@@ -32,6 +32,7 @@
 		<module>../otus-business</module>
 		<module>../otus-rest</module>
 		<module>../otus-ear</module>
+		<module>../otus-participant</module>
 	</modules>
 
 	<repositories>

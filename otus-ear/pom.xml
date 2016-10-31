@@ -34,6 +34,10 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-persistence</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-participant</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -63,18 +67,14 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.hibernate.ogm</groupId>
-			<artifactId>hibernate-ogm-core</artifactId>
-			<version>5.0.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.ogm</groupId>
-			<artifactId>hibernate-ogm-mongodb</artifactId>
-			<version>5.0.0.Final</version>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-business</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-business</artifactId>
+			<artifactId>otus-participant</artifactId>
 			<version>${project.parent.version}</version>
 			<type>ejb</type>
 		</dependency>
@@ -100,6 +100,16 @@
 			<groupId>br.org.tutty</groupId>
 			<artifactId>equalizer</artifactId>
 			<version>${equalize.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.ogm</groupId>
+			<artifactId>hibernate-ogm-core</artifactId>
+			<version>5.0.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.ogm</groupId>
+			<artifactId>hibernate-ogm-mongodb</artifactId>
+			<version>5.0.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
