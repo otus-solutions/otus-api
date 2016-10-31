@@ -1,13 +1,13 @@
 package br.org.otus.security.api;
 
-import br.org.otus.exceptions.webservice.security.AuthenticationException;
-import br.org.otus.exceptions.webservice.security.TokenException;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.dtos.ProjectAuthenticationDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.security.services.SecurityService;
+import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 import javax.inject.Inject;
 

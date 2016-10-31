@@ -1,6 +1,5 @@
 package br.org.otus.security.rest;
 
-import br.org.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.rest.Response;
@@ -8,6 +7,7 @@ import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.dtos.ProjectAuthenticationDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;

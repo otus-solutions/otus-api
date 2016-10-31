@@ -1,6 +1,6 @@
 package br.org.otus.security;
 
-import br.org.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
@@ -8,7 +8,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-@SuppressWarnings("restriction")
 public class EncryptorResources {
 
     public static String encryptIrreversible(String value) throws EncryptedException {

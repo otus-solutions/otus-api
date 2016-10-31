@@ -1,11 +1,11 @@
 package br.org.otus.user.management;
 
-import br.org.otus.exceptions.webservice.common.DataNotFoundException;
-import br.org.otus.exceptions.webservice.http.EmailNotificationException;
-import br.org.otus.exceptions.webservice.security.EncryptedException;
-import br.org.otus.exceptions.webservice.validation.ValidationException;
 import br.org.otus.user.User;
 import br.org.otus.user.dto.ManagementUserDto;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import java.util.List;
 

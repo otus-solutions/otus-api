@@ -16,10 +16,10 @@ import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.domain.actions.DomainRegisterResource;
 import br.org.otus.domain.actions.RequestUrlMapping;
 import br.org.otus.domain.exceptions.DomainConnectionError;
-import br.org.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.rest.Response;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 @Path("/installer")
 public class InstallerResource {

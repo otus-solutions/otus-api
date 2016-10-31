@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 
-import br.org.otus.exceptions.webservice.common.AlreadyExistException;
-import br.org.otus.exceptions.webservice.validation.ValidationException;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
