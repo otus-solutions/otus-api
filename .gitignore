@@ -1,0 +1,11 @@
+**/target/
+**/.settings
+**/.project
+**/.classpath
+*.jsfdia
+*.metadata
+**/.idea
+*.iml
+*.swp
+**/unit-result.report.html
+**/.sonar
