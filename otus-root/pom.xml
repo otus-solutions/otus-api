@@ -33,6 +33,8 @@
 		<module>../otus-rest</module>
 		<module>../otus-ear</module>
 		<module>../otus-participant</module>
+		<module>../otus-center</module>
+		<module>../otus-commons</module>
 	</modules>
 
 	<repositories>

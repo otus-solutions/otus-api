@@ -4,12 +4,12 @@ import br.org.otus.configuration.builder.SystemConfigBuilder;
 import br.org.otus.configuration.builder.TokenBuilder;
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.exceptions.webservice.common.AlreadyExistException;
-import br.org.otus.exceptions.webservice.http.EmailNotificationException;
-import br.org.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDao;
 import br.org.otus.user.api.UserFacade;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -2,6 +2,8 @@ package br.org.otus.importation;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
+import org.ccem.otus.importation.model.ParticipantImport;
+import org.ccem.otus.importation.service.ParticipantImportService;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.service.ParticipantService;
 
@@ -17,13 +19,13 @@ import java.util.Set;
 public class ParticipantResource {
 
     @Inject
-    private ParticipantService participantService;
+    private ParticipantImportService participantImportService;
 
     @POST
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public String post(Set<Participant> participants) {
-        participantService.create(participants);
+    public String post(Set<ParticipantImport> participantImports) {
+        participantImportService.importation(participantImports);
         return new Response().buildSuccess().toJson();
     }
 }

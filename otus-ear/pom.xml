@@ -38,6 +38,10 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-participant</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-center</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -79,6 +83,12 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-center</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
 			<groupId>org.ccem.auditor</groupId>
 			<artifactId>auditor-core</artifactId>
 			<version>${auditor.core.version}</version>
@@ -95,6 +105,12 @@
 			<artifactId>otus-rest</artifactId>
 			<version>${project.parent.version}</version>
 			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>survey-model</artifactId>
+			<version>${survey.model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>br.org.tutty</groupId>
@@ -115,11 +131,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>survey-model</artifactId>
-			<version>${survey.model.version}</version>
 		</dependency>
 	</dependencies>
 </project>

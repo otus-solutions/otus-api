@@ -2,8 +2,9 @@ package org.ccem.otus.model;
 
 public class Participant {
 
-    public Long recruitmentNumber;
-    public String name;
+    private Long recruitmentNumber;
+    private String name;
+    private FieldCenter fieldCenter;
 
     @Override
     public boolean equals(Object o) {

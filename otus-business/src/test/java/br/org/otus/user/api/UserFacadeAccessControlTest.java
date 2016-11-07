@@ -1,11 +1,6 @@
 package br.org.otus.user.api;
 
 import br.org.otus.email.service.EmailNotifierServiceBean;
-import br.org.otus.exceptions.webservice.common.AlreadyExistException;
-import br.org.otus.exceptions.webservice.common.DataNotFoundException;
-import br.org.otus.exceptions.webservice.http.EmailNotificationException;
-import br.org.otus.exceptions.webservice.security.EncryptedException;
-import br.org.otus.exceptions.webservice.validation.ValidationException;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
@@ -13,6 +8,11 @@ import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.SignupDataDto;
 import br.org.otus.user.management.ManagementUserServiceBean;
 import br.org.otus.user.signup.SignupServiceBean;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,8 +1,8 @@
 package br.org.otus.domain.actions;
 
-import br.org.otus.exceptions.webservice.http.RestCallException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.ccem.otus.exceptions.webservice.http.RestCallException;
 
 public class Resource {
     public static final String CONTENT_TYPE = "content-type";

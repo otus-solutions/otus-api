@@ -1,7 +1,5 @@
 package br.org.otus.security.services;
 
-import br.org.otus.exceptions.webservice.common.DataNotFoundException;
-import br.org.otus.exceptions.webservice.security.TokenException;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
@@ -11,6 +9,8 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.SignedJWT;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

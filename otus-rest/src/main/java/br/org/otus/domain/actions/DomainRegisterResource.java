@@ -2,7 +2,6 @@ package br.org.otus.domain.actions;
 
 
 import br.org.otus.domain.exceptions.DomainConnectionError;
-import br.org.otus.exceptions.webservice.http.RestCallException;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
@@ -10,6 +9,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.ccem.otus.exceptions.webservice.http.RestCallException;
 import org.json.JSONException;
 
 import java.io.IOException;

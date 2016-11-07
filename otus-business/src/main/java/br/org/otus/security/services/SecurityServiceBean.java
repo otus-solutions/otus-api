@@ -1,7 +1,5 @@
 package br.org.otus.security.services;
 
-import br.org.otus.exceptions.webservice.security.AuthenticationException;
-import br.org.otus.exceptions.webservice.security.TokenException;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
@@ -10,6 +8,8 @@ import br.org.otus.system.SystemConfigDao;
 import br.org.otus.user.User;
 import br.org.otus.user.UserDao;
 import br.org.tutty.Equalizer;
+import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
