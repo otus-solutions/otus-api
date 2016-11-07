@@ -10,4 +10,12 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../otus-root/pom.xml</relativePath>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.ccem.otus</groupId>
+            <artifactId>otus-center</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
 </project>
