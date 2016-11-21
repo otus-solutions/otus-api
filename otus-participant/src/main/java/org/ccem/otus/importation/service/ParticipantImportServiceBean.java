@@ -1,19 +1,33 @@
 package org.ccem.otus.importation.service;
 
-import org.ccem.otus.importation.model.ParticipantImport;
-import org.ccem.otus.service.ParticipantService;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.Set;
+
+import org.ccem.otus.importation.model.ParticipantImport;
+import org.ccem.otus.service.ParticipantService;
 
 @Stateless
 public class ParticipantImportServiceBean implements ParticipantImportService {
-    @Inject
-    private ParticipantService participantService;
 
-    @Override
-    public void importation(Set<ParticipantImport> participantImports) {
-        // TODO realizar a construção dos participantes para importação.
-    }
+	@Inject
+	private ParticipantService participantService;
+	
+	@Inject
+	private ParticipantImportValidatorService participantImportValidatorService;
+
+	@Override
+	public void importation(Set<ParticipantImport> participantImports) {
+		if(participantImportValidatorService.isImportable(participantImports)) {
+			
+		}
+	}
+	
+	private void performImportation(Set<ParticipantImport> participantImports) {
+		// TODO :
+		//	- ParticipantBuilder.build(ParticipantImport participantImport);
+	}
+
+	
 }

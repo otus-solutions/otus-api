@@ -21,4 +21,17 @@ public class Participant {
     public int hashCode() {
         return recruitmentNumber != null ? recruitmentNumber.hashCode() : 0;
     }
+
+	public Long getRecruitmentNumber() {
+		return recruitmentNumber;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public FieldCenter getFieldCenter() {
+		return fieldCenter;
+	}
+   
 }

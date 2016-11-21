@@ -69,7 +69,7 @@ public class FieldCenterDaoBean extends MongoGenericDao implements FieldCenterDa
     }
 
     @Override
-    public List<FieldCenter> find() {
+    public ArrayList<FieldCenter> find() {
         ArrayList<FieldCenter> fieldCenters = new ArrayList<>();
         list().forEach((Block<Document>) document -> {
             fieldCenters.add(new Gson().fromJson(document.toJson(), FieldCenter.class));

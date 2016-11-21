@@ -4,7 +4,8 @@ import java.util.Set;
 
 import org.ccem.otus.importation.model.ParticipantImport;
 
-public interface ParticipantImportService {
+public interface ParticipantImportValidatorService {
 
-    void importation(Set<ParticipantImport> participantImports);
+	boolean isImportable(Set<ParticipantImport> participantImports);
+	
 }

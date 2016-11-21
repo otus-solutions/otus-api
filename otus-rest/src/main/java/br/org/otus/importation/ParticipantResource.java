@@ -17,14 +17,14 @@ import br.org.otus.security.Secured;
 @Path("importation/participant")
 public class ParticipantResource {
 
-    @Inject
-    private ParticipantImportService participantImportService;
+	@Inject
+	private ParticipantImportService participantImportService;
 
-    @POST
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    public String post(Set<ParticipantImport> participantImports) {
-        participantImportService.importation(participantImports);
-        return new Response().buildSuccess().toJson();
-    }
+	@POST
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	public String post(Set<ParticipantImport> participantImports) {
+		participantImportService.importation(participantImports);
+		return new Response().buildSuccess().toJson();
+	}
 }

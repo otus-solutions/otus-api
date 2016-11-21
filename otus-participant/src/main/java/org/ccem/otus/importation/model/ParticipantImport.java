@@ -44,4 +44,11 @@ public class ParticipantImport {
     public int hashCode() {
         return recruitmentNumber != null ? recruitmentNumber.hashCode() : 0;
     }
+
+	@Override
+	public String toString() {
+		return "ParticipantImport [recruitmentNumber=" + recruitmentNumber + ", name=" + name + ", fieldCenterInitials="
+				+ fieldCenterInitials + "]";
+	}
+    
 }

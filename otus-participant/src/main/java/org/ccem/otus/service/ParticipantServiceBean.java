@@ -20,7 +20,6 @@ public class ParticipantServiceBean implements ParticipantService {
 
     @Override
     public void create(Participant participant) {
-        // TODO Validar existencia de numero de recrutamento.
         participantDao.persist(participant);
     }
 }
