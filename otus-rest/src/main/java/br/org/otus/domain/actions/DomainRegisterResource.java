@@ -1,15 +1,14 @@
 package br.org.otus.domain.actions;
 
-
 import br.org.otus.domain.exceptions.DomainConnectionError;
+import br.org.otus.domain.ssl.HttpClientFactory;
 import br.org.otus.exceptions.webservice.http.RestCallException;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -25,8 +24,6 @@ public class DomainRegisterResource extends Resource {
             throws DomainConnectionError {
 
         try {
-            HttpClient httpClient = HttpClientBuilder.create().build();
-
             HttpPost httpPost = new HttpPost(DOMAIN_URL + REGISTER_REST_PATH);
             httpPost.addHeader(CONTENT_TYPE, CONTENT_TYPE_VALUE);
 
@@ -34,6 +31,7 @@ public class DomainRegisterResource extends Resource {
                     ContentType.create(CONTENT_TYPE_VALUE));
             httpPost.setEntity(json);
 
+            CloseableHttpClient httpClient = HttpClientFactory.createIgnoringCertificate();
             validationResponse(httpClient.execute(httpPost));
         } catch (RestCallException | IOException | JSONException e) {
             throw new DomainConnectionError(e);
@@ -55,6 +53,5 @@ public class DomainRegisterResource extends Resource {
             Gson gson = new Gson();
             return gson.toJson(this);
         }
-
     }
 }
