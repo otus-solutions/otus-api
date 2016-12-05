@@ -1,6 +1,7 @@
 package br.org.otus.security.services;
 
 
+import br.org.otus.exceptions.webservice.common.DataNotFoundException;
 import br.org.otus.exceptions.webservice.security.TokenException;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;

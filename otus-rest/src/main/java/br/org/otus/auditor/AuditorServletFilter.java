@@ -1,12 +1,12 @@
 package br.org.otus.auditor;
 
-import org.ccem.auditor.service.AuditorService;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.services.SecurityContextService;
 import org.apache.commons.io.IOUtils;
 import org.ccem.auditor.model.LogEntry;
 import org.ccem.auditor.model.SessionLog;
+import org.ccem.auditor.service.AuditorService;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -74,10 +74,11 @@ public class AuditorServletFilter implements Filter {
     }
 
     private SessionLog fetchSessionInformation(String token) {
-        try{
-            SessionIdentifier session = securityContextService.getSession(token);
+        SessionIdentifier session = securityContextService.getSession(token);
+
+        if (session != null) {
             return session.buildLog();
-        }catch (Exception e){
+        } else {
             return new SessionLog();
         }
     }
