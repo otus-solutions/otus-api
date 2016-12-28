@@ -3,14 +3,17 @@ package org.ccem.otus.importation.service;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.importation.model.ParticipantImport;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.ParticipantDao;
 
+@Stateless
 public class ParticipantImportValidatorServiceBean implements ParticipantImportValidatorService {
 
 	@Inject
@@ -30,44 +33,43 @@ public class ParticipantImportValidatorServiceBean implements ParticipantImportV
 	}
 
 	@Override
-	public boolean isImportable(Set<ParticipantImport> participantToImports) {
+	public boolean isImportable(Set<ParticipantImport> participantToImports) throws ValidationException {
 		setUp();
-		
+
 		if (availableFieldCenterAcronyms.isEmpty()) {
-			// TODO: Create a specific exception
-			throw new RuntimeException("Não existem centros cadastrados no sistema!");
+			throw new ValidationException(new Throwable("There are no registered FieldCenters."));
 		}
 		
-		participantToImports.forEach(participantToImport -> hasValidFieldCenter(participantToImport));
-		
-		if(!recruitmentNumberList.isEmpty()) {
-			participantToImports.forEach(participantToImport -> isAvailableRecruitmentNumber(participantToImport));
+		for (ParticipantImport participantImport : participantToImports) {
+			hasValidFieldCenter(participantImport);
+		}
+
+		if (!recruitmentNumberList.isEmpty()) {
+			for (ParticipantImport participantImport : participantToImports) {
+				isAvailableRecruitmentNumber(participantImport);
+			}
 		}
 
 		return true;
 	}
-	
-	private boolean hasValidFieldCenter(ParticipantImport participantToImport) {
-		if(!availableFieldCenterAcronyms.contains(participantToImport.getFieldCenterInitials())) {
-			// TODO: Create a specific exception
-			throw new RuntimeException("Error: Invalid field center. \n" + participantToImport.toString());
+
+	private void hasValidFieldCenter(ParticipantImport participantToImport) throws ValidationException {
+		if (!availableFieldCenterAcronyms.contains(participantToImport.getCenter())) {
+			throw new ValidationException(new Throwable("Invalid field center. " + participantToImport.toString()));
 		}
-		
-		return true;
 	}
-	
-	private boolean isAvailableRecruitmentNumber(ParticipantImport participantToImport) {
-		if(recruitmentNumberList.contains(participantToImport.getRecruitmentNumber())) {
-			// TODO: Create a specific exception
-			throw new RuntimeException("Error: Recruitment number already exists. \n" + participantToImport.toString());
+
+	private void isAvailableRecruitmentNumber(ParticipantImport participantToImport) throws ValidationException {
+		if (recruitmentNumberList.contains(participantToImport.getRn())) {
+			throw new ValidationException(
+					new Throwable("Recruitment number already exists. " + participantToImport.toString()));
 		}
-		
-		return true;
 	}
-	
+
 	private ArrayList<Long> getRecruitmentNumberList() {
 		recruitmentNumberList = new ArrayList<Long>();
-		getRegisteredParticipants().forEach(registeredParticipant -> recruitmentNumberList.add(registeredParticipant.getRecruitmentNumber()));
+		getRegisteredParticipants().forEach(
+				registeredParticipant -> recruitmentNumberList.add(registeredParticipant.getRecruitmentNumber()));
 		return recruitmentNumberList;
 	}
 
@@ -82,7 +84,7 @@ public class ParticipantImportValidatorServiceBean implements ParticipantImportV
 		getAllFieldCenters().forEach(fieldCenter -> availableFieldCenterAcronyms.add(fieldCenter.getAcronym()));
 		return availableFieldCenterAcronyms;
 	}
-	
+
 	private ArrayList<FieldCenter> getAllFieldCenters() {
 		fieldCenters = new ArrayList<FieldCenter>();
 		fieldCenters = fieldCenterDao.find();

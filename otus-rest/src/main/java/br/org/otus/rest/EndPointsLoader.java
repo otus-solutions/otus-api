@@ -11,7 +11,8 @@ import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
-import br.org.otus.importation.ParticipantResource;
+import br.org.otus.importation.ParticipantImportationResource;
+import br.org.otus.participant.ParticipantResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.user.UserResource;
@@ -41,6 +42,9 @@ public class EndPointsLoader extends Application {
 	private VisualIdentityResource visualIdentityResource;
 	
 	@Inject
+	private ParticipantImportationResource participantImportationResource;
+	
+	@Inject
 	private ParticipantResource participantResource;
 
 	@Override
@@ -53,6 +57,7 @@ public class EndPointsLoader extends Application {
 		resources.add(SurveyResource.class);
 		resources.add(TemplateResource.class);
 		resources.add(VisualIdentityResource.class);
+		resources.add(ParticipantImportationResource.class);
 		resources.add(ParticipantResource.class);
 		return resources;
 	}
@@ -67,6 +72,7 @@ public class EndPointsLoader extends Application {
 		resources.add(surveyResource);
 		resources.add(templateResource);
 		resources.add(visualIdentityResource);
+		resources.add(participantImportationResource);
 		resources.add(participantResource);
 		return resources;
 	}

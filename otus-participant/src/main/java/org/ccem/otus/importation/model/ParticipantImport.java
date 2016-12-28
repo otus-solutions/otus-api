@@ -1,54 +1,62 @@
 package org.ccem.otus.importation.model;
 
 public class ParticipantImport {
-    private Long recruitmentNumber;
+	
+    private Long rn;
     private String name;
-    private String fieldCenterInitials;
+    private String sex;
+    private String birthdate;
+    private String center;
 
-    public Long getRecruitmentNumber() {
-        return recruitmentNumber;
-    }
-
-    public void setRecruitmentNumber(Long recruitmentNumber) {
-        this.recruitmentNumber = recruitmentNumber;
+    public Long getRn() {
+        return rn;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getCenter() {
+        return center;
     }
 
-    public String getFieldCenterInitials() {
-        return fieldCenterInitials;
-    }
+	public String getSex() {
+		return sex;
+	}
 
-    public void setFieldCenterInitials(String fieldCenterInitials) {
-        this.fieldCenterInitials = fieldCenterInitials;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ParticipantImport that = (ParticipantImport) o;
-
-        return recruitmentNumber != null ? recruitmentNumber.equals(that.recruitmentNumber) : that.recruitmentNumber == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return recruitmentNumber != null ? recruitmentNumber.hashCode() : 0;
-    }
-
+	public String getBirthdate() {
+		return birthdate;
+	}
+	
 	@Override
 	public String toString() {
-		return "ParticipantImport [recruitmentNumber=" + recruitmentNumber + ", name=" + name + ", fieldCenterInitials="
-				+ fieldCenterInitials + "]";
+		return "ParticipantImport [rn=" + rn + ", name=" + name + ", sex=" + sex + ", birthdate=" + birthdate
+				+ ", center=" + center + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((rn == null) ? 0 : rn.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ParticipantImport other = (ParticipantImport) obj;
+		if (rn == null) {
+			if (other.rn != null)
+				return false;
+		} else if (!rn.equals(other.rn))
+			return false;
+		return true;
 	}
     
 }

@@ -9,22 +9,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.importation.model.ParticipantImport;
-import org.ccem.otus.importation.service.ParticipantImportService;
 
+import br.org.otus.importation.participant.api.ParticipantImportationFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 
 @Path("importation/participant")
-public class ParticipantResource {
+public class ParticipantImportationResource {
 
 	@Inject
-	private ParticipantImportService participantImportService;
+	private ParticipantImportationFacade participantImportationFacade;
 
 	@POST
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String post(Set<ParticipantImport> participantImports) {
-		participantImportService.importation(participantImports);
+		participantImportationFacade.importParticipantSet(participantImports);
 		return new Response().buildSuccess().toJson();
 	}
 }

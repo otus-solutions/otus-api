@@ -1,15 +1,16 @@
 package br.org.otus.fieldCenter.api;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.service.FieldCenterService;
 
-import javax.inject.Inject;
-import java.util.List;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
 public class FieldCenterFacade {
 

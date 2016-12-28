@@ -1,12 +1,15 @@
 package org.ccem.otus.service;
 
-import org.ccem.otus.model.Participant;
-
+import java.util.List;
 import java.util.Set;
+
+import org.ccem.otus.model.Participant;
 
 public interface ParticipantService {
 
     void create(Set<Participant> participants);
 
     void create(Participant participant);
+    
+    List<Participant> list();
 }
