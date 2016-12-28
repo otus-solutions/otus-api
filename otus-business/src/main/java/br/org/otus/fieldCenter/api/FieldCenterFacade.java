@@ -1,47 +1,44 @@
 package br.org.otus.fieldCenter.api;
 
-import br.org.otus.exceptions.webservice.common.AlreadyExistException;
-import br.org.otus.exceptions.webservice.common.DataNotFoundException;
-import br.org.otus.exceptions.webservice.validation.ValidationException;
-import br.org.otus.fieldCenter.FieldCenterService;
-import br.org.otus.fieldCenter.dtos.FieldCenterDto;
-import br.org.otus.fieldCenter.dtos.FieldCenterUpdateDto;
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import java.util.List;
 
 import javax.inject.Inject;
-import java.util.List;
+
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.service.FieldCenterService;
+
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
 public class FieldCenterFacade {
 
     @Inject
     private FieldCenterService fieldCenterService;
 
-    public void create(FieldCenterDto fieldCenterDto) {
+    public void create(FieldCenter fieldCenter) {
         try {
-            fieldCenterService.create(fieldCenterDto);
+            fieldCenterService.create(fieldCenter);
 
         } catch (AlreadyExistException e) {
-            throw new HttpResponseException(ResponseBuild.FieldCenter.NotFound.build());
+            throw new HttpResponseException(ResponseBuild.FieldCenter.AlreadyExist.build());
 
         } catch (ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build());
         }
     }
 
-    public List<FieldCenterDto> list() {
+    public List<FieldCenter> list() {
         return fieldCenterService.list();
     }
 
-    public void update(FieldCenterUpdateDto fieldCenterUpdateDto){
+    public void update(FieldCenter fieldCenterUpdateDto){
         try {
             fieldCenterService.update(fieldCenterUpdateDto);
 
         } catch (ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build());
-
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.FieldCenter.NotFound.build());
         }
     }
 }

@@ -1,8 +1,8 @@
 package br.org.otus.survey.services;
 
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.survey.form.SurveyForm;
 
-import br.org.otus.exceptions.webservice.common.AlreadyExistException;
 import br.org.otus.survey.SurveyDao;
 import br.org.otus.survey.validators.AcronymValidator;
 import br.org.otus.survey.validators.CustomIdValidator;

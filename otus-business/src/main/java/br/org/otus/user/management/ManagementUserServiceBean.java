@@ -3,14 +3,14 @@ package br.org.otus.user.management;
 import br.org.otus.email.service.EmailNotifierService;
 import br.org.otus.email.user.management.DisableUserNotificationEmail;
 import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.exceptions.webservice.common.DataNotFoundException;
-import br.org.otus.exceptions.webservice.http.EmailNotificationException;
-import br.org.otus.exceptions.webservice.security.EncryptedException;
-import br.org.otus.exceptions.webservice.validation.ValidationException;
 import br.org.otus.user.User;
 import br.org.otus.user.UserDao;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.tutty.Equalizer;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -1,10 +1,10 @@
 package br.org.otus.configuration.dto;
 
 import br.org.otus.email.dto.EmailSenderDto;
-import br.org.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.project.dto.ProjectDto;
-import br.org.otus.rest.dtos.Dto;
+import org.ccem.otus.exceptions.Dto;
 import br.org.otus.user.dto.UserDto;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class OtusInitializationConfigDto implements Dto {
 

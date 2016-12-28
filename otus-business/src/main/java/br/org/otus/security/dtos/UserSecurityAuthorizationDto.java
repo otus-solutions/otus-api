@@ -1,8 +1,8 @@
 package br.org.otus.security.dtos;
 
-import br.org.otus.exceptions.webservice.security.EncryptedException;
-import br.org.otus.rest.dtos.Dto;
+import org.ccem.otus.exceptions.Dto;
 import br.org.tutty.Equalization;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class UserSecurityAuthorizationDto implements Dto{
 
