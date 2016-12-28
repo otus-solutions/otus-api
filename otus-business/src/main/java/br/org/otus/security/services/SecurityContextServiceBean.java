@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.security.SecureRandom;
 import java.text.ParseException;
+import java.util.NoSuchElementException;
 
 @Stateless
 public class SecurityContextServiceBean implements SecurityContextService {
@@ -71,7 +72,11 @@ public class SecurityContextServiceBean implements SecurityContextService {
     }
 
     @Override
-    public SessionIdentifier getSession(String token) {
-        return securityContext.getSession(token);
+    public SessionIdentifier getSession(String token){
+        try{
+            return securityContext.getSession(token);
+        }catch (NoSuchElementException e){
+            return null;
+        }
     }
 }

@@ -1,21 +1,21 @@
 package br.org.otus.security.services;
 
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
-import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 public interface SecurityContextService {
 
-    String generateToken(AuthenticationData authenticationData, byte[] secretKey) throws TokenException;
+	String generateToken(AuthenticationData authenticationData, byte[] secretKey) throws TokenException;
 
-    byte[] generateSecretKey();
+	byte[] generateSecretKey();
 
-    void addSession(SessionIdentifier sessionIdentifier);
+	void addSession(SessionIdentifier sessionIdentifier);
 
-    void removeToken(String jwtSignedAndSerialized);
+	void removeToken(String jwtSignedAndSerialized);
 
-    void validateToken(String token) throws TokenException;
+	void validateToken(String token) throws TokenException;
 
-    SessionIdentifier getSession(String token);
+	SessionIdentifier getSession(String token);
 }
