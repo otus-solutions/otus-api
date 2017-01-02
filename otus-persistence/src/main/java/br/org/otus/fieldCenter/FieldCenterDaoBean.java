@@ -1,17 +1,19 @@
 package br.org.otus.fieldCenter;
 
-import br.org.mongodb.MongoGenericDao;
-import com.google.gson.Gson;
-import com.mongodb.Block;
+import static com.mongodb.client.model.Filters.eq;
+
+import java.util.ArrayList;
+
+import javax.ejb.Stateless;
+
 import org.bson.Document;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.persistence.FieldCenterDao;
 
-import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.Gson;
+import com.mongodb.Block;
 
-import static com.mongodb.client.model.Filters.eq;
+import br.org.mongodb.MongoGenericDao;
 
 @Stateless
 public class FieldCenterDaoBean extends MongoGenericDao implements FieldCenterDao {

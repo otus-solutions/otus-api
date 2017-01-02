@@ -12,7 +12,7 @@ import com.mongodb.client.MongoDatabase;
 public abstract class MongoGenericDao {
 
 	@Inject
-	private MongoDatabase db;
+	protected MongoDatabase db;
 	private String collectionName;
 	protected MongoCollection<Document> collection;
 
