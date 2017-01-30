@@ -1,9 +1,11 @@
 package br.org.otus.user;
 
-import br.org.otus.dao.GenericDao;
+import java.util.List;
 
 import javax.persistence.NoResultException;
-import java.util.List;
+
+import br.org.otus.dao.GenericDao;
+import br.org.otus.model.User;
 
 public class UserDao extends GenericDao {
 

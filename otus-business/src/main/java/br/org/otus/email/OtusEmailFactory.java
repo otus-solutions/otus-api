@@ -3,7 +3,7 @@ package br.org.otus.email;
 import br.org.otus.email.system.SystemInstallationEmail;
 import br.org.otus.email.user.signup.NewUserGreetingsEmail;
 import br.org.otus.email.user.signup.NewUserNotificationEmail;
-import br.org.otus.user.User;
+import br.org.otus.model.User;
 import br.org.owail.sender.email.Recipient;
 import br.org.owail.sender.email.Sender;
 

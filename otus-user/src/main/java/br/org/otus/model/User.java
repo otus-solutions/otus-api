@@ -1,14 +1,16 @@
-package br.org.otus.user;
+package br.org.otus.model;
 
-import br.org.tutty.Equalization;
-import org.hibernate.annotations.Type;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
+
+import org.hibernate.annotations.Type;
+
+import br.org.tutty.Equalization;
 
 @Entity
 public class User {

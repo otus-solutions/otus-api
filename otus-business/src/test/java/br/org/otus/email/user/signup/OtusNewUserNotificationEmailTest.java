@@ -1,17 +1,22 @@
 package br.org.otus.email.user.signup;
 
-import br.org.otus.email.OtusEmailFactory;
-import br.org.otus.user.User;
-import br.org.owail.sender.email.Email;
-import br.org.owail.sender.email.Recipient;
-import br.org.owail.sender.email.Sender;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Matchers.anyString;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.anyString;
+import br.org.otus.email.OtusEmailFactory;
+import br.org.otus.model.User;
+import br.org.owail.sender.email.Email;
+import br.org.owail.sender.email.Recipient;
+import br.org.owail.sender.email.Sender;
 
 @Ignore
 public class OtusNewUserNotificationEmailTest {

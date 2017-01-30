@@ -33,6 +33,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-user</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-activity</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-commons</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>

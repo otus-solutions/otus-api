@@ -27,6 +27,7 @@ public abstract class MongoGenericDao {
 
 	public void persist(String json) {
 		collection.insertOne(Document.parse(json));
+		
 	}
 	
 	public FindIterable<Document> list() {

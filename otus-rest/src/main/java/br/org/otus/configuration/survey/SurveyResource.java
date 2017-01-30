@@ -25,7 +25,7 @@ public class SurveyResource {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public String getAll() {
-        return new Response().buildSuccess(surveyFacade.list()).toJson();
+        return new Response().buildSuccess(surveyFacade.list()).toSurveyJson();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class SurveyResource {
     @Path("/{acronym}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getByAcronym(@PathParam("acronym") String acronym) {
-        return new Response().buildSuccess(surveyFacade.findByAcronym(acronym)).toJson();
+        return new Response().buildSuccess(surveyFacade.findByAcronym(acronym)).toSurveyJson();
     }
 
     @DELETE

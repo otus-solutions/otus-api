@@ -1,5 +1,7 @@
 package br.org.otus.participant;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.persistence.FieldCenterDao;
@@ -17,6 +20,7 @@ import com.mongodb.client.MongoCollection;
 import br.org.mongodb.MongoGenericDao;
 
 public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDao {
+
 	private static final String COLLECTION_NAME = "Participant";
 
 	@Inject
@@ -45,13 +49,24 @@ public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDa
 		for (FieldCenter fieldCenter : fieldCenters) {
 			fieldCenterMap.put(fieldCenter.getAcronym(), fieldCenter);
 		}
-		
+
 		ArrayList<Participant> participants = participantCollection.find().into(new ArrayList<Participant>());
 		for (Participant participant : participants) {
 			String acronym = participant.getFieldCenter().getAcronym();
 			participant.setFieldCenter(fieldCenterMap.get(acronym));
 		}
-		
-		return participants; 
+
+		return participants;
+	}
+
+	@Override
+	public Participant findByRecruitmentNumber(long rn) throws DataNotFoundException {
+		Participant result = participantCollection.find(eq("recruitmentNumber", rn)).first();
+		if (result == null) {
+			throw new DataNotFoundException(
+					new Throwable("Participant with recruitment number {" + rn + "} not found."));
+		}
+
+		return result;
 	}
 }

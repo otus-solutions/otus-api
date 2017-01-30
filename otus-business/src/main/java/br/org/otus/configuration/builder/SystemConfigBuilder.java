@@ -1,8 +1,8 @@
 package br.org.otus.configuration.builder;
 
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
+import br.org.otus.model.User;
 import br.org.otus.system.SystemConfig;
-import br.org.otus.user.User;
 import br.org.tutty.Equalizer;
 
 public class SystemConfigBuilder {

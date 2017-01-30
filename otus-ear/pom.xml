@@ -42,6 +42,14 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-center</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-user</artifactId>
+						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-activity</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -106,7 +114,18 @@
 			<version>${project.parent.version}</version>
 			<type>war</type>
 		</dependency>
-
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-user</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-activity</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.persistence.ParticipantDao;
 
@@ -28,6 +29,11 @@ public class ParticipantServiceBean implements ParticipantService {
 	@Override
 	public List<Participant> list() {
 		return participantDao.find();
+	}
+
+	@Override
+	public Participant getByRecruitmentNumber(long rn) throws DataNotFoundException {
+		return participantDao.findByRecruitmentNumber(rn);
 	}
 
 }

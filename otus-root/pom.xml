@@ -35,6 +35,8 @@
 		<module>../otus-participant</module>
 		<module>../otus-center</module>
 		<module>../otus-commons</module>
+		<module>../otus-activity</module>
+		<module>../otus-user</module>
 	</modules>
 
 	<repositories>
