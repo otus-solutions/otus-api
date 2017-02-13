@@ -5,6 +5,7 @@ public class QuestionFill {
 	private String objectType;
 	private String questionID;
 	private AnswerFill answer;
+	private boolean forceAnswer;
 	private MetadataFill metadata;
 	private String comment;
 
@@ -26,6 +27,10 @@ public class QuestionFill {
 
 	public String getComment() {
 		return comment;
+	}
+
+	public boolean isForceAnswer() {
+		return forceAnswer;
 	}
 	
 }
