@@ -8,6 +8,7 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
+import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
@@ -28,6 +29,7 @@ public class SurveyActivity {
 	private FillContainer fillContainer;
 	private List<ActivityStatus> statusHistory;
 	private Boolean isDiscarded;
+	private NavigationTracker navigationTracker;
 
 	public SurveyActivity() {
 		this.isDiscarded = Boolean.FALSE;
@@ -71,6 +73,10 @@ public class SurveyActivity {
 
 	public Participant getParticipantData() {
 		return participantData;
+	}
+
+	public NavigationTracker getNavigationTracker() {
+		return navigationTracker;
 	}
 
 	public static String serialize(SurveyActivity surveyActivity) {
