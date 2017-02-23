@@ -1,13 +1,13 @@
 package org.ccem.otus.model;
 
-import java.util.Date;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 public class Participant {
 
     private Long recruitmentNumber;
     private String name;
     private Sex sex;
-    private Date birthdate;
+    private ImmutableDate birthdate;
     private FieldCenter fieldCenter;
 
 	public Participant(Long recruitmentNumber) {
@@ -43,11 +43,11 @@ public class Participant {
 		this.sex = sex;
 	}
 
-	public Date getBirthdate() {
+	public ImmutableDate getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(Date birthdate) {
+	public void setBirthdate(ImmutableDate birthdate) {
 		this.birthdate = birthdate;
 	}
 	

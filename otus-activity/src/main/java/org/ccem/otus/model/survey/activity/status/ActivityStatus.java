@@ -1,6 +1,6 @@
 package org.ccem.otus.model.survey.activity.status;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.ccem.otus.model.survey.activity.User;
 
@@ -9,7 +9,7 @@ public class ActivityStatus {
 	private String objectType;
 	// TODO: Usar enum para os tipos de status, atributo name.
 	private String name;
-	private Date date;
+	private LocalDateTime date;
 	private User user;
 
 	public String getObjectType() {
@@ -20,7 +20,7 @@ public class ActivityStatus {
 		return name;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 

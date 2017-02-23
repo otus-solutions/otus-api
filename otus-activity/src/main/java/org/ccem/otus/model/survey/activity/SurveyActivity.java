@@ -88,9 +88,10 @@ public class SurveyActivity {
 	}
 
 	/**
-	 * @return a GsonBuilder instance with SurveyItemAdapter, DateAdapter and
-	 *         OptionsAdapter, AnswerAdapter, ObjectIdAdapter registered. Also
-	 *         disableHtmlEscaping and serializeNulls options.
+	 * @return a GsonBuilder instance with AnswerAdapter, ObjectIdAdapter
+	 *         registered and also all registered adapters of SurveyForm.
+	 * @see SurveyForm.getGsonBuilder
+	 * 
 	 */
 	public static GsonBuilder getGsonBuilder() {
 		GsonBuilder builder = SurveyForm.getGsonBuilder();

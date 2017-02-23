@@ -2,21 +2,21 @@ package org.ccem.otus.utils;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
-import org.ccem.otus.model.survey.activity.filling.answer.DateAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.ImmutableDateAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.DecimalAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.TextAnswer;
 
 public enum AnswerMapping {
 	
-	CALENDAR_QUESTION(DateAnswer.class, "CalendarQuestion"),
+	CALENDAR_QUESTION(ImmutableDateAnswer.class, "CalendarQuestion"),
 	INTEGER_QUESTION(IntegerAnswer.class, "IntegerQuestion"),
 	DECIMAL_QUESTION(DecimalAnswer.class, "DecimalQuestion"),
 	SINGLE_SELECTION_QUESTION(TextAnswer.class, "SingleSelectionQuestion"),
 	CHECKBOX_QUESTION(CheckboxAnswer.class, "CheckboxQuestion"),
 	TEXT_QUESTION(TextAnswer.class, "TextQuestion"),
 	EMAIL_QUESTION(TextAnswer.class, "EmailQuestion"),
-	TIME_QUESTION(DateAnswer.class, "TimeQuestion"),
+	TIME_QUESTION(ImmutableDateAnswer.class, "TimeQuestion"),
 	PHONE_QUESTION(TextAnswer.class, "PhoneQuestion");
 	
 	private Class<? extends AnswerFill> answerType;
