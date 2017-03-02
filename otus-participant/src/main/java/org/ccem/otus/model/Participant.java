@@ -9,9 +9,9 @@ public class Participant {
     private Sex sex;
     private ImmutableDate birthdate;
     private FieldCenter fieldCenter;
+    
 
 	public Participant(Long recruitmentNumber) {
-		super();
 		this.recruitmentNumber = recruitmentNumber;
 	}
 

@@ -37,5 +37,9 @@ public abstract class MongoGenericDao {
 	public long count() {
 		return collection.count();
 	}
+	
+	public Document findFirst() {
+		return list().first();
+	}
 
 }

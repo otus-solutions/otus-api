@@ -44,11 +44,7 @@ public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDa
 
 	@Override
 	public ArrayList<Participant> find() {
-		ArrayList<FieldCenter> fieldCenters = fieldCenterDao.find();
-		Map<String, FieldCenter> fieldCenterMap = new HashMap<String, FieldCenter>();
-		for (FieldCenter fieldCenter : fieldCenters) {
-			fieldCenterMap.put(fieldCenter.getAcronym(), fieldCenter);
-		}
+		Map<String, FieldCenter> fieldCenterMap = getAllFieldCentes();
 
 		ArrayList<Participant> participants = participantCollection.find().into(new ArrayList<Participant>());
 		for (Participant participant : participants) {
@@ -59,14 +55,28 @@ public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDa
 		return participants;
 	}
 
+	private Map<String, FieldCenter> getAllFieldCentes() {
+		ArrayList<FieldCenter> fieldCenters = fieldCenterDao.find();
+		Map<String, FieldCenter> fieldCenterMap = new HashMap<String, FieldCenter>();
+		for (FieldCenter fieldCenter : fieldCenters) {
+			fieldCenterMap.put(fieldCenter.getAcronym(), fieldCenter);
+		}
+		return fieldCenterMap;
+	}
+
 	@Override
 	public Participant findByRecruitmentNumber(long rn) throws DataNotFoundException {
+		Map<String, FieldCenter> fieldCenterMap = getAllFieldCentes();
+		
 		Participant result = participantCollection.find(eq("recruitmentNumber", rn)).first();
+		
 		if (result == null) {
 			throw new DataNotFoundException(
 					new Throwable("Participant with recruitment number {" + rn + "} not found."));
 		}
-
+		
+		String acronym = result.getFieldCenter().getAcronym();
+		result.setFieldCenter(fieldCenterMap.get(acronym));
 		return result;
 	}
 }

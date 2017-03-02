@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 public class FieldCenter {
     private String name;
 
+    private	Integer code;
+    
     private String acronym;
 
     private String country;
@@ -100,4 +102,12 @@ public class FieldCenter {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+	public Integer getCode() {
+		return code;
+	}
+
+	public void setCode(Integer code) {
+		this.code = code;
+	}
 }
