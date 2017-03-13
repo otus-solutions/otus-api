@@ -23,7 +23,7 @@ import br.org.mongodb.MongoGenericDao;
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao implements ActivityDao {
 
-	private static final String COLLECTION_NAME = "Activity";
+	private static final String COLLECTION_NAME = "activity";
 
 	public ActivityDaoBean() {
 		super(COLLECTION_NAME);

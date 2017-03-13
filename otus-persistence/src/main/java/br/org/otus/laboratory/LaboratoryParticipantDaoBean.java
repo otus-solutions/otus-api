@@ -21,7 +21,7 @@ import com.mongodb.client.result.UpdateResult;
 
 @Stateless
 public class LaboratoryParticipantDaoBean extends MongoGenericDao implements LaboratoryParticipantDao {
-	private static final String COLLECTION_NAME = "LaboratoryParticipant";
+	private static final String COLLECTION_NAME = "laboratory_participant";
 
 	@Inject
 	private LaboratoryParticipantDao lab;

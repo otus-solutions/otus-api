@@ -17,7 +17,7 @@ import com.mongodb.client.result.UpdateResult;
 @Local(LaboratoryConfigurationDao.class)
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao implements LaboratoryConfigurationDao {
 
-	private static final String COLLECTION_NAME = "LaboratoryConfig";
+	private static final String COLLECTION_NAME = "laboratory_config";
 	
 	private LaboratoryConfiguration tubeConfiguration;
 

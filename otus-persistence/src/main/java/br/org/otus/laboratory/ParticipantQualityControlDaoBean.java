@@ -13,7 +13,7 @@ import br.org.otus.laboratory.persistence.ParticipantQualityControlDao;
 @Local(ParticipantQualityControlDao.class)
 public class ParticipantQualityControlDaoBean extends MongoGenericDao implements ParticipantQualityControlDao{
 
-	private static final String COLLECTION_NAME = "ParticipantQualityControl";
+	private static final String COLLECTION_NAME = "participant_quality_control";
 		
 	public ParticipantQualityControlDaoBean() {
 		super(COLLECTION_NAME);

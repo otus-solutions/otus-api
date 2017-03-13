@@ -21,7 +21,7 @@ import br.org.mongodb.MongoGenericDao;
 
 public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDao {
 
-	private static final String COLLECTION_NAME = "Participant";
+	private static final String COLLECTION_NAME = "participant";
 
 	@Inject
 	private FieldCenterDao fieldCenterDao;

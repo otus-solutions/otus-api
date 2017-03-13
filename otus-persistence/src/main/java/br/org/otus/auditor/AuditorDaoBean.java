@@ -9,7 +9,7 @@ import javax.ejb.Local;
 
 @Local(AuditorDao.class)
 public class AuditorDaoBean extends MongoGenericDao implements AuditorDao {
-    private static final String COLLECTION_NAME = "Auditor";
+    private static final String COLLECTION_NAME = "auditor";
 
     public AuditorDaoBean() {
         super(COLLECTION_NAME);

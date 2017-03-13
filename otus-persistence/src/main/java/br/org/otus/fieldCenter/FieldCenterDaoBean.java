@@ -17,7 +17,7 @@ import br.org.mongodb.MongoGenericDao;
 
 @Stateless
 public class FieldCenterDaoBean extends MongoGenericDao implements FieldCenterDao {
-    private static final String COLLECTION_NAME = "FieldCenter";
+    private static final String COLLECTION_NAME = "fieldCenter";
 
     public FieldCenterDaoBean() {
         super(COLLECTION_NAME);
