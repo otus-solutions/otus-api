@@ -1,5 +1,12 @@
 package br.org.otus.user.management;
 
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.email.user.management.DisableUserNotificationEmail;
+import br.org.otus.email.user.management.EnableUserNotificationEmail;
+import br.org.otus.model.User;
+import br.org.otus.user.UserDaoBean;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.owail.sender.email.Sender;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -13,14 +20,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.management.DisableUserNotificationEmail;
-import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.user.UserDao;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.owail.sender.email.Sender;
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ManagementUserServiceBean.class})
 public class ManagementUserServiceBeanTest {
@@ -30,7 +29,7 @@ public class ManagementUserServiceBeanTest {
     private ManagementUserServiceBean managementUserServiceBean;
 
     @Mock
-    private UserDao userDao;
+    private UserDaoBean userDao;
 
     @Mock
     private EmailNotifierService emailNotifierService;

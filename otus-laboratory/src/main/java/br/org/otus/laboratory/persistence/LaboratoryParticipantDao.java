@@ -1,9 +1,8 @@
 package br.org.otus.laboratory.persistence;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.laboratory.participant.LaboratoryParticipant;
 import br.org.otus.laboratory.participant.Tube;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface LaboratoryParticipantDao {
 

@@ -11,12 +11,65 @@
 	</parent>
 
 	<dependencies>
+		<!--
+			-
+			- External Dependencies
+			-
+		!-->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>jaxrs-api</artifactId>
+			<version>3.0.12.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>2.3.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet</groupId>
+			<artifactId>org.restlet.ext.json</artifactId>
+			<version>1.0.11</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.18.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-cdi</artifactId>
+			<version>3.0.13.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.ccem.auditor</groupId>
+			<artifactId>auditor-core</artifactId>
+			<version>${auditor.core.version}</version>
+			<type>ejb</type>
+			<scope>provided</scope>
+		</dependency>
+		<!--
+			-
+			- Dependency between modules
+			-
+		!-->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-business</artifactId>
@@ -29,38 +82,6 @@
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<version>3.0.18.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-cdi</artifactId>
-			<version>3.0.13.Final</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>jaxrs-api</artifactId>
-			<version>3.0.12.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.3.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet.jee</groupId>
-			<artifactId>org.restlet</artifactId>
-			<version>2.3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet</groupId>
-			<artifactId>org.restlet.ext.json</artifactId>
-			<version>1.0.11</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
@@ -72,13 +93,6 @@
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
 			<version>${survey.model.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.auditor</groupId>
-			<artifactId>auditor-core</artifactId>
-			<version>${auditor.core.version}</version>
-			<type>ejb</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

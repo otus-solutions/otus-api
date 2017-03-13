@@ -1,9 +1,8 @@
 package br.org.otus.security.services;
 
-import org.ccem.otus.exceptions.webservice.security.TokenException;
-
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 public interface SecurityContextService {
 

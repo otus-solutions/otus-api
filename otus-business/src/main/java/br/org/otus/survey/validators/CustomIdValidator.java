@@ -3,14 +3,11 @@ package br.org.otus.survey.validators;
 import br.org.otus.survey.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.identity.Identity;
-import org.ccem.otus.survey.template.item.questions.selectable.CheckboxQuestion;
-import org.ccem.otus.survey.template.item.questions.selectable.options.CheckboxOption;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CustomIdValidator implements SurveyValidator {
     private SurveyDao surveyDao;

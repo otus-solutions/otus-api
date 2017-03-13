@@ -1,23 +1,20 @@
 package br.org.otus.participant;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.MongoCollection;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.ParticipantDao;
 
-import com.mongodb.client.MongoCollection;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import br.org.mongodb.MongoGenericDao;
+import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDao {
 

@@ -1,8 +1,8 @@
 package br.org.otus.security.dtos;
 
-import org.ccem.otus.exceptions.Dto;
 import br.org.otus.security.EncryptorResources;
 import com.nimbusds.jwt.JWTClaimsSet;
+import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class AuthenticationDto implements Dto, AuthenticationData {

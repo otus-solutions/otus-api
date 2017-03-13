@@ -1,9 +1,9 @@
 package br.org.otus.user.dto;
 
 import br.org.otus.email.EmailSender;
-import org.ccem.otus.exceptions.Dto;
 import br.org.otus.security.EncryptorResources;
 import br.org.tutty.Equalization;
+import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class UserDto implements EmailSender, Dto {

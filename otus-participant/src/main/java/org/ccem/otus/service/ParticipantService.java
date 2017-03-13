@@ -1,10 +1,10 @@
 package org.ccem.otus.service;
 
-import java.util.List;
-import java.util.Set;
-
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.Participant;
+
+import java.util.List;
+import java.util.Set;
 
 public interface ParticipantService {
 

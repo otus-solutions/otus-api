@@ -1,7 +1,7 @@
 package org.ccem.otus.model.survey.activity;
 
-import java.util.List;
-
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
@@ -14,8 +14,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 public class SurveyActivity {
 

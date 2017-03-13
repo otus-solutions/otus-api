@@ -1,29 +1,28 @@
 package br.org.otus.security.services;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
-
-import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
-import org.ccem.otus.exceptions.webservice.security.TokenException;
-
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.system.SystemConfig;
-import br.org.otus.system.SystemConfigDao;
-import br.org.otus.user.UserDao;
+import br.org.otus.system.SystemConfigDaoBean;
+import br.org.otus.user.UserDaoBean;
 import br.org.tutty.Equalizer;
+import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
 
     @Inject
-    private UserDao userDao;
+    private UserDaoBean userDao;
 
     @Inject
-    private SystemConfigDao systemConfigDao;
+    private SystemConfigDaoBean systemConfigDao;
 
     @Inject
     private SecurityContextService securityContextService;

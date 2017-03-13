@@ -1,15 +1,13 @@
 package br.org.otus.laboratory.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
 import br.org.otus.laboratory.config.Group;
 import br.org.otus.laboratory.config.LaboratoryConfiguration;
 import br.org.otus.laboratory.persistence.LaboratoryConfigurationDao;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurationService {

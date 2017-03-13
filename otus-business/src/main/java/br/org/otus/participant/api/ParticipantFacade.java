@@ -1,15 +1,13 @@
 package br.org.otus.participant.api;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.service.ParticipantService;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import javax.inject.Inject;
+import java.util.List;
 
 public class ParticipantFacade {
 

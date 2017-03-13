@@ -1,18 +1,16 @@
 package br.org.otus.laboratory;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import javax.ejb.Local;
-
-import org.bson.Document;
-
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.config.LaboratoryConfiguration;
 import br.org.otus.laboratory.participant.LaboratoryParticipant;
 import br.org.otus.laboratory.persistence.LaboratoryConfigurationDao;
-
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+
+import javax.ejb.Local;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @Local(LaboratoryConfigurationDao.class)
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao implements LaboratoryConfigurationDao {

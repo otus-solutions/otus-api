@@ -1,7 +1,6 @@
 package br.org.otus.security.context;
 
 import br.org.otus.security.dtos.AuthenticationData;
-import com.google.gson.Gson;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.ccem.auditor.model.SessionLog;

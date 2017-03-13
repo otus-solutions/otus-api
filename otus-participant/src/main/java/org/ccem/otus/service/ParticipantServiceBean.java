@@ -1,14 +1,13 @@
 package org.ccem.otus.service;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.persistence.ParticipantDao;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class ParticipantServiceBean implements ParticipantService {

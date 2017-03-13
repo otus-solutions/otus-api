@@ -1,9 +1,9 @@
 package org.ccem.otus.persistence;
 
 
-import java.util.ArrayList;
-
 import org.ccem.otus.model.FieldCenter;
+
+import java.util.ArrayList;
 
 public interface FieldCenterDao {
 

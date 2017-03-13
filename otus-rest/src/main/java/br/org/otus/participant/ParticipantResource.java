@@ -1,20 +1,18 @@
 package br.org.otus.participant;
 
+import br.org.otus.participant.api.ParticipantFacade;
+import br.org.otus.security.Secured;
+import com.google.gson.GsonBuilder;
+import org.ccem.otus.model.Participant;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import org.ccem.otus.model.Participant;
-import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
-import org.ccem.otus.survey.template.utils.date.ImmutableDate;
-
-import com.google.gson.GsonBuilder;
-
-import br.org.otus.participant.api.ParticipantFacade;
-import br.org.otus.security.Secured;
 
 @Path("/participants")
 public class ParticipantResource {

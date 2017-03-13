@@ -1,20 +1,18 @@
 package br.org.otus.laboratory.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.Participant;
-import org.ccem.otus.persistence.ParticipantDao;
-
 import br.org.otus.laboratory.participant.LaboratoryParticipant;
 import br.org.otus.laboratory.participant.QualityControl;
 import br.org.otus.laboratory.participant.Tube;
 import br.org.otus.laboratory.persistence.LaboratoryParticipantDao;
 import br.org.otus.laboratory.persistence.ParticipantQualityControlDao;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.Participant;
+import org.ccem.otus.persistence.ParticipantDao;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class LaboratoryParticipantServiceBean implements LaboratoryParticipantService {

@@ -1,24 +1,21 @@
 package br.org.otus.survey.activity;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-
+import br.org.mongodb.MongoGenericDao;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.persistence.ActivityDao;
 
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.org.mongodb.MongoGenericDao;
+import static com.mongodb.client.model.Filters.eq;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao implements ActivityDao {

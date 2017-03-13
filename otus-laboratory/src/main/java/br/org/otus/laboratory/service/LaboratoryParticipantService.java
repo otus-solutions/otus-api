@@ -1,8 +1,7 @@
 package br.org.otus.laboratory.service;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.laboratory.participant.LaboratoryParticipant;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface LaboratoryParticipantService {
 

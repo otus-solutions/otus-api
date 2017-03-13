@@ -2,28 +2,16 @@ package br.org.otus.system;
 
 import br.org.otus.email.BasicEmailSender;
 import br.org.tutty.Equalization;
-import org.hibernate.annotations.Type;
+import com.google.gson.GsonBuilder;
 
-import javax.persistence.*;
-
-@Entity
 public class SystemConfig {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Type(type = "objectid")
-    private String id;
 
     @Equalization(name = "project_name")
     private String projectName;
-
     @Equalization(name = "domain_rest_url")
     private String domainRestUrl;
-
     @Equalization(name = "project_token")
     private String projectToken;
-
-    @Embedded
     private BasicEmailSender basicEmailSender;
 
     public SystemConfig() {
@@ -38,10 +26,6 @@ public class SystemConfig {
         return projectToken;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getProjectName() {
         return projectName;
     }
@@ -54,4 +38,15 @@ public class SystemConfig {
         return basicEmailSender;
     }
 
+    public static SystemConfig deserialize(String systemConfig){
+       return getGsonBuilder().create().fromJson(systemConfig, SystemConfig.class);
+    }
+
+    public static String serialize(SystemConfig systemConfig){
+        return getGsonBuilder().create().toJson(systemConfig);
+    }
+
+    public static GsonBuilder getGsonBuilder() {
+        return new GsonBuilder();
+    }
 }

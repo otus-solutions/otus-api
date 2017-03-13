@@ -82,6 +82,11 @@
 	</build>
 
 	<dependencies>
+		<!--
+			-
+			- Dependency between modules
+			-
+		!-->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-business</artifactId>
@@ -141,26 +146,45 @@
 			<version>${auditor.core.version}</version>
 			<type>ejb</type>
 		</dependency>
+		<!--
+			-
+			- External Dependencies
+			-
+		!-->
 		<dependency>
 			<groupId>br.org.tutty</groupId>
 			<artifactId>equalizer</artifactId>
 			<version>${equalize.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate.ogm</groupId>
-			<artifactId>hibernate-ogm-core</artifactId>
-			<version>5.0.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.ogm</groupId>
-			<artifactId>hibernate-ogm-mongodb</artifactId>
-			<version>5.0.0.Final</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>jaxrs-api</artifactId>
+			<version>3.0.12.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>2.3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet</groupId>
+			<artifactId>org.restlet.ext.json</artifactId>
+			<version>1.0.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.18.Final</version>
+		</dependency>
 	</dependencies>
 </project>

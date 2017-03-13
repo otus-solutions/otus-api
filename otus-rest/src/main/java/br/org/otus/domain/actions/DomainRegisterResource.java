@@ -1,7 +1,7 @@
 package br.org.otus.domain.actions;
 
-import java.io.IOException;
-
+import br.org.otus.domain.exceptions.DomainConnectionError;
+import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -11,9 +11,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.ccem.otus.exceptions.webservice.http.RestCallException;
 import org.json.JSONException;
 
-import com.google.gson.Gson;
-
-import br.org.otus.domain.exceptions.DomainConnectionError;
+import java.io.IOException;
 
 public class DomainRegisterResource extends Resource {
     public static final String REGISTER_REST_PATH = "/otus";

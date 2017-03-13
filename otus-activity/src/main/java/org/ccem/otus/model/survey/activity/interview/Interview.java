@@ -1,8 +1,8 @@
 package org.ccem.otus.model.survey.activity.interview;
 
-import java.time.LocalDateTime;
-
 import org.ccem.otus.model.survey.activity.interviewer.Interviewer;
+
+import java.time.LocalDateTime;
 
 public class Interview {
 

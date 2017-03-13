@@ -2,22 +2,13 @@ package br.org.otus.email;
 
 import br.org.tutty.Equalization;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
-
-@Embeddable
 public class BasicEmailSender implements EmailSender {
 
     @Equalization(name = "name")
-    @NotNull
     private String name;
-
     @Equalization(name = "email")
-    @NotNull
     private String emailAddress;
-
     @Equalization(name = "password")
-    @NotNull
     private String password;
 
     public BasicEmailSender() {

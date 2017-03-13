@@ -1,9 +1,8 @@
 package br.org.otus.survey.dtos;
 
+import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.survey.form.SurveyFormType;
-
-import org.ccem.otus.exceptions.Dto;
 
 public class UpdateSurveyFormTypeDto implements Dto {
 	

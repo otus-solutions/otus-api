@@ -1,14 +1,13 @@
 package br.org.otus.laboratory;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import javax.ejb.Local;
-
-import org.bson.Document;
-
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.QualityControl;
 import br.org.otus.laboratory.persistence.ParticipantQualityControlDao;
+import org.bson.Document;
+
+import javax.ejb.Local;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @Local(ParticipantQualityControlDao.class)
 public class ParticipantQualityControlDaoBean extends MongoGenericDao implements ParticipantQualityControlDao{

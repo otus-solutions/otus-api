@@ -1,11 +1,7 @@
 package org.ccem.otus.utils;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
-import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
-import org.ccem.otus.model.survey.activity.filling.answer.ImmutableDateAnswer;
-import org.ccem.otus.model.survey.activity.filling.answer.DecimalAnswer;
-import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
-import org.ccem.otus.model.survey.activity.filling.answer.TextAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.*;
 
 public enum AnswerMapping {
 	

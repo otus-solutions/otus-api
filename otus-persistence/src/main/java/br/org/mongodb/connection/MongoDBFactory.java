@@ -1,21 +1,18 @@
 package br.org.mongodb.connection;
 
-import java.util.Arrays;
-
-import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-
+import br.org.mongodb.codecs.ParticipantCodecProvider;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
 
-import br.org.mongodb.codecs.ParticipantCodecProvider;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import java.util.Arrays;
 
 @Stateless
 public class MongoDBFactory extends ConnectionConfiguration {

@@ -1,28 +1,26 @@
 package br.org.otus.user.management;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.email.user.management.DisableUserNotificationEmail;
+import br.org.otus.email.user.management.EnableUserNotificationEmail;
+import br.org.otus.model.User;
+import br.org.otus.user.UserDaoBean;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.management.DisableUserNotificationEmail;
-import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.user.UserDao;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.tutty.Equalizer;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class ManagementUserServiceBean implements ManagementUserService {
     @Inject
-    private UserDao userDao;
+    private UserDaoBean userDao;
 
     @Inject
     private EmailNotifierService emailNotifierService;

@@ -1,31 +1,16 @@
 package br.org.otus.model;
 
+import br.org.tutty.Equalization;
+import com.google.gson.GsonBuilder;
+
 import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.Type;
-
-import br.org.tutty.Equalization;
-
-@Entity
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Type(type = "objectid")
-	private String id;
-
 	@Equalization(name = "uuid")
-	@NotNull
 	private UUID uuid;
 
 	@Equalization(name = "admin_flag")
-	@NotNull
 	private Boolean adm;
 
 	@Equalization(name = "enable")
@@ -72,10 +57,6 @@ public class User {
 		return adm;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -108,4 +89,12 @@ public class User {
 		this.code = code;
 	}
 
+	public static User deserialize(String user) {
+		GsonBuilder builder = new GsonBuilder();
+		return builder.create().fromJson(user, User.class);
+	}
+
+	public static String serialize(User user) {
+		return new GsonBuilder().create().toJson(user);
+	}
 }

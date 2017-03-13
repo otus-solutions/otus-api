@@ -1,23 +1,18 @@
 package br.org.otus.laboratory;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.bson.Document;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.LaboratoryParticipant;
 import br.org.otus.laboratory.participant.Tube;
 import br.org.otus.laboratory.persistence.LaboratoryParticipantDao;
-
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @Stateless
 public class LaboratoryParticipantDaoBean extends MongoGenericDao implements LaboratoryParticipantDao {

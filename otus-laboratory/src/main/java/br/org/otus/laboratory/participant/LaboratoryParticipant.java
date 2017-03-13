@@ -1,13 +1,10 @@
 package br.org.otus.laboratory.participant;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.org.otus.laboratory.config.CodeDefinition;
-import br.org.otus.laboratory.config.LaboratoryConfiguration;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LaboratoryParticipant {
 

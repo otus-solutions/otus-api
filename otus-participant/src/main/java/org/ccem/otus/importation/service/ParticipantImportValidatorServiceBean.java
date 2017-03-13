@@ -1,17 +1,16 @@
 package org.ccem.otus.importation.service;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.importation.model.ParticipantImport;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.Participant;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.ParticipantDao;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Set;
 
 @Stateless
 public class ParticipantImportValidatorServiceBean implements ParticipantImportValidatorService {

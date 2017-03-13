@@ -19,12 +19,12 @@
 		<database.password>otus</database.password>
 	</properties>
 
-	<scm>
-		<connection>scm:git:git@github.com:ccem-dev/otus-api.git</connection>
-		<developerConnection>scm:git:git@github.com:ccem-dev/otus-api.git</developerConnection>
-	</scm>
-
 	<dependencies>
+		<!--
+			-
+			- External Dependencies
+			-
+		!-->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
@@ -32,15 +32,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate.ogm</groupId>
-			<artifactId>hibernate-ogm-mongodb</artifactId>
-			<version>5.0.1.Final</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.ogm</groupId>
-			<artifactId>hibernate-ogm-core</artifactId>
-			<version>5.0.1.Final</version>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -55,6 +49,11 @@
 			<version>${equalize.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!--
+			-
+			- Dependency between modules
+			-
+		!-->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>

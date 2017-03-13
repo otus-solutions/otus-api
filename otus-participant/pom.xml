@@ -12,6 +12,11 @@
 	</parent>
 
 	<dependencies>
+		<!--
+			-
+			- Dependency between modules
+			-
+		!-->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-center</artifactId>

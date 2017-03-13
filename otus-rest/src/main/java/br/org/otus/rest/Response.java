@@ -1,8 +1,7 @@
 package br.org.otus.rest;
 
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-
 import com.google.gson.Gson;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 public class Response {
 

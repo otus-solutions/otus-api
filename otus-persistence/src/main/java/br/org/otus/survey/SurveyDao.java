@@ -1,21 +1,17 @@
 package br.org.otus.survey;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
-import static com.mongodb.client.model.Filters.or;
+import br.org.mongodb.MongoGenericDao;
+import com.mongodb.Block;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.bson.Document;
-import org.ccem.otus.survey.form.SurveyForm;
-
-import com.mongodb.Block;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-
-import br.org.mongodb.MongoGenericDao;
+import static com.mongodb.client.model.Filters.*;
 
 public class SurveyDao extends MongoGenericDao {
 

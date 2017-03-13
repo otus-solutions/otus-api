@@ -1,8 +1,8 @@
 package org.ccem.otus.model.survey.activity.status;
 
-import java.time.LocalDateTime;
-
 import org.ccem.otus.model.survey.activity.User;
+
+import java.time.LocalDateTime;
 
 public class ActivityStatus {
 

@@ -13,70 +13,15 @@
 	</parent>
 
 	<dependencies>
+		<!--
+			-
+			- External Dependencies
+			-
+		!-->
 		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-persistence</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-center</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-participant</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-user</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-activity</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-laboratory</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-commons</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>br.org.tutty</groupId>
-			<artifactId>equalizer</artifactId>
-			<version>${equalize.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.owail</groupId>
-			<artifactId>owail-sender</artifactId>
-			<version>${owail.sender.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>survey-model</artifactId>
-			<version>${survey.model.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.auditor</groupId>
-			<artifactId>auditor-core</artifactId>
-			<version>${auditor.core.version}</version>
-			<type>ejb</type>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -100,6 +45,82 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>br.org.tutty</groupId>
+			<artifactId>equalizer</artifactId>
+			<version>${equalize.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.owail</groupId>
+			<artifactId>owail-sender</artifactId>
+			<version>${owail.sender.version}</version>
+		</dependency>
+		<!--
+			-
+			- Dependency between modules
+			-
+		!-->
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-persistence</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-center</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-participant</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-user</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-activity</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-laboratory</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-commons</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>survey-model</artifactId>
+			<version>${survey.model.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.auditor</groupId>
+			<artifactId>auditor-core</artifactId>
+			<version>${auditor.core.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
 		</dependency>
 	</dependencies>
 </project>

@@ -1,21 +1,14 @@
 package br.org.otus.survey.activity;
 
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import br.org.otus.survey.activity.api.ActivityFacade;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("participants/{rn}/activities")
 public class ActivityResource {

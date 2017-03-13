@@ -1,14 +1,13 @@
 package br.org.otus.laboratory;
 
-import java.util.List;
+import br.org.otus.laboratory.service.LaboratoryConfigurationService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import br.org.otus.laboratory.service.LaboratoryConfigurationService;
+import java.util.List;
 
 @Path("/laboratoryConfiguration")
 public class LaboratoryConfigurationResource {

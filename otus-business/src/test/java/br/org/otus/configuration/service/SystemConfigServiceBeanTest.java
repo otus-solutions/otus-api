@@ -5,7 +5,7 @@ import br.org.otus.configuration.builder.TokenBuilder;
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.email.service.EmailNotifierServiceBean;
 import br.org.otus.system.SystemConfig;
-import br.org.otus.system.SystemConfigDao;
+import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.user.api.UserFacade;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -27,7 +27,7 @@ public class SystemConfigServiceBeanTest {
     private SystemConfigServiceBean systemConfigServiceBean;
 
     @Mock
-    private SystemConfigDao systemConfigDao;
+    private SystemConfigDaoBean systemConfigDao;
 
     @Mock
     private UserFacade userFacade;

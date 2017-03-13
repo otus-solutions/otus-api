@@ -1,22 +1,14 @@
 package br.org.otus.laboratory;
 
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.Participant;
-
 import br.org.otus.laboratory.participant.LaboratoryParticipant;
 import br.org.otus.laboratory.service.LaboratoryParticipantService;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/laboratory-participant")
 public class LaboratoryParticipantResource {

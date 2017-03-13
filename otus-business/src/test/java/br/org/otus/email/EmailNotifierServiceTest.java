@@ -4,7 +4,7 @@ import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.email.dto.EmailSenderDto;
 import br.org.otus.email.service.EmailNotifierServiceBean;
 import br.org.otus.email.system.SystemInstallationEmail;
-import br.org.otus.system.SystemConfigDao;
+import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.user.dto.UserDto;
 import br.org.owail.io.TemplateReader;
 import br.org.owail.sender.email.EmailCompositionException;
@@ -40,7 +40,7 @@ public class EmailNotifierServiceTest {
     private EmailNotifierServiceBean service;
 
     @Mock
-    private SystemConfigDao systemConfigDao;
+    private SystemConfigDaoBean systemConfigDao;
     @Mock
     private BasicEmailSender emailSender;
     @Mock

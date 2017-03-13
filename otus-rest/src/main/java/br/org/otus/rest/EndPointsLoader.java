@@ -1,12 +1,5 @@
 package br.org.otus.rest;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
 import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
@@ -19,6 +12,12 @@ import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.user.UserResource;
+
+import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 @ApplicationPath("otus")
 public class EndPointsLoader extends Application {

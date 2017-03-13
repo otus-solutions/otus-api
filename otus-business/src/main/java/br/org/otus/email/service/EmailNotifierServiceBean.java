@@ -6,7 +6,7 @@ import br.org.otus.email.OtusEmail;
 import br.org.otus.email.OtusEmailFactory;
 import br.org.otus.email.system.SystemInstallationEmail;
 import br.org.otus.security.EncryptorResources;
-import br.org.otus.system.SystemConfigDao;
+import br.org.otus.system.SystemConfigDaoBean;
 import br.org.owail.io.TemplateReader;
 import br.org.owail.sender.email.EmailCompositionException;
 import br.org.owail.sender.email.Recipient;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class EmailNotifierServiceBean implements EmailNotifierService {
 
     @Inject
-    private SystemConfigDao systemConfigDao;
+    private SystemConfigDaoBean systemConfigDao;
 
     @Override
     public void sendSystemInstallationEmail(OtusInitializationConfigDto initializationData) throws EmailNotificationException, EncryptedException {

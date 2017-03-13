@@ -1,9 +1,8 @@
 package br.org.otus.laboratory.config;
 
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.gson.Gson;
 
 public class CodeDefinitionTest {
 

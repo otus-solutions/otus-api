@@ -5,7 +5,7 @@ import br.org.otus.configuration.builder.TokenBuilder;
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.email.service.EmailNotifierService;
 import br.org.otus.system.SystemConfig;
-import br.org.otus.system.SystemConfigDao;
+import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.user.api.UserFacade;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 public class SystemConfigServiceBean implements SystemConfigService {
 
     @Inject
-    private SystemConfigDao systemConfigDao;
+    private SystemConfigDaoBean systemConfigDao;
 
     @Inject
     private UserFacade userFacade;

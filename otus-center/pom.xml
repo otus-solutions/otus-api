@@ -12,6 +12,11 @@
     </parent>
 
     <dependencies>
+        <!--
+            -
+            - External Dependencies
+            -
+        !-->
         <dependency>
             <groupId>org.ccem.otus</groupId>
             <artifactId>otus-commons</artifactId>

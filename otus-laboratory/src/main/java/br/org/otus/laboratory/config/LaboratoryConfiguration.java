@@ -1,13 +1,12 @@
 package br.org.otus.laboratory.config;
 
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.ccem.otus.utils.ObjectIdAdapter;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import org.bson.types.ObjectId;
+import org.ccem.otus.utils.ObjectIdAdapter;
+
+import java.util.List;
 
 public class LaboratoryConfiguration {
 

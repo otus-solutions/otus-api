@@ -1,12 +1,6 @@
 package br.org.otus.laboratory.config;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import br.org.otus.laboratory.service.LaboratoryConfigurationServiceBean;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,7 +11,12 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.laboratory.service.LaboratoryConfigurationServiceBean;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 @Ignore
 @RunWith(PowerMockRunner.class)
