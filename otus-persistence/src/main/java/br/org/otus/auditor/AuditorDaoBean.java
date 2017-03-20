@@ -1,7 +1,6 @@
 package br.org.otus.auditor;
 
 import br.org.mongodb.MongoGenericDao;
-import com.google.gson.Gson;
 import org.ccem.auditor.model.Auditor;
 import org.ccem.auditor.persistence.AuditorDao;
 
@@ -16,6 +15,6 @@ public class AuditorDaoBean extends MongoGenericDao implements AuditorDao {
     }
 
     public void persist(Auditor auditor) {
-        super.persist(new Gson().toJson(auditor));
+        super.persist(Auditor.serialize(auditor));
     }
 }
