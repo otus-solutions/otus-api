@@ -4,9 +4,9 @@ import br.org.mongodb.MongoGenericDao;
 import com.mongodb.client.MongoCollection;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.Participant;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
-import org.ccem.otus.persistence.ParticipantDao;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -62,16 +62,15 @@ public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDa
 	}
 
 	@Override
-	public Participant findByRecruitmentNumber(long rn) throws DataNotFoundException {
+	public Participant findByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
 		Map<String, FieldCenter> fieldCenterMap = getAllFieldCentes();
-		
-		Participant result = participantCollection.find(eq("recruitmentNumber", rn)).first();
-		
+
+		Participant result = participantCollection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+
 		if (result == null) {
-			throw new DataNotFoundException(
-					new Throwable("Participant with recruitment number {" + rn + "} not found."));
+			throw new DataNotFoundException(new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
 		}
-		
+
 		String acronym = result.getFieldCenter().getAcronym();
 		result.setFieldCenter(fieldCenterMap.get(acronym));
 		return result;

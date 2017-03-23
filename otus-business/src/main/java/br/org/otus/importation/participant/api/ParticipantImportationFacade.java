@@ -3,8 +3,8 @@ package br.org.otus.importation.participant.api;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.importation.model.ParticipantImport;
-import org.ccem.otus.importation.service.ParticipantImportService;
+import org.ccem.otus.participant.importation.model.ParticipantImport;
+import org.ccem.otus.participant.importation.service.ParticipantImportService;
 
 import javax.inject.Inject;
 import java.util.Set;

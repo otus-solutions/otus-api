@@ -1,12 +1,17 @@
 package br.org.otus.laboratory.config;
 
 import com.google.gson.Gson;
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import br.org.otus.laboratory.CodeConfiguration;
+
+@Ignore
 public class CodeDefinitionTest {
 
-	private CodeDefinition codeDefinitions;
+	private CodeConfiguration codeDefinitions;
 	private String json = "";
 	
 	@Before
@@ -17,7 +22,7 @@ public class CodeDefinitionTest {
 				+ "\"cryotube\": 3,"
 				+ "\"lastInsertion\":0}" ;
 
-		codeDefinitions = new Gson().fromJson(json, CodeDefinition.class);
+		codeDefinitions = new Gson().fromJson(json, CodeConfiguration.class);
 
 	}
 	

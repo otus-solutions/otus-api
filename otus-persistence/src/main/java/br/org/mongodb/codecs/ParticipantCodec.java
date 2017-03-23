@@ -6,8 +6,8 @@ import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.Participant;
-import org.ccem.otus.model.Sex;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.model.Sex;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 public class ParticipantCodec implements Codec<Participant> {

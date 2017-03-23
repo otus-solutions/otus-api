@@ -1,69 +1,49 @@
 package br.org.otus.laboratory;
 
-import br.org.otus.laboratory.participant.LaboratoryParticipant;
-import br.org.otus.laboratory.service.LaboratoryParticipantService;
-import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
+import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
 
 @Path("/laboratory-participant")
 public class LaboratoryParticipantResource {
 
 	@Inject
-	private LaboratoryParticipantService laboratoryParticipantService;
+	private ParticipantLaboratoryService laboratoryParticipantService;
 
 	@POST
 	@Secured
-	@Path("/generate/{rn}")
+	@Path("/initialize/{rn}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String create(@PathParam("rn") Long rn) throws DataNotFoundException {
-		LaboratoryParticipant labParticipant = null;
+	public String initialize(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
+		ParticipantLaboratory laboratory = null;
 
-		if (!laboratoryParticipantService.hasLaboratory(rn)) {
-			labParticipant = laboratoryParticipantService.create(rn);
+		if (laboratoryParticipantService.hasLaboratory(recruitmentNumber)) {
+			laboratory = laboratoryParticipantService.getLaboratory(recruitmentNumber);
 		} else {
-			labParticipant = laboratoryParticipantService.getLaboratory(rn);
+			laboratory = laboratoryParticipantService.create(recruitmentNumber);
 		}
 
-		return new Response().buildSuccess(labParticipant).toJson();
-	}
-
-	@POST
-	@Secured
-	@Path("/generate-empty/{rn}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String createEmpty(@PathParam("rn") Long rn) throws DataNotFoundException {
-		LaboratoryParticipant labParticipant = null;
-
-		if (!laboratoryParticipantService.hasLaboratory(rn)) {
-			labParticipant = laboratoryParticipantService.createEmptyLaboratory(rn);
-		} else {
-			labParticipant = laboratoryParticipantService.getLaboratory(rn);
-		}
-
-		return new Response().buildSuccess(labParticipant).toJson();
-	}
-
-	@PUT
-	@Secured
-	@Path("/generate-tubes/{rn}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String generateTubes(@PathParam("rn") Long rn) throws DataNotFoundException {
-		LaboratoryParticipant labParticipant = laboratoryParticipantService.addTubesToParticipant(rn);
-		return new Response().buildSuccess(labParticipant).toJson();
+		return new Response().buildSuccess(laboratory).toJson();
 	}
 
 	@GET
 	@Secured
 	@Path("/{rn}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getLaboratory(@PathParam("rn") Long rn) throws DataNotFoundException {
-		LaboratoryParticipant laboratoryParticipant = laboratoryParticipantService.getLaboratory(rn);
-		return new Response().buildSuccess(laboratoryParticipant).toJson();
+	public String getLaboratory(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
+		ParticipantLaboratory laboratory = laboratoryParticipantService.getLaboratory(recruitmentNumber);
+		return new Response().buildSuccess(laboratory).toJson();
 	}
 
 }
