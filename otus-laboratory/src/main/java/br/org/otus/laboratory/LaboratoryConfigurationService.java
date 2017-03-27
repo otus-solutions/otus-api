@@ -13,8 +13,6 @@ public interface LaboratoryConfigurationService {
 
 	Set<TubeDefinition> getTubeSetByGroupName(String setName);
 
-	Set<TubeDefinition> getTubeSetByGroupType(String setType);
-
 	List<LabelReference> getLabelOrderByName(String orderName);
 
 	List<String> generateCodes(TubeSeed seed);

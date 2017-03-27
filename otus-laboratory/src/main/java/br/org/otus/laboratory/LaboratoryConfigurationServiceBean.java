@@ -35,11 +35,6 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 	}
 
 	@Override
-	public Set<TubeDefinition> getTubeSetByGroupType(String setType) {
-		return null;
-	}
-
-	@Override
 	public List<LabelReference> getLabelOrderByName(String orderName) {
 		return laboratoryConfiguration.getLabelPrintConfiguration().getOrders().get(orderName);
 	}
