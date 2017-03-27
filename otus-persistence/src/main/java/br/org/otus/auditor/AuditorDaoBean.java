@@ -1,6 +1,7 @@
 package br.org.otus.auditor;
 
 import br.org.mongodb.MongoGenericDao;
+import com.google.gson.Gson;
 import org.ccem.auditor.model.Auditor;
 import org.ccem.auditor.persistence.AuditorDao;
 
