@@ -49,8 +49,9 @@ public class AuditorServletFilter implements Filter {
 			SessionLog sessionLog = fetchSessionInformation(token);
 			String remoteAddress = resettableStreamHttpServletRequest.getRemoteAddr();
 			String url = resettableStreamHttpServletRequest.getRequestURL().toString();
+			String method = httpServletRequest.getMethod().toString();
 
-			auditorService.log(new LogEntry(remoteAddress, url, body, sessionLog));
+			auditorService.log(new LogEntry(remoteAddress, url, method, body, sessionLog));
 			resettableStreamHttpServletRequest.resetInputStream();
 		}
 
