@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.config;
+package br.org.otus.laboratory;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

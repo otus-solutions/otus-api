@@ -29,6 +29,7 @@ public class ActivityServiceBean implements ActivityService {
 	@Override
 	public List<SurveyActivity> list(long rn) {
 		return activityDao.find(rn);
+		
 	}
 
 	@Override
