@@ -28,11 +28,7 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 
     @Override
     public Set<TubeDefinition> getDefaultTubeSet() {
-        try {
-            return this.laboratoryConfiguration.getCollectGroupConfiguration().getDefaultCollectGroupDescriptor().getTubes();
-        } catch (NoSuchElementException e) {
-            return new HashSet<>();
-        }
+        return this.laboratoryConfiguration.getCollectGroupConfiguration().getDefaultCollectGroupDescriptor().getTubes();
     }
 
     @Override
