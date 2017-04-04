@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import br.org.otus.configuration.datasource.DataSourceResource;
 import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
@@ -36,25 +37,28 @@ public class EndPointsLoader extends Application {
 
 	@Inject
 	private SurveyResource surveyResource;
-
+	
 	@Inject
 	private TemplateResource templateResource;
 
 	@Inject
 	private VisualIdentityResource visualIdentityResource;
-
+	
 	@Inject
 	private ParticipantImportationResource participantImportationResource;
-
+	
 	@Inject
 	private ParticipantResource participantResource;
-
+	
 	@Inject
 	private ActivityResource activityResource;
 
 	@Inject
 	private LaboratoryParticipantResource laboratoryParticipantResource;
 
+	@Inject
+	private DataSourceResource dataSourceResource;
+	
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -69,6 +73,7 @@ public class EndPointsLoader extends Application {
 		resources.add(ParticipantResource.class);
 		resources.add(ActivityResource.class);
 		resources.add(LaboratoryParticipantResource.class);
+		resources.add(DataSourceResource.class);
 		return resources;
 	}
 
@@ -86,7 +91,7 @@ public class EndPointsLoader extends Application {
 		resources.add(participantResource);
 		resources.add(activityResource);
 		resources.add(laboratoryParticipantResource);
+		resources.add(dataSourceResource);
 		return resources;
 	}
-
 }

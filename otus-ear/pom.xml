@@ -54,6 +54,10 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-laboratory</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-datasource</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -82,11 +86,7 @@
 	</build>
 
 	<dependencies>
-		<!--
-			-
-			- Dependency between modules
-			-
-		!-->
+		<!-- - - Dependency between modules - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-business</artifactId>
@@ -141,16 +141,18 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-datasource</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
 			<groupId>org.ccem.auditor</groupId>
 			<artifactId>auditor-core</artifactId>
 			<version>${auditor.core.version}</version>
 			<type>ejb</type>
 		</dependency>
-		<!--
-			-
-			- External Dependencies
-			-
-		!-->
+		<!-- - - External Dependencies - ! -->
 		<dependency>
 			<groupId>br.org.tutty</groupId>
 			<artifactId>equalizer</artifactId>
@@ -185,6 +187,11 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>3.0.18.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-multipart-provider</artifactId>
+			<version>3.1.1.Final</version>
 		</dependency>
 	</dependencies>
 </project>

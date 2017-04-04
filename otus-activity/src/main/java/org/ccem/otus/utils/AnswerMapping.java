@@ -13,6 +13,7 @@ public enum AnswerMapping {
 	TEXT_QUESTION(TextAnswer.class, "TextQuestion"),
 	EMAIL_QUESTION(TextAnswer.class, "EmailQuestion"),
 	TIME_QUESTION(ImmutableDateAnswer.class, "TimeQuestion"),
+	AUTOCOMPLETE_QUESTION(TextAnswer.class, "AutocompleteQuestion"),
 	PHONE_QUESTION(TextAnswer.class, "PhoneQuestion");
 	
 	private Class<? extends AnswerFill> answerType;
