@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-commons</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>

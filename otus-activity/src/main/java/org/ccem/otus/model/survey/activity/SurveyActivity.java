@@ -89,7 +89,7 @@ public class SurveyActivity {
 	/**
 	 * @return a GsonBuilder instance with AnswerAdapter, ObjectIdAdapter
 	 *         registered and also all registered adapters of SurveyForm.
-	 * @see SurveyForm.getGsonBuilder
+	 * {@link SurveyForm#getGsonBuilder}
 	 * 
 	 */
 	public static GsonBuilder getGsonBuilder() {
