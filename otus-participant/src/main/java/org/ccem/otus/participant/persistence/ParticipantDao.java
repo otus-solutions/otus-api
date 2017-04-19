@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.persistence;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 
 import java.util.ArrayList;
@@ -12,4 +13,6 @@ public interface ParticipantDao {
     ArrayList<Participant> find();
     
     Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;
+
+	ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 }

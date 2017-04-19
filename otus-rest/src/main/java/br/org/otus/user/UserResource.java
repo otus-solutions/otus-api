@@ -25,7 +25,7 @@ public class UserResource {
 
 	@Inject
 	private UserFacade userFacade;
-
+	
 	@POST
 	@Path("/signup")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -61,6 +61,17 @@ public class UserResource {
 	public String disableUsers(ManagementUserDto managementUserDto) {
 		Response response = new Response();
 		userFacade.disable(managementUserDto);
+		return response.buildSuccess().toJson();
+	}
+	
+	@POST
+	@Path("/field-center")
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String updateFieldCenter(ManagementUserDto managementUserDto) {
+		Response response = new Response();
+		userFacade.updateFieldCenter(managementUserDto);
 		return response.buildSuccess().toJson();
 	}
 

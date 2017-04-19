@@ -1,6 +1,6 @@
 package br.org.mongodb.connection;
 
-import br.org.mongodb.codecs.ParticipantCodecProvider;
+import br.org.mongodb.codecs.OtusCodecProvider;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -23,7 +23,7 @@ public class MongoDBFactory extends ConnectionConfiguration {
 		MongoCredential credential = MongoCredential.createCredential(username, database, password.toCharArray());
 
 		CodecRegistry codecRegistry = CodecRegistries.fromRegistries(
-				CodecRegistries.fromProviders(new ParticipantCodecProvider()), MongoClient.getDefaultCodecRegistry());
+				CodecRegistries.fromProviders(new OtusCodecProvider()), MongoClient.getDefaultCodecRegistry());
 
 		MongoClientOptions options = MongoClientOptions.builder().codecRegistry(codecRegistry).build();
 

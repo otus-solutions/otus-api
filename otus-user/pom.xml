@@ -11,6 +11,12 @@
 	</parent>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-center</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<!--
 			-
 			- External Dependencies

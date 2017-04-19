@@ -3,7 +3,8 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public interface AuthenticationData{
-    String getUser();
+    
+	String getUserEmail();
 
     String getKey();
 

@@ -1,78 +1,96 @@
 package br.org.otus.user;
 
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.model.User;
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import org.bson.Document;
-
-import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.mongodb.client.model.Filters.eq;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.persistence.FieldCenterDao;
+
+import com.mongodb.client.MongoCollection;
+
+import br.org.mongodb.MongoGenericDao;
+import br.org.otus.model.User;
+
 public class UserDaoBean extends MongoGenericDao implements UserDao {
-    private static final String COLLECTION_NAME = "user";
-    private static final String EMAIL = "email";
-    private static final String ADM = "adm";
 
-    public UserDaoBean() {
-        super(COLLECTION_NAME);
-    }
+	@Inject
+	private FieldCenterDao fieldCenterDao;
+	private static final String COLLECTION_NAME = "user";
+	private static final String EMAIL = "email";
+	private static final String ADM = "adm";
+	private MongoCollection<User> userCollection;
 
-    public void persist(User user) {
-        super.persist(User.serialize(user));
-    }
+	public UserDaoBean() {
+		super(COLLECTION_NAME);
+	}
 
-    /**
-     * Update User System.
-     * Remove UUID and Email because they are not upgradeable
-     * @param user
-     */
-    public void update(User user){
-        Document document = Document.parse(User.serialize(user));
-        document.remove("email");
-        document.remove("uuid");
-        super.collection.updateOne(eq("email", user.getEmail()), new Document("$set", document));
-    }
+	@PostConstruct
+	private void setUp() {
+		userCollection = db.getCollection(COLLECTION_NAME, User.class);
+	}
 
-    @Override
-    public User fetchByEmail(String email) {
-        Document result = this.collection.find(eq(EMAIL, email)).first();
-        if(result != null){
-            return User.deserialize(result.toJson());
-        }else {
-            throw new NoResultException();
-        }
-    }
+	@Override
+	public void persist(User user) {
+		userCollection.insertOne(user);
+	}
 
-    @Override
-    public Boolean emailExists(String email) {
-        try{
-            fetchByEmail(email);
-            return Boolean.TRUE;
-        }catch (NoResultException e){
-            return Boolean.FALSE;
-        }
-    }
+	@Override
+	public User fetchByEmail(String email) throws DataNotFoundException {
+		User user = userCollection.find(eq(EMAIL, email)).first();
+		if (user == null) {
+			throw new DataNotFoundException(new Throwable("User with email: {" + email + "} not found."));
+		}
+		attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
+		return user;
+	}
 
-    @Override
-    public User findAdmin() {
-        Document result = this.collection.find(eq(ADM, true)).first();
-        return User.deserialize(result.toJson());
-    }
+	@Override
+	public Boolean emailExists(String email) {
+		try {
+			fetchByEmail(email);
+			return Boolean.TRUE;
+		} catch (DataNotFoundException e) {
+			return Boolean.FALSE;
+		}
+	}
 
+	@Override
+	public User findAdmin() {
+		User user = userCollection.find(eq(ADM, true)).first();
+		attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
+		return user;
+	}
 
-    @Override
-    public List<User> fetchAll() {
-        ArrayList<User> users = new ArrayList<>();
+	@Override
+	public List<User> fetchAll() {
+		ArrayList<User> users = new ArrayList<User>();
+		userCollection.find().into(users);
+		for (User user : users) {
+			attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
+		}
+		return users;
+	}
 
-        FindIterable<Document> result = this.collection.find();
-        result.forEach((Block<Document>) document -> {
-            users.add(User.deserialize(document.toJson()));
-        });
+	private void attachfieldCenter(User user, Map<String, FieldCenter> fieldCentersMap) {
+		if (user.getFieldCenter() != null) {
+			user.setFieldCenter(fieldCentersMap.get(user.getFieldCenter().getAcronym()));
+		} else {
+			user.setFieldCenter(new FieldCenter());
+		}
+	}
 
-        return users;
-    }
+	@Override
+	public User update(User user) {
+		// TODO: It needs to remove the properties that must not be updated such uuid and email.
+		return userCollection.findOneAndUpdate(eq(EMAIL, user.getEmail()), new Document("$set", user));
+	}
+
 }

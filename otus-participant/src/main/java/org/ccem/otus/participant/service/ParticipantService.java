@@ -1,10 +1,11 @@
 package org.ccem.otus.participant.service;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.Participant;
-
 import java.util.List;
 import java.util.Set;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Participant;
 
 public interface ParticipantService {
 
@@ -12,7 +13,7 @@ public interface ParticipantService {
 
     void create(Participant participant);
     
-    List<Participant> list();
-    
     Participant getByRecruitmentNumber(long rn) throws DataNotFoundException;
+
+	List<Participant> list(FieldCenter fieldCenter);
 }

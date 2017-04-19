@@ -8,22 +8,22 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 public class AuthenticationDto implements Dto, AuthenticationData {
     private static final String MODE = "user";
 
-    public String user;
+    public String userEmail;
     public String password;
     public String requestAddress;
 
     @Override
     public Boolean isValid() {
-        return (!user.isEmpty() && user != null) && (!password.isEmpty() && password != null) && (requestAddress != null);
+        return (!userEmail.isEmpty() && userEmail != null) && (!password.isEmpty() && password != null) && (requestAddress != null);
     }
 
     public void setEmail(String email) {
-        this.user = email;
+        this.userEmail = email;
     }
 
     @Override
-    public String getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AuthenticationDto implements Dto, AuthenticationData {
     @Override
     public JWTClaimsSet buildClaimSet() {
         JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-        builder.issuer(user);
+        builder.issuer(userEmail);
         builder.claim("mode", MODE);
         return builder.build();
     }
