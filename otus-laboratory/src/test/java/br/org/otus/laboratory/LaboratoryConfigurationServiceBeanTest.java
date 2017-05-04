@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.internal.matchers.Any;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -42,6 +44,8 @@ public class LaboratoryConfigurationServiceBeanTest {
 	
 	@Mock
 	private TubeSeed seed;
+	
+	Integer startingPoint = 2; 
 
 	@Before
 	public void setup() {
@@ -126,20 +130,41 @@ public class LaboratoryConfigurationServiceBeanTest {
 	}
 	
 	@Test
-	public void should_to_generate_tube_codes(){
+	public void method_generateCodes_should_use_correct_starting_point(){
 		
-		seed.setTubeCount(1);
-		Integer startingPoint;
+		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);	
+				
+		laboratoryConfigurationServiceBean.generateCodes(seed);
 		
-		PowerMockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint = 2);
+		Mockito.verify(laboratoryConfiguration).allocNextCodeList(seed);
+		Mockito.verify(laboratoryConfiguration).generateNewCodeList(seed, startingPoint);	
 		
-		CodeConfiguration codeConfiguration = new CodeConfiguration();
-		PowerMockito.when(codeConfiguration.generateCodeList(seed, startingPoint));		
+	}
+	
+	@Test
+	public void method_generateCodes_should_return_generateNewCodeList_result(){
+		List<String> codes = new ArrayList<>();
+		codes.add("33100031");
+		codes.add("33100032");		
 		
+		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
+		Mockito.when(laboratoryConfiguration.generateNewCodeList(seed, startingPoint)).thenReturn(codes);
+			
 		
-		assertEquals(2, laboratoryConfigurationServiceBean.generateCodes(seed));
+		List<String> expectedCodes = new ArrayList<>();
+		expectedCodes.add("33100031");			
+		expectedCodes.add("33100032");			
+		assertEquals(expectedCodes, laboratoryConfigurationServiceBean.generateCodes(seed));
 		
+	}
+	
+	@Test
+	public void method_generateCodes_should_call_updateLaboratoryConfiguration(){
+		List<String> code = new ArrayList<>();
+		code.add("33100031");
+		Mockito.when(laboratoryConfigurationServiceBean.generateCodes(seed)).thenReturn(code);
 		
+		//Mockito.verify(laboratorioConfigurationDao.update(laboratoryConfiguration.);
 		
 	}
 	
