@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>otus-user</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>org.ccem.otus</groupId>
+		<artifactId>otus-root</artifactId>
+		<version>1.1-SNAPSHOT</version>
+		<relativePath>../otus-root/pom.xml</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-center</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!--
+			-
+			- External Dependencies
+			-
+		!-->
+		<dependency>
+			<groupId>br.org.tutty</groupId>
+			<artifactId>equalizer</artifactId>
+			<version>${equalize.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
