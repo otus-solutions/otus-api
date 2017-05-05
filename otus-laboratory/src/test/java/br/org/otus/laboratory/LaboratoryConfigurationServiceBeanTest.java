@@ -31,6 +31,7 @@ import br.org.otus.laboratory.label.LabelReference;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(LaboratoryConfigurationServiceBean.class)
 
+
 public class LaboratoryConfigurationServiceBeanTest {
 	
 	@InjectMocks
@@ -46,12 +47,20 @@ public class LaboratoryConfigurationServiceBeanTest {
 	private TubeSeed seed;
 	
 	Integer startingPoint = 2; 
+	
+	
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		
 		PowerMockito.when(laboratorioConfigurationDao.find()).thenReturn(laboratoryConfiguration);	
 		
+		//dica stackOverflow para metodo public void 
+		//http://stackoverflow.com/questions/25020277/mockito-powermockito-mock-private-void-method/25020531#25020531
+		//Porém falta tratamento da exceção
+	    //LaboratoryConfigurationServiceBean updateLaboratoryConfiguration = PowerMockito.spy(new LaboratoryConfigurationServiceBean());
+	    //PowerMockito.doNothing().when(updateLaboratoryConfiguration, "updateLaboratoryConfiguration()");
+	   		
 	}
 	
 		
@@ -158,15 +167,7 @@ public class LaboratoryConfigurationServiceBeanTest {
 		
 	}
 	
-	@Test
-	public void method_generateCodes_should_call_updateLaboratoryConfiguration(){
-		List<String> code = new ArrayList<>();
-		code.add("33100031");
-		Mockito.when(laboratoryConfigurationServiceBean.generateCodes(seed)).thenReturn(code);
-		
-		//Mockito.verify(laboratorioConfigurationDao.update(laboratoryConfiguration.);
-		
-	}
+
 	
 	
 	
