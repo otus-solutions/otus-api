@@ -38,6 +38,8 @@
 		<module>../otus-user</module>
 		<module>../otus-laboratory</module>
 		<module>../otus-datasource</module>
+		<module>../otus-file-uploader</module>
+		
 	</modules>
 
 	<repositories>

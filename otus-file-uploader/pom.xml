@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>otus-participant</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>otus-file-uploader</artifactId>
+	<packaging>ejb</packaging>
 
 	<parent>
 		<groupId>org.ccem.otus</groupId>
@@ -12,17 +12,11 @@
 	</parent>
 
 	<dependencies>
-		<!-- - - Dependency between modules - ! -->
+		<!-- - - External Dependencies - ! -->
 		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-center</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>survey-model</artifactId>
-			<version>${survey.model.version}</version>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

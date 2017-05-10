@@ -20,6 +20,7 @@
             <groupId>org.ccem.otus</groupId>
             <artifactId>otus-commons</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>br.org.tutty</groupId>

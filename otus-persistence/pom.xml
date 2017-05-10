@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>otus-persistence</artifactId>
 	<packaging>ejb</packaging>
@@ -19,11 +20,7 @@
 	</properties>
 
 	<dependencies>
-		<!--
-			-
-			- External Dependencies
-			-
-		!-->
+		<!-- - - External Dependencies - ! -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
@@ -48,11 +45,7 @@
 			<version>${equalize.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--
-			-
-			- Dependency between modules
-			-
-		!-->
+		<!-- - - Dependency between modules - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
@@ -104,6 +97,13 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-datasource</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-file-uploader</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
 			<type>ejb</type>

@@ -9,12 +9,12 @@ import br.org.mongodb.MongoGenericDao;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
-public class LaboratoryConfigurationDaoBean extends MongoGenericDao implements LaboratoryConfigurationDao {
+public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
 	private static final String COLLECTION_NAME = "laboratory_configuration";
 
 	public LaboratoryConfigurationDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override

@@ -18,12 +18,12 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 @Stateless
-public class ActivityDaoBean extends MongoGenericDao implements ActivityDao {
+public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
 
 	private static final String COLLECTION_NAME = "activity";
 
 	public ActivityDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override

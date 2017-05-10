@@ -5,7 +5,6 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -14,38 +13,29 @@ import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 
-import com.mongodb.client.MongoCollection;
-
 import br.org.mongodb.MongoGenericDao;
 
-public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDao {
+public class ParticipantDaoBean extends MongoGenericDao<Participant> implements ParticipantDao {
 
 	private static final String COLLECTION_NAME = "participant";
 
 	@Inject
 	private FieldCenterDao fieldCenterDao;
 
-	private MongoCollection<Participant> participantCollection;
-
 	public ParticipantDaoBean() {
-		super(COLLECTION_NAME);
-	}
-
-	@PostConstruct
-	private void setUp() {
-		participantCollection = db.getCollection(COLLECTION_NAME, Participant.class);
+		super(COLLECTION_NAME, Participant.class);
 	}
 
 	@Override
 	public void persist(Participant participant) {
-		participantCollection.insertOne(participant);
+		this.collection.insertOne(participant);
 	}
 
 	@Override
 	public ArrayList<Participant> find() {
 		Map<String, FieldCenter> fieldCenterMap = fieldCenterDao.getFieldCentersMap();
 		
-		ArrayList<Participant> participants = participantCollection.find().into(new ArrayList<Participant>());
+		ArrayList<Participant> participants = this.collection.find().into(new ArrayList<Participant>());
 		for (Participant participant : participants) {
 			String acronym = participant.getFieldCenter().getAcronym();
 			participant.setFieldCenter(fieldCenterMap.get(acronym));
@@ -58,7 +48,7 @@ public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDa
 	public ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter) {
 		Map<String, FieldCenter> fieldCenterMap = fieldCenterDao.getFieldCentersMap();
 
-		ArrayList<Participant> participants = participantCollection.find(eq("fieldCenter.acronym", fieldCenter.getAcronym())).into(new ArrayList<Participant>());
+		ArrayList<Participant> participants = this.collection.find(eq("fieldCenter.acronym", fieldCenter.getAcronym())).into(new ArrayList<Participant>());
 		for (Participant participant : participants) {
 			String acronym = participant.getFieldCenter().getAcronym();
 			participant.setFieldCenter(fieldCenterMap.get(acronym));
@@ -71,7 +61,7 @@ public class ParticipantDaoBean extends MongoGenericDao implements ParticipantDa
 	public Participant findByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
 		Map<String, FieldCenter> fieldCenterMap = fieldCenterDao.getFieldCentersMap();
 
-		Participant result = participantCollection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+		Participant result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
 
 		if (result == null) {
 			throw new DataNotFoundException(

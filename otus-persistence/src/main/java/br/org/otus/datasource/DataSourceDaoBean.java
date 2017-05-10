@@ -19,12 +19,12 @@ import com.mongodb.client.FindIterable;
 import br.org.mongodb.MongoGenericDao;
 
 @Stateless
-public class DataSourceDaoBean extends MongoGenericDao implements DataSourceDao {
+public class DataSourceDaoBean extends MongoGenericDao<Document> implements DataSourceDao {
 
 	private static final String COLLECTION_NAME = "datasource";
 
 	public DataSourceDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override

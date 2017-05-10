@@ -1,10 +1,10 @@
 package org.ccem.otus.participant.persistence;
 
+import java.util.ArrayList;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
-
-import java.util.ArrayList;
 
 public interface ParticipantDao {
 

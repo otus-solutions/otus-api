@@ -16,21 +16,18 @@ public class ParticipantFacade {
 
 	@Inject
 	private ParticipantService participantService;
-	
+
 	public Participant getByRecruitmentNumber(long rn) {
-		Participant participant = null;
-		
 		try {
-			participant= participantService.getByRecruitmentNumber(rn);
+			return participantService.getByRecruitmentNumber(rn);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
-		
-		return participant;
+
 	}
 
 	public List<Participant> list(FieldCenter fieldCenter) {
 		return participantService.list(fieldCenter);
 	}
-	
+
 }

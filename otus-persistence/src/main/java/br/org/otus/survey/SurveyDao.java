@@ -13,12 +13,12 @@ import java.util.Set;
 
 import static com.mongodb.client.model.Filters.*;
 
-public class SurveyDao extends MongoGenericDao {
+public class SurveyDao extends MongoGenericDao<Document> {
 
 	private static final String COLLECTION_NAME = "survey";
 
 	public SurveyDao() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	public List<SurveyForm> find() {
