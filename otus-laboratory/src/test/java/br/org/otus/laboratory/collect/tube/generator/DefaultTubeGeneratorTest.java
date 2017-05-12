@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,13 +17,10 @@ import org.powermock.api.mockito.PowerMockito;
 import br.org.otus.laboratory.LaboratoryConfigurationService;
 import br.org.otus.laboratory.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.collect.tube.TubeDefinition;
-import junit.framework.Assert;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class DefaultTubeGeneratorTest {
-	
-	
+public class DefaultTubeGeneratorTest {	
 	
 	@InjectMocks
 	private DefaultTubeGenerator defaultTubeGenerator;
@@ -56,15 +52,13 @@ public class DefaultTubeGeneratorTest {
         assertEquals(expectTypeTubeDefinition0, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(0).getType());
         
         expectTypeTubeDefinition1 = tubeSets.stream().filter(t->t.getType().equals("FLORIDE")).findFirst().get().getType();
-        assertEquals(expectTypeTubeDefinition1, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(1).getType());
-        
-        
+        assertEquals(expectTypeTubeDefinition1, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(1).getType());        
 	}
 	
 	@Test
 	public void method_should_return_GROUP_NAME_DEFAULT(){
 		assertEquals(groupNameDefault, defaultTubeGenerator.getTubeDefinitions(tubeSeed).stream().findAny().get().getGroup());	
-		//System.out.println((defaultTubeGenerator.getTubeDefinitions(tubeSeed)).stream().findAny().get().getGroup());
+		
 	}
 
 }
