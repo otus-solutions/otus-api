@@ -1,0 +1,375 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] otus-api
+[INFO] otus-commons
+[INFO] otus-center
+[INFO] otus-participant
+[INFO] otus-user
+[INFO] otus-activity
+[INFO] otus-laboratory
+[INFO] otus-datasource
+[INFO] otus-persistence
+[INFO] otus-business
+[INFO] otus-rest
+[INFO] otus-ear
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-api 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-root ---
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-root ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-root/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-root ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-root ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-root/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-root/1.1-SNAPSHOT/otus-root-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-commons 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-commons ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-commons/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-commons ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-commons/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-commons ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-commons/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-commons ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 12 source files to /home/fabiano/CCEM/otus-api/otus-commons/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-commons ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-commons/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-commons ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-commons ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-commons ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-commons/target/otus-commons-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-commons ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-commons ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-commons/target/otus-commons-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-commons/1.1-SNAPSHOT/otus-commons-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-commons/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-commons/1.1-SNAPSHOT/otus-commons-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-center 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-center ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-center/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-center ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-center/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-center ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-center/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-center ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 4 source files to /home/fabiano/CCEM/otus-api/otus-center/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-center ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-center/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-center ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-center ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-center ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-center/target/otus-center-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-center ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-center ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-center/target/otus-center-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-center/1.1-SNAPSHOT/otus-center-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-center/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-center/1.1-SNAPSHOT/otus-center-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-participant 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-participant ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-participant/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-participant ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-participant/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-participant ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-participant/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-participant ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 11 source files to /home/fabiano/CCEM/otus-api/otus-participant/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-participant ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-participant/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-participant ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/fabiano/CCEM/otus-api/otus-participant/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-participant ---
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.ccem.otus.model.ParticipantTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.148 sec - in org.ccem.otus.model.ParticipantTest
+
+Results :
+
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-participant ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-participant/target/otus-participant-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-participant ---
+[INFO] Loading execution data file /home/fabiano/CCEM/otus-api/otus-participant/target/jacoco.exec
+[INFO] Analyzed bundle 'otus-participant' with 7 classes
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-participant ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-participant/target/otus-participant-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-participant/1.1-SNAPSHOT/otus-participant-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-participant/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-participant/1.1-SNAPSHOT/otus-participant-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-user 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-user ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-user/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-user ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-user/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-user ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-user/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-user ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/fabiano/CCEM/otus-api/otus-user/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-user ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-user/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-user ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-user ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-user ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-user/target/otus-user-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-user ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-user ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-user/target/otus-user-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-user/1.1-SNAPSHOT/otus-user-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-user/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-user/1.1-SNAPSHOT/otus-user-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-activity 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-activity ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-activity/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-activity ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-activity/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-activity ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-activity/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-activity ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 24 source files to /home/fabiano/CCEM/otus-api/otus-activity/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-activity ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-activity/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-activity ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/fabiano/CCEM/otus-api/otus-activity/target/test-classes
+[INFO] /home/fabiano/CCEM/otus-api/otus-activity/src/test/java/org/ccem/otus/service/ActivityServiceBeanTest.java: /home/fabiano/CCEM/otus-api/otus-activity/src/test/java/org/ccem/otus/service/ActivityServiceBeanTest.java uses unchecked or unsafe operations.
+[INFO] /home/fabiano/CCEM/otus-api/otus-activity/src/test/java/org/ccem/otus/service/ActivityServiceBeanTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-activity ---
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.ccem.otus.service.ActivityServiceBeanTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.49 sec - in org.ccem.otus.service.ActivityServiceBeanTest
+
+Results :
+
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-activity ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-activity/target/otus-activity-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-activity ---
+[INFO] Loading execution data file /home/fabiano/CCEM/otus-api/otus-activity/target/jacoco.exec
+[INFO] Analyzed bundle 'otus-activity' with 22 classes
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-activity ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-activity/target/otus-activity-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-activity/1.1-SNAPSHOT/otus-activity-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-activity/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-activity/1.1-SNAPSHOT/otus-activity-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-laboratory 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-laboratory ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-laboratory/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-laboratory ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-laboratory/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-laboratory ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-laboratory/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-laboratory ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 44 source files to /home/fabiano/CCEM/otus-api/otus-laboratory/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-laboratory ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-laboratory/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-laboratory ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 4 source files to /home/fabiano/CCEM/otus-api/otus-laboratory/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-laboratory ---
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running br.org.otus.laboratory.participant.LaboratoryParticipantTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.011 sec - in br.org.otus.laboratory.participant.LaboratoryParticipantTest
+Running br.org.otus.laboratory.CodeConfigurationTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.178 sec - in br.org.otus.laboratory.CodeConfigurationTest
+Running br.org.otus.laboratory.LaboratoryConfigurationServiceBeanTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 sec - in br.org.otus.laboratory.LaboratoryConfigurationServiceBeanTest
+Running br.org.otus.laboratory.TubeConfigurationTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 sec - in br.org.otus.laboratory.TubeConfigurationTest
+
+Results :
+
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 3
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-laboratory ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-laboratory/target/otus-laboratory-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-laboratory ---
+[INFO] Loading execution data file /home/fabiano/CCEM/otus-api/otus-laboratory/target/jacoco.exec
+[INFO] Analyzed bundle 'otus-laboratory' with 39 classes
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-laboratory ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-laboratory/target/otus-laboratory-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-laboratory/1.1-SNAPSHOT/otus-laboratory-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-laboratory/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-laboratory/1.1-SNAPSHOT/otus-laboratory-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-datasource 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-datasource ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-datasource/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-datasource ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-datasource/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-datasource ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-datasource/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-datasource ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 5 source files to /home/fabiano/CCEM/otus-api/otus-datasource/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-datasource ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-datasource/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-datasource ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-datasource ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ otus-datasource ---
+[INFO] Building jar: /home/fabiano/CCEM/otus-api/otus-datasource/target/otus-datasource-1.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:report (jacoco-site) @ otus-datasource ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ otus-datasource ---
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-datasource/target/otus-datasource-1.1-SNAPSHOT.jar to /home/fabiano/.m2/repository/org/ccem/otus/otus-datasource/1.1-SNAPSHOT/otus-datasource-1.1-SNAPSHOT.jar
+[INFO] Installing /home/fabiano/CCEM/otus-api/otus-datasource/pom.xml to /home/fabiano/.m2/repository/org/ccem/otus/otus-datasource/1.1-SNAPSHOT/otus-datasource-1.1-SNAPSHOT.pom
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building otus-persistence 1.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ otus-persistence ---
+[INFO] Deleting /home/fabiano/CCEM/otus-api/otus-persistence/target
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.8:prepare-agent (jacoco-initialize) @ otus-persistence ---
+[INFO] argLine set to -javaagent:/home/fabiano/.m2/repository/org/jacoco/org.jacoco.agent/0.7.8/org.jacoco.agent-0.7.8-runtime.jar=destfile=/home/fabiano/CCEM/otus-api/otus-persistence/target/jacoco.exec,append=true,output=file
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ otus-persistence ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:compile (default-compile) @ otus-persistence ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 22 source files to /home/fabiano/CCEM/otus-api/otus-persistence/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ otus-persistence ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/fabiano/CCEM/otus-api/otus-persistence/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.3:testCompile (default-testCompile) @ otus-persistence ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/fabiano/CCEM/otus-api/otus-persistence/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ otus-persistence ---
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running br.org.otus.email.BasicEmailSenderTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.074 sec - in br.org.otus.email.BasicEmailSenderTest
