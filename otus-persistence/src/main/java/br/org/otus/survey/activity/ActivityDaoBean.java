@@ -15,6 +15,7 @@ import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 @Stateless
@@ -26,11 +27,16 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		super(COLLECTION_NAME, Document.class);
 	}
 
+	/**
+	 * Return activities considering that they were not discarded
+	 * @param rn
+	 * @return
+	 */
 	@Override
 	public List<SurveyActivity> find(long rn) {
 		ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
 
-		FindIterable<Document> result = collection.find(eq("participantData.recruitmentNumber", rn));
+		FindIterable<Document> result = collection.find(and(eq("participantData.recruitmentNumber", rn), eq("isDiscarded", false)));
 		result.forEach((Block<Document>) document -> {
 			activities.add(SurveyActivity.deserialize(document.toJson()));
 		});
