@@ -34,7 +34,6 @@ public class QualityControlTubeGeneratorTest {
 	@InjectMocks
 	private LaboratoryConfiguration laboratoryConfiguration;
 	private CollectGroupDescriptor collectGroupDescriptor;
-
 	private Set<TubeDefinition> tubeSets;
 	private Set<TubeDefinition> expectedTubeSets;
 	private List<TubeDefinition> tubeDefinitionsExpected;
@@ -52,6 +51,7 @@ public class QualityControlTubeGeneratorTest {
 		tubeSets.add(new TubeDefinition(1, "URINE", "NONE"));
 		tubeSets.add(new TubeDefinition(1, "FLOURIDE", "FASTING"));
 		tubeSets.add(new TubeDefinition(2, "GEL", "POST_OVERLOAD"));
+		
 		collectGroupDescriptor = new CollectGroupDescriptor("DEFAULT", "DEFAULT", tubeSets);
 		tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
 
