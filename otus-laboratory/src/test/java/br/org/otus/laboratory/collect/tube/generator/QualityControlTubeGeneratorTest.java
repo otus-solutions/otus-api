@@ -56,13 +56,7 @@ public class QualityControlTubeGeneratorTest {
 		tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
 
 		when(laboratoryConfigurationService.getTubeSetByGroupName(tubeSeed.getCollectGroupDescriptor().getName()))
-				.thenReturn(tubeSets);
-
-		expectedTubeSets = new HashSet<TubeDefinition>();
-		expectedTubeSets.add(new TubeDefinition(4, "GEL", "POST_OVERLOAD"));
-		expectedTubeSets.add(new TubeDefinition(3, "EDTA", "FASTING"));
-
-		tubeDefinitionsExpected = expectedTubeSets.stream().map(definition -> definition).collect(Collectors.toList());
+				.thenReturn(tubeSets);		
 	}
 
 	@Test
@@ -73,6 +67,12 @@ public class QualityControlTubeGeneratorTest {
 
 	@Test
 	public void method_should_getTubeDefinitions() {
+		expectedTubeSets = new HashSet<TubeDefinition>();
+		expectedTubeSets.add(new TubeDefinition(4, "GEL", "POST_OVERLOAD"));
+		expectedTubeSets.add(new TubeDefinition(3, "EDTA", "FASTING"));
+
+		tubeDefinitionsExpected = expectedTubeSets.stream().map(definition -> definition).collect(Collectors.toList());
+		
 		typeExpected = tubeDefinitionsExpected.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
 				.getType();
 

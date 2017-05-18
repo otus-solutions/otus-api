@@ -23,12 +23,12 @@ public class CollectGroupConfigurationTest {
 	public void setUp() {
 		tubes = new HashSet<TubeDefinition>();
 		tubes.add(new TubeDefinition(1, "FLUORIDE", "POST_OVERLOAD"));
-		
-		QC1 ="QC_1";
-		QC2 ="QC_2";
-		QC3 ="QC_3";
-		QC ="QUALITY_CONTROL";
-		DF = "DEFAULT";		
+
+		QC1 = "QC_1";
+		QC2 = "QC_2";
+		QC3 = "QC_3";
+		QC = "QUALITY_CONTROL";
+		DF = "DEFAULT";
 
 		groupDescriptors = new HashSet<>();
 		groupDescriptors.add(new CollectGroupDescriptor(QC1, QC, tubes));
@@ -55,18 +55,19 @@ public class CollectGroupConfigurationTest {
 
 	@Test
 	public void method_should_getCollectGroupByName() {
-		String expectedGetName = expectedSet.stream().filter(group -> group.getName().equals("QC_1")).findFirst().get().getName();
+		String expectedGetName = expectedSet.stream().filter(group -> group.getName().equals("QC_1")).findFirst().get()
+				.getName();
 		assertEquals(expectedGetName, collectGroupConfiguration.getCollectGroupByName("QC_1").getName());
 	}
 
 	@Test
 	public void method_should_getCollectGroupsByType() {
-		assertEquals(expectedSet.stream().filter(group -> group.getType().equals("QUALITY_CONTROL"))
-			.collect(Collectors.toList()).size(),
-			collectGroupConfiguration.getCollectGroupsByType("QUALITY_CONTROL").size());
+		assertEquals(
+				expectedSet.stream().filter(group -> group.getType().equals("QUALITY_CONTROL"))
+						.collect(Collectors.toList()).size(),
+				collectGroupConfiguration.getCollectGroupsByType("QUALITY_CONTROL").size());
 	}
 
-	
 	@Test
 	public void method_should_listAllGroupDescriptors() {
 
