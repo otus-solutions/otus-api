@@ -50,7 +50,6 @@ public class DefaultTubeGeneratorTest {
 		String expectTypeTubeGel = tubeDefinitions.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
 				.getType();
 		assertEquals(expectTypeTubeGel, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(0).getType());
-
 		String expectTypeTubeFloride = tubeDefinitions.stream().filter(t -> t.getType().equals("FLORIDE")).findFirst()
 				.get().getType();
 		assertEquals(expectTypeTubeFloride, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(1).getType());
