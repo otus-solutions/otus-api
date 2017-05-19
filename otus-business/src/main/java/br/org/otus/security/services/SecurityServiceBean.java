@@ -1,25 +1,27 @@
 package br.org.otus.security.services;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
+
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
-import br.org.otus.user.UserDaoBean;
+import br.org.otus.user.UserDao;
 import br.org.tutty.Equalizer;
-import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
-import org.ccem.otus.exceptions.webservice.security.TokenException;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
 
     @Inject
-    private UserDaoBean userDao;
+    private UserDao userDao;
 
     @Inject
     private SystemConfigDaoBean systemConfigDao;
@@ -30,12 +32,16 @@ public class SecurityServiceBean implements SecurityService {
     @Override
     public UserSecurityAuthorizationDto authenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
         try {
-            User user = userDao.fetchByEmail(authenticationData.getUser());
+            User user = userDao.fetchByEmail(authenticationData.getUserEmail());
 
             if (user.getPassword().equals(authenticationData.getKey())) {
                 if (user.isEnable()) {
                     UserSecurityAuthorizationDto userSecurityAuthorizationDto = new UserSecurityAuthorizationDto();
                     Equalizer.equalize(user, userSecurityAuthorizationDto);
+                   
+                    if(user.getFieldCenter() != null) {
+                    	userSecurityAuthorizationDto.getFieldCenter().acronym = user.getFieldCenter().getAcronym();
+                    }
 
                     String token = initializeToken(authenticationData);
                     userSecurityAuthorizationDto.setToken(token);
@@ -47,7 +53,7 @@ public class SecurityServiceBean implements SecurityService {
             } else {
                 throw new AuthenticationException();
             }
-        } catch (NoResultException e) {
+        } catch (DataNotFoundException e) {
             throw new AuthenticationException();
         }
     }

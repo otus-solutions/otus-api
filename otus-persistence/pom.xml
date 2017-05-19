@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.ccem.otus</groupId>
 		<artifactId>otus-root</artifactId>
-		<version>1.0</version>
+		<version>1.1</version>
 		<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 
@@ -19,11 +19,7 @@
 	</properties>
 
 	<dependencies>
-		<!--
-			-
-			- External Dependencies
-			-
-		!-->
+		<!-- - - External Dependencies - ! -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
@@ -48,11 +44,7 @@
 			<version>${equalize.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--
-			-
-			- Dependency between modules
-			-
-		!-->
+		<!-- - - Dependency between modules - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
@@ -104,6 +96,13 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-datasource</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-file-uploader</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
 			<type>ejb</type>

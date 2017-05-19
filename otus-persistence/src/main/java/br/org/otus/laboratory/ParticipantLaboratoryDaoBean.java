@@ -12,11 +12,11 @@ import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
-public class ParticipantLaboratoryDaoBean extends MongoGenericDao implements ParticipantLaboratoryDao {
+public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
 	private static final String COLLECTION_NAME = "participant_laboratory";
 
 	public ParticipantLaboratoryDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override

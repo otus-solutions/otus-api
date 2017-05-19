@@ -1,32 +1,39 @@
 package br.org.otus.user.management;
 
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.management.DisableUserNotificationEmail;
-import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.user.UserDaoBean;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.tutty.Equalizer;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.persistence.FieldCenterDao;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.email.user.management.DisableUserNotificationEmail;
+import br.org.otus.email.user.management.EnableUserNotificationEmail;
+import br.org.otus.model.User;
+import br.org.otus.user.UserDao;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.tutty.Equalizer;
 
 @Stateless
 public class ManagementUserServiceBean implements ManagementUserService {
     @Inject
-    private UserDaoBean userDao;
+    private UserDao userDao;
+    
+    @Inject 
+    private FieldCenterDao fieldCenterDao;
 
     @Inject
     private EmailNotifierService emailNotifierService;
 
     @Override
-    public User fetchByEmail(String email) {
+    public User fetchByEmail(String email) throws DataNotFoundException {
         return userDao.fetchByEmail(email);
     }
 
@@ -85,9 +92,24 @@ public class ManagementUserServiceBean implements ManagementUserService {
             ManagementUserDto managementUserDto = new ManagementUserDto();
 
             Equalizer.equalize(user, managementUserDto);
+            if(user.getFieldCenter() != null) {
+            	managementUserDto.fieldCenter.acronym = user.getFieldCenter().getAcronym();
+            }
             administrationUsersDtos.add(managementUserDto);
         });
 
         return administrationUsersDtos;
     }
+
+	@Override
+	public void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException {
+		User user = fetchByEmail(managementUserDto.getEmail());
+		if(!managementUserDto.fieldCenter.acronym.isEmpty()) {
+			FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(managementUserDto.fieldCenter.acronym);
+			user.setFieldCenter(fieldCenter);
+		} else {
+			user.setFieldCenter(null);
+		}
+		userDao.update(user);
+	}
 }

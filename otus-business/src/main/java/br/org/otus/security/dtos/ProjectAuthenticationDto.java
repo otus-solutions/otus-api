@@ -17,7 +17,7 @@ public class ProjectAuthenticationDto implements AuthenticationData, Dto {
     }
 
     @Override
-    public String getUser() {
+    public String getUserEmail() {
         return user;
     }
 

@@ -1,8 +1,9 @@
 package br.org.otus.user.dto;
 
-import br.org.tutty.Equalization;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+
+import br.org.tutty.Equalization;
 
 public class ManagementUserDto implements Dto {
     @Equalization(name = "name")
@@ -13,6 +14,8 @@ public class ManagementUserDto implements Dto {
 
     @Equalization(name = "phone")
     public String phone;
+    
+    public FieldCenterDTO fieldCenter;
 
     @Equalization(name = "email")
     public String email;
@@ -23,6 +26,11 @@ public class ManagementUserDto implements Dto {
     @Equalization(name = "enable")
     public Boolean enable;
 
+
+    public ManagementUserDto() {
+    	this.fieldCenter = new FieldCenterDTO();
+    }
+    
     public String getEmail() {
         return email;
     }

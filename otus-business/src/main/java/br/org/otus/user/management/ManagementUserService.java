@@ -12,11 +12,13 @@ import java.util.List;
 public interface ManagementUserService {
     List<ManagementUserDto> list();
 
-    User fetchByEmail(String email);
+    User fetchByEmail(String email) throws DataNotFoundException;
 
     void enable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
     void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
+
+    void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException;
 
     Boolean isUnique(String emailToVerify);
 }

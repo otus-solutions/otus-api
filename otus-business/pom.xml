@@ -7,16 +7,12 @@
 	<parent>
 		<groupId>org.ccem.otus</groupId>
 		<artifactId>otus-root</artifactId>
-		<version>1.0</version>
+		<version>1.1</version>
 		<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 
 	<dependencies>
-		<!--
-			-
-			- External Dependencies
-			-
-		!-->
+		<!-- - - External Dependencies - ! -->
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver</artifactId>
@@ -56,11 +52,7 @@
 			<artifactId>owail-sender</artifactId>
 			<version>${owail.sender.version}</version>
 		</dependency>
-		<!--
-			-
-			- Dependency between modules
-			-
-		!-->
+		<!-- - - Dependency between modules - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-persistence</artifactId>
@@ -127,6 +119,12 @@
 			<version>${auditor.core.version}</version>
 			<scope>provided</scope>
 			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-file-uploader</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

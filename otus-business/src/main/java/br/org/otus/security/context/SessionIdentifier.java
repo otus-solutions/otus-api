@@ -19,7 +19,7 @@ public class SessionIdentifier {
     }
 
     public SessionLog buildLog() {
-        SessionLog sessionLog = new SessionLog(authenticationData.getUser(), authenticationData.getKey(), authenticationData.getMode());
+        SessionLog sessionLog = new SessionLog(authenticationData.getUserEmail(), authenticationData.getKey(), authenticationData.getMode());
         sessionLog.setToken(token);
         sessionLog.setSecretKey(secretKey);
         sessionLog.setRequestAddress(authenticationData.getRequestAddress());

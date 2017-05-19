@@ -1,20 +1,22 @@
 package org.ccem.otus.participant.service;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.participant.persistence.ParticipantDao;
+import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Set;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 
 @Stateless
 public class ParticipantServiceBean implements ParticipantService {
 
 	@Inject
 	private ParticipantDao participantDao;
-
+	
 	@Override
 	public void create(Set<Participant> participants) {
 		participants.forEach(participant -> create(participant));
@@ -26,8 +28,12 @@ public class ParticipantServiceBean implements ParticipantService {
 	}
 
 	@Override
-	public List<Participant> list() {
-		return participantDao.find();
+	public List<Participant> list(FieldCenter fieldCenter) {
+		if(fieldCenter == null) {
+			return participantDao.find();
+		} else {
+			return participantDao.findByFieldCenter(fieldCenter);
+		}
 	}
 
 	@Override

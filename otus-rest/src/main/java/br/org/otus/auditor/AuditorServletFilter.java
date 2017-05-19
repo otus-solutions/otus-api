@@ -37,26 +37,35 @@ public class AuditorServletFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+			throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-		ResettableStreamHttpServletRequest resettableStreamHttpServletRequest = new ResettableStreamHttpServletRequest(httpServletRequest);
+		ResettableStreamHttpServletRequest resettableStreamHttpServletRequest = new ResettableStreamHttpServletRequest(
+				httpServletRequest);
 
 		if (isLoggedMethod(httpServletRequest.getMethod())) {
-			String body = IOUtils.toString(resettableStreamHttpServletRequest.getReader());
-			String authorizationHeader = resettableStreamHttpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-
-			String token = readToken(authorizationHeader);
-			SessionLog sessionLog = fetchSessionInformation(token);
-			String remoteAddress = resettableStreamHttpServletRequest.getRemoteAddr();
 			String url = resettableStreamHttpServletRequest.getRequestURL().toString();
-			String method = httpServletRequest.getMethod().toString();
+			// TODO: Need to fix it.
+			if (!url.contains("otus-rest/v01/upload")) {
+				String body = IOUtils.toString(resettableStreamHttpServletRequest.getReader());
+				String authorizationHeader = resettableStreamHttpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
-			auditorService.log(new LogEntry(remoteAddress, url, method, body, sessionLog));
-			resettableStreamHttpServletRequest.resetInputStream();
+				String token = readToken(authorizationHeader);
+				SessionLog sessionLog = fetchSessionInformation(token);
+				String remoteAddress = resettableStreamHttpServletRequest.getRemoteAddr();
+				String method = httpServletRequest.getMethod().toString();
+
+				auditorService.log(new LogEntry(remoteAddress, url, method, body, sessionLog));
+				resettableStreamHttpServletRequest.resetInputStream();
+
+			} else {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 		}
-
 		filterChain.doFilter(resettableStreamHttpServletRequest, servletResponse);
 		return;
+
 	}
 
 	@Override

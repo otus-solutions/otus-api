@@ -1,5 +1,14 @@
 package br.org.otus.user.signup;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
+import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+
 import br.org.otus.configuration.builder.SystemConfigBuilder;
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.email.OtusEmailFactory;
@@ -7,26 +16,18 @@ import br.org.otus.email.service.EmailNotifierService;
 import br.org.otus.email.user.signup.NewUserGreetingsEmail;
 import br.org.otus.email.user.signup.NewUserNotificationEmail;
 import br.org.otus.model.User;
-import br.org.otus.user.UserDaoBean;
+import br.org.otus.user.UserDao;
 import br.org.otus.user.dto.SignupDataDto;
 import br.org.otus.user.management.ManagementUserService;
 import br.org.owail.sender.email.Recipient;
 import br.org.owail.sender.email.Sender;
 import br.org.tutty.Equalizer;
-import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
-import org.ccem.otus.exceptions.webservice.security.EncryptedException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 @Stateless
 public class SignupServiceBean implements SignupService {
 
     @Inject
-    private UserDaoBean userDao;
+    private UserDao userDao;
 
     @Inject
     private EmailNotifierService emailNotifierService;
