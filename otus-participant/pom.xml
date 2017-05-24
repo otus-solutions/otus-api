@@ -6,16 +6,12 @@
 	<parent>
 		<groupId>org.ccem.otus</groupId>
 		<artifactId>otus-root</artifactId>
-		<version>1.1-SNAPSHOT</version>
+		<version>1.2-SNAPSHOT</version>
 		<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 
 	<dependencies>
-		<!--
-			-
-			- Dependency between modules
-			-
-		!-->
+		<!-- - - Dependency between modules - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-center</artifactId>
@@ -26,6 +22,12 @@
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
 			<version>${survey.model.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-commons</artifactId>
+			<version>${project.parent.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

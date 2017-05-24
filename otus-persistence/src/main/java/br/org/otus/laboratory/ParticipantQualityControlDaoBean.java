@@ -8,12 +8,12 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.ParticipantQualityControl;
 import br.org.otus.laboratory.participant.ParticipantQualityControlDao;
 
-public class ParticipantQualityControlDaoBean extends MongoGenericDao implements ParticipantQualityControlDao {
+public class ParticipantQualityControlDaoBean extends MongoGenericDao<Document> implements ParticipantQualityControlDao {
 
 	private static final String COLLECTION_NAME = "participant_quality_control";
 
 	public ParticipantQualityControlDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override

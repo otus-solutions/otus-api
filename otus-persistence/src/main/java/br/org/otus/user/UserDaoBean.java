@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.bson.Document;
@@ -14,37 +13,29 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.persistence.FieldCenterDao;
 
-import com.mongodb.client.MongoCollection;
-
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.User;
 
-public class UserDaoBean extends MongoGenericDao implements UserDao {
+public class UserDaoBean extends MongoGenericDao<User> implements UserDao {
 
 	@Inject
 	private FieldCenterDao fieldCenterDao;
 	private static final String COLLECTION_NAME = "user";
 	private static final String EMAIL = "email";
 	private static final String ADM = "adm";
-	private MongoCollection<User> userCollection;
 
 	public UserDaoBean() {
-		super(COLLECTION_NAME);
-	}
-
-	@PostConstruct
-	private void setUp() {
-		userCollection = db.getCollection(COLLECTION_NAME, User.class);
+		super(COLLECTION_NAME, User.class);
 	}
 
 	@Override
 	public void persist(User user) {
-		userCollection.insertOne(user);
+		this.collection.insertOne(user);
 	}
 
 	@Override
 	public User fetchByEmail(String email) throws DataNotFoundException {
-		User user = userCollection.find(eq(EMAIL, email)).first();
+		User user = this.collection.find(eq(EMAIL, email)).first();
 		if (user == null) {
 			throw new DataNotFoundException(new Throwable("User with email: {" + email + "} not found."));
 		}
@@ -64,7 +55,7 @@ public class UserDaoBean extends MongoGenericDao implements UserDao {
 
 	@Override
 	public User findAdmin() {
-		User user = userCollection.find(eq(ADM, true)).first();
+		User user = this.collection.find(eq(ADM, true)).first();
 		attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
 		return user;
 	}
@@ -72,7 +63,7 @@ public class UserDaoBean extends MongoGenericDao implements UserDao {
 	@Override
 	public List<User> fetchAll() {
 		ArrayList<User> users = new ArrayList<User>();
-		userCollection.find().into(users);
+		this.collection.find().into(users);
 		for (User user : users) {
 			attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
 		}
@@ -90,7 +81,7 @@ public class UserDaoBean extends MongoGenericDao implements UserDao {
 	@Override
 	public User update(User user) {
 		// TODO: It needs to remove the properties that must not be updated such uuid and email.
-		return userCollection.findOneAndUpdate(eq(EMAIL, user.getEmail()), new Document("$set", user));
+		return this.collection.findOneAndUpdate(eq(EMAIL, user.getEmail()), new Document("$set", user));
 	}
 
 }

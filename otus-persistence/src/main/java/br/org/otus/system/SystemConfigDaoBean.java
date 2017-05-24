@@ -1,16 +1,18 @@
 package br.org.otus.system;
 
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.email.BasicEmailSender;
-import org.bson.Document;
-
 import javax.persistence.NoResultException;
 
-public class SystemConfigDaoBean extends MongoGenericDao implements SystemConfigDao{
+import org.bson.Document;
+
+import br.org.mongodb.MongoGenericDao;
+import br.org.otus.email.BasicEmailSender;
+
+public class SystemConfigDaoBean extends MongoGenericDao<Document> implements SystemConfigDao{
+	
 	private static final String COLLECTION_NAME = "system_config";
 
 	public SystemConfigDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class ParticipantCodec implements Codec<Participant> {
 		writer.writeInt64("recruitmentNumber", value.getRecruitmentNumber());
 		writer.writeString("name", value.getName());
 		writer.writeString("sex", value.getSex().toString());
-
+		
 		writer.writeStartDocument("birthdate");
 		writer.writeString("objectType", value.getBirthdate().getObjectType());
 		writer.writeString("value", value.getBirthdate().getFormattedValue());

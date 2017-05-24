@@ -1,35 +1,41 @@
 package br.org.mongodb;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-public abstract class MongoGenericDao {
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public abstract class MongoGenericDao<T> {
 
 	@Inject
 	protected MongoDatabase db;
 	private String collectionName;
-	protected MongoCollection<Document> collection;
+	protected MongoCollection<T> collection;
+	private Class<T> typedClass;
 
 	@PostConstruct
 	private void setUp() {
-		collection = db.getCollection(collectionName);
+		collection = (MongoCollection<T>) db.getCollection(collectionName, typedClass);
 	}
 
-	public MongoGenericDao(String collectionName) {
+	public MongoGenericDao(String collectionName, Class<T> clazz) {
 		this.collectionName = collectionName;
+		this.typedClass = clazz;
 	}
 
-	public void persist(String json) {
-		collection.insertOne(Document.parse(json));
-		
+	public void persist(T document) {		
+		collection.insertOne(document);
 	}
 	
-	public FindIterable<Document> list() {
+	public void persist(String document) {
+		collection.insertOne((T) Document.parse(document));
+	}
+	
+	public FindIterable<T> list() {
 		return collection.find();
 	}
 
@@ -37,7 +43,7 @@ public abstract class MongoGenericDao {
 		return collection.count();
 	}
 	
-	public Document findFirst() {
+	public T findFirst() {
 		return list().first();
 	}
 

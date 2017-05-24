@@ -15,11 +15,11 @@ import java.util.Map;
 import static com.mongodb.client.model.Filters.eq;
 
 @Stateless
-public class FieldCenterDaoBean extends MongoGenericDao implements FieldCenterDao {
+public class FieldCenterDaoBean extends MongoGenericDao<Document> implements FieldCenterDao {
 	private static final String COLLECTION_NAME = "field_center";
 
 	public FieldCenterDaoBean() {
-		super(COLLECTION_NAME);
+		super(COLLECTION_NAME, Document.class);
 	}
 
 	/**
