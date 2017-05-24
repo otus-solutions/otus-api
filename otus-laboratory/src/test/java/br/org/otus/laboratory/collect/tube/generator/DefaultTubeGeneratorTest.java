@@ -20,6 +20,7 @@ import br.org.otus.laboratory.collect.tube.TubeDefinition;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultTubeGeneratorTest {
+	private static String GROUP_NAME_DEFAULT = "DEFAULT";
 
 	@InjectMocks
 	private DefaultTubeGenerator defaultTubeGenerator;
@@ -32,21 +33,19 @@ public class DefaultTubeGeneratorTest {
 	private CollectGroupDescriptor collectGroupDescriptor;
 	private TubeSeed tubeSeed;
 
-	private String groupNameDefault = "DEFAULT";
 
 	@Before
 	public void setUp() {
 		tubeDefinitions = new HashSet<TubeDefinition>();
-		tubeDefinitions.add(new TubeDefinition(1, "FLORIDE", "POST_OVERLOAD"));
-		tubeDefinitions.add(new TubeDefinition(2, "GEL", "POST_OVERLOAD"));
-		collectGroupDescriptor = new CollectGroupDescriptor("DEFAULT", "DEFAULT", tubeDefinitions);
+		tubeDefinitions.add(new TubeDefinition(1, "GEL", "POST_OVERLOAD"));
+		tubeDefinitions.add(new TubeDefinition(2, "FLORIDE", "POST_OVERLOAD"));
+		collectGroupDescriptor = new CollectGroupDescriptor(GROUP_NAME_DEFAULT, GROUP_NAME_DEFAULT, tubeDefinitions);
 		tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
 		PowerMockito.when(laboratoryConfigurationService.getDefaultTubeSet()).thenReturn(tubeDefinitions);
 	}
 
 	@Test
 	public void method_should_getTubeDefinitions() {
-
 		String expectTypeTubeGel = tubeDefinitions.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
 				.getType();
 		assertEquals(expectTypeTubeGel, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(0).getType());
@@ -57,7 +56,7 @@ public class DefaultTubeGeneratorTest {
 
 	@Test
 	public void method_should_return_GROUP_NAME_DEFAULT() {
-		assertEquals(groupNameDefault,
+		assertEquals(GROUP_NAME_DEFAULT,
 				defaultTubeGenerator.getTubeDefinitions(tubeSeed).stream().findAny().get().getGroup());
 	}
 

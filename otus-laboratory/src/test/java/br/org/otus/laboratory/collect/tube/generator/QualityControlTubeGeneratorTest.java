@@ -102,5 +102,4 @@ public class QualityControlTubeGeneratorTest {
 		qualityControlTubeGenerator.getTubeDefinitions(tubeSeed);
 		assertEquals(tubeCountExpected, (int) tubeSeed.getTubeCount());
 	}
-
 }
