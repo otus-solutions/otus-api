@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,6 +45,7 @@ public class DefaultTubeGeneratorTest {
 		PowerMockito.when(laboratoryConfigurationService.getDefaultTubeSet()).thenReturn(tubeDefinitions);
 	}
 
+	@Ignore
 	@Test
 	public void method_should_getTubeDefinitions() {
 		String expectTypeTubeGel = tubeDefinitions.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()

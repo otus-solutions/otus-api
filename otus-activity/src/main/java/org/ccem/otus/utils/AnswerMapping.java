@@ -1,7 +1,13 @@
 package org.ccem.otus.utils;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
-import org.ccem.otus.model.survey.activity.filling.answer.*;
+import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.DecimalAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.FileUploadAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.GridTextQuestionAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.ImmutableDateAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.TextAnswer;
 
 public enum AnswerMapping {
 	
@@ -15,14 +21,15 @@ public enum AnswerMapping {
 	TIME_QUESTION(ImmutableDateAnswer.class, "TimeQuestion"),
 	FILE_UPLOAD_QUESTION(FileUploadAnswer.class, "FileUploadQuestion"),
 	AUTOCOMPLETE_QUESTION(TextAnswer.class, "AutocompleteQuestion"),
-	PHONE_QUESTION(TextAnswer.class, "PhoneQuestion");
-	
+	PHONE_QUESTION(TextAnswer.class, "PhoneQuestion"),
+	GRID_TEXT_QUESTION(GridTextQuestionAnswer.class, "GridTextQuestion");
+		
 	private Class<? extends AnswerFill> answerType;
 	private String questionType;
 	
 	private AnswerMapping(Class<? extends AnswerFill> answerType, String questionType) {
 		this.answerType = answerType;
-		this.questionType = questionType;
+		this.questionType = questionType;	
 	}
 	
 	public Class<? extends AnswerFill> getAnswerClass() {
