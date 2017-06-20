@@ -16,5 +16,7 @@ public interface LaboratoryConfigurationService {
 	List<LabelReference> getLabelOrderByName(String orderName);
 
 	List<String> generateCodes(TubeSeed seed);
+	
+	LaboratoryConfiguration getLaboratoryConfiguration();
 
 }

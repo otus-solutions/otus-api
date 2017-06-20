@@ -4,14 +4,16 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
+import br.org.otus.laboratory.api.ParticipantLaboratoryFacade;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 
@@ -19,7 +21,9 @@ import br.org.otus.security.Secured;
 public class LaboratoryParticipantResource {
 
 	@Inject
-	private ParticipantLaboratoryService laboratoryParticipantService;
+	private ParticipantLaboratoryFacade facade;
+	@Inject
+	private LaboratoryConfigurationService laboratoryConfigurationService;
 
 	@POST
 	@Secured
@@ -28,13 +32,13 @@ public class LaboratoryParticipantResource {
 	public String initialize(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
 		ParticipantLaboratory laboratory = null;
 
-		if (laboratoryParticipantService.hasLaboratory(recruitmentNumber)) {
-			laboratory = laboratoryParticipantService.getLaboratory(recruitmentNumber);
+		if (facade.hasLaboratory(recruitmentNumber)) {
+			laboratory = facade.getLaboratory(recruitmentNumber);
 		} else {
-			laboratory = laboratoryParticipantService.create(recruitmentNumber);
+			laboratory = facade.create(recruitmentNumber);
 		}
 
-		return new Response().buildSuccess(laboratory).toJson();
+		return new Response().buildSuccess(ParticipantLaboratory.serialize(laboratory)).toJson();
 	}
 
 	@GET
@@ -42,8 +46,29 @@ public class LaboratoryParticipantResource {
 	@Path("/{rn}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String getLaboratory(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
-		ParticipantLaboratory laboratory = laboratoryParticipantService.getLaboratory(recruitmentNumber);
-		return new Response().buildSuccess(laboratory).toJson();
+		ParticipantLaboratory laboratory = facade.getLaboratory(recruitmentNumber);
+		return new Response().buildSuccess(ParticipantLaboratory.serialize(laboratory)).toJson();
+	}
+
+	@GET
+	@Secured
+	@Path("/descriptor")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getDescriptor() {
+		LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
+		LaboratoryConfigurationDTO laboratoryConfigurationDTO = new LaboratoryConfigurationDTO(laboratoryConfiguration);
+		return new Response().buildSuccess(laboratoryConfigurationDTO).toJson();
+	}
+
+	@PUT
+	@Secured
+	@Path("/{rn}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String update(@PathParam("rn") long rn, String participantLaboratory) {
+		ParticipantLaboratory deserialized = ParticipantLaboratory.deserialize(participantLaboratory);
+		ParticipantLaboratory updatedLaboratory = facade.update(deserialized);
+		return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
 	}
 
 }

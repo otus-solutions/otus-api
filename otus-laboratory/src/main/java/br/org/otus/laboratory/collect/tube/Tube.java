@@ -7,19 +7,23 @@ import br.org.otus.laboratory.collect.aliquote.Aliquote;
 
 public class Tube implements Comparable<Tube> {
 
+	private String objectType;
 	private String type;
 	private String moment;
 	private String code;
 	private String groupName;
 	private List<Aliquote> aliquotes;
 	private Integer order;
+	private TubeCollectionData tubeCollectionData;
 
 	public Tube(String type, String moment, String code, String groupName) {
+		this.objectType = "Tube";
 		this.type = type;
 		this.moment = moment;
 		this.code = code;
 		this.groupName = groupName;
 		this.aliquotes = new ArrayList<>();
+		this.tubeCollectionData = new TubeCollectionData();
 	}
 
 	public String getType() {
@@ -57,8 +61,15 @@ public class Tube implements Comparable<Tube> {
 			return true;
 		}
 	}
-
 	
+	public String getObjectType() {
+		return objectType;
+	}
+	
+	public TubeCollectionData getTubeCollectionData() {
+		return tubeCollectionData;
+	}
+
 	@Override
 	public int compareTo(Tube otherTube) {
 		if (this.order == null && otherTube.getOrder() != null) {

@@ -35,6 +35,12 @@
 		!-->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
+			<artifactId>survey-model</artifactId>
+			<version>${survey.model.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-participant</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>

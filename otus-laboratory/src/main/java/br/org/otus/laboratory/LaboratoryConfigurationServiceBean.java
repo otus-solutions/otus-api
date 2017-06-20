@@ -60,4 +60,8 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
         }
     }
 
+	public LaboratoryConfiguration getLaboratoryConfiguration() {
+		return laboratoryConfiguration;
+	}
+
 }
