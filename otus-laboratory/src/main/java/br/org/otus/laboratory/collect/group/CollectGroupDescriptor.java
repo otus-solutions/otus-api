@@ -14,6 +14,8 @@ public class CollectGroupDescriptor {
 		this.name = name;
 		this.type = type;
 		this.tubeSet = tubeSet;
+		
+		
 	}
 
 	public String getName() {

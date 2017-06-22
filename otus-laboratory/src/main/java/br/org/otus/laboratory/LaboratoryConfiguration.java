@@ -33,6 +33,7 @@ public class LaboratoryConfiguration {
 	private CollectMomentConfiguration collectMomentConfiguration;
 	private CollectGroupConfiguration collectGroupConfiguration;
 	private LabelPrintConfiguration labelPrintConfiguration;
+	private List<MetadataConfiguration> metadataConfiguration;
 
 	public LaboratoryConfiguration() {
 		codeConfiguration = new CodeConfiguration();
@@ -69,9 +70,13 @@ public class LaboratoryConfiguration {
 	public Integer allocNextCodeList(TubeSeed seed) {
 		return codeConfiguration.allocCodeAndGetStartingPoint(seed.getTubeCount());
 	}
-	
+
 	public List<String> generateNewCodeList(TubeSeed seed, Integer startingPoint) {
 		return codeConfiguration.generateCodeList(seed, startingPoint);
+	}
+
+	public List<MetadataConfiguration> getMetadataConfiguration() {
+		return metadataConfiguration;
 	}
 
 	public static String serialize(LaboratoryConfiguration laboratory) {

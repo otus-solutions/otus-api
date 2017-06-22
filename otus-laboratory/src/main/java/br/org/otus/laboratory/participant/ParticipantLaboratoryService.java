@@ -10,4 +10,6 @@ public interface ParticipantLaboratoryService {
 
 	ParticipantLaboratory getLaboratory(Long rn) throws DataNotFoundException;
 
+	ParticipantLaboratory update(ParticipantLaboratory participantLaboratory) throws DataNotFoundException;
+
 }

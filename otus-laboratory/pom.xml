@@ -6,7 +6,7 @@
   	<parent>
     	<groupId>org.ccem.otus</groupId>
     	<artifactId>otus-root</artifactId>
-    	<version>1.1</version>
+    	<version>1.2</version>
     	<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 	
@@ -33,6 +33,12 @@
 			- Dependency between modules
 			-
 		!-->
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>survey-model</artifactId>
+			<version>${survey.model.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-participant</artifactId>

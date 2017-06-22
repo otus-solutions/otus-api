@@ -30,30 +30,33 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 		return ParticipantLaboratory.deserialize(document.toJson());
 	}
-	
+
 	@Override
-	public ParticipantLaboratory findByRecruitmentNumber(long rn) throws DataNotFoundException{
+	public ParticipantLaboratory findByRecruitmentNumber(long rn) throws DataNotFoundException {
 		Document result = collection.find(eq("recruitmentNumber", rn)).first();
-		if(result == null) {
-			throw new DataNotFoundException(new Throwable("Laboratory of Participant recruitment number: " + rn + " not found."));
+		if (result == null) {
+			throw new DataNotFoundException(
+					new Throwable("Laboratory of Participant recruitment number: " + rn + " not found."));
 		}
 		return ParticipantLaboratory.deserialize(result.toJson());
 	}
 
 	@Override
-	public ParticipantLaboratory updateLaboratoryData(ParticipantLaboratory labParticipant) throws DataNotFoundException {
+	public ParticipantLaboratory updateLaboratoryData(ParticipantLaboratory labParticipant)
+			throws DataNotFoundException {
 		Document parsed = Document.parse(ParticipantLaboratory.serialize(labParticipant));
 		parsed.remove("_id");
-		
-		UpdateResult updateLabData = collection.updateOne(eq("recruitmentNumber", labParticipant.getRecruitmentNumber()),
-		    new Document("$set", parsed), new UpdateOptions().upsert(false));
 
-		if (updateLabData.getModifiedCount() == 0) {
-			throw new DataNotFoundException();
+		UpdateResult updateLabData = collection.updateOne(
+				eq("recruitmentNumber", labParticipant.getRecruitmentNumber()), new Document("$set", parsed),
+				new UpdateOptions().upsert(false));
+
+		if (updateLabData.getMatchedCount() == 0) {
+			throw new DataNotFoundException(new Throwable("Laboratory of Participant recruitment number: "
+					+ labParticipant.getRecruitmentNumber() + " does not exists."));
 		}
 
 		return labParticipant;
 	}
-	
 
 }

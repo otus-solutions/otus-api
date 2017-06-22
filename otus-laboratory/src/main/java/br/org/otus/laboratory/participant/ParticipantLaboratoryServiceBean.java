@@ -36,17 +36,12 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 			return false;
 		}
 	}
-	
+
 	@Override
 	public ParticipantLaboratory getLaboratory(Long recruitmentNumber) throws DataNotFoundException {
-		try {
-			ParticipantLaboratory laboratoryParticipant = participantLaboratoryDao.findByRecruitmentNumber(recruitmentNumber);
-			return laboratoryParticipant;
-		} catch (DataNotFoundException e) {
-			return null;
-		}
+		return participantLaboratoryDao.findByRecruitmentNumber(recruitmentNumber);
 	}
-	
+
 	@Override
 	public ParticipantLaboratory create(Long recruitmentNumber) throws DataNotFoundException {
 		Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
@@ -55,6 +50,12 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 		ParticipantLaboratory laboratory = new ParticipantLaboratory(recruitmentNumber, collectGroup.getName(), tubes);
 		participantLaboratoryDao.persist(laboratory);
 		return laboratory;
+	}
+
+	@Override
+	public ParticipantLaboratory update(ParticipantLaboratory partipantLaboratory) throws DataNotFoundException {
+		return participantLaboratoryDao.updateLaboratoryData(partipantLaboratory);
+
 	}
 
 }
