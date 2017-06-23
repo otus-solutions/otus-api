@@ -3,7 +3,7 @@ package br.org.otus.laboratory.collect.tube;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.org.otus.laboratory.collect.aliquote.Aliquote;
+import br.org.otus.laboratory.collect.aliquote.Aliquot;
 
 public class Tube implements Comparable<Tube> {
 
@@ -12,7 +12,7 @@ public class Tube implements Comparable<Tube> {
 	private String moment;
 	private String code;
 	private String groupName;
-	private List<Aliquote> aliquotes;
+	private List<Aliquot> aliquots;
 	private Integer order;
 	private TubeCollectionData tubeCollectionData;
 
@@ -22,7 +22,7 @@ public class Tube implements Comparable<Tube> {
 		this.moment = moment;
 		this.code = code;
 		this.groupName = groupName;
-		this.aliquotes = new ArrayList<>();
+		this.aliquots = new ArrayList<Aliquot>();
 		this.tubeCollectionData = new TubeCollectionData();
 	}
 
@@ -42,14 +42,14 @@ public class Tube implements Comparable<Tube> {
 		return groupName;
 	}
 
-	public List<Aliquote> getAliquotes() {
-		return aliquotes;
+	public List<Aliquot> getAliquots() {
+		return aliquots;
 	}
 
 	public Integer getOrder() {
 		return this.order;
 	}
-	
+
 	public void setOrder(Integer order) {
 		this.order = order;
 	}
@@ -61,11 +61,11 @@ public class Tube implements Comparable<Tube> {
 			return true;
 		}
 	}
-	
+
 	public String getObjectType() {
 		return objectType;
 	}
-	
+
 	public TubeCollectionData getTubeCollectionData() {
 		return tubeCollectionData;
 	}
@@ -75,15 +75,15 @@ public class Tube implements Comparable<Tube> {
 		if (this.order == null && otherTube.getOrder() != null) {
 			return 1;
 		}
-		
+
 		if (this.order == null && otherTube.getOrder() == null) {
 			return 0;
 		}
-		
+
 		if (this.order != null && otherTube.getOrder() == null) {
 			return -1;
 		}
-		
+
 		if (this.order < otherTube.getOrder()) {
 			return -1;
 		} else {

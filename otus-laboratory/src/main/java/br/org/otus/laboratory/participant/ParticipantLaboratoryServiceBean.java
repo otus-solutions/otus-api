@@ -55,7 +55,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	@Override
 	public ParticipantLaboratory update(ParticipantLaboratory partipantLaboratory) throws DataNotFoundException {
 		return participantLaboratoryDao.updateLaboratoryData(partipantLaboratory);
-
 	}
 
 }
