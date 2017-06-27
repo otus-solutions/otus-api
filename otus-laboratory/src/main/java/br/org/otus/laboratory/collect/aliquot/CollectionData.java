@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.collect.aliquote;
+package br.org.otus.laboratory.collect.aliquot;
 
 import java.time.LocalDateTime;
 

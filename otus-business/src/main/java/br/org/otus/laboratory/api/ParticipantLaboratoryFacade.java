@@ -27,8 +27,9 @@ public class ParticipantLaboratoryFacade {
 		try {
 			return service.getLaboratory(recruitmentNumber);
 		} catch (DataNotFoundException e) {
-//			e.printStackTrace();
-//			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+			// e.printStackTrace();
+			// throw new
+			// HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 			return null;
 		}
 	}
@@ -45,8 +46,5 @@ public class ParticipantLaboratoryFacade {
 	public boolean hasLaboratory(Long recruitmentNumber) {
 		return service.hasLaboratory(recruitmentNumber);
 	}
-	
-	
 
-	
 }

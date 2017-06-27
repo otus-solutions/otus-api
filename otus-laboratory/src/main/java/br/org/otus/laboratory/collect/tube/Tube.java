@@ -3,7 +3,7 @@ package br.org.otus.laboratory.collect.tube;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.org.otus.laboratory.collect.aliquote.Aliquot;
+import br.org.otus.laboratory.collect.aliquot.Aliquot;
 
 public class Tube implements Comparable<Tube> {
 

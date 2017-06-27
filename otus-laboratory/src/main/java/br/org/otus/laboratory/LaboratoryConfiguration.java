@@ -1,5 +1,6 @@
 package br.org.otus.laboratory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,10 +8,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
-
+import br.org.otus.laboratory.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.collect.group.CollectGroupConfiguration;
 import br.org.otus.laboratory.collect.group.CollectGroupConfigurationAdapter;
 import br.org.otus.laboratory.collect.group.CollectGroupDescriptor;
@@ -23,6 +21,10 @@ import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.label.LabelPrintConfiguration;
 import br.org.otus.laboratory.label.LabelPrintConfigurationAdapter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+
 public class LaboratoryConfiguration {
 
 	@SerializedName("_id")
@@ -32,6 +34,7 @@ public class LaboratoryConfiguration {
 	private TubeConfiguration tubeConfiguration;
 	private CollectMomentConfiguration collectMomentConfiguration;
 	private CollectGroupConfiguration collectGroupConfiguration;
+	private AliquotConfiguration aliquotConfiguration;
 	private LabelPrintConfiguration labelPrintConfiguration;
 	private List<MetadataConfiguration> metadataConfiguration;
 
@@ -40,6 +43,7 @@ public class LaboratoryConfiguration {
 		tubeConfiguration = new TubeConfiguration(new HashSet<>());
 		collectMomentConfiguration = new CollectMomentConfiguration(new HashSet<>());
 		collectGroupConfiguration = new CollectGroupConfiguration(new HashSet<>());
+		aliquotConfiguration = new AliquotConfiguration(new ArrayList<>());
 		labelPrintConfiguration = new LabelPrintConfiguration(new HashMap<>());
 	}
 
@@ -53,6 +57,10 @@ public class LaboratoryConfiguration {
 
 	public TubeConfiguration getTubeConfiguration() {
 		return this.tubeConfiguration;
+	}
+
+	public AliquotConfiguration getAliquotConfiguration() {
+		return this.aliquotConfiguration;
 	}
 
 	public CollectMomentConfiguration getCollectMomentConfiguration() {
