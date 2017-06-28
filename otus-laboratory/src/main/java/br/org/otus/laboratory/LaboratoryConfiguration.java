@@ -32,9 +32,9 @@ public class LaboratoryConfiguration {
 
 	private CodeConfiguration codeConfiguration;
 	private TubeConfiguration tubeConfiguration;
+	private AliquotConfiguration aliquotConfiguration;
 	private CollectMomentConfiguration collectMomentConfiguration;
 	private CollectGroupConfiguration collectGroupConfiguration;
-	private AliquotConfiguration aliquotConfiguration;
 	private LabelPrintConfiguration labelPrintConfiguration;
 	private List<MetadataConfiguration> metadataConfiguration;
 
