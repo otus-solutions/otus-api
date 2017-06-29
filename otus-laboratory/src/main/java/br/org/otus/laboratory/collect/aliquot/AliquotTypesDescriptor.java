@@ -6,12 +6,12 @@ public class AliquotTypesDescriptor {
 
 	private String objectType;
 	private String name;
-	private List<AliquoteGroupDescriptor> aliquotsSet;
+	private List<AliquoteGroupDescriptor> aliquoteGroupDescriptors;
 
-	public AliquotTypesDescriptor(String objectType, String name, List<AliquoteGroupDescriptor> aliquotsSet) {
+	public AliquotTypesDescriptor(String objectType, String name, List<AliquoteGroupDescriptor> aliquoteGroupDescriptors) {
 		this.objectType = objectType;
 		this.name = name;
-		this.aliquotsSet = aliquotsSet;
+		this.aliquoteGroupDescriptors = aliquoteGroupDescriptors;
 	}
 
 	public String getObjectType() {
@@ -22,8 +22,8 @@ public class AliquotTypesDescriptor {
 		return name;
 	}
 
-	public List<AliquoteGroupDescriptor> getAliquotsSet() {
-		return aliquotsSet;
+	public List<AliquoteGroupDescriptor> getAliquoteGroupDescriptors() {
+		return aliquoteGroupDescriptors;
 	}
 
 }
