@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
 import br.org.otus.laboratory.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.label.LabelReference;

@@ -4,10 +4,10 @@ import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.Document;
 
-import br.org.mongodb.MongoGenericDao;
-
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
+
+import br.org.mongodb.MongoGenericDao;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 

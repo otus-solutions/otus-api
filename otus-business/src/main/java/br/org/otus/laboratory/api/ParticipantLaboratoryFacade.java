@@ -46,5 +46,6 @@ public class ParticipantLaboratoryFacade {
 	public boolean hasLaboratory(Long recruitmentNumber) {
 		return service.hasLaboratory(recruitmentNumber);
 	}
+	
 
 }

@@ -56,5 +56,18 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	public ParticipantLaboratory update(ParticipantLaboratory partipantLaboratory) throws DataNotFoundException {
 		return participantLaboratoryDao.updateLaboratoryData(partipantLaboratory);
 	}
+	
+	@Override
+	public boolean isAliquoted(String aliquotCode) {
+		
+		try {
+			participantLaboratoryDao.findTubeByAliquot(aliquotCode);
+			return true;
+			
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }
