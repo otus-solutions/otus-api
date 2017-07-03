@@ -2,13 +2,13 @@ package br.org.otus.laboratory.collect.aliquot;
 
 import java.util.List;
 
-public class AliquotMomentDescriptor {
+public class AliquotMomentDescriptors {
 
 	private String objectType;
 	private String name;
-	private List<AliquotTypesDescriptor> aliquotTypesDescriptors;
+	private List<AliquotTypesDescriptors> aliquotTypesDescriptors;
 
-	public AliquotMomentDescriptor(String objectType, String name, List<AliquotTypesDescriptor> aliquotTypesDescriptors) {
+	public AliquotMomentDescriptors(String objectType, String name, List<AliquotTypesDescriptors> aliquotTypesDescriptors) {
 		this.objectType = objectType;
 		this.name = name;
 		this.aliquotTypesDescriptors = aliquotTypesDescriptors;
@@ -22,7 +22,7 @@ public class AliquotMomentDescriptor {
 		return name;
 	}
 
-	public List<AliquotTypesDescriptor> getAliquotTypesDescriptors() {
+	public List<AliquotTypesDescriptors> getAliquotTypesDescriptors() {
 		return aliquotTypesDescriptors;
 	}
 

@@ -5,14 +5,14 @@ import java.util.List;
 public class AliquotConfiguration {
 
 	private String objectType;
-	private List<AliquotMomentDescriptor> aliquotMomentDescriptors;
+	private List<AliquotCenterDescriptors> aliquotCenterDescriptors;
 
-	public AliquotConfiguration(List<AliquotMomentDescriptor> aliquotMomentDescriptors) {
-		this.aliquotMomentDescriptors = aliquotMomentDescriptors;
+	public AliquotConfiguration(List<AliquotCenterDescriptors> aliquotCenterDescriptors) {
+		this.aliquotCenterDescriptors = aliquotCenterDescriptors;
 	}
 
-	public List<AliquotMomentDescriptor> getAliquotMomentDescriptors() {
-		return aliquotMomentDescriptors;
+	public List<AliquotCenterDescriptors> getAliquotCenterDescriptors() {
+		return aliquotCenterDescriptors;
 	}
 
 	public String getObjectType() {

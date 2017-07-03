@@ -1,13 +1,20 @@
 package br.org.otus.laboratory.collect.aliquot;
 
-import org.ccem.otus.survey.template.item.label.Label;
-
 public class AliquoteDescriptor {
 
 	private String objectType;
 	private String name;
-	private Label label;
+	private String label;
+	private String role;
 	private Integer quantity;
+
+	public AliquoteDescriptor(String objectType, String name, String label, String role, Integer quantity) {
+		this.objectType = objectType;
+		this.name = name;
+		this.label = label;
+		this.role = role;
+		this.quantity = quantity;
+	}
 
 	public String getObjectType() {
 		return objectType;
@@ -17,8 +24,12 @@ public class AliquoteDescriptor {
 		return name;
 	}
 
-	public Label getLabel() {
+	public String getLabel() {
 		return label;
+	}
+
+	public String getRole() {
+		return role;
 	}
 
 	public Integer getQuantity() {
