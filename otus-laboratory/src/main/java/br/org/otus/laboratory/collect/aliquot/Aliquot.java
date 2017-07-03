@@ -1,15 +1,18 @@
 package br.org.otus.laboratory.collect.aliquot;
 
+import br.org.otus.laboratory.collect.aliquot.enums.AliquotContainer;
+import br.org.otus.laboratory.collect.aliquot.enums.AliquotRole;
+
 public class Aliquot {
 
 	private String objectType;
 	private String code;
 	private String name;
-	private String container;
-	private String role;
+	private AliquotContainer container;
+	private AliquotRole role;
 	private AliquotCollectionData aliquotCollectionData;
 
-	public Aliquot(String objectType, String code, String name, String container, String role, AliquotCollectionData aliquotCollectionData) {
+	public Aliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData) {
 		this.objectType = objectType;
 		this.code = code;
 		this.name = name;
@@ -25,17 +28,17 @@ public class Aliquot {
 	public String getCode() {
 		return code;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getContainer() {
+	
+	public AliquotContainer getContainer() {
 		return container;
 	}
 
-	public String getRole() {
+	public AliquotRole getRole() {
 		return role;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public AliquotCollectionData getAliquotCollectionData() {
