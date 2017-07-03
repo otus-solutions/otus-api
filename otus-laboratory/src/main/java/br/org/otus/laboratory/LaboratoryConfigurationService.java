@@ -19,6 +19,4 @@ public interface LaboratoryConfigurationService {
 	
 	LaboratoryConfiguration getLaboratoryConfiguration();
 	
-	boolean isAliquoted(String aliquotCode);
-
 }

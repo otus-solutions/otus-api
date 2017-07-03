@@ -47,4 +47,8 @@ public class ParticipantLaboratoryFacade {
 		return service.hasLaboratory(recruitmentNumber);
 	}
 
+	public boolean checkAliquotIsUnique(String aliquotCode) {
+		return service.isAliquoted(aliquotCode);
+	}
+
 }

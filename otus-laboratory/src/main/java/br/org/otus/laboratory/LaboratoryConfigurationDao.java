@@ -1,8 +1,5 @@
 package br.org.otus.laboratory;
 
-import org.bson.Document;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 public interface LaboratoryConfigurationDao {
 	
 	LaboratoryConfiguration find();
@@ -11,6 +8,4 @@ public interface LaboratoryConfigurationDao {
 
 	void update(LaboratoryConfiguration configuration) throws Exception;
 	
-	Document findTubeByAliquot(String aliquotCode) throws DataNotFoundException;
-
 }
