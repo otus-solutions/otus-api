@@ -7,15 +7,15 @@ public class Aliquot {
 	private String name;
 	private String container;
 	private String role;
-	private CollectionData collectionData;
+	private AliquotCollectionData aliquotCollectionData;
 
-	public Aliquot(String objectType, String code, String name, String container, String role, CollectionData collectionData) {
+	public Aliquot(String objectType, String code, String name, String container, String role, AliquotCollectionData aliquotCollectionData) {
 		this.objectType = objectType;
 		this.code = code;
 		this.name = name;
 		this.container = container;
 		this.role = role;
-		this.collectionData = collectionData;
+		this.aliquotCollectionData = aliquotCollectionData;
 	}
 
 	public String getObjectType() {
@@ -38,8 +38,8 @@ public class Aliquot {
 		return role;
 	}
 
-	public CollectionData getCollectionData() {
-		return collectionData;
+	public AliquotCollectionData getAliquotCollectionData() {
+		return aliquotCollectionData;
 	}
 
 }

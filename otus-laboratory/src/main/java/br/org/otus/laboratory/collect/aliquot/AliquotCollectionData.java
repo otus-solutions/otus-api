@@ -2,13 +2,14 @@ package br.org.otus.laboratory.collect.aliquot;
 
 import java.time.LocalDateTime;
 
-public class CollectionData {
+public class AliquotCollectionData {
 
+	private String objectType;
 	private String metadata;
 	private String operator;
 	private LocalDateTime time;
 
-	public CollectionData(String metadata, String operator, LocalDateTime time) {
+	public AliquotCollectionData(String metadata, String operator, LocalDateTime time) {
 		this.metadata = metadata;
 		this.operator = operator;
 		this.time = time;
@@ -24,6 +25,10 @@ public class CollectionData {
 
 	public LocalDateTime getTime() {
 		return time;
+	}
+
+	public String getObjectType() {
+		return objectType;
 	}
 
 }
