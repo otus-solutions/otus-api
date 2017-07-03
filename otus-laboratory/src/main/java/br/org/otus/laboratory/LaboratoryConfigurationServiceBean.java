@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
 import br.org.otus.laboratory.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.label.LabelReference;
@@ -62,6 +64,19 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 
 	public LaboratoryConfiguration getLaboratoryConfiguration() {
 		return laboratoryConfiguration;
+	}
+
+	@Override
+	public boolean isAliquoted(String aliquotCode) {
+		
+		try {
+			laboratoryConfigurationDao.findTubeByAliquot(aliquotCode);
+			return true;
+			
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

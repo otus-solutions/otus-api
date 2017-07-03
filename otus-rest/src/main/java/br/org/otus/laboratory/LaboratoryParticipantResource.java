@@ -71,4 +71,10 @@ public class LaboratoryParticipantResource {
 		return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
 	}
 
+	@GET
+	@Path("/aliquots/{aliquotCode}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public javax.ws.rs.core.Response isAliquoted(@PathParam("aliquotCode") String aliquotCode) {
+		return javax.ws.rs.core.Response.ok(laboratoryConfigurationService.isAliquoted(aliquotCode)).build();
+	}
 }

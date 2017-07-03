@@ -1,8 +1,10 @@
 package br.org.otus.laboratory;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
 
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.mongodb.MongoGenericDao;
 
@@ -38,6 +40,15 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 		if (updatedData.getModifiedCount() == 0) {
 			throw new Exception("Update was not executed.");
 		}
+	}
+	
+	public Document findTubeByAliquot(String aliquotCode) throws DataNotFoundException {
+		Document first = collection.find(in("tubes.aliquots.code", aliquotCode)).first();
+		if(first == null) {
+			throw new DataNotFoundException();
+		}
+		return first;
+		
 	}
 
 }
