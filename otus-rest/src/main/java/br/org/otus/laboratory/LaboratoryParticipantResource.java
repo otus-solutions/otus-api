@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.api.ParticipantLaboratoryFacade;
+import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
@@ -70,11 +71,32 @@ public class LaboratoryParticipantResource {
 		ParticipantLaboratory updatedLaboratory = participantLaboratoryFacade.update(deserialized);
 		return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
 	}
+	
+	@PUT
+	@Path("/{rn}/tubes/aliquots")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String updateAliquots(@PathParam("rn") long rn, String updateAliquotsDTO) {
+		
+		UpdateAliquotsDTO updateAliquots = UpdateAliquotsDTO.deserialize(updateAliquotsDTO);
+		
+		
+		
+		ParticipantLaboratory updatedLaboratory = participantLaboratoryFacade.updateAliquotList(updateAliquots);
+		
+		// TODO
+		// Criar DTO para receber novo objeto de atualização.  X
+		// Buscar Laboratório do participante
+		// Verificar se o mesmo possui todos os tubos recebidos -> Breno
+		
+		
+		return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
+	}
 
 	@GET
-	@Path("/aliquots/{aliquotCode}")
+	@Path("/{rn}/aliquots/{aliquotCode}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public javax.ws.rs.core.Response isAliquoted(@PathParam("aliquotCode") String aliquotCode) {
-		return javax.ws.rs.core.Response.ok(participantLaboratoryFacade.checkAliquotIsUnique(aliquotCode)).build();
+	public javax.ws.rs.core.Response isAliquoted(@PathParam("rn") long rn ,@PathParam("aliquotCode") String aliquotCode) {
+		return javax.ws.rs.core.Response.ok(participantLaboratoryFacade.checkAliquotIsUnique(rn, aliquotCode)).build();
 	}
 }

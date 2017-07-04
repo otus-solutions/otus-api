@@ -1,17 +1,19 @@
 package br.org.otus.laboratory;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
+import static com.mongodb.client.model.Filters.nin;
 
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
+
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
-
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
 	private static final String COLLECTION_NAME = "participant_laboratory";
@@ -59,9 +61,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 		return labParticipant;
 	}
-	
-	public Document findTubeByAliquot(String aliquotCode) throws DataNotFoundException {
-		Document first = collection.find(in("tubes.aliquots.code", aliquotCode)).first();
+	// findDocumentWithAliquotCodeNotInRecruimentNumber
+	public Document findDocumentWithAliquotCodeNotInRecruimentNumber(long rn, String aliquotCode) throws DataNotFoundException {
+		Document first = collection.find(and(in("tubes.aliquots.code", aliquotCode), nin("recruitmentNumber", rn))).first();
 		if(first == null) {
 			throw new DataNotFoundException();
 		}

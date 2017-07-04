@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
+import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.response.builders.ResponseBuild;
@@ -47,8 +48,12 @@ public class ParticipantLaboratoryFacade {
 		return service.hasLaboratory(recruitmentNumber);
 	}
 
-	public boolean checkAliquotIsUnique(String aliquotCode) {
-		return service.isAliquoted(aliquotCode);
+	public boolean checkAliquotIsUnique(long rn, String aliquotCode) {
+		return service.isAliquoted(rn, aliquotCode);
+	}
+
+	public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
+		return service.updateAliquots(updateAliquots);
 	}
 
 }

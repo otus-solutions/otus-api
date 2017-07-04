@@ -12,7 +12,7 @@ public interface ParticipantLaboratoryDao {
 	ParticipantLaboratory findByRecruitmentNumber(long rn) throws DataNotFoundException;
 
 	ParticipantLaboratory updateLaboratoryData(ParticipantLaboratory labParticipant) throws DataNotFoundException;
-	
-	public Document findTubeByAliquot(String aliquotCode) throws DataNotFoundException;
-	
+
+	public Document findDocumentWithAliquotCodeNotInRecruimentNumber(long rn, String aliquotCode) throws DataNotFoundException;
+
 }
