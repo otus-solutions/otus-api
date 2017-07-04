@@ -45,7 +45,8 @@ public class LaboratoryConfigurationTest {
 	@Before
 	public void setup() {		
 		jsonString = "{" + "\"codeConfiguration\":{}," + "\"tubeConfiguration\":{"
-				+ "\"tubeDescriptors\":[{" + "\"name\":\"EDTA_DNA\"" + "}]" + "}," + "\"collectMomentConfiguration\":{"
+				+ "\"tubeDescriptors\":"
+				+ "[{" + "\"name\":\"EDTA_DNA\"" + "}]" + "}," + "\"collectMomentConfiguration\":{"
 				+ "\"momentDescriptors\":[{" + "\"name\":\"NONE\"," + "\"label\":\"\"" + "}]" + "},"
 				+ "\"collectGroupConfiguration\":{" + "\"groupDescriptors\":[{" + "\"name\":\"QC_1\","
 				+ "\"type\":\"QUALITY_CONTROL\"," + "\"tubeSet\":[{" + "\"count\":2," + "\"type\":\"EDTA\","

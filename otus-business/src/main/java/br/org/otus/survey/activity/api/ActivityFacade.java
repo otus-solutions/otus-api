@@ -8,6 +8,8 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityFacade {
@@ -16,7 +18,7 @@ public class ActivityFacade {
 	private ActivityService activityService;
 
 	public List<SurveyActivity> list(long rn) {
-		return activityService.list(rn);
+		return activityService.list(rn);		
 	}
 
 	public SurveyActivity getByID(String id) {
