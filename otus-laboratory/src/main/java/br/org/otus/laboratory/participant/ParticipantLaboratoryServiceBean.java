@@ -75,29 +75,29 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
 	@Override
 	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) {
-		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquots.getUpdateAliquots()) {
-
-			verifyConflicts(updateAliquots, aliquotDTO);
-
+		List<Object> conflicts = verifyConflicts(updateAliquots);
+		if (conflicts.isEmpty()) {
+			participantLaboratoryDao.updateAliquots(updateAliquots);
+		} else {
+			// TODO: ocorreu conflitos então prepara mensagem com erros!
 		}
-
-		// Verificar se a alíquota já foi aliquotada em outro participante.
-		// Verificar se a alíquota já foi utilizado dentro do mesmo
-		// participante.
 		return null;
 	}
 
-	private List<Object> verifyConflicts(UpdateAliquotsDTO updateAliquots, UpdateTubeAliquotsDTO aliquotDTO) {
+	private List<Object> verifyConflicts(UpdateAliquotsDTO updateAliquots) {
 		ArrayList<Object> conflicts = new ArrayList<>();
-		List<Aliquot> duplicates = aliquotDTO.getDuplicatesAliquots();
+		List<Aliquot> duplicates = new ArrayList<>();
 
-		if (!duplicates.isEmpty()) {
-			conflicts.addAll(duplicates);
-		}
+		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquots.getUpdateAliquots()) {
+			duplicates = aliquotDTO.getDuplicatesAliquots();
+			if (!duplicates.isEmpty()) {
+				conflicts.addAll(duplicates);
+			}
 
-		for (Aliquot aliquot : aliquotDTO.getNewAliquots()) {
-			if (this.isAliquoted(updateAliquots.getRecruitmentNumber(), aliquot.getCode())) {
-				conflicts.add(aliquot);
+			for (Aliquot aliquot : aliquotDTO.getNewAliquots()) {
+				if (isAliquoted(updateAliquots.getRecruitmentNumber(), aliquot.getCode())) {
+					conflicts.add(aliquot);
+				}
 			}
 		}
 		return conflicts;
