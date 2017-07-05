@@ -26,6 +26,10 @@ public class Tube implements Comparable<Tube> {
 		this.tubeCollectionData = new TubeCollectionData();
 	}
 
+	public void setAliquots(List<Aliquot> aliquots) {
+		this.aliquots = aliquots;
+	}
+
 	public String getType() {
 		return type;
 	}

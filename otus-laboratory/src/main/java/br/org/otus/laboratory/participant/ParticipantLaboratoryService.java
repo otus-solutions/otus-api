@@ -16,6 +16,6 @@ public interface ParticipantLaboratoryService {
 
 	public boolean isAliquoted(long rn, String aliquotCode);
 
-	ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots);
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException;
 
 }

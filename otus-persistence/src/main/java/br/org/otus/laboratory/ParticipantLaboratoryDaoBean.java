@@ -13,6 +13,7 @@ import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.dto.UpdateTubeAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 
@@ -67,11 +68,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 			throw new DataNotFoundException();
 		}
 		return first;
-
-	}
-
-	@Override
-	public void updateAliquots(UpdateAliquotsDTO updateAliquots) {
 
 	}
 

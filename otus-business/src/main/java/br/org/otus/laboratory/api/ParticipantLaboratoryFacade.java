@@ -53,7 +53,12 @@ public class ParticipantLaboratoryFacade {
 	}
 
 	public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
-		return service.updateAliquots(updateAliquots);
+		try {
+			return service.updateAliquots(updateAliquots);
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
 	}
 
 }

@@ -74,10 +74,20 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
-	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) {
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException {
 		List<Object> conflicts = verifyConflicts(updateAliquots);
 		if (conflicts.isEmpty()) {
-			participantLaboratoryDao.updateAliquots(updateAliquots);
+			ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquots.getRecruitmentNumber());
+
+			for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquots.getUpdateAliquots()) {
+				for (Tube tube : participantLaboratory.getTubes()) {
+					if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
+						tube.setAliquots(aliquotDTO.getNewAliquots());
+					}
+				}
+			}
+
+			return update(participantLaboratory);
 		} else {
 			// TODO: ocorreu conflitos então prepara mensagem com erros!
 		}
