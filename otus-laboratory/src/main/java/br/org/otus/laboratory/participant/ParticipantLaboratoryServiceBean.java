@@ -66,21 +66,9 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
-	public boolean isAliquoted(long rn, String aliquotCode) {
-		try {
-			participantLaboratoryDao.findDocumentWithAliquotCodeNotInRecruimentNumber(rn, aliquotCode);
-			return true;
-
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	@Override
 	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException {
 		ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquotsDTO.getRecruitmentNumber());
-		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO);
+		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao);
 
 		try {
 			validate = aliquotUpdateValidator.validate();

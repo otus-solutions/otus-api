@@ -48,10 +48,6 @@ public class ParticipantLaboratoryFacade {
 		return service.hasLaboratory(recruitmentNumber);
 	}
 
-	public boolean checkAliquotIsUnique(long rn, String aliquotCode) {
-		return service.isAliquoted(rn, aliquotCode);
-	}
-
 	public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
 		try {
 			return service.updateAliquots(updateAliquots);
