@@ -1,23 +1,25 @@
 package br.org.otus.laboratory.participant;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
-import br.org.otus.laboratory.collect.aliquot.Aliquot;
 import br.org.otus.laboratory.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.collect.tube.Tube;
 import br.org.otus.laboratory.collect.tube.TubeService;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.dto.UpdateTubeAliquotsDTO;
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.dto.UpdateTubeAliquotsDTO;
+import br.org.otus.laboratory.validators.AliquotUpdateValidateResponse;
+import br.org.otus.laboratory.validators.AliquotUpdateValidator;
+import br.org.otus.laboratory.validators.ParticipantLaboratoryValidator;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
@@ -30,6 +32,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	private TubeService tubeService;
 	@Inject
 	private CollectGroupRaffle groupRaffle;
+
+	private AliquotUpdateValidateResponse validate;
 
 	@Override
 	public boolean hasLaboratory(Long recruitmentNumber) {
@@ -74,43 +78,26 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
-	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException {
-		List<Object> conflicts = verifyConflicts(updateAliquots);
-		if (conflicts.isEmpty()) {
-			ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquots.getRecruitmentNumber());
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException {
+		ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquotsDTO.getRecruitmentNumber());
+		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO);
 
-			for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquots.getUpdateAliquots()) {
+		try {
+			validate = aliquotUpdateValidator.validate();
+
+			for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
 				for (Tube tube : participantLaboratory.getTubes()) {
 					if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
-						tube.setAliquots(aliquotDTO.getNewAliquots());
+						tube.setAliquots(aliquotDTO.getAliquots());
 					}
 				}
 			}
 
 			return update(participantLaboratory);
-		} else {
+		} catch (ValidationException exception) {
 			// TODO: ocorreu conflitos então prepara mensagem com erros!
+			return null;
 		}
-		return null;
-	}
-
-	private List<Object> verifyConflicts(UpdateAliquotsDTO updateAliquots) {
-		ArrayList<Object> conflicts = new ArrayList<>();
-		List<Aliquot> duplicates = new ArrayList<>();
-
-		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquots.getUpdateAliquots()) {
-			duplicates = aliquotDTO.getDuplicatesAliquots();
-			if (!duplicates.isEmpty()) {
-				conflicts.addAll(duplicates);
-			}
-
-			for (Aliquot aliquot : aliquotDTO.getNewAliquots()) {
-				if (isAliquoted(updateAliquots.getRecruitmentNumber(), aliquot.getCode())) {
-					conflicts.add(aliquot);
-				}
-			}
-		}
-		return conflicts;
 	}
 
 }

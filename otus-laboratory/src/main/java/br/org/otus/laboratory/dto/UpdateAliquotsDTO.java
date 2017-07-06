@@ -12,7 +12,7 @@ public class UpdateAliquotsDTO {
 	private long recruitmentNumber;
 	private List<UpdateTubeAliquotsDTO> tubes;
 
-	public List<UpdateTubeAliquotsDTO> getUpdateAliquots() {
+	public List<UpdateTubeAliquotsDTO> getUpdateTubeAliquots() {
 		return tubes;
 	}
 	
