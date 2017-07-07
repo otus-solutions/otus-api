@@ -19,7 +19,7 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 
 @Path("/laboratory-participant")
-public class LaboratoryParticipantResource {
+public class ParticipantLaboratoryResource {
 
 	@Inject
 	private ParticipantLaboratoryFacade participantLaboratoryFacade;
@@ -76,10 +76,10 @@ public class LaboratoryParticipantResource {
 	@Path("/{rn}/tubes/aliquots")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateAliquots(@PathParam("rn") long rn, String updateAliquotsDTO) {
+	public javax.ws.rs.core.Response updateAliquots(@PathParam("rn") long rn, String updateAliquotsDTO) {
 		UpdateAliquotsDTO updateAliquots = UpdateAliquotsDTO.deserialize(updateAliquotsDTO);
-		ParticipantLaboratory updatedLaboratory = participantLaboratoryFacade.updateAliquotList(updateAliquots);
-		return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
+		participantLaboratoryFacade.updateAliquotList(updateAliquots);
+		return javax.ws.rs.core.Response.ok().build();
 	}
 
 }

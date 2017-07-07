@@ -3,6 +3,7 @@ package br.org.otus.laboratory.api;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
@@ -54,7 +55,10 @@ public class ParticipantLaboratoryFacade {
 		} catch (DataNotFoundException e) {
 			e.printStackTrace();
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		} catch (ValidationException e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 }

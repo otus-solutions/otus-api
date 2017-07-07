@@ -14,7 +14,7 @@ import br.org.otus.configuration.visual.VisualIdentityResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
 import br.org.otus.importation.ParticipantImportationResource;
-import br.org.otus.laboratory.LaboratoryParticipantResource;
+import br.org.otus.laboratory.ParticipantLaboratoryResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
@@ -55,7 +55,7 @@ public class EndPointsLoader extends Application {
 	private ActivityResource activityResource;
 
 	@Inject
-	private LaboratoryParticipantResource laboratoryParticipantResource;
+	private ParticipantLaboratoryResource laboratoryParticipantResource;
 
 	@Inject
 	private DataSourceResource dataSourceResource;
@@ -76,7 +76,7 @@ public class EndPointsLoader extends Application {
 		resources.add(ParticipantImportationResource.class);
 		resources.add(ParticipantResource.class);
 		resources.add(ActivityResource.class);
-		resources.add(LaboratoryParticipantResource.class);
+		resources.add(ParticipantLaboratoryResource.class);
 		resources.add(DataSourceResource.class);
 		resources.add(FileUploaderResource.class);
 		return resources;

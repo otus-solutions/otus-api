@@ -33,8 +33,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	@Inject
 	private CollectGroupRaffle groupRaffle;
 
-	private AliquotUpdateValidateResponse validate;
-
 	@Override
 	public boolean hasLaboratory(Long recruitmentNumber) {
 		try {
@@ -66,25 +64,26 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
-	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException {
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
 		ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquotsDTO.getRecruitmentNumber());
 		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao);
 
 		try {
-			validate = aliquotUpdateValidator.validate();
-
-			for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
-				for (Tube tube : participantLaboratory.getTubes()) {
-					if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
-						tube.setAliquots(aliquotDTO.getAliquots());
-					}
-				}
-			}
-
+			AliquotUpdateValidateResponse validateResponse = aliquotUpdateValidator.validate();
+			updateAliquots(updateAliquotsDTO, participantLaboratory);
 			return update(participantLaboratory);
 		} catch (ValidationException exception) {
-			// TODO: ocorreu conflitos então prepara mensagem com erros!
-			return null;
+			throw exception;
+		}
+	}
+
+	private void updateAliquots(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {
+		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
+			for (Tube tube : participantLaboratory.getTubes()) {
+				if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
+					tube.setAliquots(aliquotDTO.getAliquots());
+				}
+			}
 		}
 	}
 

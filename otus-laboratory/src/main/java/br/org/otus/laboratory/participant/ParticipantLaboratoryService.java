@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.participant;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 
@@ -14,6 +15,6 @@ public interface ParticipantLaboratoryService {
 
 	ParticipantLaboratory update(ParticipantLaboratory participantLaboratory) throws DataNotFoundException;
 
-	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException;
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException, ValidationException;
 
 }
