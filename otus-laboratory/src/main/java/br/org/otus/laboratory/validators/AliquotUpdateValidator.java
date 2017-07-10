@@ -35,7 +35,6 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 //		if (!aliquotUpdateValidateResponse.isValid()) {
 //			throw new ValidationException(new Throwable("There are repeated aliquots on DataBase."));
 //		}
-
 		return aliquotUpdateValidateResponse;
 	}
 
