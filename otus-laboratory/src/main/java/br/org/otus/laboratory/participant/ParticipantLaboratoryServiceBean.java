@@ -64,17 +64,14 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
-	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
+	public AliquotUpdateValidateResponse updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
 		ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquotsDTO.getRecruitmentNumber());
 		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao);
 
-		try {
-			AliquotUpdateValidateResponse validateResponse = aliquotUpdateValidator.validate();
-			updateAliquots(updateAliquotsDTO, participantLaboratory);
-			return update(participantLaboratory);
-		} catch (ValidationException exception) {
-			throw exception;
-		}
+		AliquotUpdateValidateResponse validateResponse = aliquotUpdateValidator.validate();
+		updateAliquots(updateAliquotsDTO, participantLaboratory);
+		update(participantLaboratory);
+		return validateResponse;
 	}
 
 	private void updateAliquots(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {

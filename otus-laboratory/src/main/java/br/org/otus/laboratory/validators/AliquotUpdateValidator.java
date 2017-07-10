@@ -25,16 +25,16 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 	}
 
 	@Override
-	public AliquotUpdateValidateResponse validate() throws ValidationException {
+	public AliquotUpdateValidateResponse validate() {
 		getDuplicatesAliquotsOnDTO();
-		if (!aliquotUpdateValidateResponse.isValid()) {
-			throw new ValidationException(new Throwable("There are repeated aliquots on DTO."));
-		}
+//		if (!aliquotUpdateValidateResponse.isValid()) {
+//			throw new ValidationException(new Throwable("There are repeated aliquots on DTO."));
+//		}
 
 		verifyConflictsOnDB();
-		if (!aliquotUpdateValidateResponse.isValid()) {
-			throw new ValidationException(new Throwable("There are repeated aliquots on DataBase."));
-		}
+//		if (!aliquotUpdateValidateResponse.isValid()) {
+//			throw new ValidationException(new Throwable("There are repeated aliquots on DataBase."));
+//		}
 
 		return aliquotUpdateValidateResponse;
 	}
