@@ -8,7 +8,6 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
-import br.org.otus.laboratory.validators.AliquotUpdateValidateResponse;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 
@@ -50,17 +49,13 @@ public class ParticipantLaboratoryFacade {
 		return service.hasLaboratory(recruitmentNumber);
 	}
 
-	public void updateAliquotList(UpdateAliquotsDTO updateAliquots) {
-		AliquotUpdateValidateResponse updateAliquots2 = null;
+	public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
 		try {
-			updateAliquots2 = service.updateAliquots(updateAliquots);
-			updateAliquots2.isValid();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build("TESTE", updateAliquots2));
+			return service.updateAliquots(updateAliquots);
 		} catch (DataNotFoundException e) {
-			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), updateAliquots2));
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
 	}
 

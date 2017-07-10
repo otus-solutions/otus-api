@@ -17,7 +17,6 @@ import br.org.otus.laboratory.collect.tube.TubeService;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.dto.UpdateTubeAliquotsDTO;
-import br.org.otus.laboratory.validators.AliquotUpdateValidateResponse;
 import br.org.otus.laboratory.validators.AliquotUpdateValidator;
 import br.org.otus.laboratory.validators.ParticipantLaboratoryValidator;
 
@@ -64,17 +63,20 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
-	public AliquotUpdateValidateResponse updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
-		ParticipantLaboratory participantLaboratory = participantLaboratoryDao.findByRecruitmentNumber(updateAliquotsDTO.getRecruitmentNumber());
-		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao);
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
+		ParticipantLaboratory participantLaboratory = getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
+		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao, participantLaboratory);
 
-		AliquotUpdateValidateResponse validateResponse = aliquotUpdateValidator.validate();
-		updateAliquots(updateAliquotsDTO, participantLaboratory);
-		update(participantLaboratory);
-		return validateResponse;
+		try {
+			aliquotUpdateValidator.validate();
+		} catch (Exception e) {
+			throw e;
+		}
+		syncronizedParticipantLaboratory(updateAliquotsDTO, participantLaboratory);
+		return update(participantLaboratory);
 	}
 
-	private void updateAliquots(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {
+	private void syncronizedParticipantLaboratory(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {
 		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
 			for (Tube tube : participantLaboratory.getTubes()) {
 				if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
@@ -83,5 +85,4 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 			}
 		}
 	}
-
 }

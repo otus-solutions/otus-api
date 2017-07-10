@@ -16,6 +16,6 @@ public interface ParticipantLaboratoryService {
 
 	ParticipantLaboratory update(ParticipantLaboratory participantLaboratory) throws DataNotFoundException;
 
-	AliquotUpdateValidateResponse updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException, ValidationException;
+	ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquots) throws DataNotFoundException, ValidationException;
 
 }
