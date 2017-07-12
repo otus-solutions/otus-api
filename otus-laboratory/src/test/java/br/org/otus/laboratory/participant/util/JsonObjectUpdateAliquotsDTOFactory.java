@@ -23,7 +23,7 @@ public class JsonObjectUpdateAliquotsDTOFactory implements JsonObjectFactory {
 		aliquot.addProperty("name", "BIOSORO");
 		aliquot.addProperty("container", "CRYOTUBE");
 		aliquot.addProperty("role", "EXAM");
-
+	
 		aliquotCollectionData = new JsonObject();
 		aliquotCollectionData.addProperty("objectType", "AliquotCollectionData");
 		aliquotCollectionData.addProperty("metadata", "quebrou");
@@ -46,7 +46,7 @@ public class JsonObjectUpdateAliquotsDTOFactory implements JsonObjectFactory {
 		json = new JsonObject();
 		json.addProperty("recruitmentNumber", 12345);
 		json.add("tubes", tubes);
-
+		
 		return json;
 	}
 
