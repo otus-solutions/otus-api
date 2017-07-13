@@ -25,12 +25,6 @@ public class DataSourceFactory {
 		dataObject.addProperty("name", "MEDICAMENTOS_CONTRACEPTIVOS_HORMONAIS");
 		dataObject.add("data", valuesList);		
 		
-//		JsonArray dataList = new JsonArray();
-//		dataList.add(dataObject);		
-		
-//		JsonObject dataSource = new JsonObject();
-//		dataSource.add("data", dataList);
-		
 		
 		return dataObject;
 		
