@@ -16,6 +16,10 @@ public class UpdateAliquotsDTO {
 		return tubes;
 	}
 	
+	public void setRecruitmentNumber(long recruitmentNumber) {
+		this.recruitmentNumber = recruitmentNumber;
+	}
+
 	public static String serialize(UpdateAliquotsDTO updateAliquotsDTO) {
 		return UpdateAliquotsDTO.getGsonBuilder().create().toJson(updateAliquotsDTO);
 	}

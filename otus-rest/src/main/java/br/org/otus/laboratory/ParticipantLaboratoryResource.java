@@ -78,6 +78,7 @@ public class ParticipantLaboratoryResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public javax.ws.rs.core.Response updateAliquots(@PathParam("rn") long rn, String updateAliquotsDTO) {
 		UpdateAliquotsDTO updateAliquots = UpdateAliquotsDTO.deserialize(updateAliquotsDTO);
+		updateAliquots.setRecruitmentNumber(rn);
 		participantLaboratoryFacade.updateAliquotList(updateAliquots);
 		return javax.ws.rs.core.Response.ok().build();
 	}
