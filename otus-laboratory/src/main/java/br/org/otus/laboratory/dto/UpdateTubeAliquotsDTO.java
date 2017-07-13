@@ -6,11 +6,11 @@ import br.org.otus.laboratory.collect.aliquot.Aliquot;
 
 public class UpdateTubeAliquotsDTO {
 
-	private String tubeCode;
+	private String code;
 	private List<Aliquot> aliquots;
 
 	public String getTubeCode() {
-		return tubeCode;
+		return code;
 	}
 
 	public List<Aliquot> getAliquots() {
