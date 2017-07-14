@@ -62,7 +62,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	}
 
 	public Document findDocumentWithAliquotCodeNotInRecruimentNumber(long rn, String aliquotCode) throws DataNotFoundException {
-		Document first = collection.find(and(in("tubes.aliquots.code", aliquotCode), nin("recruitmentNumber", rn))).first();
+		Document first = collection.find(and(in("tubes.aliquotes.code", aliquotCode), nin("recruitmentNumber", rn))).first();
 		if (first == null) {
 			throw new DataNotFoundException();
 		}

@@ -12,7 +12,7 @@ public class Tube implements Comparable<Tube> {
 	private String moment;
 	private String code;
 	private String groupName;
-	private List<Aliquot> aliquots;
+	private List<Aliquot> aliquotes;
 	private Integer order;
 	private TubeCollectionData tubeCollectionData;
 
@@ -22,12 +22,12 @@ public class Tube implements Comparable<Tube> {
 		this.moment = moment;
 		this.code = code;
 		this.groupName = groupName;
-		this.aliquots = new ArrayList<Aliquot>();
+		this.aliquotes = new ArrayList<Aliquot>();
 		this.tubeCollectionData = new TubeCollectionData();
 	}
 
 	public void setAliquots(List<Aliquot> aliquots) {
-		this.aliquots = aliquots;
+		this.aliquotes = aliquots;
 	}
 
 	public String getType() {
@@ -47,7 +47,7 @@ public class Tube implements Comparable<Tube> {
 	}
 
 	public List<Aliquot> getAliquots() {
-		return aliquots;
+		return aliquotes;
 	}
 
 	public Integer getOrder() {
