@@ -7,14 +7,14 @@ import br.org.otus.laboratory.collect.aliquot.Aliquot;
 public class UpdateTubeAliquotsDTO {
 
 	private String code;
-	private List<Aliquot> aliquots;
+	private List<Aliquot> aliquotes;
 
 	public String getTubeCode() {
 		return code;
 	}
 
 	public List<Aliquot> getAliquots() {
-		return aliquots;
+		return aliquotes;
 	}
 
 }
