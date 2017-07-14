@@ -13,7 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
-import br.org.otus.laboratory.participant.util.JsonObjectFactory;
 import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
 import br.org.otus.laboratory.validators.ParticipantLaboratoryValidator;
 
@@ -26,56 +25,56 @@ public class ParticipantLaboratoryServiceBeanTest {
 	private ParticipantLaboratoryServiceBean service;
 
 	@Mock
-	private UpdateAliquotsDTO updateAliquotsDTO;
+	private ParticipantLaboratoryServiceBean laboratoryService;
 	@Mock
 	private ParticipantLaboratoryValidator aliquotUpdateValidator;
-	@Mock
-	private ParticipantLaboratoryDao participantLaboratoryDao;
 
-	private ParticipantLaboratoryServiceBean laboratoryService;
+	private UpdateAliquotsDTO aliquotsDTO;
 	private ParticipantLaboratory participantLaboratory;
 
 	@Before
 	public void setup() throws DataNotFoundException {
-		JsonObjectFactory jsonObjecParticipantLaboratory = new JsonObjecParticipantLaboratoryFactory();
-		participantLaboratory = ParticipantLaboratory.deserialize(jsonObjecParticipantLaboratory.create().toString());
-		
-		Mockito.when(service.getLaboratory(RECRUIMENT_NUMBER)).thenReturn(participantLaboratory);
+		JsonObjectUpdateAliquotsDTOFactory dtoFactory = new JsonObjectUpdateAliquotsDTOFactory();
+		aliquotsDTO = UpdateAliquotsDTO.deserialize(dtoFactory.create().toString());
+
+		JsonObjecParticipantLaboratoryFactory jsonObjecParticipantLaboratoryFactory = new JsonObjecParticipantLaboratoryFactory();
+		participantLaboratory = ParticipantLaboratory.deserialize(jsonObjecParticipantLaboratoryFactory.create().toString());
+
+		Mockito.when(laboratoryService.getLaboratory(RECRUIMENT_NUMBER)).thenReturn(participantLaboratory);
 	}
 
 	@Ignore
 	@Test
 	public void updateAliquots_method_should_call_methed_validate() throws DataNotFoundException, ValidationException {
-		
-		laboratoryService.updateAliquots(updateAliquotsDTO);
-		
+		laboratoryService.updateAliquots(aliquotsDTO);
+
 		Mockito.verify(aliquotUpdateValidator).validate();
-		
 	}
 
 	@Ignore
 	@Test
 	public void UpdateAliquots_method_when_executed_with_success_should_call_method_update() throws DataNotFoundException, ValidationException {
-		
+
+		laboratoryService.updateAliquots(aliquotsDTO);
+
+		Mockito.verify(laboratoryService).update(participantLaboratory);
 	}
 
+	@Ignore
 	@Test(expected = Exception.class)
 	public void UpdateAliquots_method_should_throw_an_exception_when_aliquots_is_invalid() throws ValidationException, DataNotFoundException {
 
 		Mockito.doThrow(new Exception()).when(aliquotUpdateValidator).validate();
-		service.updateAliquots(updateAliquotsDTO);
+		laboratoryService.updateAliquots(aliquotsDTO);
 
 	}
 
 	@Ignore
 	@Test
 	public void when_the_method_is_executed_successfully_and_the_set_of_aliquots_are_valid_then_the_laboratory_must_be_updated() throws DataNotFoundException, ValidationException {
-		ParticipantLaboratoryServiceBean laboratoryService = new ParticipantLaboratoryServiceBean();
-		JsonObjectUpdateAliquotsDTOFactory dtoFactory = new JsonObjectUpdateAliquotsDTOFactory();
-		UpdateAliquotsDTO aliquotsDTO = UpdateAliquotsDTO.deserialize(dtoFactory.create().toString());
 		
-		laboratoryService.updateAliquots(aliquotsDTO);
-
+		ParticipantLaboratory laboratory = laboratoryService.updateAliquots(aliquotsDTO);
+		
 	}
 
 }
