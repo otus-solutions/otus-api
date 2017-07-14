@@ -47,9 +47,11 @@ public class CustomIdValidator implements SurveyValidator {
 
         public void setConflicts(List<Identity> conflicts) {
             this.conflicts = conflicts;
-        }
+        }       
 
-        @Override
+
+
+		@Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
@@ -63,5 +65,7 @@ public class CustomIdValidator implements SurveyValidator {
         public int hashCode() {
             return VALIDATION_TYPE != null ? VALIDATION_TYPE.hashCode() : 0;
         }
+        
+        
     }
 }
