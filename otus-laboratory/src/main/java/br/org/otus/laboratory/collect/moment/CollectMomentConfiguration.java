@@ -4,14 +4,14 @@ import java.util.Set;
 
 public class CollectMomentConfiguration {
 
-	private Set<CollectMomentDescriptor> collectMomentDescriptors;
+	private Set<MomentDescriptor> momentDescriptors;
 
-	public CollectMomentConfiguration(Set<CollectMomentDescriptor> collectMomentDescriptors) {
-		this.collectMomentDescriptors = collectMomentDescriptors;
+	public CollectMomentConfiguration(Set<MomentDescriptor> momentDescriptors) {
+		this.momentDescriptors = momentDescriptors;
 	}
 
-	public Set<CollectMomentDescriptor> getMomentDescriptors() {
-		return collectMomentDescriptors;
+	public Set<MomentDescriptor> getMomentDescriptors() {
+		return momentDescriptors;
 	}
 
 }

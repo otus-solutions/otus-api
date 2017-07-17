@@ -1,11 +1,11 @@
 package br.org.otus.laboratory.collect.moment;
 
-public class CollectMomentDescriptor {
+public class MomentDescriptor {
 
 	private String name;
 	private String label;
 
-	public CollectMomentDescriptor(String name, String label) {
+	public MomentDescriptor(String name, String label) {
 		this.name = name;
 		this.label = label;
 	}
