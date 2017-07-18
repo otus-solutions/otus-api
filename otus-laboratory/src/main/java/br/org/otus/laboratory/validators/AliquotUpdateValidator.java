@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.validators;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +38,12 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 			throw new ValidationException(new Throwable("There are repeated aliquots on DTO."),
 					aliquotUpdateValidateResponse);
 		}
+		
+		aliquotAlreadyInUseOnParticipant();
+		if(!aliquotUpdateValidateResponse.isValid()) {
+			throw new ValidationException(new Throwable("There are repeated aliquots on Participant."),
+					aliquotUpdateValidateResponse);
+		}
 
 		verifyConflictsOnDB();
 		if (!aliquotUpdateValidateResponse.isValid()) {
@@ -63,6 +71,24 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 			}
 			if (currentTubeExists == false) {
 				aliquotUpdateValidateResponse.getTubesNotFound().add(tubesDTO.getTubeCode());
+			}
+		}
+	}
+	
+	private void aliquotAlreadyInUseOnParticipant() {
+		ArrayList<String> participantAliquots = new ArrayList<String>();
+		for (Tube tube : participantLaboratory.getTubes()) {
+			for (Aliquot aliquot : tube.getAliquots()) {
+				participantAliquots.add(aliquot.getCode());
+			}
+		}
+		
+		for (UpdateTubeAliquotsDTO tubesDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
+			for (Aliquot aliquot : tubesDTO.getAliquots()) {
+				int frequency = Collections.frequency(participantAliquots, aliquot.getCode());
+				if(frequency > 1) {
+					aliquotUpdateValidateResponse.getConflicts().add(aliquot);
+				}
 			}
 		}
 	}
