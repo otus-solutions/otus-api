@@ -86,7 +86,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 		for (UpdateTubeAliquotsDTO tubesDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
 			for (Aliquot aliquot : tubesDTO.getAliquots()) {
 				int frequency = Collections.frequency(participantAliquots, aliquot.getCode());
-				if(frequency > 1) {
+				if(frequency >= 1) {
 					aliquotUpdateValidateResponse.getConflicts().add(aliquot);
 				}
 			}
