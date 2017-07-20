@@ -26,8 +26,11 @@ public class Tube implements Comparable<Tube> {
 		this.tubeCollectionData = new TubeCollectionData();
 	}
 
-	public void setAliquots(List<Aliquot> aliquots) {
-		this.aliquotes = aliquots;
+	public void addAllAliquotsThatNotContainsInList(List<Aliquot> aliquots) {
+		for (Aliquot aliquot : aliquots) {
+			if (!aliquotes.contains(aliquot))
+				aliquotes.add(aliquot);
+		}
 	}
 
 	public String getType() {

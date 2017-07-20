@@ -1,7 +1,16 @@
 package br.org.otus.laboratory.collect.aliquot;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+
 import br.org.otus.laboratory.collect.aliquot.enums.AliquotContainer;
 import br.org.otus.laboratory.collect.aliquot.enums.AliquotRole;
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Aliquot {
 
@@ -44,5 +53,19 @@ public class Aliquot {
 	public AliquotCollectionData getAliquotCollectionData() {
 		return aliquotCollectionData;
 	}
+	
+	public static String serialize(List<Aliquot> aliquots) {
+		Gson builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.toJson(aliquots);
+	}
+
+	public static Gson getGsonBuilder() {
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.serializeNulls();
+
+		return builder.create();
+	}
+
 
 }

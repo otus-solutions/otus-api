@@ -23,10 +23,9 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 	private ParticipantLaboratoryDao participantLaboratoryDao;
 	private ParticipantLaboratory participantLaboratory;
 
-	public AliquotUpdateValidator(UpdateAliquotsDTO updateAliquotsDTO,
-			ParticipantLaboratoryDao participantLaboratoryDao, ParticipantLaboratory participantLaboratory) {
-		this.updateAliquotsDTO = updateAliquotsDTO;
+	public AliquotUpdateValidator(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratoryDao participantLaboratoryDao, ParticipantLaboratory participantLaboratory) {
 		this.aliquotUpdateValidateResponse = new AliquotUpdateValidateResponse();
+		this.updateAliquotsDTO = updateAliquotsDTO;
 		this.participantLaboratoryDao = participantLaboratoryDao;
 		this.participantLaboratory = participantLaboratory;
 	}
@@ -38,23 +37,17 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 			throw new ValidationException(new Throwable("There are repeated aliquots on DTO."),
 					aliquotUpdateValidateResponse);
 		}
-		
-		aliquotAlreadyInUseOnParticipant();
-		if(!aliquotUpdateValidateResponse.isValid()) {
-			throw new ValidationException(new Throwable("There are repeated aliquots on Participant."),
-					aliquotUpdateValidateResponse);
-		}
-
-		verifyConflictsOnDB();
-		if (!aliquotUpdateValidateResponse.isValid()) {
-			throw new ValidationException(new Throwable("There are repeated aliquots on Database."),
-					aliquotUpdateValidateResponse);
-		}
 
 		areThereAllTubesOnParticipant();
 		if (!aliquotUpdateValidateResponse.isValid()) {
 			throw new DataNotFoundException(
 					new Throwable("Tube codes not found."), aliquotUpdateValidateResponse.getTubesNotFound());
+		}
+		
+		verifyConflictsOnDB();
+		if (!aliquotUpdateValidateResponse.isValid()) {
+			throw new ValidationException(new Throwable("There are repeated aliquots on Database."),
+					aliquotUpdateValidateResponse);
 		}
 
 		return aliquotUpdateValidateResponse;
@@ -71,24 +64,6 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 			}
 			if (currentTubeExists == false) {
 				aliquotUpdateValidateResponse.getTubesNotFound().add(tubesDTO.getTubeCode());
-			}
-		}
-	}
-	
-	private void aliquotAlreadyInUseOnParticipant() {
-		ArrayList<String> participantAliquots = new ArrayList<String>();
-		for (Tube tube : participantLaboratory.getTubes()) {
-			for (Aliquot aliquot : tube.getAliquots()) {
-				participantAliquots.add(aliquot.getCode());
-			}
-		}
-		
-		for (UpdateTubeAliquotsDTO tubesDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
-			for (Aliquot aliquot : tubesDTO.getAliquots()) {
-				int frequency = Collections.frequency(participantAliquots, aliquot.getCode());
-				if(frequency >= 1) {
-					aliquotUpdateValidateResponse.getConflicts().add(aliquot);
-				}
 			}
 		}
 	}
@@ -109,7 +84,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 	private List<Aliquot> verifyConflictsOnDB() {
 		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
 			for (Aliquot aliquot : aliquotDTO.getAliquots()) {
-				if (isAliquoted(updateAliquotsDTO.getRecruitmentNumber(), aliquot.getCode())) {
+				if (isAliquoted(aliquot.getCode())) {
 					aliquotUpdateValidateResponse.getConflicts().add(aliquot);
 				}
 			}
@@ -117,9 +92,9 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 		return aliquotUpdateValidateResponse.getConflicts();
 	}
 
-	private boolean isAliquoted(long rn, String aliquotCode) {
+	private boolean isAliquoted(String aliquotCode) {
 		try {
-			participantLaboratoryDao.findDocumentWithAliquotCodeNotInRecruimentNumber(rn, aliquotCode);
+			participantLaboratoryDao.findDocumentByAliquotCode(aliquotCode);
 			return true;
 
 		} catch (DataNotFoundException e) {

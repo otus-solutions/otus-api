@@ -80,7 +80,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
 			for (Tube tube : participantLaboratory.getTubes()) {
 				if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
-					tube.setAliquots(aliquotDTO.getAliquots());
+					tube.addAllAliquotsThatNotContainsInList(aliquotDTO.getAliquots());
 				}
 			}
 		}
