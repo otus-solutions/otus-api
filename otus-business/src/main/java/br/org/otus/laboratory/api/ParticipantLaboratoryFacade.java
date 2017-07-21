@@ -3,7 +3,9 @@ package br.org.otus.laboratory.api;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
+import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.response.builders.ResponseBuild;
@@ -27,8 +29,9 @@ public class ParticipantLaboratoryFacade {
 		try {
 			return service.getLaboratory(recruitmentNumber);
 		} catch (DataNotFoundException e) {
-//			e.printStackTrace();
-//			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+			// e.printStackTrace();
+			// throw new
+			// HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 			return null;
 		}
 	}
@@ -45,8 +48,15 @@ public class ParticipantLaboratoryFacade {
 	public boolean hasLaboratory(Long recruitmentNumber) {
 		return service.hasLaboratory(recruitmentNumber);
 	}
-	
-	
 
-	
+	public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
+		try {
+			return service.updateAliquots(updateAliquots);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+		}
+	}
+
 }
