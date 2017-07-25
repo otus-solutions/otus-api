@@ -75,7 +75,7 @@ public class EmailNotifierServiceBean implements EmailNotifierService {
         }
     }
 
-    private String mergeTemplate(Map<String, String> dataMap, String template) {
+    String mergeTemplate(Map<String, String> dataMap, String template) {
         TemplateReader templateReader = new TemplateReader();
         String templateContent = templateReader.getFileToString(getClass().getClassLoader(), template);
         return templateReader.fillTemplate(dataMap, templateContent);

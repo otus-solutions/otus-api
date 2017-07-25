@@ -48,8 +48,7 @@ public class DomainRegisterResourceTest {
 	CloseableHttpResponse response;
 	@Mock
 	StatusLine statusLineResponse;
-	@Mock
-	private DomainRegisterResource domainRegisterResourceException;
+
 
 	private DomainRegisterResource domainRegisterResourceSpy;
 
