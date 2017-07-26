@@ -18,5 +18,5 @@ public interface LaboratoryConfigurationService {
 	List<String> generateCodes(TubeSeed seed);
 	
 	LaboratoryConfiguration getLaboratoryConfiguration();
-
+	
 }

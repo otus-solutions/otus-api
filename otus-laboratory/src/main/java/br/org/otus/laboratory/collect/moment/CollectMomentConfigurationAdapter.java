@@ -20,8 +20,8 @@ public class CollectMomentConfigurationAdapter implements JsonDeserializer<Colle
 		JsonObject jsonObject = new JsonObject();
 		JsonArray jsonArray = new JsonArray();
 
-		for (CollectMomentDescriptor moment : momentConfiguration.getMomentDescriptors()) {
-			jsonArray.add(context.serialize(moment, CollectMomentDescriptor.class));
+		for (MomentDescriptor moment : momentConfiguration.getMomentDescriptors()) {
+			jsonArray.add(context.serialize(moment, MomentDescriptor.class));
 			jsonObject.add("momentDescriptors", jsonArray);
 		}
 
@@ -30,12 +30,12 @@ public class CollectMomentConfigurationAdapter implements JsonDeserializer<Colle
 
 	@Override
 	public CollectMomentConfiguration deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		Set<CollectMomentDescriptor> descriptors = new HashSet<>();
+		Set<MomentDescriptor> descriptors = new HashSet<>();
 		JsonObject jsonObject = json.getAsJsonObject();
 		JsonArray jsonArray = jsonObject.get("momentDescriptors").getAsJsonArray();
 
 		for (JsonElement jsonElement : jsonArray) {
-			CollectMomentDescriptor deserialized = context.deserialize(jsonElement, CollectMomentDescriptor.class);
+			MomentDescriptor deserialized = context.deserialize(jsonElement, MomentDescriptor.class);
 			descriptors.add(deserialized);
 		}
 

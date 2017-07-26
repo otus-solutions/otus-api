@@ -11,7 +11,11 @@ public class Validation extends ResponseInfo{
     }
     
     public Validation(String message) {
-        super(Response.Status.BAD_REQUEST, "Data Validation Fail: " + message);
+    	super(Response.Status.BAD_REQUEST, "Data Validation Fail: " + message);
+    }
+ 
+    public Validation(String message, Object object) {
+        super(Response.Status.BAD_REQUEST, "Data Validation Fail: " + message, object);
     }
 
     public static ResponseInfo build(){
@@ -19,7 +23,11 @@ public class Validation extends ResponseInfo{
     }
     
     public static ResponseInfo build(String message){
-        return new Validation(message);
+    	return new Validation(message);
+    }
+    
+    public static ResponseInfo build(String message, Object object){
+        return new Validation(message, object);
     }
 
 }
