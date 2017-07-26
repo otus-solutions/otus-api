@@ -16,6 +16,7 @@ import br.org.otus.laboratory.collect.group.CollectGroupConfiguration;
 import br.org.otus.laboratory.collect.moment.CollectMomentConfiguration;
 import br.org.otus.laboratory.collect.tube.TubeConfiguration;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.label.LabelPrintConfiguration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
