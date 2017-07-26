@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
@@ -14,6 +15,10 @@ import br.org.otus.laboratory.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.collect.tube.Tube;
 import br.org.otus.laboratory.collect.tube.TubeService;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.dto.UpdateTubeAliquotsDTO;
+import br.org.otus.laboratory.validators.AliquotUpdateValidator;
+import br.org.otus.laboratory.validators.ParticipantLaboratoryValidator;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
@@ -55,7 +60,29 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	@Override
 	public ParticipantLaboratory update(ParticipantLaboratory partipantLaboratory) throws DataNotFoundException {
 		return participantLaboratoryDao.updateLaboratoryData(partipantLaboratory);
-
 	}
 
+	@Override
+	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
+		ParticipantLaboratory participantLaboratory = getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
+		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao, participantLaboratory);
+
+		try {
+			aliquotUpdateValidator.validate();
+		} catch (Exception e) {
+			throw e;
+		}
+		syncronizedParticipantLaboratory(updateAliquotsDTO, participantLaboratory);
+		return update(participantLaboratory);
+	}
+
+	private void syncronizedParticipantLaboratory(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {
+		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
+			for (Tube tube : participantLaboratory.getTubes()) {
+				if (tube.getCode().equals(aliquotDTO.getTubeCode())) {
+					tube.addAllAliquotsThatNotContainsInList(aliquotDTO.getAliquots());
+				}
+			}
+		}
+	}
 }

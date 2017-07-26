@@ -24,7 +24,7 @@ public class LaboratoryParticipantTest {
 					+ "{"
 						+"\"code\":261116141,"
 						+"\"type\":\"GEL\","
-						+"\"aliquotes\":[]"
+						+"\"aliquots\":[]"
 					+ "}],"
 					+"\"exams\":[]"		          
 	            +"}}";

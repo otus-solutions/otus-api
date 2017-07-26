@@ -13,15 +13,16 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.api.ParticipantLaboratoryFacade;
+import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 
 @Path("/laboratory-participant")
-public class LaboratoryParticipantResource {
+public class ParticipantLaboratoryResource {
 
 	@Inject
-	private ParticipantLaboratoryFacade facade;
+	private ParticipantLaboratoryFacade participantLaboratoryFacade;
 	@Inject
 	private LaboratoryConfigurationService laboratoryConfigurationService;
 
@@ -32,10 +33,10 @@ public class LaboratoryParticipantResource {
 	public String initialize(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
 		ParticipantLaboratory laboratory = null;
 
-		if (facade.hasLaboratory(recruitmentNumber)) {
-			laboratory = facade.getLaboratory(recruitmentNumber);
+		if (participantLaboratoryFacade.hasLaboratory(recruitmentNumber)) {
+			laboratory = participantLaboratoryFacade.getLaboratory(recruitmentNumber);
 		} else {
-			laboratory = facade.create(recruitmentNumber);
+			laboratory = participantLaboratoryFacade.create(recruitmentNumber);
 		}
 
 		return new Response().buildSuccess(ParticipantLaboratory.serialize(laboratory)).toJson();
@@ -46,7 +47,7 @@ public class LaboratoryParticipantResource {
 	@Path("/{rn}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String getLaboratory(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
-		ParticipantLaboratory laboratory = facade.getLaboratory(recruitmentNumber);
+		ParticipantLaboratory laboratory = participantLaboratoryFacade.getLaboratory(recruitmentNumber);
 		return new Response().buildSuccess(ParticipantLaboratory.serialize(laboratory)).toJson();
 	}
 
@@ -67,8 +68,19 @@ public class LaboratoryParticipantResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String update(@PathParam("rn") long rn, String participantLaboratory) {
 		ParticipantLaboratory deserialized = ParticipantLaboratory.deserialize(participantLaboratory);
-		ParticipantLaboratory updatedLaboratory = facade.update(deserialized);
+		ParticipantLaboratory updatedLaboratory = participantLaboratoryFacade.update(deserialized);
 		return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
+	}
+
+	@PUT
+	@Path("/{rn}/tubes/aliquots")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public javax.ws.rs.core.Response updateAliquots(@PathParam("rn") long rn, String updateAliquotsDTO) {
+		UpdateAliquotsDTO updateAliquots = UpdateAliquotsDTO.deserialize(updateAliquotsDTO);
+		updateAliquots.setRecruitmentNumber(rn);
+		participantLaboratoryFacade.updateAliquotList(updateAliquots);
+		return javax.ws.rs.core.Response.ok().build();
 	}
 
 }

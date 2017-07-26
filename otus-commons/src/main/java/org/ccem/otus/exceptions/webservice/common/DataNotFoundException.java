@@ -1,10 +1,24 @@
 package org.ccem.otus.exceptions.webservice.common;
 
 public class DataNotFoundException extends Exception {
-    public DataNotFoundException() {
-    }
 
-    public DataNotFoundException(Throwable cause) {
-        super(cause);
-    }
+	private static final long serialVersionUID = 1L;
+	private Object data;
+
+	public DataNotFoundException() {
+	}
+
+	public DataNotFoundException(Throwable cause) {
+		super(cause);
+	}
+
+	public DataNotFoundException(Throwable cause, Object data) {
+		super(cause);
+		this.data = data;
+	}
+	
+	public Object getData() {
+		return data;
+	}
+	
 }
