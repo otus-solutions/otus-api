@@ -26,6 +26,7 @@ import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.survey.activity.api.ActivityFacade;
 
+
 @RunWith(PowerMockRunner.class)
 public class ActivityResourceTest {
 	private static final long RECRUIMENT_NUMBER = 3051442;
