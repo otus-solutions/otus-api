@@ -14,22 +14,16 @@ import br.org.otus.email.service.EmailNotifierServiceBean;
 import br.org.otus.model.User;
 
 @RunWith(PowerMockRunner.class)
-public class EnableUserNotificationEmailTest {
-	
+public class EnableUserNotificationEmailTest {	
 	@Mock
-	User user;
-		
-	
+	User user;	
 	private EnableUserNotificationEmail enableUserNotificationEmail;
 
 	@Test
-	public void method_defineRecipient_should_evocate_addTORecipientMethod() {
-		
-		enableUserNotificationEmail = spy(new EnableUserNotificationEmail());
-		
+	public void method_defineRecipient_should_evocate_addTORecipientMethod() {		
+		enableUserNotificationEmail = spy(new EnableUserNotificationEmail());		
 		enableUserNotificationEmail.defineRecipient(user);
 		verify(enableUserNotificationEmail).addTORecipient("recipient", user.getEmail());		
-		
 	}
 
 }
