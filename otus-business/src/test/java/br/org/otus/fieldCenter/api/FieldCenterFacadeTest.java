@@ -1,12 +1,7 @@
 package br.org.otus.fieldCenter.api;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -22,60 +17,56 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(PowerMockRunner.class)
-public class FieldCenterFacadeTest {	
-	
+public class FieldCenterFacadeTest {
 	@InjectMocks
 	FieldCenterFacade fieldCenterFacade;
-	
 	@Mock
 	FieldCenterService fieldCenterService;
-	
+
 	private FieldCenter fieldCenter;
-		
 
 	@Before
 	public void setUp() {
 		fieldCenter = new FieldCenter();
 		fieldCenter.setAcronym("SP");
 		fieldCenter.setName("Sao Paulo");
-		fieldCenter.setCode(6);		
+		fieldCenter.setCode(6);
 	}
 
 	@Test
-	public void method_create_should_evocate_fieldCenterServiceCreateMethod() throws AlreadyExistException, ValidationException {		
+	public void method_create_should_evocate_fieldCenterServiceCreateMethod()
+			throws AlreadyExistException, ValidationException {
 		fieldCenterFacade.create(fieldCenter);
-		verify(fieldCenterService).create(fieldCenter);		
+		verify(fieldCenterService).create(fieldCenter);
 	}
-	
+
 	@Test(expected = HttpResponseException.class)
-	public void method_create_should_capture_AlreadyExistException() throws AlreadyExistException, ValidationException{
+	public void method_create_should_capture_AlreadyExistException() throws AlreadyExistException, ValidationException {
 		doThrow(AlreadyExistException.class).when(fieldCenterService).create(fieldCenter);
-		fieldCenterFacade.create(fieldCenter);		
+		fieldCenterFacade.create(fieldCenter);
 	}
-	
+
 	@Test(expected = HttpResponseException.class)
-	public void method_create_should_capture_ValidationException() throws AlreadyExistException, ValidationException{
+	public void method_create_should_capture_ValidationException() throws AlreadyExistException, ValidationException {
 		doThrow(ValidationException.class).when(fieldCenterService).create(fieldCenter);
-		fieldCenterFacade.create(fieldCenter);		
+		fieldCenterFacade.create(fieldCenter);
 	}
 
 	@Test
 	public void method_list_should_evocate_fieldCenterServiceListMethod() {
 		fieldCenterFacade.list();
-		verify(fieldCenterService).list();		
+		verify(fieldCenterService).list();
 	}
 
 	@Test
 	public void testUpdate() throws ValidationException {
 		fieldCenterFacade.update(fieldCenter);
-		verify(fieldCenterService).update(fieldCenter);		
+		verify(fieldCenterService).update(fieldCenter);
 	}
-	
+
 	@Test(expected = HttpResponseException.class)
-	public void method_update_should_capture_ValidationException() throws ValidationException{
+	public void method_update_should_capture_ValidationException() throws ValidationException {
 		doThrow(ValidationException.class).when(fieldCenterService).update(fieldCenter);
 		fieldCenterFacade.update(fieldCenter);
-		
-	}	
-
+	}
 }
