@@ -34,9 +34,9 @@ import br.org.tutty.Equalizer;
 @PrepareForTest({ EmailNotifierServiceBean.class, Equalizer.class, Recipient.class, OtusEmailFactory.class,	GMailer.class })
 public class EmailNotifierServiceBeanTest {	
 	@Mock
-	TemplateReader templateReader;	
+	private TemplateReader templateReader;	
 	@Mock
-	GMailer mailer;
+	private GMailer mailer;
 	private OtusInitializationConfigDto initializationData;
 	private BasicEmailSender emailSenderDto;
 	private EmailNotifierServiceBean emailNotifierServiceBean;

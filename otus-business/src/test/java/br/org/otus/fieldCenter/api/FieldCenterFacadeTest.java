@@ -19,10 +19,9 @@ import br.org.otus.response.exception.HttpResponseException;
 @RunWith(PowerMockRunner.class)
 public class FieldCenterFacadeTest {
 	@InjectMocks
-	FieldCenterFacade fieldCenterFacade;
+	private FieldCenterFacade fieldCenterFacade;
 	@Mock
-	FieldCenterService fieldCenterService;
-
+	private FieldCenterService fieldCenterService;
 	private FieldCenter fieldCenter;
 
 	@Before

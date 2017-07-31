@@ -27,27 +27,20 @@ public class ActivityFacadeTest {
 	private static final long RECRUITMENT_NUMBER = 5112345;
 	private static final String SURVEYACTIVITY_ID = "587723451798";
 	private static final String SURVEYACTIVITY_EXCEPTION = "notExist";
-	
-		
+			
 	@Mock
-	SurveyActivity surveyActivityInvalid;
+	private SurveyActivity surveyActivityInvalid;
 	@Mock
-	ActivityService activityService;	
-	
-	
+	private ActivityService activityService;	
 	@InjectMocks
 	ActivityFacade activityFacade;	
 	@Mock
-	SurveyActivity surveyActivity;
-	
+	private SurveyActivity surveyActivity;	
 	private SurveyActivity surveyActivityFull;
 	private String json;	
 	
-	
-	
 	@Before
 	public void setUp(){
-		
 		json = ""
 			+ "{\"objectType\" : \"Activity\","
 			+ "\"extents\" : \"StudioObject\"}";
@@ -56,7 +49,6 @@ public class ActivityFacadeTest {
 	
 		
 	}
-
 	@Test
 	public void method_should_verify_list_with_rn() {
 		when(activityService.list(RECRUITMENT_NUMBER)).thenReturn(new ArrayList<>());

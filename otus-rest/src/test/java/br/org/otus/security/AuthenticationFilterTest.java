@@ -22,14 +22,13 @@ import br.org.otus.security.services.SecurityContextService;
 public class AuthenticationFilterTest {
 
 	@InjectMocks
-	AuthenticationFilter authenticationFilter;
+	private AuthenticationFilter authenticationFilter;
 	@Mock
-	SecurityContextService securityContextService;
+	private SecurityContextService securityContextService;
 	@Mock
-	ContainerRequestContext containerRequestContext;
-
-	String authorizationHeaderReader = "Bearer jhdskajhkasdjhkdshkdsa";
-	ContainerRequestContext containerRequestContextException;
+	private ContainerRequestContext containerRequestContext;
+	private String authorizationHeaderReader = "Bearer jhdskajhkasdjhkdshkdsa";
+	private ContainerRequestContext containerRequestContextException;
 
 	@Before
 	public void setUp() throws Exception {

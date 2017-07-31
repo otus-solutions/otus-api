@@ -33,16 +33,15 @@ public class ActivityResourceTest {
 	private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
 	
 	@Mock
-	ActivityFacade activityFacade;
+	private ActivityFacade activityFacade;
 	@InjectMocks
-	ActivityResource activityResource;
+	private ActivityResource activityResource;
 	@Mock
-	SurveyActivity surveyActivity;	
+	private SurveyActivity surveyActivity;	
 	@Mock
-	ParticipantFacade participantFacade;	
+	private ParticipantFacade participantFacade;	
 	@Mock
-	ActivityService activityService;	
-
+	private ActivityService activityService;	
 	private String jsonString;
 	private SurveyActivity activityDeserialize;
 	private List<SurveyActivity> listSurveyActivity;

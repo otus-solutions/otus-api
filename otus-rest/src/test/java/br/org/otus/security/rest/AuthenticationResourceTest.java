@@ -37,17 +37,13 @@ public class AuthenticationResourceTest {
 			+ "lcnJlaXJhQGdtYWlsLmNvbSJ9.6lNpZm4IhjINsUsWi5paX15dD7gPqlvapilx5Tf90NE";
 
 	@InjectMocks
-	AuthenticationResource authenticationResource;
-
+	private AuthenticationResource authenticationResource;
 	@Mock
-	SecurityFacade securityFacade;
-
+	private SecurityFacade securityFacade;
 	@Mock
-	HttpServletRequest request;
-
+	private HttpServletRequest request;
 	@InjectMocks
-	UserSecurityAuthorizationDto userSecurityAuthorizationDto;
-
+	private UserSecurityAuthorizationDto userSecurityAuthorizationDto;
 	private AuthenticationDto authenticationDto;
 	private Response response;
 	private ProjectAuthenticationDto projectAuthenticationDto;

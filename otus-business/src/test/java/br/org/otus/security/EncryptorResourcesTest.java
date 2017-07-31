@@ -26,11 +26,9 @@ public class EncryptorResourcesTest {
 	private static String VALUE_REVERSIBLE = "Otus1234";
 	private static final String VALUE_DECRYPTER = "T3R1czEyMzQ=";
 	@Mock
-	MessageDigest messageDigest;
-
+	private MessageDigest messageDigest;
 	@Mock
-	Encoder base64encoder;
-
+	private Encoder base64encoder;
 	private EncryptorResources encryptorResources;
 	private byte[] digest;
 

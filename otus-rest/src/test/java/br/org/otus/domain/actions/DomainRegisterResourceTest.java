@@ -41,15 +41,13 @@ public class DomainRegisterResourceTest {
 	public static final Integer RESPONSE_STATUS = 200;
 
 	@Mock
-	HttpClientBuilder httpClientBuilder;
+	private HttpClientBuilder httpClientBuilder;
 	@Mock
-	CloseableHttpClient httpClient;
+	private CloseableHttpClient httpClient;
 	@Mock
-	CloseableHttpResponse response;
+	private CloseableHttpResponse response;
 	@Mock
-	StatusLine statusLineResponse;
-
-
+	private StatusLine statusLineResponse;
 	private DomainRegisterResource domainRegisterResourceSpy;
 
 	@Before

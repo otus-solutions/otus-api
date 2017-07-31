@@ -20,9 +20,9 @@ import br.org.otus.rest.Response;
 @RunWith(PowerMockRunner.class)
 public class FieldCenterResourceTest {	
 	@InjectMocks
-	FieldCenterResource fieldCenterResource;
+	private FieldCenterResource fieldCenterResource;
 	@Mock
-	FieldCenterFacade fieldCenterFacade;
+	private FieldCenterFacade fieldCenterFacade;
 	
 	private FieldCenter fieldCenter;
 	private String responseExpected;
