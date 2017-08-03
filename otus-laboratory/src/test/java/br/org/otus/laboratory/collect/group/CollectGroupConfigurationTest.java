@@ -42,21 +42,18 @@ public class CollectGroupConfigurationTest {
 		expectedSet.add(new CollectGroupDescriptor(QC3, QC, tubes));
 		expectedSet.add(new CollectGroupDescriptor(DEFAULT, DEFAULT, tubes));
 	}
-
 	@Test
 	public void method_should_getDefaultCollectGroupDescritor() {
 		String expectedGetType = expectedSet.stream().filter(group -> group.getType().equals(DEFAULT)).findFirst()
 				.get().getType();
 		assertEquals(expectedGetType, collectGroupConfiguration.getDefaultCollectGroupDescriptor().getType());
 	}
-
 	@Test
 	public void method_should_getCollectGroupByName() {
 		String expectedGetName = expectedSet.stream().filter(group -> group.getName().equals(QC1)).findFirst().get()
 				.getName();
 		assertEquals(expectedGetName, collectGroupConfiguration.getCollectGroupByName(QC1).getName());
 	}
-
 	@Test
 	public void method_should_getCollectGroupsByType() {
 		assertEquals(
@@ -64,12 +61,10 @@ public class CollectGroupConfigurationTest {
 						.collect(Collectors.toList()).size(),
 				collectGroupConfiguration.getCollectGroupsByType(QC).size());
 	}
-
 	@Test
 	public void method_should_listAllGroupDescriptors() {
 		assertEquals(expectedSet.size(), collectGroupConfiguration.listAllGroupDescriptors().size());
 	}
-
 	@Test
 	public void method_should_listGroupNames() {
 		assertTrue(expectedSet.stream().map(group -> group.getName()).collect(Collectors.toList())
