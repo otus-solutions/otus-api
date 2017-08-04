@@ -9,8 +9,8 @@ import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.laboratory.collect.tube.Tube;
-import br.org.otus.laboratory.exam.Exam;
+import br.org.otus.laboratory.participant.collect.tube.Tube;
+import br.org.otus.laboratory.participant.exam.Exam;
 
 public class ParticipantLaboratory {
 

@@ -10,15 +10,15 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
-import br.org.otus.laboratory.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.collect.group.CollectGroupRaffle;
-import br.org.otus.laboratory.collect.tube.Tube;
-import br.org.otus.laboratory.collect.tube.TubeService;
-import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
-import br.org.otus.laboratory.dto.UpdateTubeAliquotsDTO;
-import br.org.otus.laboratory.validators.AliquotUpdateValidator;
-import br.org.otus.laboratory.validators.ParticipantLaboratoryValidator;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
+import br.org.otus.laboratory.participant.collect.tube.Tube;
+import br.org.otus.laboratory.participant.collect.tube.TubeService;
+import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
+import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {

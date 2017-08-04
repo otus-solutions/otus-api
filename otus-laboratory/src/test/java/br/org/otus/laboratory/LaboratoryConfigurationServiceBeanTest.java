@@ -1,11 +1,15 @@
 package br.org.otus.laboratory;
 
-import br.org.otus.laboratory.collect.group.CollectGroupConfiguration;
-import br.org.otus.laboratory.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.label.LabelPrintConfiguration;
-import br.org.otus.laboratory.label.LabelReference;
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationServiceBean;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
+import br.org.otus.laboratory.configuration.label.LabelReference;
+import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

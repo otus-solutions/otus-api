@@ -10,7 +10,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.CodeConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

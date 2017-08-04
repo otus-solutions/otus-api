@@ -13,10 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import br.org.otus.laboratory.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
 import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
-import br.org.otus.laboratory.validators.ParticipantLaboratoryValidator;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParticipantLaboratoryServiceBeanTest {

@@ -17,10 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.laboratory.LaboratoryConfiguration;
-import br.org.otus.laboratory.LaboratoryConfigurationService;
-import br.org.otus.laboratory.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.participant.collect.tube.generator.QualityControlTubeGenerator;
+import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
 
 @RunWith(PowerMockRunner.class)
 public class QualityControlTubeGeneratorTest {

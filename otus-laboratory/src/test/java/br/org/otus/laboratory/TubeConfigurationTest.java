@@ -4,7 +4,7 @@ import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import br.org.otus.laboratory.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 
 @Ignore
 @RunWith(JUnit4.class)

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import br.org.otus.laboratory.CodeConfiguration;
+import br.org.otus.laboratory.configuration.CodeConfiguration;
 
 public class CodeConfigurationTest {
 
