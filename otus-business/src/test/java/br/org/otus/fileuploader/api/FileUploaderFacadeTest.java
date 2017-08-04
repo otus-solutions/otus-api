@@ -29,7 +29,6 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ResponseBuild.class, HttpResponseException.class, Security.class, Validation.class })
 public class FileUploaderFacadeTest {
 	private static final String OID = "592415fb28110d2722b16fe3";		
 	@InjectMocks
@@ -45,7 +44,7 @@ public class FileUploaderFacadeTest {
 	@Mock
 	private FileUploaderPOJO form;
 	private ObjectId objectId;
-	private GridFSUploadOptions gridFSUploadOptions;	
+	
 
 	@Test
 	public void method_getById_should_return_stream() throws DataNotFoundException {
