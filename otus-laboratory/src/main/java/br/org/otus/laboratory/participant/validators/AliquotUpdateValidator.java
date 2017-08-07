@@ -1,7 +1,5 @@
 package br.org.otus.laboratory.participant.validators;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,8 +9,8 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
-import br.org.otus.laboratory.participant.collect.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.collect.tube.Tube;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
 

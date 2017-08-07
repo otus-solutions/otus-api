@@ -3,7 +3,7 @@ package br.org.otus.laboratory.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 public class CodeConfiguration {
 

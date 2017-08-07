@@ -17,9 +17,9 @@ import org.powermock.api.mockito.PowerMockito;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.participant.collect.tube.generator.DefaultTubeGenerator;
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.DefaultTubeGenerator;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultTubeGeneratorTest {

@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.collect.tube.Tube;
+import br.org.otus.laboratory.participant.tube.Tube;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

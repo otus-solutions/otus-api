@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import br.org.otus.laboratory.configuration.label.LabelReference;
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 public interface LaboratoryConfigurationService {
 

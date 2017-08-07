@@ -7,8 +7,8 @@ import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfigurat
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
 import br.org.otus.laboratory.configuration.label.LabelReference;
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 import org.junit.Before;
 import org.junit.Test;

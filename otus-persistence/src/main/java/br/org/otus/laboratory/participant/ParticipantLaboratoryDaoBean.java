@@ -2,6 +2,9 @@ package br.org.otus.laboratory.participant;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -9,6 +12,8 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
+
+import java.util.ArrayList;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
 	private static final String COLLECTION_NAME = "participant_laboratory";
@@ -61,6 +66,24 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 		}
 		return first;
 
+	}
+
+	@Override
+	public ArrayList<Aliquot> getFullAliquotsList() {
+	    ArrayList<Aliquot> fullList = new ArrayList<Aliquot>();
+
+		FindIterable<Document> list = collection.find();
+		list.forEach((Block<Document>) document ->{
+            ParticipantLaboratory laboratory = ParticipantLaboratory.deserialize(document.toJson());
+            fullList.addAll(laboratory.getAliquotsList());
+        });
+
+		return fullList;
+	}
+
+	@Override
+	public ArrayList<Aliquot> getFullAliquotsList(String fieldCenter) {
+		return null;
 	}
 
 }

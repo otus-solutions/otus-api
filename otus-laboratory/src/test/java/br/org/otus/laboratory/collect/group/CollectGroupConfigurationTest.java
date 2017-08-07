@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 
 public class CollectGroupConfigurationTest {
 	private static String DEFAULT = "DEFAULT";

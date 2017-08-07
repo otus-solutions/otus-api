@@ -16,10 +16,10 @@ import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfigur
 import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfigurationAdapter;
 import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
 import br.org.otus.laboratory.configuration.label.LabelPrintConfigurationAdapter;
-import br.org.otus.laboratory.participant.collect.aliquot.AliquotConfiguration;
-import br.org.otus.laboratory.participant.collect.tube.TubeConfiguration;
-import br.org.otus.laboratory.participant.collect.tube.TubeConfigurationAdapter;
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
+import br.org.otus.laboratory.configuration.collect.tube.TubeConfiguration;
+import br.org.otus.laboratory.configuration.collect.tube.TubeConfigurationAdapter;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

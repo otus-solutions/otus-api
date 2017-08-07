@@ -4,12 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.laboratory.participant.collect.tube.Tube;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.exam.Exam;
 
 public class ParticipantLaboratory {
@@ -47,6 +48,15 @@ public class ParticipantLaboratory {
 	public List<Exam> getExams() {
 		return exams;
 	}
+	
+	public List<Aliquot> getAliquotsList(){
+        ArrayList<Aliquot> aliquotsList = new ArrayList<Aliquot>();
+        for (Tube tube: tubes) {
+            aliquotsList.addAll(tube.getAliquots());
+        }
+
+        return aliquotsList;
+    }
 
 	public static String serialize(ParticipantLaboratory laboratory) {
 		Gson builder = ParticipantLaboratory.getGsonBuilder();

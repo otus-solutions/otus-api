@@ -86,4 +86,12 @@ public class ParticipantLaboratoryResource {
 		return javax.ws.rs.core.Response.ok().build();
 	}
 
+	@GET
+	@Secured
+	@Path("/aliquots")
+	public String getAllAliquots() {
+//		ParticipantLaboratoryFacade
+		return null;
+	}
+
 }

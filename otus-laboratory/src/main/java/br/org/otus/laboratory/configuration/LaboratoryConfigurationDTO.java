@@ -5,8 +5,8 @@ import java.util.List;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
 import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfiguration;
 import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
-import br.org.otus.laboratory.participant.collect.aliquot.AliquotConfiguration;
-import br.org.otus.laboratory.participant.collect.tube.TubeConfiguration;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
+import br.org.otus.laboratory.configuration.collect.tube.TubeConfiguration;
 
 public class LaboratoryConfigurationDTO {
 

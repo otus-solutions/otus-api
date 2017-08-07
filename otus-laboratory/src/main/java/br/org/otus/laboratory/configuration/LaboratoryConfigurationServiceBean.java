@@ -9,11 +9,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.laboratory.configuration.label.LabelReference;
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 @Stateless
 public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurationService {

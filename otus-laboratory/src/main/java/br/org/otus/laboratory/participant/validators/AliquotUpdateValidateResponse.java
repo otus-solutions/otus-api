@@ -3,7 +3,7 @@ package br.org.otus.laboratory.participant.validators;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.org.otus.laboratory.participant.collect.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 
 public class AliquotUpdateValidateResponse {
 

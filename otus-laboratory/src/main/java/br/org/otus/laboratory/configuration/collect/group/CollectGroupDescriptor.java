@@ -2,7 +2,7 @@ package br.org.otus.laboratory.configuration.collect.group;
 
 import java.util.Set;
 
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 
 public class CollectGroupDescriptor {
 

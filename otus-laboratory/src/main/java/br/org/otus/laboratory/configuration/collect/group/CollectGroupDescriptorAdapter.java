@@ -14,7 +14,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import br.org.otus.laboratory.participant.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 
 public class CollectGroupDescriptorAdapter implements JsonDeserializer<CollectGroupDescriptor>, JsonSerializer<CollectGroupDescriptor> {
 

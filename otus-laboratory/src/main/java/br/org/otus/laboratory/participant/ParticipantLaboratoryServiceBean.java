@@ -1,10 +1,12 @@
 package br.org.otus.laboratory.participant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -12,9 +14,9 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
-import br.org.otus.laboratory.participant.collect.tube.Tube;
-import br.org.otus.laboratory.participant.collect.tube.TubeService;
-import br.org.otus.laboratory.participant.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.participant.tube.TubeService;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
 import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
@@ -74,6 +76,16 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 		}
 		syncronizedParticipantLaboratory(updateAliquotsDTO, participantLaboratory);
 		return update(participantLaboratory);
+	}
+
+	@Override
+	public ArrayList<Aliquot> getAllAliquots() {		
+		return participantLaboratoryDao.getFullAliquotsList();
+	}
+
+	@Override
+	public ArrayList<Aliquot> getAllAliquots(String fieldCenter) {
+		return null;
 	}
 
 	private void syncronizedParticipantLaboratory(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {

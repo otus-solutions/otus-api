@@ -19,7 +19,7 @@ public class ParticipantQualityControlDaoBean extends MongoGenericDao<Document> 
 	@Override
 	public ParticipantQualityControl findParticipantGroup(Long rn) {
 		Document result = collection.find(eq("recruitmentNumber", rn)).first();
-		
+
 		if (result != null) {
 			return ParticipantQualityControl.deserialize(result.toJson());			
 		} else {
