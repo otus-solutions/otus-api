@@ -3,6 +3,8 @@ package br.org.otus.laboratory.participant;
 import static com.mongodb.client.model.Filters.eq;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
+
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
@@ -82,8 +84,14 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	}
 
 	@Override
-	public ArrayList<Aliquot> getFullAliquotsList(String fieldCenter) {
-		return null;
+	public ArrayList<ParticipantLaboratory> getAllParticipantLaboratory() {
+		FindIterable<Document> result = super.list();
+		ArrayList<ParticipantLaboratory> participantList = new ArrayList<ParticipantLaboratory>();
+		
+		result.forEach((Block<Document>) document -> {
+			participantList.add(ParticipantLaboratory.deserialize(document.toJson()));
+		});
+		return participantList;
 	}
 
 }
