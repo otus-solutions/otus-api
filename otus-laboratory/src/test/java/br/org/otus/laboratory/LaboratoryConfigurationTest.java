@@ -10,7 +10,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.google.gson.Gson;
+
+import br.org.otus.laboratory.collect.group.CollectGroupConfiguration;
+import br.org.otus.laboratory.collect.moment.CollectMomentConfiguration;
+import br.org.otus.laboratory.collect.tube.TubeConfiguration;
 import br.org.otus.laboratory.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.label.LabelPrintConfiguration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -23,6 +29,14 @@ public class LaboratoryConfigurationTest {
 
 	@Mock
 	private CodeConfiguration codeConfiguration;
+	@Mock
+	private TubeConfiguration tubeConfiguration;
+	@Mock
+	private CollectMomentConfiguration collectMomentConfiguration;
+	@Mock
+	private CollectGroupConfiguration collectGroupConfiguration;
+	@Mock
+	private LabelPrintConfiguration labelPrintConfiguration;
 
 	@Mock
 	private TubeSeed seed;
@@ -114,6 +128,7 @@ public class LaboratoryConfigurationTest {
 		laboratoryConfiguration.generateNewCodeList(seed, startingPoint);
 		Mockito.verify(codeConfiguration).generateCodeList(seed, startingPoint);
 	}
+	
 
 	@Test
 	public void method_should_deserialize_and_serialize_jsonString() {
