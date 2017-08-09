@@ -21,7 +21,6 @@ public class ActivityServiceBeanTest {
 	private static final String HASH = "58c83f502226685b94f8973a";
 	private static final long RECRUIMENT_NUMBER = 12345;
 	private static final String SURVEY_ID = "123456789";
-
 	@InjectMocks
 	private ActivityServiceBean service;
 	@Mock
@@ -33,11 +32,9 @@ public class ActivityServiceBeanTest {
 	@Before
 	public void setup() {
 		objectId = new ObjectId(HASH);
-		Mockito.when(activityDao.persist(Dieta)).thenReturn(objectId);
-		
+		Mockito.when(activityDao.persist(Dieta)).thenReturn(objectId);		
 		ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
-		activities.add(Dieta);
-		
+		activities.add(Dieta);		
 		Mockito.when(activityDao.find(RECRUIMENT_NUMBER)).thenReturn(activities);
 	}
 	@Test
@@ -64,5 +61,4 @@ public class ActivityServiceBeanTest {
 		Mockito.when(activityDao.findByID(SURVEY_ID)).thenThrow(DataNotFoundException.class);
 		service.getByID(SURVEY_ID);
 	}
-
 }

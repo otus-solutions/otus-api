@@ -32,7 +32,9 @@ import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(EncryptorResources.class)
 public class AuthenticationResourceTest {
-
+	private static final String AUTHENTICATION_DTO_EMAIL = "otus@otus.com";
+	private static final String HTTPSERVLET_REQUEST_IP = "143.54.220.57";
+	private static final String ENCRYPT_IRREVERSIBLE = "123";
 	private static final String JWT = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZ"
 			+ "lcnJlaXJhQGdtYWlsLmNvbSJ9.6lNpZm4IhjINsUsWi5paX15dD7gPqlvapilx5Tf90NE";
 
@@ -52,20 +54,19 @@ public class AuthenticationResourceTest {
 	public void setUp() throws Exception {
 		mockStatic(EncryptorResources.class);
 		authenticationDto = new AuthenticationDto();
-		authenticationDto.setEmail("otus@otus.com");
-		when(request.getRemoteAddr()).thenReturn("143.54.220.57");
+		authenticationDto.setEmail(AUTHENTICATION_DTO_EMAIL);
+		when(request.getRemoteAddr()).thenReturn(HTTPSERVLET_REQUEST_IP);
 		response = new Response();
 		projectAuthenticationDto = new ProjectAuthenticationDto();
 	}
 
 	@Test
 	public void method_Authenticate_should_return_response_userSecurityAuthorizationDto() throws EncryptedException {
-		when(EncryptorResources.encryptIrreversible(anyString())).thenReturn("123");
+		when(EncryptorResources.encryptIrreversible(anyString())).thenReturn(ENCRYPT_IRREVERSIBLE);
 		when(securityFacade.userAuthentication(authenticationDto, request.getRemoteAddr()))
 				.thenReturn(userSecurityAuthorizationDto);
 		String autenticateResponseExpected = response
 				.buildSuccess(securityFacade.userAuthentication(authenticationDto, request.getRemoteAddr())).toJson();
-
 		assertEquals(autenticateResponseExpected, authenticationResource.authenticate(authenticationDto, request));
 	}
 
@@ -81,8 +82,8 @@ public class AuthenticationResourceTest {
 		String responseJWTExpected = response.buildSuccess(JWT).toJson();
 		when(securityFacade.projectAuthentication(projectAuthenticationDto, request.getRemoteAddr().toString()))
 				.thenReturn(JWT);
-
-		assertEquals(responseJWTExpected, authenticationResource.projectAuthenticate(projectAuthenticationDto, request));
+		assertEquals(responseJWTExpected,
+				authenticationResource.projectAuthenticate(projectAuthenticationDto, request));
 	}
 
 	@Test
@@ -91,5 +92,4 @@ public class AuthenticationResourceTest {
 		verify(securityFacade).invalidate(anyString());
 
 	}
-
 }

@@ -16,19 +16,15 @@ import br.org.otus.response.info.Validation;
 
 @RunWith(PowerMockRunner.class)
 public class AuthorizationHeaderReaderTest {
-	private HttpServletRequest request;
-	private String token;
-	private String authorizationHeaderExpected;
-	
-	@Before
-	public void setUp() {
-		token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
-		authorizationHeaderExpected = token.substring("bearer".length()).trim();
-	}
+	private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
+	private String authorizationHeaderExpected;	
+
 	@Test
 	public void method_readToken_should_read_authorizationHeader() {
-		assertEquals(authorizationHeaderExpected, AuthorizationHeaderReader.readToken(token));
+		authorizationHeaderExpected = TOKEN.substring("bearer".length()).trim();
+		assertEquals(authorizationHeaderExpected, AuthorizationHeaderReader.readToken(TOKEN));
 	}
+
 	@Test(expected = HttpResponseException.class)
 	public void method_readToken_should_throw_HttpResponseException() {
 		when(AuthorizationHeaderReader.readToken(anyString())).thenThrow(new HttpResponseException(Validation.build()));

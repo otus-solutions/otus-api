@@ -18,6 +18,9 @@ import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(PowerMockRunner.class)
 public class FieldCenterFacadeTest {
+	private static final String FIELDCENTER_ACRONYM = "SP";
+	private static final String FIELDCENTER_NAME = "Sao Paulo";
+	private static final int FIELDCENTER_CODE = 6;
 	@InjectMocks
 	private FieldCenterFacade fieldCenterFacade;
 	@Mock
@@ -27,9 +30,9 @@ public class FieldCenterFacadeTest {
 	@Before
 	public void setUp() {
 		fieldCenter = new FieldCenter();
-		fieldCenter.setAcronym("SP");
-		fieldCenter.setName("Sao Paulo");
-		fieldCenter.setCode(6);
+		fieldCenter.setAcronym(FIELDCENTER_ACRONYM);
+		fieldCenter.setName(FIELDCENTER_NAME);
+		fieldCenter.setCode(FIELDCENTER_CODE);
 	}
 
 	@Test
