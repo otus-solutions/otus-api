@@ -16,9 +16,13 @@ public class TransportationLot {
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
-	
+
 	public String getObjectType() {
 		return objectType;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getCode() {

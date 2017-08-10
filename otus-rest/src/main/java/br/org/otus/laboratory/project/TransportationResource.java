@@ -1,34 +1,35 @@
 package br.org.otus.laboratory.project;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
+import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import java.util.ArrayList;
 
 @Path("/laboratory-project/transportation")
 public class TransportationResource {
 
+	@Inject
+	private TransportationLotFacade transportationLotFacade;
 	
 	@GET
-	@Secured
+//	@Secured
 	@Path("/lots")	
 	public String getLots() {
-
+		ArrayList<TransportationLot> lots = transportationLotFacade.getLots();
 		return null;
 	}
 	
 	@POST
-	@Secured
+//	@Secured
 	@Path("/create")
 	public String create(String transportationLotJson) {
 		TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
-		// Facade criar lote
-		return null;
+		TransportationLot createdLot = transportationLotFacade.create(transportationLot);
+		return new Response().buildSuccess(TransportationLot.serialize(createdLot)).toJson();
 	}
 	
 	
@@ -37,15 +38,16 @@ public class TransportationResource {
 	@Path("/update")
 	public String update(String transportationLotJson) {
 		TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
-		return null;
+		TransportationLot updatedLot = transportationLotFacade.update(transportationLot);
+		return new Response().buildSuccess(TransportationLot.serialize(updatedLot)).toJson();
 	}
 	
 	@DELETE
 	@Secured
 	@Path("/remove/{id}")
 	public String delete(@PathParam("id") String code) {
-		
-		return null;
+		boolean result = transportationLotFacade.delete(code);
+		return new Response().buildSuccess(result).toJson();
 	}
 	
 	

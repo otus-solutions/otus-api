@@ -6,7 +6,7 @@ import br.org.otus.laboratory.project.transportation.TransportationLot;
 
 public interface TransportationLotService {
 	
-	String create(TransportationLot transportationLot);	
+	TransportationLot create(TransportationLot transportationLot);
 	
 	TransportationLot update(TransportationLot transportationLot);
 	

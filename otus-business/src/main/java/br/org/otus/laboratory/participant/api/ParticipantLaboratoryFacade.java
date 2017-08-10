@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.api;
+package br.org.otus.laboratory.participant.api;
 
 import javax.inject.Inject;
 

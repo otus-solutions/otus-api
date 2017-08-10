@@ -1,27 +1,24 @@
 package br.org.otus.laboratory.project;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bson.Document;
-
+import br.org.mongodb.MongoGenericDao;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
 
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import java.util.ArrayList;
+import java.util.List;
 
+import static com.mongodb.client.model.Filters.eq;
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
 	private static final String COLLECTION_NAME = "transportation_lot";
 
-	public TransportationLotDaoBean(String collectionName, Class<Document> clazz) {
+	public TransportationLotDaoBean() {
 		super(COLLECTION_NAME, Document.class);
 	}
 

@@ -12,11 +12,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import br.org.otus.laboratory.api.ParticipantLaboratoryFacade;
 import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDTO;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.api.ParticipantLaboratoryFacade;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
