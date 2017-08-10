@@ -1,19 +1,20 @@
 package br.org.otus.laboratory.project.transportation.business;
 
-import java.util.List;
-
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import java.util.List;
 
 public interface TransportationLotService {
 	
 	TransportationLot create(TransportationLot transportationLot);
 	
-	TransportationLot update(TransportationLot transportationLot);
+	TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 	
 	List<TransportationLot> list (String fieldCenter);
 	
-	boolean delete(String id);
+	void delete(String id);
 
 	List<TransportationAliquot> getAliquots();
 	

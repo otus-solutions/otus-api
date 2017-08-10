@@ -3,7 +3,6 @@ package br.org.otus.laboratory.project;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
-import br.org.otus.response.builders.System;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import com.google.gson.GsonBuilder;
@@ -39,8 +38,7 @@ public class TransportationResource {
 		TransportationLot createdLot = transportationLotFacade.create(transportationLot);
 		return new Response().buildSuccess(TransportationLot.serialize(createdLot)).toJson();
 	}
-	
-	
+
 	@PUT
 	@Secured
 	@Path("/lot")

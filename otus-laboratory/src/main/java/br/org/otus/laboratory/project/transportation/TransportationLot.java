@@ -1,12 +1,11 @@
 package br.org.otus.laboratory.project.transportation;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.google.gson.Gson;
-
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import com.google.gson.Gson;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class TransportationLot {
 
@@ -16,6 +15,11 @@ public class TransportationLot {
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
+
+	public TransportationLot() {
+		// TODO: 10/08/17 checkThis
+		objectType = "TransportationLot";
+	}
 
 	public String getObjectType() {
 		return objectType;

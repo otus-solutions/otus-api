@@ -24,21 +24,21 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public TransportationLot update(TransportationLot transportationLot) {
-		// TODO Auto-generated method stub
-		return null;
+	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
+		TransportationLot updateResult = transportationLotDao.update(transportationLot);
+		return updateResult;
+
 	}
 
 	@Override
 	public List<TransportationLot> list(String fieldCenter) {
-		// TODO Auto-generated method stub
-		return null;
+		return transportationLotDao.find();
 	}
 
 	@Override
-	public boolean delete(String id) {
-		// TODO Auto-generated method stub
-		return false;
+	public void delete(String id) {
+		// TODO: 10/08/17 check if return boolean
+		transportationLotDao.delete(id);
 	}
 
 	@Override

@@ -14,8 +14,7 @@ public class TransportationLotFacade {
 	private TransportationLotService transportationLotService;
 
 	public TransportationLot create(TransportationLot transportationLot) {
-		TransportationLot result = transportationLotService.create(transportationLot);
-		return result;
+		return transportationLotService.create(transportationLot);
 	}
 
 

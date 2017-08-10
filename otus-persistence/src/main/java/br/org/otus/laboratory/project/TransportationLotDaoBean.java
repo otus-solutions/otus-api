@@ -1,28 +1,25 @@
 package br.org.otus.laboratory.project;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.bson.Document;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.persistence.ParticipantDao;
-
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquotFactory;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.persistence.ParticipantDao;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
@@ -51,6 +48,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 				new UpdateOptions().upsert(false));
 		
 		if (updateLotData.getMatchedCount() == 0) {
+			// TODO: 10/08/17 rewrite message not using code
 			throw new DataNotFoundException(new Throwable("Transportation Lot - code: " + transportationLot.getCode()
 			+ " does not exists."));
 		}
@@ -81,5 +79,4 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	public List<TransportationAliquot> getAliquots() throws DataNotFoundException{
 		return TransportationAliquotFactory.getTransportationAliquotList(participantLaboratoryDao, participantDao);
 	}
-
 }
