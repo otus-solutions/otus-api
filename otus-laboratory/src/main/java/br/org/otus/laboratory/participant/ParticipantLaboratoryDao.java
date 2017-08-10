@@ -20,5 +20,5 @@ public interface ParticipantLaboratoryDao {
 
 	ArrayList<Aliquot> getFullAliquotsList();
 
-    ArrayList<Aliquot> getFullAliquotsList(String fieldCenter);
+    ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 }
