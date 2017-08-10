@@ -1,10 +1,12 @@
 package br.org.otus.laboratory.project.api;
 
 import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.laboratory.project.transportation.business.TransportationLotService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TransportationLotFacade {
 	
@@ -27,6 +29,10 @@ public class TransportationLotFacade {
 
 	public boolean delete(String id) {
 		return false;
+	}
+
+	public List<TransportationAliquot> getAliquots(){
+		return transportationLotService.getAliquots();
 	}
 
 }

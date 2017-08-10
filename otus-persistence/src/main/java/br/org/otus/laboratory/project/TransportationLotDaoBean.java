@@ -45,7 +45,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	@Override
 	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
 		Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
-		parsed.remove("_id");
+		parsed.remove("_id"); // TODO: 10/08/17 remove?
 		
 		UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()), new Document("$set", parsed), 
 				new UpdateOptions().upsert(false));
@@ -76,7 +76,8 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 			// throw
 		}
 	}
-	
+
+	@Override
 	public List<TransportationAliquot> getAliquots() throws DataNotFoundException{
 		return TransportationAliquotFactory.getTransportationAliquotList(participantLaboratoryDao, participantDao);
 	}

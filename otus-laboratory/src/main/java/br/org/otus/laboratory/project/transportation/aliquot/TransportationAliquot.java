@@ -22,7 +22,6 @@ public class TransportationAliquot extends Aliquot {
 	public TransportationAliquot(String objectType, String code, String name, AliquotContainer container,
 			AliquotRole role, AliquotCollectionData aliquotCollectionData) {
 		super(objectType, code, name, container, role, aliquotCollectionData);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public TransportationAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex) {
