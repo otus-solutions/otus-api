@@ -2,6 +2,10 @@ package br.org.otus.laboratory.project.transportation;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.ImmutableDate;
+import br.org.otus.laboratory.project.ImmutableDateAdapter;
+import br.org.otus.laboratory.project.LocalDateTimeAdapter;
+
 import com.google.gson.Gson;
 
 import java.time.LocalDateTime;
@@ -50,12 +54,23 @@ public class TransportationLot {
 	}
 
 	public static String serialize(TransportationLot transportationLot) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
+		Gson builder = getGsonBuilder();
 		return builder.toJson(transportationLot);
 	}
 
 	public static TransportationLot deserialize(String transportationLot) {
-		return ParticipantLaboratory.getGsonBuilder().fromJson(transportationLot, TransportationLot.class);
+		return getGsonBuilder().fromJson(transportationLot, TransportationLot.class);
+	}
+	
+	public static Gson getGsonBuilder() {
+		//TODO:  test
+		
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.serializeNulls();
+		
+		return builder.create();
 	}
 
 }

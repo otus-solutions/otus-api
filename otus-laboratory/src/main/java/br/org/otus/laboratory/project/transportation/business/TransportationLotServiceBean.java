@@ -18,7 +18,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	@Override
 	public TransportationLot create(TransportationLot transportationLot) {
 		//generate code - UUID?
-//		transportationLot.setCode(code);
+//		transportationLot.setCode(code);		
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;
 	}
@@ -36,21 +36,14 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public void delete(String id) {
+	public void delete(String id) throws DataNotFoundException{
 		// TODO: 10/08/17 check if return boolean
 		transportationLotDao.delete(id);
 	}
 
 	@Override
-	public List<TransportationAliquot> getAliquots(){
-		try {
-			return transportationLotDao.getAliquots();
-		} catch (DataNotFoundException e) {
-			//throws // TODO: 10/08/17
-			e.printStackTrace();
-		}
-		return null;
-		// TODO: 10/08/17 remove
+	public List<TransportationAliquot> getAliquots() throws DataNotFoundException{
+		return transportationLotDao.getAliquots();		
 	}
 
 

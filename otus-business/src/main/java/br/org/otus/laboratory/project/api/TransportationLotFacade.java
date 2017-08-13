@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransportationLotFacade {
-	
+
 	@Inject
 	private TransportationLotService transportationLotService;
 
@@ -17,20 +17,19 @@ public class TransportationLotFacade {
 		return transportationLotService.create(transportationLot);
 	}
 
+	public TransportationLot update(TransportationLot transportationLot) {
+		return transportationLotService.update(transportationLot);
+	}
 
 	public ArrayList<TransportationLot> getLots() {
-		return null;
+		return transportationLotService.list();
 	}
 
-	public TransportationLot update(TransportationLot transportationLot) {
-		return null;
+	public void delete(String id) {
+		transportationLotService.delete(id);
 	}
 
-	public boolean delete(String id) {
-		return false;
-	}
-
-	public List<TransportationAliquot> getAliquots(){
+	public List<TransportationAliquot> getAliquots() {
 		return transportationLotService.getAliquots();
 	}
 

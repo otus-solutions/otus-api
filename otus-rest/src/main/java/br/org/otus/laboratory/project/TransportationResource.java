@@ -52,8 +52,8 @@ public class TransportationResource {
 	@Secured
 	@Path("/lot/{id}")
 	public String delete(@PathParam("id") String code) {
-		boolean result = transportationLotFacade.delete(code);
-		return new Response().buildSuccess(result).toJson();
+		transportationLotFacade.delete(code);
+		return new Response().buildSuccess().toJson();
 	}
 
 	@GET
@@ -61,9 +61,7 @@ public class TransportationResource {
 	@Path("/aliquots")
 	public String getAliquots() {
 		List<TransportationAliquot> aliquots= transportationLotFacade.getAliquots();
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
-		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		GsonBuilder builder = TranportationLot.getGsonBuilder();		
 		return builder.create().toJson(aliquots);
 	}
 

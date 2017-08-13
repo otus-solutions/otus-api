@@ -15,7 +15,7 @@ public interface TransportationLotDao {
 	
 	List<TransportationLot> find();
 		
-	void delete(String id);
+	void delete(String id) throws DataNotFoundException;
 
 	List<TransportationAliquot> getAliquots() throws DataNotFoundException;
 

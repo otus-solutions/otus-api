@@ -1,35 +1,37 @@
 package br.org.otus.laboratory.project;
 
+import static com.mongodb.client.model.Filters.eq;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.persistence.ParticipantDao;
+
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquotFactory;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-import org.bson.Document;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.persistence.ParticipantDao;
-
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.mongodb.client.model.Filters.eq;
-
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
 	private static final String COLLECTION_NAME = "transportation_lot";
-	
+
 	@Inject
 	private ParticipantLaboratoryDao participantLaboratoryDao;
 	@Inject
 	private ParticipantDao participantDao;
-	
+
 	public TransportationLotDaoBean() {
 		super(COLLECTION_NAME, Document.class);
 	}
@@ -43,14 +45,14 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
 		Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
 		parsed.remove("_id"); // TODO: 10/08/17 remove?
-		
-		UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()), new Document("$set", parsed), 
-				new UpdateOptions().upsert(false));
-		
+
+		UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
+				new Document("$set", parsed), new UpdateOptions().upsert(false));
+
 		if (updateLotData.getMatchedCount() == 0) {
 			// TODO: 10/08/17 rewrite message not using code
-			throw new DataNotFoundException(new Throwable("Transportation Lot - code: " + transportationLot.getCode()
-			+ " does not exists."));
+			throw new DataNotFoundException(
+					new Throwable("Transportation Lot - code: " + transportationLot.getCode() + " does not exists."));
 		}
 
 		return transportationLot;
@@ -68,15 +70,15 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	}
 
 	@Override
-	public void delete(String id) {
+	public void delete(String id) throws DataNotFoundException{
 		DeleteResult deleteResult = collection.deleteOne(eq("code", id));
 		if (deleteResult.getDeletedCount() == 0) {
-			// throw
+			 throw new DataNotFoundException(new Throwable("Transportation Lot does not exist"));
 		}
 	}
 
 	@Override
-	public List<TransportationAliquot> getAliquots() throws DataNotFoundException{
+	public List<TransportationAliquot> getAliquots() throws DataNotFoundException {
 		return TransportationAliquotFactory.getTransportationAliquotList(participantLaboratoryDao, participantDao);
 	}
 }

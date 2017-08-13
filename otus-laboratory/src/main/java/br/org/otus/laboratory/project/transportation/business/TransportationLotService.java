@@ -12,10 +12,10 @@ public interface TransportationLotService {
 	
 	TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 	
-	List<TransportationLot> list (String fieldCenter);
+	List<TransportationLot> list (String fieldCenter) ;
 	
-	void delete(String id);
+	void delete(String id) throws DataNotFoundException;
 
-	List<TransportationAliquot> getAliquots();
+	List<TransportationAliquot> getAliquots() throws DataNotFoundException;
 	
 }
