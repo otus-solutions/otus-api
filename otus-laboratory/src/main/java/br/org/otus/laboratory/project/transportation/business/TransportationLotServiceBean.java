@@ -8,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 public class TransportationLotServiceBean implements TransportationLotService {
@@ -18,7 +19,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	@Override
 	public TransportationLot create(TransportationLot transportationLot) {
 		//generate code - UUID?
-//		transportationLot.setCode(code);		
+		String code = UUID.randomUUID().toString();
+		transportationLot.setCode(code);
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;
 	}
@@ -31,7 +33,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public List<TransportationLot> list(String fieldCenter) {
+	public List<TransportationLot> list() {
 		return transportationLotDao.find();
 	}
 

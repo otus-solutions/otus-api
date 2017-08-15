@@ -1,12 +1,12 @@
 package br.org.otus.laboratory.project.transportation;
 
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.project.ImmutableDate;
-import br.org.otus.laboratory.project.ImmutableDateAdapter;
-import br.org.otus.laboratory.project.LocalDateTimeAdapter;
-
+import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,13 +15,13 @@ public class TransportationLot {
 
 	private String objectType;
 	private String code;
-	private List<Aliquot> aliquotList;
+	private List<TransportationAliquot> aliquotList;
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
 
+
 	public TransportationLot() {
-		// TODO: 10/08/17 checkThis
 		objectType = "TransportationLot";
 	}
 
@@ -37,7 +37,7 @@ public class TransportationLot {
 		return code;
 	}
 
-	public List<Aliquot> getAliquotList() {
+	public List<TransportationAliquot> getAliquotList() {
 		return aliquotList;
 	}
 
@@ -54,23 +54,21 @@ public class TransportationLot {
 	}
 
 	public static String serialize(TransportationLot transportationLot) {
-		Gson builder = getGsonBuilder();
+		Gson builder = getGsonBuilder().create();
 		return builder.toJson(transportationLot);
 	}
 
 	public static TransportationLot deserialize(String transportationLot) {
-		return getGsonBuilder().fromJson(transportationLot, TransportationLot.class);
+		return getGsonBuilder().create().fromJson(transportationLot, TransportationLot.class);
 	}
 	
-	public static Gson getGsonBuilder() {
-		//TODO:  test
-		
+	public static GsonBuilder getGsonBuilder() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 		builder.serializeNulls();
 		
-		return builder.create();
+		return builder;
 	}
 
 }

@@ -6,14 +6,9 @@ import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliqu
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import com.google.gson.GsonBuilder;
-import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
-import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
-import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/laboratory-project/transportation")
@@ -26,8 +21,9 @@ public class TransportationResource {
 //	@Secured
 	@Path("/lots")	
 	public String getLots() {
-		ArrayList<TransportationLot> lots = transportationLotFacade.getLots();
-		return null;
+		List<TransportationLot> lots = transportationLotFacade.getLots();
+		GsonBuilder builder = TransportationLot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
 	}
 	
 	@POST
@@ -40,7 +36,7 @@ public class TransportationResource {
 	}
 
 	@PUT
-	@Secured
+//	@Secured
 	@Path("/lot")
 	public String update(String transportationLotJson) {
 		TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
@@ -49,7 +45,7 @@ public class TransportationResource {
 	}
 	
 	@DELETE
-	@Secured
+//	@Secured
 	@Path("/lot/{id}")
 	public String delete(@PathParam("id") String code) {
 		transportationLotFacade.delete(code);
@@ -61,8 +57,8 @@ public class TransportationResource {
 	@Path("/aliquots")
 	public String getAliquots() {
 		List<TransportationAliquot> aliquots= transportationLotFacade.getAliquots();
-		GsonBuilder builder = TranportationLot.getGsonBuilder();		
-		return builder.create().toJson(aliquots);
+		GsonBuilder builder = TransportationLot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
 	}
 
 

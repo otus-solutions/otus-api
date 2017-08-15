@@ -11,9 +11,9 @@ public interface TransportationLotService {
 	TransportationLot create(TransportationLot transportationLot);
 	
 	TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
-	
-	List<TransportationLot> list (String fieldCenter) ;
-	
+
+	List<TransportationLot> list();
+
 	void delete(String id) throws DataNotFoundException;
 
 	List<TransportationAliquot> getAliquots() throws DataNotFoundException;
