@@ -39,6 +39,9 @@ public class LaboratoryConfigurationTest {
 
 		JsonObject codeConfiguration = new JsonObject();
 		json.add("codeConfiguration", codeConfiguration);
+		
+		JsonObject lotConfiguration = new JsonObject();
+		json.add("lotConfiguration", lotConfiguration);
 
 		JsonObject tubeDescriptor = new JsonObject();
 		tubeDescriptor.addProperty("name", "EDTA");

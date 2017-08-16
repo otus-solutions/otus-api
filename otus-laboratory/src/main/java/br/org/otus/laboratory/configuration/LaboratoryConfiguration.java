@@ -31,6 +31,7 @@ public class LaboratoryConfiguration {
 	private ObjectId id;
 
 	private CodeConfiguration codeConfiguration;
+	private LotConfiguration lotConfiguration;
 	private TubeConfiguration tubeConfiguration;
 	private AliquotConfiguration aliquotConfiguration;
 	private CollectMomentConfiguration collectMomentConfiguration;
@@ -40,6 +41,7 @@ public class LaboratoryConfiguration {
 
 	public LaboratoryConfiguration() {
 		codeConfiguration = new CodeConfiguration();
+		lotConfiguration = new LotConfiguration();
 		tubeConfiguration = new TubeConfiguration(new HashSet<>());
 		collectMomentConfiguration = new CollectMomentConfiguration(new HashSet<>());
 		collectGroupConfiguration = new CollectGroupConfiguration(new HashSet<>());
@@ -53,6 +55,10 @@ public class LaboratoryConfiguration {
 
 	public CodeConfiguration getCodeConfiguration() {
 		return this.codeConfiguration;
+	}
+	
+	public LotConfiguration getLotConfiguration() {
+		return this.lotConfiguration;
 	}
 
 	public TubeConfiguration getTubeConfiguration() {
