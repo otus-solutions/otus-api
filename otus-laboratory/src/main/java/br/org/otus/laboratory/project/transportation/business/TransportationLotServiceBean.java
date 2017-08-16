@@ -22,7 +22,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	public TransportationLot create(TransportationLot transportationLot) throws ValidationException {
 		// TODO: 15/08/17 check for readable code
 		String code = UUID.randomUUID().toString();
-
+		transportationLot.setCode(code);
 
 		_validateLot(transportationLot);
 
