@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class TransportationLotValidationResult {
 
-	private boolean isValid;
+	private boolean isValid = true;
+	private ArrayList<TransportationAliquot> value = new ArrayList<>();
 
 	public boolean isValid() {
 		return isValid;
@@ -28,8 +29,6 @@ public class TransportationLotValidationResult {
 	public void pushConflict(TransportationAliquot aliquot) {
 		this.value.add(aliquot);
 	}
-
-	private ArrayList<TransportationAliquot> value;
 
 	public TransportationLotValidationResult() {
 	}
