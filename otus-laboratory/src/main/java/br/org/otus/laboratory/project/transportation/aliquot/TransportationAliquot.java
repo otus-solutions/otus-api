@@ -60,4 +60,6 @@ public class TransportationAliquot extends Aliquot {
 		Gson builder = ParticipantLaboratory.getGsonBuilder();
 		return builder.toJson(aliquots);
 	}
+
+
 }

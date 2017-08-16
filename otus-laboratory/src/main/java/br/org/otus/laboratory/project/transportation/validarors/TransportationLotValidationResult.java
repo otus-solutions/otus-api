@@ -1,19 +1,22 @@
 package br.org.otus.laboratory.project.transportation.validarors;
 
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
-
 import java.util.ArrayList;
 
 public class TransportationLotValidationResult {
 
 	private boolean isValid = true;
-	private ArrayList<TransportationAliquot> value = new ArrayList<>();
+	private ArrayList<String> value = new ArrayList<>();
+	private String errorCode;
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
 
 	public boolean isValid() {
 		return isValid;
 	}
 
-	public ArrayList<TransportationAliquot> getValue() {
+	public ArrayList<String> getValue() {
 		return value;
 	}
 
@@ -22,12 +25,12 @@ public class TransportationLotValidationResult {
 		isValid = valid;
 	}
 
-	public void setValue(ArrayList<TransportationAliquot> value) {
+	public void setValue(ArrayList<String> value) {
 		this.value = value;
 	}
 
-	public void pushConflict(TransportationAliquot aliquot) {
-		this.value.add(aliquot);
+	public void pushConflict(String aliquotCode) {
+		this.value.add(aliquotCode);
 	}
 
 	public TransportationLotValidationResult() {

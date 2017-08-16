@@ -7,6 +7,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TransportationLotValidator {
 
@@ -36,23 +37,26 @@ public class TransportationLotValidator {
 
 	private void checkForAliquotsOnAnotherLots(){
 		final List<TransportationLot>  transportationLotList = transportationLotDao.find();
-		transportationLot.getAliquotList().forEach(transportationAliquot ->
-				transportationLotList.forEach(transportationLot1 -> {
-					boolean duplicate = transportationLot1.getAliquotList().contains(transportationAliquot);
-					if (duplicate) {
-						transportationLotValidationResult.setValid(false);
-						transportationLotValidationResult.pushConflict(transportationAliquot);
-					}
-				}));
+		transportationLot.getAliquotList().forEach(transportationAliquot -> {
+			Optional<TransportationLot> searchedAliquot = transportationLotList.stream().filter(transportationLot1 -> {
+				return transportationLot1.getAliquotList().contains(transportationAliquot);
+			}).findFirst();
+
+			if (searchedAliquot.isPresent()){
+				transportationLotValidationResult.setValid(false);
+				transportationLotValidationResult.pushConflict(transportationAliquot.getCode());
+			}
+		});
 	}
 
 	private void checkIfAliquotsExist() throws DataNotFoundException {
 		final List<TransportationAliquot> aliquotList = transportationLotDao.getAliquots();
 		transportationLot.getAliquotList().forEach(transportationAliquot -> {
 			boolean contains = aliquotList.contains(transportationAliquot);
+
 			if (!contains){
 				transportationLotValidationResult.setValid(false);
-				transportationLotValidationResult.pushConflict(transportationAliquot);
+				transportationLotValidationResult.pushConflict(transportationAliquot.getCode());
 			}
 		});
 	}

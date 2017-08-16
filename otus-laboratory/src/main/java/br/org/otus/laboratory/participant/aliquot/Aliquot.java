@@ -55,4 +55,18 @@ public class Aliquot {
 		return builder.toJson(aliquots);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Aliquot aliquot = (Aliquot) o;
+
+		return code.equals(aliquot.code);
+	}
+
+	@Override
+	public int hashCode() {
+		return code.hashCode();
+	}
 }
