@@ -44,15 +44,14 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	@Override
 	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
 		Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
-		parsed.remove("_id"); // TODO: 10/08/17 remove?
+		parsed.remove("_id");
 
 		UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
 				new Document("$set", parsed), new UpdateOptions().upsert(false));
 
 		if (updateLotData.getMatchedCount() == 0) {
-			// TODO: 10/08/17 rewrite message not using code
 			throw new DataNotFoundException(
-					new Throwable("Transportation Lot - code: " + transportationLot.getCode() + " does not exists."));
+					new Throwable("Transportation Lot not found"));
 		}
 
 		return transportationLot;
@@ -60,12 +59,10 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
 	@Override
 	public List<TransportationLot> find() {
-		ArrayList<TransportationLot> transportationLots = new ArrayList<TransportationLot>();
+		ArrayList<TransportationLot> transportationLots = new ArrayList<>();
 
 		FindIterable<Document> result = collection.find();
-		result.forEach((Block<Document>) document -> {
-			transportationLots.add(TransportationLot.deserialize(document.toJson()));
-		});
+		result.forEach((Block<Document>) document -> transportationLots.add(TransportationLot.deserialize(document.toJson())));
 		return transportationLots;
 	}
 

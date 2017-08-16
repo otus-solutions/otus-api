@@ -4,7 +4,6 @@ import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
 import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;

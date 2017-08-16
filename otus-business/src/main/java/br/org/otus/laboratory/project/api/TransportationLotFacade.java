@@ -6,6 +6,7 @@ import br.org.otus.laboratory.project.transportation.business.TransportationLotS
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -17,7 +18,12 @@ public class TransportationLotFacade {
 	private TransportationLotService transportationLotService;
 
 	public TransportationLot create(TransportationLot transportationLot) {
-		return transportationLotService.create(transportationLot);
+		try {
+			return transportationLotService.create(transportationLot);
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
 	}
 
 	public List<TransportationLot> getLots() {

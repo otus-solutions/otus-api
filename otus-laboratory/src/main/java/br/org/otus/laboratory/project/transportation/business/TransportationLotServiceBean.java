@@ -4,9 +4,11 @@ import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,10 +19,13 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	private TransportationLotDao transportationLotDao;
 
 	@Override
-	public TransportationLot create(TransportationLot transportationLot) {
-		//generate code - UUID?
+	public TransportationLot create(TransportationLot transportationLot) throws ValidationException {
+		// TODO: 15/08/17 check for readable code
 		String code = UUID.randomUUID().toString();
-		transportationLot.setCode(code);
+
+
+		_validateLot(transportationLot);
+
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;
 	}
@@ -39,13 +44,19 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
 	@Override
 	public void delete(String id) throws DataNotFoundException{
-		// TODO: 10/08/17 check if return boolean
 		transportationLotDao.delete(id);
 	}
 
 	@Override
 	public List<TransportationAliquot> getAliquots() throws DataNotFoundException{
 		return transportationLotDao.getAliquots();		
+	}
+
+	private void _validateLot(TransportationLot transportationLot) throws ValidationException {
+		ArrayList<TransportationAliquot> conflicts = new ArrayList<>();
+		if (!conflicts.isEmpty()){
+			throw new ValidationException(new Throwable("Aliquots found on another lot"), conflicts);
+		}
 	}
 
 
