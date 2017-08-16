@@ -18,6 +18,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
@@ -31,13 +32,17 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	private ParticipantLaboratoryDao participantLaboratoryDao;
 	@Inject
 	private ParticipantDao participantDao;
-
+	@Inject
+	private LaboratoryConfigurationDao laboratoryConfigurationDao; 
+	
 	public TransportationLotDaoBean() {
 		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override
 	public void persist(TransportationLot transportationLot) {
+		transportationLot.setCode(laboratoryConfigurationDao.createNewLotCode());
+		
 		super.persist(TransportationLot.serialize(transportationLot));
 	}
 

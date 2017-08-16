@@ -8,4 +8,5 @@ public interface LaboratoryConfigurationDao {
 
 	void update(LaboratoryConfiguration configuration) throws Exception;
 	
+	String createNewLotCode();
 }

@@ -1,9 +1,12 @@
 package br.org.otus.laboratory.configuration;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.exists;
 
 import org.bson.Document;
 
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
@@ -42,5 +45,15 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 			throw new Exception("Update was not executed.");
 		}
 	}
-
+	
+	public String createNewLotCode() {		
+		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertion"), 
+				new Document("$inc", new Document("lotConfiguration.lastInsertion", 1)),  
+				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+		
+		LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
+		
+		return laboratoryConfiguration.getLotConfiguration().getLastInsertion().toString();
+	}
+	
 }
