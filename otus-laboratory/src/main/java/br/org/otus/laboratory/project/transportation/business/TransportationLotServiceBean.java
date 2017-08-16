@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project.transportation.business;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.validarors.TransportationLotValidator;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -19,12 +20,16 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	private TransportationLotDao transportationLotDao;
 
 	@Override
-	public TransportationLot create(TransportationLot transportationLot) throws ValidationException {
+	public TransportationLot create(TransportationLot transportationLot) throws ValidationException, DataNotFoundException {
+
+
+		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
+
+		transportationLotValidator.validate();
+
 		// TODO: 15/08/17 check for readable code
 		String code = UUID.randomUUID().toString();
 		transportationLot.setCode(code);
-
-		_validateLot(transportationLot);
 
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;

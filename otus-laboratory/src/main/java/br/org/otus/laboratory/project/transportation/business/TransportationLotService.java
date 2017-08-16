@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TransportationLotService {
 	
-	TransportationLot create(TransportationLot transportationLot) throws ValidationException;
+	TransportationLot create(TransportationLot transportationLot) throws ValidationException, DataNotFoundException;
 	
 	TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 
