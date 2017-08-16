@@ -25,6 +25,10 @@ public class TransportationLotValidationResult {
 		this.value = value;
 	}
 
+	public void pushConflict(TransportationAliquot aliquot) {
+		this.value.add(aliquot);
+	}
+
 	private ArrayList<TransportationAliquot> value;
 
 	public TransportationLotValidationResult() {
