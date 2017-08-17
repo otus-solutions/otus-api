@@ -20,18 +20,14 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
 	@Override
 	public TransportationLot create(TransportationLot transportationLot) throws ValidationException, DataNotFoundException {
-
-
-		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
-
-		transportationLotValidator.validate();
-
+		_validateLot(transportationLot);
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;
 	}
 
 	@Override
-	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
+	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException {
+		_validateLot(transportationLot);
 		TransportationLot updateResult = transportationLotDao.update(transportationLot);
 		return updateResult;
 
@@ -53,10 +49,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	private void _validateLot(TransportationLot transportationLot) throws ValidationException {
-		ArrayList<TransportationAliquot> conflicts = new ArrayList<>();
-		if (!conflicts.isEmpty()) {
-			throw new ValidationException(new Throwable("Aliquots found on another lot"), conflicts);
-		}
+		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
+		transportationLotValidator.validate();
 	}
 
 

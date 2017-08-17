@@ -39,6 +39,9 @@ public class TransportationLotFacade {
 		} catch (DataNotFoundException e) {
 			e.printStackTrace();
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
 	}
 

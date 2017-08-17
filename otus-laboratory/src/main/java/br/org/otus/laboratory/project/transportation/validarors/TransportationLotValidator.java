@@ -21,14 +21,14 @@ public class TransportationLotValidator {
 		this.transportationLotValidationResult = new TransportationLotValidationResult();
 	}
 
-	public void validate() throws ValidationException, DataNotFoundException {
+	public void validate() throws ValidationException {
 		checkForAliquotsOnAnotherLots();
 		if (!transportationLotValidationResult.isValid()) {
 			throw new ValidationException(new Throwable("There are aliquots in another lot."),
 					transportationLotValidationResult);
 		}
 
-		checkIfAliquotsExist();
+//		checkIfAliquotsExist();
 		if (!transportationLotValidationResult.isValid()) {
 			throw new ValidationException(new Throwable("Aliquots not found"),
 					transportationLotValidationResult);
@@ -37,6 +37,9 @@ public class TransportationLotValidator {
 
 	private void checkForAliquotsOnAnotherLots() {
 		final List<TransportationLot> transportationLotList = transportationLotDao.find();
+
+		transportationLotList.remove(transportationLot);
+
 		transportationLot.getAliquotList().forEach(transportationAliquot -> {
 			Optional<TransportationLot> searchedAliquot = transportationLotList.stream().filter(transportationLot1 -> {
 				return transportationLot1.getAliquotList().contains(transportationAliquot);

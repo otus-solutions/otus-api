@@ -70,4 +70,18 @@ public class TransportationLot {
 		return builder;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		TransportationLot that = (TransportationLot) o;
+
+		return code.equals(that.code);
+	}
+
+	@Override
+	public int hashCode() {
+		return code.hashCode();
+	}
 }
