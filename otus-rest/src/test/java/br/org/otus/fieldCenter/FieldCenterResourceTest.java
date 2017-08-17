@@ -12,12 +12,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.fieldCenter.api.FieldCenterFacade;
 import br.org.otus.rest.Response;
 
-@RunWith(PowerMockRunner.class)
+//@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FieldCenterResourceTest {
 	private static final String FIELD_CENTER_ACRONYM = "SP";
 	private static final String FIELD_CENTER_NAME = "Sao Paulo";

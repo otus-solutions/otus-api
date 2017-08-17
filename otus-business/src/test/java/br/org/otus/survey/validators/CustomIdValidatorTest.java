@@ -3,10 +3,10 @@ package br.org.otus.survey.validators;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static org.powermock.api.mockito.PowerMockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 import org.junit.Before;
@@ -14,21 +14,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import br.org.otus.survey.SurveyDao;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CustomIdValidatorTest {
-
 	@InjectMocks
-	CustomIdValidator customIdValidator;
+	private CustomIdValidator customIdValidator;
 	@Mock
-	SurveyDao surveyDao;
+	private SurveyDao surveyDao;
 	@Mock
-	SurveyForm surveyForm;
+	private SurveyForm surveyForm;
 	@Mock
-	SurveyTemplate surveyTemplate;
-
+	private SurveyTemplate surveyTemplate;
 	private String surveyJsonDeserialize;
 	private SurveyForm surveyFormReal;
 	private Set<String> customIds;
@@ -40,21 +40,22 @@ public class CustomIdValidatorTest {
 		surveyFormReal = SurveyForm.deserialize(surveyJsonDeserialize);
 		customIds = surveyFormReal.getSurveyTemplate().getCustomIds();
 		surveyFormList = new ArrayList<>();
-		when(surveyForm.getSurveyTemplate()).thenReturn(surveyTemplate);
-		when(surveyForm.getSurveyTemplate().getCustomIds()).thenReturn(customIds);
+		Mockito.when(surveyForm.getSurveyTemplate()).thenReturn(surveyTemplate);
+		Mockito.when(surveyForm.getSurveyTemplate().getCustomIds()).thenReturn(customIds);
 	}
 
 	@Test
 	public void method_validate_should_return_validatorResponse_invalid() {
 		surveyFormList.add(surveyFormReal);
-		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds())).thenReturn(surveyFormList);
+		Mockito.when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds()))
+				.thenReturn(surveyFormList);
 		assertFalse(customIdValidator.validate().isValid());
 	}
 
 	@Test
 	public void method_validate_should_return_validatorResponse_valid() {
-		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds())).thenReturn(surveyFormList);
+		Mockito.when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds()))
+				.thenReturn(surveyFormList);
 		assertTrue(customIdValidator.validate().isValid());
 	}
-
 }
