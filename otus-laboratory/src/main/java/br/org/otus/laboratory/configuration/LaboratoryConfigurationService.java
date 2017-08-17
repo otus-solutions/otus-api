@@ -1,11 +1,11 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.List;
-import java.util.Set;
-
-import br.org.otus.laboratory.configuration.label.LabelReference;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.label.LabelReference;
+
+import java.util.List;
+import java.util.Set;
 
 public interface LaboratoryConfigurationService {
 
@@ -16,7 +16,7 @@ public interface LaboratoryConfigurationService {
 	List<LabelReference> getLabelOrderByName(String orderName);
 
 	List<String> generateCodes(TubeSeed seed);
-	
+
 	LaboratoryConfiguration getLaboratoryConfiguration();
-	
+
 }

@@ -1,12 +1,11 @@
 package br.org.otus.laboratory.participant.aliquot;
 
-import java.util.List;
-
-import com.google.gson.Gson;
-
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 public class Aliquot {
 
@@ -33,7 +32,7 @@ public class Aliquot {
 	public String getCode() {
 		return code;
 	}
-	
+
 	public AliquotContainer getContainer() {
 		return container;
 	}
@@ -49,7 +48,7 @@ public class Aliquot {
 	public AliquotCollectionData getAliquotCollectionData() {
 		return aliquotCollectionData;
 	}
-	
+
 	public static String serialize(List<Aliquot> aliquots) {
 		Gson builder = ParticipantLaboratory.getGsonBuilder();
 		return builder.toJson(aliquots);

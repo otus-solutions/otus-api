@@ -1,17 +1,16 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.label.LabelReference;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-
-import br.org.otus.laboratory.configuration.label.LabelReference;
-import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Stateless
 public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurationService {

@@ -1,19 +1,17 @@
 package br.org.otus.laboratory.collect.aliquot;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.tube.Tube;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.tube.Tube;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AliquotTest {
@@ -60,7 +58,7 @@ public class AliquotTest {
 	@Test
 	public void when_method_serialize_is_called_compare_serializeds_json_with_participant_laboratory() {
 		List<Tube> tubes = new ArrayList<Tube>();
-		
+
 		ParticipantLaboratory laboratory = new ParticipantLaboratory(new Long(1234567), "DEFAULT", new ArrayList<Tube>());
 
 		participantLaboratory.serialize(laboratory);

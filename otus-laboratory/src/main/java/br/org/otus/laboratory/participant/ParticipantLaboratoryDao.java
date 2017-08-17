@@ -20,5 +20,5 @@ public interface ParticipantLaboratoryDao {
 
 	ArrayList<Aliquot> getFullAliquotsList();
 
-    ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
+	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 }

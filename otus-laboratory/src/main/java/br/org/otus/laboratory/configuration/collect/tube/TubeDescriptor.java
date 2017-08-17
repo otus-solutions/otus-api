@@ -5,7 +5,7 @@ public class TubeDescriptor {
 	private String name;
 	private String label;
 	private String color;
-	
+
 	public TubeDescriptor(String name, String label, String color) {
 		this.name = name;
 		this.label = label;

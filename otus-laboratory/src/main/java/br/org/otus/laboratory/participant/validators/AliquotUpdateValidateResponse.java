@@ -1,9 +1,9 @@
 package br.org.otus.laboratory.participant.validators;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
 
 public class AliquotUpdateValidateResponse {
 
@@ -31,7 +31,7 @@ public class AliquotUpdateValidateResponse {
 	public void setTubesNotFound(List<String> tubesNotFound) {
 		this.tubesNotFound = tubesNotFound;
 	}
-	
+
 	public boolean isValid() {
 		return conflicts.isEmpty() && tubesNotFound.isEmpty();
 	}

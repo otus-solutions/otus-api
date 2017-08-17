@@ -1,13 +1,12 @@
 package br.org.otus.laboratory.configuration.collect.tube.generator;
 
-import java.util.ArrayList;
-import java.util.List;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.participant.tube.Tube;
 
 import javax.inject.Inject;
-
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
-import br.org.otus.laboratory.participant.tube.Tube;
-import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractTubeGenerator implements TubeGenerator {
 

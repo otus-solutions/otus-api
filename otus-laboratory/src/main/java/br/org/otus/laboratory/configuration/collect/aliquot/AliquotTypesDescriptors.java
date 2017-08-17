@@ -7,7 +7,7 @@ public class AliquotTypesDescriptors {
 	private String objectType;
 	private String name;
 	private List<AliquoteDescriptor> aliquots;
-	
+
 	public AliquotTypesDescriptors(String objectType, String name, List<AliquoteDescriptor> aliquots) {
 		this.objectType = objectType;
 		this.name = name;

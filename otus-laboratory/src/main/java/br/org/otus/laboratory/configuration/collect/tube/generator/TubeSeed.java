@@ -1,8 +1,7 @@
 package br.org.otus.laboratory.configuration.collect.tube.generator;
 
-import org.ccem.otus.participant.model.Participant;
-
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import org.ccem.otus.participant.model.Participant;
 
 public class TubeSeed {
 

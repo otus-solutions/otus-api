@@ -1,7 +1,9 @@
 package br.org.otus.laboratory.participant;
 
-import static org.junit.Assert.*;
-
+import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
+import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.junit.Before;
@@ -13,10 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
-import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
-import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
-import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParticipantLaboratoryServiceBeanTest {
@@ -38,7 +37,7 @@ public class ParticipantLaboratoryServiceBeanTest {
 	public void setup() throws DataNotFoundException {
 		JsonObjectUpdateAliquotsDTOFactory dtoFactory = new JsonObjectUpdateAliquotsDTOFactory();
 		aliquotsDTO = UpdateAliquotsDTO.deserialize(dtoFactory.create().toString());
-		
+
 		JsonObjecParticipantLaboratoryFactory jsonObjecParticipantLaboratoryFactory = new JsonObjecParticipantLaboratoryFactory();
 		participantLaboratory = ParticipantLaboratory.deserialize(jsonObjecParticipantLaboratoryFactory.create().toString());
 
@@ -72,10 +71,10 @@ public class ParticipantLaboratoryServiceBeanTest {
 
 	@Test
 	public void when_the_method_is_executed_successfully_and_the_set_of_aliquots_are_valid_then_the_laboratory_must_be_updated() throws DataNotFoundException, ValidationException {
-		
+
 		ParticipantLaboratory laboratory = laboratoryService.getLaboratory(RECRUIMENT_NUMBER);
 		assertEquals(laboratory.getTubes().get(0).getAliquots().size(), 0);
-		
+
 		laboratoryService.updateAliquots(aliquotsDTO);
 	}
 

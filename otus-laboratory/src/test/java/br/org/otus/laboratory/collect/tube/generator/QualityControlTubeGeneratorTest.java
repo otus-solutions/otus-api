@@ -1,14 +1,11 @@
 package br.org.otus.laboratory.collect.tube.generator;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.when;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.QualityControlTubeGenerator;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,12 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.configuration.collect.tube.generator.QualityControlTubeGenerator;
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class QualityControlTubeGeneratorTest {
@@ -53,12 +52,12 @@ public class QualityControlTubeGeneratorTest {
 		tubeSets.add(new TubeDefinition(1, "URINE", "NONE"));
 		tubeSets.add(new TubeDefinition(1, "FLOURIDE", "FASTING"));
 		tubeSets.add(new TubeDefinition(2, "GEL", "POST_OVERLOAD"));
-		
+
 		collectGroupDescriptor = new CollectGroupDescriptor("DEFAULT", "DEFAULT", tubeSets);
 		tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
 
 		when(laboratoryConfigurationService.getTubeSetByGroupName(tubeSeed.getCollectGroupDescriptor().getName()))
-				.thenReturn(tubeSets);		
+				.thenReturn(tubeSets);
 	}
 
 	@Test
@@ -74,7 +73,7 @@ public class QualityControlTubeGeneratorTest {
 		expectedTubeSets.add(new TubeDefinition(3, "EDTA", "FASTING"));
 
 		tubeDefinitionsExpected = expectedTubeSets.stream().map(definition -> definition).collect(Collectors.toList());
-		
+
 		typeExpected = tubeDefinitionsExpected.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
 				.getType();
 

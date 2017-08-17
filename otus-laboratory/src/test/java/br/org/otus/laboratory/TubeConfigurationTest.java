@@ -1,10 +1,9 @@
 package br.org.otus.laboratory;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 
 @Ignore
 @RunWith(JUnit4.class)

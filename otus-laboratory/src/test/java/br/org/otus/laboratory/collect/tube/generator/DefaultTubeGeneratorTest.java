@@ -1,10 +1,10 @@
 package br.org.otus.laboratory.collect.tube.generator;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.HashSet;
-import java.util.Set;
-
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.generator.DefaultTubeGenerator;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,11 +15,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.configuration.collect.tube.generator.DefaultTubeGenerator;
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultTubeGeneratorTest {

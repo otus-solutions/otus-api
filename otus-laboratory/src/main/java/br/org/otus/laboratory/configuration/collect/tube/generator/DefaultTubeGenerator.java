@@ -1,13 +1,12 @@
 package br.org.otus.laboratory.configuration.collect.tube.generator;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import br.org.otus.laboratory.configuration.collect.tube.qualifier.DefaultGenerator;
+
+import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.ejb.Stateless;
-
-import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.configuration.collect.tube.qualifier.DefaultGenerator;
 
 @Stateless
 @DefaultGenerator

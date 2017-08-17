@@ -1,11 +1,9 @@
 package br.org.otus.laboratory.participant;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-
-import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
-import br.org.otus.laboratory.participant.validators.AliquotUpdateValidateResponse;
 
 import java.util.ArrayList;
 

@@ -11,7 +11,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Stateless
 public class TransportationLotServiceBean implements TransportationLotService {
@@ -26,10 +25,6 @@ public class TransportationLotServiceBean implements TransportationLotService {
 		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
 
 		transportationLotValidator.validate();
-
-		// TODO: 15/08/17 check for readable code
-		String code = UUID.randomUUID().toString();
-		transportationLot.setCode(code);
 
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;
@@ -48,18 +43,18 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public void delete(String id) throws DataNotFoundException{
+	public void delete(String id) throws DataNotFoundException {
 		transportationLotDao.delete(id);
 	}
 
 	@Override
-	public List<TransportationAliquot> getAliquots() throws DataNotFoundException{
-		return transportationLotDao.getAliquots();		
+	public List<TransportationAliquot> getAliquots() throws DataNotFoundException {
+		return transportationLotDao.getAliquots();
 	}
 
 	private void _validateLot(TransportationLot transportationLot) throws ValidationException {
 		ArrayList<TransportationAliquot> conflicts = new ArrayList<>();
-		if (!conflicts.isEmpty()){
+		if (!conflicts.isEmpty()) {
 			throw new ValidationException(new Throwable("Aliquots found on another lot"), conflicts);
 		}
 	}

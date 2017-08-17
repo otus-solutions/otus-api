@@ -8,9 +8,9 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import java.util.List;
 
 public interface TransportationLotService {
-	
+
 	TransportationLot create(TransportationLot transportationLot) throws ValidationException, DataNotFoundException;
-	
+
 	TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 
 	List<TransportationLot> list();
@@ -18,5 +18,5 @@ public interface TransportationLotService {
 	void delete(String id) throws DataNotFoundException;
 
 	List<TransportationAliquot> getAliquots() throws DataNotFoundException;
-	
+
 }

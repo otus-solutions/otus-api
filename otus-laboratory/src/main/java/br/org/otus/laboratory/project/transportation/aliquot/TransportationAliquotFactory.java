@@ -1,16 +1,13 @@
 package br.org.otus.laboratory.project.transportation.aliquot;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransportationAliquotFactory {
 

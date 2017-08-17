@@ -1,17 +1,16 @@
 package br.org.otus.laboratory.collect.group;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CollectGroupConfigurationTest {
 	private static String DEFAULT = "DEFAULT";

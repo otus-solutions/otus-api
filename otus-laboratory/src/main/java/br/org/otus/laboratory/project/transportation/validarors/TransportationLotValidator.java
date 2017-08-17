@@ -23,26 +23,26 @@ public class TransportationLotValidator {
 
 	public void validate() throws ValidationException, DataNotFoundException {
 		checkForAliquotsOnAnotherLots();
-		if (!transportationLotValidationResult.isValid()){
+		if (!transportationLotValidationResult.isValid()) {
 			throw new ValidationException(new Throwable("There are aliquots in another lot."),
 					transportationLotValidationResult);
 		}
 
 		checkIfAliquotsExist();
-		if (!transportationLotValidationResult.isValid()){
+		if (!transportationLotValidationResult.isValid()) {
 			throw new ValidationException(new Throwable("Aliquots not found"),
 					transportationLotValidationResult);
 		}
 	}
 
-	private void checkForAliquotsOnAnotherLots(){
-		final List<TransportationLot>  transportationLotList = transportationLotDao.find();
+	private void checkForAliquotsOnAnotherLots() {
+		final List<TransportationLot> transportationLotList = transportationLotDao.find();
 		transportationLot.getAliquotList().forEach(transportationAliquot -> {
 			Optional<TransportationLot> searchedAliquot = transportationLotList.stream().filter(transportationLot1 -> {
 				return transportationLot1.getAliquotList().contains(transportationAliquot);
 			}).findFirst();
 
-			if (searchedAliquot.isPresent()){
+			if (searchedAliquot.isPresent()) {
 				transportationLotValidationResult.setValid(false);
 				transportationLotValidationResult.pushConflict(transportationAliquot.getCode());
 			}
@@ -54,7 +54,7 @@ public class TransportationLotValidator {
 		transportationLot.getAliquotList().forEach(transportationAliquot -> {
 			boolean contains = aliquotList.contains(transportationAliquot);
 
-			if (!contains){
+			if (!contains) {
 				transportationLotValidationResult.setValid(false);
 				transportationLotValidationResult.pushConflict(transportationAliquot.getCode());
 			}

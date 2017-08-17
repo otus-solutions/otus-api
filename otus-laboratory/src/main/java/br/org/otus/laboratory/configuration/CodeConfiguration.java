@@ -1,9 +1,9 @@
 package br.org.otus.laboratory.configuration;
 
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 
 public class CodeConfiguration {
 
@@ -12,7 +12,7 @@ public class CodeConfiguration {
 	private Integer palletToken;
 	private Integer cryotubeToken;
 	private Integer lastInsertion;
-	
+
 	public Integer getWaveNumberToken() {
 		return waveNumberToken;
 	}

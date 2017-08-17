@@ -1,7 +1,10 @@
 package br.org.otus.laboratory;
 
-import static org.junit.Assert.assertEquals;
-
+import br.org.otus.laboratory.configuration.CodeConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,12 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.laboratory.configuration.CodeConfiguration;
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 public class LaboratoryConfigurationTest {
@@ -39,7 +37,7 @@ public class LaboratoryConfigurationTest {
 
 		JsonObject codeConfiguration = new JsonObject();
 		json.add("codeConfiguration", codeConfiguration);
-		
+
 		JsonObject lotConfiguration = new JsonObject();
 		json.add("lotConfiguration", lotConfiguration);
 

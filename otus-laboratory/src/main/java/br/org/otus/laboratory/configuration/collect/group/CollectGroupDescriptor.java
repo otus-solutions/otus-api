@@ -1,8 +1,8 @@
 package br.org.otus.laboratory.configuration.collect.group;
 
-import java.util.Set;
-
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+
+import java.util.Set;
 
 public class CollectGroupDescriptor {
 
@@ -14,8 +14,8 @@ public class CollectGroupDescriptor {
 		this.name = name;
 		this.type = type;
 		this.tubeSet = tubeSet;
-		
-		
+
+
 	}
 
 	public String getName() {

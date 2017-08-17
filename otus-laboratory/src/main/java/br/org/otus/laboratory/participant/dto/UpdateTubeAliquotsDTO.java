@@ -1,8 +1,8 @@
 package br.org.otus.laboratory.participant.dto;
 
-import java.util.List;
-
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+
+import java.util.List;
 
 public class UpdateTubeAliquotsDTO {
 

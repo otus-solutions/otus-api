@@ -7,27 +7,27 @@ public class JsonObjectUpdateAliquotsDTOBuilder {
 
 	private JsonObject updateAliquotsDTO;
 	private JsonArray tubes;
-	
+
 	private JsonObjectUpdateAliquotsDTOBuilder() {
 		updateAliquotsDTO = new JsonObject();
 		tubes = new JsonArray();
 	}
-	
+
 	public JsonObjectUpdateAliquotsDTOBuilder(long recruitmentNumber) {
 		this();
 		updateAliquotsDTO.addProperty("recruitmentNumber", recruitmentNumber);
 	}
-	
+
 	public JsonObjectUpdateAliquotsDTOBuilder addTubeCode(String code) {
 		JsonObject tube = new JsonObject();
 		tube.addProperty("code", code);
 		tube.add("aliquotes", aNewAliquotsArray());
 		return this;
 	}
-	
+
 	public JsonObjectUpdateAliquotsDTOBuilder withAliquot(String code) {
 		JsonArray aliquots = tubes.getAsJsonObject().get("aliquotes").getAsJsonArray();
-		
+
 //		aliquots.add(element);
 		return this;
 	}

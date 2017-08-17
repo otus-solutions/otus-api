@@ -1,6 +1,5 @@
 package br.org.otus.laboratory.project.transportation;
 
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,13 +60,13 @@ public class TransportationLot {
 	public static TransportationLot deserialize(String transportationLot) {
 		return getGsonBuilder().create().fromJson(transportationLot, TransportationLot.class);
 	}
-	
+
 	public static GsonBuilder getGsonBuilder() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 		builder.serializeNulls();
-		
+
 		return builder;
 	}
 

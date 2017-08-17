@@ -1,29 +1,27 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.ccem.otus.utils.ObjectIdAdapter;
-
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfigurationAdapter;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptorAdapter;
 import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfiguration;
 import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfigurationAdapter;
-import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
-import br.org.otus.laboratory.configuration.label.LabelPrintConfigurationAdapter;
-import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.tube.TubeConfiguration;
 import br.org.otus.laboratory.configuration.collect.tube.TubeConfigurationAdapter;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
-
+import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
+import br.org.otus.laboratory.configuration.label.LabelPrintConfigurationAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import org.bson.types.ObjectId;
+import org.ccem.otus.utils.ObjectIdAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class LaboratoryConfiguration {
 
@@ -56,7 +54,7 @@ public class LaboratoryConfiguration {
 	public CodeConfiguration getCodeConfiguration() {
 		return this.codeConfiguration;
 	}
-	
+
 	public LotConfiguration getLotConfiguration() {
 		return this.lotConfiguration;
 	}

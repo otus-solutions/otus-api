@@ -1,9 +1,9 @@
 package br.org.otus.laboratory.participant.tube;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
 
 public class Tube implements Comparable<Tube> {
 

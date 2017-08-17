@@ -1,18 +1,17 @@
 package br.org.otus.laboratory.participant.validators;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
+import br.org.otus.laboratory.participant.tube.Tube;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 
@@ -41,7 +40,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 			throw new DataNotFoundException(
 					new Throwable("Tube codes not found."), aliquotUpdateValidateResponse.getTubesNotFound());
 		}
-		
+
 		verifyConflictsOnDB();
 		if (!aliquotUpdateValidateResponse.isValid()) {
 			throw new ValidationException(new Throwable("There are repeated aliquots on Database."),
