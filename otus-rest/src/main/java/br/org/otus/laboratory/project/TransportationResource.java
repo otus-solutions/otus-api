@@ -18,7 +18,7 @@ public class TransportationResource {
 	private TransportationLotFacade transportationLotFacade;
 	
 	@GET
-//	@Secured
+	@Secured
 	@Path("/lots")	
 	public String getLots() {
 		List<TransportationLot> lots = transportationLotFacade.getLots();
@@ -27,7 +27,7 @@ public class TransportationResource {
 	}
 	
 	@POST
-//	@Secured
+	@Secured
 	@Path("/lot")
 	public String create(String transportationLotJson) {
 		TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
@@ -36,7 +36,7 @@ public class TransportationResource {
 	}
 
 	@PUT
-//	@Secured
+	@Secured
 	@Path("/lot")
 	public String update(String transportationLotJson) {
 		TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
@@ -45,7 +45,7 @@ public class TransportationResource {
 	}
 	
 	@DELETE
-//	@Secured
+	@Secured
 	@Path("/lot/{id}")
 	public String delete(@PathParam("id") String code) {
 		transportationLotFacade.delete(code);
@@ -53,7 +53,7 @@ public class TransportationResource {
 	}
 
 	@GET
-//	@Secured
+	@Secured
 	@Path("/aliquots")
 	public String getAliquots() {
 		List<TransportationAliquot> aliquots= transportationLotFacade.getAliquots();
