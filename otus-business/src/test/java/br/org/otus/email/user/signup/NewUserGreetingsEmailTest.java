@@ -1,6 +1,5 @@
 package br.org.otus.email.user.signup;
 
-
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -13,21 +12,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 import br.org.owail.sender.email.Recipient;
 
 @RunWith(MockitoJUnitRunner.class)
-
 public class NewUserGreetingsEmailTest {
 	private static final String EMAIL = "otus@otus.com";
-
 	@Mock
 	private Recipient recipient;
 	private NewUserGreetingsEmail newUserGreetingsEmail;
 
-	@Before
-	public void setUp() {
-		newUserGreetingsEmail = spy(new NewUserGreetingsEmail(recipient));
-	}
-
 	@Test
 	public void method_defineRecipient_should_evocate_addTORecipientMethod() {
+		newUserGreetingsEmail = spy(new NewUserGreetingsEmail(recipient));
 		newUserGreetingsEmail.defineRecipient(EMAIL);
 		verify(newUserGreetingsEmail).addTORecipient("recipient", EMAIL);
 	}
