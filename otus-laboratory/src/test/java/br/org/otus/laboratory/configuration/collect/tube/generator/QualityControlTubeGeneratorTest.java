@@ -1,11 +1,9 @@
-package br.org.otus.laboratory.collect.tube.generator;
+package br.org.otus.laboratory.configuration.collect.tube.generator;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
-import br.org.otus.laboratory.configuration.collect.tube.generator.QualityControlTubeGenerator;
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
 import org.junit.Test;

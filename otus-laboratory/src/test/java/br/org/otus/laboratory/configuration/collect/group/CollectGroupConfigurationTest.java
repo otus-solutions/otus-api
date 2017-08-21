@@ -1,7 +1,5 @@
-package br.org.otus.laboratory.collect.group;
+package br.org.otus.laboratory.configuration.collect.group;
 
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import org.junit.Before;
 import org.junit.Test;

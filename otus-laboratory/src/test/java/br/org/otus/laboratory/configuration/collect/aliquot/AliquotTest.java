@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.collect.aliquot;
+package br.org.otus.laboratory.configuration.collect.aliquot;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.tube.Tube;

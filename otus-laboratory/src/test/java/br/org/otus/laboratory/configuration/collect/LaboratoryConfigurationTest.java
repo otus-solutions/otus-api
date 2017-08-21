@@ -1,4 +1,4 @@
-package br.org.otus.laboratory;
+package br.org.otus.laboratory.configuration.collect;
 
 import br.org.otus.laboratory.configuration.CodeConfiguration;
 import br.org.otus.laboratory.configuration.LaboratoryConfiguration;

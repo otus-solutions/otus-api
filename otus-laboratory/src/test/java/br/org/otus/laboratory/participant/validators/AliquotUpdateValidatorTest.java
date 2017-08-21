@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.validators;
+package br.org.otus.laboratory.participant.validators;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
@@ -6,7 +6,6 @@ import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
 import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOBuilder;
 import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
-import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
