@@ -1,11 +1,10 @@
 package br.org.otus.laboratory.participant;
 
-import java.util.List;
-
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import br.org.otus.laboratory.collect.aliquot.Aliquot;
+import java.util.ArrayList;
 
 public interface ParticipantLaboratoryDao {
 
@@ -17,8 +16,9 @@ public interface ParticipantLaboratoryDao {
 
 	ParticipantLaboratory updateLaboratoryData(ParticipantLaboratory labParticipant) throws DataNotFoundException;
 
-	public Document findDocumentByAliquotCode(String aliquotCode) throws DataNotFoundException;
+	Document findDocumentByAliquotCode(String aliquotCode) throws DataNotFoundException;
 
-	public ParticipantLaboratory updateTubeOnParticipanteLaboratory(ParticipantLaboratory partipantLaboratory, String tubeCode, List<Aliquot> newAliquots) throws DataNotFoundException;
+	ArrayList<Aliquot> getFullAliquotsList();
 
+	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 }

@@ -22,8 +22,8 @@ public class ParticipantFacade {
 			return participantService.getByRecruitmentNumber(rn);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
 
+		}
 	}
 
 	public List<Participant> list(FieldCenter fieldCenter) {
