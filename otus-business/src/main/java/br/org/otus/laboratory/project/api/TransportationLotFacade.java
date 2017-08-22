@@ -17,9 +17,9 @@ public class TransportationLotFacade {
 	@Inject
 	private TransportationLotService transportationLotService;
 
-	public TransportationLot create(TransportationLot transportationLot) {
+	public TransportationLot create(TransportationLot transportationLot, String email) {
 		try {
-			return transportationLotService.create(transportationLot);
+			return transportationLotService.create(transportationLot, email);
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));

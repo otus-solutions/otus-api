@@ -4,11 +4,16 @@ import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
+import br.org.otus.security.context.SecurityContext;
 import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import java.util.List;
 
 @Path("/laboratory-project/transportation")
@@ -16,6 +21,9 @@ public class TransportationResource {
 
 	@Inject
 	private TransportationLotFacade transportationLotFacade;
+
+	@Inject
+	private SecurityContext securityContext;
 	
 	@GET
 	@Secured
@@ -29,9 +37,12 @@ public class TransportationResource {
 	@POST
 	@Secured
 	@Path("/lot")
-	public String create(String transportationLotJson) {
+	public String create(@Context HttpServletRequest request, String transportationLotJson) {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
 		TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
-		TransportationLot createdLot = transportationLotFacade.create(transportationLot);
+		TransportationLot createdLot = transportationLotFacade.create(transportationLot, userEmail);
 		return new Response().buildSuccess(TransportationLot.serialize(createdLot)).toJson();
 	}
 
