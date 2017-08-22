@@ -1,8 +1,10 @@
-package br.org.otus.laboratory.configuration.collect;
+package br.org.otus.laboratory.configuration;
 
-import br.org.otus.laboratory.configuration.CodeConfiguration;
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
+import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfiguration;
+import br.org.otus.laboratory.configuration.collect.tube.TubeConfiguration;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.Before;
@@ -23,6 +25,16 @@ public class LaboratoryConfigurationTest {
 
 	@Mock
 	private CodeConfiguration codeConfiguration;
+	@Mock
+	private TubeConfiguration tubeConfiguration;
+	@Mock
+	private CollectMomentConfiguration collectMomentConfiguration;
+	@Mock
+	private CollectGroupConfiguration collectGroupConfiguration;
+	@Mock
+	private LabelPrintConfiguration labelPrintConfiguration;
+	@Mock
+	private LotConfiguration  lotConfiguration;
 
 	@Mock
 	private TubeSeed seed;
@@ -51,6 +63,7 @@ public class LaboratoryConfigurationTest {
 
 		JsonObject tubeConfiguration = new JsonObject();
 		tubeConfiguration.add("tubeDescriptors", tubeDescriptors);
+
 
 		json.add("tubeConfiguration", tubeConfiguration);
 
@@ -113,7 +126,6 @@ public class LaboratoryConfigurationTest {
 
 	@Test
 	public void method_generateNewCodeList_should_call_generateCodeList() {
-
 		laboratoryConfiguration.generateNewCodeList(seed, startingPoint);
 		Mockito.verify(codeConfiguration).generateCodeList(seed, startingPoint);
 	}
@@ -121,9 +133,7 @@ public class LaboratoryConfigurationTest {
 	@Test
 	public void method_should_deserialize_and_serialize_jsonString() {
 		LaboratoryConfiguration labDeserialize = laboratoryConfiguration.deserialize(json.toString());
-
 		assertEquals(json.toString(), laboratoryConfiguration.serialize(labDeserialize));
-
 	}
 
 }

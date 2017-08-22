@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>otus-rest</artifactId>
 	<packaging>war</packaging>
@@ -133,7 +134,13 @@
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-file-uploader</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>provided</scope>			
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

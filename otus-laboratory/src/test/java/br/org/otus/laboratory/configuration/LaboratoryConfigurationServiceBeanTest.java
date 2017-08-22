@@ -1,8 +1,5 @@
-package br.org.otus.laboratory.configuration.collect;
+package br.org.otus.laboratory.configuration;
 
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationServiceBean;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
