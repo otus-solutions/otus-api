@@ -19,7 +19,6 @@ public class TransportationLot {
 	private LocalDateTime processingDate;
 	private String operator;
 
-
 	public TransportationLot() {
 		objectType = "TransportationLot";
 	}
@@ -52,6 +51,9 @@ public class TransportationLot {
 		return operator;
 	}
 
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
 	public static String serialize(TransportationLot transportationLot) {
 		Gson builder = getGsonBuilder().create();
 		return builder.toJson(transportationLot);

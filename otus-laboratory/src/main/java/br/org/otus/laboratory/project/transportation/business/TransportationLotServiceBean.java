@@ -19,8 +19,9 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	private TransportationLotDao transportationLotDao;
 
 	@Override
-	public TransportationLot create(TransportationLot transportationLot) throws ValidationException, DataNotFoundException {
+	public TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException {
 		_validateLot(transportationLot);
+		transportationLot.setOperator(email);
 		transportationLotDao.persist(transportationLot);
 		return transportationLot;
 	}
