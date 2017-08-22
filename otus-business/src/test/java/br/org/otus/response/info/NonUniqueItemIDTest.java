@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class NonUniqueItemIDTest {
 
 	@Test
-	public void method_Build_should_return_instanceOf_NonUniqueItemID() {
+	public void method_build_should_return_instanceOf_NonUniqueItemID() {
 		assertTrue(NonUniqueItemID.build() instanceof NonUniqueItemID);
 	}
 }
