@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
+import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,8 +32,9 @@ public class ParticipantFacadeTest {
 	private FieldCenter fieldCenter;
 	@Mock
 	private java.util.List<Participant> partipantList;
+	@Mock
+	private DataNotFoundException e;
 	
-
 	@Test
 	public void method_getByRecruitmentNumber_should_return_participant() throws DataNotFoundException {
 		when(participantService.getByRecruitmentNumber(RN)).thenReturn(participant);
@@ -42,7 +44,8 @@ public class ParticipantFacadeTest {
 	// TODO teste do HttpResponseException causa nullpointer por causa da
 	// chamada do metodo estático ResponseBuild no paramentro
 	// talvez whenNew HttpResponseException withAnyArguments possa validadar o
-	// teste, mas teria que usar powerMockito e perde cobertura.
+	// teste, mas teria que usar powerMockito e perde cobertura.	
+	
 
 	@Test
 	public void method_list_should_return_instanceOf_ParticipantList() {

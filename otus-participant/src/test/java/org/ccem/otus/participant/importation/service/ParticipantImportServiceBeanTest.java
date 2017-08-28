@@ -58,7 +58,7 @@ public class ParticipantImportServiceBeanTest {
 	}
 
 	@Test
-	public void method_performImportation_should_evocate_internal_methods() throws Exception {
+	public void method_performImportation_should_evocate_internals_methods() throws Exception {
 		whenNew(ParticipantBuilder.class).withAnyArguments().thenReturn(participantBuilder);
 		when(participantBuilder.buildFromPartipantToImport(participantToImport)).thenReturn(participant);
 		invokeMethod(participantImportServiceBean, "performImportation", participantImports);
