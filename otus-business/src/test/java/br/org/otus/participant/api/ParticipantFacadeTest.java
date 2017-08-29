@@ -40,11 +40,12 @@ public class ParticipantFacadeTest {
 		when(participantService.getByRecruitmentNumber(RN)).thenReturn(participant);
 		assertTrue(participantFacade.getByRecruitmentNumber(RN) instanceof Participant);
 	}
-
-	// TODO teste do HttpResponseException causa nullpointer por causa da
-	// chamada do metodo estático ResponseBuild no paramentro
-	// talvez whenNew HttpResponseException withAnyArguments possa validadar o
-	// teste, mas teria que usar powerMockito e perde cobertura.	
+	
+	
+	//TODO HttpResponseException test causes nullpointerException because of
+	//Static method call ResponseBuild per parameter
+	//Maybe whenNew HttpResponseException withAnyArguments can validate the
+	//Test, but would have to use powerMockito and will lose the coverage
 	
 
 	@Test
