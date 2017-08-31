@@ -10,6 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import com.google.gson.Gson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
@@ -20,6 +23,8 @@ import br.org.otus.laboratory.participant.api.ParticipantLaboratoryFacade;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
+
+import java.util.List;
 
 @Path("/laboratory-participant")
 public class ParticipantLaboratoryResource {
@@ -55,13 +60,31 @@ public class ParticipantLaboratoryResource {
 	}
 
 	@GET
-	@Secured
+//	@Secured // TODO: 31/08/17 uncomment
 	@Path("/descriptor")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String getDescriptor() {
 		LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
 		LaboratoryConfigurationDTO laboratoryConfigurationDTO = new LaboratoryConfigurationDTO(laboratoryConfiguration);
 		return new Response().buildSuccess(laboratoryConfigurationDTO).toJson();
+	}
+
+	@GET
+//	@Secured // TODO: 31/08/17 uncomment
+	@Path("/aliquot-configuration")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getAliquotConfiguration() {
+		AliquotConfiguration aliquotConfiguration = laboratoryConfigurationService.getAliquotConfiguration();
+		return new Response().buildSuccess(aliquotConfiguration).toJson();
+	}
+
+	@GET
+//	@Secured // TODO: 31/08/17 uncomment
+	@Path("/aliquot-descriptors")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getAliquotDescriptors() {
+		List<AliquoteDescriptor> aliquoteDescriptors = laboratoryConfigurationService.getAliquotDescriptors();
+		return new Response().buildSuccess(aliquoteDescriptors).toJson();
 	}
 
 	@PUT

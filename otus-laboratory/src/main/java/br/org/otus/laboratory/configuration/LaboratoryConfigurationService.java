@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.configuration;
 
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
@@ -18,5 +20,9 @@ public interface LaboratoryConfigurationService {
 	List<String> generateCodes(TubeSeed seed);
 
 	LaboratoryConfiguration getLaboratoryConfiguration();
+
+	AliquotConfiguration getAliquotConfiguration();
+
+	List<AliquoteDescriptor> getAliquotDescriptors();
 
 }

@@ -6,14 +6,12 @@ public class AliquoteDescriptor {
 	private String name;
 	private String label;
 	private String role;
-	private Integer quantity;
 
 	public AliquoteDescriptor(String objectType, String name, String label, String role, Integer quantity) {
 		this.objectType = objectType;
 		this.name = name;
 		this.label = label;
 		this.role = role;
-		this.quantity = quantity;
 	}
 
 	public String getObjectType() {
@@ -32,7 +30,4 @@ public class AliquoteDescriptor {
 		return role;
 	}
 
-	public Integer getQuantity() {
-		return quantity;
-	}
 }
