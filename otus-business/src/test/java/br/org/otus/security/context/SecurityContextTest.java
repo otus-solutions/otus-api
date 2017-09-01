@@ -27,7 +27,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SecurityContext.class, SignedJWT.class})
+@PrepareForTest({ SecurityContext.class, SignedJWT.class })
 public class SecurityContextTest {
 	private static final Boolean POSITIVE_ANSWER = true;
 	private static final Boolean NEGATIVE_ANSWER = false;
@@ -92,7 +92,6 @@ public class SecurityContextTest {
 	@Test
 	public void method_verifySignature() throws Exception {
 		sharedSecret = TOKEN.getBytes();
-		// verifier = new MACVerifier(sharedSecret);
 		signedJWT = PowerMockito.spy(SignedJWT.parse(TOKEN));
 		mockStatic(SignedJWT.class);
 		when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
@@ -104,32 +103,8 @@ public class SecurityContextTest {
 		whenNew(MACVerifier.class).withArguments(sharedSecret).thenReturn(verifier);
 		when(signedJWT.verify(verifier)).thenReturn(POSITIVE_ANSWER);
 
-		assertEquals(POSITIVE_ANSWER, securityContext.verifySignature(TOKEN));
+		assertTrue(securityContext.verifySignature(TOKEN));
 
 	}
-
-	/*
-	 * @Test public void method_verifySignature() throws Exception { byte[]
-	 * sharedSecret = TOKEN.getBytes(); verifier = PowerMockito.spy(new
-	 * MACVerifier(sharedSecret));
-	 * 
-	 * when(sessionIndentifierStream.filter(any())).thenReturn(
-	 * sessionIndentifierStream);
-	 * when(sessionIndentifierStream.findFirst()).thenReturn(
-	 * sessionIdentifierOptional);
-	 * when(sessionIdentifierOptional.get()).thenReturn(sessionIdentifier);
-	 * when(sessionIdentifier.getSecretKey()).thenReturn(sharedSecret);
-	 * 
-	 * 
-	 * 
-	 * whenNew(MACVerifier.class).withArguments(sharedSecret).thenReturn(
-	 * verifier); when(signedJWT.parse(TOKEN)).thenReturn(signedJWT);
-	 * when(signedJWT.verify(macVerifier)).thenReturn(POSITIVE_ANSWER);
-	 * 
-	 * 
-	 * securityContext.verifySignature(TOKEN);
-	 * 
-	 * }
-	 */
 
 }
