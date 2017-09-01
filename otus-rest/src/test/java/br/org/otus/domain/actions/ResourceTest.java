@@ -52,11 +52,11 @@ public class ResourceTest {
 	@Test
 	public void method_validationResponse_should_validate_response_with_httpStatus() throws RestCallException {
 		when(statusLine.getStatusCode()).thenReturn(RESPONSE_STATUS);
-		resource.validationResponse(response);		
+		resource.validationResponse(response);
 	}
-	
+
 	@Test(expected = RestCallException.class)
-	public void method_validationResponse_should_throws_RestCallException() throws RestCallException{
+	public void method_validationResponse_should_throws_RestCallException() throws RestCallException {
 		when(statusLine.getStatusCode()).thenReturn(ERROR_STATUS);
 		resource.validationResponse(response);
 	}
