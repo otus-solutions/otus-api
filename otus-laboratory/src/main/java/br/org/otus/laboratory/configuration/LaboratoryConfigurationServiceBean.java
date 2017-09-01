@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.configuration;
 
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
@@ -61,6 +63,16 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 
 	public LaboratoryConfiguration getLaboratoryConfiguration() {
 		return laboratoryConfiguration;
+	}
+
+	@Override
+	public AliquotConfiguration getAliquotConfiguration() {
+		return laboratoryConfiguration.getAliquotConfiguration();
+	}
+
+	@Override
+	public List<AliquoteDescriptor> getAliquotDescriptors() {
+		return laboratoryConfiguration.getAliquotConfiguration().getAliquotDescriptors();
 	}
 
 }
