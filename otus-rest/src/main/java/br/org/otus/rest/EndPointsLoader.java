@@ -1,12 +1,5 @@
 package br.org.otus.rest;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
 import br.org.otus.configuration.datasource.DataSourceResource;
 import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
@@ -15,12 +8,19 @@ import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
 import br.org.otus.importation.ParticipantImportationResource;
 import br.org.otus.laboratory.ParticipantLaboratoryResource;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
 import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.user.UserResource;
+
+import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 @ApplicationPath("otus")
 public class EndPointsLoader extends Application {
@@ -67,6 +67,9 @@ public class EndPointsLoader extends Application {
 	@Inject
 	private TransportationResource transportationResource;
 
+	@Inject
+	private LaboratoryConfigurationResource laboratoryConfigurationResource;
+
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -84,6 +87,7 @@ public class EndPointsLoader extends Application {
 		resources.add(DataSourceResource.class);
 		resources.add(FileUploaderResource.class);
 		resources.add(TransportationResource.class);
+		resources.add(LaboratoryConfigurationResource.class);
 		return resources;
 	}
 
@@ -104,6 +108,7 @@ public class EndPointsLoader extends Application {
 		resources.add(dataSourceResource);
 		resources.add(fileUploaderResource);
 		resources.add(transportationResource);
+		resources.add(laboratoryConfigurationResource);
 
 		return resources;
 	}
