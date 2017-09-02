@@ -11,7 +11,6 @@ public class AliquoteDescriptor {
 		this.objectType = objectType;
 		this.name = name;
 		this.label = label;
-		this.role = role;
 	}
 
 	public String getObjectType() {
@@ -24,10 +23,6 @@ public class AliquoteDescriptor {
 
 	public String getLabel() {
 		return label;
-	}
-
-	public String getRole() {
-		return role;
 	}
 
 }
