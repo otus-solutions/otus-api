@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
@@ -90,19 +91,19 @@ public class SecurityContextTest {
 	}
 
 	@Test
-	public void method_verifySignature() throws Exception {
+	public void method_verifySignature_should_validate_signedJWT() throws Exception {
 		sharedSecret = TOKEN.getBytes();
-		signedJWT = PowerMockito.spy(SignedJWT.parse(TOKEN));
+		signedJWT = spy(SignedJWT.parse(TOKEN));
 		mockStatic(SignedJWT.class);
+		
 		when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
-
 		when(sessionIndentifierStream.filter(any())).thenReturn(sessionIndentifierStream);
 		when(sessionIndentifierStream.findFirst()).thenReturn(sessionIdentifierOptional);
 		when(sessionIdentifierOptional.get()).thenReturn(sessionIdentifier);
 		when(sessionIdentifier.getSecretKey()).thenReturn(sharedSecret);
 		whenNew(MACVerifier.class).withArguments(sharedSecret).thenReturn(verifier);
 		when(signedJWT.verify(verifier)).thenReturn(POSITIVE_ANSWER);
-
+		
 		assertTrue(securityContext.verifySignature(TOKEN));
 
 	}
