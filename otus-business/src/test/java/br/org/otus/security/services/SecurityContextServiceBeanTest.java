@@ -55,14 +55,13 @@ public class SecurityContextServiceBeanTest {
 	private AuthenticationData authenticationData;
 	@Mock
 	private SecureRandom secureRandom;
-
 	private SessionIdentifier sessionIdentifier;
 	private SignedJWT signedJWT;
 	private byte[] secretKey;
 	private MACSigner signer;
 	private JWSHeader jwsHeader;
 	private byte[] sharedSecret;
-	private Set<SessionIdentifier> sessions;
+	
 
 	@Before
 	public void setUp() throws Exception {
@@ -155,7 +154,7 @@ public class SecurityContextServiceBeanTest {
 	}
 
 	@Test
-	public void method_getSession_should_throw() {
+	public void method_getSession_should_return_value_null() {
 		when(securityContext.getSession(TOKEN)).thenThrow(NoSuchElementException.class);
 		assertEquals(RETURN_NULL, securityContextServiceBean.getSession(TOKEN));
 	}
