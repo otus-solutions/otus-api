@@ -36,10 +36,7 @@ public class SecurityFacadeTest {
 	@Mock
 	private ProjectAuthenticationDto projectAuthenticationDto;
 
-	@Before
-	public void setUp() {
-	}
-
+	
 	@Test
 	public void method_UserAuthentication_should_return_userSecurityAuthorizationDto()
 			throws TokenException, AuthenticationException {
