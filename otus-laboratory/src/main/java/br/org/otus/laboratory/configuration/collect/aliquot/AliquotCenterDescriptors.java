@@ -6,14 +6,14 @@ public class AliquotCenterDescriptors {
 
 	private String objectType;
 	private String name;
-	private Integer aliquotCodeSize;
+	private List<Integer> aliquotCodeSizes;
 	private List<AliquotGroupDescriptors> aliquotGroupDescriptors;
 
-	public AliquotCenterDescriptors(String objectType, String name, List<AliquotGroupDescriptors> aliquotGroupDescriptors, Integer aliquotCodeSize) {
+	public AliquotCenterDescriptors(String objectType, String name, List<AliquotGroupDescriptors> aliquotGroupDescriptors, List<Integer> aliquotCodeSizes) {
 		this.objectType = objectType;
 		this.name = name;
 		this.aliquotGroupDescriptors = aliquotGroupDescriptors;
-		this.aliquotCodeSize = aliquotCodeSize;
+		this.aliquotCodeSizes = aliquotCodeSizes;
 	}
 
 	public String getObjectType() {
@@ -28,7 +28,7 @@ public class AliquotCenterDescriptors {
 		return aliquotGroupDescriptors;
 	}
 
-	public Integer getAliquotCodeSize() {
-		return aliquotCodeSize;
+	public List<Integer> getAliquotCodeSizes() {
+		return aliquotCodeSizes;
 	}
 }
