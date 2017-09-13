@@ -2,10 +2,12 @@ package br.org.otus.security.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.verifyNew;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static org.powermock.reflect.Whitebox.invokeMethod;
@@ -21,8 +23,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -42,12 +42,12 @@ public class SecurityServiceBeanTest {
 	private static final String PASSWORD = "TXUEOePzmEg0XG73TvPXGeNOcRE";
 	private static final String OTHER_PASSWORD = "TXUEOePzmEg0XG73TvPXGeNOcR";
 	private static final Boolean POSITIVE_ANSWER = true;
-	private static final Boolean NEGATIVE_ANSWER = false;	
+	private static final Boolean NEGATIVE_ANSWER = false;
 	private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 	private static final String JWT_SIGNED_SERIALIZED = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoiY2xpZW50IiwiaXNzIjoiT3R1cyBMb2NhbCJ9.2IySh22tfoVuCefGFxhGJgR6Q83wpJUWW4Efv376XKk";
 
 	@InjectMocks
-	private SecurityServiceBean securityServiceBean = PowerMockito.spy(new SecurityServiceBean());
+	private SecurityServiceBean securityServiceBean = spy(new SecurityServiceBean());
 	@Mock
 	private UserDao userDao;
 	@Mock
@@ -66,8 +66,6 @@ public class SecurityServiceBeanTest {
 	private SessionIdentifier sessionIdentifier;
 	private UserSecurityAuthorizationDto userSecurityAuthorizationDto;
 	private byte[] secretKey;
-		
-	
 
 	@Before
 	public void setUp() throws Exception {
@@ -76,20 +74,18 @@ public class SecurityServiceBeanTest {
 		userSecurityAuthorizationDto = spy(new UserSecurityAuthorizationDto());
 		when(systemConfigDao.fetchSystemConfig()).thenReturn(systemConfig);
 		when(authenticationData.getKey()).thenReturn(PASSWORD);
-		
 
 	}
 
 	@Test
-	public void method_authenticate_should_return_UserSecurityAuthorizationDto()
-			throws Exception {
+	public void method_authenticate_should_return_UserSecurityAuthorizationDto() throws Exception {
 		when(user.getPassword()).thenReturn(PASSWORD);
 		when(user.isEnable()).thenReturn(POSITIVE_ANSWER);
-		whenNew(UserSecurityAuthorizationDto.class).withAnyArguments().thenReturn(userSecurityAuthorizationDto);		
+		whenNew(UserSecurityAuthorizationDto.class).withAnyArguments().thenReturn(userSecurityAuthorizationDto);
 		assertTrue(securityServiceBean.authenticate(authenticationData) instanceof UserSecurityAuthorizationDto);
-		verifyNew(UserSecurityAuthorizationDto.class).withNoArguments();		
-		PowerMockito.verifyPrivate(securityServiceBean).invoke("initializeToken", authenticationData);
-		verify(userSecurityAuthorizationDto).setToken(Mockito.anyString());
+		verifyNew(UserSecurityAuthorizationDto.class).withNoArguments();
+		verifyPrivate(securityServiceBean).invoke("initializeToken", authenticationData);
+		verify(userSecurityAuthorizationDto).setToken(anyString());
 
 	}
 
@@ -149,25 +145,21 @@ public class SecurityServiceBeanTest {
 	}
 
 	@Test
-	public void method_invalidate() {
+	public void method_invalidate_should_evocate_removeToken_of_securityContextService() {
 		securityServiceBean.invalidate(TOKEN);
 		verify(securityContextService).removeToken(TOKEN);
 	}
-	
-	
+
 	@Test
-	public void method_private_initializeToken_should() throws Exception{
+	public void method_private_initializeToken_should_return_jwtSignedAndSerialize() throws Exception {
 		secretKey = TOKEN.getBytes();
 		when(securityContextService.generateSecretKey()).thenReturn(secretKey);
 		when(securityContextService.generateToken(authenticationData, secretKey)).thenReturn(JWT_SIGNED_SERIALIZED);
-		whenNew(SessionIdentifier.class).withArguments(JWT_SIGNED_SERIALIZED, secretKey, authenticationData).thenReturn(sessionIdentifier);
-		assertEquals(JWT_SIGNED_SERIALIZED, invokeMethod(securityServiceBean, "initializeToken", authenticationData));		
+		whenNew(SessionIdentifier.class).withArguments(JWT_SIGNED_SERIALIZED, secretKey, authenticationData)
+				.thenReturn(sessionIdentifier);
+		assertEquals(JWT_SIGNED_SERIALIZED, invokeMethod(securityServiceBean, "initializeToken", authenticationData));
 		verifyNew(SessionIdentifier.class).withArguments(JWT_SIGNED_SERIALIZED, secretKey, authenticationData);
 		verify(securityContextService).addSession(sessionIdentifier);
-
-		
 	}
-	
-	
 
 }
