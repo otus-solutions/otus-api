@@ -9,7 +9,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import org.ccem.auditor.model.SessionLog;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -36,15 +35,8 @@ public class SessionIdentifierTest {
 	private AuthenticationData authenticationData;
 	@Mock
 	private SessionLog sessionLog;
-	private JWTClaimsSet jwtClaimsSet;
 	private SignedJWT signedJWT;
 	private byte[] secretKey;
-
-	@Before
-	public void setUp() throws Exception {
-		
-
-	}
 
 	@Test
 	public void method_buildLog_should_return_sessionLog() throws Exception {
@@ -60,7 +52,7 @@ public class SessionIdentifierTest {
 	}
 
 	@Test
-	public void method_GetClaims() throws Exception {
+	public void method_GetClaims_should_return_JWTClaimsSet() throws Exception {
 		secretKey = TOKEN.getBytes();
 		sessionIdentifier = PowerMockito.spy(new SessionIdentifier(TOKEN, secretKey, authenticationData));
 		signedJWT = PowerMockito.spy(SignedJWT.parse(TOKEN));
