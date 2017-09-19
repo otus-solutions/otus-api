@@ -2,11 +2,11 @@ package org.ccem.otus.model.survey.activity.filling.answer;
 
 public class GridIntegerAnswer {
 	private String objectType;
-	private String gridInteger;
+	private String customID;
 	private Integer value;
 
-	public String getGridInteger() {
-		return gridInteger;
+	public String getCustomID() {
+		return customID;
 	}
 
 	public Integer getValue() {

@@ -6,9 +6,9 @@ public class AliquotTypesDescriptors {
 
 	private String objectType;
 	private String name;
-	private List<AliquoteDescriptor> aliquots;
+	private List<CenterAliquot> aliquots;
 
-	public AliquotTypesDescriptors(String objectType, String name, List<AliquoteDescriptor> aliquots) {
+	public AliquotTypesDescriptors(String objectType, String name, List<CenterAliquot> aliquots) {
 		this.objectType = objectType;
 		this.name = name;
 		this.aliquots = aliquots;
@@ -22,7 +22,7 @@ public class AliquotTypesDescriptors {
 		return name;
 	}
 
-	public List<AliquoteDescriptor> getAliquots() {
+	public List<CenterAliquot> getAliquots() {
 		return aliquots;
 	}
 
