@@ -3,6 +3,7 @@ package br.org.otus.survey.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
@@ -18,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -29,13 +29,11 @@ import br.org.otus.survey.services.SurveyService;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(SurveyFacade.class)
 public class SurveyFacadeTest {
-
 	private static final String USER_EMAIL = "otus@tus.com";
 	private static final String ACRONYM = "USGC";
 	private static final String ACRONYM_ALREADY_EXIST = "Acronym";
 	private static final Boolean POSITIVE_ANSWER = true;
 	private static final Boolean NEGATIVE_ANSWER = false;
-
 	@InjectMocks
 	private SurveyFacade surveyFacade;
 	@Mock
@@ -46,7 +44,6 @@ public class SurveyFacadeTest {
 	private SurveyForm surveyAcronym;
 	@Mock
 	private UpdateSurveyFormTypeDto updateSurveyFormTypeDto;
-
 	private List<SurveyForm> surveys;
 	private SurveyTemplate surveyTemplate;
 	private Throwable e;
@@ -56,7 +53,7 @@ public class SurveyFacadeTest {
 		surveys = new ArrayList<SurveyForm>();
 		surveyTemplate = new SurveyTemplate();
 		surveyAcronym = new SurveyForm(surveyTemplate, USER_EMAIL);
-		e = PowerMockito.spy(new AlreadyExistException());
+		e = spy(new AlreadyExistException());
 	}
 
 	@Test
