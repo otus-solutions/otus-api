@@ -41,11 +41,10 @@ public class SurveyFacadeTest {
 	@Mock
 	private SurveyForm survey;
 	@Mock
-	private SurveyForm surveyAcronym;
-	@Mock
 	private UpdateSurveyFormTypeDto updateSurveyFormTypeDto;
 	private List<SurveyForm> surveys;
 	private SurveyTemplate surveyTemplate;
+	private SurveyForm surveyAcronym;
 	private Throwable e;
 
 	@Before
