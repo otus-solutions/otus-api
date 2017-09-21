@@ -1,6 +1,7 @@
 package br.org.otus.survey.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -24,9 +25,9 @@ import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 public class SurveyServiceBeanTest {
 	private static final String ACRONYM = "DIEC";
 	private static final String ACRONYM_EMPTY = "";
-	private static final String SURVEY_SERIALIZE = "{survey:'survey'}";	
+	private static final String SURVEY_SERIALIZE = "{survey:'survey'}";
 	private static final String ACRONYM_NULL = "";
-	
+
 	@InjectMocks
 	private SurveyServiceBean service;
 	@Mock
@@ -39,7 +40,7 @@ public class SurveyServiceBeanTest {
 	private UpdateSurveyFormTypeDto updateSurveyFormTypeDtoInvalid;
 	@Mock
 	private UpdateSurveyFormTypeDto updateSurveyFormTypeDtoValid;
-	
+
 	@Before
 	public void setup() {
 		PowerMockito.mockStatic(SurveyForm.class);
@@ -96,20 +97,18 @@ public class SurveyServiceBeanTest {
 	}
 
 	@Test(expected = ValidationException.class)
-	public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_empty()
-			throws ValidationException {
+	public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_empty() throws ValidationException {
 		service.deleteByAcronym(ACRONYM_EMPTY);
 	}
 
 	@Test(expected = ValidationException.class)
-	public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_null()
-			throws ValidationException {
+	public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_null() throws ValidationException {
 		service.deleteByAcronym(ACRONYM_NULL);
 	}
 
 	@Test
 	public void deleteByAcronym_should_returns_positive_answer_case_acronym_not_be_null_or_empty()
-			throws ValidationException {		
+			throws ValidationException {
 		assertTrue(surveyDao.deleteByAcronym(ACRONYM));
 	}
 
