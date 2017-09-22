@@ -26,19 +26,19 @@ pipeline {
 	    
 	stage('Sonar Update') {
 		steps {
-                	sh 'mvn -f otus-root/pom.xml sonar:sonar -Dsonar.host.url=http://35.193.3.148 -Dsonar.password=f8Gov4WljZkJQv -Dsonar.login=jenkins' 
+			sh 'mvn -f otus-root/pom.xml sonar:sonar -Dsonar.host.url={URL_SONAR} -Dsonar.password={PWD_SONAR} -Dsonar.login={USER_SONAR}' 
             	}        	
     	}
 	    
 	stage('Build - Development Server') {
 		steps {
-                	sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=api-otus.dev.ccem.ufrgs.br -Ddatabase.username=otus -Ddatabase.password=LeBxL3lnhDAyvF' 
+			sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host={DATABASE_DEV_HOST} -Ddatabase.username={DATABASE_USER} -Ddatabase.password={DATABASE_PWD}'
             	}    			
     	}
 	    
 	stage('Deploy - Development Server') {
 		steps {
-                	sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=api-otus.dev.ccem.ufrgs.br -Dwildfly-username=admin -Dwildfly-password=TFoZD4j9YFsatm' 
+			sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname={SERVER_HOST} -Dwildfly-username={SERVER_USER} -Dwildfly-password={SERVER_PWD}' 
             	}    			
     	}
     }
