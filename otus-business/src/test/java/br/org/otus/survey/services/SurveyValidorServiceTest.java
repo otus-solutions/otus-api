@@ -5,6 +5,7 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.survey.form.SurveyForm;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,65 +19,55 @@ import br.org.otus.survey.validators.AcronymValidator;
 import br.org.otus.survey.validators.CustomIdValidator;
 import br.org.otus.survey.validators.ValidatorResponse;
 
-@PrepareForTest({ SurveyDao.class, SurveyForm.class, SurveyValidorService.class })
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({ SurveyDao.class, SurveyForm.class, SurveyValidorService.class })
 public class SurveyValidorServiceTest {
-
+	private static final Boolean POSITIVE_ANSWER = true;
+	private static final Boolean NEGATIVE_ANSWER = false;
 	@InjectMocks
-	private SurveyValidorService service;
+	private SurveyValidorService surveyValidorService;
+	@Mock
+	private SurveyDao surveyDao;
+	@Mock
+	private SurveyForm surveyForm;
+	@Mock
+	private AcronymValidator acronymValidator;
+	@Mock
+	private CustomIdValidator customIdValidator;
+	@Mock
+	private ValidatorResponse acronymValidatorResponse;
+	@Mock
+	private ValidatorResponse customIdValidatorResponse;
+	@Mock
+	private ValidatorResponse validatorResponse;
 
-	@Mock
-	SurveyDao surveyDaoMock;
-
-	@Mock
-	SurveyForm surveyFormMock;
-
-	@Mock
-	AcronymValidator acronymValidatorMock;
-
-	@Mock
-	CustomIdValidator customIdValidatorMock;
-
-	@Mock
-	ValidatorResponse acronymValidatorResponseMock;
-	@Mock
-	ValidatorResponse customIdValidatorResponseMock;
+	@Before
+	public void setUp() throws Exception {
+		whenNew(AcronymValidator.class).withArguments(surveyDao, surveyForm).thenReturn(acronymValidator);
+		when(acronymValidator.validate()).thenReturn(validatorResponse);
+		whenNew(CustomIdValidator.class).withArguments(surveyDao, surveyForm).thenReturn(customIdValidator);
+		when(customIdValidator.validate()).thenReturn(validatorResponse);
+	}
 
 	@Test(expected = AlreadyExistException.class)
 	public void acronymValidator_should_throw_AlreadyExistException_case_Acronym_already_exist() throws Exception {
-		isValidAcronym(false);
-		service.validateSurvey(surveyDaoMock, surveyFormMock);
+		// when(acronymValidator.validate()).thenReturn(validatorResponse);
+		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 	}
 
 	@Test(expected = AlreadyExistException.class)
 	public void customIdValidator_should_throw_AlreadyExistException_case_Item_ID_already_exist() throws Exception {
-		isValidAcronym(true);
-		isValidCustomID(false);
-
-		service.validateSurvey(surveyDaoMock, surveyFormMock);
+		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 	}
 
 	@Test
 	public void validateSurvey_call_validators_but_not_throws_exceptions() throws Exception {
-		isValidAcronym(true);
-		isValidCustomID(true);
-
-		service.validateSurvey(surveyDaoMock, surveyFormMock);
-
-		Mockito.verify(acronymValidatorMock).validate();
-		Mockito.verify(acronymValidatorMock.validate()).isValid();
-	}
-
-	private void isValidAcronym(boolean valid) throws Exception {
-		whenNew(AcronymValidator.class).withArguments(surveyDaoMock, surveyFormMock).thenReturn(acronymValidatorMock);
-		when(acronymValidatorMock.validate()).thenReturn(acronymValidatorResponseMock);
-		when(acronymValidatorResponseMock.isValid()).thenReturn(valid);
-	}
-
-	private void isValidCustomID(boolean valid) throws Exception {
-		whenNew(CustomIdValidator.class).withArguments(surveyDaoMock, surveyFormMock).thenReturn(customIdValidatorMock);
-		when(customIdValidatorMock.validate()).thenReturn(customIdValidatorResponseMock);
-		when(customIdValidatorResponseMock.isValid()).thenReturn(valid);
+		when(validatorResponse.isValid()).thenReturn(POSITIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
+		Mockito.verify(acronymValidator).validate();
+		Mockito.verify(customIdValidator).validate();
 	}
 
 }
