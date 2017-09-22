@@ -1,5 +1,6 @@
 package br.org.otus.survey.services;
 
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
@@ -8,7 +9,6 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -24,7 +24,6 @@ import br.org.otus.survey.validators.ValidatorResponse;
 public class SurveyValidorServiceTest {
 	private static final Boolean POSITIVE_ANSWER = true;
 	private static final Boolean NEGATIVE_ANSWER = false;
-	@InjectMocks
 	private SurveyValidorService surveyValidorService;
 	@Mock
 	private SurveyDao surveyDao;
@@ -43,23 +42,11 @@ public class SurveyValidorServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
+		surveyValidorService = spy(new SurveyValidorService());
 		whenNew(AcronymValidator.class).withArguments(surveyDao, surveyForm).thenReturn(acronymValidator);
 		when(acronymValidator.validate()).thenReturn(validatorResponse);
 		whenNew(CustomIdValidator.class).withArguments(surveyDao, surveyForm).thenReturn(customIdValidator);
 		when(customIdValidator.validate()).thenReturn(validatorResponse);
-	}
-
-	@Test(expected = AlreadyExistException.class)
-	public void acronymValidator_should_throw_AlreadyExistException_case_Acronym_already_exist() throws Exception {
-		// when(acronymValidator.validate()).thenReturn(validatorResponse);
-		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
-		surveyValidorService.validateSurvey(surveyDao, surveyForm);
-	}
-
-	@Test(expected = AlreadyExistException.class)
-	public void customIdValidator_should_throw_AlreadyExistException_case_Item_ID_already_exist() throws Exception {
-		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
-		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 	}
 
 	@Test
@@ -68,6 +55,18 @@ public class SurveyValidorServiceTest {
 		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 		Mockito.verify(acronymValidator).validate();
 		Mockito.verify(customIdValidator).validate();
+	}
+
+	@Test(expected = AlreadyExistException.class)
+	public void acronymValidator_should_throw_AlreadyExistException_case_Acronym_already_exist() throws Exception {
+		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
+	}
+
+	@Test(expected = AlreadyExistException.class)
+	public void customIdValidator_should_throw_AlreadyExistException_case_Item_ID_already_exist() throws Exception {
+		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 	}
 
 }
