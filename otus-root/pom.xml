@@ -39,6 +39,7 @@
 		<module>../otus-laboratory</module>
 		<module>../otus-datasource</module>
 		<module>../otus-file-uploader</module>
+		<module>../otus-extraction</module>
 		
 	</modules>
 
