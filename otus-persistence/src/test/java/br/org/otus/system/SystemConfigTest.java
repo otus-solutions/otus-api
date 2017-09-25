@@ -1,6 +1,7 @@
 package br.org.otus.system;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
 import com.google.gson.GsonBuilder;
+
+import br.org.otus.email.BasicEmailSender;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SystemConfigTest {
@@ -29,15 +32,22 @@ public class SystemConfigTest {
 	}
 
 	@Test
-	public void method_deserialize() throws NoSuchFieldException, SecurityException {
+	public void method_deserialize_ahould_compare_internal_atributes_in_object_deserializable()
+			throws NoSuchFieldException, SecurityException {
 		assertEquals(systemConfig.getProjectToken(), SystemConfig.deserialize(systemConfigJson).getProjectToken());
 		assertEquals(systemConfig.getProjectName(), SystemConfig.deserialize(systemConfigJson).getProjectName());
 		assertEquals(systemConfig.getDomainRestUrl(), SystemConfig.deserialize(systemConfigJson).getDomainRestUrl());
 	}
 
 	@Test
-	public void method_serialize() {
+	public void method_serialize_should_compare_JsonStrings_create_by_GsonBuilder() {
 		assertEquals(systemConfigJson, SystemConfig.serialize(systemConfig));
+	}
+
+	@Test
+	public void method_getEmailSender_should_return_instance_of_BasicEmailSender() {
+		assertTrue(systemConfig.getEmailSender() instanceof BasicEmailSender);
+
 	}
 
 }
