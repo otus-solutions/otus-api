@@ -1,4 +1,4 @@
-package br.org.otus.config;
+package br.org.otus.configuration;
 
 import java.io.File;
 

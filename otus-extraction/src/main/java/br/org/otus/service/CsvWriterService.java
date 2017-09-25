@@ -24,12 +24,12 @@ public class CsvWriterService {
 		}
 	}
 
-	public void write(File file, List<String> header, ActivityExtractionService activity) {
+	public void write(File file, List<String> headers, ExtractionService activity) {
 		try {
 			createFileWriter(file);
 			csvFileFormat = CSVFormat.EXCEL.withRecordSeparator(RECORD_SEPARATOR);
 			csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-			csvFilePrinter.printRecord(header);
+			csvFilePrinter.printRecord(headers);
 			csvFilePrinter.printRecord(activity.getRecord());
 		} catch (IOException e) {
 			e.printStackTrace();
