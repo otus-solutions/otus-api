@@ -1,7 +1,6 @@
 package br.org.otus.laboratory.participant;
 
 import com.google.gson.Gson;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,21 +12,21 @@ import org.junit.runners.JUnit4;
 public class LaboratoryParticipantTest {
 
 	private ParticipantLaboratory laboratoryParticipant;
-	
+
 	@Before
-	public void setup() {	
-		String json = "" 
-				+"{\"laboratory\":{"
-					+"\"recruitment_number\":123456,"
-					+"\"cq_group\":\"CQ_1\","
-					+"\"tubes\":["
-					+ "{"
-						+"\"code\":261116141,"
-						+"\"type\":\"GEL\","
-						+"\"aliquots\":[]"
-					+ "}],"
-					+"\"exams\":[]"		          
-	            +"}}";
+	public void setup() {
+		String json = ""
+				+ "{\"laboratory\":{"
+				+ "\"recruitment_number\":123456,"
+				+ "\"cq_group\":\"CQ_1\","
+				+ "\"tubes\":["
+				+ "{"
+				+ "\"code\":261116141,"
+				+ "\"type\":\"GEL\","
+				+ "\"aliquots\":[]"
+				+ "}],"
+				+ "\"exams\":[]"
+				+ "}}";
 
 		laboratoryParticipant = new Gson().fromJson(json, ParticipantLaboratory.class);
 

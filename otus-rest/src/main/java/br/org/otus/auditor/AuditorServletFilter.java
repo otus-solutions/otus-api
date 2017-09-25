@@ -24,7 +24,6 @@ import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.services.SecurityContextService;
 
-@WebFilter(filterName = "auditorFilter", urlPatterns = { "/v01/*" })
 public class AuditorServletFilter implements Filter {
 
 	@Inject

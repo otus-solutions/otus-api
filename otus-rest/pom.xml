@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.ccem.otus</groupId>
 		<artifactId>otus-root</artifactId>
-		<version>1.3</version>
+		<version>1.4</version>
 		<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 
@@ -133,7 +133,13 @@
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-file-uploader</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>provided</scope>			
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

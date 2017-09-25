@@ -4,6 +4,7 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.DecimalAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.FileUploadAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.GridIntegerQuestionAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.GridTextQuestionAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.ImmutableDateAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
@@ -22,6 +23,7 @@ public enum AnswerMapping {
 	FILE_UPLOAD_QUESTION(FileUploadAnswer.class, "FileUploadQuestion"),
 	AUTOCOMPLETE_QUESTION(TextAnswer.class, "AutocompleteQuestion"),
 	PHONE_QUESTION(TextAnswer.class, "PhoneQuestion"),
+	GRID_INTEGER_QUESTION(GridIntegerQuestionAnswer.class, "GridIntegerQuestion"),
 	GRID_TEXT_QUESTION(GridTextQuestionAnswer.class, "GridTextQuestion");
 		
 	private Class<? extends AnswerFill> answerType;
