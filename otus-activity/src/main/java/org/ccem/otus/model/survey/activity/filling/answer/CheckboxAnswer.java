@@ -4,7 +4,7 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 
 import java.util.List;
 
-public class CheckboxAnswer extends AnswerFill {
+public class CheckboxAnswer extends AnswerFill implements ExtractableAnswer{
 
 	private List<CheckboxAnswerOption> value;
 
@@ -12,4 +12,5 @@ public class CheckboxAnswer extends AnswerFill {
 		return value;
 	}
 
+	public List<>
 }
