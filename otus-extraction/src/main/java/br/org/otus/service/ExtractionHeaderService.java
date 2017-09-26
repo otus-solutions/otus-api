@@ -2,7 +2,7 @@ package br.org.otus.service;
 
 import java.util.List;
 
-public class HeaderService {
+public class ExtractionHeaderService {
 
 	private List<String> header;
 
@@ -14,7 +14,7 @@ public class HeaderService {
 		return header.remove(column);
 	}
 
-	public List<String> getHeader() {
+	public List<String> getHeaders() {
 		return header;
 	}
 

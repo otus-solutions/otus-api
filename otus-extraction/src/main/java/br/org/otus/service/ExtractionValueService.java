@@ -3,11 +3,11 @@ package br.org.otus.service;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExtractionService {
+public class ExtractionValueService {
 
 	private List<Object> records;
 
-	public ExtractionService() {
+	public ExtractionValueService() {
 		records = new ArrayList<Object>();
 	}
 

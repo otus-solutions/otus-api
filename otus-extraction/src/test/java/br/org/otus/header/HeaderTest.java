@@ -5,15 +5,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.org.otus.service.HeaderService;
+import br.org.otus.service.ExtractionHeaderService;
 
 public class HeaderTest {
 
-	private HeaderService header;
+	private ExtractionHeaderService header;
 
 	@Before
 	public void setup() {
-		header = new HeaderService();
+		header = new ExtractionHeaderService();
 	}
 
 	@Ignore
@@ -21,6 +21,6 @@ public class HeaderTest {
 	public void addHeader_method_should_add_column_in_list_the_headers() {
 		String element = "element";
 		header.addHeader(element);
-		Assert.assertEquals(header.getHeader().get(0), element);
+		Assert.assertEquals(header.getHeaders().get(0), element);
 	}
 }
