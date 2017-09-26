@@ -17,7 +17,7 @@ public class ExtractionService {
 		extractionValueService = new ExtractionValueService();
 	}
 
-	public void createExtraction(String fileName, ExtractionInterface extractionInterface) {
+	public void createExtraction(String fileName, List<ExtractionInterface> extractionInterface) {
 		file = new File(fileName);
 		extractionHeaderService.setHeader(extractionInterface.getHeaders());
 		extractionValueService.setRecords(extractionInterface.getValues());
