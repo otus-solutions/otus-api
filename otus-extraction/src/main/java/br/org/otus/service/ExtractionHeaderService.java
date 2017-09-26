@@ -4,18 +4,22 @@ import java.util.List;
 
 public class ExtractionHeaderService {
 
-	private List<String> header;
+	private List<String> headers;
 
 	public void addHeader(String column) {
-		header.add(column);
+		getHeader().add(column);
 	}
 
 	public Boolean removeHeader(String column) {
-		return header.remove(column);
+		return getHeader().remove(column);
 	}
 
-	public List<String> getHeaders() {
-		return header;
+	public List<String> getHeader() {
+		return headers;
+	}
+
+	public void setHeader(List<String> header) {
+		this.headers = header;
 	}
 
 }

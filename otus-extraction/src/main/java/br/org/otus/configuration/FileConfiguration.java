@@ -11,7 +11,7 @@ public class FileConfiguration {
 		this.fileName = fileName;
 	}
 
-	public File createFile() {
+	public File createFile(String fileName) {
 		return file = new File(fileName);
 	}
 

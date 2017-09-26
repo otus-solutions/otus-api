@@ -3,7 +3,6 @@ package br.org.otus.service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -29,10 +28,11 @@ public class CsvWriterService {
 			createFileWriter(file);
 			csvFileFormat = CSVFormat.EXCEL.withRecordSeparator(RECORD_SEPARATOR);
 			csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-			csvFilePrinter.printRecord(headers.getHeaders());
-			csvFilePrinter.printRecord(values.getRecord());
+			csvFilePrinter.printRecord(headers.getHeader());
+			csvFilePrinter.printRecord(values.getRecords());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }

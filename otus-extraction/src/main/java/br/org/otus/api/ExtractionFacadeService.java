@@ -1,5 +1,8 @@
 package br.org.otus.api;
 
+import org.ccem.otus.service.extraction.ExtractionInterface;
+
+import br.org.otus.service.ExtractionService;
 
 public class ExtractionFacadeService {
 
@@ -9,8 +12,7 @@ public class ExtractionFacadeService {
 		extractionService = new ExtractionService();
 	}
 
-	public void createExtraction() {
-		extractionService.createExtraction();
+	public void createExtraction(String fileName, ExtractionInterface extractionInterface) {
+		extractionService.createExtraction(fileName, extractionInterface);
 	}
-
 }

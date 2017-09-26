@@ -14,6 +14,4 @@ public class DecimalAnswer extends AnswerFill {
 		this.value = value;
 	}
 
-	public extract
-
 }
