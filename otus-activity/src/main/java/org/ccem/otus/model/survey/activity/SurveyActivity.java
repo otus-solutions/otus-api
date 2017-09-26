@@ -5,18 +5,20 @@ import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
+import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.service.extraction.ExtractionInterface;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.util.List;
 
-public class SurveyActivity {
+public class SurveyActivity implements ExtractionInterface{
 
 	private String objectType;
 	@SerializedName("_id")
@@ -102,4 +104,14 @@ public class SurveyActivity {
 		return builder;
 	}
 
+	@Override
+	public List<String> getHeaders() {
+		final List<QuestionFill> fillingList = fillContainer.getFillingList();
+		return null;
+	}
+
+	@Override
+	public List<Object> getValues() {
+		return null;
+	}
 }

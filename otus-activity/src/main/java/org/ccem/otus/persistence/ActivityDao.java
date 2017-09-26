@@ -16,4 +16,5 @@ public interface ActivityDao {
 
 	SurveyActivity findByID(String id) throws DataNotFoundException;
 
+	List<SurveyActivity> findAllByID(String id) throws DataNotFoundException;
 }
