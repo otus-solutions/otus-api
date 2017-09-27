@@ -1,13 +1,26 @@
 package br.org.otus.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExtractionHeaderService {
 
 	private List<String> headers;
 
-	public void addHeader(String column) {
-		getHeader().add(column);
+	public ExtractionHeaderService() {
+		headers = new ArrayList<String>();
+	}
+
+	public void addColumnInHeader(String column) {
+		this.headers.add(column);
+	}
+
+	public void setHeader(List<String> header) {
+		this.headers = header;
+	}
+
+	public void joinHeader(List<String> others) {
+		this.headers.addAll(others);
 	}
 
 	public Boolean removeHeader(String column) {
@@ -16,10 +29,6 @@ public class ExtractionHeaderService {
 
 	public List<String> getHeader() {
 		return headers;
-	}
-
-	public void setHeader(List<String> header) {
-		this.headers = header;
 	}
 
 }

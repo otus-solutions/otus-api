@@ -11,8 +11,12 @@ public class ExtractionValueService {
 		setRecords(new ArrayList<Object>());
 	}
 
-	public void parseToRecord(Object object) {
-		getRecords().add(object);
+	public void addObjectInRecords(Object object) {
+		this.records.add(object);
+	}
+
+	public void joinValues(List<Object> others) {
+		this.records.addAll(others);
 	}
 
 	public List<Object> getRecords() {

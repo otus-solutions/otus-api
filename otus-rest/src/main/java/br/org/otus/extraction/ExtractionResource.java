@@ -10,14 +10,14 @@ import br.org.otus.security.Secured;
 //TODO review url
 @Path("data-extraction")
 public class ExtractionResource {
-	
+
 	@Inject
 	private ExtractionFacadeService extractionFacadeService;
-	
+
 	@GET
 	@Secured
 	@Path("/{acronym}")
-//	@Produces(MediaType.APPLICATION_JSON)
+	// @Produces(MediaType.APPLICATION_JSON)
 	public String extractActivities(@PathParam("acronym") String acronym) {
 		extractionFacadeService.createActivityExtraction(acronym);
 		return null;

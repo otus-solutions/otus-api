@@ -3,6 +3,7 @@ package br.org.otus.service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -15,23 +16,45 @@ public class CsvWriterService {
 	private CSVFormat csvFileFormat;
 	private CSVPrinter csvFilePrinter;
 
-	private void createFileWriter(File file) {
+	public CsvWriterService(File file) {
 		try {
 			fileWriter = new FileWriter(file);
+			csvFileFormat = CSVFormat.EXCEL.withRecordSeparator(RECORD_SEPARATOR);
+			csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void write(File file, ExtractionHeaderService headers, ExtractionValueService values) {
+	public void writeHeader(File file, List<Object> headers) {
 		try {
-			createFileWriter(file);
-			csvFileFormat = CSVFormat.EXCEL.withRecordSeparator(RECORD_SEPARATOR);
-			csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-			csvFilePrinter.printRecord(headers.getHeader());
-			csvFilePrinter.printRecord(values.getRecords());
+			csvFilePrinter.printRecord(headers);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		} finally {
+			try {
+				fileWriter.flush();
+				fileWriter.close();
+				csvFilePrinter.close();
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+		}
+	}
+
+	public void writeValues(File file, List<Object> values) {
+		try {
+			csvFilePrinter.printRecord(values);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				fileWriter.flush();
+				fileWriter.close();
+				csvFilePrinter.close();
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
 		}
 	}
 
