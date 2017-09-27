@@ -82,6 +82,7 @@ public class SignupServiceBeanTest {
 		user = spy(new User());
 		whenNew(User.class).withNoArguments().thenReturn(user);
 	}
+	//TODO refatorar este teste, quebrou na mudanca de versão do powerMock
 	@Ignore // atualização do powerMock para 1.7.3
 	@Test
 	public void method_create_with_signupDataDtoValid_and_managementUserServiceUnique_should_verify_evocation_internal_methods()
