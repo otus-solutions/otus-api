@@ -11,14 +11,14 @@ import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.service.extraction.ExtractionInterface;
+import org.ccem.otus.service.extraction.Extractable;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.util.List;
 
-public class SurveyActivity implements ExtractionInterface{
+public class SurveyActivity implements Extractable {
 
 	private String objectType;
 	@SerializedName("_id")

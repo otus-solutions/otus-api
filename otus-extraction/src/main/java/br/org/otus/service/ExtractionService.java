@@ -1,8 +1,9 @@
 package br.org.otus.service;
 
 import java.io.File;
+import java.util.List;
 
-import org.ccem.otus.service.extraction.ExtractionInterface;
+import org.ccem.otus.service.extraction.Extractable;
 
 public class ExtractionService {
 
@@ -17,10 +18,11 @@ public class ExtractionService {
 		extractionValueService = new ExtractionValueService();
 	}
 
-	public void createExtraction(String fileName, List<ExtractionInterface> extractionInterface) {
+	public void createExtraction(String fileName, List<? extends Extractable> extractionInterface) {
 		file = new File(fileName);
-		extractionHeaderService.setHeader(extractionInterface.getHeaders());
-		extractionValueService.setRecords(extractionInterface.getValues());
+		// TODO: 26/09/17 iterate over List
+//		extractionHeaderService.setHeader(extractionInterface.getHeaders());
+//		extractionValueService.setRecords(extractionInterface.getValues());
 		csvWriterService.write(file, extractionHeaderService, extractionValueService);
 	}
 

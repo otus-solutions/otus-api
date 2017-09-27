@@ -19,7 +19,7 @@ public class ExtractionResource {
 	@Path("/{acronym}")
 //	@Produces(MediaType.APPLICATION_JSON)
 	public String extractActivities(@PathParam("acronym") String acronym) {
-			
+		extractionFacadeService.createActivityExtraction(acronym);
 		return null;
 	}
 
