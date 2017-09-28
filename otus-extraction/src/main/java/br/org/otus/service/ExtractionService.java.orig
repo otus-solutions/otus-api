@@ -1,0 +1,28 @@
+package br.org.otus.service;
+
+import org.ccem.otus.service.extraction.Extractable;
+
+import java.io.File;
+
+public class ExtractionService {
+
+	private CsvWriterService csvWriterService;
+
+	public ExtractionService() {
+		csvWriterService = new CsvWriterService();
+	}
+
+<<<<<<< HEAD
+	public byte[] createExtraction(Extractable extractionInterface) {
+		// TODO: in method getValues the return is all values to write?
+		csvWriterService.writeHeader(extractionInterface.getHeaders());
+		csvWriterService.writeValues(extractionInterface.getValues());
+		return csvWriterService.getResultSet();
+=======
+	public void createExtraction(String fileName, Extractable extractionInterface) {
+		file = new File(fileName);
+		csvWriterService = new CsvWriterService(file);
+		// TODO:
+>>>>>>> a71538b0827b56227a58677f93f2e9c1846e67b4
+	}
+}
