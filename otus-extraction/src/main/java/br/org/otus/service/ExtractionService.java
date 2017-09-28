@@ -1,9 +1,8 @@
 package br.org.otus.service;
 
-import java.io.File;
-import java.util.List;
-
 import org.ccem.otus.service.extraction.Extractable;
+
+import java.io.File;
 
 public class ExtractionService {
 
@@ -17,7 +16,7 @@ public class ExtractionService {
 		extractionValueService = new ExtractionValueService();
 	}
 
-	public void createExtraction(String fileName, List<? extends Extractable> extractionInterface) {
+	public void createExtraction(String fileName, Extractable extractionInterface) {
 		file = new File(fileName);
 		csvWriterService = new CsvWriterService(file);
 		// TODO:

@@ -16,6 +16,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyActivity implements Extractable {
@@ -106,12 +107,31 @@ public class SurveyActivity implements Extractable {
 
 	@Override
 	public List<String> getHeaders() {
-		final List<QuestionFill> fillingList = fillContainer.getFillingList();
 		return null;
 	}
 
 	@Override
 	public List<Object> getValues() {
-		return null;
+		List<Object> extractionValues = new ArrayList<>();
+
+		extractionValues.addAll(_extractBasics());
+		extractionValues.addAll(_extractAnswers());
+
+		return extractionValues;
+	}
+
+
+	private List<Object> _extractBasics(){
+		List<Object> fullColumns = new ArrayList<>();
+		return fullColumns;
+	}
+
+	private List<Object> _extractAnswers(){
+		List<Object> answers = new ArrayList<>();
+		final List<QuestionFill> fillingList = fillContainer.getFillingList();
+		fillingList.stream().forEach(questionFill -> answers.add(
+				questionFill.getAnswer().extract()
+		));
+		return answers;
 	}
 }
