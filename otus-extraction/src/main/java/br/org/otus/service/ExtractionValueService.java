@@ -8,7 +8,7 @@ public class ExtractionValueService {
 	private List<Object> records;
 
 	public ExtractionValueService() {
-		setRecords(new ArrayList<Object>());
+		this.records = new ArrayList<Object>();
 	}
 
 	public void addObjectInRecords(Object object) {

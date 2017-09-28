@@ -11,7 +11,6 @@ public class CsvWriterServiceTest {
 
 	@Before
 	public void setup() {
-		csvWriterService = new CsvWriterService(file);
 	}
 
 }

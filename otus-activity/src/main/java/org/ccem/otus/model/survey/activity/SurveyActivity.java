@@ -2,6 +2,7 @@ package org.ccem.otus.model.survey.activity;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
@@ -16,7 +17,10 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.faces.context.ExceptionHandler;
 
 public class SurveyActivity implements Extractable {
 
@@ -91,7 +95,7 @@ public class SurveyActivity implements Extractable {
 	/**
 	 * @return a GsonBuilder instance with AnswerAdapter, ObjectIdAdapter
 	 *         registered and also all registered adapters of SurveyForm.
-	 * {@link SurveyForm#getGsonBuilder}
+	 *         {@link SurveyForm#getGsonBuilder}
 	 * 
 	 */
 	public static GsonBuilder getGsonBuilder() {
@@ -104,9 +108,14 @@ public class SurveyActivity implements Extractable {
 		return builder;
 	}
 
+	// TODO: ruim, método está muito espesifico para o csv dessa tarefa!
+	// TODO: quem sabe criar uma factory para contrução mais generica!
 	@Override
 	public List<String> getHeaders() {
-		final List<QuestionFill> fillingList = fillContainer.getFillingList();
+		List<String> headers = new ArrayList<String>();
+		headers.add(Long.toString(participantData.getRecruitmentNumber()));
+
+		List<QuestionFill> fillingList = fillContainer.getFillingList();
 		return null;
 	}
 
