@@ -11,8 +11,8 @@ public class ExtractionService {
 	}
 
 	public byte[] createExtraction(Extractable extractionInterface) {
-		// TODO: in method getValues the return is all values to write?
-		csvWriterService.writeHeader(extractionInterface.getHeaders());
+		// TODO: in method getValues the return is all values to write? good question.
+//		csvWriterService.writeHeader(extractionInterface.getHeaders());
 		csvWriterService.writeValues(extractionInterface.getValues());
 		return csvWriterService.getResultSet();
 	}
