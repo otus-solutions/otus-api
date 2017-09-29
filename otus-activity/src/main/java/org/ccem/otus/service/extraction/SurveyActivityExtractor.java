@@ -1,37 +1,34 @@
 package org.ccem.otus.service.extraction;
 
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.survey.template.SurveyTemplate;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.ccem.otus.model.survey.activity.SurveyActivity;
+
+import br.org.otus.api.Extractable;
+
 public class SurveyActivityExtractor implements Extractable {
 
+	private List<SurveyActivity> surveyActivities;
+	private List<List<Object>> values;
 
 	public SurveyActivityExtractor(List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
 	}
 
-	private List<SurveyActivity> surveyActivities;
-
-
-	public void setSurveyActivities(List<SurveyActivity> surveyActivities) {
-		this.surveyActivities = surveyActivities;
-	}
-
 	@Override
 	public Set<String> getHeaders() {
-		return headerExtractor(surveyActivities.get(0).getSurveyForm().getSurveyTemplate());
+		return surveyActivities.get(0).getSurveyForm().getSurveyTemplate().getOrderedCustomIDs();
 	}
 
 	@Override
-	public List<Object> getValues() {
-		return null;
+	public List<List<Object>> getValues() {
+		this.values = new ArrayList<List<Object>>();
+		for (SurveyActivity surveyActivity : surveyActivities) {
+			// TODO: obter valores de repostas
+		}
+		return values;
 	}
 
-	private Set<String> headerExtractor(SurveyTemplate surveyTemplate){
-		final Set<String> orderedCustomIDs = surveyTemplate.getOrderedCustomIDs();
-		return orderedCustomIDs;
-	}
 }

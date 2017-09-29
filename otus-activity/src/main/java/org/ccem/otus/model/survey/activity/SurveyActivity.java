@@ -1,25 +1,23 @@
 package org.ccem.otus.model.survey.activity;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
-import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.service.extraction.Extractable;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 
-public class SurveyActivity implements Extractable {
+public class SurveyActivity {
 
 	private String objectType;
 	@SerializedName("_id")
@@ -92,7 +90,7 @@ public class SurveyActivity implements Extractable {
 	/**
 	 * @return a GsonBuilder instance with AnswerAdapter, ObjectIdAdapter
 	 *         registered and also all registered adapters of SurveyForm.
-	 * {@link SurveyForm#getGsonBuilder}
+	 *         {@link SurveyForm#getGsonBuilder}
 	 * 
 	 */
 	public static GsonBuilder getGsonBuilder() {
@@ -103,37 +101,5 @@ public class SurveyActivity implements Extractable {
 		builder.serializeNulls();
 
 		return builder;
-	}
-
-	// TODO: ruim, método está muito espesifico para o csv dessa tarefa!
-	// TODO: quem sabe criar uma factory para contrução mais generica!
-	@Override
-	public List<String> getHeaders() {
-		return null;
-	}
-
-	@Override
-	public List<Object> getValues() {
-		List<Object> extractionValues = new ArrayList<>();
-
-		extractionValues.addAll(_extractBasics());
-		extractionValues.addAll(_extractAnswers());
-
-		return extractionValues;
-	}
-
-
-	private List<Object> _extractBasics(){
-		List<Object> fullColumns = new ArrayList<>();
-		return fullColumns;
-	}
-
-	private List<Object> _extractAnswers(){
-		List<Object> answers = new ArrayList<>();
-		final List<QuestionFill> fillingList = fillContainer.getFillingList();
-		fillingList.stream().forEach(questionFill -> answers.add(
-				questionFill.getAnswer().extract()
-		));
-		return answers;
 	}
 }

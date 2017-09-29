@@ -1,29 +1,29 @@
 package br.org.otus.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExtractionValueService {
 
-	private List<Object> records;
+	private Map<String, Object> records;
 
 	public ExtractionValueService() {
-		this.records = new ArrayList<Object>();
+		this.records = new HashMap<String, Object>();
 	}
 
-	public void addObjectInRecords(Object object) {
-		this.records.add(object);
+	public void addObjectInRecords(String key, Object value) {
+		this.records.put(key, value);
 	}
 
-	public void joinValues(List<Object> others) {
-		this.records.addAll(others);
+	public void joinValues(Map<String, Object> others) {
+		this.records.putAll(others);
 	}
 
-	public List<Object> getRecords() {
+	public Map<String, Object> getRecords() {
 		return records;
 	}
 
-	public void setRecords(List<Object> records) {
+	public void setRecords(Map<String, Object> records) {
 		this.records = records;
 	}
 }

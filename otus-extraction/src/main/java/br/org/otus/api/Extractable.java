@@ -1,4 +1,4 @@
-package org.ccem.otus.service.extraction;
+package br.org.otus.api;
 
 import java.util.List;
 import java.util.Set;
@@ -6,5 +6,6 @@ import java.util.Set;
 public interface Extractable {
 
 	Set<String> getHeaders();
-	List<Object> getValues();
+
+	List<List<Object>> getValues();
 }

@@ -3,7 +3,6 @@ package br.org.otus.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -26,7 +25,7 @@ public class CsvWriterService {
 		}
 	}
 
-	public void writeHeader(List<?> headers) {
+	public void writeHeader(Iterable<String> headers) {
 		try {
 			csvFilePrinter.printRecord(headers);
 		} catch (Exception exception) {
@@ -40,7 +39,7 @@ public class CsvWriterService {
 		}
 	}
 
-	public void writeValues(List<?> values) {
+	public void writeValues(Iterable<Object> values) {
 		try {
 			csvFilePrinter.printRecord(values);
 		} catch (IOException e) {
@@ -54,7 +53,7 @@ public class CsvWriterService {
 		}
 	}
 
-	public byte[] getResultSet() {
+	public byte[] getResult() {
 		return out.toByteArray();
 	}
 

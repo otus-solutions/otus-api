@@ -1,7 +1,5 @@
 package org.ccem.otus.model.survey.activity.filling;
 
-import java.util.List;
-
 public class AnswerFill {
 
 	private String objectType;
@@ -13,10 +11,6 @@ public class AnswerFill {
 
 	public String getType() {
 		return type;
-	}
-
-	public List<Object> extract(){
-		return null;
 	}
 
 }

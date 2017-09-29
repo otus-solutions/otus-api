@@ -1,13 +1,14 @@
 package br.org.otus.extraction;
 
-import br.org.otus.service.ExtractionService;
-import br.org.otus.survey.activity.api.ActivityFacade;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.service.extraction.Extractable;
-import org.ccem.otus.service.extraction.SurveyActivityExtractor;
+import java.util.List;
 
 import javax.inject.Inject;
-import java.util.List;
+
+import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.service.extraction.SurveyActivityExtractor;
+
+import br.org.otus.api.ExtractionService;
+import br.org.otus.survey.activity.api.ActivityFacade;
 
 public class ExtractionFacadeService {
 
@@ -21,10 +22,9 @@ public class ExtractionFacadeService {
 		activityFacade = new ActivityFacade();
 	}
 
-	public void createActivityExtraction(String id) {
+	public byte[] createActivityExtraction(String id) {
 		List<SurveyActivity> activities = activityFacade.getAllByID(id);
-		//TODO: criar o response com o retorno de bytes
 		SurveyActivityExtractor extractor = new SurveyActivityExtractor(activities);
-		extractionService.createExtraction(extractor);
+		return extractionService.createExtraction(extractor);
 	}
 }
