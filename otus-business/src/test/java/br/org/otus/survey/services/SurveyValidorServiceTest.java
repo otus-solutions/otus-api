@@ -1,13 +1,14 @@
 package br.org.otus.survey.services;
 
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.survey.form.SurveyForm;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -18,65 +19,54 @@ import br.org.otus.survey.validators.AcronymValidator;
 import br.org.otus.survey.validators.CustomIdValidator;
 import br.org.otus.survey.validators.ValidatorResponse;
 
-@PrepareForTest({ SurveyDao.class, SurveyForm.class, SurveyValidorService.class })
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({ SurveyDao.class, SurveyForm.class, SurveyValidorService.class })
 public class SurveyValidorServiceTest {
-
-	@InjectMocks
-	private SurveyValidorService service;
-
+	private static final Boolean POSITIVE_ANSWER = true;
+	private static final Boolean NEGATIVE_ANSWER = false;
+	private SurveyValidorService surveyValidorService;
 	@Mock
-	SurveyDao surveyDaoMock;
-
+	private SurveyDao surveyDao;
 	@Mock
-	SurveyForm surveyFormMock;
-
+	private SurveyForm surveyForm;
 	@Mock
-	AcronymValidator acronymValidatorMock;
-
+	private AcronymValidator acronymValidator;
 	@Mock
-	CustomIdValidator customIdValidatorMock;
-
+	private CustomIdValidator customIdValidator;
 	@Mock
-	ValidatorResponse acronymValidatorResponseMock;
+	private ValidatorResponse acronymValidatorResponse;
 	@Mock
-	ValidatorResponse customIdValidatorResponseMock;
+	private ValidatorResponse customIdValidatorResponse;
+	@Mock
+	private ValidatorResponse validatorResponse;
 
-	@Test(expected = AlreadyExistException.class)
-	public void acronymValidator_should_throw_AlreadyExistException_case_Acronym_already_exist() throws Exception {
-		isValidAcronym(false);
-		service.validateSurvey(surveyDaoMock, surveyFormMock);
-	}
-
-	@Test(expected = AlreadyExistException.class)
-	public void customIdValidator_should_throw_AlreadyExistException_case_Item_ID_already_exist() throws Exception {
-		isValidAcronym(true);
-		isValidCustomID(false);
-
-		service.validateSurvey(surveyDaoMock, surveyFormMock);
+	@Before
+	public void setUp() throws Exception {
+		surveyValidorService = spy(new SurveyValidorService());
+		whenNew(AcronymValidator.class).withArguments(surveyDao, surveyForm).thenReturn(acronymValidator);
+		when(acronymValidator.validate()).thenReturn(validatorResponse);
+		whenNew(CustomIdValidator.class).withArguments(surveyDao, surveyForm).thenReturn(customIdValidator);
+		when(customIdValidator.validate()).thenReturn(validatorResponse);
 	}
 
 	@Test
 	public void validateSurvey_call_validators_but_not_throws_exceptions() throws Exception {
-		isValidAcronym(true);
-		isValidCustomID(true);
-
-		service.validateSurvey(surveyDaoMock, surveyFormMock);
-
-		Mockito.verify(acronymValidatorMock).validate();
-		Mockito.verify(acronymValidatorMock.validate()).isValid();
+		when(validatorResponse.isValid()).thenReturn(POSITIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
+		Mockito.verify(acronymValidator).validate();
+		Mockito.verify(customIdValidator).validate();
 	}
 
-	private void isValidAcronym(boolean valid) throws Exception {
-		whenNew(AcronymValidator.class).withArguments(surveyDaoMock, surveyFormMock).thenReturn(acronymValidatorMock);
-		when(acronymValidatorMock.validate()).thenReturn(acronymValidatorResponseMock);
-		when(acronymValidatorResponseMock.isValid()).thenReturn(valid);
+	@Test(expected = AlreadyExistException.class)
+	public void acronymValidator_should_throw_AlreadyExistException_case_Acronym_already_exist() throws Exception {
+		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 	}
 
-	private void isValidCustomID(boolean valid) throws Exception {
-		whenNew(CustomIdValidator.class).withArguments(surveyDaoMock, surveyFormMock).thenReturn(customIdValidatorMock);
-		when(customIdValidatorMock.validate()).thenReturn(customIdValidatorResponseMock);
-		when(customIdValidatorResponseMock.isValid()).thenReturn(valid);
+	@Test(expected = AlreadyExistException.class)
+	public void customIdValidator_should_throw_AlreadyExistException_case_Item_ID_already_exist() throws Exception {
+		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
+		surveyValidorService.validateSurvey(surveyDao, surveyForm);
 	}
 
 }

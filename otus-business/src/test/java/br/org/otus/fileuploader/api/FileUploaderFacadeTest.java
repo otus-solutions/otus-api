@@ -16,14 +16,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.mongodb.client.gridfs.GridFSBucket;
 
 import br.org.mongodb.gridfs.FileStoreBucket;
 import br.org.otus.response.exception.HttpResponseException;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FileUploaderFacadeTest {
 	private static final String OID = "592415fb28110d2722b16fe3";
 	@InjectMocks

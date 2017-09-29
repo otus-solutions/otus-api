@@ -20,13 +20,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.survey.activity.api.ActivityFacade;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ActivityResourceTest {
 	private static final long RECRUIMENT_NUMBER = 3051442;
 	private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
