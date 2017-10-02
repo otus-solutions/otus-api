@@ -1,26 +1,25 @@
 package org.ccem.otus.model.survey.activity.filling.answer;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
-import org.ccem.otus.service.extraction.AnswerExtraction;
 
-public class CheckboxAnswer extends AnswerFill implements AnswerExtraction {
+public class CheckboxAnswer extends AnswerFill {
 
 	private List<CheckboxAnswerOption> value;
-	private List<Object> extractableAnswer;
 
 	public List<CheckboxAnswerOption> getValue() {
 		return value;
 	}
 
 	@Override
-	public List<Object> extract() {
-		extractableAnswer = new ArrayList<>();
+	public Map<Object, Object> getAnswerExtract(String questionID) {
+		Map<Object, Object> extraction = new HashMap<Object, Object>();
 		for (CheckboxAnswerOption answer : value) {
-			extractableAnswer.add(answer.getState());
+			extraction.put(answer.getOption(), answer.getState());
 		}
-		return extractableAnswer;
+		return extraction;
 	}
 }

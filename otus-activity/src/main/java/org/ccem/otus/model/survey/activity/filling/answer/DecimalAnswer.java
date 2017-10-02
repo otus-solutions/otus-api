@@ -1,12 +1,11 @@
 package org.ccem.otus.model.survey.activity.filling.answer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
-import org.ccem.otus.service.extraction.AnswerExtraction;
 
-public class DecimalAnswer extends AnswerFill implements AnswerExtraction {
+public class DecimalAnswer extends AnswerFill {
 
 	private Double value;
 
@@ -19,9 +18,9 @@ public class DecimalAnswer extends AnswerFill implements AnswerExtraction {
 	}
 
 	@Override
-	public List<Object> extract() {
-		List<Object> extractableAnswer = new ArrayList<>();
-		extractableAnswer.add(value);
-		return extractableAnswer;
+	public Map<Object, Object> getAnswerExtract(String questionID) {
+		Map<Object, Object> extraction = new HashMap<Object, Object>();
+		extraction.put(questionID, this.value);
+		return extraction;
 	}
 }

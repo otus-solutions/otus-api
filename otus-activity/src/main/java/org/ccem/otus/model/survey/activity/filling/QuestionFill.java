@@ -32,5 +32,9 @@ public class QuestionFill {
 	public boolean isForceAnswer() {
 		return forceAnswer;
 	}
-	
+
+	public void extration() {
+		answer.getAnswerExtract(this.questionID);
+
+	}
 }

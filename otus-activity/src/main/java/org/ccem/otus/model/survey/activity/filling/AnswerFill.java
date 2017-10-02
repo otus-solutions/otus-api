@@ -1,5 +1,8 @@
 package org.ccem.otus.model.survey.activity.filling;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AnswerFill {
 
 	private String objectType;
@@ -11,6 +14,10 @@ public class AnswerFill {
 
 	public String getType() {
 		return type;
+	}
+
+	public Map<Object, Object> getAnswerExtract(String questionID) {
+		return new HashMap<Object, Object>();
 	}
 
 }
