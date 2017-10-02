@@ -6,13 +6,13 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import br.org.otus.api.Extractable;
 
-public class SurveyActivityExtractor implements Extractable {
+public class SurveyActivityExtraction implements Extractable {
 
 	private List<SurveyActivity> surveyActivities;
 	private HashMap<String, Object> headers;
 	private List<List<Object>> values;
 
-	public SurveyActivityExtractor(List<SurveyActivity> surveyActivities) {
+	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
 		setHeaders();
 	}
