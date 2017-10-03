@@ -34,7 +34,7 @@ public class QuestionFill {
 	}
 
 	public ExtractionFill extration() {
-		ExtractionFill extractionFill = new ExtractionFill();
+		ExtractionFill extractionFill = new ExtractionFill(questionID);
 		extractionFill.setAnswerExtract(answer.getAnswerExtract(this.questionID));
 		extractionFill.setMetadata(this.getMetadata().getValue());
 		extractionFill.setComment(this.getComment());

@@ -16,8 +16,8 @@ public class AnswerFill {
 		return type;
 	}
 
-	public Map<Object, Object> getAnswerExtract(String questionID) {
-		return new HashMap<Object, Object>();
+	public Map<String, Object> getAnswerExtract(String questionID) {
+		return new HashMap<String, Object>();
 	}
 
 }

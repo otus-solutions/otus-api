@@ -4,15 +4,20 @@ import java.util.Map;
 
 public class ExtractionFill {
 
-	private Map<Object, Object> answerExtract;
+	private String questionID;
+	private Map<String, Object> answerExtract;
 	private String metadata;
 	private String comment;
 
-	public Map<Object, Object> getAnswerExtract() {
+	public ExtractionFill(String questionID) {
+		this.questionID = questionID;
+	}
+
+	public Map<String, Object> getAnswerExtract() {
 		return answerExtract;
 	}
 
-	public void setAnswerExtract(Map<Object, Object> answerExtract) {
+	public void setAnswerExtract(Map<String, Object> answerExtract) {
 		this.answerExtract = answerExtract;
 	}
 

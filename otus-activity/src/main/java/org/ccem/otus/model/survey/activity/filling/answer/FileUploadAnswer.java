@@ -15,8 +15,8 @@ public class FileUploadAnswer extends AnswerFill {
 	}
 
 	@Override
-	public Map<Object, Object> getAnswerExtract(String questionID) {
-		Map<Object, Object> extraction = new HashMap<Object, Object>();
+	public Map<String, Object> getAnswerExtract(String questionID) {
+		Map<String, Object> extraction = new HashMap<String, Object>();
 		for (FileAnswer fileAnswer : value) {
 			extraction.put(questionID, fileAnswer.getName());
 		}

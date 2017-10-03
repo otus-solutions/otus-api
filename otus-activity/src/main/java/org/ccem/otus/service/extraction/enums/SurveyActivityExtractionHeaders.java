@@ -1,7 +1,7 @@
 package org.ccem.otus.service.extraction.enums;
 
 public enum SurveyActivityExtractionHeaders {
-	
+
 	RECRUITMENT_NUMBER("recruitment_number"),
 	ACRONYM("acronym"),
 	CATEGORY("category"),
@@ -11,21 +11,24 @@ public enum SurveyActivityExtractionHeaders {
 	CURRENT_STATUS_DATE("current_status_date"),
 	CREATION_DATE("creation_date"),
 	PAPPER_REALIZATION_DATE("papper_realization_date"),
-	LAST_FINALIZATION_DATE("last_finalization_date");
-	
-	private final String name;       
+	LAST_FINALIZATION_DATE("last_finalization_date"),
 
-  private SurveyActivityExtractionHeaders(String s) {
-      name = s;
-  }
+	QUESTION_COMMENT_SUFFIX("_metadata"),
+	QUESTION_METADATA_SUFFIX("_comment");
 
-  public boolean equalsName(String otherName) {
-      return name.equals(otherName);
-  }
+	private final String name;
 
-  public String toString() {
-     return this.name;
-  }
-  
+	private SurveyActivityExtractionHeaders(String s) {
+		name = s;
+	}
+
+	public boolean equalsName(String otherName) {
+		return name.equals(otherName);
+	}
+
+	public String toString() {
+		return this.name;
+	}
+
 }
 
