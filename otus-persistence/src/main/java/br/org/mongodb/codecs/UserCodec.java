@@ -21,6 +21,7 @@ public class UserCodec implements Codec<User> {
 		writer.writeString("password", user.getPassword());
 		writer.writeString("phone", user.getPhone());
 		writer.writeBoolean("enable", user.isEnable());
+		writer.writeBoolean("extraction", user.isExtractionEnabled());
 		writer.writeString("surname", user.getSurname());
 		writer.writeString("name", user.getName());
 		writer.writeBoolean("adm", user.isAdmin());
@@ -34,9 +35,7 @@ public class UserCodec implements Codec<User> {
 			writer.writeString("acronym", user.getFieldCenter().getAcronym());
 			writer.writeEndDocument();
 		}
-		
-//		writer.writeInt32("code", user.getCode());
-		
+
 		writer.writeEndDocument();
 		
 	}
@@ -50,6 +49,7 @@ public class UserCodec implements Codec<User> {
 		String password = reader.readString("password");
 		String phone = reader.readString("phone");
 		boolean enable = reader.readBoolean("enable");
+		boolean extraction = reader.readBoolean("extraction");
 		String surname = reader.readString("surname");
 		String name = reader.readString("name");
 		boolean adm = reader.readBoolean("adm");
@@ -65,9 +65,7 @@ public class UserCodec implements Codec<User> {
 			fieldCenterAcronym = reader.readString("acronym");
 			reader.readEndDocument();
 		}
-		
-		
-//		Integer code = reader.readInt32("code");
+
 		reader.readEndDocument();
 
 		User user = new User(UUID.fromString(uuid));
@@ -80,6 +78,10 @@ public class UserCodec implements Codec<User> {
 		
 		if(enable == true) {
 			user.enable();
+		}
+
+		if(extraction == true) {
+			user.enableExtraction();
 		}
 		
 		FieldCenter fieldCenter = new FieldCenter();

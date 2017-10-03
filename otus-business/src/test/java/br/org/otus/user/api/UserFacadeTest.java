@@ -219,6 +219,66 @@ public class UserFacadeTest {
 	}
 
 	@Test
+	public void method_disableExtraction_should_check_evocation_of_disableMethod_by_managementUserService()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		userFacade.disableExtraction(managementUserDto);
+		verify(managementUserService).disableExtraction(managementUserDto);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_disableExtraction_should_throw_HttpResponseException_if_caught_EncryptedException()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		doThrow(new EncryptedException()).when(managementUserService).disableExtraction(managementUserDto);
+		userFacade.disableExtraction(managementUserDto);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_disableExtraction_should_throw_HttpResponseException_if_caught_ValidationException()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		doThrow(new ValidationException()).when(managementUserService).disableExtraction(managementUserDto);
+		userFacade.disableExtraction(managementUserDto);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_disableExtraction_should_throw_HttpResponseException_if_caught_DataNotFoundException()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		doThrow(new DataNotFoundException()).when(managementUserService).disableExtraction(managementUserDto);
+		userFacade.disableExtraction(managementUserDto);
+	}
+
+	@Test
+	public void method_enableExtraction_should_check_evocation_of_enableMethod_by_managementUserService()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		userFacade.enableExtraction(managementUserDto);
+		verify(managementUserService).enableExtraction(managementUserDto);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_enableExtraction_should_throw_HttpResponseException_if_caught_EncryptedException()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		doThrow(new EncryptedException()).when(managementUserService).enableExtraction(managementUserDto);
+		userFacade.enableExtraction(managementUserDto);
+
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_enableExtraction_should_throw_HttpResponseException_if_caught_ValidationException()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		doThrow(new ValidationException()).when(managementUserService).enableExtraction(managementUserDto);
+		userFacade.enableExtraction(managementUserDto);
+
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_enableExtraction_should_throw_HttpResponseException_if_caught_DataNotFoundException()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		doThrow(new DataNotFoundException()).when(managementUserService).enableExtraction(managementUserDto);
+		userFacade.enableExtraction(managementUserDto);
+
+	}
+
+
+	@Test
 	public void method_updateFieldCenter_should_check_evocation_of_() throws DataNotFoundException {
 		userFacade.updateFieldCenter(managementUserDto);
 		verify(managementUserService).updateFieldCenter(managementUserDto);

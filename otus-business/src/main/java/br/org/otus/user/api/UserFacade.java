@@ -98,6 +98,30 @@ public class UserFacade {
 		}
 	}
 
+	public void disableExtraction(ManagementUserDto managementUserDto) {
+		try {
+			managementUserService.disableExtraction(managementUserDto);
+
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.System.NotInitialized.build());
+		}
+	}
+
+	public void enableExtraction(ManagementUserDto managementUserDto) {
+		try {
+			managementUserService.enableExtraction(managementUserDto);
+
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.System.NotInitialized.build());
+		}
+	}
+
 	public void updateFieldCenter(ManagementUserDto managementUserDto) {
 		try {
 			managementUserService.updateFieldCenter(managementUserDto);

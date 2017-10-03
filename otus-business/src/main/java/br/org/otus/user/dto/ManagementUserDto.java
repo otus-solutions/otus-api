@@ -12,6 +12,9 @@ public class ManagementUserDto implements Dto {
     @Equalization(name = "surname")
     public String surname;
 
+    @Equalization(name = "extraction")
+    public String extraction;
+
     @Equalization(name = "phone")
     public String phone;
     
@@ -39,6 +42,7 @@ public class ManagementUserDto implements Dto {
     public Boolean isValid() {
         return !name.isEmpty() &&
                 !surname.isEmpty() &&
+                !extraction.isEmpty() &&
                 !phone.isEmpty() &&
                 !email.isEmpty()
                 ? Boolean.TRUE : Boolean.FALSE;

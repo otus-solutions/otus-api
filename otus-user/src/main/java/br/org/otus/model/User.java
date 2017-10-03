@@ -17,6 +17,9 @@ public class User {
 
 	@Equalization(name = "enable")
 	private Boolean enable;
+
+	@Equalization(name = "extraction")
+	private Boolean extraction;
 	
 	@Equalization(name = "fieldCenter")
 	private FieldCenter fieldCenter;
@@ -43,12 +46,14 @@ public class User {
 		this.uuid = UUID.randomUUID();
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
+		this.extraction = Boolean.FALSE;
 	}
 	
 	public User(UUID uuid) {
 		this.uuid = uuid;
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
+		this.extraction = Boolean.FALSE;
 	}
 
 	public void enable() {
@@ -57,6 +62,14 @@ public class User {
 
 	public void disable() {
 		this.enable = Boolean.FALSE;
+	}
+
+	public void enableExtraction() {
+		this.extraction = Boolean.TRUE;
+	}
+
+	public void disableExtraction() {
+		this.extraction = Boolean.FALSE;
 	}
 
 	public void becomesAdm() {
@@ -91,7 +104,9 @@ public class User {
 	public Boolean isEnable() {
 		return enable;
 	}
-	
+
+	public Boolean isExtractionEnabled() { return extraction; }
+
 	public UUID getUuid() {
 		return uuid;
 	}
