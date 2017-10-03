@@ -3,6 +3,7 @@ package org.ccem.otus.service.extraction;
 import java.util.*;
 
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 
 import br.org.otus.api.Extractable;
 
@@ -18,9 +19,9 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	private void setHeaders() {
-		headers = new LinkedHashMap<>();
+		this.headers = new LinkedHashMap<>();
 
-		//basic info headers
+		// basic info headers
 		headers.put("recruitment_number", surveyActivities.get(0).getParticipantData().getRecruitmentNumber());
 		headers.put("acronym", "");
 		headers.put("category", "");
@@ -33,15 +34,14 @@ public class SurveyActivityExtraction implements Extractable {
 		headers.put("realization_date", "");
 		headers.put("last_finalization_date", "");
 
-
-		//answer headers
+		// answer headers
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
 			for (String header : surveyItem.getExtractionIDs()) {
-//				if () isQuestion
+				// if () isQuestion
 				headers.put(header, "");
 			}
-			headers.put(surveyItem.getTemplateID()+"_comment","");
-			headers.put(surveyItem.getTemplateID()+"_metadata","");
+			headers.put(surveyItem.getCustomID() + "_comment", "");
+			headers.put(surveyItem.getCustomID() + "_metadata", "");
 		});
 	}
 
@@ -54,13 +54,14 @@ public class SurveyActivityExtraction implements Extractable {
 	public List<List<Object>> getValues() {
 		this.values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyAcfativity : surveyActivities) {
-			final LinkedHashMap<String, Object> surveyMap = new LinkedHashMap<>(this.headers);
+			for(QuestionFill fill : surveyAcfativity.getFillContainer().getFillingList())
+			
+			LinkedHashMap<String, Object> surveyMap = new LinkedHashMap<>(this.headers);
 			// TODO: obter valores de repostas e adicionar a surveyMap
-//			surveyMap.replace("q1", "answer");
-//			this.values.addAll(surveyMap.values());
+			// surveyMap.replace("q1", "answer");
+			// this.values.addAll(surveyMap.values());
 		}
 		return values;
 	}
-
 
 }

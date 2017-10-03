@@ -1,4 +1,4 @@
-package org.ccem.otus.service.extraction;
+package org.ccem.otus.service;
 
 public class SurveyActivityExtractionTest {
 }

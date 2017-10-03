@@ -13,7 +13,6 @@ public class ExtractionService {
 	}
 
 	public byte[] createExtraction(Extractable extractionInterface) {
-		// TODO: Os métodos iram retornar todas as informações prontas?
 		csvWriterService.writeHeader(extractionInterface.getHeaders());
 		for (List<Object> values : extractionInterface.getValues()) {
 			csvWriterService.writeValues(values);
