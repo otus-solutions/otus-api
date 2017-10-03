@@ -6,6 +6,7 @@ import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 
 import java.util.*;
@@ -25,17 +26,16 @@ public class SurveyActivityExtraction implements Extractable {
 		this.headers = new LinkedHashMap<>();
 
 		// basic info headers
-		headers.put("recruitment_number", surveyActivities.get(0).getParticipantData().getRecruitmentNumber());
-		headers.put("acronym", "");
-		headers.put("category", "");
-		headers.put("type", "");
-		headers.put("interviewer", "");
-		headers.put("current_status", "");
-		headers.put("current_status_date", "");
-		headers.put("creation_date", "");
-		headers.put("paper", "");
-		headers.put("realization_date", "");
-		headers.put("last_finalization_date", "");
+		headers.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.TYPE.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), "");
+		headers.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), "");
 
 		// answer headers
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
@@ -58,7 +58,7 @@ public class SurveyActivityExtraction implements Extractable {
 		this.values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyActivity : surveyActivities) {
 			LinkedHashMap<String, Object> surveyMap = new LinkedHashMap<>(this.headers);
-			List<Object> basicInfo = new ArrayList<>();//setBasics(surveyMap, surveyActivity);
+			List<Object> basicInfo = new ArrayList<>(); //setBasics(surveyMap, surveyActivity);
 			List<Object> questionInfo = new ArrayList<>();
 
 			for (QuestionFill fill : surveyActivity.getFillContainer().getFillingList()) {
@@ -83,22 +83,25 @@ public class SurveyActivityExtraction implements Extractable {
 			// TODO: obter valores de repostas e adicionar a surveyMap
 			// surveyMap.replace("q1", "answer");
 			// this.values.addAll(surveyMap.values());
-			this.values.
+			// this.values.
 		}
 		return values;
 	}
 
-	private void setBasics(LinkedHashMap headersMap, SurveyActivity surveyActivity) {
-		headersMap.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER,surveyActivity.getParticipantData().getRecruitmentNumber());
-		headersMap.replace(SurveyActivityExtractionHeaders.ACRONYM,surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		headersMap.replace(SurveyActivityExtractionHeaders.CATEGORY,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.TYPE,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.PAPPER_REALIZATION_DATE,surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE,surveyActivity);
+	private void setBasics(LinkedHashMap<String, Object> headersMap, SurveyActivity surveyActivity) {
+		headersMap.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
+		headersMap.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		headersMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity);
+		headersMap.replace(SurveyActivityExtractionHeaders.TYPE.getName(), surveyActivity);
+		headersMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity);
+
+		final List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
+
+		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), statusHistory.get(statusHistory.size()-1).getName()); //get last
+		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), statusHistory.get(statusHistory.size()-1).getDate()); // TODO: 03/10/17 test type
+		headersMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity);
+		headersMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity);
+		headersMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity);
 	}
 
 	private void fillQuestionInfo(LinkedHashMap map, ExtractionFill filler){

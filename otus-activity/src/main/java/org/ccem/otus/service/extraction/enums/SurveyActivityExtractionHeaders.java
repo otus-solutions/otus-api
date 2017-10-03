@@ -10,7 +10,7 @@ public enum SurveyActivityExtractionHeaders {
 	CURRENT_STATUS("current_status"),
 	CURRENT_STATUS_DATE("current_status_date"),
 	CREATION_DATE("creation_date"),
-	PAPPER_REALIZATION_DATE("papper_realization_date"),
+	PAPER_REALIZATION_DATE("paper_realization_date"),
 	LAST_FINALIZATION_DATE("last_finalization_date"),
 
 	QUESTION_COMMENT_SUFFIX("_metadata"),
@@ -18,9 +18,15 @@ public enum SurveyActivityExtractionHeaders {
 
 	private final String name;
 
+	public String getName() {
+		return name;
+	}
+
 	private SurveyActivityExtractionHeaders(String s) {
 		name = s;
 	}
+
+
 
 	public boolean equalsName(String otherName) {
 		return name.equals(otherName);
