@@ -1,6 +1,6 @@
 package org.ccem.otus.model.survey.activity.filling;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AnswerFill {
@@ -17,7 +17,7 @@ public class AnswerFill {
 	}
 
 	public Map<String, Object> getAnswerExtract(String questionID) {
-		return new HashMap<String, Object>();
+		return new LinkedHashMap<String, Object>();
 	}
 
 }
