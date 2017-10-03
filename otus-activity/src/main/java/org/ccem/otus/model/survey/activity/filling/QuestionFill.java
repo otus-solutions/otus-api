@@ -1,7 +1,5 @@
 package org.ccem.otus.model.survey.activity.filling;
 
-import java.util.Map;
-
 public class QuestionFill {
 
 	private String objectType;
@@ -35,8 +33,11 @@ public class QuestionFill {
 		return forceAnswer;
 	}
 
-	public void extration() {
-		Map<Object, Object> answerExtract = answer.getAnswerExtract(this.questionID);
-		
+	public ExtractionFill extration() {
+		ExtractionFill extractionFill = new ExtractionFill();
+		extractionFill.setAnswerExtract(answer.getAnswerExtract(this.questionID));
+		extractionFill.setMetadata(this.getMetadata().getValue());
+		extractionFill.setComment(this.getComment());
+		return extractionFill;
 	}
 }

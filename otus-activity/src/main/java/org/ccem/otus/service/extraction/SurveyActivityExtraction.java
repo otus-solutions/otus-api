@@ -3,6 +3,7 @@ package org.ccem.otus.service.extraction;
 import java.util.*;
 
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 
 import br.org.otus.api.Extractable;
@@ -54,9 +55,13 @@ public class SurveyActivityExtraction implements Extractable {
 	public List<List<Object>> getValues() {
 		this.values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyAcfativity : surveyActivities) {
-			for(QuestionFill fill : surveyAcfativity.getFillContainer().getFillingList())
-			
-			LinkedHashMap<String, Object> surveyMap = new LinkedHashMap<>(this.headers);
+			for (QuestionFill fill : surveyAcfativity.getFillContainer().getFillingList()) {
+				LinkedHashMap<String, Object> surveyMap = new LinkedHashMap<>(this.headers);
+				//TODO:
+				ExtractionFill extration = fill.extration();
+				
+			}
+
 			// TODO: obter valores de repostas e adicionar a surveyMap
 			// surveyMap.replace("q1", "answer");
 			// this.values.addAll(surveyMap.values());
