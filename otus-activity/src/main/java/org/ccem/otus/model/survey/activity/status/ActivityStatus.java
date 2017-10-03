@@ -8,6 +8,12 @@ public class ActivityStatus {
 
 	private String objectType;
 	// TODO: Usar enum para os tipos de status, atributo name.
+	//		CREATED
+	//		INITIALIZED_OFFLINE
+	//		INITIALIZED_ONLINE
+	//		OPENED
+	//		SAVED
+	//		FINALIZED
 	private String name;
 	private LocalDateTime date;
 	private User user;

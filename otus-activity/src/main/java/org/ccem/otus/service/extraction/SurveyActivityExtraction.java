@@ -69,7 +69,7 @@ public class SurveyActivityExtraction implements Extractable {
 						if (!item.state.equals(NavigationTrackingItemStatuses.SKIPPED)) {
 							//begin item extraction - if not skipped
 
-							ExtractionFill extration = fill.extration();
+							ExtractionFill extration = fill.extraction();
 
 
 
@@ -94,12 +94,9 @@ public class SurveyActivityExtraction implements Extractable {
 		headersMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity);
 		headersMap.replace(SurveyActivityExtractionHeaders.TYPE.getName(), surveyActivity);
 		headersMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity);
-
-		final List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
-
-		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), statusHistory.get(statusHistory.size()-1).getName()); //get last
-		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), statusHistory.get(statusHistory.size()-1).getDate()); // TODO: 03/10/17 test type
-		headersMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity);
+		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName()); //get last
+		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate()); // TODO: 03/10/17 test type
+		headersMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName("CREATED"));  // TODO: 03/10/17 use enum? 
 		headersMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity);
 		headersMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity);
 	}

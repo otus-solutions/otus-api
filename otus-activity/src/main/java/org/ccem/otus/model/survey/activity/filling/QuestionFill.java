@@ -33,7 +33,7 @@ public class QuestionFill {
 		return forceAnswer;
 	}
 
-	public ExtractionFill extration() {
+	public ExtractionFill extraction() {
 		ExtractionFill extractionFill = new ExtractionFill(questionID);
 		extractionFill.setAnswerExtract(answer.getAnswerExtract(this.questionID));
 		extractionFill.setMetadata(this.getMetadata().getValue());
