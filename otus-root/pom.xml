@@ -52,13 +52,6 @@
 			<name>Public online Restlet repository</name>
 			<url>http://maven.restlet.com</url>
 		</repository>
-		<repository>
-			<id>snapshots</id>
-			<url>http://146.148.79.9/repository/maven-snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 
 	<distributionManagement>
