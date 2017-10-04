@@ -7,14 +7,7 @@ import java.time.LocalDateTime;
 public class ActivityStatus {
 
 	private String objectType;
-	// TODO: Usar enum para os tipos de status, atributo name.
-	//		CREATED
-	//		INITIALIZED_OFFLINE
-	//		INITIALIZED_ONLINE
-	//		OPENED
-	//		SAVED
-	//		FINALIZED
-	private String name;
+	private ActivityStatusOptions name;
 	private LocalDateTime date;
 	private User user;
 
@@ -22,7 +15,7 @@ public class ActivityStatus {
 		return objectType;
 	}
 
-	public String getName() {
+	public ActivityStatusOptions getName() {
 		return name;
 	}
 

@@ -16,7 +16,7 @@ public class ExtractionResource {
 	private ExtractionFacadeService extractionFacadeService;
 
 	@GET
-	@Secured
+//	@Secured
 	@Path("/{acronym}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String extractActivities(@PathParam("acronym") String acronym) {

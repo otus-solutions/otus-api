@@ -6,6 +6,7 @@ import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 
 import java.util.*;
@@ -30,7 +31,6 @@ public class SurveyActivityExtraction implements Extractable {
 		basicHeaders.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), "");
 		basicHeaders.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), "");
 		basicHeaders.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), "");
-		basicHeaders.put(SurveyActivityExtractionHeaders.TYPE.getName(), "");
 		basicHeaders.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), "");
 		basicHeaders.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), "");
 		basicHeaders.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), "");
@@ -83,14 +83,13 @@ public class SurveyActivityExtraction implements Extractable {
 	private List<Object> getSurveyBasicInfo(LinkedHashMap<String, Object> basicInfoMap, SurveyActivity surveyActivity) {
 		basicInfoMap.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
 		basicInfoMap.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), "?");  //?
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.TYPE.getName(), "?");  //? not used yet
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
 		basicInfoMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
 		basicInfoMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName()); //get last
 		basicInfoMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate()); // TODO: 03/10/17 test date type
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName("CREATED").getDate());  // TODO: 03/10/17 use enum?
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName("INITIALIZED_OFFLINE").getDate());
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName("FINALIZED").getDate());
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());  // TODO: 03/10/17 use enum?
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
 
 		return new ArrayList<>(basicInfoMap.values());
 	}
