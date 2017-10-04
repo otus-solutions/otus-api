@@ -98,6 +98,15 @@ public class ManagementUserServiceBean implements ManagementUserService {
     }
 
     @Override
+    public void updateExtractionIps(ManagementUserDto managementUserDto) throws DataNotFoundException {
+        User user = fetchByEmail(managementUserDto.getEmail());
+        if(!managementUserDto.extractionIps.isEmpty()) {
+            user.setExtractionIps(managementUserDto.extractionIps);
+        }
+        userDao.update(user);
+    }
+
+    @Override
     public Boolean isUnique(String emailToVerify) {
         if (emailToVerify != null && userDao.emailExists(emailToVerify)) {
             return false;

@@ -122,6 +122,14 @@ public class UserFacade {
 		}
 	}
 
+	public void updateExtractionIps(ManagementUserDto managementUserDto) {
+		try {
+			managementUserService.updateExtractionIps(managementUserDto);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+		}
+	}
+
 	public void updateFieldCenter(ManagementUserDto managementUserDto) {
 		try {
 			managementUserService.updateFieldCenter(managementUserDto);

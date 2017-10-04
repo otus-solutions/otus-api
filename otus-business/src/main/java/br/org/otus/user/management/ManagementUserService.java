@@ -24,5 +24,7 @@ public interface ManagementUserService {
 
     void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException;
 
+    void updateExtractionIps(ManagementUserDto managementUserDto) throws DataNotFoundException;
+
     Boolean isUnique(String emailToVerify);
 }

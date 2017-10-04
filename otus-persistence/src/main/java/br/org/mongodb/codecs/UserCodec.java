@@ -1,5 +1,6 @@
 package br.org.mongodb.codecs;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bson.BsonInvalidOperationException;
@@ -36,13 +37,22 @@ public class UserCodec implements Codec<User> {
 			writer.writeEndDocument();
 		}
 
+		if (user.getExtractionIps() == null){
+			writer.writeNull("extractionIps");
+		} else {
+			writer.writeStartArray("extractionIps");
+			for (Object o : user.getExtractionIps()) {
+				writer.writeString(o.toString());
+			}
+			writer.writeEndArray();
+		}
+
 		writer.writeEndDocument();
 		
 	}
 
 	@Override
 	public User decode(BsonReader reader, DecoderContext decoderContext) {
-
 		reader.readStartDocument();
 		
 		reader.readObjectId("_id");

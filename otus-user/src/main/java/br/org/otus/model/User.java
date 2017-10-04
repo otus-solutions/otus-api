@@ -3,6 +3,7 @@ package br.org.otus.model;
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.ccem.otus.model.FieldCenter;
@@ -20,6 +21,9 @@ public class User {
 
 	@Equalization(name = "extraction")
 	private Boolean extraction;
+
+	@Equalization(name = "extraction_ips")
+	private ArrayList extractionIps;
 	
 	@Equalization(name = "fieldCenter")
 	private FieldCenter fieldCenter;
@@ -47,6 +51,7 @@ public class User {
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
+		this.extractionIps = null;
 	}
 	
 	public User(UUID uuid) {
@@ -54,6 +59,7 @@ public class User {
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
+		this.extractionIps = null;
 	}
 
 	public void enable() {
@@ -101,11 +107,17 @@ public class User {
 		return password;
 	}
 
+	public ArrayList getExtractionIps() {
+		return extractionIps;
+	}
+
 	public Boolean isEnable() {
 		return enable;
 	}
 
-	public Boolean isExtractionEnabled() { return extraction; }
+	public Boolean isExtractionEnabled() {
+		return extraction;
+	}
 
 	public UUID getUuid() {
 		return uuid;
@@ -139,6 +151,8 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public void setExtractionIps(ArrayList extractionIps) { this.extractionIps = extractionIps;	}
 
 	public void setSurname(String surname) {
 		this.surname = surname;
