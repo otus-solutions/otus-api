@@ -6,7 +6,6 @@ import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
-import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 
 import java.util.*;
@@ -14,7 +13,8 @@ import java.util.*;
 public class SurveyActivityExtraction implements Extractable {
 
 	private List<SurveyActivity> surveyActivities;
-	private HashMap<String, Object> headers;
+	private HashMap<String, Object> basicHeaders;
+	private HashMap<String, Object> questionHeaders;
 	private List<List<Object>> values;
 
 	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
@@ -23,82 +23,102 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	private void setHeaders() {
-		this.headers = new LinkedHashMap<>();
+		this.basicHeaders = new LinkedHashMap<>();
+		this.questionHeaders = new LinkedHashMap<>();
 
 		// basic info headers
-		headers.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.TYPE.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), "");
-		headers.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.TYPE.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), "");
+		basicHeaders.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), "");
 
 		// answer headers
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
 			for (String header : surveyItem.getExtractionIDs()) {
 				// if () isQuestion
-				headers.put(header, "");
+				questionHeaders.put(header, "");
 			}
-			headers.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, "");
-			headers.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, "");
+			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, "");
+			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, "");
 		});
 	}
 
 	@Override
 	public Set<String> getHeaders() {
-		return headers.keySet();
+		// TODO: 03/10/17 como validar que nenhuma chave se repetiu?
+		Set<String> headers = new HashSet<>();
+		headers.addAll(new ArrayList<>(basicHeaders.keySet()));
+		headers.addAll(new ArrayList<>(questionHeaders.keySet()));
+		return headers;
 	}
 
 	@Override
 	public List<List<Object>> getValues() {
 		this.values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyActivity : surveyActivities) {
-			LinkedHashMap<String, Object> surveyMap = new LinkedHashMap<>(this.headers);
-			List<Object> basicInfo = new ArrayList<>(); //setBasics(surveyMap, surveyActivity);
-			List<Object> questionInfo = new ArrayList<>();
+			LinkedHashMap<String, Object> basicInfoMap = new LinkedHashMap<>(this.basicHeaders);
+			LinkedHashMap<String, Object> questionInfoMap = new LinkedHashMap<>(this.questionHeaders);
 
-			for (QuestionFill fill : surveyActivity.getFillContainer().getFillingList()) {
-				List<NavigationTrackingItem> items = surveyActivity.getNavigationTracker().items;
+			List<Object> basicInfo = getSurveyBasicInfo(basicInfoMap, surveyActivity);
+			List<Object> questionInfo = getSurveyQuestionInfo(questionInfoMap, surveyActivity);
 
-				for (NavigationTrackingItem item : items) {
-					if (item.equals(fill.getQuestionID())) {
-						if (!item.state.equals(NavigationTrackingItemStatuses.SKIPPED)) {
-							//begin item extraction - if not skipped
+			List<Object> surveyInfo = new ArrayList<>(); //concatenar ambas listas
 
-							ExtractionFill extration = fill.extraction();
+			//isso preserva a ordem?
+			surveyInfo.addAll(basicInfo);
+			surveyInfo.addAll(questionInfo);
 
+			values.add(surveyInfo);
 
-
-						}
-					}
-				}
-
-
-			}
-
-			// TODO: obter valores de repostas e adicionar a surveyMap
-			// surveyMap.replace("q1", "answer");
-			// this.values.addAll(surveyMap.values());
-			// this.values.
 		}
 		return values;
 	}
 
-	private void setBasics(LinkedHashMap<String, Object> headersMap, SurveyActivity surveyActivity) {
-		headersMap.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
-		headersMap.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		headersMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.TYPE.getName(), surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName()); //get last
-		headersMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate()); // TODO: 03/10/17 test type
-		headersMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName("CREATED"));  // TODO: 03/10/17 use enum? 
-		headersMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity);
-		headersMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity);
+	private List<Object> getSurveyBasicInfo(LinkedHashMap<String, Object> basicInfoMap, SurveyActivity surveyActivity) {
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), "?");  //?
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.TYPE.getName(), "?");  //? not used yet
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName()); //get last
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate()); // TODO: 03/10/17 test date type
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName("CREATED").getDate());  // TODO: 03/10/17 use enum?
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName("INITIALIZED_OFFLINE").getDate());
+		basicInfoMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName("FINALIZED").getDate());
+
+		return new ArrayList<>(basicInfoMap.values());
+	}
+
+	private List<Object> getSurveyQuestionInfo(LinkedHashMap<String, Object> basicInfoMap, SurveyActivity surveyActivity){
+		// TODO: obter valores de repostas e adicionar a surveyMap
+		// surveyMap.replace("q1", "answer");
+		for (QuestionFill fill : surveyActivity.getFillContainer().getFillingList()) {
+			List<NavigationTrackingItem> items = surveyActivity.getNavigationTracker().items;
+
+			for (NavigationTrackingItem item : items) {
+				if (item.equals(fill.getQuestionID())) {
+					if (!item.state.equals(NavigationTrackingItemStatuses.SKIPPED)) {
+						//begin item extraction - if not skipped
+
+						ExtractionFill extration = fill.extraction();
+
+
+
+					}
+				}
+			}
+
+
+		}
+
+
+		return null;
 	}
 
 	private void fillQuestionInfo(LinkedHashMap map, ExtractionFill filler){

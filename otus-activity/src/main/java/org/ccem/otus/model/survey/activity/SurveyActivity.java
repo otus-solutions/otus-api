@@ -92,7 +92,9 @@ public class SurveyActivity {
 		return activityStatuses.get(activityStatuses.size()-1);
 	}
 
-
+	public Interview getLastInterview(){
+		return this.interviews.get(this.interviews.size()-1);
+	}
 
 	public static String serialize(SurveyActivity surveyActivity) {
 		return getGsonBuilder().create().toJson(surveyActivity);
