@@ -11,6 +11,7 @@ import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
@@ -87,9 +88,10 @@ public class SurveyActivity {
 
 	public ActivityStatus getLastStatusByName(String name) {
 		List<ActivityStatus> activityStatuses = statusHistory.stream()
-				.filter(history -> history.getName().equals(name))
+				.filter(status -> status.getName().equals(name))
 				.collect(Collectors.toList());
-		return activityStatuses.get(activityStatuses.size()-1);
+		if (activityStatuses.size() > 0) return activityStatuses.get(activityStatuses.size()-1);
+		else return new ActivityStatus();
 	}
 
 	public Interview getLastInterview(){

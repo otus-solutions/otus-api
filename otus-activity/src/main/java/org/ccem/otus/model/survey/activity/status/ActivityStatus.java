@@ -15,8 +15,8 @@ public class ActivityStatus {
 		return objectType;
 	}
 
-	public ActivityStatusOptions getName() {
-		return name;
+	public String getName() {
+		return name.name();
 	}
 
 	public LocalDateTime getDate() {

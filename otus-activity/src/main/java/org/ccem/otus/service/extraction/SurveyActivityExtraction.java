@@ -14,8 +14,8 @@ import java.util.*;
 public class SurveyActivityExtraction implements Extractable {
 
 	private List<SurveyActivity> surveyActivities;
-	private HashMap<String, Object> basicHeaders;
-	private HashMap<String, Object> questionHeaders;
+	private LinkedHashMap<String, Object> basicHeaders;
+	private LinkedHashMap<String, Object> questionHeaders;
 	private List<List<Object>> values;
 
 	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
@@ -25,7 +25,7 @@ public class SurveyActivityExtraction implements Extractable {
 
 	private void setHeaders() {
 		this.basicHeaders = new LinkedHashMap<>();
-		this.questionHeaders = new LinkedHashMap<>();
+//		this.questionHeaders = new LinkedHashMap<>();
 
 		// basic info headers
 		basicHeaders.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), "");
@@ -39,14 +39,14 @@ public class SurveyActivityExtraction implements Extractable {
 		basicHeaders.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), "");
 
 		// answer headers
-		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
-			for (String header : surveyItem.getExtractionIDs()) {
-				// if () isQuestion
-				questionHeaders.put(header, "");
-			}
-			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, "");
-			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, "");
-		});
+//		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
+//			for (String header : surveyItem.getExtractionIDs()) {
+//				// if () isQuestion
+//				questionHeaders.put(header, "");
+//			}
+//			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, "");
+//			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, "");
+//		});
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class SurveyActivityExtraction implements Extractable {
 		// TODO: 03/10/17 como validar que nenhuma chave se repetiu?
 		Set<String> headers = new HashSet<>();
 		headers.addAll(new ArrayList<>(basicHeaders.keySet()));
-		headers.addAll(new ArrayList<>(questionHeaders.keySet()));
+//		headers.addAll(new ArrayList<>(questionHeaders.keySet()));
 		return headers;
 	}
 
@@ -63,16 +63,16 @@ public class SurveyActivityExtraction implements Extractable {
 		this.values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyActivity : surveyActivities) {
 			LinkedHashMap<String, Object> basicInfoMap = new LinkedHashMap<>(this.basicHeaders);
-			LinkedHashMap<String, Object> questionInfoMap = new LinkedHashMap<>(this.questionHeaders);
+//			LinkedHashMap<String, Object> questionInfoMap = new LinkedHashMap<>(this.questionHeaders);
 
 			List<Object> basicInfo = getSurveyBasicInfo(basicInfoMap, surveyActivity);
-			List<Object> questionInfo = getSurveyQuestionInfo(questionInfoMap, surveyActivity);
+//			List<Object> questionInfo = getSurveyQuestionInfo(questionInfoMap, surveyActivity);
 
 			List<Object> surveyInfo = new ArrayList<>(); //concatenar ambas listas
 
 			//isso preserva a ordem?
 			surveyInfo.addAll(basicInfo);
-			surveyInfo.addAll(questionInfo);
+//			surveyInfo.addAll(questionInfo);
 
 			values.add(surveyInfo);
 

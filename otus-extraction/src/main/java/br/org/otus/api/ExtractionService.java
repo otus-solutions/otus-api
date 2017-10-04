@@ -10,7 +10,7 @@ public class ExtractionService {
 		csvWriterService = new CsvWriterService();
 	}
 
-	public String createExtraction(Extractable extractionInterface) {
+	public byte[] createExtraction(Extractable extractionInterface) {
 		csvWriterService.write(extractionInterface.getHeaders(), extractionInterface.getValues());
 		return csvWriterService.getResult();
 	}

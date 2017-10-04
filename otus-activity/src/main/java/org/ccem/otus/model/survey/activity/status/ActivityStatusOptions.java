@@ -3,24 +3,23 @@ package org.ccem.otus.model.survey.activity.status;
 import com.google.gson.annotations.SerializedName;
 
 public enum ActivityStatusOptions {
-	@SerializedName("CREATED")
-	CREATED,
-	@SerializedName("INITIALIZED_OFFLINE")
-	INITIALIZED_OFFLINE,
-	@SerializedName("INITIALIZED_ONLINE")
-	INITIALIZED_ONLINE,
-	@SerializedName("OPENED")
-	OPENED,
-	@SerializedName("SAVED")
-	SAVED,
-	@SerializedName("FINALIZED")
-	FINALIZED;
+	// TODO: 04/10/17 test serialize 
+	CREATED("CREATED"),
+	INITIALIZED_OFFLINE("INITIALIZED_OFFLINE"),
+	INITIALIZED_ONLINE("INITIALIZED_ONLINE"),
+	OPENED("OPENED"),
+	SAVED("SAVED"),
+	FINALIZED("FINALIZED");
 
 	private String name;
 
-	// TODO: 04/10/17 does this work?
+	// TODO: 04/10/17 does this work?s
 	public String getName() {
 		return name;
+	}
+
+	ActivityStatusOptions(String name) {
+		this.name = name;
 	}
 }
 

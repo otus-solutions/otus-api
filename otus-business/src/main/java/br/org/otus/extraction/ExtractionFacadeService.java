@@ -22,7 +22,7 @@ public class ExtractionFacadeService {
 		activityFacade = new ActivityFacade();
 	}
 
-	public String createActivityExtraction(String id) {
+	public byte[] createActivityExtraction(String id) {
 		List<SurveyActivity> activities = activityFacade.getAllByID(id);
 		SurveyActivityExtraction extractor = new SurveyActivityExtraction(activities);
 		return extractionService.createExtraction(extractor);

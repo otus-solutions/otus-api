@@ -18,8 +18,8 @@ public class ExtractionResource {
 	@GET
 //	@Secured
 	@Path("/{acronym}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String extractActivities(@PathParam("acronym") String acronym) {
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public byte[] extractActivities(@PathParam("acronym") String acronym) {
 		return extractionFacadeService.createActivityExtraction(acronym);
 	}
 

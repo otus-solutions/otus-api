@@ -44,8 +44,8 @@ public class CsvWriterService {
 		}
 	}
 
-	public String getResult() {
-		return new String(out.toByteArray());
+	public byte[] getResult() {
+		return out.toByteArray();
 	}
 
 }
