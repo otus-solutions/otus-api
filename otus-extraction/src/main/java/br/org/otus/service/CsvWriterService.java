@@ -3,12 +3,14 @@ package br.org.otus.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 public class CsvWriterService {
 
+	private static final char DELIMITER = ';';
 	private static final String RECORD_SEPARATOR = "\n";
 
 	private CSVFormat csvFileFormat;
@@ -18,16 +20,19 @@ public class CsvWriterService {
 	public CsvWriterService() {
 		try {
 			out = new ByteArrayOutputStream();
-			csvFileFormat = CSVFormat.EXCEL.withRecordSeparator(RECORD_SEPARATOR);
+			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR);
 			csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void writeHeader(Iterable<String> headers) {
+	public void write(Iterable<String> headers, List<List<Object>> values) {
 		try {
 			csvFilePrinter.printRecord(headers);
+			for (List<Object> record : values) {
+				csvFilePrinter.printRecord(record);
+			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
@@ -39,22 +44,8 @@ public class CsvWriterService {
 		}
 	}
 
-	public void writeValues(Iterable<Object> values) {
-		try {
-			csvFilePrinter.printRecord(values);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				csvFilePrinter.close();
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
-		}
-	}
-
-	public byte[] getResult() {
-		return out.toByteArray();
+	public String getResult() {
+		return new String(out.toByteArray());
 	}
 
 }

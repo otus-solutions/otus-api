@@ -12,8 +12,7 @@ import javax.ws.rs.core.MediaType;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 
-//TODO review url
-@Path("data-extraction")
+@Path("activity-extraction")
 public class ExtractionResource {
 
 	@Inject
@@ -30,4 +29,5 @@ public class ExtractionResource {
 		extractionFacadeService.createActivityExtraction(acronym);
 		return null;
 	}
+	
 }

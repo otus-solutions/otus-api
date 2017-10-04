@@ -1,7 +1,5 @@
 package br.org.otus.api;
 
-import java.util.List;
-
 import br.org.otus.service.CsvWriterService;
 
 public class ExtractionService {
@@ -12,11 +10,8 @@ public class ExtractionService {
 		csvWriterService = new CsvWriterService();
 	}
 
-	public byte[] createExtraction(Extractable extractionInterface) {
-		csvWriterService.writeHeader(extractionInterface.getHeaders());
-		for (List<Object> values : extractionInterface.getValues()) {
-			csvWriterService.writeValues(values);
-		}
+	public String createExtraction(Extractable extractionInterface) {
+		csvWriterService.write(extractionInterface.getHeaders(), extractionInterface.getValues());
 		return csvWriterService.getResult();
 	}
 }
