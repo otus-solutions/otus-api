@@ -13,6 +13,10 @@ public class ExtractionFill {
 		this.questionID = questionID;
 	}
 
+	public String getQuestionID() {
+		return questionID;
+	}
+
 	public Map<String, Object> getAnswerExtract() {
 		return answerExtract;
 	}

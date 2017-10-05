@@ -10,6 +10,7 @@ import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SurveyActivityExtraction implements Extractable {
 
@@ -20,13 +21,12 @@ public class SurveyActivityExtraction implements Extractable {
 
 	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
+		this.basicHeaders = new LinkedHashMap<>();
+		this.questionHeaders = new LinkedHashMap<>();
 		setHeaders();
 	}
 
 	private void setHeaders() {
-		this.basicHeaders = new LinkedHashMap<>();
-//		this.questionHeaders = new LinkedHashMap<>();
-
 		// basic info headers
 		basicHeaders.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), "");
 		basicHeaders.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), "");
@@ -39,22 +39,22 @@ public class SurveyActivityExtraction implements Extractable {
 		basicHeaders.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), "");
 
 		// answer headers
-//		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
-//			for (String header : surveyItem.getExtractionIDs()) {
-//				// if () isQuestion
-//				questionHeaders.put(header, "");
-//			}
-//			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, "");
-//			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, "");
-//		});
+		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
+			for (String header : surveyItem.getExtractionIDs()) {
+				// if () isQuestion
+				questionHeaders.put(header, "");
+			}
+			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, "");
+			questionHeaders.put(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, "");
+		});
 	}
 
 	@Override
-	public Set<String> getHeaders() {
+	public LinkedHashSet<String> getHeaders() {
 		// TODO: 03/10/17 como validar que nenhuma chave se repetiu?
-		Set<String> headers = new HashSet<>();
+		LinkedHashSet<String> headers = new LinkedHashSet<>();
 		headers.addAll(new ArrayList<>(basicHeaders.keySet()));
-//		headers.addAll(new ArrayList<>(questionHeaders.keySet()));
+		headers.addAll(new ArrayList<>(questionHeaders.keySet()));
 		return headers;
 	}
 
@@ -63,16 +63,16 @@ public class SurveyActivityExtraction implements Extractable {
 		this.values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyActivity : surveyActivities) {
 			LinkedHashMap<String, Object> basicInfoMap = new LinkedHashMap<>(this.basicHeaders);
-//			LinkedHashMap<String, Object> questionInfoMap = new LinkedHashMap<>(this.questionHeaders);
+			LinkedHashMap<String, Object> questionInfoMap = new LinkedHashMap<>(this.questionHeaders);
 
 			List<Object> basicInfo = getSurveyBasicInfo(basicInfoMap, surveyActivity);
-//			List<Object> questionInfo = getSurveyQuestionInfo(questionInfoMap, surveyActivity);
+			List<Object> questionInfo = getSurveyQuestionInfo(questionInfoMap, surveyActivity);
 
 			List<Object> surveyInfo = new ArrayList<>(); //concatenar ambas listas
 
 			//isso preserva a ordem?
 			surveyInfo.addAll(basicInfo);
-//			surveyInfo.addAll(questionInfo);
+			surveyInfo.addAll(questionInfo);
 
 			values.add(surveyInfo);
 
@@ -81,52 +81,44 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	private List<Object> getSurveyBasicInfo(LinkedHashMap<String, Object> basicInfoMap, SurveyActivity surveyActivity) {
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName()); //get last
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate()); // TODO: 03/10/17 test date type
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());  // TODO: 03/10/17 use enum?
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
-		basicInfoMap.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
+		basicInfoMap.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
+		basicInfoMap.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		basicInfoMap.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
+		basicInfoMap.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
+		basicInfoMap.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName()); //get last
+		basicInfoMap.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate()); // TODO: 03/10/17 test date type
+		basicInfoMap.put(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());  // TODO: 03/10/17 use enum?
+		basicInfoMap.put(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
+		basicInfoMap.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
 
 		return new ArrayList<>(basicInfoMap.values());
 	}
 
-	private List<Object> getSurveyQuestionInfo(LinkedHashMap<String, Object> basicInfoMap, SurveyActivity surveyActivity){
-		// TODO: obter valores de repostas e adicionar a surveyMap
-		// surveyMap.replace("q1", "answer");
-		for (QuestionFill fill : surveyActivity.getFillContainer().getFillingList()) {
-			List<NavigationTrackingItem> items = surveyActivity.getNavigationTracker().items;
-
-			for (NavigationTrackingItem item : items) {
-				if (item.equals(fill.getQuestionID())) {
-					if (!item.state.equals(NavigationTrackingItemStatuses.SKIPPED)) {
-						//begin item extraction - if not skipped
-
-						ExtractionFill extration = fill.extraction();
-
-
-
+	private List<Object> getSurveyQuestionInfo(LinkedHashMap<String, Object> questionInfoMap, SurveyActivity surveyActivity){
+		for (QuestionFill questionFill : surveyActivity.getFillContainer().getFillingList()) {
+			List<NavigationTrackingItem> trackingItems = surveyActivity.getNavigationTracker().items;
+			for (NavigationTrackingItem navigationTrackingItem : trackingItems) {
+				if (navigationTrackingItem.id.equals(questionFill.getQuestionID())) {
+					if (!navigationTrackingItem.state.equals(NavigationTrackingItemStatuses.SKIPPED)) {
+						//begin extraction - if not skipped
+						ExtractionFill extraction = questionFill.extraction();
+						fillQuestionInfo(questionInfoMap, extraction);
 					}
 				}
 			}
-
-
 		}
-
-
-		return null;
+		return new ArrayList<>(questionInfoMap.values());
 	}
 
 	private void fillQuestionInfo(LinkedHashMap map, ExtractionFill filler){
-		Map<String, Object> answerExtract = filler.getAnswerExtract();
 //		map.replaceAll(answerExtract);
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
 			String key = pair.getKey();
 			map.replace(key, pair.getValue());
 		}
+		map.replace(filler.getQuestionID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
+		map.replace(filler.getQuestionID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, filler.getMetadata());
+
 
 	}
 }
