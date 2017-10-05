@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import br.org.otus.security.Secured;
 
-@Path("activity-extraction")
+@Path("extraction")
 public class ExtractionResource {
 
 	@Inject
@@ -17,7 +17,7 @@ public class ExtractionResource {
 
 	@GET
 //	@Secured
-	@Path("/{acronym}")
+	@Path("/activity/{acronym}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public byte[] extractActivities(@PathParam("acronym") String acronym) {
 		return extractionFacadeService.createActivityExtraction(acronym);
