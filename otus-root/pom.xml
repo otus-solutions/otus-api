@@ -18,7 +18,7 @@
 		<owail.sender.version>1.0</owail.sender.version>
 		<equalize.version>2.0.2</equalize.version>
 		<survey.model.version>1.3</survey.model.version>
-		<auditor.core.version>1.2</auditor.core.version>
+		<auditor.core.version>1.2-SNAPSHOT</auditor.core.version>
 	</properties>
 
 	<scm>
