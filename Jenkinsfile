@@ -11,12 +11,7 @@ pipeline {
 		steps {
                 	sh 'mvn -f otus-root/pom.xml clean install -Dmaven.test.failure.ignore=true'
             	}
-        	post {
-                	always {
 
-                    		junit 'target/surefire-reports/xml'
-                	}
-            	}
     	}
 
 	stage('Publish artifact') {
@@ -43,4 +38,10 @@ pipeline {
         //    	}
     	//}
     }
+    post {
+            always {
+                  archive "target/**/*"
+                  junit 'target/surefire-reports/*.xml'
+            }
+        }
 }
