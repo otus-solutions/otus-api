@@ -51,7 +51,7 @@ public class User {
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
-		this.extractionIps = null;
+		this.extractionIps = new ArrayList();
 	}
 	
 	public User(UUID uuid) {
@@ -59,7 +59,7 @@ public class User {
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
-		this.extractionIps = null;
+		this.extractionIps = new ArrayList();
 	}
 
 	public void enable() {
@@ -152,7 +152,9 @@ public class User {
 		this.name = name;
 	}
 
-	public void setExtractionIps(ArrayList extractionIps) { this.extractionIps = extractionIps;	}
+	public void setExtractionIps(ArrayList extractionIps) {
+		this.extractionIps = extractionIps;
+	}
 
 	public void setSurname(String surname) {
 		this.surname = surname;

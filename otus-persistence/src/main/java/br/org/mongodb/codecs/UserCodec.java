@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.bson.BsonInvalidOperationException;
 import org.bson.BsonReader;
+import org.bson.BsonType;
 import org.bson.BsonWriter;
 import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
@@ -12,6 +13,8 @@ import org.bson.codecs.EncoderContext;
 import org.ccem.otus.model.FieldCenter;
 
 import br.org.otus.model.User;
+
+import javax.print.DocFlavor;
 
 public class UserCodec implements Codec<User> {
 
@@ -37,13 +40,11 @@ public class UserCodec implements Codec<User> {
 			writer.writeEndDocument();
 		}
 
-		if (user.getExtractionIps() == null){
+		if (user.getExtractionIps().isEmpty()){
 			writer.writeNull("extractionIps");
 		} else {
 			writer.writeStartArray("extractionIps");
-			for (Object o : user.getExtractionIps()) {
-				writer.writeString(o.toString());
-			}
+				user.getExtractionIps().forEach(object -> writer.writeString(object.toString()));
 			writer.writeEndArray();
 		}
 
@@ -65,8 +66,14 @@ public class UserCodec implements Codec<User> {
 		boolean adm = reader.readBoolean("adm");
 		String uuid = reader.readString("uuid");
 		String email = reader.readString("email");
-	
-	
+
+		reader.readStartArray();
+			ArrayList extractionIps = new ArrayList();
+			while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
+				extractionIps.add(reader.readString());
+			}
+		reader.readEndArray();
+
 		String fieldCenterAcronym = "";
 		try{
 			reader.readNull("fieldCenter");
@@ -102,8 +109,8 @@ public class UserCodec implements Codec<User> {
 		user.setName(name);
 		user.setSurname(surname);
 		user.setEmail(email);
-//		user.setCode(code);
-		
+		user.setExtractionIps(extractionIps);
+
 		return user;
 	}
 	
