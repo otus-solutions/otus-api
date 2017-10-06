@@ -9,9 +9,14 @@ pipeline {
     stages {
     	stage('Build Aplication') {
 		steps {
-                	sh 'mvn -f otus-root/pom.xml clean install'
+                	sh 'mvn -f otus-root/pom.xml clean install -Dmaven.test.failure.ignore=true'
             	}
-        	
+        	post {
+                	success {
+                        archive "target/**/*"
+                    		junit 'target/surefire-reports/*.xml'
+                	}
+            	}
     	}
 
 	stage('Publish artifact') {
