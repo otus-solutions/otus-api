@@ -13,7 +13,8 @@ pipeline {
             	}
         	post {
                 	success {
-                    		junit '${PATH}/target/surefire-reports/**/*.xml'
+                        archive "target/**/*"
+                    		junit 'target/surefire-reports/**/*.xml'
                 	}
             	}
     	}
