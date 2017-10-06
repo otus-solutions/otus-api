@@ -12,9 +12,9 @@ pipeline {
                 	sh 'mvn -f otus-root/pom.xml clean install -Dmaven.test.failure.ignore=true'
             	}
         	post {
-                	success {
-                        archive "target/**/*"
-                    		junit 'target/surefire-reports/*.xml'
+                	always {
+
+                    		junit 'target/surefire-reports/xml'
                 	}
             	}
     	}
