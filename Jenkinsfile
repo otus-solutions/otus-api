@@ -9,7 +9,7 @@ pipeline {
     stages {
     	stage('Build Aplication') {
 		steps {
-                	sh 'mvn -f otus-root/pom.xml clean install -Dmaven.test.failure.ignore=true'
+                	sh 'mvn -f otus-root/pom.xml clean install'
             	}
               post {
                       always {
