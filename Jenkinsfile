@@ -12,7 +12,7 @@ pipeline {
                 	sh 'mvn -f otus-root/pom.xml clean install'
             	}
         	post {
-                	success {
+                	always {
                         archive "target/**/*"
                     		junit 'target/surefire-reports/*.xml'
                 	}
