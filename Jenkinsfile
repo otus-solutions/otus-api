@@ -11,11 +11,11 @@ pipeline {
 		steps {
                 	sh 'mvn -f otus-root/pom.xml clean install'
             	}
-        	//post {
-                //	success {
-                //    		junit 'target/surefire-reports/**/*.xml'
-                //	}
-            	//}
+        	post {
+                	success {
+                    		junit 'target/surefire-reports/**/*.xml'
+                	}
+            	}
     	}
 
 	stage('Publish artifact') {
