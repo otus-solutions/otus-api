@@ -8,22 +8,21 @@ pipeline {
 
     stages {
     	stage('Build Aplication') {
-		steps {
-                	sh 'mvn -f otus-root/pom.xml clean install'
-            	}
-              post {
-                      always {
-
-                            junit '**/target/surefire-reports/*.xml'
-                      }
-                  }
+		      steps {
+            sh 'mvn -f otus-root/pom.xml clean install'
+          }
+          post {
+            always {
+              junit '**/target/surefire-reports/*.xml'
+            }
+          }
     	}
 
 	stage('Publish artifact') {
 		steps {
-                	sh 'mvn -f otus-root/pom.xml deploy'
-            	}
-    	}
+      sh 'mvn -f otus-root/pom.xml deploy'
+    }
+  }
 
 	stage('Sonar Update') {
 		steps {
@@ -37,7 +36,11 @@ pipeline {
             	}
     	}
 
-
+	//stage('Deploy - Development Server') {
+	//	steps {
+	//		sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
+        //    	}
+    	//}
     }
 
 }
