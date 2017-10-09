@@ -34,12 +34,12 @@ pipeline {
 		steps {
 			sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=${DATABASE_DEV_HOST} -Ddatabase.username=${DATABASE_USER} -Ddatabase.password=${DATABASE_PWD}'
             	}
-            
+
     	}
 
 	stage('Deploy - Development Server') {
 		steps {
-      sh 'ssh -L 9990:localhost:9990 ${SERVER_HOST}'
+      
 			sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
             	}
     	}
