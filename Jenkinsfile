@@ -34,6 +34,12 @@ pipeline {
 		steps {
 			sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=${DATABASE_DEV_HOST} -Ddatabase.username=${DATABASE_USER} -Ddatabase.password=${DATABASE_PWD}'
             	}
+              post{
+                always {
+                  sh 'ssh -L 9990:localhost:9990 ${SERVER_HOST}'
+
+                }
+              }
     	}
 
 	stage('Deploy - Development Server') {
