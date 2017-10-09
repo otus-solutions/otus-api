@@ -4,12 +4,6 @@ pipeline {
         maven 'maven 3.5.0'
         jdk 'Java8'
     }
-    node {
-  sshagent (credentials: ['deploy-dev']) {
-
-    sh 'ssh -L 9990:localhost:9990 ${SERVER_HOST}'
-  }
-}
 
     stages {
     	stage('Build Aplication') {
