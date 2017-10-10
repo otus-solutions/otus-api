@@ -226,13 +226,6 @@ public class UserFacadeTest {
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_disableExtraction_should_throw_HttpResponseException_if_caught_EncryptedException()
-			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-		doThrow(new EncryptedException()).when(managementUserService).disableExtraction(managementUserDto);
-		userFacade.disableExtraction(managementUserDto);
-	}
-
-	@Test(expected = HttpResponseException.class)
 	public void method_disableExtraction_should_throw_HttpResponseException_if_caught_ValidationException()
 			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
 		doThrow(new ValidationException()).when(managementUserService).disableExtraction(managementUserDto);
@@ -254,14 +247,6 @@ public class UserFacadeTest {
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_enableExtraction_should_throw_HttpResponseException_if_caught_EncryptedException()
-			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-		doThrow(new EncryptedException()).when(managementUserService).enableExtraction(managementUserDto);
-		userFacade.enableExtraction(managementUserDto);
-
-	}
-
-	@Test(expected = HttpResponseException.class)
 	public void method_enableExtraction_should_throw_HttpResponseException_if_caught_ValidationException()
 			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
 		doThrow(new ValidationException()).when(managementUserService).enableExtraction(managementUserDto);
@@ -277,6 +262,19 @@ public class UserFacadeTest {
 
 	}
 
+	@Test
+	public void method_updateExtractionIps_should_check_evocation_of_updateExtractionIps_by_managementUserService()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		userFacade.updateExtractionIps(managementUserDto);
+		verify(managementUserService).updateExtractionIps(managementUserDto);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_updateExtractionIps_should_throw_HttpResponseException_if_caught_DataNotFoundException()
+			throws ValidationException, DataNotFoundException {
+		doThrow(new DataNotFoundException()).when(managementUserService).updateExtractionIps(managementUserDto);
+		userFacade.updateExtractionIps(managementUserDto);
+	}
 
 	@Test
 	public void method_updateFieldCenter_should_check_evocation_of_() throws DataNotFoundException {

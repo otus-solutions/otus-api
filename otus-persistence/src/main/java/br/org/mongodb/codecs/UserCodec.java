@@ -40,6 +40,12 @@ public class UserCodec implements Codec<User> {
 			writer.writeEndDocument();
 		}
 
+		if (user.getExtractionToken() == null){
+			writer.writeNull("extractionToken");
+		} else {
+			writer.writeString("extractionToken", user.getExtractionToken());
+		}
+
 		if (user.getExtractionIps().isEmpty()){
 			writer.writeNull("extractionIps");
 		} else {
@@ -83,6 +89,13 @@ public class UserCodec implements Codec<User> {
 			reader.readEndDocument();
 		}
 
+		String extractionToken = "";
+		try{
+			reader.readNull("fieldCenter");
+		} catch (BsonInvalidOperationException e) {
+			extractionToken = reader.readString("extractionUuid");
+		}
+
 		reader.readEndDocument();
 
 		User user = new User(UUID.fromString(uuid));
@@ -100,11 +113,12 @@ public class UserCodec implements Codec<User> {
 		if(extraction == true) {
 			user.enableExtraction();
 		}
-		
+
 		FieldCenter fieldCenter = new FieldCenter();
 		if(!fieldCenterAcronym.isEmpty()) {
 			fieldCenter.setAcronym(fieldCenterAcronym);
 		}
+		user.setExtractionToken(extractionToken);
 		user.setFieldCenter(fieldCenter);
 		user.setName(name);
 		user.setSurname(surname);

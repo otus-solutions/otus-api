@@ -22,6 +22,9 @@ public class User {
 	@Equalization(name = "extraction")
 	private Boolean extraction;
 
+	@Equalization(name = "extraction_token")
+	private String extractionToken;
+
 	@Equalization(name = "extraction_ips")
 	private ArrayList extractionIps;
 	
@@ -48,6 +51,7 @@ public class User {
 
 	public User() {
 		this.uuid = UUID.randomUUID();
+		this.extractionToken = null;
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
@@ -56,6 +60,7 @@ public class User {
 	
 	public User(UUID uuid) {
 		this.uuid = uuid;
+		this.extractionToken = null;
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
@@ -72,10 +77,12 @@ public class User {
 
 	public void enableExtraction() {
 		this.extraction = Boolean.TRUE;
+		this.extractionToken = UUID.randomUUID().toString();
 	}
 
 	public void disableExtraction() {
 		this.extraction = Boolean.FALSE;
+		this.extractionToken = null;
 	}
 
 	public void becomesAdm() {
@@ -109,6 +116,10 @@ public class User {
 
 	public ArrayList getExtractionIps() {
 		return extractionIps;
+	}
+
+	public String getExtractionToken() {
+		return extractionToken;
 	}
 
 	public Boolean isEnable() {
@@ -170,6 +181,10 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void setExtractionToken(String ExtractionToken) {
+		this.extractionToken = ExtractionToken;
 	}
 
 	public static String serialize(User user) {

@@ -14,9 +14,6 @@ public class ManagementUserDto implements Dto {
     @Equalization(name = "surname")
     public String surname;
 
-    @Equalization(name = "extraction_ips")
-    public ArrayList extractionIps;
-
     @Equalization(name = "extraction")
     public String extraction;
 
@@ -48,7 +45,6 @@ public class ManagementUserDto implements Dto {
         return !name.isEmpty() &&
                 !surname.isEmpty() &&
                 !extraction.isEmpty() &&
-                !extractionIps.isEmpty() &&
                 !phone.isEmpty() &&
                 !email.isEmpty()
                 ? Boolean.TRUE : Boolean.FALSE;
