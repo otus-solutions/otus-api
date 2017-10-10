@@ -91,9 +91,9 @@ public class UserCodec implements Codec<User> {
 
 		String extractionToken = "";
 		try{
-			reader.readNull("fieldCenter");
+			reader.readNull("extractionToken");
 		} catch (BsonInvalidOperationException e) {
-			extractionToken = reader.readString("extractionUuid");
+			extractionToken = reader.readString("extractionToken");
 		}
 
 		reader.readEndDocument();

@@ -17,6 +17,9 @@ public class ManagementUserDto implements Dto {
     @Equalization(name = "extraction")
     public String extraction;
 
+    @Equalization(name = "extractionIps")
+    public ArrayList extractionIps;
+
     @Equalization(name = "phone")
     public String phone;
     
