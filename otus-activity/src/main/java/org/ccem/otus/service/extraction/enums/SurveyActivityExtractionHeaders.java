@@ -26,8 +26,6 @@ public enum SurveyActivityExtractionHeaders {
 		name = s;
 	}
 
-
-
 	public boolean equalsName(String otherName) {
 		return name.equals(otherName);
 	}

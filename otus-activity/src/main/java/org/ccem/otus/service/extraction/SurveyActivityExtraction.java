@@ -13,6 +13,7 @@ import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
+import org.ccem.otus.survey.template.item.questions.Question;
 
 import br.org.otus.api.Extractable;
 
@@ -37,9 +38,10 @@ public class SurveyActivityExtraction implements Extractable {
 		List<List<Object>> values = new ArrayList<List<Object>>();
 		for (SurveyActivity surveyActivity : surveyActivities) {
 			List<Object> resultInformation = new ArrayList<>();
-			LinkedHashMap<String, Object> surveyInformation = new LinkedHashMap<String, Object>();
-			resultInformation.addAll(this.getSurveyBasicInfo(surveyInformation, surveyActivity));
-			resultInformation.addAll(this.getSurveyQuestionInfo(surveyInformation, surveyActivity));
+			LinkedHashMap<String, Object> surveyInformationBasic = new LinkedHashMap<String, Object>();
+			LinkedHashMap<String, Object> surveyInformationQuestion = new LinkedHashMap<String, Object>();
+			resultInformation.addAll(this.getSurveyBasicInfo(surveyInformationBasic, surveyActivity));
+			resultInformation.addAll(this.getSurveyQuestionInfo(surveyInformationQuestion, surveyActivity));
 			values.add(resultInformation);
 		}
 		return values;
@@ -56,16 +58,15 @@ public class SurveyActivityExtraction implements Extractable {
 		headers.add(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName());
 		headers.add(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName());
 
-		// Activities headers
+		/* Activities headers */
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
-
 			for (String header : surveyItem.getExtractionIDs()) {
-				if (surveyItem.isQuestion()) {
+				if (surveyItem instanceof Question) {
 					headers.add(header);
+					headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
+					headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
 				}
 			}
-			headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
-			headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
 		});
 	}
 
