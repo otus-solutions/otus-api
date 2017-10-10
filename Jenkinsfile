@@ -12,7 +12,7 @@ pipeline {
           }
           post {
             always {
-              archive '**/target/**/*'
+              //archive '**/target/surefire-reports/*'
               junit '**/target/surefire-reports/*.xml'
             }
           }
@@ -44,10 +44,9 @@ pipeline {
     post {
       failure {
         emailext (
-   subject: "${PROJECT_NAME} - Build # ${BUILD_NUMBER} - ${BUILD_STATUS}!",
-   body: """${PROJECT_NAME} - Build # ${BUILD_NUMBER} - ${BUILD_STATUS}:
-
-Check console output at ${BUILD_URL} to view the results.""",
+   subject: "Deploy failed in Jenkins '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+   body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+     <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
  )
           }
