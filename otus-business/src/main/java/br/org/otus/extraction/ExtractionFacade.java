@@ -10,14 +10,14 @@ import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import br.org.otus.api.ExtractionService;
 import br.org.otus.survey.activity.api.ActivityFacade;
 
-public class ExtractionFacadeService {
+public class ExtractionFacade {
 
 	@Inject
 	private ActivityFacade activityFacade;
 	@Inject
 	private ExtractionService extractionService;
 
-	public ExtractionFacadeService() {
+	public ExtractionFacade() {
 		extractionService = new ExtractionService();
 		activityFacade = new ActivityFacade();
 	}
