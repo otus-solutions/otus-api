@@ -40,11 +40,13 @@ pipeline {
 	stage('Deploy - Development Server') {
 		steps {
 			sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
-            	}
-              failure {
-            mail to: tiago.matana@gmail.com, subject: 'The Pipeline failed :('
-        }
-    	}
+    }
+    post {
+      failure {
+              mail to: tiago.matana@gmail.com, subject: 'The Pipeline failed :('
+          }
+    }
+  }
     }
 
 }
