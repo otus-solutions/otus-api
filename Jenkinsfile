@@ -42,7 +42,17 @@ pipeline {
       }
       post {
         failure {
-          notificationEmail()
+          emailext (
+            subject: '$DEFAULT_SUBJECT',
+            body: '$DEFAULT_CONTENT',
+            recipientProviders: [
+            [$class: 'CulpritsRecipientProvider'],
+            [$class: 'DevelopersRecipientProvider'],
+            [$class: 'RequesterRecipientProvider']
+            ],
+            replyTo: '$DEFAULT_REPLYTO',
+            to: '$DEFAULT_RECIPIENTS'
+            )
           }
           success {
             emailext (
@@ -60,22 +70,6 @@ pipeline {
         }
       }
 
-      def notificationEmail(){
-        return {
-          emailext (
-            subject: '$DEFAULT_SUBJECT',
-            body: '$DEFAULT_CONTENT',
-            recipientProviders: [
-            [$class: 'CulpritsRecipientProvider'],
-            [$class: 'DevelopersRecipientProvider'],
-            [$class: 'RequesterRecipientProvider']
-            ],
-            replyTo: '$DEFAULT_REPLYTO',
-            to: '$DEFAULT_RECIPIENTS'
-            )
-
-        }
-      }
     }
 
   }
