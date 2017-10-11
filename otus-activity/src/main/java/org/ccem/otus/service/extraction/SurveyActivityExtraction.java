@@ -32,7 +32,7 @@ public class SurveyActivityExtraction implements Extractable {
 
 	@Override
 	public LinkedHashSet<String> getHeaders() {
-		this.buildHeaders();
+		this.buildHeadersInfo();
 		return this.headers;
 	}
 
@@ -46,15 +46,15 @@ public class SurveyActivityExtraction implements Extractable {
 			while (iterator.hasNext()) {
 				surveyInformation.put(iterator.next(), "");
 			}
-			resultInformation.addAll(this.getSurveyBasicInfo(surveyActivity));
-			resultInformation.addAll(this.getSurveyQuestionInfo(surveyActivity));
-
+			this.getSurveyBasicInfo(surveyActivity);
+			this.getSurveyQuestionInfo(surveyActivity);
+			resultInformation.addAll(new ArrayList<>(this.surveyInformation.values()));
 			values.add(resultInformation);
 		}
 		return values;
 	}
 
-	private void buildHeaders() {
+	private void buildHeadersInfo() {
 		this.headers.add(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.ACRONYM.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.CATEGORY.getName());
@@ -77,23 +77,22 @@ public class SurveyActivityExtraction implements Extractable {
 		});
 	}
 
-	private List<Object> getSurveyBasicInfo(SurveyActivity surveyActivity) {	
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName());
+	private void getSurveyBasicInfo(SurveyActivity surveyActivity) {
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
+		// get last
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName());
 		// TODO: 03/10/17 test date type
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate());
 		// TODO: 03/10/17 use enum?
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
-		this.surveyInformation.put(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
-
-		return new ArrayList<>(surveyInformation.values());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
 	}
 
-	private List<Object> getSurveyQuestionInfo(SurveyActivity surveyActivity) {
+	private void getSurveyQuestionInfo(SurveyActivity surveyActivity) {
 		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
 		final List<QuestionFill> fillingList = surveyActivity.getFillContainer().getFillingList();
 
@@ -118,7 +117,6 @@ public class SurveyActivityExtraction implements Extractable {
 
 			}
 		}
-		return new ArrayList<>(surveyInformation.values());
 	}
 
 	private void fillQuestionInfo(Map<String, String> customIDMap, ExtractionFill filler) {
