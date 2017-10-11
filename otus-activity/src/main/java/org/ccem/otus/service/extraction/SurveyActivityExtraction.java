@@ -82,7 +82,6 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyInformation.put(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
 		this.surveyInformation.put(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
 		this.surveyInformation.put(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
-		// get last
 		this.surveyInformation.put(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName());
 		// TODO: 03/10/17 test date type
 		this.surveyInformation.put(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate());
@@ -95,28 +94,48 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	private List<Object> getSurveyQuestionInfo(SurveyActivity surveyActivity) {
-		for (QuestionFill questionFill : surveyActivity.getFillContainer().getFillingList()) {
-			List<NavigationTrackingItem> trackingItems = surveyActivity.getNavigationTracker().items;
-			for (NavigationTrackingItem navigationTrackingItem : trackingItems) {
-				if (navigationTrackingItem.id.equals(questionFill.getQuestionID())) {
-					if (!navigationTrackingItem.state.equals(NavigationTrackingItemStatuses.SKIPPED)) {
-						// begin extraction - if not skipped
-						ExtractionFill extraction = questionFill.extraction();
-						fillQuestionInfo(extraction);
-					}
+		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
+		final List<QuestionFill> fillingList = surveyActivity.getFillContainer().getFillingList();
+
+		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
+			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
+
+			final String itemCustomID = customIDMap.get(trackingItem.id);
+
+			switch (trackingItem.state){
+				case "ANSWERED":{
+					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id);
+					ExtractionFill extraction = questionFill.extraction();
+					fillQuestionInfo(customIDMap, extraction);
+					break;
 				}
+				case "SKIPPED":{
+					// TODO: 11/10/17 fill with .p value
+					skippAnswer(itemCustomID);
+					break;
+				}
+				// TODO: 11/10/17 other states
+
 			}
 		}
 		return new ArrayList<>(surveyInformation.values());
 	}
 
-	private void fillQuestionInfo(ExtractionFill filler) {
+	private void fillQuestionInfo(Map<String, String> customIDMap, ExtractionFill filler) {
+		final String answerCustomID = customIDMap.get(filler.getQuestionID());
+
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
 			String key = pair.getKey();
-			this.surveyInformation.replace(key, pair.getValue());
+			this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
 		}
-		this.surveyInformation.replace(filler.getQuestionID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
-		this.surveyInformation.replace(filler.getQuestionID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, filler.getMetadata());
+
+		this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
+		this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, filler.getMetadata());
+
+	}
+
+	private void skippAnswer(String customID){
+		// TODO: 11/10/17 skip on all customIDs (checkbox, grid)
 
 	}
 }
