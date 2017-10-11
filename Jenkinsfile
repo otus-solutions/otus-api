@@ -35,22 +35,6 @@ pipeline {
         sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=${DATABASE_DEV_HOST} -Ddatabase.username=${DATABASE_USER} -Ddatabase.password=${DATABASE_PWD}'
       }
     }
-    def notificationEmail(){
-      return {
-        emailext (
-          subject: '$DEFAULT_SUBJECT',
-          body: '$DEFAULT_CONTENT',
-          recipientProviders: [
-          [$class: 'CulpritsRecipientProvider'],
-          [$class: 'DevelopersRecipientProvider'],
-          [$class: 'RequesterRecipientProvider']
-          ],
-          replyTo: '$DEFAULT_REPLYTO',
-          to: '$DEFAULT_RECIPIENTS'
-          )
-
-      }
-    }
 
     stage('Deploy - Development Server') {
       steps {
@@ -73,6 +57,23 @@ pipeline {
               to: '$DEFAULT_RECIPIENTS'
               )
             }
+        }
+      }
+
+      def notificationEmail(){
+        return {
+          emailext (
+            subject: '$DEFAULT_SUBJECT',
+            body: '$DEFAULT_CONTENT',
+            recipientProviders: [
+            [$class: 'CulpritsRecipientProvider'],
+            [$class: 'DevelopersRecipientProvider'],
+            [$class: 'RequesterRecipientProvider']
+            ],
+            replyTo: '$DEFAULT_REPLYTO',
+            to: '$DEFAULT_RECIPIENTS'
+            )
+
         }
       }
     }
