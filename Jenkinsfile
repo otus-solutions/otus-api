@@ -35,25 +35,44 @@ pipeline {
         sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=${DATABASE_DEV_HOST} -Ddatabase.username=${DATABASE_USER} -Ddatabase.password=${DATABASE_PWD}'
       }
     }
+    def notificationEmail(){
+      return {
+        emailext (
+          subject: '$DEFAULT_SUBJECT',
+          body: '$DEFAULT_CONTENT',
+          recipientProviders: [
+          [$class: 'CulpritsRecipientProvider'],
+          [$class: 'DevelopersRecipientProvider'],
+          [$class: 'RequesterRecipientProvider']
+          ],
+          replyTo: '$DEFAULT_REPLYTO',
+          to: '$DEFAULT_RECIPIENTS'
+          )
+
+      }
+    }
 
     stage('Deploy - Development Server') {
       steps {
         sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
       }
       post {
-        always {
-          emailext (
-            subject: '$DEFAULT_SUBJECT',
-            body: '$DEFAULT_CONTENT',
-            recipientProviders: [
-              [$class: 'CulpritsRecipientProvider'],
-              [$class: 'DevelopersRecipientProvider'],
-              [$class: 'RequesterRecipientProvider']
-            ],
-            replyTo: '$DEFAULT_REPLYTO',
-            to: '$DEFAULT_RECIPIENTS'
-            )
+        failure {
+          notificationEmail()
           }
+          success {
+            emailext (
+              subject: '$DEFAULT_SUBJECT',
+              body: '$DEFAULT_CONTENT',
+              recipientProviders: [
+                [$class: 'CulpritsRecipientProvider'],
+                [$class: 'DevelopersRecipientProvider'],
+                [$class: 'RequesterRecipientProvider']
+              ],
+              replyTo: '$DEFAULT_REPLYTO',
+              to: '$DEFAULT_RECIPIENTS'
+              )
+            }
         }
       }
     }
