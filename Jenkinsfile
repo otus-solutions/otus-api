@@ -41,7 +41,7 @@ pipeline {
         sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
       }
       post {
-        failure {
+        always {
           emailext (
             subject: '$DEFAULT_SUBJECT',
             body: '$DEFAULT_CONTENT',
