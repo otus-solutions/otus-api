@@ -6,6 +6,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface ExtractionSecurityDao {
 
-    User validateSecurityCredentials(String securityToken, String ip) throws DataNotFoundException;
+    User validateSecurityCredentials(String securityToken) throws DataNotFoundException;
 
 }

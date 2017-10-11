@@ -15,7 +15,7 @@ public class ExtractionSecurityDaoBean extends MongoGenericDao<Document>  implem
     }
 
     @Override
-    public User validateSecurityCredentials(String securityToken, String ip) throws DataNotFoundException {
+    public User validateSecurityCredentials(String securityToken) throws DataNotFoundException {
         Document result = collection.find(eq("extractionToken", securityToken)).first();
         if (result == null) {
             throw new DataNotFoundException(new Throwable("Security token: " + securityToken + " not found."));
