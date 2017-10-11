@@ -1,22 +1,16 @@
 package org.ccem.otus.service.extraction;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-
+import br.org.otus.api.Extractable;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
-import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.template.item.questions.Question;
 
-import br.org.otus.api.Extractable;
+import java.util.*;
 
 public class SurveyActivityExtraction implements Extractable {
 
@@ -37,8 +31,8 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	@Override
-	public List<List<Object>> getValues() {
-		List<List<Object>> values = new ArrayList<List<Object>>();
+	public List<List<Object>> getValues() throws DataNotFoundException {
+		List<List<Object>> values = new ArrayList<>();
 		for (SurveyActivity surveyActivity : surveyActivities) {
 			List<Object> resultInformation = new ArrayList<>();
 
@@ -55,6 +49,7 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	private void buildHeadersInfo() {
+		/* Basic info headers */
 		this.headers.add(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.ACRONYM.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.CATEGORY.getName());
@@ -65,7 +60,7 @@ public class SurveyActivityExtraction implements Extractable {
 		this.headers.add(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName());
 
-		/* Activities headers */
+		/* Answers headers */
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
 			for (String header : surveyItem.getExtractionIDs()) {
 				if (surveyItem instanceof Question) {
@@ -82,7 +77,6 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
-		// get last
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName());
 		// TODO: 03/10/17 test date type
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate());
@@ -92,9 +86,8 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
 	}
 
-	private void getSurveyQuestionInfo(SurveyActivity surveyActivity) {
+	private void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
 		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
-		final List<QuestionFill> fillingList = surveyActivity.getFillContainer().getFillingList();
 
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
@@ -114,7 +107,6 @@ public class SurveyActivityExtraction implements Extractable {
 					break;
 				}
 				// TODO: 11/10/17 other states
-
 			}
 		}
 	}

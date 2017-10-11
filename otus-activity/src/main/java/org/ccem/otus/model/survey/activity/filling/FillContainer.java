@@ -1,5 +1,7 @@
 package org.ccem.otus.model.survey.activity.filling;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,15 +13,8 @@ public class FillContainer {
 		return fillingList;
 	}
 
-	public QuestionFill getQuestionFill(String templateID){
+	public QuestionFill getQuestionFill(String templateID) throws DataNotFoundException {
 		final Optional<QuestionFill> first = fillingList.stream().filter(questionFill -> questionFill.getQuestionID().equals(templateID)).findFirst();
-		if (first.isPresent()){
-			return first.get();
-		}
-		else {
-			// TODO: 11/10/17 throw
-		}
-		return null;
+		return first.orElseThrow(() -> new DataNotFoundException());
 	}
-
 }

@@ -13,8 +13,8 @@ public enum SurveyActivityExtractionHeaders {
 	PAPER_REALIZATION_DATE("paper_realization_date"),
 	LAST_FINALIZATION_DATE("last_finalization_date"),
 
-	QUESTION_COMMENT_SUFFIX("_metadata"),
-	QUESTION_METADATA_SUFFIX("_comment");
+	QUESTION_COMMENT_SUFFIX("_comment"),
+	QUESTION_METADATA_SUFFIX("_metadata");
 
 	private final String name;
 
