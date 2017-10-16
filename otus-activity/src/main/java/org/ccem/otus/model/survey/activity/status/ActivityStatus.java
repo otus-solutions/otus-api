@@ -11,6 +11,10 @@ public class ActivityStatus {
 	private LocalDateTime date;
 	private User user;
 
+	public ActivityStatus() {
+		this.user = new User();
+	}
+
 	public String getObjectType() {
 		return objectType;
 	}
@@ -24,7 +28,7 @@ public class ActivityStatus {
 	}
 
 	public User getUser() {
-		return user;
+		if (user != null) return user;
+		throw new UserNotFoundException();
 	}
-
 }
