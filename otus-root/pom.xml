@@ -45,14 +45,14 @@
 	<repositories>
 		<repository>
 			<id>snapshots</id>
-			<url>http://146.148.79.9/repository/maven-snapshots</url>
+			<url>${repository_snapshots}</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>releases</id>
-			<url>http://146.148.79.9/repository/maven-releases</url>
+			<url>${repository_releases}</url>
 		</repository>
 		<repository>
 			<id>maven-restlet</id>
@@ -63,11 +63,11 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>http://146.148.79.9/repository/maven-releases</url>
+			<url>>${repository_releases}</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
-			<url>http://146.148.79.9/repository/maven-snapshots</url>
+			<url>${repository_snapshots}</url>
 		</snapshotRepository>
 	</distributionManagement>
 
