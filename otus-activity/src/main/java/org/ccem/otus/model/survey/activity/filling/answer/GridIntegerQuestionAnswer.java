@@ -17,9 +17,11 @@ public class GridIntegerQuestionAnswer extends AnswerFill {
 	@Override
 	public Map<String, Object> getAnswerExtract(String questionID) {
 		Map<String, Object> extraction = new LinkedHashMap<String, Object>();
-		for (List<GridIntegerAnswer> list : value) {
-			for (GridIntegerAnswer gridIntegerAnswer : list) {
-				extraction.put(gridIntegerAnswer.getCustomID(), gridIntegerAnswer.getValue());
+		if (this.value != null){
+			for (List<GridIntegerAnswer> list : value) {
+				for (GridIntegerAnswer gridIntegerAnswer : list) {
+					extraction.put(gridIntegerAnswer.getCustomID(), gridIntegerAnswer.getValue());
+				}
 			}
 		}
 		return extraction;
