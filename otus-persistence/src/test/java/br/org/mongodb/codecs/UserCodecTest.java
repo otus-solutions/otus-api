@@ -85,7 +85,7 @@ public class UserCodecTest {
         verify(writer).writeString("password", PASSWORD);
         verify(writer).writeString("phone", PHONE);
         verify(writer).writeBoolean("enable", ENABLE);
-        verify(writer).writeBoolean("extraction", EXTRACTIONENABLED);
+        verify(writer).writeStartDocument("extraction");
         verify(writer).writeString("surname", SURNAME);
         verify(writer).writeString("name", NAME);
         verify(writer).writeBoolean("adm", ADMIN);
@@ -118,6 +118,7 @@ public class UserCodecTest {
         PowerMockito.when(reader.readString("acronym")).thenReturn(FIELDCENTERACRONYM);
         PowerMockito.when(reader.readBsonType()).thenReturn(BsonType.END_OF_DOCUMENT);
         doThrow(new BsonInvalidOperationException("teste")).when(reader).readNull("fieldCenter");
+        doThrow(new BsonInvalidOperationException("teste")).when(reader).readNull("extraction");
         User userLocal = UserCodec.decode(reader,  decoderContext);
         assertEquals(userLocal.getEmail(),EMAIL);
         assertEquals(userLocal.getPassword(),PASSWORD);

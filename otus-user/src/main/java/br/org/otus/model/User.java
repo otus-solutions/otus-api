@@ -51,7 +51,7 @@ public class User {
 
 	public User() {
 		this.uuid = UUID.randomUUID();
-		this.extractionToken = null;
+		this.extractionToken = "";
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
@@ -60,7 +60,7 @@ public class User {
 	
 	public User(UUID uuid) {
 		this.uuid = uuid;
-		this.extractionToken = null;
+		this.extractionToken = "";
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
 		this.extraction = Boolean.FALSE;
@@ -82,7 +82,7 @@ public class User {
 
 	public void disableExtraction() {
 		this.extraction = Boolean.FALSE;
-		this.extractionToken = null;
+		this.extractionToken = "";
 	}
 
 	public void becomesAdm() {

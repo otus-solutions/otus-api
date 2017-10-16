@@ -25,7 +25,6 @@ public class UserCodec implements Codec<User> {
 		writer.writeString("password", user.getPassword());
 		writer.writeString("phone", user.getPhone());
 		writer.writeBoolean("enable", user.isEnable());
-		writer.writeBoolean("extraction", user.isExtractionEnabled());
 		writer.writeString("surname", user.getSurname());
 		writer.writeString("name", user.getName());
 		writer.writeBoolean("adm", user.isAdmin());
@@ -40,18 +39,23 @@ public class UserCodec implements Codec<User> {
 			writer.writeEndDocument();
 		}
 
-		if (user.getExtractionToken() == null){
-			writer.writeNull("extractionToken");
-		} else {
-			writer.writeString("extractionToken", user.getExtractionToken());
-		}
-
-		if (user.getExtractionIps().isEmpty()){
-			writer.writeNull("extractionIps");
-		} else {
-			writer.writeStartArray("extractionIps");
-				user.getExtractionIps().forEach(object -> writer.writeString(object.toString()));
-			writer.writeEndArray();
+		if(!user.isExtractionEnabled()){
+			writer.writeNull("extraction");
+		}else{
+			writer.writeStartDocument("extraction");
+				if (user.getExtractionToken() == ""){
+					writer.writeNull("extractionToken");
+				} else {
+					writer.writeString("extractionToken", user.getExtractionToken());
+				}
+				if (user.getExtractionIps().isEmpty()){
+					writer.writeNull("extractionIps");
+				} else {
+					writer.writeStartArray("extractionIps");
+					user.getExtractionIps().forEach(object -> writer.writeString(object.toString()));
+					writer.writeEndArray();
+				}
+			writer.writeEndDocument();
 		}
 
 		writer.writeEndDocument();
@@ -66,19 +70,11 @@ public class UserCodec implements Codec<User> {
 		String password = reader.readString("password");
 		String phone = reader.readString("phone");
 		boolean enable = reader.readBoolean("enable");
-		boolean extraction = reader.readBoolean("extraction");
 		String surname = reader.readString("surname");
 		String name = reader.readString("name");
 		boolean adm = reader.readBoolean("adm");
 		String uuid = reader.readString("uuid");
 		String email = reader.readString("email");
-
-		reader.readStartArray();
-			ArrayList extractionIps = new ArrayList();
-			while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
-				extractionIps.add(reader.readString());
-			}
-		reader.readEndArray();
 
 		String fieldCenterAcronym = "";
 		try{
@@ -89,11 +85,30 @@ public class UserCodec implements Codec<User> {
 			reader.readEndDocument();
 		}
 
+		boolean extraction = false;
 		String extractionToken = "";
+		ArrayList extractionIps = new ArrayList();
 		try{
-			reader.readNull("extractionToken");
+			reader.readNull("extraction");
 		} catch (BsonInvalidOperationException e) {
-			extractionToken = reader.readString("extractionToken");
+			extraction = true;
+			reader.readStartDocument();
+				try{
+					reader.readNull("extractionToken");
+				} catch (BsonInvalidOperationException ef) {
+					extractionToken = reader.readString();
+				}
+
+				try{
+					reader.readNull("extractionIps");
+				} catch (BsonInvalidOperationException ef) {
+					reader.readStartArray();
+					while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
+						extractionIps.add(reader.readString());
+					}
+					reader.readEndArray();
+				}
+			reader.readEndDocument();
 		}
 
 		reader.readEndDocument();
@@ -112,18 +127,18 @@ public class UserCodec implements Codec<User> {
 
 		if(extraction == true) {
 			user.enableExtraction();
+			user.setExtractionToken(extractionToken);
+			user.setExtractionIps(extractionIps);
 		}
 
 		FieldCenter fieldCenter = new FieldCenter();
 		if(!fieldCenterAcronym.isEmpty()) {
 			fieldCenter.setAcronym(fieldCenterAcronym);
 		}
-		user.setExtractionToken(extractionToken);
 		user.setFieldCenter(fieldCenter);
 		user.setName(name);
 		user.setSurname(surname);
 		user.setEmail(email);
-		user.setExtractionIps(extractionIps);
 
 		return user;
 	}
