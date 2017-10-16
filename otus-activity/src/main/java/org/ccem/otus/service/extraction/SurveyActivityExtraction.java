@@ -58,6 +58,7 @@ public class SurveyActivityExtraction implements Extractable {
 		this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.CREATION_DATE.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName());
+		this.headers.add(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getName());
 		this.headers.add(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName());
 
 		/* Answers headers */
@@ -78,11 +79,10 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName());
-		// TODO: 03/10/17 test date type
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate());
-		// TODO: 03/10/17 use enum?
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getUser().getEmail());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
 	}
 
@@ -90,11 +90,11 @@ public class SurveyActivityExtraction implements Extractable {
 		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
 
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
-			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 
 			final String itemCustomID = customIDMap.get(trackingItem.id);
 
 			switch (trackingItem.state){
+				// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 				case "ANSWERED":{
 					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id);
 					ExtractionFill extraction = questionFill.extraction();
