@@ -64,13 +64,13 @@ public class SurveyActivityExtraction implements Extractable {
 
 		/* Answers headers */
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
-			for (String header : surveyItem.getExtractionIDs()) {
-				if (surveyItem instanceof Question) {
-					this.headers.add(header);
-					this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
-					this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
+			if (surveyItem instanceof Question) {
+				for (String header : surveyItem.getExtractionIDs()) {
+						this.headers.add(header);
 				}
 			}
+			this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
+			this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
 		});
 	}
 

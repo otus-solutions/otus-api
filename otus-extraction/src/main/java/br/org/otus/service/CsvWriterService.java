@@ -12,7 +12,7 @@ public class CsvWriterService {
 
 	private static final char DELIMITER = ';';
 	private static final String RECORD_SEPARATOR = "\n";
-
+	
 	private CSVFormat csvFileFormat;
 	private CSVPrinter csvFilePrinter;
 	private ByteArrayOutputStream out;
@@ -20,7 +20,7 @@ public class CsvWriterService {
 	public CsvWriterService() {
 		try {
 			out = new ByteArrayOutputStream();
-			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR);
+			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('"');
 			csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 		} catch (IOException e) {
 			e.printStackTrace();
