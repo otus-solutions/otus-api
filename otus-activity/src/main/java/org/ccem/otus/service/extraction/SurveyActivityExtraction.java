@@ -8,6 +8,7 @@ import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
+import org.ccem.otus.survey.template.item.SurveyItem;
 import org.ccem.otus.survey.template.item.questions.Question;
 
 import java.util.*;
@@ -102,8 +103,8 @@ public class SurveyActivityExtraction implements Extractable {
 					break;
 				}
 				case "SKIPPED":{
-					// TODO: 11/10/17 fill with .p value
-					skippAnswer(itemCustomID);
+					SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(() -> new RuntimeException());// TODO: 16/10/17 create ExtractionExceptions
+					skippAnswer(surveyItem.getExtractionIDs());
 					break;
 				}
 				// TODO: 11/10/17 other states
@@ -124,8 +125,10 @@ public class SurveyActivityExtraction implements Extractable {
 
 	}
 
-	private void skippAnswer(String customID){
+	private void skippAnswer(List<String> extractionIDs){
 		// TODO: 11/10/17 skip on all customIDs (checkbox, grid)
-
+		for (String extractionID : extractionIDs) {
+			this.surveyInformation.replace(extractionID, ".p");
+		}
 	}
 }
