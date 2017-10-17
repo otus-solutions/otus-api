@@ -20,7 +20,7 @@ public class CsvWriterService {
 	public CsvWriterService() {
 		try {
 			out = new ByteArrayOutputStream();
-			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('"');
+			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"');
 			csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 		} catch (IOException e) {
 			e.printStackTrace();
