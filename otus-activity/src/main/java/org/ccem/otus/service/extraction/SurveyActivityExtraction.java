@@ -11,7 +11,6 @@ import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.template.item.SurveyItem;
 import org.ccem.otus.survey.template.item.questions.Question;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class SurveyActivityExtraction implements Extractable {
@@ -110,7 +109,7 @@ public class SurveyActivityExtraction implements Extractable {
 				}
 				default:{ // TODO: 17/10/17 check other possible cases
 					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-					if (questionFill != null){
+					if (questionFill != null){	
 						ExtractionFill extraction = questionFill.extraction();
 						fillQuestionInfo(customIDMap, extraction);
 					}
