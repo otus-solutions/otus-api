@@ -11,6 +11,7 @@ import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.template.item.SurveyItem;
 import org.ccem.otus.survey.template.item.questions.Question;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 public class SurveyActivityExtraction implements Extractable {
@@ -64,12 +65,12 @@ public class SurveyActivityExtraction implements Extractable {
 
 		/* Answers headers */
 		surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
-			for (String header : surveyItem.getExtractionIDs()) {
-				if (surveyItem instanceof Question) {
+			if (surveyItem instanceof Question) {
+				for (String header : surveyItem.getExtractionIDs()) {
 					this.headers.add(header);
-					this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
-					this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
 				}
+				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
+				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
 			}
 		});
 	}
@@ -96,18 +97,25 @@ public class SurveyActivityExtraction implements Extractable {
 
 			switch (trackingItem.state){
 				// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-				case "ANSWERED":{
-					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id);
-					ExtractionFill extraction = questionFill.extraction();
-					fillQuestionInfo(customIDMap, extraction);
-					break;
-				}
 				case "SKIPPED":{
 					SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(() -> new RuntimeException());// TODO: 16/10/17 create ExtractionExceptions
 					skippAnswer(surveyItem.getExtractionIDs());
 					break;
 				}
-				// TODO: 11/10/17 other states
+				case "ANSWERED":{
+					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(() -> new DataNotFoundException());
+					ExtractionFill extraction = questionFill.extraction();
+					fillQuestionInfo(customIDMap, extraction);
+					break;
+				}
+				default:{ // TODO: 17/10/17 check other possible cases
+					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
+					if (questionFill != null){
+						ExtractionFill extraction = questionFill.extraction();
+						fillQuestionInfo(customIDMap, extraction);
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -126,7 +134,6 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	private void skippAnswer(List<String> extractionIDs){
-		// TODO: 11/10/17 skip on all customIDs (checkbox, grid)
 		for (String extractionID : extractionIDs) {
 			this.surveyInformation.replace(extractionID, ".p");
 		}

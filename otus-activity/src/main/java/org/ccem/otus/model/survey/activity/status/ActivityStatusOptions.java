@@ -13,7 +13,6 @@ public enum ActivityStatusOptions {
 
 	private String name;
 
-	// TODO: 04/10/17 does this work?s
 	public String getName() {
 		return name;
 	}

@@ -13,8 +13,7 @@ public class FillContainer {
 		return fillingList;
 	}
 
-	public QuestionFill getQuestionFill(String templateID) throws DataNotFoundException {
-		final Optional<QuestionFill> first = fillingList.stream().filter(questionFill -> questionFill.getQuestionID().equals(templateID)).findFirst();
-		return first.orElseThrow(() -> new DataNotFoundException());
+	public Optional<QuestionFill> getQuestionFill(String templateID) {
+		return fillingList.stream().filter(questionFill -> questionFill.getQuestionID().equals(templateID)).findAny();
 	}
 }
