@@ -23,4 +23,10 @@ public class ExtractionSecurityDaoBean extends MongoGenericDao<Document>  implem
             return User.deserialize(result.toJson());
         }
     }
+
+    @Override
+    public String getExtractionToken(String email) throws DataNotFoundException {
+        Document result = collection.find(eq("email", email)).first();
+        return User.deserialize(result.toJson()).getExtractionToken();
+    }
 }

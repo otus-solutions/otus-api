@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.extraction.ExtractionSecurityService;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -30,6 +31,9 @@ public class UserFacade {
 
 	@Inject
 	private SignupService signupService;
+
+	@Inject
+	private ExtractionSecurityService extractionSecurityService;
 
 	public void create(OtusInitializationConfigDto initializationConfigDto) {
 		try {
@@ -125,6 +129,14 @@ public class UserFacade {
 	public void updateExtractionIps(ManagementUserDto managementUserDto) {
 		try {
 			managementUserService.updateExtractionIps(managementUserDto);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+		}
+	}
+
+	public String getExtractionToken(String email) {
+		try {
+			return extractionSecurityService.getExtractionToken(email);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
 		}

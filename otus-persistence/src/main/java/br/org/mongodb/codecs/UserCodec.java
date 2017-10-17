@@ -39,27 +39,21 @@ public class UserCodec implements Codec<User> {
 			writer.writeEndDocument();
 		}
 
-		if(!user.isExtractionEnabled()){
-			writer.writeNull("extraction");
-		}else{
-			writer.writeStartDocument("extraction");
-				if (user.getExtractionToken() == ""){
-					writer.writeNull("extractionToken");
-				} else {
-					writer.writeString("extractionToken", user.getExtractionToken());
-				}
-				if (user.getExtractionIps().isEmpty()){
-					writer.writeNull("extractionIps");
-				} else {
-					writer.writeStartArray("extractionIps");
-					user.getExtractionIps().forEach(object -> writer.writeString(object.toString()));
-					writer.writeEndArray();
-				}
-			writer.writeEndDocument();
+		writer.writeBoolean("extraction", user.isExtractionEnabled());
+		if (user.getExtractionToken() == ""){
+			writer.writeNull("extractionToken");
+		} else {
+			writer.writeString("extractionToken", user.getExtractionToken());
+		}
+		if (user.getExtractionIps().isEmpty()){
+			writer.writeNull("extractionIps");
+		} else {
+			writer.writeStartArray("extractionIps");
+			user.getExtractionIps().forEach(object -> writer.writeString(object.toString()));
+			writer.writeEndArray();
 		}
 
 		writer.writeEndDocument();
-		
 	}
 
 	@Override
@@ -85,31 +79,26 @@ public class UserCodec implements Codec<User> {
 			reader.readEndDocument();
 		}
 
-		boolean extraction = false;
+		boolean extraction = reader.readBoolean("extraction");
+
 		String extractionToken = "";
+		try{
+			reader.readNull("extractionToken");
+		} catch (BsonInvalidOperationException ef) {
+			extractionToken = reader.readString();
+		}
+
 		ArrayList extractionIps = new ArrayList();
 		try{
-			reader.readNull("extraction");
-		} catch (BsonInvalidOperationException e) {
-			extraction = true;
-			reader.readStartDocument();
-				try{
-					reader.readNull("extractionToken");
-				} catch (BsonInvalidOperationException ef) {
-					extractionToken = reader.readString();
-				}
-
-				try{
-					reader.readNull("extractionIps");
-				} catch (BsonInvalidOperationException ef) {
-					reader.readStartArray();
-					while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
-						extractionIps.add(reader.readString());
-					}
-					reader.readEndArray();
-				}
-			reader.readEndDocument();
+			reader.readNull("extractionIps");
+		} catch (BsonInvalidOperationException ef) {
+			reader.readStartArray();
+			while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
+				extractionIps.add(reader.readString());
+			}
+			reader.readEndArray();
 		}
+
 
 		reader.readEndDocument();
 
