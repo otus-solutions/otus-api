@@ -116,27 +116,28 @@ public class SurveyActivityExtraction implements Extractable {
 
 			final String itemCustomID = customIDMap.get(trackingItem.id);
 
-			switch (trackingItem.state){
-				// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-				case "SKIPPED":{
-					SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(() -> new RuntimeException());// TODO: 16/10/17 create ExtractionExceptions
-					skippAnswer(surveyItem.getExtractionIDs());
-					break;
-				}
-				case "ANSWERED":{
-					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(() -> new DataNotFoundException());
+			switch (trackingItem.state) {
+			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
+			case "SKIPPED": {
+				// TODO: 16/10/17 create ExtractionExceptions
+				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(() -> new RuntimeException());
+				skippAnswer(surveyItem.getExtractionIDs());
+				break;
+			}
+			case "ANSWERED": {
+				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(() -> new DataNotFoundException());
+				ExtractionFill extraction = questionFill.extraction();
+				fillQuestionInfo(customIDMap, extraction);
+				break;
+			}
+			default: { // TODO: 17/10/17 check other possible cases
+				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
+				if (questionFill != null) {
 					ExtractionFill extraction = questionFill.extraction();
 					fillQuestionInfo(customIDMap, extraction);
-					break;
 				}
-				default:{ // TODO: 17/10/17 check other possible cases
-					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-					if (questionFill != null){
-						ExtractionFill extraction = questionFill.extraction();
-						fillQuestionInfo(customIDMap, extraction);
-					}
-					break;
-				}
+				break;
+			}
 			}
 		}
 	}
@@ -154,7 +155,7 @@ public class SurveyActivityExtraction implements Extractable {
 
 	}
 
-	private void skippAnswer(List<String> extractionIDs){
+	private void skippAnswer(List<String> extractionIDs) {
 		for (String extractionID : extractionIDs) {
 			this.surveyInformation.replace(extractionID, ".p");
 		}

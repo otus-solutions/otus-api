@@ -7,12 +7,13 @@ import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
 
 public class CsvWriterService {
 
 	private static final char DELIMITER = ';';
 	private static final String RECORD_SEPARATOR = "\n";
-	
+
 	private CSVFormat csvFileFormat;
 	private CSVPrinter csvFilePrinter;
 	private ByteArrayOutputStream out;
@@ -20,7 +21,7 @@ public class CsvWriterService {
 	public CsvWriterService() {
 		try {
 			out = new ByteArrayOutputStream();
-			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"');
+			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"').withQuoteMode(QuoteMode.ALL);
 			csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 		} catch (IOException e) {
 			e.printStackTrace();
