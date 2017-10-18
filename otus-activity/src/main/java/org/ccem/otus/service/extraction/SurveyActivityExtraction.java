@@ -71,8 +71,8 @@ public class SurveyActivityExtraction implements Extractable {
 				for (String header : surveyItem.getExtractionIDs()) {
 					this.headers.add(header);
 				}
-				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
 				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX);
+				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX);
 			}
 		});
 	}
@@ -150,14 +150,14 @@ public class SurveyActivityExtraction implements Extractable {
 			this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
 		}
 
-		this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
 		this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, filler.getMetadata());
+		this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
 
 	}
 
 	private void skippAnswer(List<String> extractionIDs) {
 		for (String extractionID : extractionIDs) {
-			this.surveyInformation.replace(extractionID, ".p");
+			this.surveyInformation.replace(extractionID, ".p"); // TODO: extrair para uma enumeração!
 		}
 	}
 }
