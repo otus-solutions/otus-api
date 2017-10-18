@@ -85,7 +85,7 @@ public class UserCodecTest {
         verify(writer).writeString("password", PASSWORD);
         verify(writer).writeString("phone", PHONE);
         verify(writer).writeBoolean("enable", ENABLE);
-        verify(writer).writeStartDocument("extraction");
+        verify(writer).writeBoolean("extraction",EXTRACTIONENABLED);
         verify(writer).writeString("surname", SURNAME);
         verify(writer).writeString("name", NAME);
         verify(writer).writeBoolean("adm", ADMIN);

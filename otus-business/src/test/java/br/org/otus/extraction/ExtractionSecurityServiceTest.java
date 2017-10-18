@@ -1,6 +1,7 @@
 package br.org.otus.extraction;
 
 import br.org.otus.model.User;
+import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.doThrow;
 public class ExtractionSecurityServiceTest {
     private static String TOKEN = UUID.randomUUID().toString();
     private static String IP = "192.168.0.1";
+    private static final String EMAIL = "email@email";
 
     @InjectMocks
     private ExtractionSecurityService service;
@@ -36,7 +38,7 @@ public class ExtractionSecurityServiceTest {
     @Test
     public void validateSecurityCredentials_method_should_return_true() throws DataNotFoundException {
         when(extractionSecurityDaoBean.validateSecurityCredentials(TOKEN)).thenReturn(user);
-        assertEquals(service.validateSecurityCredentials(TOKEN,"teste"),true);
+        assertEquals(service.validateSecurityCredentials(TOKEN,IP),true);
     }
 
     @Test
@@ -44,15 +46,27 @@ public class ExtractionSecurityServiceTest {
         when(user.getExtractionIps()).thenReturn(LIST);
         when(LIST.isEmpty()).thenReturn(false);
         when(user.getExtractionIps()).thenReturn(LIST);
-        when(LIST.contains(IP)).thenReturn(true);
+        when(LIST.contains(IP)).thenReturn(false);
         when(extractionSecurityDaoBean.validateSecurityCredentials(TOKEN)).thenReturn(user);
         assertEquals(service.validateSecurityCredentials(TOKEN,IP),false);
     }
 
-    @Test(expected = HttpResponseException.class)
+    @Test(expected = DataNotFoundException.class)
     public void validateSecurityCredentials_method_throw_DataNotFoundException() throws DataNotFoundException {
         doThrow(new DataNotFoundException(new Exception())).when(extractionSecurityDaoBean).validateSecurityCredentials(TOKEN);
         service.validateSecurityCredentials(TOKEN,IP);
+    }
+
+    @Test
+    public void getExtractionToken_method_should_return_extractionToken() throws DataNotFoundException {
+        when(extractionSecurityDaoBean.getExtractionToken(EMAIL)).thenReturn(TOKEN);
+        assertEquals(service.getExtractionToken(EMAIL),TOKEN);
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void getExtractionToken_method_throw_DataNotFoundException() throws DataNotFoundException {
+        doThrow(new DataNotFoundException(new Exception())).when(extractionSecurityDaoBean).getExtractionToken(EMAIL);
+        service.getExtractionToken(EMAIL);
     }
 
 }

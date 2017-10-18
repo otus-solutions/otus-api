@@ -8,6 +8,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.extraction.ExtractionSecurityService;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -28,11 +29,15 @@ import br.org.otus.user.dto.SignupDataDto;
 import br.org.otus.user.management.ManagementUserService;
 import br.org.otus.user.signup.SignupService;
 
+import javax.inject.Inject;
+
 @RunWith(PowerMockRunner.class)
 public class UserFacadeTest {
 	private static final String EMAIL = "otus@otus.com";
 	@InjectMocks
 	private UserFacade userFacade;
+	@Mock
+	private ExtractionSecurityService extractionSecurityService;
 	@Mock
 	private EmailNotifierService emailNotifierService;
 	@Mock
@@ -274,6 +279,20 @@ public class UserFacadeTest {
 			throws ValidationException, DataNotFoundException {
 		doThrow(new DataNotFoundException()).when(managementUserService).updateExtractionIps(managementUserDto);
 		userFacade.updateExtractionIps(managementUserDto);
+	}
+
+	@Test
+	public void method_getExtractionToken_should_check_evocation_of_getExtractionToken_by_extractionSecurityService()
+			throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		userFacade.getExtractionToken(EMAIL);
+		verify(extractionSecurityService).getExtractionToken(EMAIL);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_getExtractionToken_should_throw_HttpResponseException_if_caught_DataNotFoundException()
+			throws ValidationException, DataNotFoundException {
+		doThrow(new DataNotFoundException()).when(extractionSecurityService).getExtractionToken(EMAIL);
+		userFacade.getExtractionToken(EMAIL);
 	}
 
 	@Test

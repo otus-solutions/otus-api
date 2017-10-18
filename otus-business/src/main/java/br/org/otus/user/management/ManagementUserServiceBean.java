@@ -91,19 +91,22 @@ public class ManagementUserServiceBean implements ManagementUserService {
             User user = fetchByEmail(managementUserDto.getEmail());
             user.disableExtraction();
             userDao.update(user);
-
         } else {
             throw new ValidationException();
         }
     }
 
     @Override
-    public void updateExtractionIps(ManagementUserDto managementUserDto) throws DataNotFoundException {
-        User user = fetchByEmail(managementUserDto.getEmail());
-        if(!managementUserDto.extractionIps.isEmpty()) {
-            user.setExtractionIps(managementUserDto.extractionIps);
+    public void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
+        if (managementUserDto.isValid()) {
+            User user = fetchByEmail(managementUserDto.getEmail());
+            if(!managementUserDto.extractionIps.isEmpty()) {
+                user.setExtractionIps(managementUserDto.extractionIps);
+            }
+            userDao.update(user);
+        } else {
+            throw new ValidationException();
         }
-        userDao.update(user);
     }
 
     @Override

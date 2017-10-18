@@ -21,11 +21,14 @@ import br.org.otus.user.UserDaoBean;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.owail.sender.email.Sender;
 
+import java.util.ArrayList;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ManagementUserServiceBean.class})
 public class ManagementUserServiceBeanTest {
-
     private static final String EMAIL = "email@email";
+    private static String IP = "192.168.0.1";
+
     @InjectMocks
     private ManagementUserServiceBean managementUserServiceBean;
 
@@ -217,10 +220,27 @@ public class ManagementUserServiceBeanTest {
         Mockito.verify(userDao).update(user);
     }
 
-
     @Test(expected = ValidationException.class)
     public void method_disableExtraction_should_throw_ValidationException_when_dto_invalid() throws ValidationException, DataNotFoundException {
         Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
         managementUserServiceBean.disableExtraction(managementUserDto);
     }
+
+    @Test
+    public void method_updateExtractionIps_should_update_user() throws ValidationException, DataNotFoundException {
+        Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
+        Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
+        Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
+        managementUserDto.extractionIps = new ArrayList();
+        managementUserDto.extractionIps.add(IP);
+        managementUserServiceBean.updateExtractionIps(managementUserDto);
+        Mockito.verify(userDao).update(user);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void method_updateExtractionIps_should_throw_ValidationException_when_dto_invalid() throws ValidationException, DataNotFoundException {
+        Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
+        managementUserServiceBean.updateExtractionIps(managementUserDto);
+    }
+
 }
