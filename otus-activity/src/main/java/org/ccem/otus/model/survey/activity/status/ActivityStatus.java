@@ -11,10 +11,6 @@ public class ActivityStatus {
 	private LocalDateTime date;
 	private User user;
 
-	public ActivityStatus() {
-		this.user = new User();
-	}
-
 	public String getObjectType() {
 		return objectType;
 	}

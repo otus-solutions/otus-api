@@ -5,12 +5,15 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
+import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.template.item.SurveyItem;
 import org.ccem.otus.survey.template.item.questions.Question;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class SurveyActivityExtraction implements Extractable {
@@ -78,13 +81,32 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getName(), surveyActivity.getParticipantData().getRecruitmentNumber());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getName(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getName(), surveyActivity.getMode());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), surveyActivity.getLastInterview().getInterviewer().getEmail());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), surveyActivity.getCurrentStatus().getName());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), surveyActivity.getCurrentStatus().getDate());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).getDate());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getDate());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).getUser().getEmail());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).getDate());
+
+		final Interview lastInterview = surveyActivity.getLastInterview().orElse(null);
+		final String interviewerEmail = lastInterview != null ? lastInterview.getInterviewer().getEmail() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getName(), interviewerEmail);
+
+		final ActivityStatus currentActivityStatus = surveyActivity.getCurrentStatus().orElse(null);
+		final String currentStatus = currentActivityStatus != null ? currentActivityStatus.getName() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getName(), currentStatus);
+
+		final LocalDateTime currentStatusDate = (currentActivityStatus != null) ? currentActivityStatus.getDate() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getName(), currentStatusDate);
+
+		final ActivityStatus creationStatus = surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).orElse(null);
+		final LocalDateTime creationTime = (creationStatus != null) ? creationStatus.getDate() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getName(), creationTime);
+
+		final ActivityStatus paperStatus = surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).orElse(null);
+		final LocalDateTime paperRealizationDate = (paperStatus != null) ? paperStatus.getDate() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getName(), paperRealizationDate);
+
+		final String paperInterviewer = (paperStatus != null) ? paperStatus.getUser().getEmail() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getName(), paperInterviewer);
+
+		final ActivityStatus finalizedStatus = surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).orElse(null);
+		final LocalDateTime lastFinalizationDate = (finalizedStatus != null) ? finalizedStatus.getDate() : null;
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getName(), lastFinalizationDate);
 	}
 
 	private void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
@@ -109,7 +131,7 @@ public class SurveyActivityExtraction implements Extractable {
 				}
 				default:{ // TODO: 17/10/17 check other possible cases
 					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-					if (questionFill != null){	
+					if (questionFill != null){
 						ExtractionFill extraction = questionFill.extraction();
 						fillQuestionInfo(customIDMap, extraction);
 					}

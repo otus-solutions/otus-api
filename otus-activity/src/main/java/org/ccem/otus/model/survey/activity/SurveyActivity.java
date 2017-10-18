@@ -1,7 +1,7 @@
 package org.ccem.otus.model.survey.activity;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
@@ -80,20 +80,19 @@ public class SurveyActivity {
 		return navigationTracker;
 	}
 
-	public ActivityStatus getCurrentStatus() {
-		return this.statusHistory.get(this.statusHistory.size()-1);
+	public Optional<ActivityStatus> getCurrentStatus() {
+		return this.statusHistory.stream().reduce((activityStatus, activityStatus2) -> activityStatus2);
 	}
 
-	public ActivityStatus getLastStatusByName(String name) {
-		List<ActivityStatus> activityStatuses = statusHistory.stream()
+	public Optional<ActivityStatus> getLastStatusByName(String name) {
+		return statusHistory.stream()
 				.filter(status -> status.getName().equals(name))
-				.collect(Collectors.toList());
-		if (activityStatuses.size() > 0) return activityStatuses.get(activityStatuses.size()-1);
-		else return new ActivityStatus();
+				.reduce((activityStatus, activityStatus2) -> activityStatus2);
 	}
 
-	public Interview getLastInterview(){
-		return this.interviews.get(this.interviews.size()-1);
+	public Optional<Interview> getLastInterview(){
+		return this.interviews.stream().reduce((interview, interview2) -> interview2);
+
 	}
 
 	public static String serialize(SurveyActivity surveyActivity) {
