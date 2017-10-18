@@ -70,12 +70,12 @@ public class SurveyActivityExtractionRecordsFactory {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 			case "SKIPPED": {
 				// TODO: 16/10/17 create ExtractionExceptions
-				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(() -> new RuntimeException());
+				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
 				skippAnswer(surveyItem.getExtractionIDs());
 				break;
 			}
 			case "ANSWERED": {
-				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(() -> new DataNotFoundException());
+				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
 				ExtractionFill extraction = questionFill.extraction();
 				fillQuestionInfo(customIDMap, extraction);
 				break;
