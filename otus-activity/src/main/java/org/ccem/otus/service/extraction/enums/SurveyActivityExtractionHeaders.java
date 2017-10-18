@@ -5,7 +5,7 @@ public enum SurveyActivityExtractionHeaders {
 	RECRUITMENT_NUMBER("recruitment_number"),
 	ACRONYM("acronym"),
 	CATEGORY("category"),
-	TYPE("type"),
+	TYPE("type"), // TODO: utilizado para extração?
 	INTERVIEWER("interviewer"),
 	CURRENT_STATUS("current_status"),
 	CURRENT_STATUS_DATE("current_status_date"),
@@ -13,26 +13,25 @@ public enum SurveyActivityExtractionHeaders {
 	PAPER_REALIZATION_DATE("paper_realization_date"),
 	PAPER_INTERVIEWER("paper_interviewer"),
 	LAST_FINALIZATION_DATE("last_finalization_date"),
-
 	QUESTION_COMMENT_SUFFIX("_comment"),
 	QUESTION_METADATA_SUFFIX("_metadata");
 
-	private final String name;
+	private final String value;
 
-	public String getName() {
-		return name;
+	public String getValue() {
+		return value;
 	}
 
 	private SurveyActivityExtractionHeaders(String s) {
-		name = s;
+		value = s;
 	}
 
-	public boolean equalsName(String otherName) {
-		return name.equals(otherName);
+	public boolean equalsName(String otherValue) {
+		return value.equals(otherValue);
 	}
 
 	public String toString() {
-		return this.name;
+		return this.value;
 	}
 
 }
