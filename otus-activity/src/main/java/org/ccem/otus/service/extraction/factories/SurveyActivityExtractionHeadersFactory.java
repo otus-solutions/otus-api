@@ -13,6 +13,7 @@ public class SurveyActivityExtractionHeadersFactory {
 	private LinkedHashSet<String> headers;
 
 	public SurveyActivityExtractionHeadersFactory(List<SurveyActivity> surveyActivities) {
+		this.surveyActivities = surveyActivities;
 		this.headers = new LinkedHashSet<String>();
 	}
 
@@ -26,6 +27,7 @@ public class SurveyActivityExtractionHeadersFactory {
 		this.headers.add(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.ACRONYM.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.CATEGORY.getValue());
+		this.headers.add(SurveyActivityExtractionHeaders.TYPE.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.INTERVIEWER.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getValue());

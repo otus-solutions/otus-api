@@ -19,6 +19,9 @@ import org.ccem.otus.survey.template.item.SurveyItem;
 
 public class SurveyActivityExtractionRecordsFactory {
 
+	private static final String SKIPPED = "SKIPPED";
+	private static final String ANSWERED = "ANSWERED";
+
 	private LinkedHashMap<String, Object> surveyInformation;
 
 	public SurveyActivityExtractionRecordsFactory() {
@@ -68,13 +71,13 @@ public class SurveyActivityExtractionRecordsFactory {
 
 			switch (trackingItem.state) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-			case "SKIPPED": {
+			case SKIPPED: {
 				// TODO: 16/10/17 create ExtractionExceptions
 				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
 				skippAnswer(surveyItem.getExtractionIDs());
 				break;
 			}
-			case "ANSWERED": {
+			case ANSWERED: {
 				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
 				ExtractionFill extraction = questionFill.extraction();
 				fillQuestionInfo(customIDMap, extraction);

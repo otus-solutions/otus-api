@@ -19,6 +19,7 @@ public class SurveyActivityExtraction implements Extractable {
 	private SurveyActivityExtractionRecordsFactory recordsFactory;
 
 	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
+		this.surveyActivities = surveyActivities;
 		this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyActivities);
 		this.recordsFactory = new SurveyActivityExtractionRecordsFactory();
 	}
