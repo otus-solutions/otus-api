@@ -3,12 +3,14 @@ package br.org.otus.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.hamcrest.CoreMatchers;
 
 public class CsvWriterServiceTest {
 
-	private static final String RECORD = "id;nome;idade"+"\n"+"1;Emanoel;23";
+	private static final String RECORD = "\"id\";\"name\";\"age\"" + "\n" + "\"1\";\"Emanoel\";\"23\"" + "\n";
 
 	private CsvWriterService service;
 
@@ -21,8 +23,8 @@ public class CsvWriterServiceTest {
 		service = new CsvWriterService();
 		headers = new ArrayList<String>();
 		headers.add("id");
-		headers.add("nome");
-		headers.add("idade");
+		headers.add("name");
+		headers.add("age");
 
 		record = new ArrayList<Object>();
 		record.add(1);
@@ -34,9 +36,38 @@ public class CsvWriterServiceTest {
 	}
 
 	@Test
-	public void should_return() {
-		service.write(headers, values);
-		service.getResult().equals(RECORD);
-		//Assert.assertEquals(RECORD, service.getResult());
+	public void should_return_an_array_of_bytes() {
+		service.write(this.headers, this.values);
+
+		Assert.assertTrue(service.getResult() instanceof byte[]);
 	}
+
+	@Test
+	public void should_return_result_containing_headers() {
+		service.write(this.headers, this.values);
+		String result = new String(service.getResult());
+
+		Assert.assertThat(result, CoreMatchers.containsString("id"));
+		Assert.assertThat(result, CoreMatchers.containsString("name"));
+		Assert.assertThat(result, CoreMatchers.containsString("age"));
+	}
+
+	@Test
+	public void should_return_result_containing_records() {
+		service.write(this.headers, this.values);
+		String result = new String(service.getResult());
+
+		Assert.assertThat(result, CoreMatchers.containsString("1"));
+		Assert.assertThat(result, CoreMatchers.containsString("Emanoel"));
+		Assert.assertThat(result, CoreMatchers.containsString("23"));
+	}
+
+	@Test
+	public void should_return_the_result_as_the_record() {
+		service.write(this.headers, this.values);
+		String result = new String(service.getResult());
+
+		Assert.assertEquals(RECORD, result);
+	}
+
 }
