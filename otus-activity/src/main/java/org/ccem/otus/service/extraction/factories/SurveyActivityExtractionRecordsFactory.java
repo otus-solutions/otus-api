@@ -80,12 +80,17 @@ public class SurveyActivityExtractionRecordsFactory {
 				fillQuestionInfo(customIDMap, extraction);
 				break;
 			}
-			default: { // TODO: 17/10/17 check other possible cases
+			case "NOT_VISITED":
+			case "IGNORED":
+			case "VISITED":{
 				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-				if (questionFill != null) {
+				if (questionFill != null){
 					ExtractionFill extraction = questionFill.extraction();
 					fillQuestionInfo(customIDMap, extraction);
 				}
+				break;
+			}
+			default:{ // TODO: 17/10/17 check other possible cases
 				break;
 			}
 			}
