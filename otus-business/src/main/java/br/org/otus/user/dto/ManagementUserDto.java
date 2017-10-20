@@ -5,12 +5,20 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import br.org.tutty.Equalization;
 
+import java.util.ArrayList;
+
 public class ManagementUserDto implements Dto {
     @Equalization(name = "name")
     public String name;
 
     @Equalization(name = "surname")
     public String surname;
+
+    @Equalization(name = "extraction")
+    public Boolean extraction;
+
+    @Equalization(name = "extraction_ips")
+    public ArrayList extractionIps;
 
     @Equalization(name = "phone")
     public String phone;
