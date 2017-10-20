@@ -29,11 +29,12 @@ public class SurveyActivityExtractionRecordsFactory {
 	}
 
 	public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), surveyActivity.getParticipantData().getRecruitmentNumber());
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(),
+				surveyActivity.getParticipantData().getRecruitmentNumber());
+		this.getSurveyInformation()
+				.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
 		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), surveyActivity.getMode());
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.TYPE.getValue(), "");
-		
+
 		final Interview lastInterview = surveyActivity.getLastInterview().orElse(null);
 		final String interviewerEmail = lastInterview != null ? lastInterview.getInterviewer().getEmail() : null;
 		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.INTERVIEWER.getValue(), interviewerEmail);
@@ -60,32 +61,39 @@ public class SurveyActivityExtractionRecordsFactory {
 		final LocalDateTime lastFinalizationDate = (finalizedStatus != null) ? finalizedStatus.getDate() : null;
 		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue(), lastFinalizationDate);
 	}
-	
+
 	public void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
 		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
+
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
+
 			final String itemCustomID = customIDMap.get(trackingItem.id);
 
 			switch (trackingItem.state) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 			case SKIPPED: {
 				// TODO: 16/10/17 create ExtractionExceptions
-				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(() -> new RuntimeException());
-				this.skippAnswer(surveyItem.getExtractionIDs());
+				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
+				skippAnswer(surveyItem.getExtractionIDs());
 				break;
 			}
 			case ANSWERED: {
-				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(() -> new DataNotFoundException());
+				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
 				ExtractionFill extraction = questionFill.extraction();
-				this.fillQuestionInfo(customIDMap, extraction);
+				fillQuestionInfo(customIDMap, extraction);
 				break;
 			}
-			default: { // TODO: 17/10/17 check other possible cases
+			case "NOT_VISITED":
+			case "IGNORED":
+			case "VISITED":{
 				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-				if (questionFill != null) {
+				if (questionFill != null){
 					ExtractionFill extraction = questionFill.extraction();
 					fillQuestionInfo(customIDMap, extraction);
 				}
+				break;
+			}
+			default:{ // TODO: 17/10/17 check other possible cases
 				break;
 			}
 			}

@@ -39,9 +39,7 @@ public class SurveyActivityExtractionHeadersFactory {
 		/* Answers headers */
 		this.surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
 			if (surveyItem instanceof Question) {
-				for (String header : surveyItem.getExtractionIDs()) {
-					this.headers.add(header);
-				}
+				this.headers.addAll(surveyItem.getExtractionIDs());
 				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX.getValue());
 				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX.getValue());
 			}
