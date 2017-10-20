@@ -5,7 +5,7 @@ public enum SurveyActivityExtractionHeaders {
 	RECRUITMENT_NUMBER("recruitment_number"),
 	ACRONYM("acronym"),
 	CATEGORY("category"),
-	TYPE("type"), // TODO: utilizado para extração?
+	TYPE("type"),
 	INTERVIEWER("interviewer"),
 	CURRENT_STATUS("current_status"),
 	CURRENT_STATUS_DATE("current_status_date"),
