@@ -12,11 +12,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.response.exception.HttpResponseException;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FieldCenterFacadeTest {
 	private static final String FIELDCENTER_ACRONYM = "SP";
 	private static final String FIELDCENTER_NAME = "Sao Paulo";

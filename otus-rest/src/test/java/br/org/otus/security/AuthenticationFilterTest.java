@@ -14,13 +14,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.security.services.SecurityContextService;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AuthenticationFilterTest {
-
 	@InjectMocks
 	private AuthenticationFilter authenticationFilter;
 	@Mock

@@ -13,17 +13,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 
 import br.org.otus.response.exception.HttpResponseException;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ActivityFacadeTest {
 	private static final long RECRUITMENT_NUMBER = 5112345;
 	private static final String SURVEYACTIVITY_ID = "587723451798";
 	private static final String SURVEYACTIVITY_EXCEPTION = "notExist";
+	private static final String JSON = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
 	@Mock
 	private SurveyActivity surveyActivityInvalid;
 	@Mock
@@ -33,12 +34,11 @@ public class ActivityFacadeTest {
 	@Mock
 	private SurveyActivity surveyActivity;
 	private SurveyActivity surveyActivityFull;
-	private String json;
+	
 
 	@Before
 	public void setUp() {
-		json = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
-		surveyActivityFull = new Gson().fromJson(json, SurveyActivity.class);
+		surveyActivityFull = new Gson().fromJson(JSON, SurveyActivity.class);
 	}
 
 	@Test

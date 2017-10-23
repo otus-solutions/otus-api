@@ -1,24 +1,110 @@
 package br.org.otus.extraction;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.response.info.Authorization;
+import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.Secured;
+import br.org.otus.security.context.SecurityContext;
+import br.org.otus.user.api.UserFacade;
+import br.org.otus.user.dto.ManagementUserDto;
+
 @Path("extraction")
-public class ExtractionResource {
+public class ExtractionResource implements ContainerRequestFilter {
 
 	@Inject
+	private UserFacade userFacade;
+	@Inject
 	private ExtractionFacade extractionFacade;
+	@Inject
+	private SecurityContext securityContext;
+	@Inject
+	private ExtractionSecurityService extractionSecurityService;
+
+	private Boolean authorization;
 
 	@GET
-	//@Secured
+	// @Secured
+	@SecuredExtraction
 	@Path("/activity/{acronym}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public byte[] extractActivities(@PathParam("acronym") String acronym) {
-		return extractionFacade.createActivityExtraction(acronym);
+	public byte[] extractActivities(@PathParam("acronym") String acronym) throws AuthorizationFailedException {
+		if (authorization) {
+			return extractionFacade.createActivityExtraction(acronym);
+		} else {
+			return null;
+		}
 	}
 
+	@POST
+	@Secured
+	@Path("/enable")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String enableUsers(ManagementUserDto managementUserDto) {
+		Response response = new Response();
+		userFacade.enableExtraction(managementUserDto);
+		return response.buildSuccess().toJson();
+	}
+
+	@POST
+	@Secured
+	@Path("/disable")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String disableUsers(ManagementUserDto managementUserDto) {
+		Response response = new Response();
+		userFacade.disableExtraction(managementUserDto);
+		return response.buildSuccess().toJson();
+	}
+
+	@POST
+	@Secured
+	@Path("/enable-ips")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String enableIps(ManagementUserDto managementUserDto) {
+		Response response = new Response();
+		userFacade.updateExtractionIps(managementUserDto);
+		return response.buildSuccess().toJson();
+	}
+
+	@GET
+	@Secured
+	@Path("/extraction-token")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getToken(@Context HttpServletRequest request) {
+		Response response = new Response();
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+		String extractionToken = userFacade.getExtractionToken(userEmail);
+		return response.buildSuccess(extractionToken).toJson();
+	}
+
+	@Override
+	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+		String authorizationToken = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+		String authorizationIp = containerRequestContext.getHeaderString(HttpHeaders.HOST);
+
+		try {
+			authorization = extractionSecurityService.validateSecurityCredentials(authorizationToken, authorizationIp);
+		} catch (Exception e) {
+			containerRequestContext.abortWith(Authorization.build().toResponse());
+		}
+	}
 }

@@ -3,6 +3,7 @@ package br.org.otus.model;
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.ccem.otus.model.FieldCenter;
@@ -17,7 +18,7 @@ public class User {
 
 	@Equalization(name = "enable")
 	private Boolean enable;
-	
+
 	@Equalization(name = "fieldCenter")
 	private FieldCenter fieldCenter;
 	
@@ -38,17 +39,32 @@ public class User {
 
 	@Equalization(name = "code")
 	private Integer code;
+	
+	@Equalization(name = "extraction")
+	private Boolean extraction;
 
+	@Equalization(name = "extraction_token")
+	private String extractionToken;
+
+	@Equalization(name = "extraction_ips")
+	private ArrayList extractionIps;
+	
 	public User() {
 		this.uuid = UUID.randomUUID();
+		this.extractionToken = "";
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
+		this.extraction = Boolean.FALSE;
+		this.extractionIps = new ArrayList();
 	}
 	
 	public User(UUID uuid) {
 		this.uuid = uuid;
+		this.extractionToken = "";
 		this.adm = Boolean.FALSE;
 		this.enable = Boolean.FALSE;
+		this.extraction = Boolean.FALSE;
+		this.extractionIps = new ArrayList();
 	}
 
 	public void enable() {
@@ -57,6 +73,16 @@ public class User {
 
 	public void disable() {
 		this.enable = Boolean.FALSE;
+	}
+
+	public void enableExtraction() {
+		this.extraction = Boolean.TRUE;
+		this.extractionToken = UUID.randomUUID().toString();
+	}
+
+	public void disableExtraction() {
+		this.extraction = Boolean.FALSE;
+		this.extractionToken = "";
 	}
 
 	public void becomesAdm() {
@@ -88,10 +114,22 @@ public class User {
 		return password;
 	}
 
+	public ArrayList getExtractionIps() {
+		return extractionIps;
+	}
+
+	public String getExtractionToken() {
+		return extractionToken;
+	}
+
 	public Boolean isEnable() {
 		return enable;
 	}
-	
+
+	public Boolean isExtractionEnabled() {
+		return extraction;
+	}
+
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -125,6 +163,10 @@ public class User {
 		this.name = name;
 	}
 
+	public void setExtractionIps(ArrayList extractionIps) {
+		this.extractionIps = extractionIps;
+	}
+
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
@@ -139,6 +181,10 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void setExtractionToken(String ExtractionToken) {
+		this.extractionToken = ExtractionToken;
 	}
 
 	public static String serialize(User user) {

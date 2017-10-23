@@ -49,7 +49,6 @@ public class DataSourceResourceTest {
 	public void method_post_should_return_reponse_buildSucess() throws Exception {
 		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
 		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
-		
 		assertEquals(dataSourceResource.post(form), new Response().buildSuccess().toJson());
 		verify(dataSourceFacade).create(dataSource);
 	}
@@ -57,7 +56,6 @@ public class DataSourceResourceTest {
 	@Test
 	public void method_getAll_should_return_dataSourceList() {
 		when(dataSourceFacade.getAll()).thenReturn(dataSourceList);
-		
 		assertEquals(new Response().buildSuccess(dataSourceFacade.getAll()).toJson(), dataSourceResource.getAll());
 		verify(dataSourceFacade, times(2)).getAll();
 	}
@@ -66,7 +64,6 @@ public class DataSourceResourceTest {
 	public void method_getByID_return_Response_fills_if_id_isValid() {
 		idValid = "medicamentos_contraceptivos_hormonais";
 		when(dataSourceFacade.getByID(idValid)).thenReturn(dataSource);
-		
 		assertEquals(new Response().buildSuccess(dataSourceFacade.getByID(idValid)).toJson(),
 				dataSourceResource.getByID(idValid));
 		verify(dataSourceFacade, times(2)).getByID(idValid);

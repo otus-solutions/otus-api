@@ -18,7 +18,13 @@ public interface ManagementUserService {
 
     void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
+    void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
+
+    void disableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
+
     void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException;
+
+    void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 
     Boolean isUnique(String emailToVerify);
 }
