@@ -67,8 +67,6 @@ public class SurveyActivityExtractionRecordsFactory {
 
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
 
-			final String itemCustomID = customIDMap.get(trackingItem.id);
-
 			switch (trackingItem.state) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 			case SKIPPED: {
@@ -91,9 +89,6 @@ public class SurveyActivityExtractionRecordsFactory {
 					ExtractionFill extraction = questionFill.extraction();
 					fillQuestionInfo(customIDMap, extraction);
 				}
-				break;
-			}
-			default:{ // TODO: 17/10/17 check other possible cases
 				break;
 			}
 			}

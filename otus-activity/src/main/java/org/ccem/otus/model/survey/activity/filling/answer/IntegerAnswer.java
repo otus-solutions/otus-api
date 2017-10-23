@@ -7,9 +7,9 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 
 public class IntegerAnswer extends AnswerFill {
 
-	private Integer value;
+	private Long value;
 
-	public Integer getValue() {
+	public Long getValue() {
 		return value;
 	}
 
