@@ -1,7 +1,5 @@
 package org.ccem.otus.model.survey.activity.filling;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import java.util.List;
 import java.util.Optional;
 
