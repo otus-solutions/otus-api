@@ -34,8 +34,8 @@ public class ExtractionResource {
 
 	@GET
 	@SecuredExtraction
-	@Path("/activity/{acronym}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Path("/activity/{acronym}")
 	public byte[] extractActivities(@PathParam("acronym") String acronym) throws ExtractionNotAuthorizedException {
 		return extractionFacade.createActivityExtraction(acronym);
 	}
