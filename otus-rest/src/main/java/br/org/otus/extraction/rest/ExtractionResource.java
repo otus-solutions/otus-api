@@ -1,6 +1,4 @@
-package br.org.otus.extraction;
-
-import java.io.IOException;
+package br.org.otus.extraction.rest;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -10,13 +8,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.response.info.Authorization;
+import br.org.otus.extraction.ExtractionNotAuthorizedException;
+import br.org.otus.extraction.ExtractionFacade;
+import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
@@ -25,7 +23,7 @@ import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
 
 @Path("extraction")
-public class ExtractionResource implements ContainerRequestFilter {
+public class ExtractionResource {
 
 	@Inject
 	private UserFacade userFacade;
@@ -33,22 +31,13 @@ public class ExtractionResource implements ContainerRequestFilter {
 	private ExtractionFacade extractionFacade;
 	@Inject
 	private SecurityContext securityContext;
-	@Inject
-	private ExtractionSecurityService extractionSecurityService;
-
-	private Boolean authorization;
 
 	@GET
-	// @Secured
 	@SecuredExtraction
 	@Path("/activity/{acronym}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public byte[] extractActivities(@PathParam("acronym") String acronym) throws AuthorizationFailedException {
-		if (authorization) {
-			return extractionFacade.createActivityExtraction(acronym);
-		} else {
-			return null;
-		}
+	public byte[] extractActivities(@PathParam("acronym") String acronym) throws ExtractionNotAuthorizedException {
+		return extractionFacade.createActivityExtraction(acronym);
 	}
 
 	@POST
@@ -96,15 +85,4 @@ public class ExtractionResource implements ContainerRequestFilter {
 		return response.buildSuccess(extractionToken).toJson();
 	}
 
-	@Override
-	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		String authorizationToken = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-		String authorizationIp = containerRequestContext.getHeaderString(HttpHeaders.HOST);
-
-		try {
-			authorization = extractionSecurityService.validateSecurityCredentials(authorizationToken, authorizationIp);
-		} catch (Exception e) {
-			containerRequestContext.abortWith(Authorization.build().toResponse());
-		}
-	}
 }

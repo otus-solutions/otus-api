@@ -4,10 +4,9 @@ import br.org.otus.configuration.datasource.DataSourceResource;
 import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
-import br.org.otus.extraction.ExtractionResource;
+import br.org.otus.extraction.rest.ExtractionResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
-
 import br.org.otus.importation.ParticipantImportationResource;
 import br.org.otus.laboratory.ParticipantLaboratoryResource;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
@@ -21,6 +20,7 @@ import br.org.otus.user.UserResource;
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+
 import java.util.HashSet;
 import java.util.Set;
 
