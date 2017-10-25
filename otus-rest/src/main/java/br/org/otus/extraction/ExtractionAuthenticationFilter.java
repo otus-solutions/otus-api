@@ -10,7 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
 
-import br.org.otus.response.info.Authorization;
+import br.org.otus.response.info.ExtractionNotAuthorized;
 
 @Provider
 @SecuredExtraction
@@ -30,12 +30,12 @@ public class ExtractionAuthenticationFilter implements ContainerRequestFilter {
 			Boolean authorization = extractionSecurityService.validateSecurityCredentials(authorizationToken, ipAddress);
 			validateAuthorization(authorization);
 		} catch (Exception e) {
-			containerRequestContext.abortWith(Authorization.build().toResponse());
+			containerRequestContext.abortWith(ExtractionNotAuthorized.build().toResponse());
 		}
 	}
 
 	private void validateAuthorization(Boolean authorization) throws Exception {
-		if(!Boolean.TRUE.equals(authorization)) {			
+		if (!Boolean.TRUE.equals(authorization)) {
 			throw new Exception("Extraction not authorized");
 		}
 	}
