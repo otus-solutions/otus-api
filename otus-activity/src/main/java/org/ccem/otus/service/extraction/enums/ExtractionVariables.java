@@ -1,9 +1,10 @@
 package org.ccem.otus.service.extraction.enums;
 
 public enum ExtractionVariables {
-	//TODO: Rever quais desses variaveis precisam estar aqui!
-	POINT_P(".P"),
-	POINT_F(".F");
+	SKIPPED_ANSWER(".P"),
+	NOT_VISITED(""),
+	IGNORED(""),
+	VISITED("");
 
 	private final String value;
 

@@ -19,13 +19,10 @@ import org.ccem.otus.survey.template.item.SurveyItem;
 
 public class SurveyActivityExtractionRecordsFactory {
 
-	private static final String SKIPPED = "SKIPPED";
-	private static final String ANSWERED = "ANSWERED";
-
 	private LinkedHashMap<String, Object> surveyInformation;
 
 	public SurveyActivityExtractionRecordsFactory() {
-		this.surveyInformation = new LinkedHashMap<String, Object>();
+		this.surveyInformation = new LinkedHashMap<>();
 	}
 
 	public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
@@ -68,34 +65,32 @@ public class SurveyActivityExtractionRecordsFactory {
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
 
 			switch (trackingItem.state) {
-			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-			case SKIPPED: {
-				// TODO: 16/10/17 create ExtractionExceptions
-				SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
-				skippAnswer(surveyItem.getExtractionIDs());
-				break;
-			}
-			case ANSWERED: {
-				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
-				ExtractionFill extraction = questionFill.extraction();
-				fillQuestionInfo(customIDMap, extraction);
-				break;
-			}
-			case "NOT_VISITED":
-			case "IGNORED":
-			case "VISITED":{
-				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-				if (questionFill != null){
-					ExtractionFill extraction = questionFill.extraction();
-					fillQuestionInfo(customIDMap, extraction);
+				case "SKIPPED": { // TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
+					SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new); // TODO: 16/10/17 create ExtractionExceptions
+					skippAnswer(surveyItem.getExtractionIDs());
+					break;
 				}
-				break;
-			}
+				case "ANSWERED": {
+					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new); // TODO: 16/10/17 create ExtractionExceptions
+					ExtractionFill extraction = questionFill.extraction();
+					fillAnswerInfo(customIDMap, extraction);
+					break;
+				}
+				case "NOT_VISITED":
+				case "IGNORED":
+				case "VISITED": {
+					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
+					if (questionFill != null) {
+						ExtractionFill extraction = questionFill.extraction();
+						fillAnswerInfo(customIDMap, extraction);
+					}
+					break;
+				}
 			}
 		}
 	}
 
-	private void fillQuestionInfo(Map<String, String> customIDMap, ExtractionFill filler) {
+	private void fillAnswerInfo(Map<String, String> customIDMap, ExtractionFill filler) {
 		final String answerCustomID = customIDMap.get(filler.getQuestionID());
 
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
@@ -110,7 +105,7 @@ public class SurveyActivityExtractionRecordsFactory {
 
 	private void skippAnswer(List<String> extractionIDs) {
 		for (String extractionID : extractionIDs) {
-			this.getSurveyInformation().replace(extractionID, ExtractionVariables.POINT_P.getValue());
+			this.getSurveyInformation().replace(extractionID, ExtractionVariables.SKIPPED_ANSWER.getValue());
 		}
 	}
 
