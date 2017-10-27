@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -16,6 +17,8 @@ import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.ExtractionVariables;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.template.item.SurveyItem;
+import org.ccem.otus.survey.template.item.questions.Question;
+import org.ccem.otus.survey.template.item.questions.metadata.MetadataOption;
 
 public class SurveyActivityExtractionRecordsFactory {
 
@@ -63,17 +66,17 @@ public class SurveyActivityExtractionRecordsFactory {
 		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
 
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
+			SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new); // TODO: 16/10/17 create ExtractionExceptions
 
 			switch (trackingItem.state) {
 				case "SKIPPED": { // TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-					SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new); // TODO: 16/10/17 create ExtractionExceptions
 					skippAnswer(surveyItem.getExtractionIDs());
 					break;
 				}
 				case "ANSWERED": {
 					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new); // TODO: 16/10/17 create ExtractionExceptions
 					ExtractionFill extraction = questionFill.extraction();
-					fillAnswerInfo(customIDMap, extraction);
+					fillAnswerInfo(customIDMap, extraction, surveyItem);
 					break;
 				}
 				case "NOT_VISITED":
@@ -82,7 +85,7 @@ public class SurveyActivityExtractionRecordsFactory {
 					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
 					if (questionFill != null) {
 						ExtractionFill extraction = questionFill.extraction();
-						fillAnswerInfo(customIDMap, extraction);
+						fillAnswerInfo(customIDMap, extraction, surveyItem);
 					}
 					break;
 				}
@@ -90,15 +93,19 @@ public class SurveyActivityExtractionRecordsFactory {
 		}
 	}
 
-	private void fillAnswerInfo(Map<String, String> customIDMap, ExtractionFill filler) {
-		final String answerCustomID = customIDMap.get(filler.getQuestionID());
+	private void fillAnswerInfo(Map<String, String> customIDMap, ExtractionFill filler, SurveyItem surveyItem) throws DataNotFoundException {
+		final String questionID = filler.getQuestionID();
+		final String answerCustomID = customIDMap.get(questionID);
 
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
 			String key = pair.getKey();
 			this.getSurveyInformation().replace(customIDMap.get(key), pair.getValue());
 		}
 
-		this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, filler.getMetadata());
+		if (filler.getMetadata()!=null){
+			final MetadataOption metadataExtractionValue = ((Question) surveyItem).metadata.getMetadataByValue(Integer.valueOf(filler.getMetadata())).orElseThrow(DataNotFoundException::new);
+			this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, metadataExtractionValue.extractionValue);
+		}
 		this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
 
 	}
