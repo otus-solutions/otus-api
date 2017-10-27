@@ -3,13 +3,13 @@ package org.ccem.otus.model.survey.activity.filling.answer;
 public class GridIntegerAnswer {
 	private String objectType;
 	private String customID;
-	private Long value;
+	private Integer value;
 
 	public String getCustomID() {
 		return customID;
 	}
 
-	public Long getValue() {
+	public Integer getValue() {
 		return value;
 	}
 
