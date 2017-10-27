@@ -23,123 +23,121 @@ import br.org.tutty.Equalizer;
 
 @Stateless
 public class ManagementUserServiceBean implements ManagementUserService {
-    @Inject
-    private UserDao userDao;
-    
-    @Inject 
-    private FieldCenterDao fieldCenterDao;
+	@Inject
+	private UserDao userDao;
 
-    @Inject
-    private EmailNotifierService emailNotifierService;
+	@Inject
+	private FieldCenterDao fieldCenterDao;
 
-    @Override
-    public User fetchByEmail(String email) throws DataNotFoundException {
-        return userDao.fetchByEmail(email);
-    }
+	@Inject
+	private EmailNotifierService emailNotifierService;
 
-    @Override
-    public void enable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-        if (managementUserDto.isValid()) {
-            User user = fetchByEmail(managementUserDto.getEmail());
-            user.enable();
+	@Override
+	public User fetchByEmail(String email) throws DataNotFoundException {
+		return userDao.fetchByEmail(email);
+	}
 
-            userDao.update(user);
+	@Override
+	public void enable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		if (managementUserDto.isValid()) {
+			User user = fetchByEmail(managementUserDto.getEmail());
+			user.enable();
 
-            EnableUserNotificationEmail enableUserNotificationEmail = new EnableUserNotificationEmail();
-            enableUserNotificationEmail.defineRecipient(user);
-            enableUserNotificationEmail.setFrom(emailNotifierService.getSender());
-            emailNotifierService.sendEmail(enableUserNotificationEmail);
-        }else{
-            throw new ValidationException();
-        }
-    }
+			userDao.update(user);
 
-    @Override
-    public void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-        if (managementUserDto.isValid()) {
-            User user = fetchByEmail(managementUserDto.getEmail());
+			EnableUserNotificationEmail enableUserNotificationEmail = new EnableUserNotificationEmail();
+			enableUserNotificationEmail.defineRecipient(user);
+			enableUserNotificationEmail.setFrom(emailNotifierService.getSender());
+			emailNotifierService.sendEmail(enableUserNotificationEmail);
+		} else {
+			throw new ValidationException();
+		}
+	}
 
-            if (!user.isAdmin()) {
-                user.disable();
+	@Override
+	public void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+		if (managementUserDto.isValid()) {
+			User user = fetchByEmail(managementUserDto.getEmail());
 
-                userDao.update(user);
+			if (!user.isAdmin()) {
+				user.disable();
 
-                DisableUserNotificationEmail disableUserNotificationEmail = new DisableUserNotificationEmail();
-                disableUserNotificationEmail.defineRecipient(user);
-                disableUserNotificationEmail.setFrom(emailNotifierService.getSender());
-                emailNotifierService.sendEmail(disableUserNotificationEmail);
-            }
-        } else {
-            throw new ValidationException();
-        }
-    }
+				userDao.update(user);
 
-    @Override
-    public void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
-        if (managementUserDto.isValid()) {
-            User user = fetchByEmail(managementUserDto.getEmail());
-            user.enableExtraction();
-            userDao.update(user);
-        }else{
-            throw new ValidationException();
-        }
-    }
+				DisableUserNotificationEmail disableUserNotificationEmail = new DisableUserNotificationEmail();
+				disableUserNotificationEmail.defineRecipient(user);
+				disableUserNotificationEmail.setFrom(emailNotifierService.getSender());
+				emailNotifierService.sendEmail(disableUserNotificationEmail);
+			}
+		} else {
+			throw new ValidationException();
+		}
+	}
 
-    @Override
-    public void disableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
-        if (managementUserDto.isValid()) {
-            User user = fetchByEmail(managementUserDto.getEmail());
-            user.disableExtraction();
-            userDao.update(user);
-        } else {
-            throw new ValidationException();
-        }
-    }
+	@Override
+	public void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
+		if (managementUserDto.isValid()) {
+			User user = fetchByEmail(managementUserDto.getEmail());
+			user.enableExtraction();
+			userDao.update(user);
+		} else {
+			throw new ValidationException();
+		}
+	}
 
-    @Override
-    public void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
-        if (managementUserDto.isValid()) {
-            User user = fetchByEmail(managementUserDto.getEmail());
-            if(!managementUserDto.extractionIps.isEmpty()) {
-                user.setExtractionIps(managementUserDto.extractionIps);
-            }
-            userDao.update(user);
-        } else {
-            throw new ValidationException();
-        }
-    }
+	@Override
+	public void disableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
+		if (managementUserDto.isValid()) {
+			User user = fetchByEmail(managementUserDto.getEmail());
+			user.disableExtraction();
+			userDao.update(user);
+		} else {
+			throw new ValidationException();
+		}
+	}
 
-    @Override
-    public Boolean isUnique(String emailToVerify) {
-        if (emailToVerify != null && userDao.emailExists(emailToVerify)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+	@Override
+	public void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
+		if (managementUserDto.isValid()) {
+			User user = fetchByEmail(managementUserDto.getEmail());
+			user.setExtractionIps(managementUserDto.extractionIps);
+			userDao.update(user);
+		} else {
+			throw new ValidationException();
+		}
+	}
 
-    @Override
-    public List<ManagementUserDto> list() {
-        List<ManagementUserDto> administrationUsersDtos = new ArrayList<>();
-        List<User> users = userDao.fetchAll();
+	@Override
+	public Boolean isUnique(String emailToVerify) {
+		if (emailToVerify != null && userDao.emailExists(emailToVerify)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
-        users.stream().forEach(user -> {
-            ManagementUserDto managementUserDto = new ManagementUserDto();
+	@Override
+	public List<ManagementUserDto> list() {
+		List<ManagementUserDto> administrationUsersDtos = new ArrayList<>();
+		List<User> users = userDao.fetchAll();
 
-            Equalizer.equalize(user, managementUserDto);
-            if(user.getFieldCenter() != null) {
-            	managementUserDto.fieldCenter.acronym = user.getFieldCenter().getAcronym();
-            }
-            administrationUsersDtos.add(managementUserDto);
-        });
+		users.stream().forEach(user -> {
+			ManagementUserDto managementUserDto = new ManagementUserDto();
 
-        return administrationUsersDtos;
-    }
+			Equalizer.equalize(user, managementUserDto);
+			if (user.getFieldCenter() != null) {
+				managementUserDto.fieldCenter.acronym = user.getFieldCenter().getAcronym();
+			}
+			administrationUsersDtos.add(managementUserDto);
+		});
+
+		return administrationUsersDtos;
+	}
 
 	@Override
 	public void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException {
 		User user = fetchByEmail(managementUserDto.getEmail());
-		if(!managementUserDto.fieldCenter.acronym.isEmpty()) {
+		if (!managementUserDto.fieldCenter.acronym.isEmpty()) {
 			FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(managementUserDto.fieldCenter.acronym);
 			user.setFieldCenter(fieldCenter);
 		} else {

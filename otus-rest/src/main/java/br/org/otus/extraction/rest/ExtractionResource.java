@@ -12,7 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.extraction.ExtractionNotAuthorizedException;
 import br.org.otus.extraction.ExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
@@ -22,7 +21,7 @@ import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
 
-@Path("extraction")
+@Path("data-extraction")
 public class ExtractionResource {
 
 	@Inject
@@ -36,7 +35,7 @@ public class ExtractionResource {
 	@SecuredExtraction
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/activity/{acronym}")
-	public byte[] extractActivities(@PathParam("acronym") String acronym) throws ExtractionNotAuthorizedException {
+	public byte[] extractActivities(@PathParam("acronym") String acronym) {
 		return extractionFacade.createActivityExtraction(acronym);
 	}
 

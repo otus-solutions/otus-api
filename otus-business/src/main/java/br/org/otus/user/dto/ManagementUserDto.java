@@ -1,58 +1,57 @@
 package br.org.otus.user.dto;
 
+import java.util.ArrayList;
+
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import br.org.tutty.Equalization;
 
-import java.util.ArrayList;
-
 public class ManagementUserDto implements Dto {
-    @Equalization(name = "name")
-    public String name;
+	@Equalization(name = "name")
+	public String name;
 
-    @Equalization(name = "surname")
-    public String surname;
+	@Equalization(name = "surname")
+	public String surname;
 
-    @Equalization(name = "extraction")
-    public Boolean extraction;
+	@Equalization(name = "extraction")
+	public Boolean extraction;
 
-    @Equalization(name = "extraction_ips")
-    public ArrayList extractionIps;
+	@Equalization(name = "extraction_ips")
+	public ArrayList extractionIps;
 
-    @Equalization(name = "phone")
-    public String phone;
-    
-    public FieldCenterDTO fieldCenter;
+	@Equalization(name = "phone")
+	public String phone;
 
-    @Equalization(name = "email")
-    public String email;
+	public FieldCenterDTO fieldCenter;
 
-    @Equalization(name = "admin_flag")
-    public Boolean admin;
+	@Equalization(name = "email")
+	public String email;
 
-    @Equalization(name = "enable")
-    public Boolean enable;
+	@Equalization(name = "admin_flag")
+	public Boolean admin;
 
+	@Equalization(name = "enable")
+	public Boolean enable;
 
-    public ManagementUserDto() {
-    	this.fieldCenter = new FieldCenterDTO();
-    }
-    
-    public String getEmail() {
-        return email;
-    }
+	public ManagementUserDto() {
+		this.fieldCenter = new FieldCenterDTO();
+	}
 
-    @Override
-    public Boolean isValid() {
-        return !name.isEmpty() &&
-                !surname.isEmpty() &&
-                !phone.isEmpty() &&
-                !email.isEmpty()
-                ? Boolean.TRUE : Boolean.FALSE;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    @Override
-    public void encrypt() throws EncryptedException {
-    }
+	public ArrayList<String> getExtractionIps() {
+		return extractionIps;
+	}
+
+	@Override
+	public Boolean isValid() {
+		return !name.isEmpty() && !surname.isEmpty() && !phone.isEmpty() && !email.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
+	}
+
+	@Override
+	public void encrypt() throws EncryptedException {
+	}
 }

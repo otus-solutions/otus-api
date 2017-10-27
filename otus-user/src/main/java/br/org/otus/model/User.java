@@ -21,7 +21,7 @@ public class User {
 
 	@Equalization(name = "fieldCenter")
 	private FieldCenter fieldCenter;
-	
+
 	@Equalization(name = "name")
 	private String name;
 
@@ -39,7 +39,7 @@ public class User {
 
 	@Equalization(name = "code")
 	private Integer code;
-	
+
 	@Equalization(name = "extraction")
 	private Boolean extraction;
 
@@ -48,7 +48,7 @@ public class User {
 
 	@Equalization(name = "extraction_ips")
 	private ArrayList extractionIps;
-	
+
 	public User() {
 		this.uuid = UUID.randomUUID();
 		this.extractionToken = "";
@@ -57,7 +57,7 @@ public class User {
 		this.extraction = Boolean.FALSE;
 		this.extractionIps = new ArrayList();
 	}
-	
+
 	public User(UUID uuid) {
 		this.uuid = uuid;
 		this.extractionToken = "";
@@ -90,7 +90,7 @@ public class User {
 		enable();
 	}
 
-	public Boolean isAdmin(){
+	public Boolean isAdmin() {
 		return adm;
 	}
 
