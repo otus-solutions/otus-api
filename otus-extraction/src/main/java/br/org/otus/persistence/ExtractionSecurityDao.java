@@ -1,4 +1,4 @@
-package br.org.otus.extraction;
+package br.org.otus.persistence;
 
 import br.org.otus.model.User;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;

@@ -1,6 +1,7 @@
 package br.org.otus.extraction;
 
 import br.org.otus.model.User;
+import br.org.otus.persistence.ExtractionSecurityDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.inject.Inject;
