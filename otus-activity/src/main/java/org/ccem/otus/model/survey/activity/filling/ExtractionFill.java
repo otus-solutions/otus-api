@@ -38,7 +38,18 @@ public class ExtractionFill {
 	}
 
 	public void setComment(String comment) {
-		this.comment = comment;
+		this.comment =  ExtractionFill.escapeText(comment);
 	}
+
+	/**
+	 * Removes line break characters replacing for blank spaces.
+	 * This prevents the csv writer to assume \n from text fields as being a new line char
+	 * @param  text  text from source which accept , like text questions, grid text questions and comments
+	 * @return  the escaped text.
+	 */
+	public static String escapeText(String text){
+		return text != null ? text.replace("\n", " ") : text;
+	}
+
 
 }

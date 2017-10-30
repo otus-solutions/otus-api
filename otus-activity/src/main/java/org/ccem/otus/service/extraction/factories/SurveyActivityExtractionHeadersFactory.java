@@ -14,7 +14,7 @@ public class SurveyActivityExtractionHeadersFactory {
 
 	public SurveyActivityExtractionHeadersFactory(List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
-		this.headers = new LinkedHashSet<String>();
+		this.headers = new LinkedHashSet<>();
 	}
 
 	public LinkedHashSet<String> getHeaders() {

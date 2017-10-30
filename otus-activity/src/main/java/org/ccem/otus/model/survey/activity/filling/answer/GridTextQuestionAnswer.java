@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
+import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 
 public class GridTextQuestionAnswer extends AnswerFill {
 
@@ -20,11 +21,13 @@ public class GridTextQuestionAnswer extends AnswerFill {
 		if (this.value != null){
 			for (List<GridTextAnswer> list : value) {
 				for (GridTextAnswer gridTextAnswer : list) {
-					extraction.put(gridTextAnswer.getGridText(), gridTextAnswer.getValue());
+					extraction.put(gridTextAnswer.getGridText(),  ExtractionFill.escapeText(gridTextAnswer.getValue()));
 				}
 			}
 		}
 		return extraction;
 	}
+
+
 
 }

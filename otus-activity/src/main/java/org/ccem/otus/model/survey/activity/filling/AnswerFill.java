@@ -17,7 +17,7 @@ public class AnswerFill {
 	}
 
 	public Map<String, Object> getAnswerExtract(String questionID) {
-		return new LinkedHashMap<String, Object>();
+		return new LinkedHashMap<>();
 	}
 
 }
