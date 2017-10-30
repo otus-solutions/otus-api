@@ -3,6 +3,8 @@ package br.org.otus.laboratory.project.transportation;
 import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
@@ -18,6 +20,7 @@ public class TransportationLot {
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
+	private FieldCenter fieldCenter;
 
 	public TransportationLot() {
 		objectType = "TransportationLot";
@@ -85,5 +88,13 @@ public class TransportationLot {
 	@Override
 	public int hashCode() {
 		return code.hashCode();
+	}
+
+	public FieldCenter getCenter() {
+		return fieldCenter;
+	}
+
+	public void setCenter(FieldCenter center) {
+		this.fieldCenter = center;
 	}
 }
