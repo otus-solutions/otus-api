@@ -30,8 +30,8 @@ public class UserCodec implements Codec<User> {
 		writer.writeBoolean("adm", user.isAdmin());
 		writer.writeString("uuid", user.getUuid().toString());
 		writer.writeString("email", user.getEmail());
-		
-		if(user.getFieldCenter() == null) {
+
+		if (user.getFieldCenter() == null) {
 			writer.writeNull("fieldCenter");
 		} else {
 			writer.writeStartDocument("fieldCenter");
@@ -40,12 +40,12 @@ public class UserCodec implements Codec<User> {
 		}
 
 		writer.writeBoolean("extraction", user.isExtractionEnabled());
-		if (user.getExtractionToken() == ""){
+		if (user.getExtractionToken() == "") {
 			writer.writeNull("extractionToken");
 		} else {
 			writer.writeString("extractionToken", user.getExtractionToken());
 		}
-		if (user.getExtractionIps().isEmpty()){
+		if (user.getExtractionIps().isEmpty()) {
 			writer.writeNull("extractionIps");
 		} else {
 			writer.writeStartArray("extractionIps");
@@ -59,7 +59,7 @@ public class UserCodec implements Codec<User> {
 	@Override
 	public User decode(BsonReader reader, DecoderContext decoderContext) {
 		reader.readStartDocument();
-		
+
 		reader.readObjectId("_id");
 		String password = reader.readString("password");
 		String phone = reader.readString("phone");
@@ -71,7 +71,7 @@ public class UserCodec implements Codec<User> {
 		String email = reader.readString("email");
 
 		String fieldCenterAcronym = "";
-		try{
+		try {
 			reader.readNull("fieldCenter");
 		} catch (BsonInvalidOperationException e) {
 			reader.readStartDocument();
@@ -82,14 +82,14 @@ public class UserCodec implements Codec<User> {
 		boolean extraction = reader.readBoolean("extraction");
 
 		String extractionToken = "";
-		try{
+		try {
 			reader.readNull("extractionToken");
 		} catch (BsonInvalidOperationException ef) {
 			extractionToken = reader.readString();
 		}
 
 		ArrayList extractionIps = new ArrayList();
-		try{
+		try {
 			reader.readNull("extractionIps");
 		} catch (BsonInvalidOperationException ef) {
 			reader.readStartArray();
@@ -99,29 +99,30 @@ public class UserCodec implements Codec<User> {
 			reader.readEndArray();
 		}
 
-
 		reader.readEndDocument();
 
 		User user = new User(UUID.fromString(uuid));
 		user.setPassword(password);
 		user.setPhone(phone);
-		
-		if(adm == true) {
+
+		if (adm == true) {
 			user.becomesAdm();
 		}
-		
-		if(enable == true) {
+
+		if (enable == true) {
 			user.enable();
 		}
 
-		if(extraction == true) {
+		if (extraction == true) {
 			user.enableExtraction();
 			user.setExtractionToken(extractionToken);
+			user.setExtractionIps(extractionIps);
+		} else if (!extractionIps.isEmpty()) {
 			user.setExtractionIps(extractionIps);
 		}
 
 		FieldCenter fieldCenter = new FieldCenter();
-		if(!fieldCenterAcronym.isEmpty()) {
+		if (!fieldCenterAcronym.isEmpty()) {
 			fieldCenter.setAcronym(fieldCenterAcronym);
 		}
 		user.setFieldCenter(fieldCenter);
@@ -131,7 +132,7 @@ public class UserCodec implements Codec<User> {
 
 		return user;
 	}
-	
+
 	@Override
 	public Class<User> getEncoderClass() {
 		return User.class;

@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public enum ActivityMode {
 	@SerializedName("ONLINE")
-	ONLINE, @SerializedName("PAPER")
+	ONLINE, 
+	@SerializedName("PAPER")
 	PAPER
 
 }

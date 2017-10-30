@@ -81,4 +81,22 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		return SurveyActivity.deserialize(result.toJson());
 	}
 
+	@Override
+	public List<SurveyActivity> findAllByID(String id) throws DataNotFoundException {
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
+
+		FindIterable<Document> result = collection.find(eq("surveyForm.surveyTemplate.identity.acronym", id));
+
+
+		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
+		if (activities.size()== 0) {
+			throw new DataNotFoundException(
+					new Throwable("OID {" + id + "} not found."));
+		}
+
+		return activities;
+	}
+
+
+
 }

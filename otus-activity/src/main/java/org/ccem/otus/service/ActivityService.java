@@ -14,5 +14,6 @@ public interface ActivityService {
 	List<SurveyActivity> list(long rn);
 
 	SurveyActivity getByID(String id) throws DataNotFoundException;
-
+	
+	List<SurveyActivity> getAllByID(String id) throws DataNotFoundException;
 }

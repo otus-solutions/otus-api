@@ -61,6 +61,10 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-file-uploader</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-extraction</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -98,6 +102,12 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-business</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-extraction</artifactId>
 			<version>${project.parent.version}</version>
 			<type>ejb</type>
 		</dependency>
@@ -166,6 +176,7 @@
 			<version>${auditor.core.version}</version>
 			<type>ejb</type>
 		</dependency>
+
 		<!-- - - External Dependencies - ! -->
 		<dependency>
 			<groupId>br.org.tutty</groupId>
@@ -206,6 +217,16 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-multipart-provider</artifactId>
 			<version>3.1.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.5</version>
 		</dependency>
 	</dependencies>
 </project>
