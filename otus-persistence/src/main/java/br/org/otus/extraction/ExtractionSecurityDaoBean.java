@@ -2,12 +2,13 @@ package br.org.otus.extraction;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.User;
+import br.org.otus.persistence.ExtractionSecurityDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class ExtractionSecurityDaoBean extends MongoGenericDao<Document>  implements ExtractionSecurityDao{
+public class ExtractionSecurityDaoBean extends MongoGenericDao<Document>  implements ExtractionSecurityDao {
     private static final String COLLECTION_NAME = "user";
 
     public ExtractionSecurityDaoBean() {
