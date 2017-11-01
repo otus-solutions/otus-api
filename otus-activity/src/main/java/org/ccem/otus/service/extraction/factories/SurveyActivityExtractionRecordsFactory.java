@@ -1,7 +1,10 @@
 package org.ccem.otus.service.extraction.factories;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -23,75 +26,77 @@ public class SurveyActivityExtractionRecordsFactory {
 
 	public SurveyActivityExtractionRecordsFactory(LinkedHashSet headers) {
 		this.surveyInformation = new LinkedHashMap<>();
-
-
-		Iterator iterator = headers.iterator();
-		while (iterator.hasNext()){
-			this.surveyInformation.put(iterator.next().toString(), "");
+		for (Object header : headers) {
+			this.surveyInformation.put(header.toString(), "");
 		}
 	}
 
+	public LinkedHashMap<String, Object> getSurveyInformation() {
+		return this.surveyInformation;
+	}
+
 	public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(),
-				surveyActivity.getParticipantData().getRecruitmentNumber());
-		this.getSurveyInformation()
-				.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), surveyActivity.getMode());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), surveyActivity.getParticipantData().getRecruitmentNumber());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), surveyActivity.getMode());
 
 		final Interview lastInterview = surveyActivity.getLastInterview().orElse(null);
 		final String interviewerEmail = lastInterview != null ? lastInterview.getInterviewer().getEmail() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.INTERVIEWER.getValue(), interviewerEmail);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getValue(), interviewerEmail);
 
 		final ActivityStatus currentActivityStatus = surveyActivity.getCurrentStatus().orElse(null);
 		final String currentStatus = currentActivityStatus != null ? currentActivityStatus.getName() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getValue(), currentStatus);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getValue(), currentStatus);
 
 		final LocalDateTime currentStatusDate = (currentActivityStatus != null) ? currentActivityStatus.getDate() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getValue(), currentStatusDate);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getValue(), currentStatusDate);
 
 		final ActivityStatus creationStatus = surveyActivity.getLastStatusByName(ActivityStatusOptions.CREATED.getName()).orElse(null);
 		final LocalDateTime creationTime = (creationStatus != null) ? creationStatus.getDate() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.CREATION_DATE.getValue(), creationTime);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CREATION_DATE.getValue(), creationTime);
 
 		final ActivityStatus paperStatus = surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).orElse(null);
 		final LocalDateTime paperRealizationDate = (paperStatus != null) ? paperStatus.getDate() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getValue(), paperRealizationDate);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getValue(), paperRealizationDate);
 
 		final String paperInterviewer = (paperStatus != null) ? paperStatus.getUser().getEmail() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getValue(), paperInterviewer);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getValue(), paperInterviewer);
 
 		final ActivityStatus finalizedStatus = surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).orElse(null);
 		final LocalDateTime lastFinalizationDate = (finalizedStatus != null) ? finalizedStatus.getDate() : null;
-		this.getSurveyInformation().replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue(), lastFinalizationDate);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue(), lastFinalizationDate);
 	}
 
 	public void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
 		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
 
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
-			SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new); // TODO: 16/10/17 create ExtractionExceptions
+			// TODO: 16/10/17 create ExtractionExceptions
+			SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
 
 			switch (trackingItem.state) {
-				case "SKIPPED": { // TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-					skippAnswer(surveyItem.getExtractionIDs());
-					break;
-				}
-				case "ANSWERED": {
-					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new); // TODO: 16/10/17 create ExtractionExceptions
+			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
+			case "SKIPPED": {
+				skippAnswer(surveyItem.getExtractionIDs());
+				break;
+			}
+			case "ANSWERED": {
+				// TODO: 16/10/17 create ExtractionExceptions
+				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
+				ExtractionFill extraction = questionFill.extraction();
+				fillAnswerInfo(customIDMap, extraction, surveyItem);
+				break;
+			}
+			case "NOT_VISITED":
+			case "IGNORED":
+			case "VISITED": {
+				QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
+				if (questionFill != null) {
 					ExtractionFill extraction = questionFill.extraction();
 					fillAnswerInfo(customIDMap, extraction, surveyItem);
-					break;
 				}
-				case "NOT_VISITED":
-				case "IGNORED":
-				case "VISITED": {
-					QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-					if (questionFill != null) {
-						ExtractionFill extraction = questionFill.extraction();
-						fillAnswerInfo(customIDMap, extraction, surveyItem);
-					}
-					break;
-				}
+				break;
+			}
 			}
 		}
 	}
@@ -102,11 +107,12 @@ public class SurveyActivityExtractionRecordsFactory {
 
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
 			String key = pair.getKey();
-			this.getSurveyInformation().replace(customIDMap.get(key), pair.getValue());
+			this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
 		}
 
-		if (filler.getMetadata()!=null){
-			final MetadataOption metadataExtractionValue = ((Question) surveyItem).metadata.getMetadataByValue(Integer.valueOf(filler.getMetadata())).orElseThrow(DataNotFoundException::new);
+		if (filler.getMetadata() != null) {
+			final MetadataOption metadataExtractionValue = ((Question) surveyItem).metadata.getMetadataByValue(Integer.valueOf(filler.getMetadata())).orElseThrow(
+					DataNotFoundException::new);
 			this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, metadataExtractionValue.extractionValue);
 		}
 		this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
@@ -117,10 +123,6 @@ public class SurveyActivityExtractionRecordsFactory {
 		for (String extractionID : extractionIDs) {
 			this.getSurveyInformation().replace(extractionID, ExtractionVariables.SKIPPED_ANSWER.getValue());
 		}
-	}
-
-	public LinkedHashMap<String, Object> getSurveyInformation() {
-		return surveyInformation;
 	}
 
 }

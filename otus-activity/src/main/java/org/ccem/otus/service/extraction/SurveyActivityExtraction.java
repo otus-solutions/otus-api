@@ -29,11 +29,11 @@ public class SurveyActivityExtraction implements Extractable {
 	public List<List<Object>> getValues() throws DataNotFoundException {
 		List<List<Object>> values = new ArrayList<>();
 
-		for (SurveyActivity surveyActivity : surveyActivities) {
+		for (SurveyActivity surveyActivity : this.surveyActivities) {
 			List<Object> resultInformation = new ArrayList<>();
 			this.recordsFactory.getSurveyBasicInfo(surveyActivity);
 			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
-			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
+			resultInformation.addAll(new ArrayList<Object>(this.recordsFactory.getSurveyInformation().values()));
 			values.add(resultInformation);
 		}
 		return values;
