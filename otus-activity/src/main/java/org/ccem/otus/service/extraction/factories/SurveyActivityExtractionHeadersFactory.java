@@ -15,10 +15,10 @@ public class SurveyActivityExtractionHeadersFactory {
 	public SurveyActivityExtractionHeadersFactory(List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
 		this.headers = new LinkedHashSet<>();
+		this.buildHeadersInfo();
 	}
 
 	public LinkedHashSet<String> getHeaders() {
-		this.buildHeadersInfo();
 		return this.headers;
 	}
 

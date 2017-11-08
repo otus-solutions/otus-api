@@ -6,9 +6,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionHeadersFactory;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecordsFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 public class SurveyActivityExtraction implements Extractable {
 
@@ -19,7 +17,7 @@ public class SurveyActivityExtraction implements Extractable {
 	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
 		this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyActivities);
-		this.recordsFactory = new SurveyActivityExtractionRecordsFactory();
+		this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.headersFactory.getHeaders());
 	}
 
 	@Override
@@ -30,15 +28,12 @@ public class SurveyActivityExtraction implements Extractable {
 	@Override
 	public List<List<Object>> getValues() throws DataNotFoundException {
 		List<List<Object>> values = new ArrayList<>();
-		for (SurveyActivity surveyActivity : surveyActivities) {
-			List<Object> resultInformation = new ArrayList<>();
 
-			for (String s : this.headersFactory.getHeaders()) {
-				this.recordsFactory.getSurveyInformation().put(s, "");
-			}
+		for (SurveyActivity surveyActivity : this.surveyActivities) {
+			List<Object> resultInformation = new ArrayList<>();
 			this.recordsFactory.getSurveyBasicInfo(surveyActivity);
 			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
-			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
+			resultInformation.addAll(new ArrayList<Object>(this.recordsFactory.getSurveyInformation().values()));
 			values.add(resultInformation);
 		}
 		return values;
