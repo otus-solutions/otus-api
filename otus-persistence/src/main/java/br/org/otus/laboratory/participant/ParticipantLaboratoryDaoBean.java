@@ -1,9 +1,12 @@
 package br.org.otus.laboratory.participant;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
@@ -59,6 +62,23 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 		}
 
 		return labParticipant;
+	}
+
+	@Override
+	public Tube updateTubeCollectionData(long rn,Tube tube) throws DataNotFoundException {
+		Document parsedCollectionData = Document.parse(TubeCollectionData.serialize(tube.getTubeCollectionData()));
+
+		UpdateResult updateLabData = collection.updateOne(and(eq("recruitmentNumber", rn),
+																eq("tubes.code",tube.getCode())),
+															set("tubes.$.tubeCollectionData", parsedCollectionData),
+															new UpdateOptions().upsert(false));
+
+		if (updateLabData.getMatchedCount() == 0) {
+			throw new DataNotFoundException(new Throwable("Laboratory of Participant recruitment number: " + rn
+					+ " does not exists."));
+		}
+
+		return tube;
 	}
 
 	public Document findDocumentByAliquotCode(String aliquotCode) throws DataNotFoundException {
