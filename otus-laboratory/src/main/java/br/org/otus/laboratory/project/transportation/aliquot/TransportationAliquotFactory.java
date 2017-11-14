@@ -26,7 +26,7 @@ public class TransportationAliquotFactory {
 				tube.getAliquots().forEach(aliquot -> {
 					TransportationAliquot transportationAliquot;
 					transportationAliquot = new TransportationAliquot(aliquot, participant.getRecruitmentNumber(),
-							participant.getBirthdate(), participant.getSex());
+							participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
 					aliquotList.add(transportationAliquot);
 				});
 			});

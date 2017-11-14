@@ -11,4 +11,18 @@ public class NavigationTrackingItem {
 	public List<String> inputs;
 	public List<String> outputs;
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		NavigationTrackingItem that = (NavigationTrackingItem) o;
+
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 }

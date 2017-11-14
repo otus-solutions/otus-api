@@ -32,5 +32,12 @@ public class QuestionFill {
 	public boolean isForceAnswer() {
 		return forceAnswer;
 	}
-	
+
+	public ExtractionFill extraction() {
+		ExtractionFill extractionFill = new ExtractionFill(questionID);
+		extractionFill.setAnswerExtract(this.answer.getAnswerExtract(this.questionID));
+		extractionFill.setMetadata(this.metadata.getValue());
+		extractionFill.setComment(this.getComment());
+		return extractionFill;
+	}
 }

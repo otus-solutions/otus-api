@@ -7,6 +7,7 @@ import org.ccem.otus.persistence.ActivityDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import java.util.List;
 
 @Stateless
@@ -35,6 +36,11 @@ public class ActivityServiceBean implements ActivityService {
 	@Override
 	public SurveyActivity getByID(String id) throws DataNotFoundException {
 		return activityDao.findByID(id);
+	}
+
+	@Override
+	public List<SurveyActivity> getAllByID(String id) throws DataNotFoundException {		
+		return activityDao.findAllByID(id);
 	}
 
 }

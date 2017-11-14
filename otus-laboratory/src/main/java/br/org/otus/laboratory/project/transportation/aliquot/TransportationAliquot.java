@@ -6,6 +6,8 @@ import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.AliquotCollectionData;
 import com.google.gson.Gson;
+
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Sex;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
@@ -16,17 +18,21 @@ public class TransportationAliquot extends Aliquot {
 	private Long recruitmentNumber;
 	private ImmutableDate birthdate;
 	private Sex sex;
+	private FieldCenter fieldCenter;
+
+
 
 	public TransportationAliquot(String objectType, String code, String name, AliquotContainer container,
-								 AliquotRole role, AliquotCollectionData aliquotCollectionData) {
+								 AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
 		super(objectType, code, name, container, role, aliquotCollectionData);
 	}
 
-	public TransportationAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex) {
+	public TransportationAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex, FieldCenter aliquotCenter) {
 		super(aliquot.getObjectType(), aliquot.getCode(), aliquot.getName(), aliquot.getContainer(), aliquot.getRole(), aliquot.getAliquotCollectionData());
 		this.setRecruitmentNumber(recruitmentNumber);
 		this.setBirthdate(birthdate);
 		this.setSex(sex);
+		this.setFieldCenter(aliquotCenter);
 	}
 
 
@@ -57,6 +63,14 @@ public class TransportationAliquot extends Aliquot {
 	public static String serialize(List<Aliquot> aliquots) {
 		Gson builder = ParticipantLaboratory.getGsonBuilder();
 		return builder.toJson(aliquots);
+	}
+	
+	public FieldCenter getFieldCenter() {
+		return fieldCenter;
+	}
+
+	public void setFieldCenter(FieldCenter fieldCenter) {
+		this.fieldCenter = fieldCenter;
 	}
 
 
