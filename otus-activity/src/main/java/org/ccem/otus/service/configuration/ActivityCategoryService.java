@@ -17,5 +17,5 @@ public interface ActivityCategoryService {
 
     String update(ActivityCategory activityCategory) throws DataNotFoundException;
 
-    ActivityCategory setDefault(String name) throws DataNotFoundException;
+    String setDefaultCategory(String name) throws DataNotFoundException;
 }

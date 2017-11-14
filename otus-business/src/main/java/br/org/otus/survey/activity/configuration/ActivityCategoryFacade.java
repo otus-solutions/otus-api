@@ -4,7 +4,6 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
 
@@ -54,11 +53,14 @@ public class ActivityCategoryFacade {
     }
 
     public String setDefaultCategory(String name){
-        return null;
+        try {
+            return activityCategoryService.setDefaultCategory(name);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
     }
 
     private ActivityCategory deserialize(String activityCategory){
-//        GsonBuilder gsonBuilder = SurveyActivity.getGsonBuilder();
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().fromJson(activityCategory, ActivityCategory.class);
     }
