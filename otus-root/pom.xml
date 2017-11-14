@@ -63,7 +63,7 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>>${repository_releases}</url>
+			<url>&gt;${repository_releases}</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
