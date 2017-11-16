@@ -1,15 +1,18 @@
-package org.ccem.otus.service.configuration;
+package org.ccem.otus.persistence;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ActivityCategoryService {
+public interface ActivityConfigurationDao {
 
-    List<ActivityCategory> list();
+    List<ActivityCategory> find();
 
-    ActivityCategory getByName(String name) throws DataNotFoundException;
+    ActivityCategory findByName(String name) throws DataNotFoundException;
+
+    Optional<ActivityCategory> getLastInsertedCategory();
 
     ActivityCategory create(ActivityCategory activityCategory);
 
@@ -17,5 +20,5 @@ public interface ActivityCategoryService {
 
     String update(ActivityCategory activityCategory) throws DataNotFoundException;
 
-    String setDefaultCategory(String name) throws DataNotFoundException;
+    String updateDefault(String name) throws DataNotFoundException;
 }

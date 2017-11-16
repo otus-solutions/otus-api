@@ -28,13 +28,12 @@ public class ActivityConfigurationResource {
         return new Response().buildSuccess(activityCategoryFacade.getByName(name)).toJson();
     }
 
-    //list //TODO 14/11/17: add single or bunch?
     @POST
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String create(String activityCategory){
-        return new Response().buildSuccess(activityCategoryFacade.create(activityCategory)).toJson();
+    public String create(String categoryLabel){
+        return new Response().buildSuccess(activityCategoryFacade.create(categoryLabel)).toJson();
     }
 
     @DELETE
@@ -61,7 +60,4 @@ public class ActivityConfigurationResource {
     public String setDefault(@PathParam("id") String name){
         return new Response().buildSuccess(activityCategoryFacade.setDefaultCategory(name)).toJson();
     }
-
-
-
 }

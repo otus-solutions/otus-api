@@ -5,6 +5,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.configuration.ActivityConfiguration;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
 
 import javax.inject.Inject;
@@ -27,8 +28,9 @@ public class ActivityCategoryFacade {
         }
     }
 
-    public String create(String activityCategoryJson) {
-        return activityCategoryService.create(deserialize(activityCategoryJson));
+    public String create(String categoryLabel) {
+        ActivityCategory insertedCategory = activityCategoryService.create(new ActivityCategory(categoryLabel));
+        return ActivityCategory.serialize(insertedCategory);
     }
 
     //TODO 14/11/17: implement
@@ -46,7 +48,7 @@ public class ActivityCategoryFacade {
 
     public String update(String activityCategoryJson){
         try {
-            return activityCategoryService.update(deserialize(activityCategoryJson));
+            return activityCategoryService.update(ActivityCategory.deserialize(activityCategoryJson));
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
@@ -59,10 +61,4 @@ public class ActivityCategoryFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
-
-    private ActivityCategory deserialize(String activityCategory){
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().fromJson(activityCategory, ActivityCategory.class);
-    }
-
 }
