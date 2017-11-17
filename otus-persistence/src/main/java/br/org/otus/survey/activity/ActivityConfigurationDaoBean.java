@@ -65,6 +65,7 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     @Override
     public String findDefault(String name) throws DataNotFoundException {
         Document defaultcategory = collection.find(new BasicDBObject("isDefault", true)).first();
+        return null;
     }
 
     @Override
