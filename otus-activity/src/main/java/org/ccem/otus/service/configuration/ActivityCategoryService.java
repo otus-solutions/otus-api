@@ -13,9 +13,9 @@ public interface ActivityCategoryService {
 
     ActivityCategory create(ActivityCategory activityCategory);
 
-    String delete(String name) throws DataNotFoundException;
+    void delete(String name) throws DataNotFoundException;
 
-    String update(ActivityCategory activityCategory) throws DataNotFoundException;
+    ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
     String setDefaultCategory(String name) throws DataNotFoundException;
 }

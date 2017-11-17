@@ -21,12 +21,12 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Override
     public ActivityCategory getByName(String name) throws DataNotFoundException {
-        return null;
+        return activityConfigurationDao.findByName(name);
     }
 
     @Override
     public ActivityCategory create(ActivityCategory activityCategory) {
-        ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory().orElse(null);
+        ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory();
 
         if (lastInsertedCategory != null) activityCategory.setName(lastInsertedCategory.getName());
         else activityCategory.setName();
@@ -35,17 +35,20 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
     }
 
     @Override
-    public String delete(String name) throws DataNotFoundException {
-        return null;
+    public void delete(String name) throws DataNotFoundException {
+        activityConfigurationDao.delete(name);
     }
 
     @Override
-    public String update(ActivityCategory activityCategory) throws DataNotFoundException {
-        return null;
+    public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
+        return activityConfigurationDao.update(activityCategory);
     }
 
     @Override
     public String setDefaultCategory(String name) throws DataNotFoundException {
+        //TODO 17/11/17: findOneAndUpdate??
+        ActivityCategory newDefault = activityConfigurationDao.findByName(name);
+        ActivityCategory oldDefault = activityConfigurationDao.findDefault();
         return null;
     }
 }

@@ -4,6 +4,7 @@ import br.org.mongodb.MongoGenericDao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -13,7 +14,6 @@ import org.ccem.otus.persistence.ActivityConfigurationDao;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Stateless
 public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> implements ActivityConfigurationDao {
@@ -26,15 +26,26 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
 
     @Override
     public List<ActivityCategory> find() {
-        ArrayList<ActivityCategory> documentArray = new ArrayList<>();
-        FindIterable<Document> documents = collection.find();
-        documents.forEach((Block<? super Document>) document -> documentArray.add(ActivityCategory.deserialize(document.toJson())));
-        return documentArray;
+        ArrayList<ActivityCategory> categories = new ArrayList<>();
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+
+        FindIterable<Document> documents = collection.find(query);
+
+        documents.forEach((Block<? super Document>) document -> categories.add(ActivityCategory.deserialize(document.toJson())));
+
+        return categories;
     }
 
     @Override
     public ActivityCategory findByName(String name) throws DataNotFoundException {
-        return null;
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("name", name);
+
+        Document first = collection.find(query).first();
+        return ActivityCategory.deserialize(first.toJson());
     }
 
     @Override
@@ -46,33 +57,63 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
-    public String delete(String name) throws DataNotFoundException {
-        return null;
+    public void delete(String name) throws DataNotFoundException {
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("name", name);
+
+        DeleteResult deleteResult = collection.deleteOne(query);
+
+        if (deleteResult.getDeletedCount() == 0) {
+            throw new DataNotFoundException(
+                    new Throwable("ActivityCategory {" + name + "} not found."));        }
     }
 
     @Override
     public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
         Document parsed = Document.parse(ActivityCategory.serialize(activityCategory));
-        UpdateResult updateResult = collection.updateOne(new BasicDBObject("name", activityCategory.getName()), parsed);
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("name", activityCategory.getName());
+
+        UpdateResult updateResult = collection.updateOne(query, parsed);
+
         if (updateResult.getMatchedCount() == 0){
             throw new DataNotFoundException(
-                    new Throwable("Category {" + activityCategory.getName() + "} not found."));
+                    new Throwable("ActivityCategory {" + activityCategory.getName() + "} not found."));
         }
 
         return activityCategory;
     }
 
     @Override
-    public String findDefault(String name) throws DataNotFoundException {
-        Document defaultcategory = collection.find(new BasicDBObject("isDefault", true)).first();
-        return null;
+    public ActivityCategory findDefault() throws DataNotFoundException {
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("isDefault", true);
+
+        Document defaultCategory = collection.find(query).first();
+        return ActivityCategory.deserialize(defaultCategory.toJson());
     }
 
     @Override
-    public Optional<ActivityCategory> getLastInsertedCategory() {
-        Document lastInsertedDocument = collection.find(new BasicDBObject("objectType","ActivityCategory")).sort(new BasicDBObject("_id",-1)).first();
-        if (lastInsertedDocument == null) return Optional.empty();
-        else return Optional.ofNullable(ActivityCategory.deserialize(lastInsertedDocument.toJson()));
+    public ActivityCategory getLastInsertedCategory() {
+        BasicDBObject query = new BasicDBObject("objectType","ActivityCategory");
+
+        Document lastInsertedDocument = collection.find(query).sort(new BasicDBObject("_id",-1)).first();
+
+        return lastInsertedDocument == null ? null : ActivityCategory.deserialize(lastInsertedDocument.toJson());
+
+    }
+
+
+    public ActivityCategory getLaastInsertedCategory() {
+        BasicDBObject query = new BasicDBObject("objectType","ActivityCategory");
+
+        Document lastInsertedDocument = collection.find(query).sort(new BasicDBObject("_id",-1)).first();
+
+        return lastInsertedDocument == null ? null : ActivityCategory.deserialize(lastInsertedDocument.toJson());
 
     }
 }
