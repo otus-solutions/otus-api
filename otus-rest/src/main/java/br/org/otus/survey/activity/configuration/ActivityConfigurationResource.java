@@ -38,7 +38,8 @@ public class ActivityConfigurationResource {
     @Path("/categories/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String delete(@PathParam("id") String name){
-        return new Response().buildSuccess(activityCategoryFacade.delete(name)).toJson();
+        activityCategoryFacade.delete(name);
+        return new Response().buildSuccess().toJson();
     }
 
     @PUT
@@ -46,7 +47,8 @@ public class ActivityConfigurationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public String update(String activityCategory){
-        return new Response().buildSuccess(activityCategoryFacade.update(activityCategory)).toJson();
+        activityCategoryFacade.update(activityCategory);
+        return new Response().buildSuccess().toJson();
     }
 
     @PUT

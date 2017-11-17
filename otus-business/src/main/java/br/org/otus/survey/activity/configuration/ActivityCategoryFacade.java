@@ -38,17 +38,17 @@ public class ActivityCategoryFacade {
         return null;
     }
 
-    public String delete(String name) {
+    public void delete(String name) {
         try {
-            return activityCategoryService.delete(name);
+            activityCategoryService.delete(name);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
 
-    public String update(String activityCategoryJson){
+    public void update(String activityCategoryJson){
         try {
-            return activityCategoryService.update(ActivityCategory.deserialize(activityCategoryJson));
+            activityCategoryService.update(ActivityCategory.deserialize(activityCategoryJson));
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
