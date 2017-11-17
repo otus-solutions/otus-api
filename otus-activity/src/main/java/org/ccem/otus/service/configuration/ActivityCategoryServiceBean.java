@@ -26,10 +26,10 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Override
     public ActivityCategory create(ActivityCategory activityCategory) {
-//        ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory().orElse(null);
+        ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory().orElse(null);
 
-//        if (lastInsertedCategory != null) activityCategory.setName(lastInsertedCategory.getName());
-//        else activityCategory.setName();
+        if (lastInsertedCategory != null) activityCategory.setName(lastInsertedCategory.getName());
+        else activityCategory.setName();
 
         return activityConfigurationDao.create(activityCategory);
     }

@@ -18,7 +18,7 @@ public interface ActivityConfigurationDao {
 
     String delete(String name) throws DataNotFoundException;
 
-    String update(ActivityCategory activityCategory) throws DataNotFoundException;
+    ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
-    String updateDefault(String name) throws DataNotFoundException;
+    String findDefault(String name) throws DataNotFoundException;
 }

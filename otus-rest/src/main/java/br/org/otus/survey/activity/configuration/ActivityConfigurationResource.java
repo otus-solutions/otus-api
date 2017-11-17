@@ -15,7 +15,6 @@ public class ActivityConfigurationResource {
     @GET
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public String getAllCategories(){
         return new Response().buildSuccess(activityCategoryFacade.list()).toJson();
     }
@@ -23,7 +22,6 @@ public class ActivityConfigurationResource {
     @GET
     @Path("/categories/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public String get(@PathParam("id") String name){
         return new Response().buildSuccess(activityCategoryFacade.getByName(name)).toJson();
     }
@@ -31,7 +29,7 @@ public class ActivityConfigurationResource {
     @POST
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     public String create(String categoryLabel){
         return new Response().buildSuccess(activityCategoryFacade.create(categoryLabel)).toJson();
     }
@@ -39,11 +37,9 @@ public class ActivityConfigurationResource {
     @DELETE
     @Path("/categories/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public String delete(@PathParam("id") String name){
         return new Response().buildSuccess(activityCategoryFacade.delete(name)).toJson();
     }
-
 
     @PUT
     @Path("/categories")
