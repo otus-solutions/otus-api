@@ -4,6 +4,7 @@ public enum SurveyActivityExtractionHeaders {
 
 	RECRUITMENT_NUMBER("recruitment_number"),
 	ACRONYM("acronym"),
+	MODE("mode"),
 	CATEGORY("category"),
 	TYPE("type"),
 	INTERVIEWER("interviewer"),

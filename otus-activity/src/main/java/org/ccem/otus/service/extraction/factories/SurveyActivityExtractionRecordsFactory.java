@@ -38,7 +38,7 @@ public class SurveyActivityExtractionRecordsFactory {
 	public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), surveyActivity.getParticipantData().getRecruitmentNumber());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), surveyActivity.getMode());
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.MODE.getValue(), surveyActivity.getMode());
 
 		final Interview lastInterview = surveyActivity.getLastInterview().orElse(null);
 		final String interviewerEmail = lastInterview != null ? lastInterview.getInterviewer().getEmail() : null;
