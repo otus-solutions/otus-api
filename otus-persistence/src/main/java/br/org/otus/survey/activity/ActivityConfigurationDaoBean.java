@@ -7,12 +7,14 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityConfigurationDao;
 
+import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Optional;
 
+@Stateless
 public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> implements ActivityConfigurationDao {
 
-    private static final String COLLECTION_NAME = "activity-configuration";
+    private static final String COLLECTION_NAME = "activity_configuration";
 
     public ActivityConfigurationDaoBean() {
         super(COLLECTION_NAME, Document.class);
@@ -53,7 +55,7 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
 
     @Override
     public Optional<ActivityCategory> getLastInsertedCategory() {
-        Document lastInsertedDocument = (Document)collection.find().sort(new BasicDBObject("_id",-1)).first();
+        Document lastInsertedDocument = (Document)collection.find(new BasicDBObject("objectType","ActivityCategory")).sort(new BasicDBObject("_id",-1)).limit(1);
         return Optional.ofNullable(ActivityCategory.deserialize(lastInsertedDocument.toJson()));
     }
 }
