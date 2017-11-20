@@ -105,13 +105,27 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
-    public ActivityCategory findDefault() throws DataNotFoundException {
+    public void setNewDefault(String name) throws DataNotFoundException {
         BasicDBObject query = new BasicDBObject();
         query.put("objectType", "ActivityCategory");
         query.put("isDefault", true);
+        UpdateResult undefaultResult = collection.updateOne(query, new Document("$set", new Document("isDefault", false)), new UpdateOptions().upsert(false));
 
-        Document defaultCategory = collection.find(query).first();
-        return ActivityCategory.deserialize(defaultCategory.toJson());
+        if (undefaultResult.getMatchedCount() > 1){
+            throw new DataNotFoundException(
+                    new Throwable("Default category error. More than one default found"));
+        }
+
+        BasicDBObject otherQuery = new BasicDBObject();
+        otherQuery.put("objectType", "ActivityCategory");
+        otherQuery.put("name", name);
+        UpdateResult defaultSetResult = collection.updateOne(otherQuery, new Document("$set", new Document("isDefault", true)), new UpdateOptions().upsert(false));
+
+        if (defaultSetResult.getMatchedCount() == 0){
+            throw new DataNotFoundException(
+                    new Throwable("ActivityCategory {" + name + "} not found."));
+        }
+
     }
 
     @Override

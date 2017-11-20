@@ -45,10 +45,7 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
     }
 
     @Override
-    public String setDefaultCategory(String name) throws DataNotFoundException {
-        //TODO 17/11/17: findOneAndUpdate??
-        ActivityCategory newDefault = activityConfigurationDao.findByName(name);
-        ActivityCategory oldDefault = activityConfigurationDao.findDefault();
-        return null;
+    public void setDefaultCategory(String name) throws DataNotFoundException {
+        activityConfigurationDao.setNewDefault(name);
     }
 }

@@ -51,9 +51,9 @@ public class ActivityCategoryFacade {
         }
     }
 
-    public String setDefaultCategory(String name){
+    public void setDefaultCategory(String name){
         try {
-            return activityCategoryService.setDefaultCategory(name);
+            activityCategoryService.setDefaultCategory(name);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

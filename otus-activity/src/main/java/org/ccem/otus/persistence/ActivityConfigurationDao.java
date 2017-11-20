@@ -12,7 +12,7 @@ public interface ActivityConfigurationDao {
     ActivityCategory findByName(String name) throws DataNotFoundException;
 
     List<ActivityCategory> findAll();
-    
+
     ActivityCategory getLastInsertedCategory();
 
     ActivityCategory create(ActivityCategory activityCategory);
@@ -21,6 +21,5 @@ public interface ActivityConfigurationDao {
 
     ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
-    ActivityCategory findDefault() throws DataNotFoundException;
-
+    void setNewDefault(String name) throws DataNotFoundException;
 }

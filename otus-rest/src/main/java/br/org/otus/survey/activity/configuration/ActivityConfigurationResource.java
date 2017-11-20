@@ -56,6 +56,7 @@ public class ActivityConfigurationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public String setDefault(@PathParam("id") String name){
-        return new Response().buildSuccess(activityCategoryFacade.setDefaultCategory(name)).toJson();
+        activityCategoryFacade.setDefaultCategory(name);
+        return new Response().buildSuccess().toJson();
     }
 }
