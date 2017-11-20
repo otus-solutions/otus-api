@@ -58,14 +58,14 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
-    public void delete(String name) throws DataNotFoundException {
+    public void softDelete(String name) throws DataNotFoundException {
         BasicDBObject query = new BasicDBObject();
         query.put("objectType", "ActivityCategory");
         query.put("name", name);
 
-        DeleteResult deleteResult = collection.deleteOne(query);
+        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("deleted", true)), new UpdateOptions().upsert(false));
 
-        if (deleteResult.getDeletedCount() == 0) {
+        if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException(
                     new Throwable("ActivityCategory {" + name + "} not found."));        }
     }

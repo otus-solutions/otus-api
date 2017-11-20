@@ -15,7 +15,7 @@ public interface ActivityConfigurationDao {
 
     ActivityCategory create(ActivityCategory activityCategory);
 
-    void delete(String name) throws DataNotFoundException;
+    void softDelete(String name) throws DataNotFoundException;
 
     ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 

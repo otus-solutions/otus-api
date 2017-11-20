@@ -36,7 +36,7 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Override
     public void delete(String name) throws DataNotFoundException {
-        activityConfigurationDao.delete(name);
+        activityConfigurationDao.softDelete(name);
     }
 
     @Override
