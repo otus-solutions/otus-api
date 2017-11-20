@@ -32,6 +32,10 @@ public class ActivityCategory {
         return name;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public void setName(String lastInsertedName) {
         this.name = ActivityConfiguration.extractNamingSuffix(NAMING_PREFIX, lastInsertedName);
     }
@@ -40,11 +44,11 @@ public class ActivityCategory {
         this.name = NAMING_PREFIX + "0";
     }
 
-    public static String serialize(ActivityCategory surveyActivity) {
-        return ActivityConfiguration.getGsonBuilder().create().toJson(surveyActivity);
+    public static String serialize(ActivityCategory activityCategory) {
+        return ActivityConfiguration.getGsonBuilder().create().toJson(activityCategory);
     }
 
-    public static ActivityCategory deserialize(String surveyActivity) {
-        return ActivityConfiguration.getGsonBuilder().create().fromJson(surveyActivity, ActivityCategory.class);
+    public static ActivityCategory deserialize(String activityCategory) {
+        return ActivityConfiguration.getGsonBuilder().create().fromJson(activityCategory, ActivityCategory.class);
     }
 }

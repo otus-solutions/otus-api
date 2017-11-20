@@ -4,6 +4,7 @@ import br.org.mongodb.MongoGenericDao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -77,7 +78,8 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
         query.put("objectType", "ActivityCategory");
         query.put("name", activityCategory.getName());
 
-        UpdateResult updateResult = collection.updateOne(query, parsed);
+        UpdateResult updateResult = collection.updateOne(query,
+                new Document("$set", new Document("label",activityCategory.getLabel())), new UpdateOptions().upsert(false));
 
         if (updateResult.getMatchedCount() == 0){
             throw new DataNotFoundException(
