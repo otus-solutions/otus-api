@@ -30,11 +30,6 @@ public class ActivityCategoryFacade {
         return activityCategoryService.create(new ActivityCategory(categoryLabel));
     }
 
-    //TODO 14/11/17: implement
-    public String createMany(){
-        return null;
-    }
-
     public void delete(String name) {
         try {
             activityCategoryService.delete(name);

@@ -54,7 +54,6 @@ public class ActivityConfigurationResource {
     @PUT
     @Path("/categories/default/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public String setDefault(@PathParam("id") String name){
         activityCategoryFacade.setDefaultCategory(name);
         return new Response().buildSuccess().toJson();
