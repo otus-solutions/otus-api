@@ -27,8 +27,7 @@ public class ActivityCategoryFacade {
     }
 
     public ActivityCategory create(String categoryLabel) {
-        ActivityCategory insertedCategory = activityCategoryService.create(new ActivityCategory(categoryLabel));
-        return insertedCategory;
+        return activityCategoryService.create(new ActivityCategory(categoryLabel));
     }
 
     //TODO 14/11/17: implement

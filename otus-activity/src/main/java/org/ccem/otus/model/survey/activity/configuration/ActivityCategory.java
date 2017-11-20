@@ -5,7 +5,7 @@ import com.sun.media.jfxmediaimpl.NativeMediaManager;
 public class ActivityCategory {
 
     public static String NAMING_PREFIX = "C";
-    public static String OBJECT_TYPE = "ActivityCategory"; //if you change this, script mongo to update the collection. The find method use this field
+    public static String OBJECT_TYPE = "ActivityCategory"; //if you change this, script mongo to update the collection. The findNonDeleted method use this field
 
     private String name;
     private String objectType;

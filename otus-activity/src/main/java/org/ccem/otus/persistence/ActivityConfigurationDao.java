@@ -7,10 +7,12 @@ import java.util.List;
 
 public interface ActivityConfigurationDao {
 
-    List<ActivityCategory> find();
+    List<ActivityCategory> findNonDeleted();
 
     ActivityCategory findByName(String name) throws DataNotFoundException;
 
+    List<ActivityCategory> findAll();
+    
     ActivityCategory getLastInsertedCategory();
 
     ActivityCategory create(ActivityCategory activityCategory);
@@ -20,4 +22,5 @@ public interface ActivityConfigurationDao {
     ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
     ActivityCategory findDefault() throws DataNotFoundException;
+
 }

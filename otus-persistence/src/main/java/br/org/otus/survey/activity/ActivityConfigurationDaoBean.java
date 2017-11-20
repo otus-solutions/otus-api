@@ -26,7 +26,22 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
-    public List<ActivityCategory> find() {
+    public List<ActivityCategory> findNonDeleted() {
+        ArrayList<ActivityCategory> categories = new ArrayList<>();
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("deleted", false);
+
+        FindIterable<Document> documents = collection.find(query);
+
+        documents.forEach((Block<? super Document>) document -> categories.add(ActivityCategory.deserialize(document.toJson())));
+
+        return categories;
+    }
+
+    @Override
+    public List<ActivityCategory> findAll() {
         ArrayList<ActivityCategory> categories = new ArrayList<>();
 
         BasicDBObject query = new BasicDBObject();

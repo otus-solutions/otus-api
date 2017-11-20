@@ -16,7 +16,7 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Override
     public List<ActivityCategory> list() {
-        return activityConfigurationDao.find();
+        return activityConfigurationDao.findNonDeleted();
     }
 
     @Override
