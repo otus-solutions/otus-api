@@ -36,10 +36,11 @@ pipeline {
       }
     }
 
-    // stage('Deploy - Development Server') {
-    //   steps {
+     stage('Deploy - Development Server') {
+       steps {
+         echo "NÃO IMPLEMENTADO"
     //     sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
-    //   }
+       }
     //   post {
     //     failure {
     //       emailext (
@@ -68,7 +69,7 @@ pipeline {
     //           )
     //         }
     //     }
-    //   }
+       }
 
     }
 
