@@ -97,6 +97,14 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		return activities;
 	}
 
+	@Override
+	public List<SurveyActivity> findByCategory(String categoryName) {
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
 
+		FindIterable<Document> result = collection.find(eq("category.name", categoryName));
+
+		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
+		return activities;
+	}
 
 }
