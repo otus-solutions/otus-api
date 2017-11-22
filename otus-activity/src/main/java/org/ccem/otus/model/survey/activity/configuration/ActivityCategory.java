@@ -1,7 +1,5 @@
 package org.ccem.otus.model.survey.activity.configuration;
 
-import com.sun.media.jfxmediaimpl.NativeMediaManager;
-
 public class ActivityCategory {
 
     public static String NAMING_PREFIX = "C";
@@ -10,13 +8,13 @@ public class ActivityCategory {
     private String name;
     private String objectType;
     private String label;
-    private Boolean deleted;
+    private Boolean disabled;
     private Boolean isDefault;
 
     public ActivityCategory(String label) {
         this.objectType = OBJECT_TYPE;
         this.label = label;
-        this.deleted = false;
+        this.disabled = false;
         this.isDefault = false;
     }
 
@@ -24,7 +22,7 @@ public class ActivityCategory {
         this.objectType = OBJECT_TYPE;
         this.name = name;
         this.label = label;
-        this.deleted = deleted;
+        this.disabled = deleted;
         this.isDefault = isDefault;
     }
 

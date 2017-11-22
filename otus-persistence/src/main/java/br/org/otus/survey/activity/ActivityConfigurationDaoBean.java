@@ -31,7 +31,7 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
 
         BasicDBObject query = new BasicDBObject();
         query.put("objectType", "ActivityCategory");
-        query.put("deleted", false);
+        query.put("disabled", false);
 
         FindIterable<Document> documents = collection.find(query);
 
@@ -78,7 +78,7 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
         query.put("objectType", "ActivityCategory");
         query.put("name", name);
 
-        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("deleted", true)), new UpdateOptions().upsert(false));
+        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("disabled", true)), new UpdateOptions().upsert(false));
 
         if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException(
@@ -102,8 +102,6 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
 
     @Override
     public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
-        Document parsed = Document.parse(ActivityCategory.serialize(activityCategory));
-
         BasicDBObject query = new BasicDBObject();
         query.put("objectType", "ActivityCategory");
         query.put("name", activityCategory.getName());
