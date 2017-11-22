@@ -5,6 +5,9 @@ import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import javax.inject.Inject;
 import java.util.List;
@@ -26,8 +29,13 @@ public class ActivityCategoryFacade {
         }
     }
 
-    public ActivityCategory create(String categoryLabel) {
-        return activityCategoryService.create(new ActivityCategory(categoryLabel));
+    public ActivityCategory create(String categoryLabelJson) {
+        try {
+            JSONObject categoryLabel = new JSONObject(categoryLabelJson);
+            return activityCategoryService.create(new ActivityCategory((String) categoryLabel.get("label")));
+        } catch (JSONException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
     }
 
     public void delete(String name) {

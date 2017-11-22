@@ -29,7 +29,7 @@ public class ActivityConfigurationResource {
     @POST
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String create(String categoryLabel){
         return new Response().buildSuccess(activityCategoryFacade.create(categoryLabel)).toJson();
     }
