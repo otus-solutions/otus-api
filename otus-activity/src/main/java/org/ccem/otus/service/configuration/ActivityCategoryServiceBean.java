@@ -3,6 +3,7 @@ package org.ccem.otus.service.configuration;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityConfigurationDao;
+import org.ccem.otus.persistence.ActivityDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -13,6 +14,9 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Inject
     ActivityConfigurationDao activityConfigurationDao;
+
+    @Inject
+    ActivityDao activityDao;
 
     @Override
     public List<ActivityCategory> list() {
@@ -36,7 +40,13 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Override
     public void delete(String name) throws DataNotFoundException {
-        activityConfigurationDao.softDelete(name);
+        if (activityDao.findByCategory(name).size() != 0){
+            activityConfigurationDao.disable(name);
+        }
+        else {
+            activityConfigurationDao.delete(name);
+        }
+
     }
 
     @Override

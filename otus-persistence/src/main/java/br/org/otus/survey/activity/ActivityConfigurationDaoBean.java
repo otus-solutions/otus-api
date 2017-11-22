@@ -73,7 +73,7 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
-    public void softDelete(String name) throws DataNotFoundException {
+    public void disable(String name) throws DataNotFoundException {
         BasicDBObject query = new BasicDBObject();
         query.put("objectType", "ActivityCategory");
         query.put("name", name);
@@ -84,6 +84,21 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
             throw new DataNotFoundException(
                     new Throwable("ActivityCategory {" + name + "} not found."));        }
     }
+
+    @Override
+    public void delete(String name) throws DataNotFoundException {
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("name", name);
+
+        DeleteResult deleteResult = collection.deleteOne(query);
+
+        if (deleteResult.getDeletedCount() == 0) {
+            throw new DataNotFoundException(
+                    new Throwable("ActivityCategory {" + name + "} not found."));        }
+    }
+
+
 
     @Override
     public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
@@ -138,13 +153,4 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
 
     }
 
-
-    public ActivityCategory getLaastInsertedCategory() {
-        BasicDBObject query = new BasicDBObject("objectType","ActivityCategory");
-
-        Document lastInsertedDocument = collection.find(query).sort(new BasicDBObject("_id",-1)).first();
-
-        return lastInsertedDocument == null ? null : ActivityCategory.deserialize(lastInsertedDocument.toJson());
-
-    }
 }
