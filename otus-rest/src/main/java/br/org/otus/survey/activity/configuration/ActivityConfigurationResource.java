@@ -1,6 +1,7 @@
 package br.org.otus.survey.activity.configuration;
 
 import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -13,6 +14,7 @@ public class ActivityConfigurationResource {
     ActivityCategoryFacade activityCategoryFacade;
 
     @GET
+    @Secured
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllCategories(){
@@ -20,6 +22,7 @@ public class ActivityConfigurationResource {
     }
 
     @GET
+    @Secured
     @Path("/categories/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String get(@PathParam("id") String name){
@@ -27,6 +30,7 @@ public class ActivityConfigurationResource {
     }
 
     @POST
+    @Secured
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -35,6 +39,7 @@ public class ActivityConfigurationResource {
     }
 
     @DELETE
+    @Secured
     @Path("/categories/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String delete(@PathParam("id") String name){
@@ -43,6 +48,7 @@ public class ActivityConfigurationResource {
     }
 
     @PUT
+    @Secured
     @Path("/categories")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -52,6 +58,7 @@ public class ActivityConfigurationResource {
     }
 
     @PUT
+    @Secured
     @Path("/categories/default/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String setDefault(@PathParam("id") String name){
