@@ -42,6 +42,10 @@ public class ActivityCategory {
         this.name = NAMING_PREFIX + "0";
     }
 
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
+
     public static String serialize(ActivityCategory activityCategory) {
         return ActivityConfiguration.getGsonBuilder().create().toJson(activityCategory);
     }

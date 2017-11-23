@@ -33,7 +33,10 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
         ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory();
 
         if (lastInsertedCategory != null) activityCategory.setName(lastInsertedCategory.getName());
-        else activityCategory.setName();
+        else {
+            activityCategory.setName();
+            activityCategory.setDefault(true);
+        }
 
         return activityConfigurationDao.create(activityCategory);
     }
