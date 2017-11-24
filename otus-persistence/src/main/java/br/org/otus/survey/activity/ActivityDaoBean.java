@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityDao;
 
 import javax.ejb.Stateless;
@@ -105,6 +106,15 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
 		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
 		return activities;
+	}
+
+	@Override
+	public void updateCategory(ActivityCategory activityCategory){
+		Document query = new Document();
+		query.put("category.name", activityCategory.getName());
+
+		UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("category.label", activityCategory.getLabel())), new UpdateOptions().upsert(false));
+
 	}
 
 }

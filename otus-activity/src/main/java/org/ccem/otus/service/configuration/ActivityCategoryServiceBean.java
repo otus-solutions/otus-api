@@ -54,7 +54,10 @@ public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
     @Override
     public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
-        return activityConfigurationDao.update(activityCategory);
+        ActivityCategory update = activityConfigurationDao.update(activityCategory);
+        activityDao.updateCategory(activityCategory);
+
+        return update;
     }
 
     @Override
