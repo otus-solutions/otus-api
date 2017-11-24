@@ -3,6 +3,7 @@ package org.ccem.otus.persistence;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface ActivityDao {
 	SurveyActivity findByID(String id) throws DataNotFoundException;
 
 	List<SurveyActivity> findAllByID(String id) throws DataNotFoundException;
+
+	List<SurveyActivity> findByCategory(String categoryName);
+
+	void updateCategory(ActivityCategory activityCategory);
 }
