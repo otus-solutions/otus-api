@@ -15,6 +15,7 @@ import br.org.otus.participant.ParticipantResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
+import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.user.UserResource;
 
 import javax.inject.Inject;
@@ -75,6 +76,9 @@ public class EndPointsLoader extends Application {
 	@Inject
 	private ExtractionResource extractionResource;
 
+	@Inject
+	private ActivityConfigurationResource activityConfigurationResource;
+
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -94,6 +98,7 @@ public class EndPointsLoader extends Application {
 		resources.add(TransportationResource.class);
 		resources.add(LaboratoryConfigurationResource.class);
 		resources.add(ExtractionResource.class);
+		resources.add(ActivityConfigurationResource.class);
 		return resources;
 	}
 
@@ -116,6 +121,7 @@ public class EndPointsLoader extends Application {
 		resources.add(transportationResource);
 		resources.add(laboratoryConfigurationResource);
 		resources.add(extractionResource);
+		resources.add(activityConfigurationResource);
 
 		return resources;
 	}

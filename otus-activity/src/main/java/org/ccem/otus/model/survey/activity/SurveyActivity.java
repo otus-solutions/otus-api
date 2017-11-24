@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.interview.Interview;
@@ -25,6 +26,7 @@ public class SurveyActivity {
 	private ObjectId activityID;
 	private SurveyForm surveyForm;
 	private ActivityMode mode;
+	private ActivityCategory category;
 	private Participant participantData;
 	private List<Interview> interviews;
 	private FillContainer fillContainer;
@@ -58,6 +60,10 @@ public class SurveyActivity {
 
 	public ActivityMode getMode() {
 		return mode;
+	}
+
+	public ActivityCategory getCategory() {
+		return category;
 	}
 
 	public List<Interview> getInterviews() {
