@@ -62,6 +62,10 @@ public class SurveyActivity {
 		return mode;
 	}
 
+	public ActivityCategory getCategory() {
+		return category;
+	}
+
 	public List<Interview> getInterviews() {
 		return interviews;
 	}

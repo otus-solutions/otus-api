@@ -28,6 +28,7 @@ public class SurveyActivityExtractionHeadersFactory {
 		this.headers.add(SurveyActivityExtractionHeaders.ACRONYM.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.MODE.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.TYPE.getValue());
+		this.headers.add(SurveyActivityExtractionHeaders.CATEGORY.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.INTERVIEWER.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getValue());
