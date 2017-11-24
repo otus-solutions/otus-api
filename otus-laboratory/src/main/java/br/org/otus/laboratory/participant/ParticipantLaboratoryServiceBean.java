@@ -63,6 +63,11 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 	}
 
 	@Override
+	public Tube updateTubeCollectionData(long rn, Tube tube) throws DataNotFoundException {
+		return participantLaboratoryDao.updateTubeCollectionData(rn,tube);
+	}
+
+	@Override
 	public ParticipantLaboratory updateAliquots(UpdateAliquotsDTO updateAliquotsDTO) throws DataNotFoundException, ValidationException {
 		ParticipantLaboratory participantLaboratory = getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
 		ParticipantLaboratoryValidator aliquotUpdateValidator = new AliquotUpdateValidator(updateAliquotsDTO, participantLaboratoryDao, participantLaboratory);

@@ -2,6 +2,7 @@ package br.org.otus.laboratory.participant.api;
 
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.participant.tube.Tube;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -19,6 +20,15 @@ public class ParticipantLaboratoryFacade {
 	public ParticipantLaboratory update(ParticipantLaboratory participantLaboratory) {
 		try {
 			return service.update(participantLaboratory);
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+	}
+
+	public Tube updateTubeCollectionData(Long rn, Tube tube) {
+		try {
+			return service.updateTubeCollectionData(rn,tube);
 		} catch (DataNotFoundException e) {
 			e.printStackTrace();
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
