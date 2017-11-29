@@ -1,16 +1,17 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import com.google.gson.JsonSyntaxException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 
-import javax.inject.Inject;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.JsonSyntaxException;
 
 public class ActivityFacade {
 
@@ -24,6 +25,14 @@ public class ActivityFacade {
 	public SurveyActivity getByID(String id) {
 		try {
 			return activityService.getByID(id);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+	}
+	
+	public List<SurveyActivity> getAllByID(String id) {
+		try {
+			return activityService.getAllByID(id);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}

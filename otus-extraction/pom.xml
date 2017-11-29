@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>otus-extraction</artifactId>
+	<packaging>ejb</packaging>
+
+	<parent>
+		<groupId>org.ccem.otus</groupId>
+		<artifactId>otus-root</artifactId>
+		<version>1.7-SNAPSHOT</version>
+		<relativePath>../otus-root/pom.xml</relativePath>
+	</parent>
+
+	<dependencies>
+		<!-- - - External Dependencies - ! -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.5</version>
+			<scope>provided</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.ccem.otus</groupId>
+            <artifactId>otus-commons</artifactId>
+            <version>1.4-SNAPSHOT</version>
+        </dependency>
+		<!-- - - Dependency between modules - ! -->
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-user</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+    </dependencies>
+</project>

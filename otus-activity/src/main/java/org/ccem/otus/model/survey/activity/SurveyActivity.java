@@ -1,8 +1,10 @@
 package org.ccem.otus.model.survey.activity;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
+import java.util.Optional;
+
 import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.interview.Interview;
@@ -14,7 +16,8 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 
 public class SurveyActivity {
 
@@ -23,6 +26,7 @@ public class SurveyActivity {
 	private ObjectId activityID;
 	private SurveyForm surveyForm;
 	private ActivityMode mode;
+	private ActivityCategory category;
 	private Participant participantData;
 	private List<Interview> interviews;
 	private FillContainer fillContainer;
@@ -58,6 +62,10 @@ public class SurveyActivity {
 		return mode;
 	}
 
+	public ActivityCategory getCategory() {
+		return category;
+	}
+
 	public List<Interview> getInterviews() {
 		return interviews;
 	}
@@ -78,6 +86,21 @@ public class SurveyActivity {
 		return navigationTracker;
 	}
 
+	public Optional<ActivityStatus> getCurrentStatus() {
+		return this.statusHistory.stream().reduce((activityStatus, activityStatus2) -> activityStatus2);
+	}
+
+	public Optional<ActivityStatus> getLastStatusByName(String name) {
+		return statusHistory.stream()
+				.filter(status -> status.getName().equals(name))
+				.reduce((activityStatus, activityStatus2) -> activityStatus2);
+	}
+
+	public Optional<Interview> getLastInterview(){
+		return this.interviews.stream().reduce((interview, interview2) -> interview2);
+
+	}
+
 	public static String serialize(SurveyActivity surveyActivity) {
 		return getGsonBuilder().create().toJson(surveyActivity);
 	}
@@ -89,7 +112,7 @@ public class SurveyActivity {
 	/**
 	 * @return a GsonBuilder instance with AnswerAdapter, ObjectIdAdapter
 	 *         registered and also all registered adapters of SurveyForm.
-	 * {@link SurveyForm#getGsonBuilder}
+	 *         {@link SurveyForm#getGsonBuilder}
 	 * 
 	 */
 	public static GsonBuilder getGsonBuilder() {
@@ -101,5 +124,4 @@ public class SurveyActivity {
 
 		return builder;
 	}
-
 }

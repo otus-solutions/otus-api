@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.extraction.ExtractionSecurityService;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -30,6 +31,9 @@ public class UserFacade {
 
 	@Inject
 	private SignupService signupService;
+
+	@Inject
+	private ExtractionSecurityService extractionSecurityService;
 
 	public void create(OtusInitializationConfigDto initializationConfigDto) {
 		try {
@@ -95,6 +99,49 @@ public class UserFacade {
 
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.System.NotInitialized.build());
+		}
+	}
+
+	public void disableExtraction(ManagementUserDto managementUserDto) {
+		try {
+			managementUserService.disableExtraction(managementUserDto);
+
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.System.NotInitialized.build());
+		}
+	}
+
+	public void enableExtraction(ManagementUserDto managementUserDto) {
+		try {
+			managementUserService.enableExtraction(managementUserDto);
+
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.System.NotInitialized.build());
+		}
+	}
+
+	public void updateExtractionIps(ManagementUserDto managementUserDto) {
+		try {
+			managementUserService.updateExtractionIps(managementUserDto);
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+		}
+	}
+
+	public String getExtractionToken(String email) {
+		try {
+			return extractionSecurityService.getExtractionToken(email);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
 		}
 	}
 

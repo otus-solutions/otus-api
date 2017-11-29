@@ -31,14 +31,14 @@ import br.org.otus.domain.exceptions.DomainConnectionError;
 @PrepareForTest({ DomainRegisterResource.class, HttpClientBuilder.class })
 public class DomainRegisterResourceTest {
 
-	public static final String CONTENT_TYPE = "content-type";
-	public static final String CONTENT_TYPE_VALUE = "application/json";
-	public static final String REGISTER_REST_PATH = "/otus";
-	public static final String DOMAIN_REST_URL = "https://domain.hmg.ccem.ufrgs.br";
-	public static final String PROJECT_REST_URL = "https://api-otus.dev.ccem.ufrgs.br";
-	public static final String PROJECT_NAME = "OtusLocal";
-	public static final String TOKEN = "347bcf7e-dcb2-4768-82eb-ee95d893f4c0";
-	public static final Integer RESPONSE_STATUS = 200;
+	private static final String CONTENT_TYPE = "content-type";
+	private static final String CONTENT_TYPE_VALUE = "application/json";
+	private static final String REGISTER_REST_PATH = "/otus";
+	private static final String DOMAIN_REST_URL = "https://domain.hmg.ccem.ufrgs.br";
+	private static final String PROJECT_REST_URL = "https://api-otus.dev.ccem.ufrgs.br";
+	private static final String PROJECT_NAME = "OtusLocal";
+	private static final String TOKEN = "347bcf7e-dcb2-4768-82eb-ee95d893f4c0";
+	private static final Integer RESPONSE_STATUS = 200;
 
 	@Mock
 	private HttpClientBuilder httpClientBuilder;

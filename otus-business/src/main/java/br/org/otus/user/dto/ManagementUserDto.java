@@ -1,50 +1,57 @@
 package br.org.otus.user.dto;
 
+import java.util.ArrayList;
+
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import br.org.tutty.Equalization;
 
 public class ManagementUserDto implements Dto {
-    @Equalization(name = "name")
-    public String name;
+	@Equalization(name = "name")
+	public String name;
 
-    @Equalization(name = "surname")
-    public String surname;
+	@Equalization(name = "surname")
+	public String surname;
 
-    @Equalization(name = "phone")
-    public String phone;
-    
-    public FieldCenterDTO fieldCenter;
+	@Equalization(name = "extraction")
+	public Boolean extraction;
 
-    @Equalization(name = "email")
-    public String email;
+	@Equalization(name = "extraction_ips")
+	public ArrayList extractionIps;
 
-    @Equalization(name = "admin_flag")
-    public Boolean admin;
+	@Equalization(name = "phone")
+	public String phone;
 
-    @Equalization(name = "enable")
-    public Boolean enable;
+	public FieldCenterDTO fieldCenter;
 
+	@Equalization(name = "email")
+	public String email;
 
-    public ManagementUserDto() {
-    	this.fieldCenter = new FieldCenterDTO();
-    }
-    
-    public String getEmail() {
-        return email;
-    }
+	@Equalization(name = "admin_flag")
+	public Boolean admin;
 
-    @Override
-    public Boolean isValid() {
-        return !name.isEmpty() &&
-                !surname.isEmpty() &&
-                !phone.isEmpty() &&
-                !email.isEmpty()
-                ? Boolean.TRUE : Boolean.FALSE;
-    }
+	@Equalization(name = "enable")
+	public Boolean enable;
 
-    @Override
-    public void encrypt() throws EncryptedException {
-    }
+	public ManagementUserDto() {
+		this.fieldCenter = new FieldCenterDTO();
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public ArrayList<String> getExtractionIps() {
+		return extractionIps;
+	}
+
+	@Override
+	public Boolean isValid() {
+		return !name.isEmpty() && !surname.isEmpty() && !phone.isEmpty() && !email.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
+	}
+
+	@Override
+	public void encrypt() throws EncryptedException {
+	}
 }

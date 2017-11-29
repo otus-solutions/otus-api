@@ -12,8 +12,8 @@ pipeline {
       }
       post {
         always {
-          junit '**/target/surefire-reports/*.xml'
           archive '**/target/surefire-reports/*.xml'
+          junit '**/target/surefire-reports/*.xml'
         }
       }
     }
@@ -36,40 +36,7 @@ pipeline {
       }
     }
 
-     stage('Deploy - Development Server') {
-       steps {
-         echo "NÃO IMPLEMENTADO"
-    //     sh 'mvn -f otus-ear/pom.xml wildfly:deploy -Dwildfly-hostname=${SERVER_HOST} -Dwildfly-username=${SERVER_USER} -Dwildfly-password=${SERVER_PWD}'
-       }
-    //   post {
-    //     failure {
-    //       emailext (
-    //         subject: '$DEFAULT_SUBJECT',
-    //         body: '$DEFAULT_CONTENT',
-    //         recipientProviders: [
-    //         [$class: 'CulpritsRecipientProvider'],
-    //         [$class: 'DevelopersRecipientProvider'],
-    //         [$class: 'RequesterRecipientProvider']
-    //         ],
-    //         replyTo: '$DEFAULT_REPLYTO',
-    //         to: '$DEFAULT_RECIPIENTS'
-    //         )
-    //       }
-    //       success {
-    //         emailext (
-    //           subject: '$DEFAULT_SUBJECT',
-    //           body: '$DEFAULT_CONTENT',
-    //           recipientProviders: [
-    //             [$class: 'CulpritsRecipientProvider'],
-    //             [$class: 'DevelopersRecipientProvider'],
-    //             [$class: 'RequesterRecipientProvider']
-    //           ],
-    //           replyTo: '$DEFAULT_REPLYTO',
-    //           to: '$DEFAULT_RECIPIENTS'
-    //           )
-    //         }
-    //     }
-       }
+
 
     }
 

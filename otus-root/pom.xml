@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.ccem.otus</groupId>
 	<artifactId>otus-root</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>otus-api</name>
 
@@ -17,7 +17,7 @@
 
 		<owail.sender.version>1.0</owail.sender.version>
 		<equalize.version>2.0.2</equalize.version>
-		<survey.model.version>1.3</survey.model.version>
+		<survey.model.version>1.4</survey.model.version>
 		<auditor.core.version>1.2</auditor.core.version>
 	</properties>
 
@@ -39,20 +39,20 @@
 		<module>../otus-laboratory</module>
 		<module>../otus-datasource</module>
 		<module>../otus-file-uploader</module>
-
+		<module>../otus-extraction</module>
 	</modules>
 
 	<repositories>
 		<repository>
 			<id>snapshots</id>
-			<url>http://146.148.79.9/repository/maven-snapshots</url>
+			<url>${repository_snapshots}</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>releases</id>
-			<url>http://146.148.79.9/repository/maven-releases</url>
+			<url>${repository_releases}</url>
 		</repository>
 		<repository>
 			<id>maven-restlet</id>
@@ -63,11 +63,11 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>http://146.148.79.9/repository/maven-releases</url>
+			<url>${repository_releases}</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
-			<url>http://146.148.79.9/repository/maven-snapshots</url>
+			<url>${repository_snapshots}</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -179,13 +179,13 @@
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.6.3</version>
+			<version>1.7.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.6.3</version>
+			<version>1.7.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
