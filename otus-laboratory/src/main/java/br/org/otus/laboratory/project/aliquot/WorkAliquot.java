@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.transportation.aliquot;
+package br.org.otus.laboratory.project.aliquot;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
@@ -13,28 +13,27 @@ import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import java.util.List;
 
-public class TransportationAliquot extends Aliquot {
+public class WorkAliquot extends Aliquot {
 
 	private Long recruitmentNumber;
 	private ImmutableDate birthdate;
 	private Sex sex;
 	private FieldCenter fieldCenter;
 
-
-
-	public TransportationAliquot(String objectType, String code, String name, AliquotContainer container,
-								 AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
+	public WorkAliquot(String objectType, String code, String name, AliquotContainer container,
+			AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
 		super(objectType, code, name, container, role, aliquotCollectionData);
 	}
 
-	public TransportationAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex, FieldCenter aliquotCenter) {
-		super(aliquot.getObjectType(), aliquot.getCode(), aliquot.getName(), aliquot.getContainer(), aliquot.getRole(), aliquot.getAliquotCollectionData());
+	public WorkAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex,
+			FieldCenter aliquotCenter) {
+		super(aliquot.getObjectType(), aliquot.getCode(), aliquot.getName(), aliquot.getContainer(), aliquot.getRole(),
+				aliquot.getAliquotCollectionData());
 		this.setRecruitmentNumber(recruitmentNumber);
 		this.setBirthdate(birthdate);
 		this.setSex(sex);
 		this.setFieldCenter(aliquotCenter);
 	}
-
 
 	public Long getRecruitmentNumber() {
 		return recruitmentNumber;
@@ -64,7 +63,7 @@ public class TransportationAliquot extends Aliquot {
 		Gson builder = ParticipantLaboratory.getGsonBuilder();
 		return builder.toJson(aliquots);
 	}
-	
+
 	public FieldCenter getFieldCenter() {
 		return fieldCenter;
 	}
@@ -72,6 +71,5 @@ public class TransportationAliquot extends Aliquot {
 	public void setFieldCenter(FieldCenter fieldCenter) {
 		this.fieldCenter = fieldCenter;
 	}
-
 
 }

@@ -1,7 +1,7 @@
 package br.org.otus.laboratory.project.transportation.validarors;
 
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -53,7 +53,7 @@ public class TransportationLotValidator {
 	}
 
 	private void checkIfAliquotsExist() throws DataNotFoundException {
-		final List<TransportationAliquot> aliquotList = transportationLotDao.getAliquots();
+		final List<WorkAliquot> aliquotList = transportationLotDao.getAliquots();
 		transportationLot.getAliquotList().forEach(transportationAliquot -> {
 			boolean contains = aliquotList.contains(transportationAliquot);
 

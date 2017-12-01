@@ -1,8 +1,9 @@
 package br.org.otus.laboratory.project.transportation;
 
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
@@ -16,7 +17,7 @@ public class TransportationLot {
 
 	private String objectType;
 	private String code;
-	private List<TransportationAliquot> aliquotList;
+	private List<WorkAliquot> aliquotList;
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
@@ -38,7 +39,7 @@ public class TransportationLot {
 		return code;
 	}
 
-	public List<TransportationAliquot> getAliquotList() {
+	public List<WorkAliquot> getAliquotList() {
 		return aliquotList;
 	}
 
