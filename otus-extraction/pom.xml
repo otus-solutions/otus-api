@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.ccem.otus</groupId>
             <artifactId>otus-commons</artifactId>
-            <version>1.4-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 			<scope>provided</scope>
         </dependency>
 		<!-- - - Dependency between modules - ! -->
