@@ -11,7 +11,7 @@ import java.util.List;
 
 public class WorkAliquotFactory {
 
-	public static List<WorkAliquot> getTransportationAliquotList(ParticipantLaboratoryDao participantLaboratoryDao,
+	public static List<WorkAliquot> getAliquotList(ParticipantLaboratoryDao participantLaboratoryDao,
 			ParticipantDao participantDao) throws DataNotFoundException {
 		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
 
@@ -24,10 +24,10 @@ public class WorkAliquotFactory {
 
 			participantLaboratory.getTubes().forEach(tube -> {
 				tube.getAliquots().forEach(aliquot -> {
-					WorkAliquot transportationAliquot;
-					transportationAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
+					WorkAliquot workAliquot;
+					workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
 							participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
-					aliquotList.add(transportationAliquot);
+					aliquotList.add(workAliquot);
 				});
 			});
 
