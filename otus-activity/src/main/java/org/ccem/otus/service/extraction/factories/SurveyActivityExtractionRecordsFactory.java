@@ -16,6 +16,7 @@ import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.service.extraction.enums.ExtractionVariables;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
+import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.item.SurveyItem;
 import org.ccem.otus.survey.template.item.questions.Question;
 import org.ccem.otus.survey.template.item.questions.metadata.MetadataOption;
@@ -23,9 +24,11 @@ import org.ccem.otus.survey.template.item.questions.metadata.MetadataOption;
 public class SurveyActivityExtractionRecordsFactory {
 
 	private LinkedHashMap<String, Object> surveyInformation;
+	private SurveyForm surveyForm;
 
-	public SurveyActivityExtractionRecordsFactory(LinkedHashSet headers) {
+	public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet headers) {
 		this.surveyInformation = new LinkedHashMap<>();
+		this.surveyForm = surveyForm;
 		for (Object header : headers) {
 			this.surveyInformation.put(header.toString(), "");
 		}
@@ -37,7 +40,7 @@ public class SurveyActivityExtractionRecordsFactory {
 
 	public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), surveyActivity.getParticipantData().getRecruitmentNumber());
-		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+		this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), this.surveyForm.getSurveyTemplate().identity.acronym);
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.MODE.getValue(), surveyActivity.getMode());
 		this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), surveyActivity.getCategory().getName());
 
@@ -69,11 +72,11 @@ public class SurveyActivityExtractionRecordsFactory {
 	}
 
 	public void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
-		final Map<String, String> customIDMap = surveyActivity.getSurveyForm().getSurveyTemplate().mapTemplateAndCustomIDS();
+		final Map<String, String> customIDMap = this.surveyForm.getSurveyTemplate().mapTemplateAndCustomIDS();
 
 		for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
 			// TODO: 16/10/17 create ExtractionExceptions
-			SurveyItem surveyItem = surveyActivity.getSurveyForm().getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
+			SurveyItem surveyItem = this.surveyForm.getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
 
 			switch (trackingItem.state) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses

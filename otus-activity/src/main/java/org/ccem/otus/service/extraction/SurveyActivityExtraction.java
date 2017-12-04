@@ -5,19 +5,22 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionHeadersFactory;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecordsFactory;
+import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.*;
 
 public class SurveyActivityExtraction implements Extractable {
 
 	private List<SurveyActivity> surveyActivities;
+	private SurveyForm surveyForm;
 	private SurveyActivityExtractionHeadersFactory headersFactory;
 	private SurveyActivityExtractionRecordsFactory recordsFactory;
 
-	public SurveyActivityExtraction(List<SurveyActivity> surveyActivities) {
+	public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
-		this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyActivities);
-		this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.headersFactory.getHeaders());
+		this.surveyForm = surveyForm;
+		this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyForm);
+		this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());
 	}
 
 	@Override
@@ -33,7 +36,7 @@ public class SurveyActivityExtraction implements Extractable {
 			List<Object> resultInformation = new ArrayList<>();
 			this.recordsFactory.getSurveyBasicInfo(surveyActivity);
 			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
-			resultInformation.addAll(new ArrayList<Object>(this.recordsFactory.getSurveyInformation().values()));
+			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
 			values.add(resultInformation);
 		}
 		return values;
