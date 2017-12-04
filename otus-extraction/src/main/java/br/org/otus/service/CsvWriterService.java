@@ -21,7 +21,7 @@ public class CsvWriterService {
 	public CsvWriterService() {
 		try {
 			out = new ByteArrayOutputStream();
-			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"').withQuoteMode(QuoteMode.ALL);
+			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"').withQuoteMode(QuoteMode.MINIMAL);
 			csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 		} catch (IOException e) {
 			e.printStackTrace();
