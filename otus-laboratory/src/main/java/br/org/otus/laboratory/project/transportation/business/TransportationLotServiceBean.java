@@ -3,7 +3,8 @@ package br.org.otus.laboratory.project.transportation.business;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import br.org.otus.laboratory.project.transportation.validarors.TransportationLotValidator;
+import br.org.otus.laboratory.project.transportation.validators.TransportationLotValidator;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 

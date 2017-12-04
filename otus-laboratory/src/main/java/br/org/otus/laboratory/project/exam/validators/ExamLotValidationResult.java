@@ -1,8 +1,8 @@
-package br.org.otus.laboratory.project.transportation.validarors;
+package br.org.otus.laboratory.project.exam.validators;
 
 import java.util.ArrayList;
 
-public class TransportationLotValidationResult {
+public class ExamLotValidationResult {
 
 	private boolean isValid = true;
 	private ArrayList<String> value = new ArrayList<>();
@@ -33,6 +33,6 @@ public class TransportationLotValidationResult {
 		this.value.add(aliquotCode);
 	}
 
-	public TransportationLotValidationResult() {
+	public ExamLotValidationResult() {
 	}
 }

@@ -10,6 +10,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.ExamLot;
 import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.validators.ExamLotValidator;
 
 public class ExamLotServiceBean implements ExamLotService {
 
@@ -18,6 +19,7 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException {
+		_validateLot(examLot);
 		examLot.setOperator(email);
 		examLotDao.persist(examLot);
 		return examLot;
@@ -42,6 +44,11 @@ public class ExamLotServiceBean implements ExamLotService {
 	@Override
 	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
 		return examLotDao.getAliquots();
+	}
+
+	private void _validateLot(ExamLot examLot) throws ValidationException {
+		ExamLotValidator examLotValidator = new ExamLotValidator(examLotDao, examLot);
+		examLotValidator.validate();
 	}
 
 }
