@@ -19,7 +19,7 @@ public class ExamLot {
 	private String typeOfLot;
 	private String code;
 	private List<WorkAliquot> aliquotList;
-	private LocalDateTime shipmentDate;
+	private LocalDateTime processingDate;
 	private String operator;
 	private FieldCenter fieldCenter;
 
@@ -73,12 +73,12 @@ public class ExamLot {
 		this.code = code;
 	}
 
-	public LocalDateTime getShipmentDate() {
-		return shipmentDate;
+	public LocalDateTime getProcessingDate() {
+		return processingDate;
 	}
 
-	public void setShipmentDate(LocalDateTime shipmentDate) {
-		this.shipmentDate = shipmentDate;
+	public void setProcessingDate(LocalDateTime processingDate) {
+		this.processingDate = processingDate;
 	}
 
 	public String getOperator() {

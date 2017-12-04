@@ -34,7 +34,6 @@ public class ExamResource {
 
 	@POST
 	@Secured
-	@Path("/create")
 	public String create(@Context HttpServletRequest request, String examLotJson) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token))
@@ -48,7 +47,6 @@ public class ExamResource {
 
 	@PUT
 	@Secured
-	@Path("/update")
 	public String update(String examLotJson) {
 		ExamLot examLot = ExamLot.deserialize(examLotJson);
 		ExamLot updatedLot = examLotFacade.update(examLot);
@@ -57,7 +55,7 @@ public class ExamResource {
 
 	@DELETE
 	@Secured
-	@Path("/delete/{id}")
+	@Path("/{id}")
 	public String delete(@PathParam("id") String code) {
 		examLotFacade.delete(code);
 		return new Response().buildSuccess().toJson();
