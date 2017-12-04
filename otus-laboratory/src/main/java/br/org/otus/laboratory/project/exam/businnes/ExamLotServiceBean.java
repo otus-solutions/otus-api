@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.exam.businnes;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -12,6 +13,7 @@ import br.org.otus.laboratory.project.exam.ExamLot;
 import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.validators.ExamLotValidator;
 
+@Stateless
 public class ExamLotServiceBean implements ExamLotService {
 
 	@Inject
