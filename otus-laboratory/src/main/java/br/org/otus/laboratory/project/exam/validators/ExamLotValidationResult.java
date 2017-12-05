@@ -32,7 +32,4 @@ public class ExamLotValidationResult {
 	public void pushConflict(String aliquotCode) {
 		this.value.add(aliquotCode);
 	}
-
-	public ExamLotValidationResult() {
-	}
 }

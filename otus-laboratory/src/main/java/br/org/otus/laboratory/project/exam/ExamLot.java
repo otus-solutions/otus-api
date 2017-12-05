@@ -16,10 +16,10 @@ import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 public class ExamLot {
 
 	private String objectType;
-	private String typeOfLot;
+	private String lotType;
 	private String code;
 	private List<WorkAliquot> aliquotList;
-	private LocalDateTime processingDate;
+	private LocalDateTime realizationDate;
 	private String operator;
 	private FieldCenter fieldCenter;
 
@@ -49,14 +49,6 @@ public class ExamLot {
 		return objectType;
 	}
 
-	public String getTypeOfLot() {
-		return typeOfLot;
-	}
-
-	public void setTypeOfLot(String typeOfLot) {
-		this.typeOfLot = typeOfLot;
-	}
-
 	public List<WorkAliquot> getAliquotList() {
 		return aliquotList;
 	}
@@ -73,14 +65,6 @@ public class ExamLot {
 		this.code = code;
 	}
 
-	public LocalDateTime getProcessingDate() {
-		return processingDate;
-	}
-
-	public void setProcessingDate(LocalDateTime processingDate) {
-		this.processingDate = processingDate;
-	}
-
 	public String getOperator() {
 		return operator;
 	}
@@ -95,5 +79,21 @@ public class ExamLot {
 
 	public void setFieldCenter(FieldCenter fieldCenter) {
 		this.fieldCenter = fieldCenter;
+	}
+
+	public LocalDateTime getRealizationDate() {
+		return realizationDate;
+	}
+
+	public void setRealizationDate(LocalDateTime realizationDate) {
+		this.realizationDate = realizationDate;
+	}
+
+	public String getLotType() {
+		return lotType;
+	}
+
+	public void setLotType(String lotType) {
+		this.lotType = lotType;
 	}
 }

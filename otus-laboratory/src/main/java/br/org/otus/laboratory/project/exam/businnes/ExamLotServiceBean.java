@@ -12,12 +12,15 @@ import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.ExamLot;
 import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.validators.ExamLotValidator;
+import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 @Stateless
 public class ExamLotServiceBean implements ExamLotService {
 
 	@Inject
 	private ExamLotDao examLotDao;
+	@Inject
+	private TransportationLotDao transportationLotDao;
 
 	@Override
 	public ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException {
@@ -49,7 +52,7 @@ public class ExamLotServiceBean implements ExamLotService {
 	}
 
 	private void _validateLot(ExamLot examLot) throws ValidationException {
-		ExamLotValidator examLotValidator = new ExamLotValidator(examLotDao, examLot);
+		ExamLotValidator examLotValidator = new ExamLotValidator(examLotDao, transportationLotDao, examLot);
 		examLotValidator.validate();
 	}
 
