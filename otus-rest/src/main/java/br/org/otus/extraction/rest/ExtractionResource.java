@@ -32,7 +32,7 @@ public class ExtractionResource {
 	private SecurityContext securityContext;
 
 	@GET
-//	@SecuredExtraction
+	@SecuredExtraction
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/activity/{acronym}")
 	public byte[] extractActivities(@PathParam("acronym") String acronym) {
