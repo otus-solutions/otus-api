@@ -10,7 +10,7 @@ import org.hamcrest.CoreMatchers;
 
 public class CsvWriterServiceTest {
 
-	private static final String RECORD = "\"id\";\"name\";\"age\"" + "\n" + "\"1\";\"Emanoel\";\"23\"" + "\n";
+	private static final String RECORD = "id;name;age" + "\n" + "1;\"Emano;el\";23" + "\n";
 
 	private CsvWriterService service;
 
@@ -28,7 +28,7 @@ public class CsvWriterServiceTest {
 
 		record = new ArrayList<Object>();
 		record.add(1);
-		record.add("Emanoel");
+		record.add("Emano;el");
 		record.add(23);
 
 		values = new ArrayList<List<Object>>();
@@ -58,7 +58,7 @@ public class CsvWriterServiceTest {
 		String result = new String(service.getResult());
 
 		Assert.assertThat(result, CoreMatchers.containsString("1"));
-		Assert.assertThat(result, CoreMatchers.containsString("Emanoel"));
+		Assert.assertThat(result, CoreMatchers.containsString("Emano;el"));
 		Assert.assertThat(result, CoreMatchers.containsString("23"));
 	}
 

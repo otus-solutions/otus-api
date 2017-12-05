@@ -6,6 +6,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -18,6 +19,8 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Projections.exclude;
+import static com.mongodb.client.model.Projections.fields;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
@@ -86,8 +89,15 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	public List<SurveyActivity> findAllByID(String id) throws DataNotFoundException {
 		ArrayList<SurveyActivity> activities = new ArrayList<>();
 
-		FindIterable<Document> result = collection.find(eq("surveyForm.surveyTemplate.identity.acronym", id));
+//		FindIterable<Document> result = collection.find(eq("surveyForm.surveyTemplate.identity.acronym", id));
 
+		Document query = new Document();
+		query.put("surveyForm.surveyTemplate.identity.acronym", id);
+
+		Bson projection = fields(exclude("surveyForm.surveyTemplate"));
+
+
+		FindIterable<Document> result = collection.find(query).projection(projection);
 
 		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
 		if (activities.size()== 0) {

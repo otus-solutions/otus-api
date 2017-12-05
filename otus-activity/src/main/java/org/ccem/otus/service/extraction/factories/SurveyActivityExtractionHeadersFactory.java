@@ -5,15 +5,16 @@ import java.util.List;
 
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
+import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.item.questions.Question;
 
 public class SurveyActivityExtractionHeadersFactory {
 
-	private List<SurveyActivity> surveyActivities;
+	private SurveyForm surveyForm;
 	private LinkedHashSet<String> headers;
 
-	public SurveyActivityExtractionHeadersFactory(List<SurveyActivity> surveyActivities) {
-		this.surveyActivities = surveyActivities;
+	public SurveyActivityExtractionHeadersFactory(SurveyForm surveyForm) {
+		this.surveyForm = surveyForm;
 		this.headers = new LinkedHashSet<>();
 		this.buildHeadersInfo();
 	}
@@ -38,7 +39,7 @@ public class SurveyActivityExtractionHeadersFactory {
 		this.headers.add(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue());
 
 		/* Answers headers */
-		this.surveyActivities.get(0).getSurveyForm().getSurveyTemplate().itemContainer.forEach(surveyItem -> {
+		this.surveyForm.getSurveyTemplate().itemContainer.forEach(surveyItem -> {
 			if (surveyItem instanceof Question) {
 				this.headers.addAll(surveyItem.getExtractionIDs());
 				this.headers.add(surveyItem.getCustomID() + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX.getValue());
