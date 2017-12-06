@@ -16,7 +16,7 @@ import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 public class ExamLot {
 
 	private String objectType;
-	private String lotType;
+	private String aliquotName;
 	private String code;
 	private List<WorkAliquot> aliquotList;
 	private LocalDateTime realizationDate;
@@ -24,7 +24,7 @@ public class ExamLot {
 	private FieldCenter fieldCenter;
 
 	public ExamLot() {
-		objectType = "ExamsLot";
+		objectType = "ExamLot";
 	}
 
 	public static ExamLot deserialize(String examLot) {
@@ -89,11 +89,11 @@ public class ExamLot {
 		this.realizationDate = realizationDate;
 	}
 
-	public String getLotType() {
-		return lotType;
+	public String getAliquotName() {
+		return aliquotName;
 	}
 
-	public void setLotType(String lotType) {
-		this.lotType = lotType;
+	public void setAliquotName(String aliquotName) {
+		this.aliquotName = aliquotName;
 	}
 }

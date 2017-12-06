@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
@@ -15,9 +14,9 @@ import br.org.otus.laboratory.project.transportation.persistence.TransportationL
 
 public class ExamLotValidator {
 
+	private ExamLot examLot;
 	private ExamLotDao examLotDao;
 	private TransportationLotDao transportationLotDao;
-	private ExamLot examLot;
 	private ExamLotValidationResult examLotValidationResult;
 
 	public ExamLotValidator(ExamLotDao examLotDao, TransportationLotDao transportationLotDao, ExamLot examLot) {
@@ -28,11 +27,6 @@ public class ExamLotValidator {
 	}
 
 	public void validate() throws ValidationException {
-		//checkIfAliquotsExist();
-		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(new Throwable("Aliquots not found"), examLotValidationResult);
-		}
-
 		checkForAliquotsOnAnotherLots();
 		if (!examLotValidationResult.isValid()) {
 			throw new ValidationException(new Throwable("There are aliquots in another lot."), examLotValidationResult);
@@ -41,22 +35,6 @@ public class ExamLotValidator {
 		checkOriginOfAliquots();
 		if (!examLotValidationResult.isValid()) {
 			throw new ValidationException(new Throwable("There are aliquots different from the center and not exist in lot of transport."), examLotValidationResult);
-		}
-	}
-
-	private void checkIfAliquotsExist() {
-		try {
-			List<WorkAliquot> aliquotList = examLotDao.getAliquots();
-			examLot.getAliquotList().forEach(transportationAliquot -> {
-				boolean contains = aliquotList.contains(transportationAliquot);
-
-				if (!contains) {
-					examLotValidationResult.setValid(false);
-					examLotValidationResult.pushConflict(transportationAliquot.getCode());
-				}
-			});
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -77,7 +55,7 @@ public class ExamLotValidator {
 		});
 	}
 
-	public void checkOriginOfAliquots() {
+	private void checkOriginOfAliquots() {
 		for (WorkAliquot aliquot : examLot.getAliquotList()) {
 			if (!checkIfEqualsCenter(aliquot)) {
 				if (!checkForAliquotsInLotOfTransport(aliquot)) {

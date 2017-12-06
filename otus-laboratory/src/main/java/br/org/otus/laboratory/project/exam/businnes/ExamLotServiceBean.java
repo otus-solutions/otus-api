@@ -32,6 +32,7 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException {
+		_validateLot(examLot);
 		ExamLot updateResult = examLotDao.update(examLot);
 		return updateResult;
 	}
