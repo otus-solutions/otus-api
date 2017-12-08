@@ -33,11 +33,9 @@ public class ExamResource {
 	private SecurityContext securityContext;
 
 	@POST
-	@Secured
 	public String create(@Context HttpServletRequest request, String examLotJson) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token))
-				.getAuthenticationData().getUserEmail();
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
 		ExamLot examLot = ExamLot.deserialize(examLotJson);
 		ExamLot createdLot = examLotFacade.create(examLot, userEmail);
