@@ -61,7 +61,6 @@ public class ExamResource {
 
 	@GET
 	@Secured
-	@Path("/lots")
 	public String getLots() {
 		List<WorkAliquot> lots = examLotFacade.getLots();
 		GsonBuilder builder = ExamLot.getGsonBuilder();
