@@ -33,6 +33,7 @@ public class ExamResource {
 	private SecurityContext securityContext;
 
 	@POST
+	@Secured
 	public String create(@Context HttpServletRequest request, String examLotJson) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
@@ -62,7 +63,7 @@ public class ExamResource {
 	@GET
 	@Secured
 	public String getLots() {
-		List<WorkAliquot> lots = examLotFacade.getLots();
+		List<ExamLot> lots = examLotFacade.getLots();
 		GsonBuilder builder = ExamLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
 	}

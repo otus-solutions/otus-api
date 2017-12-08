@@ -54,13 +54,8 @@ public class ExamLotFacade {
 		}
 	}
 
-	public List<WorkAliquot> getLots() {
-		try {
-			return examLotService.getAliquots();
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
+	public List<ExamLot> getLots() {
+		return examLotService.list();
 	}
 
 	public List<WorkAliquot> getAliquots() {
