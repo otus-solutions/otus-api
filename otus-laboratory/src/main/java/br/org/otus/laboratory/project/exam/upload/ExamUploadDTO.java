@@ -5,11 +5,11 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 public class ExamUploadDTO {
-    private Exam exam;
+    private ExamResultLot examResultLot;
     private List<ExamResult> examResults;
 
-    public Exam getExam() {
-        return exam;
+    public ExamResultLot getExamResultLot() {
+        return examResultLot;
     }
 
     public List<ExamResult> getExamResults() {
@@ -20,8 +20,15 @@ public class ExamUploadDTO {
         return ExamUploadDTO.getGsonBuilder().create().toJson(examUploadDTO);
     }
 
-    public static ExamUploadDTO deserialize(String examUploadDTO) {
-        return ExamUploadDTO.getGsonBuilder().create().fromJson(examUploadDTO, ExamUploadDTO.class);
+    public static ExamUploadDTO deserialize(String examUploadJson) {
+        ExamUploadDTO examUploadDTO = ExamUploadDTO.getGsonBuilder().create().fromJson(examUploadJson, ExamUploadDTO.class);
+        //set same fieldCenter for all results
+        examUploadDTO.getExamResults()
+                .stream()
+                .forEach(examResult ->
+                        examResult.setFieldCenter(examUploadDTO.getExamResultLot().getFieldCenter()));
+
+        return examUploadDTO;
     }
 
     public static GsonBuilder getGsonBuilder() {

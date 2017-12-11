@@ -7,6 +7,7 @@ public class ExamResult {
     private ObjectId id;
     private ObjectId examId;
     private String aliquotCode;
+    private Long recruitmentNumber;
 
     private String name;
     private String label;
@@ -14,5 +15,9 @@ public class ExamResult {
     private String collectionDate;
     private String releaseDate;
     private String fieldCenter;
+
+    public void setFieldCenter(String fieldCenter) {
+        this.fieldCenter = fieldCenter;
+    }
 }
 
