@@ -54,10 +54,10 @@ public class ExamLotValidator {
 
 	private void checkIfAliquotsExist() {
 		try {
-			List<WorkAliquot> aliquotList;
-			aliquotList = examLotDao.getAliquots();
-			examLot.getAliquotList().forEach(examAliquot -> {
-				boolean contains = aliquotList.contains(examAliquot);
+			List<WorkAliquot> workAliquotList;
+			workAliquotList = examLotDao.getAliquots();
+			examLot.getAliquotList().forEach(workAliquot -> {
+				boolean contains = workAliquotList.contains(workAliquot);
 
 				if (!contains) {
 					examLotValidationResult.setValid(false);
@@ -69,8 +69,8 @@ public class ExamLotValidator {
 	}
 
 	private void checkOfTypesInLot() {
-		for (WorkAliquot aliquot : examLot.getAliquotList()) {
-			if (!aliquot.getName().equals(examLot.getAliquotName())) {
+		for (WorkAliquot workAliquot : examLot.getAliquotList()) {
+			if (!workAliquot.getName().equals(examLot.getAliquotName())) {
 				examLotValidationResult.setValid(false);
 				break;
 			}
@@ -82,14 +82,14 @@ public class ExamLotValidator {
 
 		examLotList.remove(examLot);
 
-		examLot.getAliquotList().forEach(examAliquot -> {
+		examLot.getAliquotList().forEach(workAliquot -> {
 			Optional<ExamLot> searchedAliquot = examLotList.stream().filter(lot -> {
-				return lot.getAliquotList().contains(examAliquot);
+				return lot.getAliquotList().contains(workAliquot);
 			}).findFirst();
 
 			if (searchedAliquot.isPresent()) {
 				examLotValidationResult.setValid(false);
-				examLotValidationResult.pushConflict(examAliquot.getCode());
+				examLotValidationResult.pushConflict(workAliquot.getCode());
 			}
 		});
 	}

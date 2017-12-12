@@ -1,30 +1,40 @@
 package br.org.otus.laboratory.project.exam.validators;
 
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+
+//import static org.junit.Assert.*;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.ExamLot;
 import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ExamLotValidator.class)
 public class ExamLotValidatorTest {
+
+	private static final String FIELD_CENTER_RS = "RS";
+	private static final String BIOCHEMICAL_SERUM = "BIOCHEMICAL_SERUM";
 
 	@InjectMocks
 	private ExamLotValidator examLotValidator;
-
 	@Mock
 	private ExamLot examLot;
 	@Mock
@@ -32,35 +42,42 @@ public class ExamLotValidatorTest {
 	@Mock
 	private TransportationLotDao transportationLotDao;
 	@Mock
-	private WorkAliquot aliquot;
+	private WorkAliquot workAliquot;
 	@Mock
 	private FieldCenter fieldCenter;
 
-	private List<WorkAliquot> aliquotList;
+	private ExamLotValidationResult examLotValidationResult = spy(new ExamLotValidationResult());
+	private List<WorkAliquot> aliquotList = new ArrayList<>();
+	private List<ExamLot> examLotList;
 
 	@Before
-	public void setup() {
-		aliquotList = new ArrayList<WorkAliquot>();
-		buildAliquotsInList();
-		examLotValidator = new ExamLotValidator(examLotDao, transportationLotDao, examLot);
+	public void setUp() throws Exception {
+		//aliquotList = new ArrayList<>();
+		examLotList = new ArrayList<>();
 	}
 
-	@Ignore
 	@Test
-	public void should_no_return_exception_when_aliquot_has_no_problems() {
+	public void method_validate() throws ValidationException, DataNotFoundException {
+		ExamLot examLotResult = Mockito.mock(ExamLot.class);
+
+		when(examLotDao.find()).thenReturn(examLotList);
+		when(examLotDao.getAliquots()).thenReturn(aliquotList);
+
+		when(examLot.getAliquotList()).thenReturn(aliquotList);
+		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(examLot.getFieldCenter()).thenReturn(fieldCenter);
+		
+		when(workAliquot.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(workAliquot.getFieldCenter()).thenReturn(fieldCenter);
+		when(fieldCenter.getAcronym()).thenReturn(FIELD_CENTER_RS);
+		
+		aliquotList.add(workAliquot);
+		examLotList.add(examLotResult);
+
+		examLotValidator.validate();
 
 	}
 
-	@Ignore
-	@Test(expected = ValidationException.class)
-	public void should_return_exception_when_aliquot_exists_in_another_lot() throws ValidationException {
-		Mockito.when(aliquot.getFieldCenter()).thenReturn(fieldCenter);
-
-		//examLotValidator.validate();
-	}
-
-	private void buildAliquotsInList() {
-		aliquotList.add(aliquot);
-	}
+	// Whitebox.invokeMethod(examLotValidator, "checkIfAliquotsExist");
 
 }
