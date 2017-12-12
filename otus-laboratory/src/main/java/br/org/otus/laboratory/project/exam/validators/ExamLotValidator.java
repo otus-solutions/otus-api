@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
@@ -27,14 +28,52 @@ public class ExamLotValidator {
 	}
 
 	public void validate() throws ValidationException {
+		checkIfAliquotsExist();
+		if (!examLotValidationResult.isValid()) {
+			throw new ValidationException(new Throwable("Aliquots not found"), examLotValidationResult);
+		}
+
+		checkOfTypesInLot();
+		if (!examLotValidationResult.isValid()) {
+			throw new ValidationException(new Throwable("There are different types of aliquots in lot"),
+					examLotValidationResult);
+		}
+
 		checkForAliquotsOnAnotherLots();
 		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(new Throwable("There are aliquots in another lot."), examLotValidationResult);
+			throw new ValidationException(new Throwable("There are aliquots in another lot"), examLotValidationResult);
 		}
 
 		checkOriginOfAliquots();
 		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(new Throwable("There are aliquots different from the center and not exist in lot of transport."), examLotValidationResult);
+			throw new ValidationException(
+					new Throwable("There are aliquots different from the center and not exist in lot of transport"),
+					examLotValidationResult);
+		}
+	}
+
+	private void checkIfAliquotsExist() {
+		try {
+			List<WorkAliquot> aliquotList;
+			aliquotList = examLotDao.getAliquots();
+			examLot.getAliquotList().forEach(examAliquot -> {
+				boolean contains = aliquotList.contains(examAliquot);
+
+				if (!contains) {
+					examLotValidationResult.setValid(false);
+				}
+			});
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void checkOfTypesInLot() {
+		for (WorkAliquot aliquot : examLot.getAliquotList()) {
+			if (!aliquot.getName().equals(examLot.getAliquotName())) {
+				examLotValidationResult.setValid(false);
+				break;
+			}
 		}
 	}
 
@@ -70,17 +109,17 @@ public class ExamLotValidator {
 
 		Iterator<TransportationLot> iterator = listOfTransportation.iterator();
 		boolean exist = false;
-		while (iterator.hasNext() || !exist) {
+		while (iterator.hasNext()) {
 			TransportationLot transportationLot = iterator.next();
 			if (transportationLot.getAliquotList().contains(aliquot))
 				exist = true;
 		}
-		return true;
+		return exist;
 	}
 
 	private boolean checkIfEqualsCenter(WorkAliquot aliquot) {
-		if (!aliquot.getFieldCenter().equals(examLot.getFieldCenter()))
-			return false;
-		return true;
+		if (aliquot.getFieldCenter().getAcronym().equals(examLot.getFieldCenter().getAcronym()))
+			return true;
+		return false;
 	}
 }

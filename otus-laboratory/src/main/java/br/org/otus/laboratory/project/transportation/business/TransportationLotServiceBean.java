@@ -1,17 +1,17 @@
 package br.org.otus.laboratory.project.transportation.business;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import br.org.otus.laboratory.project.transportation.validators.TransportationLotValidator;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.validators.TransportationLotValidator;
 
 @Stateless
 public class TransportationLotServiceBean implements TransportationLotService {
