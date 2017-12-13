@@ -24,7 +24,7 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException {
-		_validateLot(examLot);
+		validateLot(examLot);
 		examLot.setOperator(email);
 		examLotDao.persist(examLot);
 		return examLot;
@@ -32,7 +32,7 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException {
-		_validateLot(examLot);
+		validateLot(examLot);
 		ExamLot updateResult = examLotDao.update(examLot);
 		return updateResult;
 	}
@@ -52,7 +52,7 @@ public class ExamLotServiceBean implements ExamLotService {
 		return examLotDao.getAliquots();
 	}
 
-	private void _validateLot(ExamLot examLot) throws ValidationException {
+	private void validateLot(ExamLot examLot) throws ValidationException {
 		ExamLotValidator examLotValidator = new ExamLotValidator(examLotDao, transportationLotDao, examLot);
 		examLotValidator.validate();
 	}

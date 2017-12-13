@@ -13,6 +13,7 @@ import org.ccem.otus.model.FieldCenter;
 //import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -56,6 +57,7 @@ public class ExamLotValidatorTest {
 		examLotList = new ArrayList<>();
 	}
 
+	@Ignore
 	@Test
 	public void method_validate() throws ValidationException, DataNotFoundException {
 		ExamLot examLotResult = Mockito.mock(ExamLot.class);

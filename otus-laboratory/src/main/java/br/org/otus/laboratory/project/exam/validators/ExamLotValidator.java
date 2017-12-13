@@ -80,7 +80,12 @@ public class ExamLotValidator {
 	private void checkForAliquotsOnAnotherLots() {
 		final List<ExamLot> examLotList = examLotDao.find();
 
-		examLotList.remove(examLot);
+		for (ExamLot current : examLotList) {
+			if (current.getCode().equals(this.examLot.getCode())) {
+				examLotList.remove(current);
+				break;
+			}
+		}
 
 		examLot.getAliquotList().forEach(workAliquot -> {
 			Optional<ExamLot> searchedAliquot = examLotList.stream().filter(lot -> {
@@ -122,4 +127,5 @@ public class ExamLotValidator {
 			return true;
 		return false;
 	}
+
 }
