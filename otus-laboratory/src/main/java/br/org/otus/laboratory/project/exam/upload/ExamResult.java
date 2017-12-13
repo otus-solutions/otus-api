@@ -16,6 +16,14 @@ public class ExamResult {
     private String releaseDate;
     private String fieldCenter;
 
+    public void setExamId(ObjectId examId) {
+        this.examId = examId;
+    }
+
+    public void setRecruitmentNumber(Long recruitmentNumber) {
+        this.recruitmentNumber = recruitmentNumber;
+    }
+
     public void setFieldCenter(String fieldCenter) {
         this.fieldCenter = fieldCenter;
     }

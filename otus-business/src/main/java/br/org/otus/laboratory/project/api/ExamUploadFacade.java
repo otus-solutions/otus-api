@@ -2,7 +2,6 @@ package br.org.otus.laboratory.project.api;
 
 import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
 import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
-import br.org.otus.laboratory.project.exam.upload.business.ExamResultService;
 import br.org.otus.laboratory.project.exam.upload.business.ExamUploadService;
 
 import javax.inject.Inject;
@@ -13,11 +12,8 @@ public class ExamUploadFacade {
     @Inject
     private ExamUploadService examUploadService;
 
-    @Inject
-    private ExamResultService examResultService;
-
-    public ExamResultLot create(ExamUploadDTO examUploadDTO){
-        examResultService.create(examUploadDTO.getExamResults());
+    public ExamResultLot create(String examUploadJson){
+        ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
         examUploadService.create(examUploadDTO);
         return null;
     }
