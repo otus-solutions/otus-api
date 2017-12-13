@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
 
 public class ExamLot {
 
@@ -57,12 +58,12 @@ public class ExamLot {
 		this.aliquotList = aliquotList;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getCode() {
+		return code;
 	}
 
 	public String getOperator() {
@@ -95,5 +96,22 @@ public class ExamLot {
 
 	public void setAliquotName(String aliquotName) {
 		this.aliquotName = aliquotName;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		ExamLot that = (ExamLot) o;
+
+		return code.equals(that.code);
+	}
+
+	@Override
+	public int hashCode() {
+		return code.hashCode();
 	}
 }
