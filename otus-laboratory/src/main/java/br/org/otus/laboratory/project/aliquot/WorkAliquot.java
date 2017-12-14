@@ -15,20 +15,18 @@ import java.util.List;
 
 public class WorkAliquot extends Aliquot {
 
+	private static String objectType = "WorkAliquot";
 	private Long recruitmentNumber;
 	private ImmutableDate birthdate;
 	private Sex sex;
 	private FieldCenter fieldCenter;
 
-	public WorkAliquot(String objectType, String code, String name, AliquotContainer container,
-			AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
+	public WorkAliquot(String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
 		super(objectType, code, name, container, role, aliquotCollectionData);
 	}
 
-	public WorkAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex,
-			FieldCenter aliquotCenter) {
-		super(aliquot.getObjectType(), aliquot.getCode(), aliquot.getName(), aliquot.getContainer(), aliquot.getRole(),
-				aliquot.getAliquotCollectionData());
+	public WorkAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex, FieldCenter aliquotCenter) {
+		super(objectType, aliquot.getCode(), aliquot.getName(), aliquot.getContainer(), aliquot.getRole(), aliquot.getAliquotCollectionData());
 		this.setRecruitmentNumber(recruitmentNumber);
 		this.setBirthdate(birthdate);
 		this.setSex(sex);
