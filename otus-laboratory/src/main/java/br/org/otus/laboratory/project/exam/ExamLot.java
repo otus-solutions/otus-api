@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
 
 public class ExamLot {
 

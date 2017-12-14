@@ -80,7 +80,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 	}
 
 	@Override
-	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
+	public List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException {
 		return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
 	}
 

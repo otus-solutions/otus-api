@@ -2,7 +2,6 @@ package br.org.otus.laboratory.project.exam.validators;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -54,10 +53,15 @@ public class ExamLotValidator {
 
 	private void checkIfAliquotsExist() {
 		try {
-			List<WorkAliquot> workAliquotList;
-			workAliquotList = examLotDao.getAliquots();
+			List<WorkAliquot> workAliquotListInDB = examLotDao.getAllAliquotsInDB();
 			examLot.getAliquotList().forEach(workAliquot -> {
-				boolean contains = workAliquotList.contains(workAliquot);
+				boolean contains = false;
+				for (WorkAliquot workAliquotInDB : workAliquotListInDB) {
+					if (workAliquotInDB.getCode().equals(workAliquot.getCode())) {
+						contains = true;
+						break;
+					}
+				}
 
 				if (!contains) {
 					examLotValidationResult.setValid(false);
@@ -82,16 +86,17 @@ public class ExamLotValidator {
 
 		examLotList.remove(examLot);
 
-		examLot.getAliquotList().forEach(workAliquot -> {
-			Optional<ExamLot> searchedAliquot = examLotList.stream().filter(lot -> {
-				return lot.getAliquotList().contains(workAliquot);
-			}).findFirst();
-
-			if (searchedAliquot.isPresent()) {
-				examLotValidationResult.setValid(false);
-				examLotValidationResult.pushConflict(workAliquot.getCode());
+		for (WorkAliquot workAliquotInLot : examLot.getAliquotList()) {
+			for (ExamLot examLotInDB : examLotList) {
+				for (WorkAliquot workAliquotInDB : examLotInDB.getAliquotList()) {
+					if (workAliquotInDB.getCode().equals(workAliquotInLot.getCode())) {
+						examLotValidationResult.setValid(false);
+						examLotValidationResult.pushConflict(workAliquotInLot.getCode());
+						break;
+					}
+				}
 			}
-		});
+		}
 	}
 
 	private void checkOriginOfAliquots() {
@@ -111,8 +116,12 @@ public class ExamLotValidator {
 		boolean exist = false;
 		while (iterator.hasNext()) {
 			TransportationLot transportationLot = iterator.next();
-			if (transportationLot.getAliquotList().contains(aliquot))
-				exist = true;
+			for (WorkAliquot workAliquotInTransport : transportationLot.getAliquotList()) {
+				if (workAliquotInTransport.getCode().equals(aliquot.getCode())) {
+					exist = true;
+					break;
+				}
+			}
 		}
 		return exist;
 	}

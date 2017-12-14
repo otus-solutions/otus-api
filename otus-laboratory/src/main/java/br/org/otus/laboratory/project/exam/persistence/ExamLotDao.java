@@ -17,6 +17,6 @@ public interface ExamLotDao {
 
 	void delete(String id) throws DataNotFoundException;
 
-	List<WorkAliquot> getAliquots() throws DataNotFoundException;
+	List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException;
 
 }

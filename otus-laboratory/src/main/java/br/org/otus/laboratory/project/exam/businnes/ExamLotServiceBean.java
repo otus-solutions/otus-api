@@ -49,7 +49,7 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
-		return examLotDao.getAliquots();
+		return examLotDao.getAllAliquotsInDB();
 	}
 
 	private void validateLot(ExamLot examLot) throws ValidationException {

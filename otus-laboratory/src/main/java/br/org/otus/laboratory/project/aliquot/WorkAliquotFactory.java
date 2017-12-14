@@ -18,9 +18,7 @@ public class WorkAliquotFactory {
 		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();
 
 		for (ParticipantLaboratory participantLaboratory : participantList) {
-			Participant participant;
-
-			participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
+			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
 
 			participantLaboratory.getTubes().forEach(tube -> {
 				tube.getAliquots().forEach(aliquot -> {
