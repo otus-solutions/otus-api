@@ -46,6 +46,9 @@
 		<repository>
 			<id>snapshots</id>
 			<url>${repository_snapshots}</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -53,6 +56,12 @@
 		<repository>
 			<id>releases</id>
 			<url>${repository_releases}</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</repository>
 		<repository>
 			<id>maven-restlet</id>
