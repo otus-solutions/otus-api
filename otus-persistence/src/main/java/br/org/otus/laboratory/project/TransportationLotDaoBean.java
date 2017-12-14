@@ -41,7 +41,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
 	@Override
 	public void persist(TransportationLot transportationLot) {
-		transportationLot.setCode(laboratoryConfigurationDao.createNewLotCode());
+		transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation());
 		
 		super.persist(TransportationLot.serialize(transportationLot));
 	}

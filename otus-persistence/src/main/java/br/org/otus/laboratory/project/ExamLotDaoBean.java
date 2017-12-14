@@ -42,7 +42,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 
 	@Override
 	public void persist(ExamLot examLot) {
-		examLot.setCode(laboratoryConfigurationDao.createNewLotCode());
+		examLot.setCode(laboratoryConfigurationDao.createNewLotCodeForExam());
 		super.persist(ExamLot.serialize(examLot));
 	}
 
