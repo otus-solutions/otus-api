@@ -64,6 +64,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 	@Override
 	public List<ExamLot> find() {
 		ArrayList<ExamLot> ExamLots = new ArrayList<>();
+		
 		FindIterable<Document> result = collection.find();
 		result.forEach((Block<Document>) document -> ExamLots.add(ExamLot.deserialize(document.toJson())));
 
