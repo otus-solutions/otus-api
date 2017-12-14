@@ -23,16 +23,11 @@ public class ExamUploadDTO {
 
     public static ExamUploadDTO deserialize(String examUploadJson) {
         ExamUploadDTO examUploadDTO = ExamUploadDTO.getGsonBuilder().create().fromJson(examUploadJson, ExamUploadDTO.class);
-        //set same fieldCenter for all results
-        examUploadDTO.getExamResults()
-                .stream()
-                .forEach(examResult ->
-                        examResult.setFieldCenter(examUploadDTO.getExamResultLot().getFieldCenter()));
-
         return examUploadDTO;
     }
 
     public static GsonBuilder getGsonBuilder() {
-        return new GsonBuilder();
+        GsonBuilder builder = new GsonBuilder();
+        return builder;
     }
 }

@@ -1,6 +1,9 @@
 package br.org.otus.laboratory.project.exam.upload;
 
+import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class ExamResult {
 
@@ -9,12 +12,13 @@ public class ExamResult {
     private String aliquotCode;
     private Long recruitmentNumber;
 
+    private String result;
     private String name;
     private String label;
     private String solicitationDate;
     private String collectionDate;
     private String releaseDate;
-    private String fieldCenter;
+    private FieldCenter fieldCenter;
 
     public void setExamId(ObjectId examId) {
         this.examId = examId;
@@ -24,8 +28,23 @@ public class ExamResult {
         this.recruitmentNumber = recruitmentNumber;
     }
 
-    public void setFieldCenter(String fieldCenter) {
+    public void setFieldCenter(FieldCenter fieldCenter) {
         this.fieldCenter = fieldCenter;
     }
+
+    public static String serialize(ExamResult examResult) {
+        return getGsonBuilder().create().toJson(examResult);
+    }
+
+    public static ExamResult deserialize(String examResultJson) {
+        return ExamResult.getGsonBuilder().create().fromJson(examResultJson, ExamResult.class);
+    }
+
+    public static GsonBuilder getGsonBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+        return builder;
+    }
 }
+
 

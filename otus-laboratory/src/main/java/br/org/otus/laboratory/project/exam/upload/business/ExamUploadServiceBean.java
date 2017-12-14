@@ -3,30 +3,31 @@ package br.org.otus.laboratory.project.exam.upload.business;
 import br.org.otus.laboratory.project.exam.upload.ExamResult;
 import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
 import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
-import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultDAO;
-import br.org.otus.laboratory.project.exam.upload.persistence.ExamUploadDAO;
+import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultDao;
+import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultLotDao;
 import org.bson.types.ObjectId;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
+@Stateless
 public class ExamUploadServiceBean implements ExamUploadService{
     @Inject
-    ExamUploadDAO examUploadDAO;
+    ExamResultLotDao examResultLotDAO;
 
     @Inject
-    ExamResultDAO examResultDAO;
+    ExamResultDao examResultDAO;
 
     @Override
     public ExamResultLot create(ExamUploadDTO examUploadDTO) {
-        ExamResultLot insertResult = examUploadDAO.insert(examUploadDTO.getExamResultLot());
-        ObjectId insertResultId = insertResult.getId();
+        ObjectId lotId = examResultLotDAO.insert(examUploadDTO.getExamResultLot());
 
         List<ExamResult> examResults = examUploadDTO.getExamResults();
 
         examResults.stream()
                 .forEach(examResult -> {
-                    examResult.setExamId(insertResultId);
+                    examResult.setExamId(lotId);
                     examResult.setFieldCenter(examUploadDTO.getExamResultLot().getFieldCenter());
                 });
 
@@ -47,5 +48,10 @@ public class ExamUploadServiceBean implements ExamUploadService{
     @Override
     public void delete() {
 
+    }
+
+    @Override
+    public List<ExamResult> getAllByExamId(ObjectId id) {
+        return examResultDAO.getByExamId(id);
     }
 }

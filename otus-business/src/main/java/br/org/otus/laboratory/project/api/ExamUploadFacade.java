@@ -1,8 +1,10 @@
 package br.org.otus.laboratory.project.api;
 
+import br.org.otus.laboratory.project.exam.upload.ExamResult;
 import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
 import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
 import br.org.otus.laboratory.project.exam.upload.business.ExamUploadService;
+import org.bson.types.ObjectId;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -25,5 +27,11 @@ public class ExamUploadFacade {
         return null;
     }
     public void delete(){
+    }
+
+    public List<ExamResult> listResults(String id){
+        ObjectId objectId = new ObjectId(id);
+        return examUploadService.getAllByExamId(objectId);
+
     }
 }

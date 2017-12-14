@@ -1,10 +1,9 @@
 package br.org.otus.laboratory.project.exam.upload.persistence;
 
 import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
+import org.bson.types.ObjectId;
 
-import java.util.List;
+public interface ExamResultLotDao {
 
-public interface ExamUploadDAO {
-
-    public ExamResultLot insert (ExamResultLot examResults);
+    public ObjectId insert (ExamResultLot examResults);
 }
