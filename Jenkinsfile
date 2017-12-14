@@ -32,11 +32,12 @@ pipeline {
 
     stage('Build - Development Server') {
       steps {
-        sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=${DATABASE_DEV_HOST} -Ddatabase.username=${DATABASE_USER} -Ddatabase.password=${DATABASE_PWD}'
+        echo 'Deploy'
+        // sh 'mvn -f otus-root/pom.xml clean install -Ddatabase.host=${DATABASE_DEV_HOST} -Ddatabase.username=${DATABASE_USER} -Ddatabase.password=${DATABASE_PWD}'
       }
     }
 
-  
+
 
     }
 
