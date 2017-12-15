@@ -45,14 +45,4 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
         }
         return examResults;
     }
-
-    //TODO 14/12/17: implement findById
-//    public Document findDocumentById(String id) {
-//
-//        Document query = new Document();
-//        query.put("_id", new ObjectId(id));
-//
-//        Document dbObj = collection.find(query);
-//        return dbObj;
-//    }
 }

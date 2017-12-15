@@ -14,10 +14,10 @@ public class ExamUploadFacade {
     @Inject
     private ExamUploadService examUploadService;
 
-    public ExamResultLot create(String examUploadJson){
+    public String create(String examUploadJson){
         ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
-        examUploadService.create(examUploadDTO);
-        return null;
+        String lotId = examUploadService.create(examUploadDTO);
+        return lotId;
     }
 
     public List<ExamResultLot> list(){

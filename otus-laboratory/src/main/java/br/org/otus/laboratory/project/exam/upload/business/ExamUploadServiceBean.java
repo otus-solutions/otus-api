@@ -20,7 +20,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
     ExamResultDao examResultDAO;
 
     @Override
-    public ExamResultLot create(ExamUploadDTO examUploadDTO) {
+    public String create(ExamUploadDTO examUploadDTO) {
         ObjectId lotId = examResultLotDAO.insert(examUploadDTO.getExamResultLot());
 
         List<ExamResult> examResults = examUploadDTO.getExamResults();
@@ -32,7 +32,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
                 });
 
         examResultDAO.insertMany(examResults);
-        return null;
+        return lotId.toString();
     }
 
     @Override

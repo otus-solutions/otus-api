@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ExamUploadService {
 
-    public ExamResultLot create(ExamUploadDTO examUploadDTO);
+    public String create(ExamUploadDTO examUploadDTO);
 
     public List<ExamResultLot> list();
 

@@ -24,7 +24,7 @@ public class ExamUploadResource {
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)
     public String create(String examUploadJson){
-        return new Response().buildSuccess(examUploadFacade.create(examUploadJson)).toSurveyJson();
+        return new Response().buildSuccess(examUploadFacade.create(examUploadJson)).toJson();
     }
 
     @GET
@@ -32,7 +32,7 @@ public class ExamUploadResource {
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)
     public String getResults(@PathParam("id") String examId){
-        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toSurveyJson();
+        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toJson();
     }
 
 }
