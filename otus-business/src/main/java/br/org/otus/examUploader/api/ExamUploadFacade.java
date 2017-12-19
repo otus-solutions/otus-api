@@ -15,7 +15,7 @@ public class ExamUploadFacade {
     @Inject
     private ExamUploadService examUploadService;
 
-    public String create(String examUploadJson){
+    public String create(String examUploadJson, String userEmail){
         ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
         String lotId = examUploadService.create(examUploadDTO);
         return lotId;
