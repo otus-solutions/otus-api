@@ -1,11 +1,8 @@
 package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.project.exam.upload.ExamResult;
-import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
-import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultDao;
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
+import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.persistence.ExamResultDao;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.types.ObjectId;

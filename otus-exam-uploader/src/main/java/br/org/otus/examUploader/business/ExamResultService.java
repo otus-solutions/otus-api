@@ -1,6 +1,6 @@
-package br.org.otus.laboratory.project.exam.upload.business;
+package br.org.otus.examUploader.business;
 
-import br.org.otus.laboratory.project.exam.upload.ExamResult;
+import br.org.otus.examUploader.ExamResult;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package br.org.otus.laboratory.project.exam.upload.persistence;
+package br.org.otus.examUploader.persistence;
 
-import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
+import br.org.otus.examUploader.ExamResultLot;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 

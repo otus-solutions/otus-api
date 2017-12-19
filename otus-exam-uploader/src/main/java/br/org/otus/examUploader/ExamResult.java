@@ -1,6 +1,6 @@
-package br.org.otus.laboratory.project.exam.upload;
+package br.org.otus.examUploader;
 
-import br.org.otus.laboratory.project.utils.LabObjectIdAdapter;
+import br.org.otus.examUploader.utils.LabObjectIdAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;

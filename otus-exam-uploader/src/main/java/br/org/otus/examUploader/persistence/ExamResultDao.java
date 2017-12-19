@@ -1,6 +1,6 @@
-package br.org.otus.laboratory.project.exam.upload.persistence;
+package br.org.otus.examUploader.persistence;
 
-import br.org.otus.laboratory.project.exam.upload.ExamResult;
+import br.org.otus.examUploader.ExamResult;
 import org.bson.types.ObjectId;
 
 import java.util.List;

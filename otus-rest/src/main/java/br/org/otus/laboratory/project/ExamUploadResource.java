@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.project;
 
-import br.org.otus.laboratory.project.api.ExamUploadFacade;
+import br.org.otus.examUploader.api.ExamUploadFacade;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

@@ -1,10 +1,10 @@
-package br.org.otus.laboratory.project.exam.upload.business;
+package br.org.otus.examUploader.business;
 
-import br.org.otus.laboratory.project.exam.upload.ExamResult;
-import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
-import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
-import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultDao;
-import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.ExamUploadDTO;
+import br.org.otus.examUploader.persistence.ExamResultDao;
+import br.org.otus.examUploader.persistence.ExamResultLotDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 

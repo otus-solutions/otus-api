@@ -1,9 +1,9 @@
-package br.org.otus.laboratory.project.api;
+package br.org.otus.examUploader.api;
 
-import br.org.otus.laboratory.project.exam.upload.ExamResult;
-import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
-import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
-import br.org.otus.laboratory.project.exam.upload.business.ExamUploadService;
+import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.ExamUploadDTO;
+import br.org.otus.examUploader.business.ExamUploadService;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 

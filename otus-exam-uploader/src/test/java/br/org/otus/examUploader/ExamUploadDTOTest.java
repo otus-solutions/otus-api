@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.exam.upload;
+package br.org.otus.examUploader;
 
 import com.google.gson.JsonObject;
 import org.junit.Before;

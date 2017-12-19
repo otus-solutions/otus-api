@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.exam.upload;
+package br.org.otus.examUploader;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;

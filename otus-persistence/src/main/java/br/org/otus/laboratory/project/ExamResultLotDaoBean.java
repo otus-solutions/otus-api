@@ -1,16 +1,14 @@
 package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
-import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultLotDao;
-import com.mongodb.Block;
+import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.persistence.ExamResultLotDao;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import javax.json.Json;
 import java.util.ArrayList;
 import java.util.List;
 
