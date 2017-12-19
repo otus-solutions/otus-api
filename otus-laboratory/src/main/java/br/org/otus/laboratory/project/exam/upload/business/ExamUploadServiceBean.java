@@ -6,6 +6,7 @@ import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
 import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultDao;
 import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultLotDao;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -47,7 +48,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(String id) throws DataNotFoundException {
         examResultLotDAO.deleteById(id);
     }
 

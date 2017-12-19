@@ -5,6 +5,7 @@ import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
 import br.org.otus.laboratory.project.exam.upload.ExamUploadDTO;
 import br.org.otus.laboratory.project.exam.upload.business.ExamUploadService;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -29,7 +30,11 @@ public class ExamUploadFacade {
     }
 
     public void deleteById(String id){
-        examUploadService.delete(id);
+        try {
+            examUploadService.delete(id);
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<ExamResult> listResults(String id){
