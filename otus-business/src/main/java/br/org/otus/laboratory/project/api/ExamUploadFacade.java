@@ -21,12 +21,15 @@ public class ExamUploadFacade {
     }
 
     public List<ExamResultLot> list(){
-        return null;
+        return examUploadService.list();
     }
-    public ExamResultLot getByID(String id){
-        return null;
+
+    public ExamResultLot getById(String id){
+        return examUploadService.getByID(id);
     }
-    public void delete(){
+
+    public void deleteById(String id){
+        examUploadService.delete(id);
     }
 
     public List<ExamResult> listResults(String id){

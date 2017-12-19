@@ -13,11 +13,12 @@ import java.util.List;
 
 @Stateless
 public class ExamUploadServiceBean implements ExamUploadService{
-    @Inject
-    ExamResultLotDao examResultLotDAO;
 
     @Inject
-    ExamResultDao examResultDAO;
+    private ExamResultLotDao examResultLotDAO;
+
+    @Inject
+    private ExamResultDao examResultDAO;
 
     @Override
     public String create(ExamUploadDTO examUploadDTO) {
@@ -37,17 +38,17 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public List<ExamResultLot> list() {
-        return null;
+        return examResultLotDAO.getAll();
     }
 
     @Override
     public ExamResultLot getByID(String id) {
-        return null;
+        return examResultLotDAO.getById(id);
     }
 
     @Override
-    public void delete() {
-
+    public void delete(String id) {
+        examResultLotDAO.deleteById(id);
     }
 
     @Override

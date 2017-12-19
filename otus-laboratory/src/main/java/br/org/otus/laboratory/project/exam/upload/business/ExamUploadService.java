@@ -15,7 +15,7 @@ public interface ExamUploadService {
 
     public ExamResultLot getByID(String id);
 
-    public void delete();
+    public void delete(String id);
 
     public List<ExamResult> getAllByExamId(ObjectId id);
 }

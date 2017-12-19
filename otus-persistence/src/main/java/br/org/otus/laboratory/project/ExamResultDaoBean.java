@@ -2,7 +2,9 @@ package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.project.exam.upload.ExamResult;
+import br.org.otus.laboratory.project.exam.upload.ExamResultLot;
 import br.org.otus.laboratory.project.exam.upload.persistence.ExamResultDao;
+import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
@@ -43,6 +45,8 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
             Document next = (Document) iterator.next();
             examResults.add(ExamResult.deserialize(next.toJson()));
         }
+        iterator.close();
+
         return examResults;
     }
 }

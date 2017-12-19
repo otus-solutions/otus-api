@@ -31,8 +31,8 @@ public class ExamResultLot {
         return getGsonBuilder().create().toJson(examResultLot);
     }
 
-    public static ExamUploadDTO deserialize(String examResultLotJson) {
-        return ExamUploadDTO.getGsonBuilder().create().fromJson(examResultLotJson, ExamUploadDTO.class);
+    public static ExamResultLot deserialize(String examResultLotJson) {
+        return ExamResultLot.getGsonBuilder().create().fromJson(examResultLotJson, ExamResultLot.class);
     }
 
     public static GsonBuilder getGsonBuilder() {

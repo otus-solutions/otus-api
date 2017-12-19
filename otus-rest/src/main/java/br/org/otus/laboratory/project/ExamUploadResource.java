@@ -16,7 +16,7 @@ public class ExamUploadResource {
 
     @GET
     @Produces (MediaType.APPLICATION_JSON)
-    public String getAll(){
+    public String list(){
         return new Response().buildSuccess(examUploadFacade.list()).toSurveyJson();
     }
 
@@ -25,6 +25,14 @@ public class ExamUploadResource {
     @Consumes (MediaType.APPLICATION_JSON)
     public String create(String examUploadJson){
         return new Response().buildSuccess(examUploadFacade.create(examUploadJson)).toJson();
+    }
+
+    @DELETE
+    @Produces (MediaType.APPLICATION_JSON)
+    public String delete(String id){
+        //TODO 18/12/17: check params. will we send oid through url?
+        examUploadFacade.deleteById(id);
+        return new Response().buildSuccess().toJson();
     }
 
     @GET
