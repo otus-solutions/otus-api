@@ -49,7 +49,7 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
     public ExamResultLot getById(String id) {
         ArrayList<ExamResultLot> results = new ArrayList<>();
 
-        Document query = new Document("_id",new Document("$oid",id));
+        Document query = new Document("_id",new ObjectId(id));
 
         //TODO 18/12/17: check this cast to document
         //TODO 18/12/17:  check how this returns when not found
@@ -60,7 +60,7 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
 
     @Override
     public void deleteById(String id) throws DataNotFoundException {
-        Document query = new Document("_id",new Document("$oid",id));
+        Document query = new Document("_id",new ObjectId(id)    );
         DeleteResult deleteResult = collection.deleteOne(query);
 
         if (!deleteResult.wasAcknowledged()) {
