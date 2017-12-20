@@ -22,15 +22,18 @@ public class ExamUploadServiceBean implements ExamUploadService{
     private ExamResultDao examResultDAO;
 
     @Override
-    public String create(ExamUploadDTO examUploadDTO) {
-        ObjectId lotId = examResultLotDAO.insert(examUploadDTO.getExamResultLot());
+    public String create(ExamUploadDTO examUploadDTO, String userEmail) {
+        ExamResultLot examResultLot = examUploadDTO.getExamResultLot();
+        examResultLot.setOperator(userEmail);
+
+        ObjectId lotId = examResultLotDAO.insert(examResultLot);
 
         List<ExamResult> examResults = examUploadDTO.getExamResults();
 
         examResults.stream()
                 .forEach(examResult -> {
                     examResult.setExamId(lotId);
-                    examResult.setFieldCenter(examUploadDTO.getExamResultLot().getFieldCenter());
+                    examResult.setFieldCenter(examResultLot.getFieldCenter());
                 });
 
         examResultDAO.insertMany(examResults);
@@ -43,17 +46,18 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     @Override
-    public ExamResultLot getByID(String id) {
+    public ExamResultLot getByID(String id) throws DataNotFoundException {
         return examResultLotDAO.getById(id);
     }
 
     @Override
     public void delete(String id) throws DataNotFoundException {
+        examResultDAO.deleteByExamId(id);
         examResultLotDAO.deleteById(id);
     }
 
     @Override
-    public List<ExamResult> getAllByExamId(ObjectId id) {
+    public List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException {
         return examResultDAO.getByExamId(id);
     }
 }

@@ -4,6 +4,8 @@ import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamResultLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -17,7 +19,7 @@ public class ExamUploadFacade {
 
     public String create(String examUploadJson, String userEmail){
         ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
-        String lotId = examUploadService.create(examUploadDTO);
+        String lotId = examUploadService.create(examUploadDTO, userEmail);
         return lotId;
     }
 
@@ -26,20 +28,28 @@ public class ExamUploadFacade {
     }
 
     public ExamResultLot getById(String id){
-        return examUploadService.getByID(id);
+        try {
+            return examUploadService.getByID(id);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
     }
 
     public void deleteById(String id){
         try {
             examUploadService.delete(id);
         } catch (DataNotFoundException e) {
-            e.printStackTrace();
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
 
     public List<ExamResult> listResults(String id){
-        ObjectId objectId = new ObjectId(id);
-        return examUploadService.getAllByExamId(objectId);
+        try {
+            ObjectId objectId = new ObjectId(id);
+            return examUploadService.getAllByExamId(objectId);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
 
     }
 }

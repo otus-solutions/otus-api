@@ -44,7 +44,7 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
     }
 
     @Override
-    public ExamResultLot getById(String id) {
+    public ExamResultLot getById(String id) throws DataNotFoundException {
         ArrayList<ExamResultLot> results = new ArrayList<>();
 
         Document query = new Document("_id",new ObjectId(id));
@@ -52,6 +52,11 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
         //TODO 18/12/17: check this cast to document
         //TODO 18/12/17:  check how this returns when not found
         Document first = (Document) collection.find(query).first();
+
+        if (first.isEmpty()){
+            throw new DataNotFoundException(
+                    new Throwable("ExamResultLot not found. Id: " + id));
+        }
 
         return ExamResultLot.deserialize(first.toJson());
     }
@@ -61,15 +66,9 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
         Document query = new Document("_id",new ObjectId(id)    );
         DeleteResult deleteResult = collection.deleteOne(query);
 
-        if (!deleteResult.wasAcknowledged()) {
-            //TODO 18/12/17: debug and check if fits
-            throw new DataNotFoundException(
-                    new Throwable("ExamResultLot not found."));
-        }
-
         if (deleteResult.getDeletedCount() == 0) {
             throw new DataNotFoundException(
-                    new Throwable("ExamResultLot not found."));
+                    new Throwable("ExamResultLot not found. Id: " + id));
         }
 
     }

@@ -12,7 +12,7 @@ public interface ExamResultLotDao {
 
     List<ExamResultLot> getAll();
 
-    ExamResultLot getById(String id);
+    ExamResultLot getById(String id) throws DataNotFoundException;
 
     void deleteById(String id) throws DataNotFoundException;
 }

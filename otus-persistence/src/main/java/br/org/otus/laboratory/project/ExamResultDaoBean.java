@@ -4,8 +4,10 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,28 +24,42 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
     @Override
     public void insertMany(List<ExamResult> examResults) {
         List<Document> parsedExamResults = new ArrayList<>();
-        examResults.stream().forEach(examResult -> parsedExamResults.add(Document.parse(ExamResult.serialize(examResult))));
+        examResults.forEach(examResult -> parsedExamResults.add(Document.parse(ExamResult.serialize(examResult))));
         collection.insertMany(parsedExamResults);
     }
 
     @Override
-    public List<ExamResult> getByExamId(ObjectId id) {
-        ArrayList<ExamResult> examResults = new ArrayList<>();
+    public void deleteByExamId(String id) throws DataNotFoundException {
+        Document query = new Document("examId", new ObjectId(id));
+        DeleteResult deleteResult = collection.deleteMany(query);
+
+        if (deleteResult.getDeletedCount() == 0){
+            throw new DataNotFoundException(
+                    new Throwable("Any result under the {" + id + "} examId."));
+        }
+    }
+
+    @Override
+    public List<ExamResult> getByExamId(ObjectId id) throws DataNotFoundException {
+        ArrayList<ExamResult> results = new ArrayList<>();
 
         Document query = new Document();
         query.put("examId", id);
 
         MongoCursor iterator = collection.find(query).iterator();
 
-        List<Document> employees = (List<Document>) collection.find(query).into(
-                new ArrayList<Document>());
+        if (!iterator.hasNext()){
+            iterator.close(); //TODO 20/12/17: is this necessary?
+            throw new DataNotFoundException(
+                    new Throwable("Any result under the {" + id + "} examId."));
+        }
 
         while(iterator.hasNext()){
             Document next = (Document) iterator.next();
-            examResults.add(ExamResult.deserialize(next.toJson()));
+            results.add(ExamResult.deserialize(next.toJson()));
         }
         iterator.close();
 
-        return examResults;
+        return results;
     }
 }

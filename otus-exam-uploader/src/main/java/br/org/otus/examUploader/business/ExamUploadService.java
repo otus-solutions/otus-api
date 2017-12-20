@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface ExamUploadService {
 
-    public String create(ExamUploadDTO examUploadDTO);
+    public String create(ExamUploadDTO examUploadDTO, String userEmail);
 
     public List<ExamResultLot> list();
 
-    public ExamResultLot getByID(String id);
+    public ExamResultLot getByID(String id) throws DataNotFoundException;
 
     public void delete(String id) throws DataNotFoundException;
 
-    public List<ExamResult> getAllByExamId(ObjectId id);
+    public List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException;
 }

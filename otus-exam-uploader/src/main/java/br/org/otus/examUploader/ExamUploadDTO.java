@@ -1,8 +1,6 @@
 package br.org.otus.examUploader;
 
-import br.org.otus.examUploader.utils.LabObjectIdAdapter;
 import com.google.gson.GsonBuilder;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -28,9 +26,6 @@ public class ExamUploadDTO {
     }
 
     public static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new LabObjectIdAdapter());
-
-        return builder;
+        return new GsonBuilder();
     }
 }

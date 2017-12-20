@@ -25,7 +25,7 @@ public class ExamUploadResource {
     @GET
     @Produces (MediaType.APPLICATION_JSON)
     public String list(){
-        return new Response().buildSuccess(examUploadFacade.list()).toSurveyJson();
+        return new Response().buildSuccess(examUploadFacade.list()).toExamJson();
     }
 
     @POST
@@ -50,7 +50,7 @@ public class ExamUploadResource {
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)
     public String getResults(@PathParam("id") String examId){
-        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toJson();
+        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toExamJson();
     }
 
 }
