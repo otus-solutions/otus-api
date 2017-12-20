@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.project;
 
+import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ public class ExamUploadResource {
     @GET
     @Produces (MediaType.APPLICATION_JSON)
     public String list(){
-        return new Response().buildSuccess(examUploadFacade.list()).toExamJson();
+        return new Response().buildSuccess(examUploadFacade.list()).toCustomJson(ExamUploadDTO.getGsonBuilder());
     }
 
     @POST
@@ -50,7 +52,7 @@ public class ExamUploadResource {
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)
     public String getResults(@PathParam("id") String examId){
-        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toExamJson();
+        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toCustomJson(ExamUploadDTO.getGsonBuilder());
     }
 
 }
