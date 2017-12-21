@@ -5,12 +5,13 @@ import br.org.otus.examUploader.ExamResultLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import java.util.List;
 
 public interface ExamUploadService {
 
-    public String create(ExamUploadDTO examUploadDTO, String userEmail);
+    public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException;
 
     public List<ExamResultLot> list();
 

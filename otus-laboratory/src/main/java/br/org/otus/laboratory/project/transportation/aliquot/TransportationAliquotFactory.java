@@ -13,7 +13,7 @@ public class TransportationAliquotFactory {
 
 
 	public static List<TransportationAliquot> getTransportationAliquotList(ParticipantLaboratoryDao participantLaboratoryDao, ParticipantDao participantDao) throws DataNotFoundException {
-		List<TransportationAliquot> aliquotList = new ArrayList<TransportationAliquot>();
+		List<TransportationAliquot> aliquotList = new ArrayList<>();
 
 		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();
 

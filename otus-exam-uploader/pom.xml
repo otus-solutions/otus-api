@@ -63,5 +63,10 @@
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.ccem.otus</groupId>
+            <artifactId>otus-laboratory</artifactId>
+            <version>1.7-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

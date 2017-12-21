@@ -8,6 +8,7 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -19,7 +20,15 @@ public class ExamUploadFacade {
 
     public String create(String examUploadJson, String userEmail){
         ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
-        String lotId = examUploadService.create(examUploadDTO, userEmail);
+        String lotId = null;
+        try {
+            lotId = examUploadService.create(examUploadDTO, userEmail);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        } catch (ValidationException e) {
+
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        }
         return lotId;
     }
 
