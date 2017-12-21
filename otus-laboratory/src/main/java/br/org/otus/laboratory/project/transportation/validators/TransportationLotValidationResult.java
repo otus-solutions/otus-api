@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.transportation.validarors;
+package br.org.otus.laboratory.project.transportation.validators;
 
 import java.util.ArrayList;
 

@@ -45,15 +45,25 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 			throw new Exception("Update was not executed.");
 		}
 	}
-	
-	public String createNewLotCode() {		
-		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertion"), 
-				new Document("$inc", new Document("lotConfiguration.lastInsertion", 1)),  
+
+	public String createNewLotCodeForTransportation() {
+		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionTransportation"),
+				new Document("$inc", new Document("lotConfiguration.lastInsertionTransportation", 1)),
 				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
-		
+
 		LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
-		
-		return laboratoryConfiguration.getLotConfiguration().getLastInsertion().toString();
+
+		return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation().toString();
 	}
-	
+
+	public String createNewLotCodeForExam() {
+		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionExam"),
+				new Document("$inc", new Document("lotConfiguration.lastInsertionExam", 1)),
+				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+
+		LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
+
+		return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam().toString();
+	}
+
 }

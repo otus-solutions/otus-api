@@ -1,8 +1,8 @@
 package br.org.otus.laboratory.project;
 
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
@@ -67,7 +67,7 @@ public class TransportationResource {
 	@Secured
 	@Path("/aliquots")
 	public String getAliquots() {
-		List<TransportationAliquot> aliquots= transportationLotFacade.getAliquots();
+		List<WorkAliquot> aliquots= transportationLotFacade.getAliquots();
 		GsonBuilder builder = TransportationLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
 	}
