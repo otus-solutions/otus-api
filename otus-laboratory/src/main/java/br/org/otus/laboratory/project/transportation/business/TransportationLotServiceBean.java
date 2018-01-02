@@ -1,16 +1,17 @@
 package br.org.otus.laboratory.project.transportation.business;
 
-import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import br.org.otus.laboratory.project.transportation.validarors.TransportationLotValidator;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.validators.TransportationLotValidator;
 
 @Stateless
 public class TransportationLotServiceBean implements TransportationLotService {
@@ -45,7 +46,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public List<TransportationAliquot> getAliquots() throws DataNotFoundException {
+	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
 		return transportationLotDao.getAliquots();
 	}
 

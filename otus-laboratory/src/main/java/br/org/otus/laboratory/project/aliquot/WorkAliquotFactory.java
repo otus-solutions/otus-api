@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.transportation.aliquot;
+package br.org.otus.laboratory.project.aliquot;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
@@ -9,25 +9,23 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransportationAliquotFactory {
+public class WorkAliquotFactory {
 
-
-	public static List<TransportationAliquot> getTransportationAliquotList(ParticipantLaboratoryDao participantLaboratoryDao, ParticipantDao participantDao) throws DataNotFoundException {
-		List<TransportationAliquot> aliquotList = new ArrayList<TransportationAliquot>();
+	public static List<WorkAliquot> getAliquotList(ParticipantLaboratoryDao participantLaboratoryDao,
+			ParticipantDao participantDao) throws DataNotFoundException {
+		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
 
 		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();
 
 		for (ParticipantLaboratory participantLaboratory : participantList) {
-			Participant participant;
-
-			participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
+			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
 
 			participantLaboratory.getTubes().forEach(tube -> {
 				tube.getAliquots().forEach(aliquot -> {
-					TransportationAliquot transportationAliquot;
-					transportationAliquot = new TransportationAliquot(aliquot, participant.getRecruitmentNumber(),
+					WorkAliquot workAliquot;
+					workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
 							participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
-					aliquotList.add(transportationAliquot);
+					aliquotList.add(workAliquot);
 				});
 			});
 

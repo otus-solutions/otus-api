@@ -1,9 +1,14 @@
 package br.org.otus.laboratory.configuration;
 
 public class LotConfiguration {
-	private Integer lastInsertion;
+	private Integer lastInsertionTransportation;
+	private Integer lastInsertionExam;
 
-	public Integer getLastInsertion() {
-		return lastInsertion;
+	public Integer getLastInsertionTransportation() {
+		return this.lastInsertionTransportation;
+	}
+
+	public Integer getLastInsertionExam() {
+		return this.lastInsertionExam;
 	}
 }
