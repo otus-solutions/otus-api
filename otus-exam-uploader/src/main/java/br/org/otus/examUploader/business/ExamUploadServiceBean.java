@@ -34,11 +34,12 @@ public class ExamUploadServiceBean implements ExamUploadService{
         ExamResultLot examResultLot = examUploadDTO.getExamResultLot();
         examResultLot.setOperator(userEmail);
 
+        validateExamResults(examUploadDTO);
+
         ObjectId lotId = examResultLotDAO.insert(examResultLot);
 
         List<ExamResult> examResults = examUploadDTO.getExamResults();
 
-        validateExamResults(examUploadDTO);
 
         examResults.stream()
                 .forEach(examResult -> {
@@ -60,8 +61,8 @@ public class ExamUploadServiceBean implements ExamUploadService{
         return examResultLotDAO.getById(id);
     }
 
-    @Override
-    public void delete(String id) throws DataNotFoundException {
+        @Override
+        public void delete(String id) throws DataNotFoundException {
         examResultDAO.deleteByExamId(id);
         examResultLotDAO.deleteById(id);
     }
@@ -77,7 +78,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         isSubset(allAliquots, examResults);
     }
 
-    /* Return true if smallArray is a subset of bigArray */
+    /* Throws error if smallArray is not a subset of bigArray */
     private void isSubset(List<TransportationAliquot> bigArray, List<ExamResult> smallArray) throws ValidationException {
         HashSet<String> hset= new HashSet<>();
         ArrayList<String> missing = new ArrayList<>();
@@ -98,7 +99,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         }
 
         if (missing.size() > 0){
-            throw new ValidationException(new Throwable("Aliquots not found"),
+            throw new ValidationException(new Throwable("Aliquots not found"), //TODO 04/01/18: rewrite message
                     missing);
         }
     }

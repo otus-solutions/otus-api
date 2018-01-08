@@ -5,11 +5,15 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
+import javax.validation.constraints.NotNull;
+
 public class ExamResultLot {
 
     private ObjectId _id;
     private String operator;
     private String sendingDate;
+
+    @NotNull
     private FieldCenter fieldCenter;
 
     public ObjectId getId() {
@@ -21,6 +25,7 @@ public class ExamResultLot {
     }
 
     public void setOperator(String operator) {
+        assert operator != null;
         this.operator = operator;
     }
 

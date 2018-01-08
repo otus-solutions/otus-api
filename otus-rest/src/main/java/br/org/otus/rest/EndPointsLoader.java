@@ -10,7 +10,7 @@ import br.org.otus.fileuploader.FileUploaderResource;
 import br.org.otus.importation.ParticipantImportationResource;
 import br.org.otus.laboratory.ParticipantLaboratoryResource;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
-import br.org.otus.laboratory.project.ExamUploadResource;
+import br.org.otus.examUploader.ExamUploadResource;
 import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.security.rest.AuthenticationResource;

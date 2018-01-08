@@ -1,6 +1,5 @@
-package br.org.otus.laboratory.project;
+package br.org.otus.examUploader;
 
-import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
@@ -13,7 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-@Path("laboratory-project/exam")
+@Path("exam-upload/")
 public class ExamUploadResource {
 
     @Inject

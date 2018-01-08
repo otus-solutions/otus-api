@@ -17,8 +17,7 @@ public class ExamResult {
     private String name;
     private FieldCenter fieldCenter;
 
-    private String result;
-//    private LinkedHashMap<String, String> results;
+    private LinkedHashMap<String, String> results;
     private String unity; //TODO 21/12/17: check this name
     private String observations; //TODO 21/12/17: holds observations such as reference values
 
