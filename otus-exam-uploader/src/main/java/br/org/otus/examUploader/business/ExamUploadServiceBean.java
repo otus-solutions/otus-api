@@ -31,10 +31,11 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
+        validateExamResults(examUploadDTO);
+
+
         ExamResultLot examResultLot = examUploadDTO.getExamResultLot();
         examResultLot.setOperator(userEmail);
-
-        validateExamResults(examUploadDTO);
 
         ObjectId lotId = examResultLotDAO.insert(examResultLot);
 
@@ -61,8 +62,8 @@ public class ExamUploadServiceBean implements ExamUploadService{
         return examResultLotDAO.getById(id);
     }
 
-        @Override
-        public void delete(String id) throws DataNotFoundException {
+    @Override
+    public void delete(String id) throws DataNotFoundException {
         examResultDAO.deleteByExamId(id);
         examResultLotDAO.deleteById(id);
     }

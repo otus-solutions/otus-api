@@ -10,10 +10,9 @@ import javax.validation.constraints.NotNull;
 public class ExamResultLot {
 
     private ObjectId _id; //TODO 08/01/18: remove underscore and test
-    private String name;
-    private Integer resultsQuantity;
     private String operator;
     private String realizationDate;
+    private Integer resultsQuantity;
     private FieldCenter fieldCenter;
 
 
