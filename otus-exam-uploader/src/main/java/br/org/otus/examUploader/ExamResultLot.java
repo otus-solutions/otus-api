@@ -11,6 +11,7 @@ public class ExamResultLot {
 
     private ObjectId _id; //TODO 08/01/18: remove underscore and test
     private String operator;
+    private String fileName;
     private String realizationDate;
     private Integer resultsQuantity;
     private FieldCenter fieldCenter;
