@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 
 import java.lang.reflect.Type;
 
+//TODO 08/01/18: rename
 public class LabObjectIdAdapter implements JsonDeserializer<ObjectId>, JsonSerializer<ObjectId> {
 
     @Override

@@ -9,30 +9,26 @@ import javax.validation.constraints.NotNull;
 
 public class ExamResultLot {
 
-    private ObjectId _id;
+    private ObjectId _id; //TODO 08/01/18: remove underscore and test
+    private String name;
+    private Integer resultsQuantity;
     private String operator;
-    private String sendingDate;
-
-    @NotNull
+    private String realizationDate;
     private FieldCenter fieldCenter;
+
 
     public ObjectId getId() {
         return _id;
     }
-
     public String getOperator() {
         return operator;
     }
-
     public void setOperator(String operator) {
-        assert operator != null;
         this.operator = operator;
     }
-
-    public String getSendingDate() {
-        return sendingDate;
+    public String getRealizationDate() {
+        return realizationDate;
     }
-
     public FieldCenter getFieldCenter() {
         return fieldCenter;
     }
