@@ -45,15 +45,12 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
 
     @Override
     public ExamResultLot getById(String id) throws DataNotFoundException {
-        ArrayList<ExamResultLot> results = new ArrayList<>();
-
         Document query = new Document("_id",new ObjectId(id));
 
-        //TODO 18/12/17: check this cast to document
         //TODO 18/12/17:  check how this returns when not found
         Document first = (Document) collection.find(query).first();
 
-        if (first.isEmpty()){
+        if (first == null){
             throw new DataNotFoundException(
                     new Throwable("ExamResultLot not found. Id: " + id));
         }

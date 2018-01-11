@@ -27,6 +27,13 @@ public class ExamUploadResource {
         return new Response().buildSuccess(examUploadFacade.list()).toCustomJson(ExamUploadDTO.getGsonBuilder());
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces (MediaType.APPLICATION_JSON)
+    public String getById(@PathParam("id") String id){
+        return new Response().buildSuccess(examUploadFacade.getById(id)).toCustomJson(ExamUploadDTO.getGsonBuilder());
+    }
+
     @POST
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)

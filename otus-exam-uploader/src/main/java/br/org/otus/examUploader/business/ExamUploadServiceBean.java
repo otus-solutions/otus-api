@@ -81,6 +81,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     /* Throws error if smallArray is not a subset of bigArray */
     private void isSubset(List<TransportationAliquot> bigArray, List<ExamResult> smallArray) throws ValidationException {
+        //TODO 11/01/18: transform into hashmap and get sex, birthdate and rn
         HashSet<String> hset= new HashSet<>();
         ArrayList<String> missing = new ArrayList<>();
 
