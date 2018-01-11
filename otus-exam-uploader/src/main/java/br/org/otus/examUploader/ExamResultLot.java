@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
-import javax.validation.constraints.NotNull;
-
 public class ExamResultLot {
 
     private ObjectId _id; //TODO 08/01/18: remove underscore and test
@@ -23,9 +21,11 @@ public class ExamResultLot {
     public String getOperator() {
         return operator;
     }
+
     public void setOperator(String operator) {
         this.operator = operator;
     }
+
     public String getRealizationDate() {
         return realizationDate;
     }

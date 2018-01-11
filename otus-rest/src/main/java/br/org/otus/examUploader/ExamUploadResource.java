@@ -37,9 +37,9 @@ public class ExamUploadResource {
     }
 
     @DELETE
+    @Path("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
-    public String delete(String id){
-        //TODO 18/12/17: check params. will we send oid through url?
+    public String delete(@PathParam("id") String id){
         examUploadFacade.deleteById(id);
         return new Response().buildSuccess().toJson();
     }
@@ -47,7 +47,6 @@ public class ExamUploadResource {
     @GET
     @Path("/results/{id}")
     @Produces (MediaType.APPLICATION_JSON)
-    @Consumes (MediaType.APPLICATION_JSON)
     public String getResults(@PathParam("id") String examId){
         return new Response().buildSuccess(examUploadFacade.listResults(examId)).toCustomJson(ExamUploadDTO.getGsonBuilder());
     }
