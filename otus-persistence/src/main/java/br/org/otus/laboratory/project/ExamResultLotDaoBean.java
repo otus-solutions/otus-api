@@ -12,6 +12,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: 15/01/18 move?
 public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultLotDao {
 
     private static final String COLLECTION_NAME = "exam_result_lot";
@@ -47,7 +48,6 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
     public ExamResultLot getById(String id) throws DataNotFoundException {
         Document query = new Document("_id",new ObjectId(id));
 
-        //TODO 18/12/17:  check how this returns when not found
         Document first = (Document) collection.find(query).first();
 
         if (first == null){

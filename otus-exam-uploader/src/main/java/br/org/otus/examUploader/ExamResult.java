@@ -17,12 +17,10 @@ public class ExamResult {
     private String resultName;
     private double value;
     private String releaseDate;
-
-    //TODO 09/01/18: split this into metadata?
     private String observations;
 
     private FieldCenter fieldCenter;
-    private Long recruitmentNumber; //TODO 09/01/18: is this necessary?
+    private Long recruitmentNumber;
     private Sex sex;
     private ImmutableDate birthdate;
 
