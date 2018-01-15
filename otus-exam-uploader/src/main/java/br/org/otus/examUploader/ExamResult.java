@@ -1,6 +1,6 @@
 package br.org.otus.examUploader;
 
-import br.org.otus.examUploader.utils.LabObjectIdAdapter;
+import br.org.otus.examUploader.utils.ObjectIdAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
@@ -62,7 +62,7 @@ public class ExamResult {
 
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new LabObjectIdAdapter());
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
         return builder;
     }
 }

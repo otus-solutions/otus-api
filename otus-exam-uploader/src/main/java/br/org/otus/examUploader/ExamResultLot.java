@@ -1,13 +1,13 @@
 package br.org.otus.examUploader;
 
-import br.org.otus.examUploader.utils.LabObjectIdAdapter;
+import br.org.otus.examUploader.utils.ObjectIdAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
 public class ExamResultLot {
 
-    private ObjectId _id; //TODO 08/01/18: remove underscore and test
+    private ObjectId _id;
     private String operator;
     private String fileName;
     private String realizationDate;
@@ -33,6 +33,10 @@ public class ExamResultLot {
         return fieldCenter;
     }
 
+    public void setResultsQuantity(Integer resultsQuantity) {
+        this.resultsQuantity = resultsQuantity;
+    }
+
     public static String serialize(ExamResultLot examResultLot) {
         return getGsonBuilder().create().toJson(examResultLot);
     }
@@ -43,7 +47,7 @@ public class ExamResultLot {
 
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new LabObjectIdAdapter());
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
         return builder;
     }
 }

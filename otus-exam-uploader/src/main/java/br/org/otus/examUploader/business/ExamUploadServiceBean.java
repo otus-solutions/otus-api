@@ -15,7 +15,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 @Stateless
@@ -36,12 +35,12 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
 
         ExamResultLot examResultLot = examUploadDTO.getExamResultLot();
+        List<ExamResult> examResults = examUploadDTO.getExamResults();
+
         examResultLot.setOperator(userEmail);
 
         ObjectId lotId = examResultLotDAO.insert(examResultLot);
-
-        List<ExamResult> examResults = examUploadDTO.getExamResults();
-
+        examResultLot.setResultsQuantity(examResults.size());
 
         examResults.stream()
                 .forEach(examResult -> {
