@@ -14,6 +14,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -81,27 +82,30 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     /* Throws error if smallArray is not a subset of bigArray */
     private void isSubset(List<TransportationAliquot> bigArray, List<ExamResult> smallArray) throws ValidationException {
-        //TODO 11/01/18: transform into hashmap and get sex, birthdate and rn
-        HashSet<String> hset= new HashSet<>();
+        HashMap<String, TransportationAliquot> hmap = new HashMap<>();
         ArrayList<String> missing = new ArrayList<>();
 
-        // hset stores all the values of bigArray
+        // hmap stores all the values of bigArray taking aliquotCode as key
         for (TransportationAliquot aBigArray : bigArray) {
-            String s = aBigArray.getCode();
-            if (!hset.contains(s))
-                hset.add(s);
+            hmap.putIfAbsent(aBigArray.getCode(), aBigArray);
         }
 
         // loop to check if all elements of smallArray also
         // lies in bigArray
         for (ExamResult aSmallArray : smallArray) {
             String aliquotCode = aSmallArray.getAliquotCode();
-            if (!hset.contains(aliquotCode))
+            TransportationAliquot found = hmap.get(aliquotCode);
+            if (found == null)
                 missing.add(aliquotCode);
+            else {
+                aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
+                aSmallArray.setBirthdate(found.getBirthdate());
+                aSmallArray.setSex(found.getSex());
+            }
         }
 
         if (missing.size() > 0){
-            throw new ValidationException(new Throwable("Aliquots not found"), //TODO 04/01/18: rewrite message
+            throw new ValidationException(new Throwable("Aliquots not found"),
                     missing);
         }
     }
