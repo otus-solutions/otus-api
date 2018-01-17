@@ -1,16 +1,17 @@
 package br.org.otus.laboratory.project.api;
 
-import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
-import br.org.otus.laboratory.project.transportation.business.TransportationLotService;
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.business.TransportationLotService;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
 public class TransportationLotFacade {
 
@@ -54,7 +55,7 @@ public class TransportationLotFacade {
 		}
 	}
 
-	public List<TransportationAliquot> getAliquots() {
+	public List<WorkAliquot> getAliquots() {
 		try {
 			return transportationLotService.getAliquots();
 		} catch (DataNotFoundException e) {

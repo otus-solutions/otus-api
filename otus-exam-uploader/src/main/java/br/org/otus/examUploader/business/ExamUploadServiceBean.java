@@ -5,8 +5,8 @@ import br.org.otus.examUploader.ExamResultLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -74,18 +74,18 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     public void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException {
-        List<TransportationAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
+        List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
         List<ExamResult> examResults = examUploadDTO.getExamResults();
         isSubset(allAliquots, examResults);
     }
 
     /* Throws error if smallArray is not a subset of bigArray */
-    private void isSubset(List<TransportationAliquot> bigArray, List<ExamResult> smallArray) throws ValidationException {
-        HashMap<String, TransportationAliquot> hmap = new HashMap<>();
+    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray) throws ValidationException {
+        HashMap<String, WorkAliquot> hmap = new HashMap<>();
         ArrayList<String> missing = new ArrayList<>();
 
         // hmap stores all the values of bigArray taking aliquotCode as key
-        for (TransportationAliquot aBigArray : bigArray) {
+        for (WorkAliquot aBigArray : bigArray) {
             hmap.putIfAbsent(aBigArray.getCode(), aBigArray);
         }
 
@@ -93,7 +93,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         // lies in bigArray
         for (ExamResult aSmallArray : smallArray) {
             String aliquotCode = aSmallArray.getAliquotCode();
-            TransportationAliquot found = hmap.get(aliquotCode);
+            WorkAliquot found = hmap.get(aliquotCode);
             if (found == null)
                 missing.add(aliquotCode);
             else {

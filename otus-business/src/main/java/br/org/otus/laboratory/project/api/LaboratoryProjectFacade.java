@@ -1,7 +1,7 @@
 package br.org.otus.laboratory.project.api;
 
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -17,7 +17,7 @@ public class LaboratoryProjectFacade {
     @Inject
     LaboratoryProjectService laboratoryProjectService;
 
-    public List<TransportationAliquot> getAllProjectAliquots(){
+    public List<WorkAliquot> getAllProjectAliquots(){
         try {
             return laboratoryProjectService.getAllAliquots();
         } catch (DataNotFoundException e) {

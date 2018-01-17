@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.project.business;
 
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.business.TransportationLotService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -15,7 +15,7 @@ public class LaboratoryProjectServiceBean implements LaboratoryProjectService{
     TransportationLotService transportationLotService;
 
     @Override
-    public List<TransportationAliquot> getAllAliquots() throws DataNotFoundException {
+    public List<WorkAliquot> getAllAliquots() throws DataNotFoundException {
         return transportationLotService.getAliquots();
     }
 }

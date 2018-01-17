@@ -1,7 +1,8 @@
 package br.org.otus.laboratory.project.transportation.persistence;
 
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.aliquot.TransportationAliquot;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface TransportationLotDao {
 
 	void delete(String id) throws DataNotFoundException;
 
-	List<TransportationAliquot> getAliquots() throws DataNotFoundException;
+	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
 }
