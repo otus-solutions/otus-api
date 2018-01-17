@@ -39,8 +39,8 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
         examResultLot.setOperator(userEmail);
 
-        ObjectId lotId = examResultLotDAO.insert(examResultLot);
         examResultLot.setResultsQuantity(examResults.size());
+        ObjectId lotId = examResultLotDAO.insert(examResultLot);
 
         examResults.stream()
                 .forEach(examResult -> {
