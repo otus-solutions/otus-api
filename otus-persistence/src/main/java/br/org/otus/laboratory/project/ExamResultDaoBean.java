@@ -49,7 +49,7 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
         MongoCursor iterator = collection.find(query).iterator();
 
         if (!iterator.hasNext()){
-            iterator.close(); //TODO 20/12/17: is this necessary?
+            iterator.close();
             throw new DataNotFoundException(
                     new Throwable("Any result under the {" + id + "} examId."));
         }
