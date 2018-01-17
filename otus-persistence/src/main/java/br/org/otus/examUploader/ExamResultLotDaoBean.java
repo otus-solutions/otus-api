@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project;
+package br.org.otus.examUploader;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.ExamResultLot;
@@ -12,7 +12,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 15/01/18 move?
 public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultLotDao {
 
     private static final String COLLECTION_NAME = "exam_result_lot";

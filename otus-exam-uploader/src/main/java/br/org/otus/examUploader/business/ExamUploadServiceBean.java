@@ -73,7 +73,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         return examResultDAO.getByExamId(id);
     }
 
-    private void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException {
+    public void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException {
         List<TransportationAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
         List<ExamResult> examResults = examUploadDTO.getExamResults();
         isSubset(allAliquots, examResults);

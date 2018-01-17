@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ExamResultLotDao {
 
-    ObjectId insert(ExamResultLot examResults);
+    ObjectId insert(ExamResultLot examResultLot);
 
     List<ExamResultLot> getAll();
 
