@@ -11,15 +11,17 @@ import java.util.List;
 
 public interface ExamUploadService {
 
-    public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException;
+    String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException;
 
-    public List<ExamResultLot> list();
+    List<ExamResultLot> list();
 
-    public ExamResultLot getByID(String id) throws DataNotFoundException;
+    ExamResultLot getByID(String id) throws DataNotFoundException;
 
-    public void delete(String id) throws DataNotFoundException;
+    void delete(String id) throws DataNotFoundException;
 
-    public List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException;
+    List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException;
 
     void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException;
+
+    void validateExamResultLot(ExamUploadDTO examUploadDTO) throws ValidationException;
 }

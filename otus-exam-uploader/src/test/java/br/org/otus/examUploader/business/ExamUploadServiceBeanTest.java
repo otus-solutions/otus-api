@@ -129,4 +129,12 @@ public class ExamUploadServiceBeanTest {
         service.validateExamResults(examUploadDTO);
 
     }
-}
+
+    @Test (expected = ValidationException.class)
+    public void validateExamResultLot_should_throw_ValidationException_when_examResults_list_size_is_zero() throws ValidationException {
+        ArrayList<ExamResult> examResults = new ArrayList<>();
+        PowerMockito.when(examUploadDTO.getExamResults()).thenReturn(examResults);
+        service.validateExamResultLot(examUploadDTO);
+    }
+
+    }

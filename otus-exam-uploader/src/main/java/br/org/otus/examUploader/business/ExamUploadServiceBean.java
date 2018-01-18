@@ -31,6 +31,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
+        validateExamResultLot(examUploadDTO);
         validateExamResults(examUploadDTO);
 
 
@@ -78,6 +79,13 @@ public class ExamUploadServiceBean implements ExamUploadService{
         List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
         List<ExamResult> examResults = examUploadDTO.getExamResults();
         isSubset(allAliquots, examResults);
+    }
+
+    @Override
+    public void validateExamResultLot(ExamUploadDTO examUploadDTO) throws ValidationException {
+        if (examUploadDTO.getExamResults().size() == 0){
+            throw new ValidationException(new Throwable("Empty Lot"));
+        }
     }
 
     /* Throws error if smallArray is not a subset of bigArray */
