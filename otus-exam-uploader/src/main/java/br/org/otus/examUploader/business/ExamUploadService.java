@@ -20,4 +20,6 @@ public interface ExamUploadService {
     public void delete(String id) throws DataNotFoundException;
 
     public List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException;
+
+    void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException;
 }

@@ -36,6 +36,11 @@ public class ExamResult {
         return aliquotCode;
     }
 
+    //used for unit testing
+    public void setAliquotCode(String aliquotCode) {
+        this.aliquotCode = aliquotCode;
+    }
+
     public Long getRecruitmentNumber() {
         return recruitmentNumber;
     }
