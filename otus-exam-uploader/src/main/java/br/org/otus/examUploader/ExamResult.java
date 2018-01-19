@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Sex;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 public class ExamResult {
@@ -68,6 +69,7 @@ public class ExamResult {
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+        builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         return builder;
     }
 }
