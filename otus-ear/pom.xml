@@ -65,6 +65,10 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-extraction</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-file-uploader</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -167,6 +171,12 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-datasource</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-exam-uploader</artifactId>
 			<version>${project.parent.version}</version>
 			<type>ejb</type>
 		</dependency>

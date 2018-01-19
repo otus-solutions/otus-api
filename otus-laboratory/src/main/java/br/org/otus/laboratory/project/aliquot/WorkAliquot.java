@@ -6,7 +6,6 @@ import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.AliquotCollectionData;
 import com.google.gson.Gson;
-
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Sex;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
