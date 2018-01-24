@@ -1,9 +1,7 @@
 package org.ccem.otus.service.extraction.factories;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 
-import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.item.questions.Question;

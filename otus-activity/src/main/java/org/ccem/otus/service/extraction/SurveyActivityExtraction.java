@@ -20,7 +20,6 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyActivities = surveyActivities;
 		this.surveyForm = surveyForm;
 		this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyForm);
-		
 	}
 
 	@Override
@@ -39,7 +38,6 @@ public class SurveyActivityExtraction implements Extractable {
 			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
 			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
 			values.add(resultInformation);			
-			
 		}
 		return values;
 	}
