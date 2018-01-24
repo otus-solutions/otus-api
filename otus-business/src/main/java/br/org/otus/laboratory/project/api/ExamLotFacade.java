@@ -1,9 +1,12 @@
 package br.org.otus.laboratory.project.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.response.builders.Security;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -18,6 +21,9 @@ public class ExamLotFacade {
 
     @Inject
     private ExamLotService examLotService;
+
+    @Inject
+    private LaboratoryConfigurationService laboratoryConfigurationService;
 
     public ExamLot create(ExamLot examLot, String userEmail) {
         try {
@@ -66,6 +72,10 @@ public class ExamLotFacade {
             e.printStackTrace();
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
+    }
+
+    public ArrayList<AliquoteDescriptor> getAvailableAliquots(){
+        return laboratoryConfigurationService.getAvailableAliquots();
     }
 
 }

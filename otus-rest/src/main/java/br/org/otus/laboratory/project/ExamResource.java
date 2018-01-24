@@ -4,15 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import com.google.gson.GsonBuilder;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
@@ -75,5 +72,14 @@ public class ExamResource {
 		List<WorkAliquot> aliquots = examLotFacade.getAliquots();
 		GsonBuilder builder = ExamLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
+	}
+
+	@GET
+	@Secured
+	@Path("/available-aliquots")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getAvailableAliquots() {
+		List<AliquoteDescriptor> aliquoteDescriptors = examLotFacade.getAvailableAliquots();
+		return new Response().buildSuccess(aliquoteDescriptors).toJson();
 	}
 }
