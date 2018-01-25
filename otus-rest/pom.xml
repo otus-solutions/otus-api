@@ -67,6 +67,12 @@
 			<type>ejb</type>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.4.2</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- - - Dependency between modules - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
@@ -136,10 +142,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver</artifactId>
-			<version>3.4.2</version>
-			<scope>test</scope>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-commons</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>

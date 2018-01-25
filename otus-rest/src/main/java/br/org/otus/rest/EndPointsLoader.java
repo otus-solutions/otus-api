@@ -1,16 +1,10 @@
 package br.org.otus.rest;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
 import br.org.otus.configuration.datasource.DataSourceResource;
 import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
+import br.org.otus.examUploader.ExamUploadResource;
 import br.org.otus.extraction.rest.ExtractionResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
@@ -25,6 +19,13 @@ import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.user.UserResource;
+
+import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @ApplicationPath("otus")
 public class EndPointsLoader extends Application {
@@ -43,19 +44,19 @@ public class EndPointsLoader extends Application {
 
 	@Inject
 	private SurveyResource surveyResource;
-
+	
 	@Inject
 	private TemplateResource templateResource;
 
 	@Inject
 	private VisualIdentityResource visualIdentityResource;
-
+	
 	@Inject
 	private ParticipantImportationResource participantImportationResource;
-
+	
 	@Inject
 	private ParticipantResource participantResource;
-
+	
 	@Inject
 	private ActivityResource activityResource;
 
@@ -64,7 +65,7 @@ public class EndPointsLoader extends Application {
 
 	@Inject
 	private DataSourceResource dataSourceResource;
-
+	
 	@Inject
 	private FileUploaderResource fileUploaderResource;
 
@@ -82,6 +83,9 @@ public class EndPointsLoader extends Application {
 
 	@Inject
 	private ExamResource examResource;
+
+	@Inject
+	private ExamUploadResource examUploadResource;
 
 	@Override
 	public Set<Class<?>> getClasses() {
@@ -104,6 +108,7 @@ public class EndPointsLoader extends Application {
 		resources.add(ExtractionResource.class);
 		resources.add(ActivityConfigurationResource.class);
 		resources.add(ExamResource.class);
+		resources.add(ExamUploadResource.class);
 		return resources;
 	}
 
@@ -128,6 +133,7 @@ public class EndPointsLoader extends Application {
 		resources.add(extractionResource);
 		resources.add(activityConfigurationResource);
 		resources.add(examResource);
+		resources.add(examUploadResource);
 
 		return resources;
 	}
