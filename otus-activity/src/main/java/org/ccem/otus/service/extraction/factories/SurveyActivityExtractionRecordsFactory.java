@@ -33,7 +33,7 @@ public class SurveyActivityExtractionRecordsFactory {
 			this.surveyInformation.put(header.toString(), "");
 		}
 	}
-
+	
 	public LinkedHashMap<String, Object> getSurveyInformation() {
 		return this.surveyInformation;
 	}
@@ -123,8 +123,6 @@ public class SurveyActivityExtractionRecordsFactory {
 	
 	private void skippAnswer(List<String> extractionIDs) {
 		for (String extractionID : extractionIDs) {
-			// TODO: Correção sobre o problema de .P para o metadata aplicada
-			// TODO: Testar para casos onde a questão é customID
 			this.getSurveyInformation().replace(extractionID, ExtractionVariables.SKIPPED_ANSWER.getValue());
 		}
 	}
