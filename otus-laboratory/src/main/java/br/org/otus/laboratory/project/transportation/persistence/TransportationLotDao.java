@@ -6,6 +6,7 @@ import br.org.otus.laboratory.project.transportation.TransportationLot;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TransportationLotDao {
 
@@ -19,4 +20,5 @@ public interface TransportationLotDao {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
+	Set<String> getAliquotsDescriptorsInTransportationLots() throws DataNotFoundException;
 }

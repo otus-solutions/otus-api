@@ -74,8 +74,8 @@ public class ExamLotFacade {
         }
     }
 
-    public ArrayList<AliquoteDescriptor> getAvailableAliquots(){
-        return laboratoryConfigurationService.getAvailableAliquots();
+    public ArrayList<AliquoteDescriptor> getAvailableAliquots(String center){
+        return laboratoryConfigurationService.getAliquotDescriptorsByCenter(center);
     }
 
 }

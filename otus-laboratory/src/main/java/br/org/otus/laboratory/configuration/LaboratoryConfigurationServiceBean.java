@@ -1,7 +1,9 @@
 package br.org.otus.laboratory.configuration;
 
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotCenterDescriptors;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
@@ -9,10 +11,7 @@ import br.org.otus.laboratory.configuration.label.LabelReference;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 @Stateless
 public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurationService {
@@ -72,6 +71,21 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 
 	@Override
 	public List<AliquoteDescriptor> getAliquotDescriptors() {
+		return laboratoryConfiguration.getAliquotConfiguration().getAliquotDescriptors();
+	}
+
+	@Override
+	public List<AliquoteDescriptor> getAliquotDescriptorsByCenter(String center) {
+		AliquotCenterDescriptors first = laboratoryConfiguration.getAliquotConfiguration().getAliquotCenterDescriptors().stream()
+				.filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center))
+				.findFirst()
+				.orElseThrow(RuntimeException::new);
+		List<CenterAliquot> allCenterAliquots = first.getAllCenterAliquots();
+		return null;
+	}
+
+//	@Override
+	public List<AliquoteDescriptor> getAliquotDescriptorsByName(String name) {
 		return laboratoryConfiguration.getAliquotConfiguration().getAliquotDescriptors();
 	}
 

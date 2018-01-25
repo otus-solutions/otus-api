@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -50,6 +51,10 @@ public class ExamLotServiceBean implements ExamLotService {
 	@Override
 	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
 		return examLotDao.getAllAliquotsInDB();
+	}
+
+	public List<AliquoteDescriptor> getAliquotsDescriptorsInTransportationLots() throws DataNotFoundException {
+		return transportationLotDao.getAliquotsDescriptorsInTransportationLots();
 	}
 
 	private void validateLot(ExamLot examLot) throws ValidationException {

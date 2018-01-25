@@ -3,7 +3,9 @@ package br.org.otus.laboratory.project;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -82,5 +84,18 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	@Override
 	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
 		return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
+	}
+
+	@Override
+	//TODO 25/01/18: rename
+	public Set<String> getAliquotsDescriptorsInTransportationLots() throws DataNotFoundException {
+        Document projection = new Document("aliquotsInfo", 1);
+        Set<String> descriptors = new HashSet<>();
+
+        FindIterable<Document> documents = collection.find().projection(projection);
+        documents.forEach((Block<? super Document>) document -> {
+            descriptors.add(document.getString("aliquotName"));
+        });
+        return descriptors;
 	}
 }

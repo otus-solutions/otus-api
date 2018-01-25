@@ -25,4 +25,5 @@ public interface LaboratoryConfigurationService {
 
 	List<AliquoteDescriptor> getAliquotDescriptors();
 
+    List<AliquoteDescriptor> getAliquotDescriptorsByCenter(String center);
 }

@@ -76,10 +76,10 @@ public class ExamResource {
 
 	@GET
 	@Secured
-	@Path("/available-aliquots")
+	@Path("/available-exams/{center}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getAvailableAliquots() {
-		List<AliquoteDescriptor> aliquoteDescriptors = examLotFacade.getAvailableAliquots();
+	public String getAvailableAliquots(@PathParam("center") String center) {
+		List<AliquoteDescriptor> aliquoteDescriptors = examLotFacade.getAvailableAliquots(center);
 		return new Response().buildSuccess(aliquoteDescriptors).toJson();
 	}
 }
