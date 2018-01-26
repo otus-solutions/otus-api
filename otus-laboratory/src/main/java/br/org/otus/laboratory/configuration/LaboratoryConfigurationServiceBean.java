@@ -7,6 +7,7 @@ import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -75,21 +76,20 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 	}
 
 	@Override
-	public List<CenterAliquot> getAliquotDescriptorsByCenter(String center) {
+	public List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException {
 		AliquotCenterDescriptors first = laboratoryConfiguration.getAliquotConfiguration().getAliquotCenterDescriptors().stream()
 				.filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center))
 				.findFirst()
-				.orElseThrow(RuntimeException::new);
-		//TODO 25/01/18: review this exception - create lab-config-exception?
+				.orElseThrow(() -> new DataNotFoundException("FieldCenter not found"));
 		return first.getAllCenterAliquots();
 	}
 
 	@Override
-	public AliquoteDescriptor getAliquotDescriptorsByName(String name) {
+	public AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException {
 		AliquoteDescriptor aliquotByName = getAliquotDescriptors().stream()
 				.filter(aliquoteDescriptor -> aliquoteDescriptor.getName().equals(name))
 				.findFirst()
-				.orElseThrow(RuntimeException::new);
+				.orElseThrow(() -> new DataNotFoundException("Any descriptor found for " + name));
 		return aliquotByName;
 	}
 

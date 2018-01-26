@@ -33,27 +33,26 @@ public class LaboratoryProjectServiceBean implements LaboratoryProjectService{
 
     @Override
     public LinkedHashSet<AliquoteDescriptor> getAvailableExams(String center) throws DataNotFoundException {
-        LinkedHashSet<AliquoteDescriptor> aliquoteDescriptors = new LinkedHashSet<>();
+        LinkedHashSet<AliquoteDescriptor> aliquotDescriptors = new LinkedHashSet<>();
 
-        HashSet<String> suport = new HashSet<>();
+        HashSet<String> support = new HashSet<>();
 
         List<CenterAliquot> aliquotDescriptorsByCenter = laboratoryConfigurationService.getAliquotDescriptorsByCenter(center);
         HashSet<String> aliquotsDescriptorsInTransportationLots = examLotService.getAliquotsDescriptorsInTransportationLots();
 
-        //TODO 26/01/18: merge list and hashset into a single hashset and iterate only once
         for (CenterAliquot centerAliquot : aliquotDescriptorsByCenter) {
             String name = centerAliquot.getName();
-            if (suport.add(name)){
-                aliquoteDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(name));
+            if (support.add(name)){
+                aliquotDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(name));
             }
         }
 
         for (String aliquotsDescriptorName : aliquotsDescriptorsInTransportationLots) {
-            if (suport.add(aliquotsDescriptorName)){
-                aliquoteDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(aliquotsDescriptorName));
+            if (support.add(aliquotsDescriptorName)){
+                aliquotDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(aliquotsDescriptorName));
             }
         }
-        return aliquoteDescriptors;
+        return aliquotDescriptors;
     }
 
 

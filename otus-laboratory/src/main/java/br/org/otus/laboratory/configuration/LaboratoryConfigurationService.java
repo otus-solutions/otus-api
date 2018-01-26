@@ -6,6 +6,7 @@ import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,7 @@ public interface LaboratoryConfigurationService {
 
 	List<AliquoteDescriptor> getAliquotDescriptors();
 
-    	List<CenterAliquot> getAliquotDescriptorsByCenter(String center);
+    	List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException;
 
-    	AliquoteDescriptor getAliquotDescriptorsByName(String name);
+    	AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException;
 }

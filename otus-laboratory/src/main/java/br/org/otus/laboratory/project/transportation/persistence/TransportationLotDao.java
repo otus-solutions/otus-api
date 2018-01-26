@@ -20,5 +20,5 @@ public interface TransportationLotDao {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
-	HashSet<String> getAliquotsInTransportationLots() throws DataNotFoundException;
+	HashSet<String> getAliquotNamesInTransportationLots() throws DataNotFoundException;
 }

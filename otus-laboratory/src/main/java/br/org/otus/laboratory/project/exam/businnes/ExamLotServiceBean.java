@@ -59,7 +59,7 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public HashSet<String> getAliquotsDescriptorsInTransportationLots() throws DataNotFoundException {
-		return transportationLotDao.getAliquotsInTransportationLots();
+		return transportationLotDao.getAliquotNamesInTransportationLots();
 	}
 
 	private void validateLot(ExamLot examLot) throws ValidationException {
