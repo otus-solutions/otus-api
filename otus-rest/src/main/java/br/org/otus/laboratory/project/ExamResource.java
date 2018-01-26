@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.project;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -78,8 +79,8 @@ public class ExamResource {
 	@Secured
 	@Path("/available-exams/{center}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getAvailableAliquots(@PathParam("center") String center) {
-		List<AliquoteDescriptor> aliquoteDescriptors = examLotFacade.getAvailableAliquots(center);
-		return new Response().buildSuccess(aliquoteDescriptors).toJson();
+	public String getAvailableExams(@PathParam("center") String center) {
+		LinkedHashSet<AliquoteDescriptor> availableExams = examLotFacade.getAvailableExams(center);
+		return new Response().buildSuccess(availableExams).toJson();
 	}
 }

@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.project.exam.businnes;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -20,4 +21,5 @@ public interface ExamLotService {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
+    HashSet<String> getAliquotsDescriptorsInTransportationLots() throws DataNotFoundException;
 }
