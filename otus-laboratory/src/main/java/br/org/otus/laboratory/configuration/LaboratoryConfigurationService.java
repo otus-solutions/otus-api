@@ -2,6 +2,7 @@ package br.org.otus.laboratory.configuration;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
@@ -25,5 +26,7 @@ public interface LaboratoryConfigurationService {
 
 	List<AliquoteDescriptor> getAliquotDescriptors();
 
-    List<AliquoteDescriptor> getAliquotDescriptorsByCenter(String center);
+    	List<CenterAliquot> getAliquotDescriptorsByCenter(String center);
+
+    	AliquoteDescriptor getAliquotDescriptorsByName(String name);
 }

@@ -75,18 +75,22 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 	}
 
 	@Override
-	public List<AliquoteDescriptor> getAliquotDescriptorsByCenter(String center) {
+	public List<CenterAliquot> getAliquotDescriptorsByCenter(String center) {
 		AliquotCenterDescriptors first = laboratoryConfiguration.getAliquotConfiguration().getAliquotCenterDescriptors().stream()
 				.filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center))
 				.findFirst()
 				.orElseThrow(RuntimeException::new);
-		List<CenterAliquot> allCenterAliquots = first.getAllCenterAliquots();
-		return null;
+		//TODO 25/01/18: review this exception - create lab-config-exception?
+		return first.getAllCenterAliquots();
 	}
 
-//	@Override
-	public List<AliquoteDescriptor> getAliquotDescriptorsByName(String name) {
-		return laboratoryConfiguration.getAliquotConfiguration().getAliquotDescriptors();
+	@Override
+	public AliquoteDescriptor getAliquotDescriptorsByName(String name) {
+		AliquoteDescriptor aliquotByName = getAliquotDescriptors().stream()
+				.filter(aliquoteDescriptor -> aliquoteDescriptor.getName().equals(name))
+				.findFirst()
+				.orElseThrow(RuntimeException::new);
+		return aliquotByName;
 	}
 
 }
