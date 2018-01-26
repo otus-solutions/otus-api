@@ -5,7 +5,7 @@ import org.bson.types.ObjectId;
 
 import java.lang.reflect.Type;
 
-public class ObjectIdAdapter implements JsonSerializer<ObjectId>, JsonDeserializer<ObjectId> {
+public class ObjectIdToStringAdapter implements JsonSerializer<ObjectId>, JsonDeserializer<ObjectId> {
 
 	@Override
 	public JsonElement serialize(ObjectId arg0, Type arg1, JsonSerializationContext arg2) {

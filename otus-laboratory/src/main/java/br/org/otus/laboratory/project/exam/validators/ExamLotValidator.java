@@ -65,6 +65,7 @@ public class ExamLotValidator {
 
 				if (!contains) {
 					examLotValidationResult.setValid(false);
+					examLotValidationResult.pushConflict(workAliquot.getCode());
 				}
 			});
 		} catch (DataNotFoundException e) {

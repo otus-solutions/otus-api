@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
-import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,7 +103,7 @@ public class LaboratoryConfiguration {
 
 	public static Gson getGsonBuilder() {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+		builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
 		builder.registerTypeAdapter(TubeConfiguration.class, new TubeConfigurationAdapter());
 		builder.registerTypeAdapter(CollectMomentConfiguration.class, new CollectMomentConfigurationAdapter());
 		builder.registerTypeAdapter(CollectGroupConfiguration.class, new CollectGroupConfigurationAdapter());
