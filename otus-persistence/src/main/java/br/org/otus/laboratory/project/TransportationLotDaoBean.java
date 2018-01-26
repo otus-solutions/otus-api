@@ -83,7 +83,6 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     }
 
     @Override
-    //TODO 25/01/18: rename
     public HashSet<String> getAliquotNamesInTransportationLots() throws DataNotFoundException {
         Document projection = new Document("aliquotsInfo", 1);
         HashSet<String> descriptors = new HashSet<>();
