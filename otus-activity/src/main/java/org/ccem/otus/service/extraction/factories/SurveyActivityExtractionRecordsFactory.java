@@ -3,7 +3,6 @@ package org.ccem.otus.service.extraction.factories;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -81,7 +80,7 @@ public class SurveyActivityExtractionRecordsFactory {
 			switch (trackingItem.state) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 			case "SKIPPED": {
-				skippAnswer(surveyItem.getExtractionIDs());
+				skippAnswer(surveyItem.getCustomID());
 				break;
 			}
 			case "ANSWERED": {
@@ -123,10 +122,8 @@ public class SurveyActivityExtractionRecordsFactory {
 
 	}
 
-	private void skippAnswer(List<String> extractionIDs) {
-		for (String extractionID : extractionIDs) {
-			this.getSurveyInformation().replace(extractionID, ExtractionVariables.SKIPPED_ANSWER.getValue());
-		}
+	private void skippAnswer(String questionID) {	
+		this.surveyInformation.replace(questionID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, ExtractionVariables.SKIPPED_ANSWER.getValue());
 	}
 
 }
