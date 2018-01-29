@@ -111,7 +111,12 @@ public class SurveyActivityExtractionRecordsFactory {
 
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
 			String key = pair.getKey();
-			this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
+			//TODO CheckboxQuestion Option ID FIX
+			if(surveyItem.objectType.equals("CheckboxQuestion")){
+				this.surveyInformation.replace(key, pair.getValue());
+			} else {
+				this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
+			}
 		}
 
 		if (filler.getMetadata() != null) {
