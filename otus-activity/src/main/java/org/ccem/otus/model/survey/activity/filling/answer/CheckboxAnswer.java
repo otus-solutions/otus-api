@@ -19,9 +19,13 @@ public class CheckboxAnswer extends AnswerFill {
 		Map<String, Object> extraction = new LinkedHashMap<String, Object>();
 		if (this.value != null) {
 			for (CheckboxAnswerOption answer : value) {
-				extraction.put(answer.getOption(), answer.getState());
+				extraction.put(answer.getOption(), parseBooleanToInt(answer.getState()));
 			}
 		}
 		return extraction;
+	}
+
+	private int parseBooleanToInt(Boolean value) {
+		return value.equals(Boolean.TRUE) ? 1 : 0;
 	}
 }
