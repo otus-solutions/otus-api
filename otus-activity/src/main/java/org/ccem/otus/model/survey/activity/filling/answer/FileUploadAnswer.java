@@ -17,8 +17,10 @@ public class FileUploadAnswer extends AnswerFill {
 	@Override
 	public Map<String, Object> getAnswerExtract(String questionID) {
 		Map<String, Object> extraction = new LinkedHashMap<String, Object>();
-		for (FileAnswer fileAnswer : value) {
-			extraction.put(questionID, fileAnswer.getName());
+		if (this.value != null) {
+			for (FileAnswer fileAnswer : value) {
+				extraction.put(questionID, fileAnswer.getName());
+			}
 		}
 		return extraction;
 	}
