@@ -18,9 +18,15 @@ public class FileUploadAnswer extends AnswerFill {
 	public Map<String, Object> getAnswerExtract(String questionID) {
 		Map<String, Object> extraction = new LinkedHashMap<String, Object>();
 		if (this.value != null) {
+			String concatFileNames = "";
 			for (FileAnswer fileAnswer : value) {
-				extraction.put(questionID, fileAnswer.getName());
+				if (concatFileNames.length() == 0){
+					concatFileNames = concatFileNames.concat(fileAnswer.getName());
+				} else {
+					concatFileNames = concatFileNames.concat("," + fileAnswer.getName());
+				}
 			}
+			extraction.put(questionID, concatFileNames);
 		}
 		return extraction;
 	}
