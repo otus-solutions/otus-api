@@ -89,7 +89,7 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 		AliquoteDescriptor aliquotByName = getAliquotDescriptors().stream()
 				.filter(aliquoteDescriptor -> aliquoteDescriptor.getName().equals(name))
 				.findFirst()
-				.orElseThrow(() -> new DataNotFoundException("Any descriptor found for " + name));
+				.orElseThrow(() -> new DataNotFoundException("Any descriptor found for \"" + name + "\""));
 		return aliquotByName;
 	}
 

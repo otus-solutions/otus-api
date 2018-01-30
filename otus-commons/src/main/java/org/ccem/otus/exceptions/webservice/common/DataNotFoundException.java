@@ -6,7 +6,7 @@ public class DataNotFoundException extends Exception {
 	private Object data;
 
 	public DataNotFoundException(String message){
-		super(message);
+		super(new Throwable(message));
 	}
 
 	public DataNotFoundException() {
