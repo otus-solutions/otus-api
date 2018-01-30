@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -58,8 +59,8 @@ public class ExamLotServiceBean implements ExamLotService {
 	}
 
 	@Override
-	public HashSet<String> getAliquotsDescriptorsInTransportationLots() throws DataNotFoundException {
-		return transportationLotDao.getAliquotNamesInTransportationLots();
+	public HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException {
+		return transportationLotDao.getAliquotsInfoInTransportationLots();
 	}
 
 	private void validateLot(ExamLot examLot) throws ValidationException {

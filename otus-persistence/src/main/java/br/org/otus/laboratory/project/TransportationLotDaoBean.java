@@ -83,20 +83,18 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     }
 
     @Override
-    public HashSet<String> getAliquotNamesInTransportationLots() throws DataNotFoundException {
+    public HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException {
         Document projection = new Document("aliquotsInfo", 1);
-        HashSet<String> descriptors = new HashSet<>();
+        HashSet<Document> aliquotsInfos = new HashSet<>();
 
         FindIterable<Document> documents = collection.find().projection(projection);
         documents.forEach((Block<? super Document>) document -> {
             List<Document> aliquotsInfo = (List<Document>) document.get("aliquotsInfo");
             if (aliquotsInfo != null) {
-                for (Document aliquotInfo : aliquotsInfo) {
-                    descriptors.add(aliquotInfo.getString("aliquotName"));
-                }
+                aliquotsInfos.addAll(aliquotsInfo);
             }
         });
-        descriptors.remove(null);
-        return descriptors;
+        aliquotsInfos.remove(null);
+        return aliquotsInfos;
     }
 }

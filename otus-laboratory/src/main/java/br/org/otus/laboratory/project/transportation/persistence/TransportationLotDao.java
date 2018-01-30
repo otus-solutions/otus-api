@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project.transportation.persistence;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.HashSet;
@@ -20,5 +21,5 @@ public interface TransportationLotDao {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
-	HashSet<String> getAliquotNamesInTransportationLots() throws DataNotFoundException;
+	HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException;
 }

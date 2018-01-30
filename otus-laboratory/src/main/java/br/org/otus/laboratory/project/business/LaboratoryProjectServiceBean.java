@@ -6,6 +6,7 @@ import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.businnes.ExamLotService;
 import br.org.otus.laboratory.project.transportation.business.TransportationLotService;
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.ejb.Stateless;
@@ -15,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 @Stateless
-public class LaboratoryProjectServiceBean implements LaboratoryProjectService{
+public class LaboratoryProjectServiceBean implements LaboratoryProjectService {
 
     @Inject
     TransportationLotService transportationLotService;
@@ -38,18 +39,23 @@ public class LaboratoryProjectServiceBean implements LaboratoryProjectService{
         HashSet<String> support = new HashSet<>();
 
         List<CenterAliquot> aliquotDescriptorsByCenter = laboratoryConfigurationService.getAliquotDescriptorsByCenter(center);
-        HashSet<String> aliquotsDescriptorsInTransportationLots = examLotService.getAliquotsDescriptorsInTransportationLots();
+        HashSet<Document> aliquotsInfosInTransportationLots = examLotService.getAliquotsInfosInTransportationLots();
 
         for (CenterAliquot centerAliquot : aliquotDescriptorsByCenter) {
-            String name = centerAliquot.getName();
-            if (support.add(name)){
-                aliquotDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(name));
+            if (centerAliquot.getRole().equals("EXAM")) {
+                String name = centerAliquot.getName();
+                if (support.add(name)) {
+                    aliquotDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(name));
+                }
             }
         }
 
-        for (String aliquotsDescriptorName : aliquotsDescriptorsInTransportationLots) {
-            if (support.add(aliquotsDescriptorName)){
-                aliquotDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(aliquotsDescriptorName));
+        for (Document aliquotsInfos : aliquotsInfosInTransportationLots) {
+            if (aliquotsInfos.getString("role").equals("EXAM")) {
+                String name = aliquotsInfos.getString("aliquotName");
+                if (support.add(name)) {
+                    aliquotDescriptors.add(laboratoryConfigurationService.getAliquotDescriptorsByName(name));
+                }
             }
         }
         return aliquotDescriptors;

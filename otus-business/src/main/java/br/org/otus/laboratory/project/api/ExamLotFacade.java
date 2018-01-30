@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project.api;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
