@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.configuration.collect.aliquot;
 
+import java.util.Objects;
+
 public class AliquoteDescriptor {
 
 	private String objectType;
@@ -25,4 +27,19 @@ public class AliquoteDescriptor {
 		return label;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AliquoteDescriptor that = (AliquoteDescriptor) o;
+		return Objects.equals(objectType, that.objectType) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(label, that.label);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(objectType, name, label);
+	}
 }
