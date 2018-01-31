@@ -1,7 +1,7 @@
 package br.org.otus.examUploader.business;
 
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -13,15 +13,15 @@ public interface ExamUploadService {
 
     String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException;
 
-    List<ExamResultLot> list();
+    List<ExamLot> list();
 
-    ExamResultLot getByID(String id) throws DataNotFoundException;
+    ExamLot getByID(String id) throws DataNotFoundException;
 
     void delete(String id) throws DataNotFoundException;
 
     List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException;
 
-    void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException;
+    void validateExamResults(List<ExamResult> examResults) throws DataNotFoundException, ValidationException;
 
-    void validateExamResultLot(ExamUploadDTO examUploadDTO) throws ValidationException;
+    void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
 }

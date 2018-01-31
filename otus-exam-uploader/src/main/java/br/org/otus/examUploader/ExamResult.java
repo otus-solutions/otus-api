@@ -8,17 +8,20 @@ import org.ccem.otus.participant.model.Sex;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
+import java.util.List;
+
 public class ExamResult {
 
     private ObjectId _id;
     private ObjectId examId;
 
+    private String objectType;
     private String aliquotCode;
     private String examName;
     private String resultName;
     private double value;
     private String releaseDate;
-    private String observations;
+    private List<Observation> observations;
 
     private FieldCenter fieldCenter;
     private Long recruitmentNumber;

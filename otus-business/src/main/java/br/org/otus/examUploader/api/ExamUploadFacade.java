@@ -1,7 +1,7 @@
 package br.org.otus.examUploader.api;
 
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
 import br.org.otus.response.builders.ResponseBuild;
@@ -20,7 +20,7 @@ public class ExamUploadFacade {
 
     public String create(String examUploadJson, String userEmail){
         ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
-        String lotId = null;
+        String lotId;
         try {
             lotId = examUploadService.create(examUploadDTO, userEmail);
         } catch (DataNotFoundException e) {
@@ -32,11 +32,11 @@ public class ExamUploadFacade {
         return lotId;
     }
 
-    public List<ExamResultLot> list(){
+    public List<ExamLot> list(){
         return examUploadService.list();
     }
 
-    public ExamResultLot getById(String id){
+    public ExamLot getById(String id){
         try {
             return examUploadService.getByID(id);
         } catch (DataNotFoundException e) {

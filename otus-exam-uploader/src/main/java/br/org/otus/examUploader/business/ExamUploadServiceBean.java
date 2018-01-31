@@ -1,12 +1,15 @@
 package br.org.otus.examUploader.business;
 
+import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
+import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamResultLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -27,39 +30,54 @@ public class ExamUploadServiceBean implements ExamUploadService{
     private ExamResultLotDao examResultLotDAO;
 
     @Inject
+    private ExamDao examDAO;
+
+    @Inject
     private ExamResultDao examResultDAO;
 
     @Override
     public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
-        validateExamResultLot(examUploadDTO);
-        validateExamResults(examUploadDTO);
+        ExamLot examLot = examUploadDTO.getExamResultLot();
+        List<Exam> exams= examUploadDTO.getExams();
+        List<ExamResult> allResults = new ArrayList<>();
 
+        exams.stream()
+                .forEach(exam -> {
+                    examLot.setResultsQuantity(exam.getExamResults().size() + examLot.getResultsQuantity());
+                    exam.getExamResults().stream()
+                            .forEach(examResult -> {
+                                allResults.add(examResult);
+                            });
+                });
+        validateExamResultLot(allResults);
+        validateExamResults(allResults);
 
-        ExamResultLot examResultLot = examUploadDTO.getExamResultLot();
-        List<ExamResult> examResults = examUploadDTO.getExamResults();
+        examLot.setOperator(userEmail);
+        ObjectId lotId = examResultLotDAO.insert(examLot);
 
-        examResultLot.setOperator(userEmail);
-
-        examResultLot.setResultsQuantity(examResults.size());
-        ObjectId lotId = examResultLotDAO.insert(examResultLot);
-
-        examResults.stream()
-                .forEach(examResult -> {
-                    examResult.setExamId(lotId);
-                    examResult.setFieldCenter(examResultLot.getFieldCenter());
+        exams.stream()
+                .forEach(exam -> {
+                    exam.setExamLotId(lotId);
+                    ObjectId examId = examDAO.insert(exam);
+                    List<ExamResult> examResults = exam.getExamResults();
+                    examResults.stream()
+                            .forEach(result ->{
+                                result.setExamId(examId);
+                            });
                 });
 
-        examResultDAO.insertMany(examResults);
+        examResultDAO.insertMany(allResults);
+
         return lotId.toString();
     }
 
     @Override
-    public List<ExamResultLot> list() {
+    public List<ExamLot> list() {
         return examResultLotDAO.getAll();
     }
 
     @Override
-    public ExamResultLot getByID(String id) throws DataNotFoundException {
+    public ExamLot getByID(String id) throws DataNotFoundException {
         return examResultLotDAO.getById(id);
     }
 
@@ -73,17 +91,16 @@ public class ExamUploadServiceBean implements ExamUploadService{
     public List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException {
         return examResultDAO.getByExamId(id);
     }
-
+//
     @Override
-    public void validateExamResults(ExamUploadDTO examUploadDTO) throws DataNotFoundException, ValidationException {
+    public void validateExamResults(List<ExamResult> examResults) throws DataNotFoundException, ValidationException {
         List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
-        List<ExamResult> examResults = examUploadDTO.getExamResults();
         isSubset(allAliquots, examResults);
     }
 
     @Override
-    public void validateExamResultLot(ExamUploadDTO examUploadDTO) throws ValidationException {
-        if (examUploadDTO.getExamResults().size() == 0){
+    public void validateExamResultLot(List<ExamResult> examResults) throws ValidationException {
+        if (examResults.size() == 0){
             throw new ValidationException(new Throwable("Empty Lot"));
         }
     }
