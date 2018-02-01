@@ -20,7 +20,6 @@ public class SurveyActivityExtraction implements Extractable {
 		this.surveyActivities = surveyActivities;
 		this.surveyForm = surveyForm;
 		this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyForm);
-		this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());
 	}
 
 	@Override
@@ -33,11 +32,12 @@ public class SurveyActivityExtraction implements Extractable {
 		List<List<Object>> values = new ArrayList<>();
 
 		for (SurveyActivity surveyActivity : this.surveyActivities) {
+			this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());			
 			List<Object> resultInformation = new ArrayList<>();
 			this.recordsFactory.getSurveyBasicInfo(surveyActivity);
 			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
 			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
-			values.add(resultInformation);
+			values.add(resultInformation);			
 		}
 		return values;
 	}

@@ -11,6 +11,7 @@ import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransportationLot {
@@ -21,6 +22,7 @@ public class TransportationLot {
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
+	private ArrayList<AliquotInfo> aliquotsInfo;
 	private FieldCenter fieldCenter;
 
 	public TransportationLot() {

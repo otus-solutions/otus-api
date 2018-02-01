@@ -1,17 +1,17 @@
 package br.org.otus.extraction;
 
-import br.org.otus.api.ExtractionService;
-import br.org.otus.survey.activity.api.ActivityFacade;
-import br.org.otus.survey.api.SurveyFacade;
-import br.org.otus.survey.services.SurveyService;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
-import org.ccem.otus.survey.template.SurveyTemplate;
 
-import javax.inject.Inject;
-import java.util.List;
+import br.org.otus.api.ExtractionService;
+import br.org.otus.survey.activity.api.ActivityFacade;
+import br.org.otus.survey.api.SurveyFacade;
 
 public class ExtractionFacade {
 

@@ -3,7 +3,6 @@ package org.ccem.otus.service.extraction.factories;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -26,14 +25,14 @@ public class SurveyActivityExtractionRecordsFactory {
 	private LinkedHashMap<String, Object> surveyInformation;
 	private SurveyForm surveyForm;
 
-	public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet headers) {
+	public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet<String> headers) {
 		this.surveyInformation = new LinkedHashMap<>();
 		this.surveyForm = surveyForm;
 		for (Object header : headers) {
 			this.surveyInformation.put(header.toString(), "");
 		}
 	}
-
+	
 	public LinkedHashMap<String, Object> getSurveyInformation() {
 		return this.surveyInformation;
 	}
@@ -81,7 +80,7 @@ public class SurveyActivityExtractionRecordsFactory {
 			switch (trackingItem.state) {
 			// TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
 			case "SKIPPED": {
-				skippAnswer(surveyItem.getExtractionIDs());
+				skippAnswer(surveyItem.getCustomID());
 				break;
 			}
 			case "ANSWERED": {
@@ -111,22 +110,24 @@ public class SurveyActivityExtractionRecordsFactory {
 
 		for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
 			String key = pair.getKey();
-			this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
+			//TODO CheckboxQuestion Option ID FIX
+			if(surveyItem.objectType.equals("CheckboxQuestion") ||
+					surveyItem.objectType.equals("GridTextQuestion") ||
+					surveyItem.objectType.equals("GridIntegerQuestion")){
+				this.surveyInformation.replace(key, pair.getValue());
+			} else {
+				this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
+			}
 		}
 
 		if (filler.getMetadata() != null) {
-			final MetadataOption metadataExtractionValue = ((Question) surveyItem).metadata.getMetadataByValue(Integer.valueOf(filler.getMetadata())).orElseThrow(
-					DataNotFoundException::new);
-			this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, metadataExtractionValue.extractionValue);
+			final MetadataOption metadataExtractionValue = ((Question) surveyItem).metadata.getMetadataByValue(Integer.valueOf(filler.getMetadata())).orElseThrow(DataNotFoundException::new);
+			this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, metadataExtractionValue.extractionValue);
 		}
-		this.getSurveyInformation().replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
-
+		this.surveyInformation.replace(answerCustomID + SurveyActivityExtractionHeaders.QUESTION_COMMENT_SUFFIX, filler.getComment());
 	}
-
-	private void skippAnswer(List<String> extractionIDs) {
-		for (String extractionID : extractionIDs) {
-			this.getSurveyInformation().replace(extractionID, ExtractionVariables.SKIPPED_ANSWER.getValue());
-		}
+	
+	private void skippAnswer(String questionID) {	
+		this.surveyInformation.replace(questionID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, ExtractionVariables.SKIPPED_ANSWER.getValue());
 	}
-
 }
