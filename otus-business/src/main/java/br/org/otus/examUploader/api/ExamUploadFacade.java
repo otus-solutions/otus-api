@@ -1,5 +1,6 @@
 package br.org.otus.examUploader.api;
 
+import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
@@ -52,10 +53,10 @@ public class ExamUploadFacade {
         }
     }
 
-    public List<ExamResult> listResults(String id){
+    public List<Exam> listResults(String id){
         try {
             ObjectId objectId = new ObjectId(id);
-            return examUploadService.getAllByExamId(objectId);
+            return examUploadService.getAllByExamLotId(objectId);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

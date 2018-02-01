@@ -1,5 +1,6 @@
 package br.org.otus.examUploader.business;
 
+import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
@@ -19,7 +20,7 @@ public interface ExamUploadService {
 
     void delete(String id) throws DataNotFoundException;
 
-    List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException;
+    List<Exam> getAllByExamLotId(ObjectId id) throws DataNotFoundException;
 
     void validateExamResults(List<ExamResult> examResults) throws DataNotFoundException, ValidationException;
 

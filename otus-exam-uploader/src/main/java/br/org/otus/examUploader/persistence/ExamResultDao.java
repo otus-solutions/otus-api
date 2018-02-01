@@ -1,5 +1,6 @@
 package br.org.otus.examUploader.persistence;
 
+import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -12,5 +13,5 @@ public interface ExamResultDao {
 
     public void deleteByExamId(String id) throws DataNotFoundException;
 
-    public List<ExamResult> getByExamId(ObjectId id) throws DataNotFoundException;
+    public List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException;
 }

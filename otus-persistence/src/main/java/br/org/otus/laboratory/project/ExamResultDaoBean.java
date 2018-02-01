@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import com.mongodb.client.MongoCursor;
@@ -40,11 +41,11 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
     }
 
     @Override
-    public List<ExamResult> getByExamId(ObjectId id) throws DataNotFoundException {
-        ArrayList<ExamResult> results = new ArrayList<>();
+    public List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException {
+        ArrayList<Exam> exams = new ArrayList<>();
 
         Document query = new Document();
-        query.put("examId", id);
+        query.put("examLotId", id);
 
         MongoCursor iterator = collection.find(query).iterator();
 
@@ -56,10 +57,12 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
 
         while(iterator.hasNext()){
             Document next = (Document) iterator.next();
-            results.add(ExamResult.deserialize(next.toJson()));
+            exams.add(Exam.deserialize(next.toJson()));
         }
+
         iterator.close();
 
-        return results;
+        
+        return exams;
     }
 }

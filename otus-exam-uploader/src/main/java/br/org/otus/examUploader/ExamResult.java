@@ -19,7 +19,7 @@ public class ExamResult {
     private String aliquotCode;
     private String examName;
     private String resultName;
-    private double value;
+    private String value;
     private String releaseDate;
     private List<Observation> observations;
 

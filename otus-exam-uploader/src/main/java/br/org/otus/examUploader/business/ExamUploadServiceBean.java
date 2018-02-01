@@ -88,8 +88,8 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     @Override
-    public List<ExamResult> getAllByExamId(ObjectId id) throws DataNotFoundException {
-        return examResultDAO.getByExamId(id);
+    public List<Exam> getAllByExamLotId(ObjectId id) throws DataNotFoundException {
+        return examResultDAO.getByExamLotId(id);
     }
 //
     @Override
