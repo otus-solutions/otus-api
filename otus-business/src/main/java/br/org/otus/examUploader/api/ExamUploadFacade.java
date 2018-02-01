@@ -20,15 +20,16 @@ public class ExamUploadFacade {
     private ExamUploadService examUploadService;
 
     public String create(String examUploadJson, String userEmail){
-        ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
         String lotId;
         try {
+            ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
             lotId = examUploadService.create(examUploadDTO, userEmail);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
         } catch (ValidationException e) {
-
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        } catch (Exception e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
         return lotId;
     }
