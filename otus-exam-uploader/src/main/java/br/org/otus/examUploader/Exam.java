@@ -3,6 +3,8 @@ package br.org.otus.examUploader;
 import br.org.otus.examUploader.utils.ObjectIdAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import java.util.List;
 
@@ -38,6 +40,8 @@ public class Exam {
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+        builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+
         return builder;
     }
 

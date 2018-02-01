@@ -55,6 +55,7 @@ public class ExamLot {
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+
         return builder;
     }
 }
