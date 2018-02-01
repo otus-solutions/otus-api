@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.persistence.ExamDao;
+import br.org.otus.examUploader.utils.ExamAdapter;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
@@ -42,7 +43,9 @@ public class ExamDaoBean extends MongoGenericDao<Document> implements ExamDao {
 
     @Override
     public ObjectId insert(Exam exam) {
-        Document parsed = Document.parse(Exam.serialize(exam));
+        ExamAdapter examAdapter = ExamAdapter.deserialize(Exam.serialize(exam));
+
+        Document parsed = Document.parse(ExamAdapter.serialize(examAdapter));
 
         super.persist(parsed);
         return (ObjectId)parsed.get( "_id" );
