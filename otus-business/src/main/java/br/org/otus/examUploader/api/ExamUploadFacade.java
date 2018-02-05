@@ -1,7 +1,6 @@
 package br.org.otus.examUploader.api;
 
 import br.org.otus.examUploader.Exam;
-import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
