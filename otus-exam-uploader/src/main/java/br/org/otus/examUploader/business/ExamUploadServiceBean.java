@@ -9,7 +9,6 @@ import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamResultLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -37,7 +36,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
-        ExamLot examLot = examUploadDTO.getExamResultLot();
+        ExamLot examLot = examUploadDTO.getExamLot();
         List<Exam> exams= examUploadDTO.getExams();
         List<ExamResult> allResults = new ArrayList<>();
 

@@ -12,7 +12,7 @@ public class ExamUploadDTO {
     private ExamLot examLot;
     private List<Exam> exams;
 
-    public ExamLot getExamResultLot() {
+    public ExamLot getExamLot() {
         return examLot;
     }
 
