@@ -9,15 +9,15 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 import java.util.List;
 
 public class ExamUploadDTO {
-    private ExamResultLot examResultLot;
-    private List<ExamResult> examResults;
+    private ExamLot examLot;
+    private List<Exam> exams;
 
-    public ExamResultLot getExamResultLot() {
-        return examResultLot;
+    public ExamLot getExamLot() {
+        return examLot;
     }
 
-    public List<ExamResult> getExamResults() {
-        return examResults;
+    public List<Exam> getExams() {
+        return exams;
     }
 
     public static String serialize(ExamUploadDTO examUploadDTO) {

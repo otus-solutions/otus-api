@@ -1,15 +1,17 @@
 package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.persistence.ExamResultDao;
-import com.mongodb.client.MongoCursor;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
@@ -30,36 +32,32 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
 
     @Override
     public void deleteByExamId(String id) throws DataNotFoundException {
-        Document query = new Document("examId", new ObjectId(id));
+        Document query = new Document("examLotId", new ObjectId(id));
         DeleteResult deleteResult = collection.deleteMany(query);
 
         if (deleteResult.getDeletedCount() == 0){
             throw new DataNotFoundException(
-                    new Throwable("Any result under the {" + id + "} examId."));
+                    new Throwable("Any result under the {" + id + "} examLotId."));
         }
     }
 
     @Override
-    public List<ExamResult> getByExamId(ObjectId id) throws DataNotFoundException {
-        ArrayList<ExamResult> results = new ArrayList<>();
+    public List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException {
+        ArrayList<Exam> exams = new ArrayList<>();
 
-        Document query = new Document();
-        query.put("examId", id);
+        Document match = new Document("$match", new Document("examLotId", id));
+        Document lookup = new Document("$lookup", new Document("from","exam_result")
+                .append("localField", "_id")
+                .append("foreignField", "examId")
+                .append("as", "examResults"));
 
-        MongoCursor iterator = collection.find(query).iterator();
+        AggregateIterable output = collection.aggregate(Arrays.asList(match,lookup));
 
-        if (!iterator.hasNext()){
-            iterator.close();
-            throw new DataNotFoundException(
-                    new Throwable("Any result under the {" + id + "} examId."));
+        for (Object anOutput : output) {
+            Document next = (Document) anOutput;
+            exams.add(Exam.deserialize(next.toJson()));
         }
 
-        while(iterator.hasNext()){
-            Document next = (Document) iterator.next();
-            results.add(ExamResult.deserialize(next.toJson()));
-        }
-        iterator.close();
-
-        return results;
+        return exams;
     }
 }

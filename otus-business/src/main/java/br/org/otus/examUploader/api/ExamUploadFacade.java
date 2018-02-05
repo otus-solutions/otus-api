@@ -1,7 +1,7 @@
 package br.org.otus.examUploader.api;
 
-import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamResultLot;
+import br.org.otus.examUploader.Exam;
+import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
 import br.org.otus.response.builders.ResponseBuild;
@@ -19,24 +19,25 @@ public class ExamUploadFacade {
     private ExamUploadService examUploadService;
 
     public String create(String examUploadJson, String userEmail){
-        ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
-        String lotId = null;
+        String lotId;
         try {
+            ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
             lotId = examUploadService.create(examUploadDTO, userEmail);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
         } catch (ValidationException e) {
-
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        } catch (Exception e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
         return lotId;
     }
 
-    public List<ExamResultLot> list(){
+    public List<ExamLot> list(){
         return examUploadService.list();
     }
 
-    public ExamResultLot getById(String id){
+    public ExamLot getById(String id){
         try {
             return examUploadService.getByID(id);
         } catch (DataNotFoundException e) {
@@ -52,10 +53,10 @@ public class ExamUploadFacade {
         }
     }
 
-    public List<ExamResult> listResults(String id){
+    public List<Exam> listResults(String id){
         try {
             ObjectId objectId = new ObjectId(id);
-            return examUploadService.getAllByExamId(objectId);
+            return examUploadService.getAllByExamLotId(objectId);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
