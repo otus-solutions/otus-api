@@ -45,25 +45,22 @@ public class ExamUploadServiceBean implements ExamUploadService{
             ResultsCount += exam.getExamResults().size();
             allResults.addAll(exam.getExamResults());
         }
-
         examLot.setResultsQuantity(ResultsCount);
+
         validateExamResultLot(allResults);
         validateExamResults(allResults);
 
         examLot.setOperator(userEmail);
         ObjectId lotId = examResultLotDAO.insert(examLot);
 
-        exams.stream()
-                .forEach(exam -> {
-                    exam.setExamLotId(lotId);
-                    ObjectId examId = examDAO.insert(exam);
-                    List<ExamResult> examResults = exam.getExamResults();
-                    examResults.stream()
-                            .forEach(result ->{
-                                result.setExamLotId(lotId);
-                                result.setExamId(examId);
-                            });
-                });
+        for (Exam exam: exams) {
+            exam.setExamLotId(lotId);
+            ObjectId examId = examDAO.insert(exam);
+            for (ExamResult result: exam.getExamResults()) {
+                result.setExamLotId(lotId);
+                result.setExamId(examId);
+            }
+        }
 
         examResultDAO.insertMany(allResults);
 

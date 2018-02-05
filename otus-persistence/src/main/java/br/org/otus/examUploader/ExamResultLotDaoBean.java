@@ -1,6 +1,7 @@
 package br.org.otus.examUploader;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.persistence.ExamResultLotDao;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
