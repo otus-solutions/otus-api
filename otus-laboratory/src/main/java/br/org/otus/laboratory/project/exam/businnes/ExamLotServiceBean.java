@@ -1,10 +1,13 @@
 package br.org.otus.laboratory.project.exam.businnes;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -21,6 +24,9 @@ public class ExamLotServiceBean implements ExamLotService {
 	private ExamLotDao examLotDao;
 	@Inject
 	private TransportationLotDao transportationLotDao;
+
+	@Inject
+	private LaboratoryConfigurationService laboratoryConfigurationService;
 
 	@Override
 	public ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException {
@@ -50,6 +56,11 @@ public class ExamLotServiceBean implements ExamLotService {
 	@Override
 	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
 		return examLotDao.getAllAliquotsInDB();
+	}
+
+	@Override
+	public HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException {
+		return transportationLotDao.getAliquotsInfoInTransportationLots();
 	}
 
 	private void validateLot(ExamLot examLot) throws ValidationException {

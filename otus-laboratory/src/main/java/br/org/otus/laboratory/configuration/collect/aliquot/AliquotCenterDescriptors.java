@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.configuration.collect.aliquot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AliquotCenterDescriptors {
@@ -31,4 +32,17 @@ public class AliquotCenterDescriptors {
 	public List<Integer> getAliquotCodeSizes() {
 		return aliquotCodeSizes;
 	}
+
+	public List<CenterAliquot> getAllCenterAliquots(){
+		ArrayList<CenterAliquot> aliquoteDescriptors = new ArrayList<>();
+		for (AliquotGroupDescriptors aliquotGroupDescriptor : aliquotGroupDescriptors) {
+			for (AliquotMomentDescriptors aliquotMomentDescriptors : aliquotGroupDescriptor.getAliquotMomentDescriptors()) {
+				for (AliquotTypesDescriptors aliquotTypesDescriptors : aliquotMomentDescriptors.getAliquotTypesDescriptors()) {
+					aliquoteDescriptors.addAll(aliquotTypesDescriptors.getAliquots());
+				}
+			}
+		}
+		return aliquoteDescriptors;
+	}
+
 }

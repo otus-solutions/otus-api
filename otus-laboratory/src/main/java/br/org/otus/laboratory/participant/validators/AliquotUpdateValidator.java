@@ -95,7 +95,6 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 			return true;
 
 		} catch (DataNotFoundException e) {
-			e.printStackTrace();
 			return false;
 		}
 	}
