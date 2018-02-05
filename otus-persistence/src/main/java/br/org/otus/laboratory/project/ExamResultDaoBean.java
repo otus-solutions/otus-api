@@ -36,12 +36,12 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
 
     @Override
     public void deleteByExamId(String id) throws DataNotFoundException {
-        Document query = new Document("examId", new ObjectId(id));
+        Document query = new Document("examLotId", new ObjectId(id));
         DeleteResult deleteResult = collection.deleteMany(query);
 
         if (deleteResult.getDeletedCount() == 0){
             throw new DataNotFoundException(
-                    new Throwable("Any result under the {" + id + "} examId."));
+                    new Throwable("Any result under the {" + id + "} examLotId."));
         }
     }
 

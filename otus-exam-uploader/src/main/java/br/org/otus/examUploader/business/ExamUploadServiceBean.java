@@ -62,6 +62,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
                     List<ExamResult> examResults = exam.getExamResults();
                     examResults.stream()
                             .forEach(result ->{
+                                result.setExamLotId(lotId);
                                 result.setExamId(examId);
                             });
                 });
