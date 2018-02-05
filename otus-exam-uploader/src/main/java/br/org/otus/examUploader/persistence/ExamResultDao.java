@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ExamResultDao {
 
-    public void insertMany (List<ExamResult> examResults);
+    void insertMany (List<ExamResult> examResults);
 
-    public void deleteByExamId(String id) throws DataNotFoundException;
+    void deleteByExamId(String id) throws DataNotFoundException;
 
-    public List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException;
+    List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException;
 }

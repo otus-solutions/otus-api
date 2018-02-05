@@ -40,12 +40,10 @@ public class ExamUploadServiceBean implements ExamUploadService{
         List<Exam> exams= examUploadDTO.getExams();
         List<ExamResult> allResults = new ArrayList<>();
 
-        int ResultsCount = 0;
         for (Exam exam: exams) {
-            ResultsCount += exam.getExamResults().size();
             allResults.addAll(exam.getExamResults());
         }
-        examLot.setResultsQuantity(ResultsCount);
+        examLot.setResultsQuantity(allResults.size());
 
         validateExamResultLot(allResults);
         validateExamResults(allResults);
