@@ -7,4 +7,6 @@ public interface ReportDao {
 
    ReportTemplate find(long ri);
 
+   boolean getResults(ReportTemplate reportTemplate);
+
 }

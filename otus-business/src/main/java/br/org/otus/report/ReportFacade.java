@@ -1,10 +1,6 @@
 package br.org.otus.report;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
-
-import org.ccem.otus.model.DataSourceModel;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
