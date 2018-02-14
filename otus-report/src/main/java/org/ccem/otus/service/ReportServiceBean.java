@@ -13,7 +13,7 @@ public class ReportServiceBean implements ReportService {
     private ReportDao reportDao;
 
     @Override
-    public ReportTemplate find(long ri) {
-        return reportDao.find(ri);
+    public ReportTemplate findReport(long ri) {
+        return reportDao.findReport(ri);
     }
 }

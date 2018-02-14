@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder;
 public class DataSource {
     private String key;
     private String dataSource;
-    private String birthdate;
-
 
     public String getDataSource() {
         return dataSource;

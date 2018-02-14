@@ -6,8 +6,7 @@ import org.ccem.otus.utils.DataSourceAdapter;
 import java.util.ArrayList;
 
 public class ReportTemplate {
-    long reportId;
-    ArrayList<DataSource> DS;
+    ArrayList<DataSource> dataSources;
 
     public static String serialize(ReportTemplate reportTemplate) {
         return getGsonBuilder().create().toJson(reportTemplate);

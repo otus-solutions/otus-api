@@ -14,7 +14,7 @@ public class ReportFacade {
 
     public ReportTemplate getByReportId(long ri) {
         try {
-            return reportService.find(ri);
+            return reportService.findReport(ri);
         } catch (Exception e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

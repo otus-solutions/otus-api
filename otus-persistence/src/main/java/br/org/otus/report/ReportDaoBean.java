@@ -16,14 +16,13 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
     }
 
     @Override
-    public ReportTemplate find(long ri) {
+    public ReportTemplate findReport(long ri) {
         Document result = this.collection.find(eq("id", ri)).first();
         return ReportTemplate.deserialize(result.toJson());
     }
 
     @Override
     public boolean getResults(ReportTemplate reportTemplate) {
-
         return true;
     }
 }
