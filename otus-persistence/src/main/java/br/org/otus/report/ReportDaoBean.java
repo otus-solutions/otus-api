@@ -10,7 +10,6 @@ import static com.mongodb.client.model.Filters.eq;
 public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDao {
 
     private static final String COLLECTION_NAME = "reports";
-
     public ReportDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
@@ -18,7 +17,8 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
     @Override
     public ReportTemplate findReport(long ri) {
         Document result = this.collection.find(eq("id", ri)).first();
-        return ReportTemplate.deserialize(result.toJson());
+        ReportTemplate report = ReportTemplate.deserialize(result.toJson());
+        return report;
     }
 
     @Override

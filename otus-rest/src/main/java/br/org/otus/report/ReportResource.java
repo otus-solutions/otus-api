@@ -17,9 +17,9 @@ public class ReportResource {
     private ReportFacade reportFacade;
 
     @GET
-    @Path("/{report}")
+    @Path("/{report}/{rn}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getByRecruitmentNumber(@PathParam("report") long report) {
-        return new Response().buildSuccess(reportFacade.getByReportId(report)).toJson();
+    public String getByRecruitmentNumber(@PathParam("report") long report, @PathParam("rn") long rn) {
+        return new Response().buildSuccess(reportFacade.getByReportId(report, rn)).toJson();
     }
 }

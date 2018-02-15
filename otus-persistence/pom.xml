@@ -46,6 +46,11 @@
 		</dependency>
 		<!-- - - Dependency between modules - ! -->
 		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>org.json</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
 			<version>${survey.model.version}</version>

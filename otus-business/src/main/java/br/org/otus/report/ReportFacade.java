@@ -12,9 +12,9 @@ public class ReportFacade {
     @Inject
     private ReportService reportService;
 
-    public ReportTemplate getByReportId(long ri) {
+    public ReportTemplate getByReportId(long ri, long rn) {
         try {
-            return reportService.findReport(ri);
+            return reportService.findReport(ri,rn);
         } catch (Exception e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

@@ -1,13 +1,11 @@
 package org.ccem.otus.model;
 
-import org.ccem.otus.persistence.ParticipantDataSourceDao;
+import java.util.ArrayList;
 
-import javax.inject.Inject;
+public class ParticipantDataSource extends ReportDataSource<ParticipantDataSourceResult> {
+    private ArrayList<ParticipantDataSourceResult> result = new ArrayList<>();
 
-public class ParticipantDataSource extends DataSource {
-    @Inject
-    private ParticipantDataSourceDao ParticipantDataSourceDao;
-
-    private String rn;
-    private String birthdate;
+    public void addResult(ParticipantDataSourceResult result){
+        this.result.add(result);
+    }
 }

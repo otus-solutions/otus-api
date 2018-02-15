@@ -6,7 +6,11 @@ import org.ccem.otus.utils.DataSourceAdapter;
 import java.util.ArrayList;
 
 public class ReportTemplate {
-    ArrayList<DataSource> dataSources;
+    private ArrayList<ReportDataSource> dataSources;
+
+    public ArrayList<ReportDataSource> getDataSources(){
+        return dataSources;
+    }
 
     public static String serialize(ReportTemplate reportTemplate) {
         return getGsonBuilder().create().toJson(reportTemplate);
@@ -18,7 +22,7 @@ public class ReportTemplate {
 
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(DataSource.class, new DataSourceAdapter());
+        builder.registerTypeAdapter(ReportDataSource.class, new DataSourceAdapter());
         return builder;
     }
 }
