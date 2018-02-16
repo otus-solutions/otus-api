@@ -2,8 +2,6 @@ package org.ccem.otus.enums;
 
 import org.ccem.otus.model.ReportDataSource;
 import org.ccem.otus.model.ParticipantDataSource;
-import org.ccem.otus.persistence.ParticipantDataSourceDao;
-import org.ccem.otus.persistence.ReportDao;
 
 public enum DataSourceMapping {
     PARTICIPANT_DATASOURCE(ParticipantDataSource.class, "Participant");

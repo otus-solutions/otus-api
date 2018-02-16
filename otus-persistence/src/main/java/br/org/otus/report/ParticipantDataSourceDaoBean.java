@@ -4,15 +4,12 @@ import br.org.mongodb.MongoGenericDao;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.ParticipantDataSource;
 import org.ccem.otus.model.ParticipantDataSourceResult;
-import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -34,8 +31,6 @@ public class ParticipantDataSourceDaoBean extends MongoGenericDao<Document> impl
             throw new DataNotFoundException(
                     new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
         }
-
-        ;
 
         return ParticipantDataSourceResult.deserialize(new JSONObject(result).toString());
     }

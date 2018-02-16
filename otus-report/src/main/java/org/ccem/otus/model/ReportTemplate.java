@@ -1,6 +1,8 @@
 package org.ccem.otus.model;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.ccem.otus.utils.DataSourceAdapter;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class ReportTemplate {
 
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         builder.registerTypeAdapter(ReportDataSource.class, new DataSourceAdapter());
         return builder;
     }
