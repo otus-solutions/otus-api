@@ -2,7 +2,7 @@ package org.ccem.otus.utils;
 
 import com.google.gson.*;
 import org.ccem.otus.enums.DataSourceMapping;
-import org.ccem.otus.model.ReportDataSource;
+import org.ccem.otus.model.dataSources.ReportDataSource;
 
 import java.lang.reflect.Type;
 

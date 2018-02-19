@@ -1,6 +1,7 @@
 package org.ccem.otus.model;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.ccem.otus.utils.DataSourceAdapter;

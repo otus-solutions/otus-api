@@ -1,4 +1,4 @@
-package org.ccem.otus.model;
+package org.ccem.otus.model.dataSources;
 
 import java.util.ArrayList;
 

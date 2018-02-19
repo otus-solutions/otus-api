@@ -2,12 +2,10 @@ package br.org.otus.report;
 
 import br.org.otus.rest.Response;
 import org.ccem.otus.model.ReportTemplate;
+import org.ccem.otus.model.RequestParameters;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/report")
@@ -16,10 +14,11 @@ public class ReportResource {
     @Inject
     private ReportFacade reportFacade;
 
-    @GET
-    @Path("/{report}/{rn}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String getByRecruitmentNumber(@PathParam("report") long report, @PathParam("rn") long rn) {
-        return new Response().buildSuccess(reportFacade.getByReportId(report, rn)).toJson();
+    public String getByRecruitmentNumber(String parameters) {
+        RequestParameters requestParameters = RequestParameters.deserialize(parameters);
+        return new Response().buildSuccess(reportFacade.getByReportId(requestParameters)).toJson();
     }
 }

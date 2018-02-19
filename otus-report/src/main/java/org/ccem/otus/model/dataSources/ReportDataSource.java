@@ -1,4 +1,4 @@
-package org.ccem.otus.model;
+package org.ccem.otus.model.dataSources;
 
 public abstract class ReportDataSource<T> {
     private String key;
