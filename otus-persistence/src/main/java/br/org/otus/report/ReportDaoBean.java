@@ -2,6 +2,7 @@ package br.org.otus.report;
 
 import br.org.mongodb.MongoGenericDao;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportDao;
 
@@ -15,8 +16,8 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
     }
 
     @Override
-    public ReportTemplate findReport(long ri) {
-        Document result = this.collection.find(eq("id", ri)).first();
+    public ReportTemplate findReport(ObjectId ri) {
+        Document result = this.collection.find(eq("_id", ri)).first();
         ReportTemplate report = ReportTemplate.deserialize(result.toJson());
         return report;
     }

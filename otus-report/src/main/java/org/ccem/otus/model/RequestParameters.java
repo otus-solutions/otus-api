@@ -1,10 +1,12 @@
 package org.ccem.otus.model;
 
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class RequestParameters {
-    private Long recruitmentNumber;
-    private Long reportId;
+    private long recruitmentNumber;
+    private ObjectId reportId;
 
     public static RequestParameters deserialize(String requestParameters) {
         GsonBuilder builder = RequestParameters.getGsonBuilder();
@@ -13,14 +15,15 @@ public class RequestParameters {
 
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
         return builder;
     }
 
-    public Long getReportId() {
+    public ObjectId getReportId() {
         return reportId;
     }
 
-    public Long getRecruitmentNumber() {
+    public long getRecruitmentNumber() {
         return recruitmentNumber;
     }
 }

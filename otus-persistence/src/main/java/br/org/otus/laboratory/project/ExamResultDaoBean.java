@@ -61,3 +61,4 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
         return exams;
     }
 }
+

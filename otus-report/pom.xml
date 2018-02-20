@@ -25,6 +25,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>3.6.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.ccem.otus</groupId>
             <artifactId>otus-center</artifactId>
             <version>${project.parent.version}</version>
@@ -35,6 +41,11 @@
             <artifactId>survey-model</artifactId>
             <version>${survey.model.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ccem.otus</groupId>
+            <artifactId>otus-activity</artifactId>
+            <version>1.11-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

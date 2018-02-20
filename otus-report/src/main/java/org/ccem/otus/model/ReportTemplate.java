@@ -9,6 +9,7 @@ import org.ccem.otus.utils.DataSourceAdapter;
 import java.util.ArrayList;
 
 public class ReportTemplate {
+    private String template;
     private ArrayList<ReportDataSource> dataSources;
 
     public ArrayList<ReportDataSource> getDataSources(){

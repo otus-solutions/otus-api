@@ -13,9 +13,9 @@ public class ReportFacade {
     @Inject
     private ReportService reportService;
 
-    public String getByReportId(RequestParameters requestParameters) {
+    public ReportTemplate getByReportId(RequestParameters requestParameters) {
         try {
-            return ReportTemplate.serialize(reportService.findReport(requestParameters));
+            return reportService.findReport(requestParameters);
         } catch (Exception e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
