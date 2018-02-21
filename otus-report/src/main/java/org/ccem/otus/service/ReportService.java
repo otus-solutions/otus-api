@@ -6,6 +6,6 @@ import org.ccem.otus.model.RequestParameters;
 
 public interface ReportService {
 
-    ReportTemplate findReport(RequestParameters requestParameters) throws DataNotFoundException;
+    ReportTemplate findReportById(RequestParameters requestParameters) throws DataNotFoundException;
 
 }

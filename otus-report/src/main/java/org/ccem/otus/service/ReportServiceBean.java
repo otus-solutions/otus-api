@@ -25,7 +25,7 @@ public class ReportServiceBean implements ReportService {
     private ActivityDataSourceDao activityDataSourceDao;
 
     @Override
-    public ReportTemplate findReport(RequestParameters requestParameters) throws DataNotFoundException{
+    public ReportTemplate findReportById(RequestParameters requestParameters) throws DataNotFoundException{
         ReportTemplate report = reportDao.findReport(requestParameters.getReportId());
         for (ReportDataSource dataSource:report.getDataSources()) {
             if(dataSource instanceof ParticipantDataSource){

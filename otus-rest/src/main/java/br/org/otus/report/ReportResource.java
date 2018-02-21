@@ -19,6 +19,6 @@ public class ReportResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getByRecruitmentNumber(String parameters) {
         RequestParameters requestParameters = RequestParameters.deserialize(parameters);
-        return new Response().buildSuccess(reportFacade.getByReportId(requestParameters)).toJson();
+        return new Response().buildSuccess(reportFacade.getByReportById(requestParameters)).toJson();
     }
 }
