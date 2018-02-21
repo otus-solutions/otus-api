@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import org.bson.Document;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> implements ActivityDataSourceDao {
 
@@ -25,18 +22,10 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
 
     @Override
     public ActivityDataSourceResult getResult(Long recruitmentNumber, ActivityDataSource activityDataSource) throws DataNotFoundException {
-        List<Document> query = new ArrayList<>();
+
         ActivityDataSourceResult result = null;
-        Document filters = new Document("participantData.recruitmentNumber", recruitmentNumber)
-                            .append("surveyForm.surveyTemplate.identity.acronym", activityDataSource.getAcronym());
-
-        if(activityDataSource.getCategory() != null){
-            appendCategoryFilter(filters, activityDataSource.getCategory());
-        }
-
-        Document matchStage = new Document("$match",filters);
-        Document projectStage = new Document("$project",new Document("statusHistory",new Document("$filter",new Document("input","$statusHistory").append("as","statusHistory").append("cond",new Document("$$statusHistory.name","FINALIZED")))));
-        AggregateIterable output = collection.aggregate(Arrays.asList(matchStage,projectStage));
+        ArrayList<Document> query = activityDataSource.builtQuery(recruitmentNumber,activityDataSource);
+        AggregateIterable output = collection.aggregate(query);
 
         for (Object anOutput : output) {
             Document next = (Document) anOutput;
@@ -46,8 +35,6 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
         return result;
     }
 
-    private void appendCategoryFilter(Document matchStage, String category) {
-        matchStage.append("category.name",category);
-    }
+
 
 }
