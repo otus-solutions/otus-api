@@ -6,6 +6,6 @@ import org.ccem.otus.model.dataSources.ParticipantDataSourceResult;
 
 public interface ParticipantDataSourceDao{
 
-    ParticipantDataSourceResult getResult(long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException;
+    ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException;
 
 }

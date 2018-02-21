@@ -19,7 +19,7 @@ public class ParticipantDataSourceDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
-    public ParticipantDataSourceResult getResult(long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException{
+    public ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException{
         Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
         if (result == null) {
             throw new DataNotFoundException(

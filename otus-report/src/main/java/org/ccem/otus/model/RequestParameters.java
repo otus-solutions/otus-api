@@ -5,7 +5,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class RequestParameters {
-    private long recruitmentNumber;
+    private Long recruitmentNumber;
     private ObjectId reportId;
 
     public static RequestParameters deserialize(String requestParameters) {
@@ -23,7 +23,7 @@ public class RequestParameters {
         return reportId;
     }
 
-    public long getRecruitmentNumber() {
+    public Long getRecruitmentNumber() {
         return recruitmentNumber;
     }
 }

@@ -1,5 +1,6 @@
-package org.ccem.otus.model;
+package org.ccem.otus.model.dataSources;
 
+import org.ccem.otus.model.FieldCenter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,49 +22,45 @@ import com.google.gson.GsonBuilder;
 @RunWith(PowerMockRunner.class)
 //@PrepareForTest(ParticipantDataSourceResult.class)
 public class ParticipantDataSourceResultTest {
-	
+
 	private ParticipantDataSourceResult participantDataSourceResult;
 	private FieldCenter fieldCenterInstance;
 	private ImmutableDate imutableDateInstance;
 	private String participantDatasourceJson;
 	private String participantDatasourceString ="{\"recruitmentNumber\":543535,\"name\":\"Joao\",\"sex\":\"masc\"}";
-	
+
 //	{"recruitmentNumber":543535,"name":"Joao","sex":"masc","fieldCenter":{"acronym":"RS"}}
-	
+
 	@Before
 	public void setUp() {
 		fieldCenterInstance  = new FieldCenter();
 		Whitebox.setInternalState(fieldCenterInstance, "acronym", "RS");
-		
-		imutableDateInstance = new ImmutableDate(LocalDate.now());		
-		
-		
+
+		imutableDateInstance = new ImmutableDate(LocalDate.now());
+
+
 		participantDataSourceResult = new ParticipantDataSourceResult();
 		Whitebox.setInternalState(participantDataSourceResult, "name", "Joao");
 		Whitebox.setInternalState(participantDataSourceResult, "sex", "masc");
 		Whitebox.setInternalState(participantDataSourceResult, "fieldCenter", fieldCenterInstance);
 		Whitebox.setInternalState(participantDataSourceResult, "birthdate", imutableDateInstance);
-		
+
 		participantDatasourceJson = new GsonBuilder().create().toJson(participantDataSourceResult);
-		
+
 		System.out.println(participantDatasourceJson);
 		System.out.println(imutableDateInstance);
 	}
-	
-	
+
+
 
 	@Test
 	public void methodSerialize() {
 //		assertEquals(participantDatasourceString,participantDataSourceResult.serialize(participantDataSourceResult));
-		
-		
-		
-		
 	}
 
 	@Test
 	public void methodDeserialize() {
-		
+
 	}
 
 }
