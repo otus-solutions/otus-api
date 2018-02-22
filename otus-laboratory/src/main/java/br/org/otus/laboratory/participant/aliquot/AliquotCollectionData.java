@@ -8,14 +8,14 @@ public class AliquotCollectionData {
 	private String metadata;
 	private String operator;
 	private LocalDateTime time;
-	private LocalDateTime processingDate;
+	private LocalDateTime processing;
 	
 
-	public AliquotCollectionData(String metadata, String operator, LocalDateTime time, LocalDateTime processingDate) {
+	public AliquotCollectionData(String metadata, String operator, LocalDateTime time, LocalDateTime processing) {
 		this.metadata = metadata;
 		this.operator = operator;
 		this.time = time;
-		this.processingDate = processingDate;
+		this.processing = processing;
 	}
 
 	public String getMetadata() {
@@ -34,8 +34,8 @@ public class AliquotCollectionData {
 		return objectType;
 	}
 	
-	public LocalDateTime getProcessingDate() {
-		return processingDate;
+	public LocalDateTime getProcessing() {
+		return processing;
 	}
 
 }
