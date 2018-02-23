@@ -24,4 +24,8 @@ public class ActivityDataSourceResult {
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         return builder;
     }
+
+    public List<ActivityStatus> getStatusHistory() {
+        return statusHistory;
+    }
 }

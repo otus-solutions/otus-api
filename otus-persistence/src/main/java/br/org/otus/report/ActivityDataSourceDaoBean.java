@@ -24,7 +24,7 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
     public ActivityDataSourceResult getResult(Long recruitmentNumber, ActivityDataSource activityDataSource) throws DataNotFoundException {
 
         ActivityDataSourceResult result = null;
-        ArrayList<Document> query = activityDataSource.builtQuery(recruitmentNumber,activityDataSource);
+        ArrayList<Document> query = activityDataSource.builtQuery(recruitmentNumber);
         AggregateIterable output = collection.aggregate(query);
 
         for (Object anOutput : output) {

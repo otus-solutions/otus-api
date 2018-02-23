@@ -1,66 +1,53 @@
 package org.ccem.otus.model.dataSources;
 
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
-
-import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import com.google.gson.GsonBuilder;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(PowerMockRunner.class)
-//@PrepareForTest(ParticipantDataSourceResult.class)
 public class ParticipantDataSourceResultTest {
 
 	private ParticipantDataSourceResult participantDataSourceResult;
-	private FieldCenter fieldCenterInstance;
-	private ImmutableDate imutableDateInstance;
-	private String participantDatasourceJson;
-	private String participantDatasourceString ="{\"recruitmentNumber\":543535,\"name\":\"Joao\",\"sex\":\"masc\"}";
-
-//	{"recruitmentNumber":543535,"name":"Joao","sex":"masc","fieldCenter":{"acronym":"RS"}}
+	private String participantDatasourceJson ="{\"recruitmentNumber\":123456789,\"name\":\"Joao\",\"sex\":\"masc\",\"birthdate\":{\"objectType\":\"ImmutableDate\",\"value\":\"2018-02-22 00:00:00.000\"},\"fieldCenter\":{\"acronym\":\"RS\"}}";
 
 	@Before
 	public void setUp() {
-		fieldCenterInstance  = new FieldCenter();
+		FieldCenter fieldCenterInstance = new FieldCenter();
 		Whitebox.setInternalState(fieldCenterInstance, "acronym", "RS");
 
-		imutableDateInstance = new ImmutableDate(LocalDate.now());
+		ImmutableDate immutableDateInstance = new ImmutableDate("2018-02-22 00:00:00.000");
 
 
 		participantDataSourceResult = new ParticipantDataSourceResult();
 		Whitebox.setInternalState(participantDataSourceResult, "name", "Joao");
 		Whitebox.setInternalState(participantDataSourceResult, "sex", "masc");
+		Whitebox.setInternalState(participantDataSourceResult, "recruitmentNumber", (long) 123456789);
 		Whitebox.setInternalState(participantDataSourceResult, "fieldCenter", fieldCenterInstance);
-		Whitebox.setInternalState(participantDataSourceResult, "birthdate", imutableDateInstance);
-
-		participantDatasourceJson = new GsonBuilder().create().toJson(participantDataSourceResult);
-
-		System.out.println(participantDatasourceJson);
-		System.out.println(imutableDateInstance);
+		Whitebox.setInternalState(participantDataSourceResult, "birthdate", immutableDateInstance);
 	}
 
 
 
 	@Test
 	public void methodSerialize() {
-//		assertEquals(participantDatasourceString,participantDataSourceResult.serialize(participantDataSourceResult));
+		assertEquals(participantDatasourceJson,ParticipantDataSourceResult.serialize(participantDataSourceResult));
 	}
 
 	@Test
 	public void methodDeserialize() {
-
+		ParticipantDataSourceResult result = ParticipantDataSourceResult.deserialize(participantDatasourceJson);
+		assertEquals("Birthdate",participantDataSourceResult.getBirthdate().getValue(),result.getBirthdate().getValue());
+		assertEquals("FieldCenter",participantDataSourceResult.getFieldCenter().getAcronym(),result.getFieldCenter().getAcronym());
+		assertEquals("Name",participantDataSourceResult.getName(),result.getName());
+		assertEquals("RecruitmentNumber",participantDataSourceResult.getRecruitmentNumber(),result.getRecruitmentNumber());
+		assertEquals("Sex",participantDataSourceResult.getSex(),result.getSex());
 	}
 
 }

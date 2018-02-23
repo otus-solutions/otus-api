@@ -26,4 +26,24 @@ public class ParticipantDataSourceResult{
         builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         return builder;
     }
+
+    public Long getRecruitmentNumber() {
+        return recruitmentNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public FieldCenter getFieldCenter() {
+        return fieldCenter;
+    }
+
+    public ImmutableDate getBirthdate() {
+        return birthdate;
+    }
 }

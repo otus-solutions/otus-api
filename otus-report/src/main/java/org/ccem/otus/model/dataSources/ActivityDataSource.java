@@ -5,7 +5,7 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResult,ActivityDataSource> {
+public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResult> {
 
     private ActivityDataSourceFilters filters;
     private ArrayList<ActivityDataSourceResult> result = new ArrayList<>();
@@ -16,7 +16,7 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
     }
 
     @Override
-    public ArrayList<Document> builtQuery(Long recruitmentNumber, ActivityDataSource dataSource) {
+    public ArrayList<Document> builtQuery(Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
         buildMachStage(recruitmentNumber, query);
         buildProjectionStage(query);
@@ -57,5 +57,9 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
 
     private void appendCategoryFilter(Document matchStage, String category) {
         matchStage.append("category.name",category);
+    }
+
+    public ArrayList<ActivityDataSourceResult> getResult() {
+        return result;
     }
 }
