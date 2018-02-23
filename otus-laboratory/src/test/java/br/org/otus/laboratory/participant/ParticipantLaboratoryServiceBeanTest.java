@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParticipantLaboratoryServiceBeanTest {
+	
+	//TODO:  This test needs to be refactored
 
 	private static final long RECRUIMENT_NUMBER = 12345;
 
