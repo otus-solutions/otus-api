@@ -12,12 +12,8 @@ public class ReportTemplate {
     private String template;
     private ArrayList<ReportDataSource> dataSources;
 
-    public ArrayList<ReportDataSource> getDataSources(){
-        return dataSources;
-    }
-
     public static String serialize(ReportTemplate reportTemplate) {
-        return getGsonBuilder().create().toJson(reportTemplate);
+        return ReportTemplate.getGsonBuilder().create().toJson(reportTemplate);
     }
 
     public static ReportTemplate deserialize(String examResultLotJson) {
@@ -30,4 +26,13 @@ public class ReportTemplate {
         builder.registerTypeAdapter(ReportDataSource.class, new DataSourceAdapter());
         return builder;
     }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public ArrayList<ReportDataSource> getDataSources(){
+        return dataSources;
+    }
+
 }

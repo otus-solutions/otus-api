@@ -15,7 +15,7 @@ public class ParticipantDataSourceTest {
     private ParticipantDataSource participantDataSource;
 
     private ParticipantDataSourceResult participantDataSourceResult;
-    private FieldCenter fieldCenterInstance;
+
     private ImmutableDate immutableDateInstance;
 
     @Before
@@ -23,7 +23,7 @@ public class ParticipantDataSourceTest {
         participantDataSource = new ParticipantDataSource();
         participantDataSourceResult = new ParticipantDataSourceResult();
 
-        fieldCenterInstance  = new FieldCenter();
+        FieldCenter fieldCenterInstance = new FieldCenter();
         Whitebox.setInternalState(fieldCenterInstance, "acronym", "RS");
 
         immutableDateInstance = new ImmutableDate("2018-02-22 00:00:00.000");
