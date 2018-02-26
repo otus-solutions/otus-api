@@ -1,5 +1,6 @@
 package org.ccem.otus.model;
 
+import org.ccem.otus.model.dataSources.ActivityDataSource;
 import org.ccem.otus.model.dataSources.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.junit.Before;
@@ -18,13 +19,14 @@ public class ReportTemplateTest {
 
     private ReportTemplate reportTemplate;
 
-    private String reportTemplateJson = "{\"template\":\"\\u003cspan\\u003eteste\\u003c/span\\u003e\",\"dataSources\":[{\"result\":[],\"dataSource\":\"Participant\"}]}";
+    private String reportTemplateJson = "{\"template\":\"\\u003cspan\\u003eteste\\u003c/span\\u003e\",\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[]}]}";
 
     private String template = "<span>teste</span>";
     @Before
     public void setup(){
         ParticipantDataSource participantDataSource = new ParticipantDataSource();
         Whitebox.setInternalState(participantDataSource, "dataSource", "Participant");
+        Whitebox.setInternalState(participantDataSource, "result", new ArrayList<>());
 
         reportTemplate = new ReportTemplate();
         Whitebox.setInternalState(reportTemplate, "template", template);
@@ -33,18 +35,19 @@ public class ReportTemplateTest {
     }
 
     @Test
-    public void method_get_data_sources(){
+    public void method_get_data_sources_should_return_participantDataSource(){
         ArrayList<ReportDataSource> dataSources = reportTemplate.getDataSources();
+        assertEquals("Participant",dataSources.get(0).getDataSource());
         assertTrue(dataSources.size()>0);
     }
 
     @Test
-    public void method_serialize(){
+    public void method_serialize_should_return_json_of_reportTemplateJson(){
         assertEquals(reportTemplateJson,ReportTemplate.serialize(reportTemplate));
     }
 
     @Test
-    public void method_deserialize(){
+    public void method_deserialize_should_return_reportTemplate(){
         ReportTemplate report = ReportTemplate.deserialize(reportTemplateJson);
         assertEquals(template,report.getTemplate());
         assertTrue(reportTemplate.getDataSources().get(0) instanceof ParticipantDataSource);

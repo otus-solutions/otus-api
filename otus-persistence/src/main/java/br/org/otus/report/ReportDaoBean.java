@@ -19,6 +19,9 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
     @Override
     public ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException {
         Document result = this.collection.find(eq("_id", reportId)).first();
+        if(reportId == null){
+            throw new DataNotFoundException("parameter reportId is NULL.");
+        }
         if (result == null) {
             throw new DataNotFoundException(
                     new Throwable("Report with ID {" + reportId + "} not found."));

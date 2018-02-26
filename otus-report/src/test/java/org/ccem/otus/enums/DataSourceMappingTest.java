@@ -1,6 +1,5 @@
-package org.ccem.otus.model.enums;
+package org.ccem.otus.enums;
 
-import org.ccem.otus.enums.DataSourceMapping;
 import org.ccem.otus.model.dataSources.ActivityDataSource;
 import org.ccem.otus.model.dataSources.ParticipantDataSource;
 import org.junit.Test;
@@ -13,13 +12,18 @@ import static org.junit.Assert.assertTrue;
 public class DataSourceMappingTest {
 
     @Test
-    public void method_get_enum_by_object_type() throws Exception {
+    public void method_getEnumByObjectType_should_return_ParticipantDataSource() throws Exception {
         assertTrue(DataSourceMapping.getEnumByObjectType("Participant").getItemClass() == ParticipantDataSource.class);
+    }
+
+    @Test
+    public void method_getEnumByObjectType_should_return_ActivityDataSource() throws Exception {
         assertTrue(DataSourceMapping.getEnumByObjectType("Activity").getItemClass() == ActivityDataSource.class);
     }
 
     @Test(expected=RuntimeException.class)
-    public void methodAddResult() throws Exception {
-       DataSourceMapping.getEnumByObjectType("fakeDataSource").getItemClass();
+    public void method_getEnumByObjectType_should_trow_RuntimeException() throws Exception {
+       DataSourceMapping.getEnumByObjectType("fakeDataSource");
     }
+
 }

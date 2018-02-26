@@ -5,7 +5,6 @@ import org.bson.Document;
 import java.util.ArrayList;
 
 public class ParticipantDataSource extends ReportDataSource<ParticipantDataSourceResult> {
-    private ArrayList<ParticipantDataSourceResult> result = new ArrayList<>();
 
     @Override
     public ArrayList<Document> builtQuery(Long recruitmentNumber) {
@@ -13,10 +12,10 @@ public class ParticipantDataSource extends ReportDataSource<ParticipantDataSourc
     }
 
     public void addResult(ParticipantDataSourceResult result){
-        this.result.add(result);
+        super.getResult().add(result);
     }
 
     public ArrayList<ParticipantDataSourceResult> getResult() {
-        return result;
+        return super.getResult();
     }
 }

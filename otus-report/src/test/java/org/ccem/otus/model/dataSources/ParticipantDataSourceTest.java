@@ -37,9 +37,8 @@ public class ParticipantDataSourceTest {
     }
 
     @Test
-    public void method_addResult(){
-        participantDataSource.addResult(participantDataSourceResult);
+    public void method_addResult_should_add_participantDataSourceResult(){
+        participantDataSource.getResult().add(participantDataSourceResult);
         assertEquals(participantDataSource.getResult().get(0).getBirthdate().getValue(),immutableDateInstance.getValue());
-
     }
 }

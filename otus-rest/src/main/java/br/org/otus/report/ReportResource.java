@@ -1,6 +1,8 @@
 package br.org.otus.report;
 
 import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.RequestParameters;
 
@@ -15,10 +17,11 @@ public class ReportResource {
     private ReportFacade reportFacade;
 
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String getByRecruitmentNumber(String parameters) {
+    public String getByRecruitmentNumber(String parameters) throws DataNotFoundException, NullPointerException {
         RequestParameters requestParameters = RequestParameters.deserialize(parameters);
-        return new Response().buildSuccess(reportFacade.getByReportById(requestParameters)).toJson();
+        return new Response().buildSuccess(ReportTemplate.serialize(reportFacade.getByReportId(requestParameters))).toJson();
     }
 }

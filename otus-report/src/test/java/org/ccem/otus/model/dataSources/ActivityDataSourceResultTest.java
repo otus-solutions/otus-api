@@ -52,12 +52,12 @@ public class ActivityDataSourceResultTest {
     }
 
     @Test
-    public void methodSerialize() {
+    public void method_serialize_should_return_json_of_activityDataSourceResult() {
         assertEquals(activityDataSourceResultJson,ActivityDataSourceResult.serialize(activityDataSourceResult));
     }
 
     @Test
-    public void methodDeserialize() {
+    public void method_deserialize_should_return_activityDataSourceResult() {
         ActivityDataSourceResult result = ActivityDataSourceResult.deserialize(activityDataSourceResultJson);
         assertEquals(result.getStatusHistory().get(0).getUser().getName(),activityStatus.getUser().getName());
         assertEquals(result.getStatusHistory().get(0).getObjectType(),activityStatus.getObjectType());

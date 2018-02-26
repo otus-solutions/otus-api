@@ -14,10 +14,10 @@ public class ReportFacade {
     @Inject
     private ReportService reportService;
 
-    public ReportTemplate getByReportById(RequestParameters requestParameters) {
+    public ReportTemplate getByReportId(RequestParameters requestParameters) throws DataNotFoundException, NullPointerException{
         try {
             return reportService.findReportById(requestParameters);
-        } catch (DataNotFoundException e) {
+        } catch (DataNotFoundException | NullPointerException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }

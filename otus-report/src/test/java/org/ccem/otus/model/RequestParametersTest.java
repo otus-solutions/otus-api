@@ -17,7 +17,7 @@ public class RequestParametersTest {
     private String requestParametersJson = "{\"recruitmentNumber\":322148795,\"reportId\":\"5a9199056ddc4f48a340b3ec\"}";
 
     @Test
-    public void method_deserialize(){
+    public void method_deserialize_should_return_requestParameters(){
         RequestParameters requestParameters = RequestParameters.deserialize(requestParametersJson);
         assertEquals(322148795, requestParameters.getRecruitmentNumber().longValue());
         assertEquals(objectId, requestParameters.getReportId());

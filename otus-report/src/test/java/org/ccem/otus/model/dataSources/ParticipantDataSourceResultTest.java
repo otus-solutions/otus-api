@@ -9,7 +9,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(PowerMockRunner.class)
 public class ParticipantDataSourceResultTest {
@@ -36,12 +35,12 @@ public class ParticipantDataSourceResultTest {
 
 
 	@Test
-	public void methodSerialize() {
+	public void method_serialize_should_return_json_of_participantDatasourceJson() {
 		assertEquals(participantDatasourceJson,ParticipantDataSourceResult.serialize(participantDataSourceResult));
 	}
 
 	@Test
-	public void methodDeserialize() {
+	public void method_deserialize_should_return_participantDataSourceResult() {
 		ParticipantDataSourceResult result = ParticipantDataSourceResult.deserialize(participantDatasourceJson);
 		assertEquals("Birthdate",participantDataSourceResult.getBirthdate().getValue(),result.getBirthdate().getValue());
 		assertEquals("FieldCenter",participantDataSourceResult.getFieldCenter().getAcronym(),result.getFieldCenter().getAcronym());

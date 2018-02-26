@@ -34,7 +34,15 @@ public class ActivityDataSourceTest {
     }
 
     @Test
-    public void method_build_status_history_query() {
+    public void method_builtQuery() {
+        Whitebox.setInternalState(activityDataSource, "filters", activityDataSourceFilters);
+        ArrayList<Document> query = activityDataSource.builtQuery((long) 343545345 );
+        assertEquals("{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.surveyTemplate.identity.acronym\" : \"TF\", \"category.name\" : \"C0\" } }",query.get(0).toJson());
+        assertEquals("{ \"$project\" : { \"_id\" : -1 } }",query.get(1).toJson());
+    }
+
+    @Test
+    public void method_builtQuery_with_StatusHistoryFilter() {
         activityDataSourceStatusHistoryFilter = new ActivityDataSourceStatusHistoryFilter();
         Whitebox.setInternalState(activityDataSourceStatusHistoryFilter,"name", "FINALIZED");
         Whitebox.setInternalState(activityDataSourceStatusHistoryFilter,"position", -1);

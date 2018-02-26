@@ -8,11 +8,10 @@ import java.util.Arrays;
 public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResult> {
 
     private ActivityDataSourceFilters filters;
-    private ArrayList<ActivityDataSourceResult> result = new ArrayList<>();
 
     @Override
     public void addResult(ActivityDataSourceResult result) {
-        this.result.add(result);
+        super.getResult().add(result);
     }
 
     @Override
@@ -57,9 +56,5 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
 
     private void appendCategoryFilter(Document matchStage, String category) {
         matchStage.append("category.name",category);
-    }
-
-    public ArrayList<ActivityDataSourceResult> getResult() {
-        return result;
     }
 }
