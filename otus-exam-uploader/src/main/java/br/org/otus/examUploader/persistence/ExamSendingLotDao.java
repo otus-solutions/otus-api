@@ -6,7 +6,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.List;
 
-public interface ExamResultLotDao {
+public interface ExamSendingLotDao {
 
     ObjectId insert(ExamSendingLot examSendingLot);
 

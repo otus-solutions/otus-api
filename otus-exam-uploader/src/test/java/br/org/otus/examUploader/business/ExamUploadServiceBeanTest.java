@@ -5,7 +5,7 @@ import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamResultDao;
-import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -34,7 +34,7 @@ public class ExamUploadServiceBeanTest {
     LaboratoryProjectService laboratoryProjectService;
 
     @Mock
-    private ExamResultLotDao examResultLotDAO;
+    private ExamSendingLotDao examResultLotDAO;
 
     @Mock
     private ExamResultDao examResultDAO;

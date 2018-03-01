@@ -1,8 +1,8 @@
-package br.org.otus.examUploader;
+package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.ExamSendingLot;
-import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
@@ -12,11 +12,11 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultLotDao {
+public class ExamSendingLotDaoBean extends MongoGenericDao implements ExamSendingLotDao {
 
-    private static final String COLLECTION_NAME = "exam_result_lot";
+    private static final String COLLECTION_NAME = "exam_sending_lot";
 
-    public ExamResultLotDaoBean() {
+    public ExamSendingLotDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
 

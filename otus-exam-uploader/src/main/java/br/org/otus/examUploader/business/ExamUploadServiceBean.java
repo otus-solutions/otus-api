@@ -6,7 +6,7 @@ import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
-import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -26,7 +26,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
     LaboratoryProjectService laboratoryProjectService;
 
     @Inject
-    private ExamResultLotDao examResultLotDAO;
+    private ExamSendingLotDao examSendingLotDao;
 
     @Inject
     private ExamDao examDAO;
@@ -49,7 +49,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         validateExamResults(allResults);
 
         examSendingLot.setOperator(userEmail);
-        ObjectId lotId = examResultLotDAO.insert(examSendingLot);
+        ObjectId lotId = examSendingLotDao.insert(examSendingLot);
 
         for (Exam exam: exams) {
             exam.setExamSendingLotId(lotId);
@@ -67,18 +67,18 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public List<ExamSendingLot> list() {
-        return examResultLotDAO.getAll();
+        return examSendingLotDao.getAll();
     }
 
     @Override
     public ExamSendingLot getByID(String id) throws DataNotFoundException {
-        return examResultLotDAO.getById(id);
+        return examSendingLotDao.getById(id);
     }
 
     @Override
     public void delete(String id) throws DataNotFoundException {
         examResultDAO.deleteByExamSendingLotId(id);
-        examResultLotDAO.deleteById(id);
+        examSendingLotDao.deleteById(id);
     }
 
     @Override
