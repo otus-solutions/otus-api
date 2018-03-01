@@ -14,6 +14,7 @@ public class ExamSendingLot {
     private String realizationDate;
     private Integer resultsQuantity = 0;
     private FieldCenter fieldCenter;
+    private Boolean forcedSave;
 
 
     public ObjectId getId() {
@@ -57,5 +58,9 @@ public class ExamSendingLot {
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
 
         return builder;
+    }
+
+    public Boolean isForcedSave() {
+        return forcedSave;
     }
 }

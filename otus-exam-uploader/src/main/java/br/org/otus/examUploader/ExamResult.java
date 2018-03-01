@@ -21,6 +21,7 @@ public class ExamResult {
     private String examName;
     private String resultName;
     private String value;
+    private Boolean aliquotValid;
     private String releaseDate;
     private List<Observation> observations;
 

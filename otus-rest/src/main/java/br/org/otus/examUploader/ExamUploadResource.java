@@ -3,6 +3,7 @@ package br.org.otus.examUploader;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
 
 import javax.inject.Inject;
@@ -22,12 +23,14 @@ public class ExamUploadResource {
     private SecurityContext securityContext;
 
     @GET
+    @Secured
     @Produces (MediaType.APPLICATION_JSON)
     public String list(){
         return new Response().buildSuccess(examUploadFacade.list()).toCustomJson(ExamUploadDTO.getGsonBuilder());
     }
 
     @GET
+    @Secured
     @Path("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public String getById(@PathParam("id") String id){
@@ -35,6 +38,7 @@ public class ExamUploadResource {
     }
 
     @POST
+    @Secured
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)
     public String create(@Context HttpServletRequest request, String examUploadJson){
@@ -44,6 +48,7 @@ public class ExamUploadResource {
     }
 
     @DELETE
+    @Secured
     @Path("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public String delete(@PathParam("id") String id){
@@ -52,6 +57,7 @@ public class ExamUploadResource {
     }
 
     @GET
+    @Secured
     @Path("/results/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public String getResults(@PathParam("id") String examLotId){

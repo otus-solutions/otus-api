@@ -45,7 +45,8 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
     public List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException {
         ArrayList<Exam> exams = new ArrayList<>();
 
-        Document match = new Document("$match", new Document("examSendingLotId", id));
+        Document match = new Document("$match", new Document("examSendingLotId", id)
+                .append("objectType", "Exam"));
         Document lookup = new Document("$lookup", new Document("from","exam_result")
                 .append("localField", "_id")
                 .append("foreignField", "examId")
