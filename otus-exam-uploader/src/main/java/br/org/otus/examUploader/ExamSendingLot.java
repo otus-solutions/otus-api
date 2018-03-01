@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
-public class ExamLot {
+public class ExamSendingLot {
 
     private ObjectId _id;
     private String objectType;
@@ -44,12 +44,12 @@ public class ExamLot {
         return resultsQuantity;
     }
 
-    public static String serialize(ExamLot examResultLot) {
+    public static String serialize(ExamSendingLot examResultLot) {
         return getGsonBuilder().create().toJson(examResultLot);
     }
 
-    public static ExamLot deserialize(String examResultLotJson) {
-        return ExamLot.getGsonBuilder().create().fromJson(examResultLotJson, ExamLot.class);
+    public static ExamSendingLot deserialize(String examResultLotJson) {
+        return ExamSendingLot.getGsonBuilder().create().fromJson(examResultLotJson, ExamSendingLot.class);
     }
 
     private static GsonBuilder getGsonBuilder() {

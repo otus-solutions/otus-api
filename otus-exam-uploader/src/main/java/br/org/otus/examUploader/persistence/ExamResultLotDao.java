@@ -1,6 +1,6 @@
 package br.org.otus.examUploader.persistence;
 
-import br.org.otus.examUploader.ExamLot;
+import br.org.otus.examUploader.ExamSendingLot;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ExamResultLotDao {
 
-    ObjectId insert(ExamLot examLot);
+    ObjectId insert(ExamSendingLot examSendingLot);
 
-    List<ExamLot> getAll();
+    List<ExamSendingLot> getAll();
 
-    ExamLot getById(String id) throws DataNotFoundException;
+    ExamSendingLot getById(String id) throws DataNotFoundException;
 
     void deleteById(String id) throws DataNotFoundException;
 }

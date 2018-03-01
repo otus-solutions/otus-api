@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ExamResult {
 
-    private ObjectId examLotId;
+    private ObjectId examSendingLotId;
     private ObjectId examId;
     private ObjectId _id;
 
@@ -33,8 +33,8 @@ public class ExamResult {
         this.examId = examId;
     }
 
-    public void setExamLotId(ObjectId examId) {
-        this.examLotId = examId;
+    public void setExamSendingLotId(ObjectId examId) {
+        this.examSendingLotId = examId;
     }
 
     public void setFieldCenter(FieldCenter fieldCenter) {

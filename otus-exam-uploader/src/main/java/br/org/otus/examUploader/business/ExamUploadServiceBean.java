@@ -2,7 +2,7 @@ package br.org.otus.examUploader.business;
 
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamLot;
+import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
@@ -36,26 +36,26 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
-        ExamLot examLot = examUploadDTO.getExamLot();
+        ExamSendingLot examSendingLot = examUploadDTO.getExamSendingLot();
         List<Exam> exams= examUploadDTO.getExams();
         List<ExamResult> allResults = new ArrayList<>();
 
         for (Exam exam: exams) {
             allResults.addAll(exam.getExamResults());
         }
-        examLot.setResultsQuantity(allResults.size());
+        examSendingLot.setResultsQuantity(allResults.size());
 
         validateExamResultLot(allResults);
         validateExamResults(allResults);
 
-        examLot.setOperator(userEmail);
-        ObjectId lotId = examResultLotDAO.insert(examLot);
+        examSendingLot.setOperator(userEmail);
+        ObjectId lotId = examResultLotDAO.insert(examSendingLot);
 
         for (Exam exam: exams) {
-            exam.setExamLotId(lotId);
+            exam.setExamSendingLotId(lotId);
             ObjectId examId = examDAO.insert(exam);
             for (ExamResult result: exam.getExamResults()) {
-                result.setExamLotId(lotId);
+                result.setExamSendingLotId(lotId);
                 result.setExamId(examId);
             }
         }
@@ -66,24 +66,24 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     @Override
-    public List<ExamLot> list() {
+    public List<ExamSendingLot> list() {
         return examResultLotDAO.getAll();
     }
 
     @Override
-    public ExamLot getByID(String id) throws DataNotFoundException {
+    public ExamSendingLot getByID(String id) throws DataNotFoundException {
         return examResultLotDAO.getById(id);
     }
 
     @Override
     public void delete(String id) throws DataNotFoundException {
-        examResultDAO.deleteByExamId(id);
+        examResultDAO.deleteByExamSendingLotId(id);
         examResultLotDAO.deleteById(id);
     }
 
     @Override
-    public List<Exam> getAllByExamLotId(ObjectId id) throws DataNotFoundException {
-        return examResultDAO.getByExamLotId(id);
+    public List<Exam> getAllByExamSendingLotId(ObjectId id) throws DataNotFoundException {
+        return examResultDAO.getByExamSendingLotId(id);
     }
 //
     @Override

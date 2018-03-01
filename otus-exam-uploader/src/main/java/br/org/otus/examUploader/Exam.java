@@ -11,7 +11,7 @@ import java.util.List;
 public class Exam {
 
     private ObjectId _id;
-    private ObjectId examLotId;
+    private ObjectId examSendingLotId;
     private String objectType;
     private String name;
     private List<ExamResult> examResults;
@@ -21,8 +21,8 @@ public class Exam {
         return _id;
     }
 
-    public void setExamLotId(ObjectId examLotId) {
-        this.examLotId = examLotId;
+    public void setExamSendingLotId(ObjectId examLotId) {
+        this.examSendingLotId = examLotId;
     }
 
     public List<ExamResult> getExamResults() {
