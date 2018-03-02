@@ -46,6 +46,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         examLot.setResultsQuantity(allResults.size());
 
         validateExamResultLot(allResults);
+
         validateExamResults(allResults);
 
         examLot.setOperator(userEmail);

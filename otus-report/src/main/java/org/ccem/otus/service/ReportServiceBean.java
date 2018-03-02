@@ -1,8 +1,8 @@
 package org.ccem.otus.service;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.ReportTemplate;
-import org.ccem.otus.model.RequestParameters;
 import org.ccem.otus.model.dataSources.ActivityDataSource;
 import org.ccem.otus.model.dataSources.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.ReportDataSource;
@@ -26,13 +26,14 @@ public class ReportServiceBean implements ReportService {
     private ActivityDataSourceDao activityDataSourceDao;
 
     @Override
-    public ReportTemplate findReportById(RequestParameters requestParameters) throws DataNotFoundException{
-        ReportTemplate report = reportDao.findReport(requestParameters.getReportId());
+    public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException {
+        ObjectId reportObjectId = new ObjectId(reportId);
+        ReportTemplate report = reportDao.findReport(reportObjectId);
         for (ReportDataSource dataSource:report.getDataSources()) {
             if(dataSource instanceof ParticipantDataSource){
-                ((ParticipantDataSource) dataSource).getResult().add(participantDataSourceDao.getResult(requestParameters.getRecruitmentNumber(),(ParticipantDataSource) dataSource));
+                ((ParticipantDataSource) dataSource).getResult().add(participantDataSourceDao.getResult(recruitmentNumber,(ParticipantDataSource) dataSource));
             }else if(dataSource instanceof ActivityDataSource){
-                ((ActivityDataSource) dataSource).getResult().add(activityDataSourceDao.getResult(requestParameters.getRecruitmentNumber(),(ActivityDataSource) dataSource));
+                ((ActivityDataSource) dataSource).getResult().add(activityDataSourceDao.getResult(recruitmentNumber,(ActivityDataSource) dataSource));
             }
         }
         return report;
