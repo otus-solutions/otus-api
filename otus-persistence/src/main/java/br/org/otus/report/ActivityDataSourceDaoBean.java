@@ -21,7 +21,7 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
     }
 
     @Override
-    public ActivityDataSourceResult getResult(Long recruitmentNumber, ActivityDataSource activityDataSource) throws DataNotFoundException {
+    public ActivityDataSourceResult getResult(Long recruitmentNumber, ActivityDataSource activityDataSource){
 
         ActivityDataSourceResult result = null;
         ArrayList<Document> query = activityDataSource.builtQuery(recruitmentNumber);

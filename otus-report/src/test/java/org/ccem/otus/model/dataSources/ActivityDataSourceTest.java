@@ -50,9 +50,8 @@ public class ActivityDataSourceTest {
         Whitebox.setInternalState(activityDataSource, "filters", activityDataSourceFilters);
         ArrayList<Document> query = activityDataSource.builtQuery((long) 343545345 );
         assertEquals("{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.surveyTemplate.identity.acronym\" : \"TF\", \"category.name\" : \"C0\" } }",query.get(0).toJson());
-        assertEquals("{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : { \"$filter\" : { \"input\" : \"$statusHistory\", \"as\" : \"statusHistory\", \"cond\" : { \"$eq\" : [\"$$statusHistory.name\", \"FINALIZED\"] } } } } }",query.get(1).toJson());
-        assertEquals("{ \"$project\" : { \"statusHistory\" : { \"$slice\" : [\"$statusHistory\", -1] } } }",query.get(2).toJson());
-        assertEquals("{ \"$match\" : { \"statusHistory.name\" : \"FINALIZED\" } }",query.get(3).toJson());
+        assertEquals("{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : { \"$slice\" : [\"$statusHistory\", -1, 1] } } }",query.get(1).toJson());
+        assertEquals("{ \"$match\" : { \"statusHistory.name\" : \"FINALIZED\" } }",query.get(2).toJson());
     }
 
     @Test

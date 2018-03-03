@@ -22,9 +22,6 @@ public class ParticipantDataSourceDaoBean extends MongoGenericDao<Document> impl
     public ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException{
         Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
 
-        if(recruitmentNumber == null){
-            throw new DataNotFoundException("parameter recruitmentNumber is NULL.");
-        }
         if (result == null) {
             throw new DataNotFoundException(
                     new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
