@@ -17,6 +17,26 @@ public class SurveyBasicInfoRecordsFactory {
     private static final String PAPPER_DATE_NOT_FOUND = "Paper date value error";
     private static final String PAPPER_INTERVIEWER_NOT_FOUND = "Paper interviewer value error";
     private static final String FINALIZED_STATUS_NOT_FOUND = "Finalized status value error";
+    private static final String CATEGORY_NOT_FOUND = "Category value error";
+    private static final String PARTICIPANT_NOT_FOUND = "Participant value error";
+
+    public static Long getRecruitmentNumber(SurveyActivity surveyActivity){
+        try{
+            return surveyActivity.getParticipantData().getRecruitmentNumber();
+        }catch (Exception e){
+            SurveyBasicInfoRecordsFactory.printMessageError(PARTICIPANT_NOT_FOUND);
+            return null;
+        }
+    }
+
+    public static String getCategory(SurveyActivity surveyActivity){
+        try{
+            return surveyActivity.getCategory().getName();
+        }catch (Exception e){
+            SurveyBasicInfoRecordsFactory.printMessageError(CATEGORY_NOT_FOUND);
+            return null;
+        }
+    }
 
     public static String getLastInterviewer(SurveyActivity surveyActivity) {
         try {

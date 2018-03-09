@@ -54,6 +54,17 @@ public class SurveyBasicInfoRecordsFactoryTest {
     @Test
     public void method_getLastFinalizedDate_should_return_null_when_finalized_status_dont_exist(){
         Assert.assertNull(SurveyBasicInfoRecordsFactory.getLasFinalizationDate(null));
+    }
 
+    @Test
+    public void method_getRecruitmentNumber_should_return_null_when_recruitmentNumber_dont_exist(){
+        PowerMockito.when(surveyActivity.getParticipantData()).thenReturn(null);
+        Assert.assertNull(SurveyBasicInfoRecordsFactory.getRecruitmentNumber(surveyActivity));
+    }
+
+    @Test
+    public void method_getCategory_should_return_null_when_category_dont_exist(){
+        PowerMockito.when(surveyActivity.getCategory()).thenReturn(null);
+        Assert.assertNull(SurveyBasicInfoRecordsFactory.getCategory(surveyActivity));
     }
 }
