@@ -5,19 +5,21 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
-public class ExamResultLot {
+public class ExamLot {
 
     private ObjectId _id;
+    private String objectType;
     private String operator;
     private String fileName;
     private String realizationDate;
-    private Integer resultsQuantity;
+    private Integer resultsQuantity = 0;
     private FieldCenter fieldCenter;
 
 
     public ObjectId getId() {
         return _id;
     }
+
     public String getOperator() {
         return operator;
     }
@@ -29,6 +31,7 @@ public class ExamResultLot {
     public String getRealizationDate() {
         return realizationDate;
     }
+
     public FieldCenter getFieldCenter() {
         return fieldCenter;
     }
@@ -37,17 +40,22 @@ public class ExamResultLot {
         this.resultsQuantity = resultsQuantity;
     }
 
-    public static String serialize(ExamResultLot examResultLot) {
+    public Integer getResultsQuantity(){
+        return resultsQuantity;
+    }
+
+    public static String serialize(ExamLot examResultLot) {
         return getGsonBuilder().create().toJson(examResultLot);
     }
 
-    public static ExamResultLot deserialize(String examResultLotJson) {
-        return ExamResultLot.getGsonBuilder().create().fromJson(examResultLotJson, ExamResultLot.class);
+    public static ExamLot deserialize(String examResultLotJson) {
+        return ExamLot.getGsonBuilder().create().fromJson(examResultLotJson, ExamLot.class);
     }
 
     private static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+
         return builder;
     }
 }

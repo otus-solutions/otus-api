@@ -54,8 +54,8 @@ public class ExamUploadResource {
     @GET
     @Path("/results/{id}")
     @Produces (MediaType.APPLICATION_JSON)
-    public String getResults(@PathParam("id") String examId){
-        return new Response().buildSuccess(examUploadFacade.listResults(examId)).toCustomJson(ExamUploadDTO.getGsonBuilder());
+    public String getResults(@PathParam("id") String examLotId){
+        return new Response().buildSuccess(examUploadFacade.listResults(examLotId)).toCustomJson(ExamUploadDTO.getGsonBuilder());
     }
 
 }

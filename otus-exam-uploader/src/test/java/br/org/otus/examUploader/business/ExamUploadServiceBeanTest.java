@@ -1,20 +1,15 @@
 package br.org.otus.examUploader.business;
 
+import br.org.otus.examUploader.Exam;
+import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamResultLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamResultLotDao;
-import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
-import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
-import br.org.otus.laboratory.participant.aliquot.AliquotCollectionData;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.FieldCenter;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,11 +19,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static org.mockito.Matchers.eq;
 
 @RunWith(PowerMockRunner.class)
 public class ExamUploadServiceBeanTest {
@@ -54,7 +46,10 @@ public class ExamUploadServiceBeanTest {
     private ExamResult examResult;
 
     @Mock
-    private ExamResultLot examResultLot;
+    private ExamLot examLot;
+
+    @Mock
+    private Exam exam;
 
 
     @Test
@@ -63,7 +58,13 @@ public class ExamUploadServiceBeanTest {
 
         List<ExamResult> examResults = new ArrayList<>();
         examResults.add(examResult);
-        PowerMockito.when(examUploadDTO.getExamResults()).thenReturn(examResults);
+
+        List<Exam> exams = new ArrayList<>();
+        exams.add(exam);
+
+        PowerMockito.when(examUploadDTO.getExams()).thenReturn(exams);
+        PowerMockito.when(examUploadDTO.getExamLot()).thenReturn(examLot);
+        PowerMockito.when(exam.getExamResults()).thenReturn(examResults);
 
         Mockito.doThrow(new ValidationException()).when(service).validateExamResults(Mockito.any());
 
@@ -72,14 +73,13 @@ public class ExamUploadServiceBeanTest {
         }catch (ValidationException ignored){
 
         }finally{
-            Mockito.verify(examResultLotDAO, Mockito.times(0)).insert(examResultLot);
+            Mockito.verify(examResultLotDAO, Mockito.times(0)).insert(examLot);
             Mockito.verify(examResultDAO, Mockito.times(0)).insertMany(Mockito.any());
         }
 
     }
 
     @Test
-    //TODO 17/01/18: review deletion rule
     public void delete_should_not_delete_a_lot_if_doesnt_find_associated_exam_results() throws DataNotFoundException {
         Mockito.doThrow(new DataNotFoundException()).when(examResultDAO).deleteByExamId(Mockito.any());
         try{
@@ -109,10 +109,9 @@ public class ExamUploadServiceBeanTest {
             allAliquots.add(mock);
         });
 
-        PowerMockito.when(examUploadDTO.getExamResults()).thenReturn(resultsToVerify);
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
 
-        service.validateExamResults(examUploadDTO);
+        service.validateExamResults(resultsToVerify);
     }
 
     @Test (expected = ValidationException.class)
@@ -124,17 +123,21 @@ public class ExamUploadServiceBeanTest {
 
         resultsToVerify.add(examResult);
 
-        PowerMockito.when(examUploadDTO.getExamResults()).thenReturn(resultsToVerify);
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
-        service.validateExamResults(examUploadDTO);
+        service.validateExamResults(resultsToVerify);
 
     }
 
     @Test (expected = ValidationException.class)
-    public void validateExamResultLot_should_throw_ValidationException_when_examResults_list_size_is_zero() throws ValidationException {
+    public void validateExamLot_should_throw_ValidationException_when_examResults_list_size_is_zero() throws ValidationException {
         ArrayList<ExamResult> examResults = new ArrayList<>();
-        PowerMockito.when(examUploadDTO.getExamResults()).thenReturn(examResults);
-        service.validateExamResultLot(examUploadDTO);
+        List<Exam> exams = new ArrayList<>();
+        exams.add(exam);
+
+        PowerMockito.when(examUploadDTO.getExams()).thenReturn(exams);
+        PowerMockito.when(exam.getExamResults()).thenReturn(examResults);
+
+        service.validateExamResultLot(examResults);
     }
 
     }
