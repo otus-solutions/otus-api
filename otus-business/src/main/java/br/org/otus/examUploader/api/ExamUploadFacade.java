@@ -1,7 +1,7 @@
 package br.org.otus.examUploader.api;
 
 import br.org.otus.examUploader.Exam;
-import br.org.otus.examUploader.ExamLot;
+import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
 import br.org.otus.response.builders.ResponseBuild;
@@ -19,10 +19,10 @@ public class ExamUploadFacade {
     private ExamUploadService examUploadService;
 
     public String create(String examUploadJson, String userEmail){
-        String lotId;
+        String examSendingLotId;
         try {
             ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
-            lotId = examUploadService.create(examUploadDTO, userEmail);
+            examSendingLotId = examUploadService.create(examUploadDTO, userEmail);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
         } catch (ValidationException e) {
@@ -30,14 +30,14 @@ public class ExamUploadFacade {
         } catch (Exception e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
-        return lotId;
+        return examSendingLotId;
     }
 
-    public List<ExamLot> list(){
+    public List<ExamSendingLot> list(){
         return examUploadService.list();
     }
 
-    public ExamLot getById(String id){
+    public ExamSendingLot getById(String id){
         try {
             return examUploadService.getByID(id);
         } catch (DataNotFoundException e) {
@@ -56,7 +56,7 @@ public class ExamUploadFacade {
     public List<Exam> listResults(String id){
         try {
             ObjectId objectId = new ObjectId(id);
-            return examUploadService.getAllByExamLotId(objectId);
+            return examUploadService.getAllByExamSendingLotId(objectId);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

@@ -9,11 +9,11 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 import java.util.List;
 
 public class ExamUploadDTO {
-    private ExamLot examLot;
+    private ExamSendingLot examSendingLot;
     private List<Exam> exams;
 
-    public ExamLot getExamLot() {
-        return examLot;
+    public ExamSendingLot getExamSendingLot() {
+        return examSendingLot;
     }
 
     public List<Exam> getExams() {

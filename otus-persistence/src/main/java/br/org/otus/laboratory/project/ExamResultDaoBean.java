@@ -31,8 +31,8 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
     }
 
     @Override
-    public void deleteByExamId(String id) throws DataNotFoundException {
-        Document query = new Document("examLotId", new ObjectId(id));
+    public void deleteByExamSendingLotId(String id) throws DataNotFoundException {
+        Document query = new Document("examSendingLotId", new ObjectId(id));
         DeleteResult deleteResult = collection.deleteMany(query);
 
         if (deleteResult.getDeletedCount() == 0){
@@ -42,10 +42,11 @@ public class ExamResultDaoBean extends MongoGenericDao implements ExamResultDao{
     }
 
     @Override
-    public List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException {
+    public List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException {
         ArrayList<Exam> exams = new ArrayList<>();
 
-        Document match = new Document("$match", new Document("examLotId", id));
+        Document match = new Document("$match", new Document("examSendingLotId", id)
+                .append("objectType", "Exam"));
         Document lookup = new Document("$lookup", new Document("from","exam_result")
                 .append("localField", "_id")
                 .append("foreignField", "examId")

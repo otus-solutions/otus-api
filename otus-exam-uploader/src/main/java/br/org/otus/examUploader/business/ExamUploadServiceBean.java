@@ -2,11 +2,11 @@ package br.org.otus.examUploader.business;
 
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamLot;
+import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
-import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -26,7 +26,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
     LaboratoryProjectService laboratoryProjectService;
 
     @Inject
-    private ExamResultLotDao examResultLotDAO;
+    private ExamSendingLotDao examSendingLotDao;
 
     @Inject
     private ExamDao examDAO;
@@ -36,26 +36,29 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Override
     public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
-        ExamLot examLot = examUploadDTO.getExamLot();
+        ExamSendingLot examSendingLot = examUploadDTO.getExamSendingLot();
         List<Exam> exams= examUploadDTO.getExams();
         List<ExamResult> allResults = new ArrayList<>();
 
         for (Exam exam: exams) {
             allResults.addAll(exam.getExamResults());
         }
-        examLot.setResultsQuantity(allResults.size());
+        examSendingLot.setResultsQuantity(allResults.size());
 
         validateExamResultLot(allResults);
-        validateExamResults(allResults);
 
-        examLot.setOperator(userEmail);
-        ObjectId lotId = examResultLotDAO.insert(examLot);
+        if(!examSendingLot.isForcedSave()) {
+            validateExamResults(allResults);
+        }
+
+        examSendingLot.setOperator(userEmail);
+        ObjectId lotId = examSendingLotDao.insert(examSendingLot);
 
         for (Exam exam: exams) {
-            exam.setExamLotId(lotId);
+            exam.setExamSendingLotId(lotId);
             ObjectId examId = examDAO.insert(exam);
             for (ExamResult result: exam.getExamResults()) {
-                result.setExamLotId(lotId);
+                result.setExamSendingLotId(lotId);
                 result.setExamId(examId);
             }
         }
@@ -66,24 +69,24 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     @Override
-    public List<ExamLot> list() {
-        return examResultLotDAO.getAll();
+    public List<ExamSendingLot> list() {
+        return examSendingLotDao.getAll();
     }
 
     @Override
-    public ExamLot getByID(String id) throws DataNotFoundException {
-        return examResultLotDAO.getById(id);
+    public ExamSendingLot getByID(String id) throws DataNotFoundException {
+        return examSendingLotDao.getById(id);
     }
 
     @Override
     public void delete(String id) throws DataNotFoundException {
-        examResultDAO.deleteByExamId(id);
-        examResultLotDAO.deleteById(id);
+        examResultDAO.deleteByExamSendingLotId(id);
+        examSendingLotDao.deleteById(id);
     }
 
     @Override
-    public List<Exam> getAllByExamLotId(ObjectId id) throws DataNotFoundException {
-        return examResultDAO.getByExamLotId(id);
+    public List<Exam> getAllByExamSendingLotId(ObjectId id) throws DataNotFoundException {
+        return examResultDAO.getByExamSendingLotId(id);
     }
 //
     @Override

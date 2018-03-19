@@ -1,12 +1,9 @@
 package br.org.otus.rest;
 
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.ExamLot;
-import br.org.otus.examUploader.ExamUploadDTO;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-
-import com.google.gson.Gson;
 
 public class Response {
 

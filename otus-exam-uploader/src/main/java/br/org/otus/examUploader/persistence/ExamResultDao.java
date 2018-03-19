@@ -11,7 +11,7 @@ public interface ExamResultDao {
 
     void insertMany (List<ExamResult> examResults);
 
-    void deleteByExamId(String id) throws DataNotFoundException;
+    void deleteByExamSendingLotId(String id) throws DataNotFoundException;
 
-    List<Exam> getByExamLotId(ObjectId id) throws DataNotFoundException;
+    List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException;
 }
