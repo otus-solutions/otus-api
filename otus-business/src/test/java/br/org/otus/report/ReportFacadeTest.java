@@ -4,7 +4,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.ReportTemplate;
-import org.ccem.otus.model.dataSources.ParticipantDataSource;
+import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.service.ReportService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

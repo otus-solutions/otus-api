@@ -1,6 +1,10 @@
 package org.ccem.otus.model.dataSources;
 
 import org.bson.Document;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceFilters;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceStatusHistoryFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

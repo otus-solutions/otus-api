@@ -1,6 +1,7 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.activity;
 
 import org.bson.Document;
+import org.ccem.otus.model.dataSources.ReportDataSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,9 +18,9 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
     @Override
     public ArrayList<Document> builtQuery(Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
-        buildMachStage(recruitmentNumber, query);
-        buildProjectionStage(query);
-        appendStatusHistoryFilter(query);
+        this.buildMachStage(recruitmentNumber, query);
+        this.buildProjectionStage(query);
+        this.appendStatusHistoryFilter(query);
         return query;
     }
 

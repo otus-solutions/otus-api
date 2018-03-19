@@ -1,7 +1,7 @@
 package org.ccem.otus.enums;
 
-import org.ccem.otus.model.dataSources.ActivityDataSource;
-import org.ccem.otus.model.dataSources.ParticipantDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;

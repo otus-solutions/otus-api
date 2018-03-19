@@ -1,4 +1,4 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.participant;
 
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.model.FieldCenter;

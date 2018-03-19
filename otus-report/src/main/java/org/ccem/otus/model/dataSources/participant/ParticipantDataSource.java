@@ -1,6 +1,7 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.participant;
 
 import org.bson.Document;
+import org.ccem.otus.model.dataSources.ReportDataSource;
 
 import java.util.ArrayList;
 

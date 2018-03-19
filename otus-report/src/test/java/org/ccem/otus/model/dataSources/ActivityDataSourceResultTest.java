@@ -1,6 +1,8 @@
 package org.ccem.otus.model.dataSources;
 
 import com.google.gson.GsonBuilder;
+
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;

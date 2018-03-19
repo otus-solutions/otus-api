@@ -1,8 +1,8 @@
 package br.org.otus.report;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.dataSources.ActivityDataSourceResult;
-import org.ccem.otus.model.dataSources.ActivityDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.persistence.ActivityDataSourceDao;
 import com.mongodb.client.AggregateIterable;
 import br.org.mongodb.MongoGenericDao;
