@@ -41,6 +41,7 @@
 		<module>../otus-file-uploader</module>
 		<module>../otus-extraction</module>
 		<module>../otus-exam-uploader</module>
+		<module>../otus-report</module>
 	</modules>
 
 	<repositories>
