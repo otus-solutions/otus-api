@@ -8,6 +8,8 @@ import org.ccem.otus.model.ReportTemplate;
 public interface ReportDao {
 
    ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException;
+   
+   ObjectId insert(ReportTemplate report);
 
    boolean getResults(ReportTemplate reportTemplate);
 

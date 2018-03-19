@@ -33,4 +33,22 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
     public boolean getResults(ReportTemplate reportTemplate) {
         return true;
     }
+    
+    @Override
+    public ObjectId insert(ReportTemplate reportTemplate) {
+    	String label = reportTemplate.getLabel();
+    	Document result = this.collection.find(eq("label", label)).first();
+    	if (result != null) {
+            return (ObjectId)result.get("_id");
+        }else {
+        	Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
+    		super.persist(parsed);
+            return (ObjectId)parsed.get( "_id" );
+        }
+    	
+    
+    	
+    	
+    	
+    }
 }

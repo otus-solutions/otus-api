@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public class ReportTemplate {
     private String template;
+    private String label;
+    private String fieldCenter;
     private ArrayList<ReportDataSource> dataSources;
 
     public static String serialize(ReportTemplate reportTemplate) {
@@ -36,6 +38,14 @@ public class ReportTemplate {
 
     public String getTemplate() {
         return template;
+    }
+    
+    public String getLabel() {
+    	return label;
+    }
+    
+    public String getFieldCenter() {
+    	return fieldCenter;
     }
 
 }

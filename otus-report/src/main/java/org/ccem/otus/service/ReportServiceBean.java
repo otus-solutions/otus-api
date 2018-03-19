@@ -2,6 +2,7 @@ package org.ccem.otus.service;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ActivityDataSource;
 import org.ccem.otus.model.dataSources.ParticipantDataSource;
@@ -9,6 +10,9 @@ import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.persistence.ActivityDataSourceDao;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 import org.ccem.otus.persistence.ReportDao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -38,4 +42,17 @@ public class ReportServiceBean implements ReportService {
         }
         return report;
     }
+
+	@Override
+	public String create(ReportTemplate reportTemplate, String userEmail) throws DataNotFoundException, ValidationException {
+		List<ReportDataSource> dataSources = reportTemplate.getDataSources();
+		if(!userEmail.isEmpty()) {
+			ObjectId reportId = reportDao.insert(reportTemplate);
+			return reportId.toString();
+		} else {
+			return null;
+		}
+		
+		
+	}
 }
