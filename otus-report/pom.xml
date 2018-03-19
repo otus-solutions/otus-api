@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.ccem.otus</groupId>
             <artifactId>otus-activity</artifactId>
-            <version>1.11-SNAPSHOT</version>
+	    <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 </project>
