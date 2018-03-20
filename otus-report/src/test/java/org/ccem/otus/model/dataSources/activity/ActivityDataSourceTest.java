@@ -1,4 +1,4 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.activity;
 
 import org.bson.Document;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;

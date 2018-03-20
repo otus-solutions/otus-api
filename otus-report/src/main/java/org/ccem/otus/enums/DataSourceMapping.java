@@ -2,13 +2,13 @@ package org.ccem.otus.enums;
 
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.exam.ExamDataSource;
+import org.ccem.otus.model.dataSources.examResult.ExamResultDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 
 public enum DataSourceMapping {
 	PARTICIPANT_DATASOURCE(ParticipantDataSource.class, "Participant"), 
 	ACTIVITY_DATASOURCE(ActivityDataSource.class, "Activity"), 
-	EXAM_DATASOURCE(ExamDataSource.class, "Exam");
+	EXAM_DATASOURCE(ExamResultDataSource.class, "Exam");
 
 	private Class<? extends ReportDataSource> dataSource;
 	private String Key;

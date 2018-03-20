@@ -1,4 +1,4 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.participant;
 
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;

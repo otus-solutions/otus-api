@@ -21,12 +21,12 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
         this.buildMachStage(recruitmentNumber, query);
         this.buildProjectionStage(query);
         this.appendStatusHistoryFilter(query);
+        
         return query;
     }
 
     private void buildMachStage(Long recruitmentNumber, ArrayList<Document> query) {
-        Document filters = new Document("participantData.recruitmentNumber", recruitmentNumber)
-                .append("surveyForm.surveyTemplate.identity.acronym", this.filters.getAcronym());
+        Document filters = new Document("participantData.recruitmentNumber", recruitmentNumber).append("surveyForm.surveyTemplate.identity.acronym", this.filters.getAcronym());
 
         if(this.filters.getCategory() != null){
             appendCategoryFilter(filters, this.filters.getCategory());

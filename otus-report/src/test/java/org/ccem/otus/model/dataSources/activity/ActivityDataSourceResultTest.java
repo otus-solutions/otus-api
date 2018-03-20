@@ -1,4 +1,4 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.activity;
 
 import com.google.gson.GsonBuilder;
 
