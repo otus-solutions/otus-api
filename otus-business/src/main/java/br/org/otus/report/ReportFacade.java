@@ -1,5 +1,7 @@
 package br.org.otus.report;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import br.org.otus.response.builders.ResponseBuild;
@@ -14,9 +16,17 @@ public class ReportFacade {
     @Inject
     private ReportService reportService;
     
-      public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId){
+    public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId){
         try {
             return reportService.getParticipantReport(recruitmentNumber, reportId);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
+    
+    public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber){
+        try {
+            return reportService.getReportByParticipant(recruitmentNumber);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
@@ -38,6 +48,39 @@ public class ReportFacade {
     	
     	return reportUploadId;
     	
+    }
+    
+    public void deleteById(String id){
+        try {
+        	reportService.delete(id);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
+    
+    public List<ReportTemplate> list(){
+        return reportService.list();
+    }
+    
+    public ReportTemplate getById(String id){
+        try {
+            return reportService.getByID(id);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
+    
+    public ReportTemplate update(ReportTemplate reportTemplate) {
+    	try {
+            return reportService.update(reportTemplate);
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        } catch (ValidationException e) {
+            e.printStackTrace();
+            throw new HttpResponseException(
+                    ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        }
     }
 
 }
