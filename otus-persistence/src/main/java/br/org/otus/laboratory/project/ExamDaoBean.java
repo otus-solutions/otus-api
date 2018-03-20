@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.Exam;
+import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.utils.ExamAdapter;
 import org.bson.Document;
@@ -30,17 +31,15 @@ public class ExamDaoBean extends MongoGenericDao<Document> implements ExamDao {
     }
 
     @Override
-    public List<br.org.otus.examUploader.ExamLot> getAll() {
+    public List<ExamSendingLot> getAll() {
         return null;
     }
 
     @Override
-    public br.org.otus.examUploader.ExamLot getById(String id) throws DataNotFoundException {
+    public ExamSendingLot getById(String id) throws DataNotFoundException {
         return null;
     }
 
     @Override
-    public void deleteById(String id) throws DataNotFoundException {
-
-    }
+    public void deleteById(String id) throws DataNotFoundException {}
 }

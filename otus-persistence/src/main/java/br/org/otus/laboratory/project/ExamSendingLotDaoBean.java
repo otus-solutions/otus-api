@@ -1,8 +1,8 @@
-package br.org.otus.examUploader;
+package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.examUploader.ExamLot;
-import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.ExamSendingLot;
+import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
@@ -12,31 +12,31 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultLotDao {
+public class ExamSendingLotDaoBean extends MongoGenericDao implements ExamSendingLotDao {
 
-    private static final String COLLECTION_NAME = "exam_result_lot";
+    private static final String COLLECTION_NAME = "exam_sending_lot";
 
-    public ExamResultLotDaoBean() {
+    public ExamSendingLotDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
 
     @Override
-    public ObjectId insert(ExamLot examLot) {
-        Document parsed = Document.parse(ExamLot.serialize(examLot));
+    public ObjectId insert(ExamSendingLot examSendingLot) {
+        Document parsed = Document.parse(ExamSendingLot.serialize(examSendingLot));
 
         super.persist(parsed);
         return (ObjectId)parsed.get( "_id" );
     }
 
     @Override
-    public List<ExamLot> getAll() {
-        ArrayList<ExamLot> results = new ArrayList<>();
+    public List<ExamSendingLot> getAll() {
+        ArrayList<ExamSendingLot> results = new ArrayList<>();
 
         MongoCursor iterator = collection.find().iterator();
 
         while(iterator.hasNext()){
             Document next = (Document) iterator.next();
-            results.add(ExamLot.deserialize(next.toJson()));
+            results.add(ExamSendingLot.deserialize(next.toJson()));
         }
         iterator.close();
 
@@ -44,7 +44,7 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
     }
 
     @Override
-    public ExamLot getById(String id) throws DataNotFoundException {
+    public ExamSendingLot getById(String id) throws DataNotFoundException {
         Document query = new Document("_id",new ObjectId(id));
 
         Document first = (Document) collection.find(query).first();
@@ -54,7 +54,7 @@ public class ExamResultLotDaoBean extends MongoGenericDao implements ExamResultL
                     new Throwable("ExamLot not found. Id: " + id));
         }
 
-        return ExamLot.deserialize(first.toJson());
+        return ExamSendingLot.deserialize(first.toJson());
     }
 
     @Override

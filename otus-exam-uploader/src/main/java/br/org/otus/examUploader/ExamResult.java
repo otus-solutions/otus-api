@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ExamResult {
 
-    private ObjectId examLotId;
+    private ObjectId examSendingLotId;
     private ObjectId examId;
     private ObjectId _id;
 
@@ -21,6 +21,7 @@ public class ExamResult {
     private String examName;
     private String resultName;
     private String value;
+    private Boolean aliquotValid;
     private String releaseDate;
     private List<Observation> observations;
 
@@ -33,8 +34,8 @@ public class ExamResult {
         this.examId = examId;
     }
 
-    public void setExamLotId(ObjectId examId) {
-        this.examLotId = examId;
+    public void setExamSendingLotId(ObjectId examId) {
+        this.examSendingLotId = examId;
     }
 
     public void setFieldCenter(FieldCenter fieldCenter) {

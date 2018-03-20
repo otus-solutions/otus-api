@@ -1,11 +1,11 @@
 package br.org.otus.examUploader.business;
 
 import br.org.otus.examUploader.Exam;
-import br.org.otus.examUploader.ExamLot;
 import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamResultDao;
-import br.org.otus.examUploader.persistence.ExamResultLotDao;
+import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -34,7 +34,7 @@ public class ExamUploadServiceBeanTest {
     LaboratoryProjectService laboratoryProjectService;
 
     @Mock
-    private ExamResultLotDao examResultLotDAO;
+    private ExamSendingLotDao examResultLotDAO;
 
     @Mock
     private ExamResultDao examResultDAO;
@@ -46,7 +46,7 @@ public class ExamUploadServiceBeanTest {
     private ExamResult examResult;
 
     @Mock
-    private ExamLot examLot;
+    private ExamSendingLot examSendingLot;
 
     @Mock
     private Exam exam;
@@ -63,7 +63,7 @@ public class ExamUploadServiceBeanTest {
         exams.add(exam);
 
         PowerMockito.when(examUploadDTO.getExams()).thenReturn(exams);
-        PowerMockito.when(examUploadDTO.getExamLot()).thenReturn(examLot);
+        PowerMockito.when(examUploadDTO.getExamSendingLot()).thenReturn(examSendingLot);
         PowerMockito.when(exam.getExamResults()).thenReturn(examResults);
 
         Mockito.doThrow(new ValidationException()).when(service).validateExamResults(Mockito.any());
@@ -73,7 +73,7 @@ public class ExamUploadServiceBeanTest {
         }catch (ValidationException ignored){
 
         }finally{
-            Mockito.verify(examResultLotDAO, Mockito.times(0)).insert(examLot);
+            Mockito.verify(examResultLotDAO, Mockito.times(0)).insert(examSendingLot);
             Mockito.verify(examResultDAO, Mockito.times(0)).insertMany(Mockito.any());
         }
 
@@ -81,7 +81,7 @@ public class ExamUploadServiceBeanTest {
 
     @Test
     public void delete_should_not_delete_a_lot_if_doesnt_find_associated_exam_results() throws DataNotFoundException {
-        Mockito.doThrow(new DataNotFoundException()).when(examResultDAO).deleteByExamId(Mockito.any());
+        Mockito.doThrow(new DataNotFoundException()).when(examResultDAO).deleteByExamSendingLotId(Mockito.any());
         try{
             service.delete(Mockito.any());
         }catch (DataNotFoundException ignored){

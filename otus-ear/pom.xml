@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.ccem.otus</groupId>
 		<artifactId>otus-root</artifactId>
-		<version>1.11</version>
+		<version>1.12</version>
 		<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 
@@ -68,6 +68,10 @@
 						<ejbModule>
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-file-uploader</artifactId>
+						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-report</artifactId>
 						</ejbModule>
 					</modules>
 					<archive>
@@ -177,6 +181,12 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-exam-uploader</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-report</artifactId>
 			<version>${project.parent.version}</version>
 			<type>ejb</type>
 		</dependency>

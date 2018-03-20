@@ -14,7 +14,7 @@ import java.util.List;
 public class ExamAdapter {
 
     private ObjectId _id;
-    private ObjectId examLotId;
+    private ObjectId examSendingLotId;
     private String objectType;
     private String name;
     private List<Observation> observations;
