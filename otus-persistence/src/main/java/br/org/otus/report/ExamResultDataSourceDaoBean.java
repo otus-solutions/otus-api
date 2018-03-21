@@ -16,22 +16,22 @@ public class ExamResultDataSourceDaoBean extends MongoGenericDao<Document> imple
 
 	private static final String COLLECTION_NAME = "exam_result";
 
-	public ExamResultDataSourceDaoBean(String collectionName, Class<Document> clazz) {
+	public ExamResultDataSourceDaoBean() {
 		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override
 	public ExamResultDataSourceResult getResult(Long recruitmentNumber, ExamResultDataSource examDataSource) {
-		ExamResultDataSourceResult result;
+		ExamResultDataSourceResult result = null;
 		ArrayList<Document> query = examDataSource.builtQuery(recruitmentNumber);
-		AggregateIterable output = collection.aggregate(query);
+		AggregateIterable<?> output = collection.aggregate(query);
 
 		for (Object anOutput : output) {
 			Document next = (Document) anOutput;
 			result = ExamResultDataSourceResult.deserialize(new JSONObject(next).toString());
 		}
 
-		return null;
+		return result;
 	}
 
 }

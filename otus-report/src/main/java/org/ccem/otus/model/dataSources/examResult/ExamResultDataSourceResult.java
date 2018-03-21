@@ -1,16 +1,17 @@
 package org.ccem.otus.model.dataSources.examResult;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import com.google.gson.GsonBuilder;
 
+import br.org.otus.examUploader.ExamResult;
+
 public class ExamResultDataSourceResult {
 
-	private String releaseDate;
-	private String resultName;
-	private String value;
+	private List<ExamResult> examResults;
 
 	public static String serialize(ExamResultDataSourceResult examResultDataSourceResult) {
 		return getGsonBuilder().create().toJson(examResultDataSourceResult);
@@ -27,16 +28,8 @@ public class ExamResultDataSourceResult {
 		return builder;
 	}
 
-	public String getReleaseDate() {
-		return releaseDate;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public String getResultName() {
-		return resultName;
+	public List<ExamResult> getExamResults() {
+		return examResults;
 	}
 
 }

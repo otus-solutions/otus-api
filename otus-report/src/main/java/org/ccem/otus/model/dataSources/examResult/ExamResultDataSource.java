@@ -18,26 +18,28 @@ public class ExamResultDataSource extends ReportDataSource<ExamResultDataSourceR
 	public ArrayList<Document> builtQuery(Long recruitmentNumber) {
 		ArrayList<Document> query = new ArrayList<>();
 		this.buildMachStage(recruitmentNumber, query);
-		this.buildProjectionStage(query);
-		this.appendFieldCenterFilter(query);
-		
+
 		return query;
 	}
 
 	private void buildMachStage(Long recruitmentNumber, ArrayList<Document> query) {
-		Document filters = new Document("recruitmentNumber", recruitmentNumber).append("examName", this.filters.getExamName());
+		Document matchStageFilters = new Document("recruitmentNumber", recruitmentNumber);
+		this.appendExamName(matchStageFilters);
+		this.appendReleaseDateFilter(matchStageFilters, query);
 
-		Document matchStage = new Document("$match", filters);
+		Document matchStage = new Document("$match", matchStageFilters);
 		query.add(matchStage);
 	}
 
-	private void buildProjectionStage(ArrayList<Document> query) {
-		//TODO: para cada atributo que pode existir ou não, deve ser adicionando uma condição de verificação!
+	private void appendExamName(Document matchStage) {
+		if (this.filters.getExamName() != null) {
+			matchStage.append("examName", this.filters.getExamName());
+		}
 	}
 
-	private void appendFieldCenterFilter(ArrayList<Document> query) {
-		if(this.filters.getFieldCenter() != null) {
-			
+	private void appendReleaseDateFilter(Document matchStage, ArrayList<Document> query) {
+		if (this.filters.getReleaseDate() != null) {
+			matchStage.append("releaseDate", this.filters.getReleaseDate());
 		}
 	}
 
