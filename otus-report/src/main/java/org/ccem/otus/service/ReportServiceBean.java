@@ -58,12 +58,8 @@ public class ReportServiceBean implements ReportService {
 	@Override
 	public String create(ReportTemplate reportTemplate, String userEmail)
 			throws DataNotFoundException, ValidationException {
-		List<ReportDataSource> dataSources = reportTemplate.getDataSources();
-		validateReport(reportTemplate);
-		validateDataSource(dataSources);
 		ObjectId reportId = reportDao.insert(reportTemplate);
 		return reportId.toString();
-
 	}
 
 	@Override
@@ -87,26 +83,4 @@ public class ReportServiceBean implements ReportService {
 		return updateResult;
 	}
 
-	public void validateReport(ReportTemplate report) throws ValidationException {
-		if (report.getTemplate().isEmpty()) {
-			throw new ValidationException(new Throwable("Report Template Not Found"));
-		}
-		if (report.getLabel().isEmpty()) {
-			throw new ValidationException(new Throwable("Report Label Not Found"));
-		}
-	}
-
-	public void validateDataSource(List<ReportDataSource> dataSources) throws ValidationException {
-		for (ReportDataSource dataSource : dataSources) {
-			if (dataSource.getKey().isEmpty()) {
-				throw new ValidationException(new Throwable("DataSource Key Not Found"));
-			} else if (dataSource.getLabel().isEmpty()) {
-				throw new ValidationException(new Throwable("DataSource Label Not Found"));
-			} else if (dataSource.getDataSource().isEmpty()) {
-				throw new ValidationException(new Throwable("DataSource Not Found"));
-			}
-
-		}
-
-	}
 }
