@@ -25,7 +25,8 @@ public class ExamResultDataSource extends ReportDataSource<ExamResultDataSourceR
 	private void buildMachStage(Long recruitmentNumber, ArrayList<Document> query) {
 		Document matchStageFilters = new Document("recruitmentNumber", recruitmentNumber);
 		this.appendExamName(matchStageFilters);
-		this.appendReleaseDateFilter(matchStageFilters, query);
+		this.appendRealizationDateFilter(matchStageFilters);
+		this.appendFieldCenterFilter(matchStageFilters);
 
 		Document matchStage = new Document("$match", matchStageFilters);
 		query.add(matchStage);
@@ -37,9 +38,15 @@ public class ExamResultDataSource extends ReportDataSource<ExamResultDataSourceR
 		}
 	}
 
-	private void appendReleaseDateFilter(Document matchStage, ArrayList<Document> query) {
-		if (this.filters.getReleaseDate() != null) {
-			matchStage.append("releaseDate", this.filters.getReleaseDate());
+	private void appendRealizationDateFilter(Document matchStage) {
+		if (this.filters.getRealizationDate() != null) {
+			matchStage.append("realizationDate", this.filters.getRealizationDate());
+		}
+	}
+
+	private void appendFieldCenterFilter(Document matchStage) {
+		if (this.filters.getFieldCenter() != null) {
+			matchStage.append("fieldCenter.acronym", this.filters.getFieldCenter().getAcronym());
 		}
 	}
 

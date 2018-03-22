@@ -22,9 +22,10 @@ public class ExamResultDataSourceDaoBean extends MongoGenericDao<Document> imple
 
 	@Override
 	public ExamResultDataSourceResult getResult(Long recruitmentNumber, ExamResultDataSource examDataSource) {
+		
 		ExamResultDataSourceResult result = null;
 		ArrayList<Document> query = examDataSource.builtQuery(recruitmentNumber);
-		AggregateIterable<?> output = collection.aggregate(query);
+		AggregateIterable output = collection.aggregate(query);
 
 		for (Object anOutput : output) {
 			Document next = (Document) anOutput;
