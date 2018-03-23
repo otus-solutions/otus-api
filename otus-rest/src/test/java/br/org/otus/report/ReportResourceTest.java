@@ -48,7 +48,7 @@ public class ReportResourceTest {
 	private static final String reportJson = "{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}";
 	private static final String USER_MAIL = "otus@otus.com";
 	private static final String RESULT = "{\"data\":true}";
-
+	private static final String REPORT_BY_RN = "{\"data\":\"{\\\"_id\\\":{\\\"$oid\\\":\\\"5ab128d713cdd20490497f58\\\"},\\\"label\\\":\\\"teste\\\"}\"}";
 	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
 	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}"; 
@@ -71,12 +71,7 @@ public class ReportResourceTest {
 	@Mock
 	private AuthenticationData authenticationData;
 	
-
-
 	private ReportTemplate reportTemplate;
-
-	
-	
 	
 	List<ReportTemplate> reports = new ArrayList<>();
 	
@@ -88,8 +83,12 @@ public class ReportResourceTest {
 	}
 
 	@Test
-	public void testGetByRecruitmentNumber() throws DataNotFoundException {
-
+	public void method_GetByRecruitmentNumber_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
+		reportTemplate = new ReportTemplate();
+		Whitebox.setInternalState(reportTemplate, "_id", id);
+		Whitebox.setInternalState(reportTemplate, "label", label);
+		when(reportFacade.getParticipantReport(recruitmentNumber,REPORT_ID)).thenReturn(reportTemplate);
+		assertEquals(reportResource.getByRecruitmentNumber(recruitmentNumber, REPORT_ID), REPORT_BY_RN);
 	}
 
 	@Test
@@ -110,12 +109,10 @@ public class ReportResourceTest {
 		when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
 		when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
 		when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
-		
 		reportTemplate = new ReportTemplate();
 		Whitebox.setInternalState(reportTemplate, "_id", id);
 		when(reportFacade.create(reportUploadJson, USER_MAIL)).thenReturn(REPORT_ID);
 		assertEquals("{\"data\":\"5ab3a88013cdd20490873afe\"}", reportResource.create(request,reportUploadJson));
-		
 	}
 
 	@Test
@@ -131,7 +128,6 @@ public class ReportResourceTest {
 		ArrayList<ReportDataSource> dataSources = new ArrayList<>();	
 		fieldCenter.add("SP");
 		dataSources = reportTemplate.getDataSources();
-
 		Whitebox.setInternalState(reportTemplate, "_id", id);
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
@@ -140,7 +136,6 @@ public class ReportResourceTest {
 		reports.add(reportTemplate);
 		when(reportFacade.list()).thenReturn(reports);
 		assertEquals(REPORTS, reportResource.list());
-		
 	}
 
 	@Test
@@ -150,7 +145,6 @@ public class ReportResourceTest {
 		ArrayList<ReportDataSource> dataSources = new ArrayList<>();	
 		fieldCenter.add("SP");
 		dataSources = reportTemplate.getDataSources();
-
 		Whitebox.setInternalState(reportTemplate, "_id", id);
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
@@ -159,7 +153,6 @@ public class ReportResourceTest {
 		reports.add(reportTemplate);
 		when(reportFacade.getById(REPORT_ID)).thenReturn(reportTemplate);
 		assertEquals(REPORTS_BY_ID, reportResource.getById(REPORT_ID));
-		
 	}
 
 	@Test
@@ -170,7 +163,6 @@ public class ReportResourceTest {
 		ArrayList<ReportDataSource> dataSources = new ArrayList<>();	
 		fieldCenter.add("SP");
 		dataSources = report.getDataSources();
-
 		Whitebox.setInternalState(report, "_id", id);
 		Whitebox.setInternalState(report, "label", label);
 		Whitebox.setInternalState(report, "template", "<span></span>");
@@ -185,10 +177,7 @@ public class ReportResourceTest {
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(reportUploadJson);
 		PowerMockito.when(reportFacade.update(Mockito.anyObject())).thenReturn(updateReport);
-		
 		assertEquals(REPORT_UPDATE, reportResource.update(reportJson));
-		
-		
 	}
 
 }

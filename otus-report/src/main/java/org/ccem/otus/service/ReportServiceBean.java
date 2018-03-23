@@ -52,7 +52,8 @@ public class ReportServiceBean implements ReportService {
 	@Override
 	public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException {
 		Participant participant = participantService.getByRecruitmentNumber(recruitmentNumber);
-		return reportDao.getByCenter(participant.getFieldCenter().getAcronym());
+		String field = participant.getFieldCenter().getAcronym();
+		return reportDao.getByCenter(field);
 	}
 
 	@Override

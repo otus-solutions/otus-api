@@ -54,7 +54,6 @@ public class ReportFacadeTest {
 		ParticipantDataSource participantDataSource = new ParticipantDataSource();
 		Whitebox.setInternalState(participantDataSource, "dataSource", "Participant");
 		Whitebox.setInternalState(participantDataSource, "result", new ArrayList<>());
-
 		ReportTemplate reportTemplate = new ReportTemplate();
 		String template = "<span>teste</span>";
 		Whitebox.setInternalState(reportTemplate, "template", template);

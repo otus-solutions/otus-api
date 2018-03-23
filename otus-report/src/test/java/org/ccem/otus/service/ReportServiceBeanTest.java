@@ -64,7 +64,9 @@ public class ReportServiceBeanTest {
 	@Mock
 	private ActivityDataSourceDao activityDataSourceDao;
 
-	private Participant participant = PowerMockito.spy(new Participant(RECRUITMENTNUMBER));
+	// private Participant participant = PowerMockito.spy(new
+	// Participant(RECRUITMENTNUMBER));
+	@Mock
 	private ParticipantServiceBean participantServiceBean;
 
 	@Test
@@ -75,12 +77,9 @@ public class ReportServiceBeanTest {
 		Whitebox.setInternalState(reportTemplate, "template", template);
 		Whitebox.setInternalState(reportTemplate, "dataSources", new ArrayList<>());
 		reportTemplate.getDataSources().add(participantDataSource);
-
 		FieldCenter fieldCenterInstance = new FieldCenter();
 		Whitebox.setInternalState(fieldCenterInstance, "acronym", "RS");
-
 		ImmutableDate immutableDateInstance = new ImmutableDate("2018-02-22 00:00:00.000");
-
 		ParticipantDataSourceResult participantDataSourceResult = new ParticipantDataSourceResult();
 		Whitebox.setInternalState(participantDataSourceResult, "name", "Joao");
 		Whitebox.setInternalState(participantDataSourceResult, "sex", "masc");
@@ -90,9 +89,7 @@ public class ReportServiceBeanTest {
 		when(participantDataSourceDao.getResult(RECRUITMENTNUMBER, participantDataSource))
 				.thenReturn(participantDataSourceResult);
 		when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
-
 		ReportTemplate response = reportServiceBean.getParticipantReport(RECRUITMENTNUMBER, REPORTID);
-
 		assertTrue(response.getDataSources().get(0).getResult().get(0) instanceof ParticipantDataSourceResult);
 		assertEquals(participantDataSourceResult.toString(),
 				response.getDataSources().get(0).getResult().get(0).toString());
@@ -106,27 +103,21 @@ public class ReportServiceBeanTest {
 		Whitebox.setInternalState(reportTemplate, "template", template);
 		Whitebox.setInternalState(reportTemplate, "dataSources", new ArrayList<>());
 		reportTemplate.getDataSources().add(activityDataSource);
-
 		ActivityStatusOptions activityStatusOptions = ActivityStatusOptions.CREATED;
-
 		User user = new User();
 		Whitebox.setInternalState(user, "name", "Joao");
-
 		ActivityStatus activityStatus = new ActivityStatus();
 		Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
 		Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
 		Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
 		Whitebox.setInternalState(activityStatus, "user", user);
-
 		ArrayList<ActivityStatus> statusHistory = new ArrayList<>();
 		statusHistory.add(activityStatus);
 		ActivityDataSourceResult activityDataSourceResult = new ActivityDataSourceResult();
-
 		when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
 		when(activityDataSourceDao.getResult(RECRUITMENTNUMBER, activityDataSource))
 				.thenReturn(activityDataSourceResult);
 		ReportTemplate response = reportServiceBean.getParticipantReport(RECRUITMENTNUMBER, REPORTID);
-
 		assertTrue(response.getDataSources().get(0).getResult().get(0) instanceof ActivityDataSourceResult);
 		assertEquals(activityDataSourceResult.toString(),
 				response.getDataSources().get(0).getResult().get(0).toString());
@@ -134,29 +125,18 @@ public class ReportServiceBeanTest {
 
 	@Test
 	public void method_getReportByParticipant_should_returns_list_reports() throws Exception {
-		//TODO: implementar test
-		// ReportTemplate reportTemplate = new ReportTemplate();
-		// Participant participant = new Participant(RECRUITMENTNUMBER);
-		// FieldCenter fieldCenter = new FieldCenter();
-		// fieldCenter.setAcronym("SP");
-		// ArrayList<ReportTemplate> reports = new ArrayList<>();
-		// ArrayList<String> fieldCenter = new ArrayList<>();
-		//
-		// Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
-		// Whitebox.setInternalState(reportTemplate, "label", "teste");
-		// reports.add(reportTemplate);
-		// mockStatic(Participant.class);
-		// PowerMockito.when(Participant.class,
-		// "getFieldCenter").thenReturn(fieldCenter.getAcronym());
-		// PowerMockito.when(participantServiceBean.getByRecruitmentNumber(RECRUITMENTNUMBER));
-		// PowerMockito.when(reportDao.getByCenter("SP")).thenReturn(reports);
-		// System.out.println(reportDao.getByCenter("SP"));
-		// ArrayList<ReportTemplate> lista = new ArrayList<>();
-		// lista.addAll(reportServiceBean.getReportByParticipant(RECRUITMENTNUMBER));
-		// System.out.println(lista.toString());
-		// assertEquals(reports,
-		// reportServiceBean.getReportByParticipant(RECRUITMENTNUMBER));
-
+		ReportTemplate reportTemplate = new ReportTemplate();
+		Participant participant = new Participant(RECRUITMENTNUMBER);
+		FieldCenter fieldCenter = new FieldCenter();
+		fieldCenter.setAcronym("SP");
+		participant.setFieldCenter(fieldCenter);
+		ArrayList<ReportTemplate> reports = new ArrayList<>();
+		Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
+		Whitebox.setInternalState(reportTemplate, "label", "teste");
+		reports.add(reportTemplate);
+		PowerMockito.when(participantServiceBean.getByRecruitmentNumber(RECRUITMENTNUMBER)).thenReturn(participant);
+		PowerMockito.when(reportDao.getByCenter("SP")).thenReturn(reports);
+		assertEquals(reports, reportServiceBean.getReportByParticipant(RECRUITMENTNUMBER));
 	}
 
 	@Test
@@ -170,82 +150,72 @@ public class ReportServiceBeanTest {
 		assertEquals(REPORTID, reportServiceBean.create(reportTemplate, Mockito.anyString()));
 	}
 
-	 @Test
-	 public void method_delete_should_remove_report() throws Exception {
-	 PowerMockito.doNothing().when(reportDao,"deleteById",REPORTID);
-	 ReportServiceBean teste = Mockito.mock(ReportServiceBean.class);
-	 teste.delete(REPORTID);
-	 reportServiceBean.delete(REPORTID);
-	 Mockito.verify(teste, Mockito.times(1)).delete(REPORTID);
-	 }
+	@Test
+	public void method_delete_should_remove_report() throws Exception {
+		PowerMockito.doNothing().when(reportDao, "deleteById", REPORTID);
+		reportServiceBean.delete(REPORTID);
+		Mockito.verify(reportDao, Mockito.times(1)).deleteById(REPORTID);
+	}
 
-	 @Test
-	 public void method_list_should_returns_list_reports() {
-	 ReportTemplate reportTemplate = new ReportTemplate();
-	 ArrayList<String> fieldCenter = new ArrayList<>();
-	 ArrayList<ReportDataSource> dataSources = new ArrayList<>();
-	 fieldCenter.add("SP");
-	 dataSources = reportTemplate.getDataSources();
-	 List<ReportTemplate> reports = new ArrayList<>();
-	 Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
-	 Whitebox.setInternalState(reportTemplate, "label", "RELATORIO");
-	 Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
-	 Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
-	 Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
-	 reports.add(reportTemplate);
-	 PowerMockito.when(reportDao.getAll()).thenReturn(reports);
-	 assertEquals(reports, reportServiceBean.list());
-	
-	 }
-	
-	 @Test
-	 public void method_getById_should_return_report() throws DataNotFoundException {
-	 ReportTemplate reportTemplate = new ReportTemplate();
-	 ArrayList<String> fieldCenter = new ArrayList<>();
-	 ArrayList<ReportDataSource> dataSources = new ArrayList<>();
-	 fieldCenter.add("SP");
-	 dataSources = reportTemplate.getDataSources();
-	 List<ReportTemplate> reports = new ArrayList<>();
-	 Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
-	 Whitebox.setInternalState(reportTemplate, "label", "teste");
-	 Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
-	 Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
-	 Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
-	 reports.add(reportTemplate);
-	 PowerMockito.when(reportDao.getById(REPORTID)).thenReturn(reportTemplate);
-	 assertEquals(reportTemplate, reportServiceBean.getByID(REPORTID));
-	
-	 }
+	@Test
+	public void method_list_should_returns_list_reports() {
+		ReportTemplate reportTemplate = new ReportTemplate();
+		ArrayList<String> fieldCenter = new ArrayList<>();
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+		fieldCenter.add("SP");
+		dataSources = reportTemplate.getDataSources();
+		List<ReportTemplate> reports = new ArrayList<>();
+		Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
+		Whitebox.setInternalState(reportTemplate, "label", "RELATORIO");
+		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
+		Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
+		Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
+		reports.add(reportTemplate);
+		PowerMockito.when(reportDao.getAll()).thenReturn(reports);
+		assertEquals(reports, reportServiceBean.list());
+	}
 
-	 @Test
-	 public void method_update_should_alter_report() throws Exception {
-	 ReportTemplate reportTemplate = new ReportTemplate();
-	 ReportTemplate updateReport = new ReportTemplate();
-	 ArrayList<String> fieldCenter = new ArrayList<>();
-	 ArrayList<ReportDataSource> dataSources = new ArrayList<>();
-	 fieldCenter.add("SP");
-	 dataSources = reportTemplate.getDataSources();
-	
-	 Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
-	 Whitebox.setInternalState(reportTemplate, "label", "teste");
-	 Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
-	 Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
-	 Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
-	 Whitebox.setInternalState(updateReport, "_id", reportObjectId);
-	 Whitebox.setInternalState(updateReport, "label", "Novo Template");
-	 Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
-	 Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
-	 Whitebox.setInternalState(updateReport, "dataSources", dataSources);
-	 mockStatic(ReportTemplate.class);
-	 PowerMockito.when(ReportTemplate.class, "deserialize",
-	 Mockito.any()).thenReturn(updateReport);
-	 PowerMockito.when(ReportTemplate.class, "serialize",
-	 Mockito.any()).thenReturn(REPORT_UPDATE);
-	 PowerMockito.when(reportDao.update(Mockito.anyObject())).thenReturn(updateReport);
-	 assertEquals(updateReport, reportServiceBean.update(reportTemplate));
-	
-	
-	 }
+	@Test
+	public void method_getById_should_return_report() throws DataNotFoundException {
+		ReportTemplate reportTemplate = new ReportTemplate();
+		ArrayList<String> fieldCenter = new ArrayList<>();
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+		fieldCenter.add("SP");
+		dataSources = reportTemplate.getDataSources();
+		List<ReportTemplate> reports = new ArrayList<>();
+		Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
+		Whitebox.setInternalState(reportTemplate, "label", "teste");
+		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
+		Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
+		Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
+		reports.add(reportTemplate);
+		PowerMockito.when(reportDao.getById(REPORTID)).thenReturn(reportTemplate);
+		assertEquals(reportTemplate, reportServiceBean.getByID(REPORTID));
+	}
 
+	@Test
+	public void method_update_should_alter_report() throws Exception {
+		ReportTemplate reportTemplate = new ReportTemplate();
+		ReportTemplate updateReport = new ReportTemplate();
+		ArrayList<String> fieldCenter = new ArrayList<>();
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+		fieldCenter.add("SP");
+		dataSources = reportTemplate.getDataSources();
+		Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
+		Whitebox.setInternalState(reportTemplate, "label", "teste");
+		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
+		Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
+		Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
+		Whitebox.setInternalState(updateReport, "_id", reportObjectId);
+		Whitebox.setInternalState(updateReport, "label", "Novo Template");
+		Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
+		Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
+		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
+		mockStatic(ReportTemplate.class);
+		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
+		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(REPORT_UPDATE);
+		PowerMockito.when(reportDao.update(Mockito.anyObject())).thenReturn(updateReport);
+		assertEquals(updateReport, reportServiceBean.update(reportTemplate));
+	}
 
 }
