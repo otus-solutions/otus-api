@@ -18,53 +18,53 @@ import static org.junit.Assert.assertEquals;
 
 public class ActivityDataSourceResultTest {
 
-    private ActivityDataSourceResult activityDataSourceResult;
+	private ActivityDataSourceResult activityDataSourceResult;
 
-    private ActivityStatus activityStatus;
+	private ActivityStatus activityStatus;
 
-    private User user;
+	private User user;
 
-    private ActivityStatusOptions activityStatusOptions;
+	private ActivityStatusOptions activityStatusOptions;
 
-    private String activityDataSourceResultJson;
+	private String activityDataSourceResultJson;
 
-    private ArrayList<ActivityStatus> statusHistory;
+	private ArrayList<ActivityStatus> statusHistory;
 
-    @Before
-    public void setUp() {
-        activityStatusOptions = ActivityStatusOptions.CREATED;
+	@Before
+	public void setUp() {
+		activityStatusOptions = ActivityStatusOptions.CREATED;
 
-        user = new User();
-        Whitebox.setInternalState(user, "name", "Joao");
+		user = new User();
+		Whitebox.setInternalState(user, "name", "Joao");
 
-        activityStatus = new ActivityStatus();
-        Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
-        Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
-        Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
-        Whitebox.setInternalState(activityStatus, "user", user);
+		activityStatus = new ActivityStatus();
+		Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
+		Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
+		Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
+		Whitebox.setInternalState(activityStatus, "user", user);
 
-        statusHistory = new ArrayList<>();
-        statusHistory.add(activityStatus);
-        activityDataSourceResult = new ActivityDataSourceResult();
-        Whitebox.setInternalState(activityDataSourceResult, "statusHistory", statusHistory);
+		statusHistory = new ArrayList<>();
+		statusHistory.add(activityStatus);
+		activityDataSourceResult = new ActivityDataSourceResult();
+		Whitebox.setInternalState(activityDataSourceResult, "statusHistory", statusHistory);
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        activityDataSourceResultJson = builder.create().toJson(activityDataSourceResult);
-    }
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		activityDataSourceResultJson = builder.create().toJson(activityDataSourceResult);
+	}
 
-    @Test
-    public void method_serialize_should_return_json_of_activityDataSourceResult() {
-        assertEquals(activityDataSourceResultJson,ActivityDataSourceResult.serialize(activityDataSourceResult));
-    }
+	@Test
+	public void method_serialize_should_return_json_of_activityDataSourceResult() {
+		assertEquals(activityDataSourceResultJson, ActivityDataSourceResult.serialize(activityDataSourceResult));
+	}
 
-    @Test
-    public void method_deserialize_should_return_activityDataSourceResult() {
-        ActivityDataSourceResult result = ActivityDataSourceResult.deserialize(activityDataSourceResultJson);
-        assertEquals(result.getStatusHistory().get(0).getUser().getName(),activityStatus.getUser().getName());
-        assertEquals(result.getStatusHistory().get(0).getObjectType(),activityStatus.getObjectType());
-        assertEquals(result.getStatusHistory().get(0).getName(),activityStatus.getName());
-        assertEquals(result.getStatusHistory().get(0).getDate(),activityStatus.getDate());
-    }
+	@Test
+	public void method_deserialize_should_return_activityDataSourceResult() {
+		ActivityDataSourceResult result = ActivityDataSourceResult.deserialize(activityDataSourceResultJson);
+		assertEquals(result.getStatusHistory().get(0).getUser().getName(), activityStatus.getUser().getName());
+		assertEquals(result.getStatusHistory().get(0).getObjectType(), activityStatus.getObjectType());
+		assertEquals(result.getStatusHistory().get(0).getName(), activityStatus.getName());
+		assertEquals(result.getStatusHistory().get(0).getDate(), activityStatus.getDate());
+	}
 
 }

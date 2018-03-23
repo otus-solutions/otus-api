@@ -6,7 +6,6 @@ import org.bson.Document;
 import org.ccem.otus.model.dataSources.examResult.ExamResultDataSource;
 import org.ccem.otus.model.dataSources.examResult.ExamResultDataSourceResult;
 import org.ccem.otus.persistence.ExamResultDataSourceDao;
-import org.json.JSONObject;
 
 import com.mongodb.client.AggregateIterable;
 
@@ -22,14 +21,14 @@ public class ExamResultDataSourceDaoBean extends MongoGenericDao<Document> imple
 
 	@Override
 	public ExamResultDataSourceResult getResult(Long recruitmentNumber, ExamResultDataSource examDataSource) {
-		
+
 		ExamResultDataSourceResult result = null;
 		ArrayList<Document> query = examDataSource.builtQuery(recruitmentNumber);
 		AggregateIterable output = collection.aggregate(query);
 
 		for (Object anOutput : output) {
 			Document next = (Document) anOutput;
-			result = ExamResultDataSourceResult.deserialize(new JSONObject(next).toString());
+			result = ExamResultDataSourceResult.deserialize(next.toJson());
 		}
 
 		return result;

@@ -1,13 +1,15 @@
 package org.ccem.otus.model.dataSources.examResult;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.bson.types.ObjectId;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import com.google.gson.GsonBuilder;
 
 import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.utils.ObjectIdAdapter;
 
 public class ExamResultDataSourceResult {
 
@@ -18,13 +20,14 @@ public class ExamResultDataSourceResult {
 	}
 
 	public static ExamResultDataSourceResult deserialize(String DataSource) {
-		GsonBuilder builder = ExamResultDataSourceResult.getGsonBuilder();
-		return builder.create().fromJson(DataSource, ExamResultDataSourceResult.class);
+		return ExamResultDataSourceResult.getGsonBuilder().create().fromJson(DataSource, ExamResultDataSourceResult.class);
 	}
 
 	private static GsonBuilder getGsonBuilder() {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+
 		return builder;
 	}
 
