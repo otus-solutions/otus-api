@@ -56,8 +56,8 @@ public class ExamResultDataSource extends ReportDataSource<ExamResultDataSourceR
 	}
 
 	private void appendMatchReleaseDateInQuery() {
-		if (this.filters.getRealizationDate() != null) {
-			Document match = new Document("$match", new Document("examResults.releaseDate", this.filters.getRealizationDate()));
+		if (this.filters.getReleaseDate() != null) {
+			Document match = new Document("$match", new Document("examResults.releaseDate", this.filters.getReleaseDate()));
 			this.query.add(match);
 		}
 	}

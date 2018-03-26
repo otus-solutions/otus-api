@@ -17,9 +17,10 @@ public class ExamResultDataSourceTest {
 	private static final String FIELD_CENTER_ACRONYM = "acronym";
 
 	private static final String EXPECTED_RESULT = "[Document{{$match=Document{{objectType=Exam, name=TRIGLICÉRIDES - SANGUE}}}}, Document{{$lookup=Document{{from=exam_result, localField=_id, foreignField=examId, as=examResults}}}}, Document{{$match=Document{{examResults.recruitmentNumber=1063154}}}}, Document{{$match=Document{{examResults.releaseDate=2018-03-21T17:42:17.205Z}}}}, Document{{$lookup=Document{{from=exam_sending_lot, localField=examSendingLotId, foreignField=_id, as=examSendingLot}}}}, Document{{$match=Document{{examSendingLot.fieldCenter.acronym=RS}}}}]";
-	private static final String FILTER_EXAM_NAME = "name";
-	private static final CharSequence FILTER_REALIZATION_DATE = "releaseDate";
-	private static final CharSequence FILTER_FIELD_CENTER_ACRONYM = "fieldCenter.acronym";
+
+	private static final String RESULT_FILTER_EXAM_NAME = "name";
+	private static final CharSequence RESULT_FILTER_REALIZATION_DATE = "releaseDate";
+	private static final CharSequence RESULT_FILTER_FIELD_CENTER_ACRONYM = "fieldCenter.acronym";
 
 	private static final String VALUE_RS = "RS";
 
@@ -34,7 +35,7 @@ public class ExamResultDataSourceTest {
 		Whitebox.setInternalState(fieldCenterFilter, FIELD_CENTER_ACRONYM, VALUE_RS);
 
 		Whitebox.setInternalState(filters, "examName", "TRIGLICÉRIDES - SANGUE");
-		Whitebox.setInternalState(filters, "realizationDate", "2018-03-21T17:42:17.205Z");
+		Whitebox.setInternalState(filters, "releaseDate", "2018-03-21T17:42:17.205Z");
 		Whitebox.setInternalState(filters, "fieldCenter", fieldCenterFilter);
 	}
 
@@ -59,8 +60,8 @@ public class ExamResultDataSourceTest {
 		Whitebox.setInternalState(examResultDataSource, "filters", filters);
 		ArrayList<Document> query = examResultDataSource.builtQuery(RECRUITMENT_NUMBER);
 
-		assertTrue(query.toString().contains(FILTER_FIELD_CENTER_ACRONYM));
-		assertTrue(query.toString().contains(FILTER_EXAM_NAME));
-		assertTrue(query.toString().contains(FILTER_REALIZATION_DATE));
+		assertTrue(query.toString().contains(RESULT_FILTER_FIELD_CENTER_ACRONYM));
+		assertTrue(query.toString().contains(RESULT_FILTER_EXAM_NAME));
+		assertTrue(query.toString().contains(RESULT_FILTER_REALIZATION_DATE));
 	}
 }
