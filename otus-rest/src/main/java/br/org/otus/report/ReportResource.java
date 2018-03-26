@@ -61,7 +61,7 @@ public class ReportResource {
     public String update(String reportTemplateJson) {
     	ReportTemplate examReport = ReportTemplate.deserialize(reportTemplateJson);
     	ReportTemplate updatedReport = reportFacade.update(examReport);
-    	return new Response().buildSuccess(ReportTemplate.serialize(updatedReport)).toJson();
+    	return new Response().buildSuccess(updatedReport).toCustomJson(ReportTemplate.getGsonBuilder());
     }
     
     @DELETE
