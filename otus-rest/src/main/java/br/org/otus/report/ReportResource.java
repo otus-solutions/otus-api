@@ -30,30 +30,39 @@ public class ReportResource {
     @Inject
     private SecurityContext securityContext;
 
-    @GET
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/participant/{recruitmentNumber}/{reportId}")
-    public String getByRecruitmentNumber(@PathParam("recruitmentNumber") Long recruitmentNumber,@PathParam("reportId") String reportId){
-        return new Response().buildSuccess(ReportTemplate.serialize(reportFacade.getParticipantReport(recruitmentNumber,reportId))).toJson();
-    }
-    
-    @GET
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/participant/list/{recruitmentNumber}")
-    public String getByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber){
-        return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toCustomJson(ReportTemplate.getGsonBuilder());
-    }
-    
     @POST
     @Secured
     @Produces (MediaType.APPLICATION_JSON)
     @Consumes (MediaType.APPLICATION_JSON)
     public String create(@Context HttpServletRequest request, String reportTemplateJson){
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-        return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toJson();
+    	String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    	String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    	return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toJson();
+    }
+    
+    @GET
+    @Secured
+    @Produces (MediaType.APPLICATION_JSON)
+    @Path("/list")
+    public String list(){
+    	return new Response().buildSuccess(reportFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
+    }
+    
+    @GET
+    @Secured
+    @Path("/list/{id}")
+    @Produces (MediaType.APPLICATION_JSON)
+    public String getById(@PathParam("id") String id){
+    	return new Response().buildSuccess(reportFacade.getById(id)).toCustomJson(ReportTemplate.getGsonBuilder());
+    }
+    
+    @PUT
+    @Secured
+    @Produces (MediaType.APPLICATION_JSON)
+    public String update(String reportTemplateJson) {
+    	ReportTemplate examReport = ReportTemplate.deserialize(reportTemplateJson);
+    	ReportTemplate updatedReport = reportFacade.update(examReport);
+    	return new Response().buildSuccess(ReportTemplate.serialize(updatedReport)).toJson();
     }
     
     @DELETE
@@ -67,27 +76,17 @@ public class ReportResource {
     
     @GET
     @Secured
-    @Produces (MediaType.APPLICATION_JSON)
-    @Path("/list")
-    public String list(){
-        return new Response().buildSuccess(reportFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/participant/list/{recruitmentNumber}")
+    public String getByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber){
+    	return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toCustomJson(ReportTemplate.getGsonBuilder());
     }
-    
     
     @GET
     @Secured
-    @Path("/list/{id}")
-    @Produces (MediaType.APPLICATION_JSON)
-    public String getById(@PathParam("id") String id){
-        return new Response().buildSuccess(reportFacade.getById(id)).toCustomJson(ReportTemplate.getGsonBuilder());
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/participant/{recruitmentNumber}/{reportId}")
+    public String getByRecruitmentNumber(@PathParam("recruitmentNumber") Long recruitmentNumber,@PathParam("reportId") String reportId){
+    	return new Response().buildSuccess(ReportTemplate.serialize(reportFacade.getParticipantReport(recruitmentNumber,reportId))).toJson();
     }
-    
-    @PUT
-	@Secured
-	@Produces (MediaType.APPLICATION_JSON)
-	public String update(String reportTemplateJson) {
-		ReportTemplate examReport = ReportTemplate.deserialize(reportTemplateJson);
-		ReportTemplate updatedReport = reportFacade.update(examReport);
-		return new Response().buildSuccess(ReportTemplate.serialize(updatedReport)).toJson();
-	}
 }
