@@ -88,7 +88,7 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(reportTemplate, "_id", id);
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		when(reportFacade.getParticipantReport(recruitmentNumber,REPORT_ID)).thenReturn(reportTemplate);
-		assertEquals(reportResource.getByRecruitmentNumber(recruitmentNumber, REPORT_ID), REPORT_BY_RN);
+		assertEquals(reportResource.getParticipantReport(recruitmentNumber, REPORT_ID), REPORT_BY_RN);
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		reports.add(reportTemplate);
 		when(reportFacade.getReportByParticipant(recruitmentNumber)).thenReturn(reports);
-		assertEquals(reportResource.getByParticipant(recruitmentNumber), PARTICIPANT_LIST);
+		assertEquals(reportResource.listByParticipant(recruitmentNumber), PARTICIPANT_LIST);
 	}
 
 	@Test
