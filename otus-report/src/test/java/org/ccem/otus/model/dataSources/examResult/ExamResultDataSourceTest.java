@@ -33,7 +33,7 @@ public class ExamResultDataSourceTest {
 		ExamResultDataSourceFieldCenterFilter fieldCenterFilter = new ExamResultDataSourceFieldCenterFilter();
 		Whitebox.setInternalState(fieldCenterFilter, FIELD_CENTER_ACRONYM, VALUE_RS);
 
-		Whitebox.setInternalState(filters, "name", "TRIGLICÉRIDES - SANGUE");
+		Whitebox.setInternalState(filters, "examName", "TRIGLICÉRIDES - SANGUE");
 		Whitebox.setInternalState(filters, "realizationDate", "2018-03-21T17:42:17.205Z");
 		Whitebox.setInternalState(filters, "fieldCenter", fieldCenterFilter);
 	}

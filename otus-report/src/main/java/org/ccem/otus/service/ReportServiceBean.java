@@ -37,7 +37,7 @@ public class ReportServiceBean implements ReportService {
 			} else if (dataSource instanceof ActivityDataSource) {
 				((ActivityDataSource) dataSource).getResult().add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
 			} else if (dataSource instanceof ExamResultDataSource) {
-				((ExamResultDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamResultDataSource) dataSource));
+				((ExamResultDataSource) dataSource).getResult().addAll(examDataSourceDao.getResult(recruitmentNumber, (ExamResultDataSource) dataSource));
 			}
 		}
 		return report;

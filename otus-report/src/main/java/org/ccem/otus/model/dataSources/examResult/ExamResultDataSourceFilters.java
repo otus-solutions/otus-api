@@ -2,12 +2,12 @@ package org.ccem.otus.model.dataSources.examResult;
 
 public class ExamResultDataSourceFilters {
 
-	private String name;
+	private String examName;
 	private String realizationDate;
 	private ExamResultDataSourceFieldCenterFilter fieldCenter;
 
-	public String getName() {
-		return name;
+	public String getExamName() {
+		return examName;
 	}
 
 	public String getRealizationDate() {

@@ -40,8 +40,8 @@ public class ExamResultDataSource extends ReportDataSource<ExamResultDataSourceR
 	}
 
 	private void appendExamName(Document matchStage) {
-		if (this.filters.getName() != null) {
-			matchStage.append("name", this.filters.getName());
+		if (this.filters.getExamName() != null) {
+			matchStage.append("name", this.filters.getExamName());
 		}
 	}
 
