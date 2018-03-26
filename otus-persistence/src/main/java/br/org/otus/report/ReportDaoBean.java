@@ -41,11 +41,6 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public boolean getResults(ReportTemplate reportTemplate) {
-		return true;
-	}
-
-	@Override
 	public ObjectId insert(ReportTemplate reportTemplate) {
 		Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
 		super.persist(parsed);

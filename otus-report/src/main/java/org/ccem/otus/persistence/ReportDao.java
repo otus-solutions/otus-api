@@ -13,8 +13,6 @@ public interface ReportDao {
    ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException;
    
    ObjectId insert(ReportTemplate report);
-
-   boolean getResults(ReportTemplate reportTemplate);
    
    void deleteById(String id) throws DataNotFoundException;
    

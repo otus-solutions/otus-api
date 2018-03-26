@@ -57,8 +57,7 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public String create(ReportTemplate reportTemplate, String userEmail)
-			throws DataNotFoundException, ValidationException {
+	public String create(ReportTemplate reportTemplate, String userEmail) {
 		ObjectId reportId = reportDao.insert(reportTemplate);
 		return reportId.toString();
 	}
@@ -79,7 +78,7 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException {
+	public ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException {
 		ReportTemplate updateResult = reportDao.update(reportTemplate);
 		return updateResult;
 	}

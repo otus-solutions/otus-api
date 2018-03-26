@@ -43,14 +43,13 @@ public class ReportResource {
     @GET
     @Secured
     @Produces (MediaType.APPLICATION_JSON)
-    @Path("/list")
     public String list(){
     	return new Response().buildSuccess(reportFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
     }
     
     @GET
     @Secured
-    @Path("/list/{id}")
+    @Path("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public String getById(@PathParam("id") String id){
     	return new Response().buildSuccess(reportFacade.getById(id)).toCustomJson(ReportTemplate.getGsonBuilder());
@@ -78,7 +77,7 @@ public class ReportResource {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/participant/list/{recruitmentNumber}")
-    public String getByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber){
+    public String listByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber){
     	return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toCustomJson(ReportTemplate.getGsonBuilder());
     }
     
@@ -86,7 +85,7 @@ public class ReportResource {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/participant/{recruitmentNumber}/{reportId}")
-    public String getByRecruitmentNumber(@PathParam("recruitmentNumber") Long recruitmentNumber,@PathParam("reportId") String reportId){
+    public String getParticipantReport(@PathParam("recruitmentNumber") Long recruitmentNumber,@PathParam("reportId") String reportId){
     	return new Response().buildSuccess(ReportTemplate.serialize(reportFacade.getParticipantReport(recruitmentNumber,reportId))).toJson();
     }
 }
