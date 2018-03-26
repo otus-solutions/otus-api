@@ -78,7 +78,7 @@ public class ReportResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/participant/list/{recruitmentNumber}")
     public String listByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber){
-    	return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toCustomJson(ReportTemplate.getGsonBuilder());
+    	return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toSurveyJson();
     }
     
     @GET
