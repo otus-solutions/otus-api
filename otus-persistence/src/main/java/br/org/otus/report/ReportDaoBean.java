@@ -66,12 +66,8 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	@Override
 	public List<ReportTemplate> getByCenter(String fieldCenter) {
 		ArrayList<ReportTemplate> results = new ArrayList<>();
-
 		Document query = new Document("fieldCenter", fieldCenter);
 		Document projection = new Document("label", 1);
-//		projection.put("id", 1)
-		
-		
 		MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).projection(projection).iterator();
 
 		while (iterator.hasNext()) {
