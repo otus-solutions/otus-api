@@ -2,7 +2,7 @@ package org.ccem.otus.enums;
 
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.examResult.ExamResultDataSource;
+import org.ccem.otus.model.dataSources.exam.ExamResultDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 
 public enum DataSourceMapping {

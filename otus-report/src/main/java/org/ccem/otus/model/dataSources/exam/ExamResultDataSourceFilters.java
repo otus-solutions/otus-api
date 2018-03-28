@@ -1,10 +1,12 @@
-package org.ccem.otus.model.dataSources.examResult;
+package org.ccem.otus.model.dataSources.exam;
+
+import java.util.List;
 
 public class ExamResultDataSourceFilters {
 
 	private String examName;
 	private String releaseDate;
-	private ExamResultDataSourceFieldCenterFilter fieldCenter;
+	private List<String> fieldCenters;
 
 	public String getExamName() {
 		return this.examName;
@@ -14,8 +16,8 @@ public class ExamResultDataSourceFilters {
 		return this.releaseDate;
 	}
 
-	public ExamResultDataSourceFieldCenterFilter getFieldCenter() {
-		return this.fieldCenter;
+	public List<String> getFieldCenters() {
+		return fieldCenters;
 	}
 
 }

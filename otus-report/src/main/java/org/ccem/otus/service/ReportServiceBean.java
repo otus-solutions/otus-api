@@ -8,7 +8,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.examResult.ExamResultDataSource;
+import org.ccem.otus.model.dataSources.exam.ExamResultDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.persistence.ActivityDataSourceDao;
 import org.ccem.otus.persistence.ExamResultDataSourceDao;

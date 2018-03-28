@@ -2,11 +2,11 @@ package org.ccem.otus.persistence;
 
 import java.util.List;
 
-import org.ccem.otus.model.dataSources.examResult.ExamResultDataSource;
-import org.ccem.otus.model.dataSources.examResult.ExamResultDataSourceResult;
+import org.ccem.otus.model.dataSources.exam.ExamDataSourceResult;
+import org.ccem.otus.model.dataSources.exam.ExamResultDataSource;
 
 public interface ExamResultDataSourceDao {
 
-	List<ExamResultDataSourceResult> getResult(Long recruitmentNumber, ExamResultDataSource examDataSource);
+	List<ExamDataSourceResult> getResult(Long recruitmentNumber, ExamResultDataSource examDataSource);
 
 }

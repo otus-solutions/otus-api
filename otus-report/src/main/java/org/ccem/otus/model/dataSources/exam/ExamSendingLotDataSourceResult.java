@@ -1,4 +1,4 @@
-package org.ccem.otus.model.dataSources.examResult;
+package org.ccem.otus.model.dataSources.exam;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
@@ -6,19 +6,17 @@ import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.utils.ObjectIdAdapter;
 
-public class ExamResultDataSourceResult {
+public class ExamSendingLotDataSourceResult {
+	private ObjectId _id;
 
-	private Exam exam;
-
-	public static String serialize(ExamResultDataSourceResult examResultDataSourceResult) {
+	public static String serialize(ExamDataSourceResult examResultDataSourceResult) {
 		return getGsonBuilder().create().toJson(examResultDataSourceResult);
 	}
 
-	public static ExamResultDataSourceResult deserialize(String DataSource) {
-		return ExamResultDataSourceResult.getGsonBuilder().create().fromJson(DataSource, ExamResultDataSourceResult.class);
+	public static ExamSendingLotDataSourceResult deserialize(String DataSource) {
+		return ExamSendingLotDataSourceResult.getGsonBuilder().create().fromJson(DataSource, ExamSendingLotDataSourceResult.class);
 	}
 
 	private static GsonBuilder getGsonBuilder() {
@@ -29,7 +27,7 @@ public class ExamResultDataSourceResult {
 		return builder;
 	}
 
-	public Exam getExam() {
-		return exam;
+	public ObjectId getObjectId() {
+		return _id;
 	}
 }

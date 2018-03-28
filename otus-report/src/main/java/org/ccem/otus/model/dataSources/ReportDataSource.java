@@ -1,8 +1,8 @@
 package org.ccem.otus.model.dataSources;
 
-import org.bson.Document;
-
 import java.util.ArrayList;
+
+import org.bson.Document;
 
 public abstract class ReportDataSource<T> {
 	private String key;
