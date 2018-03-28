@@ -42,16 +42,16 @@ public class ReportResourceTest {
 	private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 	private static final Long recruitmentNumber = (Long) 5001007L;
 	private static final String label = "teste";
-	private static final String PARTICIPANT_LIST = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"label\":\"teste\"}]}";
+	private static final String PARTICIPANT_LIST = "{\"data\":[{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"fieldCenter\":null,\"dataSources\":null}]}";
 	private static final String REPORT_ID = "5ab3a88013cdd20490873afe";
 	private static final String reportUploadJson = "{\"template\" : \"<span></span>\",\"label\": \"tiago\",\"fieldCenter\": [],\"dataSources\" : [{\"key\" : \"HS\",\"label\": \"tester\", \"dataSource\" : \"Participant\",\"filters\" : {\"statusHistory\" : {\"name\" : \"FINALIZED\",\"position\" : -1},\"acronym\" : \"TF\",\"category\" : \"C0\"}}]}";
 	private static final String reportJson = "{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}";
 	private static final String USER_MAIL = "otus@otus.com";
 	private static final String RESULT = "{\"data\":true}";
-	private static final String REPORT_BY_RN = "{\"data\":\"{\\\"_id\\\":{\\\"$oid\\\":\\\"5ab128d713cdd20490497f58\\\"},\\\"label\\\":\\\"teste\\\"}\"}";
+	private static final String REPORT_BY_RN = "{\"data\":{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"fieldCenter\":null,\"dataSources\":null}}";
 	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
 	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
-	private static final Object REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}"; 
+	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
 	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 	
 	@InjectMocks
@@ -83,22 +83,22 @@ public class ReportResourceTest {
 	}
 
 	@Test
-	public void method_GetByRecruitmentNumber_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
+	public void method_getParticipantReport_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
 		reportTemplate = new ReportTemplate();
 		Whitebox.setInternalState(reportTemplate, "_id", id);
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		when(reportFacade.getParticipantReport(recruitmentNumber,REPORT_ID)).thenReturn(reportTemplate);
-		assertEquals(reportResource.getParticipantReport(recruitmentNumber, REPORT_ID), REPORT_BY_RN);
+		assertEquals(REPORT_BY_RN, reportResource.getParticipantReport(recruitmentNumber, REPORT_ID));
 	}
 
 	@Test
-	public void method_getByParticipant_should_returns_datasourceLists() throws DataNotFoundException {
+	public void method_listByParticipant_should_returns_datasourceLists() throws DataNotFoundException {
 		reportTemplate = new ReportTemplate();
 		Whitebox.setInternalState(reportTemplate, "_id", id);
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		reports.add(reportTemplate);
 		when(reportFacade.getReportByParticipant(recruitmentNumber)).thenReturn(reports);
-		assertEquals(reportResource.listByParticipant(recruitmentNumber), PARTICIPANT_LIST);
+		assertEquals(PARTICIPANT_LIST, reportResource.listByParticipant(recruitmentNumber));
 	}
 
 	@Test
@@ -168,14 +168,12 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(report, "template", "<span></span>");
 		Whitebox.setInternalState(report, "fieldCenter", fieldCenter);
 		Whitebox.setInternalState(report, "dataSources", dataSources);
+
 		Whitebox.setInternalState(updateReport, "_id", id);
 		Whitebox.setInternalState(updateReport, "label", "Novo Template");
 		Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
 		Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
 		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
-		mockStatic(ReportTemplate.class);		
-		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
-		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(reportUploadJson);
 		PowerMockito.when(reportFacade.update(Mockito.anyObject())).thenReturn(updateReport);
 		assertEquals(REPORT_UPDATE, reportResource.update(reportJson));
 	}
