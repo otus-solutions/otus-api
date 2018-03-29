@@ -20,6 +20,26 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 		return this.builtQueryToExamSendingLot(recruitmentNumber);
 	}
 
+	public ArrayList<Document> builtQueryToExamResults(ObjectId objectId) {
+		ArrayList<Document> query = new ArrayList<>();
+
+		Document examSendingLotId = new Document("$match", new Document("examSendingLotId", objectId));
+		query.add(examSendingLotId);
+
+		Document objectType = new Document("$match", new Document("objectType", "Exam"));
+		query.add(objectType);
+
+		if (this.filters.getExamName() != null) {
+			Document examName = new Document("$match", new Document("name", this.filters.getExamName()));
+			query.add(examName);
+		}
+
+		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examId").append("as", "examResults"));
+		query.add(lookup);
+
+		return query;
+	}
+
 	private ArrayList<Document> builtQueryToExamSendingLot(Long recruitmentNumber) {
 		ArrayList<Document> query = new ArrayList<>();
 
@@ -47,26 +67,6 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 
 		Document limitToResults = new Document("$limit", 1);
 		query.add(limitToResults);
-
-		return query;
-	}
-
-	public ArrayList<Document> builtQueryToExamResults(ObjectId objectId) {
-		ArrayList<Document> query = new ArrayList<>();
-
-		Document examSendingLotId = new Document("$match", new Document("examSendingLotId", objectId));
-		query.add(examSendingLotId);
-
-		Document objectType = new Document("$match", new Document("objectType", "Exam"));
-		query.add(objectType);
-
-		if (this.filters.getExamName() != null) {
-			Document examName = new Document("$match", new Document("name", this.filters.getExamName()));
-			query.add(examName);
-		}
-
-		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examId").append("as", "examResults"));
-		query.add(lookup);
 
 		return query;
 	}
