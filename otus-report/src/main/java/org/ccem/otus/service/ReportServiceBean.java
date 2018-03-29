@@ -8,10 +8,10 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.exam.ExamResultDataSource;
+import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.persistence.ActivityDataSourceDao;
-import org.ccem.otus.persistence.ExamResultDataSourceDao;
+import org.ccem.otus.persistence.ExamDataSourceDao;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 import org.ccem.otus.persistence.ReportDao;
 
@@ -25,7 +25,7 @@ public class ReportServiceBean implements ReportService {
 	@Inject
 	private ActivityDataSourceDao activityDataSourceDao;
 	@Inject
-	private ExamResultDataSourceDao examDataSourceDao;
+	private ExamDataSourceDao examDataSourceDao;
 
 	@Override
 	public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException {
@@ -36,8 +36,8 @@ public class ReportServiceBean implements ReportService {
 				((ParticipantDataSource) dataSource).getResult().add(participantDataSourceDao.getResult(recruitmentNumber, (ParticipantDataSource) dataSource));
 			} else if (dataSource instanceof ActivityDataSource) {
 				((ActivityDataSource) dataSource).getResult().add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
-			} else if (dataSource instanceof ExamResultDataSource) {
-				((ExamResultDataSource) dataSource).getResult().addAll(examDataSourceDao.getResult(recruitmentNumber, (ExamResultDataSource) dataSource));
+			} else if (dataSource instanceof ExamDataSource) {
+				((ExamDataSource) dataSource).getResult().addAll(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
 			}
 		}
 		return report;

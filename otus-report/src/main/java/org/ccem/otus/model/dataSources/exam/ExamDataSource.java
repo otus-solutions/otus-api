@@ -6,11 +6,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 
-public class ExamResultDataSource extends ReportDataSource<ExamDataSourceResult> {
+public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 
-	private ExamResultDataSourceFilters filters;
-	private ArrayList<Document> query;
-	private Long recruitmentNumber;
+	private ExamDataSourceFilters filters;
 
 	@Override
 	public void addResult(ExamDataSourceResult result) {
@@ -19,58 +17,58 @@ public class ExamResultDataSource extends ReportDataSource<ExamDataSourceResult>
 
 	@Override
 	public ArrayList<Document> builtQuery(Long recruitmentNumber) {
-		this.query = new ArrayList<>();
-		this.recruitmentNumber = recruitmentNumber;
-
-		this.builtQueryToExamSendingLot(recruitmentNumber);
-
-		return this.query;
+		return this.builtQueryToExamSendingLot(recruitmentNumber);
 	}
 
 	private ArrayList<Document> builtQueryToExamSendingLot(Long recruitmentNumber) {
-		this.query = new ArrayList<>();
+		ArrayList<Document> query = new ArrayList<>();
 
 		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examSendingLotId").append("as", "exam"));
-		this.query.add(lookup);
+		query.add(lookup);
 
 		Document objectType = new Document("$match", new Document("exam.objectType", "Exam"));
-		this.query.add(objectType);
+		query.add(objectType);
 
 		if (this.filters.getExamName() != null) {
 			Document examName = new Document("$match", new Document("exam.name", this.filters.getExamName()));
-			this.query.add(examName);
+			query.add(examName);
 		}
 
-		Document participantRecruitmentNumber = new Document("$match", new Document("exam.recruitmentNumber", this.recruitmentNumber));
-		this.query.add(participantRecruitmentNumber);
+		Document participantRecruitmentNumber = new Document("$match", new Document("exam.recruitmentNumber", recruitmentNumber));
+		query.add(participantRecruitmentNumber);
 
-		Document sortResults = new Document("$sort", new Document("service.apps.updates.date", 1));
-		this.query.add(sortResults);
+		if (this.filters.getFieldCenter() != null) {
+			Document fieldCenters = new Document("$match", new Document("fieldCenter.acronym", this.filters.getFieldCenter()));
+			query.add(fieldCenters);
+		}
+
+		Document sortResults = new Document("$sort", new Document("realizationDate", 1));
+		query.add(sortResults);
 
 		Document limitToResults = new Document("$limit", 1);
-		this.query.add(limitToResults);
+		query.add(limitToResults);
 
-		return this.query;
+		return query;
 	}
 
 	public ArrayList<Document> builtQueryToExamResults(ObjectId objectId) {
-		this.query = new ArrayList<>();
+		ArrayList<Document> query = new ArrayList<>();
 
 		Document examSendingLotId = new Document("$match", new Document("examSendingLotId", objectId));
-		this.query.add(examSendingLotId);
+		query.add(examSendingLotId);
 
 		Document objectType = new Document("$match", new Document("objectType", "Exam"));
-		this.query.add(objectType);
+		query.add(objectType);
 
 		if (this.filters.getExamName() != null) {
 			Document examName = new Document("$match", new Document("name", this.filters.getExamName()));
-			this.query.add(examName);
+			query.add(examName);
 		}
 
 		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examId").append("as", "examResults"));
-		this.query.add(lookup);
+		query.add(lookup);
 
-		return this.query;
+		return query;
 	}
 
 }

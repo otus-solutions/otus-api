@@ -7,16 +7,16 @@ import javax.inject.Inject;
 
 import org.bson.Document;
 import org.ccem.otus.model.dataSources.exam.ExamDataSourceResult;
-import org.ccem.otus.model.dataSources.exam.ExamResultDataSource;
+import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.exam.ExamSendingLotDataSourceResult;
-import org.ccem.otus.persistence.ExamResultDataSourceDao;
+import org.ccem.otus.persistence.ExamDataSourceDao;
 import org.json.JSONObject;
 
 import com.mongodb.client.AggregateIterable;
 
 import br.org.mongodb.MongoGenericDao;
 
-public class ExamResultDataSourceDaoBean extends MongoGenericDao<Document> implements ExamResultDataSourceDao {
+public class ExamDataSourceDaoBean extends MongoGenericDao<Document> implements ExamDataSourceDao {
 
 	private static final String COLLECTION_NAME = "exam_result";
 	private List<ExamDataSourceResult> result;
@@ -24,12 +24,12 @@ public class ExamResultDataSourceDaoBean extends MongoGenericDao<Document> imple
 	@Inject
 	private ExamSendingLotDataSourceDaoBean examSendingLotDataSource;
 
-	public ExamResultDataSourceDaoBean() {
+	public ExamDataSourceDaoBean() {
 		super(COLLECTION_NAME, Document.class);
 	}
 
 	@Override
-	public List<ExamDataSourceResult> getResult(Long recruitmentNumber, ExamResultDataSource examDataSource) {
+	public List<ExamDataSourceResult> getResult(Long recruitmentNumber, ExamDataSource examDataSource) {
 		this.result = new ArrayList<>();
 		ExamSendingLotDataSourceResult examSendingLot = null;
 

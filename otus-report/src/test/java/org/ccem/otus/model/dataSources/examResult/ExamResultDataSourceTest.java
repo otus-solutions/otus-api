@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 
 import org.bson.Document;
-import org.ccem.otus.model.dataSources.exam.ExamResultDataSource;
-import org.ccem.otus.model.dataSources.exam.ExamResultDataSourceFilters;
+import org.ccem.otus.model.dataSources.exam.ExamDataSource;
+import org.ccem.otus.model.dataSources.exam.ExamDataSourceFilters;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -28,13 +28,13 @@ public class ExamResultDataSourceTest {
 
 	private static final String VALUE_RS = "RS";
 
-	private ExamResultDataSource examResultDataSource;
-	private ExamResultDataSourceFilters filters;
+	private ExamDataSource examResultDataSource;
+	private ExamDataSourceFilters filters;
 
 	@Before
 	public void setUp() {
-		examResultDataSource = new ExamResultDataSource();
-		filters = new ExamResultDataSourceFilters();
+		examResultDataSource = new ExamDataSource();
+		filters = new ExamDataSourceFilters();
 		// ExamDataSourceFieldCenterFilter fieldCenterFilter = new
 		// ExamDataSourceFieldCenterFilter();
 		// Whitebox.setInternalState(fieldCenterFilter, FIELD_CENTER_ACRONYM, VALUE_RS);
