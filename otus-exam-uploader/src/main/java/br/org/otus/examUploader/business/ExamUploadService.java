@@ -22,7 +22,7 @@ public interface ExamUploadService {
 
     List<Exam> getAllByExamSendingLotId(ObjectId id) throws DataNotFoundException;
 
-    void validateExamResults(List<ExamResult> examResults) throws DataNotFoundException, ValidationException;
+    void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException;
 
     void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
 }

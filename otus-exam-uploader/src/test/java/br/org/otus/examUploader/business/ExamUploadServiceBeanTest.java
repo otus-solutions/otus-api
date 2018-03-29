@@ -66,7 +66,7 @@ public class ExamUploadServiceBeanTest {
         PowerMockito.when(examUploadDTO.getExamSendingLot()).thenReturn(examSendingLot);
         PowerMockito.when(exam.getExamResults()).thenReturn(examResults);
 
-        Mockito.doThrow(new ValidationException()).when(service).validateExamResults(Mockito.any());
+        Mockito.doThrow(new ValidationException()).when(service).validateExamResults(Mockito.any(), Mockito.anyBoolean());
 
         try{
             service.create(examUploadDTO, EMAIL_STRING);
@@ -111,7 +111,7 @@ public class ExamUploadServiceBeanTest {
 
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
 
-        service.validateExamResults(resultsToVerify);
+        service.validateExamResults(resultsToVerify, examSendingLot.isForcedSave());
     }
 
     @Test (expected = ValidationException.class)
@@ -124,7 +124,21 @@ public class ExamUploadServiceBeanTest {
         resultsToVerify.add(examResult);
 
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
-        service.validateExamResults(resultsToVerify);
+        service.validateExamResults(resultsToVerify, false);
+
+    }
+
+    @Test
+    public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_not_subSet_of_allAliquots() throws DataNotFoundException, ValidationException {
+        List<ExamResult> resultsToVerify= new ArrayList<>();
+
+        ExamResult examResult = new ExamResult();
+        examResult.setAliquotCode("a");
+
+        resultsToVerify.add(examResult);
+
+        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
+        service.validateExamResults(resultsToVerify, true);
 
     }
 

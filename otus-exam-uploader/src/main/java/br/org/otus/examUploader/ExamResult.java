@@ -26,9 +26,9 @@ public class ExamResult {
     private List<Observation> observations;
 
     private FieldCenter fieldCenter;
-    private Long recruitmentNumber;
-    private Sex sex;
-    private ImmutableDate birthdate;
+    private Long recruitmentNumber = null;
+    private Sex sex = null;
+    private ImmutableDate birthdate = null;
 
     public void setExamId(ObjectId examId) {
         this.examId = examId;
