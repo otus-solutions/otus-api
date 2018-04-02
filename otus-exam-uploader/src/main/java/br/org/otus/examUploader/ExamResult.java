@@ -26,9 +26,9 @@ public class ExamResult {
     private List<Observation> observations;
 
     private FieldCenter fieldCenter;
-    private Long recruitmentNumber = null;
-    private Sex sex = null;
-    private ImmutableDate birthdate = null;
+    private Long recruitmentNumber;
+    private Sex sex;
+    private ImmutableDate birthdate;
 
     public void setExamId(ObjectId examId) {
         this.examId = examId;
@@ -85,6 +85,4 @@ public class ExamResult {
         builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         return builder;
     }
-
-
 }
