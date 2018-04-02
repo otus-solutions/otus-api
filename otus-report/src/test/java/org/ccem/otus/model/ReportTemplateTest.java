@@ -19,7 +19,7 @@ public class ReportTemplateTest {
 
     private ReportTemplate reportTemplate;
 
-    private String reportTemplateJson = "{\"template\":\"\\u003cspan\\u003eteste\\u003c/span\\u003e\",\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[]}]}";
+    private String reportTemplateJson = "{\"template\":\"<span>teste</span>\",\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[]}]}";
 
     private String template = "<span>teste</span>";
     @Before

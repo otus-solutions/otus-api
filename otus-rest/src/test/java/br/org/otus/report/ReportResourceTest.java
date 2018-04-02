@@ -49,8 +49,8 @@ public class ReportResourceTest {
 	private static final String USER_MAIL = "otus@otus.com";
 	private static final String RESULT = "{\"data\":true}";
 	private static final String REPORT_BY_RN = "{\"data\":{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"fieldCenter\":null,\"dataSources\":null}}";
-	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
-	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
+	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
+	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
 	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 	
@@ -175,7 +175,7 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
 		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
 		PowerMockito.when(reportFacade.update(Mockito.anyObject())).thenReturn(updateReport);
-		assertEquals(REPORT_UPDATE, reportResource.update(reportJson));
+		assertEquals(REPORT_UPDATE, reportResource.update(Mockito.anyObject()));
 	}
 
 }

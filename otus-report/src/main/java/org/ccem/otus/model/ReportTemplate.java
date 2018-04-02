@@ -34,6 +34,7 @@ public class ReportTemplate {
         builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         builder.registerTypeAdapter(ReportDataSource.class, new DataSourceAdapter());
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        builder.disableHtmlEscaping();
         return builder;
     }
 
