@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-public class ExamResultDataSourceTest {
+public class ExamDataSourceTest {
 
 	private static final Long VALUE_RECRUITMENT_NUMBER = 1063154L;
 	private static final String VALUE_EXAM_NAME = "TRIGLICÉRIDES - SANGUE";
@@ -44,7 +44,7 @@ public class ExamResultDataSourceTest {
 	}
 
 	@Test
-	public void query_should_contains_filters() {
+	public void query_should_contains_center_and_exam_name() {
 		Whitebox.setInternalState(examResultDataSource, "filters", filters);
 		ArrayList<Document> query = examResultDataSource.builtQuery(VALUE_RECRUITMENT_NUMBER);
 

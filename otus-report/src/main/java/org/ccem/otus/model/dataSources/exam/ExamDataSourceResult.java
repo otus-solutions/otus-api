@@ -8,7 +8,6 @@ import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.Observation;
 import br.org.otus.examUploader.utils.ObjectIdAdapter;
