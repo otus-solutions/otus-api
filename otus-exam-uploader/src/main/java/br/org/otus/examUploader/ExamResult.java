@@ -67,6 +67,10 @@ public class ExamResult {
         this.birthdate = birthdate;
     }
 
+    public void setAliquotValid(boolean aliquotValid) {
+        this.aliquotValid = aliquotValid;
+    }
+
     public static String serialize(ExamResult examResult) {
         return getGsonBuilder().create().toJson(examResult);
     }
@@ -81,4 +85,6 @@ public class ExamResult {
         builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         return builder;
     }
+
+
 }

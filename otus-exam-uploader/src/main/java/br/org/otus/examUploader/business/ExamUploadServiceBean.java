@@ -116,7 +116,9 @@ public class ExamUploadServiceBean implements ExamUploadService{
             WorkAliquot found = hmap.get(aliquotCode);
             if (found == null) {
                 missing.add(aliquotCode);
+                aSmallArray.setAliquotValid(false);
             } else {
+                aSmallArray.setAliquotValid(true);
                 aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
                 aSmallArray.setBirthdate(found.getBirthdate());
                 aSmallArray.setSex(found.getSex());

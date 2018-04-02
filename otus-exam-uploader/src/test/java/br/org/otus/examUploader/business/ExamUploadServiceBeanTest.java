@@ -129,7 +129,7 @@ public class ExamUploadServiceBeanTest {
     }
 
     @Test
-    public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_not_subSet_of_allAliquots() throws DataNotFoundException, ValidationException {
+    public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_not_subSet_of_allAliquots_and_forcedSaved_is_true() throws DataNotFoundException, ValidationException {
         List<ExamResult> resultsToVerify= new ArrayList<>();
 
         ExamResult examResult = new ExamResult();
@@ -154,4 +154,4 @@ public class ExamUploadServiceBeanTest {
         service.validateExamResultLot(examResults);
     }
 
-    }
+}
