@@ -57,9 +57,9 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public String create(ReportTemplate reportTemplate, String userEmail) {
-		ObjectId reportId = reportDao.insert(reportTemplate);
-		return reportId.toString();
+	public ReportTemplate create(ReportTemplate reportTemplate) {
+		ReportTemplate insertedReport = reportDao.insert(reportTemplate);
+		return insertedReport;
 	}
 
 	@Override

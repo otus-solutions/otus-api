@@ -12,7 +12,7 @@ public interface ReportDao {
 
    ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException;
    
-   ObjectId insert(ReportTemplate report);
+   ReportTemplate insert(ReportTemplate report);
    
    void deleteById(String id) throws DataNotFoundException;
    

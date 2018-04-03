@@ -10,8 +10,8 @@ public interface ReportService {
     ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException;
     
     List<ReportTemplate> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException;
-    
-    String create(ReportTemplate reportTemplate, String userEmail) throws DataNotFoundException, ValidationException;
+
+    ReportTemplate create(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
     
     void delete(String id) throws DataNotFoundException;
     

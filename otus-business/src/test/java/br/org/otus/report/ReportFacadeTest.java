@@ -46,6 +46,8 @@ public class ReportFacadeTest {
 	private ReportService reportService;
 	@Mock
 	private ReportServiceBean reportServiceBean;
+	@Mock
+	private String userEmail;
 
 	private ObjectId objectId = new ObjectId("5a9199056ddc4f48a340b3ec");
 
@@ -101,30 +103,36 @@ public class ReportFacadeTest {
 		mockStatic(ReportTemplate.class);
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(reportTemplate);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(report);
-		PowerMockito.when(reportService.create(Mockito.anyObject(), Mockito.anyString())).thenReturn(REPORTID);
-		assertEquals(REPORTID, reportFacade.create(report, USER_MAIL));
+		PowerMockito.when(reportService.create(Mockito.anyObject())).thenReturn(reportTemplate);
+		assertEquals(reportTemplate, reportFacade.create(report, USER_MAIL));
 	}
 	
 	@Test(expected = HttpResponseException.class)
 	public void method_create_should_throw_DataNotFoundException()
-			throws HttpResponseException, DataNotFoundException, ValidationException {
+			throws Exception {
+		mockStatic(ReportTemplate.class);
+		reportTemplate.setSender(USER_MAIL);
+		PowerMockito.when(ReportTemplate.class,"deserialize",Mockito.any()).thenReturn(reportTemplate);
 		doThrow(new DataNotFoundException(
-				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).create(Mockito.anyObject(), Mockito.anyString());
-		reportFacade.create(Mockito.anyObject(), Mockito.anyString());
+				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).create(Mockito.anyObject());
+		reportFacade.create(Mockito.anyObject(), USER_MAIL);
 	}
 	
 	@Test(expected = HttpResponseException.class)
 	public void method_create_should_throw_ValidationException()
-			throws HttpResponseException, DataNotFoundException, ValidationException {
+			throws HttpResponseException, DataNotFoundException, ValidationException, Exception {
+		mockStatic(ReportTemplate.class);
+		reportTemplate.setSender(USER_MAIL);
+		PowerMockito.when(ReportTemplate.class,"deserialize",Mockito.any()).thenReturn(reportTemplate);
 		doThrow(new ValidationException(
-				new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService).create(Mockito.anyObject(), Mockito.anyString());
-		reportFacade.create(Mockito.anyObject(), Mockito.anyString());
+				new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService).create(Mockito.anyObject());
+		reportFacade.create(Mockito.anyObject(), USER_MAIL);
 	}
 	
 	@Test(expected = Exception.class)
 	public void method_create_should_throw_Exception()
 			throws HttpResponseException, DataNotFoundException, ValidationException, Exception {
-		doThrow(new Exception("method_RegisterProject_should_captured_Exception")).when(reportService).create(Mockito.anyObject(), Mockito.anyString());
+		doThrow(new Exception("method_RegisterProject_should_captured_Exception")).when(reportService).create(Mockito.anyObject());
 		reportFacade.create(Mockito.anyObject(), Mockito.anyString());
 	}
 	

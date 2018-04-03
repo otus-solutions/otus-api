@@ -17,6 +17,8 @@ public class ReportTemplate {
 	private ObjectId _id;
     private String template;
     private String label;
+    private String sender;
+    private LocalDateTime sendingDate;
     private ArrayList<String> fieldCenter; //TODO ALTERAR PARA ARRAY
     private ArrayList<ReportDataSource> dataSources;
 
@@ -57,6 +59,13 @@ public class ReportTemplate {
 	public ObjectId getId() {
 		return _id;
 	}
-    
 
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public void setId(ObjectId id) {
+        this._id = id;
+    }
 }

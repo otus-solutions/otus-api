@@ -42,13 +42,13 @@ public class ReportResourceTest {
 	private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 	private static final Long recruitmentNumber = (Long) 5001007L;
 	private static final String label = "teste";
-	private static final String PARTICIPANT_LIST = "{\"data\":[{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"fieldCenter\":null,\"dataSources\":null}]}";
+	private static final String PARTICIPANT_LIST = "{\"data\":[{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}]}";
 	private static final String REPORT_ID = "5ab3a88013cdd20490873afe";
 	private static final String reportUploadJson = "{\"template\" : \"<span></span>\",\"label\": \"tiago\",\"fieldCenter\": [],\"dataSources\" : [{\"key\" : \"HS\",\"label\": \"tester\", \"dataSource\" : \"Participant\",\"filters\" : {\"statusHistory\" : {\"name\" : \"FINALIZED\",\"position\" : -1},\"acronym\" : \"TF\",\"category\" : \"C0\"}}]}";
 	private static final String reportJson = "{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}";
 	private static final String USER_MAIL = "otus@otus.com";
 	private static final String RESULT = "{\"data\":true}";
-	private static final String REPORT_BY_RN = "{\"data\":{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"fieldCenter\":null,\"dataSources\":null}}";
+	private static final String REPORT_BY_RN = "{\"data\":{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
 	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
 	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
@@ -111,8 +111,8 @@ public class ReportResourceTest {
 		when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
 		reportTemplate = new ReportTemplate();
 		Whitebox.setInternalState(reportTemplate, "_id", id);
-		when(reportFacade.create(reportUploadJson, USER_MAIL)).thenReturn(REPORT_ID);
-		assertEquals("{\"data\":\"5ab3a88013cdd20490873afe\"}", reportResource.create(request,reportUploadJson));
+		when(reportFacade.create(reportUploadJson, USER_MAIL)).thenReturn(reportTemplate);
+		assertEquals("{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"}}}", reportResource.create(request,reportUploadJson));
 	}
 
 	@Test

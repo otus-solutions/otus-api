@@ -42,6 +42,7 @@ import org.powermock.reflect.Whitebox;
 public class ReportServiceBeanTest {
 	String REPORTID = "5a9199056ddc4f48a340b3ec";
 	Long RECRUITMENTNUMBER = (Long) 322148795L;
+	String USER_MAIL = "teste@gmail.com";
 	private static final String REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}";
 
 	@InjectMocks
@@ -146,8 +147,8 @@ public class ReportServiceBeanTest {
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(reportTemplate);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(REPORT_UPDATE);
 		reportTemplate = ReportTemplate.deserialize(REPORT_UPDATE);
-		PowerMockito.when(reportDao.insert(Mockito.anyObject())).thenReturn(reportObjectId);
-		assertEquals(REPORTID, reportServiceBean.create(reportTemplate, Mockito.anyString()));
+		PowerMockito.when(reportDao.insert(Mockito.anyObject())).thenReturn(reportTemplate);
+		assertEquals(reportTemplate, reportServiceBean.create(reportTemplate));
 	}
 
 	@Test

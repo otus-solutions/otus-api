@@ -37,7 +37,7 @@ public class ReportResource {
     public String create(@Context HttpServletRequest request, String reportTemplateJson){
     	String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     	String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    	return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toJson();
+    	return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toCustomJson(ReportTemplate.getGsonBuilder());
     }
     
     @GET

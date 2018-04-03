@@ -32,11 +32,12 @@ public class ReportFacade {
         }
     }
     
-    public String create(String reportUploadJson, String userEmail){
-    	String reportUploadId;
+    public ReportTemplate create(String reportUploadJson, String userEmail){
+    	ReportTemplate insertedReport;
     	try {
     		ReportTemplate reportTemplate = ReportTemplate.deserialize(reportUploadJson);
-    		reportUploadId = reportService.create(reportTemplate, userEmail);
+            reportTemplate.setSender(userEmail);
+            insertedReport = reportService.create(reportTemplate);
     	}catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
         } catch (ValidationException e) {
@@ -46,7 +47,7 @@ public class ReportFacade {
         }
     	
     	
-    	return reportUploadId;
+    	return insertedReport;
     	
     }
     

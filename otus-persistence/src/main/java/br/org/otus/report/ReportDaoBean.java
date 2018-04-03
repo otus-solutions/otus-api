@@ -41,10 +41,11 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public ObjectId insert(ReportTemplate reportTemplate) {
+	public ReportTemplate insert(ReportTemplate reportTemplate) {
 		Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
 		super.persist(parsed);
-		return (ObjectId) parsed.get("_id");
+		reportTemplate.setId((ObjectId) parsed.get("_id"));
+		return reportTemplate;
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		parsed.remove("_id");
 
 		UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()),
-				new Document("$set", parsed), new UpdateOptions().upsert(false));
+				new Document("$set", new Document("fieldCenter",reportTemplate.getFieldCenter())), new UpdateOptions().upsert(false));
 
 		if (updateReportData.getMatchedCount() == 0) {
 			throw new DataNotFoundException(new Throwable("Exam Report not found"));
