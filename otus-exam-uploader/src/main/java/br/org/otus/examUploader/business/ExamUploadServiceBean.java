@@ -85,7 +85,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
     public List<Exam> getAllByExamSendingLotId(ObjectId id) throws DataNotFoundException {
         return examResultDAO.getByExamSendingLotId(id);
     }
-//
+
     @Override
     public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException {
         List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
