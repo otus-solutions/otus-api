@@ -37,6 +37,9 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examId").append("as", "examResults"));
 		query.add(lookup);
 
+		Document match = new Document("$match", new Document("examResults.aliquotValid", Boolean.TRUE));
+		query.add(match);
+
 		return query;
 	}
 
