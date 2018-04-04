@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class ParticipantDataSource extends ReportDataSource<ParticipantDataSourceResult> {
 
     @Override
-    public ArrayList<Document> builtQuery(Long recruitmentNumber) {
+    public ArrayList<Document> buildQuery(Long recruitmentNumber) {
         return null;
     }
 

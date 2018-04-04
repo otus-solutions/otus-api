@@ -16,11 +16,11 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 	}
 
 	@Override
-	public ArrayList<Document> builtQuery(Long recruitmentNumber) {
-		return this.builtQueryToExamSendingLot(recruitmentNumber);
+	public ArrayList<Document> buildQuery(Long recruitmentNumber) {
+		return this.buildQueryToExamSendingLot(recruitmentNumber);
 	}
 
-	public ArrayList<Document> builtQueryToExamResults(ObjectId objectId) {
+	public ArrayList<Document> buildQueryToExamResults(ObjectId objectId) {
 		ArrayList<Document> query = new ArrayList<>();
 
 		Document examSendingLotId = new Document("$match", new Document("examSendingLotId", objectId));
@@ -43,7 +43,7 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 		return query;
 	}
 
-	private ArrayList<Document> builtQueryToExamSendingLot(Long recruitmentNumber) {
+	private ArrayList<Document> buildQueryToExamSendingLot(Long recruitmentNumber) {
 		ArrayList<Document> query = new ArrayList<>();
 
 		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examSendingLotId").append("as", "exam"));

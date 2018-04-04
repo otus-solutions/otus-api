@@ -16,7 +16,7 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
     }
 
     @Override
-    public ArrayList<Document> builtQuery(Long recruitmentNumber) {
+    public ArrayList<Document> buildQuery(Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
         this.buildMachStage(recruitmentNumber, query);
         this.buildProjectionStage(query);

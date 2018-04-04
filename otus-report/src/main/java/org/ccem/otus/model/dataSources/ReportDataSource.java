@@ -12,7 +12,7 @@ public abstract class ReportDataSource<T> {
 
 	public abstract void addResult(T result);
 
-	public abstract ArrayList<Document> builtQuery(Long recruitmentNumber);
+	public abstract ArrayList<Document> buildQuery(Long recruitmentNumber);
 
 	public ArrayList<T> getResult() {
 		return result;

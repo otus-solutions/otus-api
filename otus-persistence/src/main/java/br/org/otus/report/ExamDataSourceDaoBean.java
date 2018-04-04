@@ -33,7 +33,7 @@ public class ExamDataSourceDaoBean extends MongoGenericDao<Document> implements 
 		this.result = new ArrayList<>();
 		ExamSendingLotDataSourceResult examSendingLot = null;
 
-		ArrayList<Document> queryToLot = examDataSource.builtQuery(recruitmentNumber);
+		ArrayList<Document> queryToLot = examDataSource.buildQuery(recruitmentNumber);
 		AggregateIterable<?> outputLot = examSendingLotDataSource.getCollection().aggregate(queryToLot);
 
 		for (Object anOutput : outputLot) {
@@ -42,7 +42,7 @@ public class ExamDataSourceDaoBean extends MongoGenericDao<Document> implements 
 		}
 
 		if (examSendingLot != null) {
-			ArrayList<Document> queryToResults = examDataSource.builtQueryToExamResults(examSendingLot.getObjectId());
+			ArrayList<Document> queryToResults = examDataSource.buildQueryToExamResults(examSendingLot.getObjectId());
 			AggregateIterable<?> outputResults = collection.aggregate(queryToResults);
 
 			for (Object anOutput : outputResults) {

@@ -43,7 +43,7 @@ public class ActivityDataSourceTest {
 	@Test
 	public void method_builtQuery() {
 		Whitebox.setInternalState(activityDataSource, "filters", activityDataSourceFilters);
-		ArrayList<Document> query = activityDataSource.builtQuery((long) 343545345);
+		ArrayList<Document> query = activityDataSource.buildQuery((long) 343545345);
 
 		assertEquals(EXPECTED_RESULT, query.get(0).toJson());
 		assertEquals(EXPECTED_RESULT_PROJECTION, query.get(1).toJson());
@@ -58,7 +58,7 @@ public class ActivityDataSourceTest {
 		Whitebox.setInternalState(activityDataSourceFilters, "statusHistory", activityDataSourceStatusHistoryFilter);
 		Whitebox.setInternalState(activityDataSource, "filters", activityDataSourceFilters);
 
-		ArrayList<Document> query = activityDataSource.builtQuery(RECRUITMENT_NUMBER);
+		ArrayList<Document> query = activityDataSource.buildQuery(RECRUITMENT_NUMBER);
 
 		assertEquals(EXPECTED_RESULT, query.get(0).toJson());
 		assertEquals(EXPECTED_RESULT_PROJECTION_WHIT_STATUS_HISTORY, query.get(1).toJson());
