@@ -8,6 +8,7 @@ import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import java.util.stream.IntStream;
 
 @RunWith(PowerMockRunner.class)
 public class ExamUploadServiceBeanTest {
+    String EXAM_SENDING_LOT_ID = "asfafw32f23f3q";
 
     private static String EMAIL_STRING = "fulano@detal.com";
 
@@ -66,7 +68,7 @@ public class ExamUploadServiceBeanTest {
         PowerMockito.when(examUploadDTO.getExamSendingLot()).thenReturn(examSendingLot);
         PowerMockito.when(exam.getExamResults()).thenReturn(examResults);
 
-        Mockito.doThrow(new ValidationException()).when(service).validateExamResults(Mockito.any());
+        Mockito.doThrow(new ValidationException()).when(service).validateExamResults(Mockito.any(), Mockito.anyBoolean());
 
         try{
             service.create(examUploadDTO, EMAIL_STRING);
@@ -78,6 +80,34 @@ public class ExamUploadServiceBeanTest {
         }
 
     }
+
+    @Test
+    public void list_should_call_getAll_method() throws ValidationException, DataNotFoundException {
+        service.list();
+        Mockito.verify(examResultLotDAO, Mockito.times(1)).getAll();
+    }
+
+    @Test
+    public void getByID_should_call_getById_method() throws ValidationException, DataNotFoundException {
+        service.getByID(EXAM_SENDING_LOT_ID);
+        Mockito.verify(examResultLotDAO, Mockito.times(1)).getById(EXAM_SENDING_LOT_ID);
+    }
+
+    @Test
+    public void delete_should_call_deleteByExamSendingLotId_and_deleteById_methods() throws ValidationException, DataNotFoundException {
+        service.delete(EXAM_SENDING_LOT_ID);
+        Mockito.verify(examResultDAO, Mockito.times(1)).deleteByExamSendingLotId(EXAM_SENDING_LOT_ID);
+        Mockito.verify(examResultLotDAO, Mockito.times(1)).deleteById(EXAM_SENDING_LOT_ID);
+    }
+
+    @Test
+    public void getAllByExamSendingLotId_should_call_getByExamSendingLotId_method() throws ValidationException, DataNotFoundException {
+        ObjectId examSendingLotObjectId = new ObjectId();
+        service.getAllByExamSendingLotId(examSendingLotObjectId);
+        Mockito.verify(examResultDAO, Mockito.times(1)).getByExamSendingLotId(examSendingLotObjectId);
+
+    }
+
 
     @Test
     public void delete_should_not_delete_a_lot_if_doesnt_find_associated_exam_results() throws DataNotFoundException {
@@ -111,7 +141,7 @@ public class ExamUploadServiceBeanTest {
 
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
 
-        service.validateExamResults(resultsToVerify);
+        service.validateExamResults(resultsToVerify, examSendingLot.isForcedSave());
     }
 
     @Test (expected = ValidationException.class)
@@ -124,7 +154,21 @@ public class ExamUploadServiceBeanTest {
         resultsToVerify.add(examResult);
 
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
-        service.validateExamResults(resultsToVerify);
+        service.validateExamResults(resultsToVerify, false);
+
+    }
+
+    @Test
+    public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_not_subSet_of_allAliquots_and_forcedSaved_is_true() throws DataNotFoundException, ValidationException {
+        List<ExamResult> resultsToVerify= new ArrayList<>();
+
+        ExamResult examResult = new ExamResult();
+        examResult.setAliquotCode("a");
+
+        resultsToVerify.add(examResult);
+
+        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
+        service.validateExamResults(resultsToVerify, true);
 
     }
 
@@ -140,4 +184,4 @@ public class ExamUploadServiceBeanTest {
         service.validateExamResultLot(examResults);
     }
 
-    }
+}

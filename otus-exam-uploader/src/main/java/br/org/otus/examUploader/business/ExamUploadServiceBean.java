@@ -46,10 +46,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
         examSendingLot.setResultsQuantity(allResults.size());
 
         validateExamResultLot(allResults);
-
-        if(!examSendingLot.isForcedSave()) {
-            validateExamResults(allResults);
-        }
+        validateExamResults(allResults, examSendingLot.isForcedSave());
 
         examSendingLot.setOperator(userEmail);
         ObjectId lotId = examSendingLotDao.insert(examSendingLot);
@@ -88,11 +85,11 @@ public class ExamUploadServiceBean implements ExamUploadService{
     public List<Exam> getAllByExamSendingLotId(ObjectId id) throws DataNotFoundException {
         return examResultDAO.getByExamSendingLotId(id);
     }
-//
+
     @Override
-    public void validateExamResults(List<ExamResult> examResults) throws DataNotFoundException, ValidationException {
+    public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException {
         List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
-        isSubset(allAliquots, examResults);
+        isSubset(allAliquots, examResults, forcedSave);
     }
 
     @Override
@@ -103,7 +100,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     /* Throws error if smallArray is not a subset of bigArray */
-    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray) throws ValidationException {
+    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray, Boolean forcedSave) throws ValidationException {
         HashMap<String, WorkAliquot> hmap = new HashMap<>();
         ArrayList<String> missing = new ArrayList<>();
 
@@ -117,16 +114,18 @@ public class ExamUploadServiceBean implements ExamUploadService{
         for (ExamResult aSmallArray : smallArray) {
             String aliquotCode = aSmallArray.getAliquotCode();
             WorkAliquot found = hmap.get(aliquotCode);
-            if (found == null)
+            if (found == null) {
                 missing.add(aliquotCode);
-            else {
+                aSmallArray.setAliquotValid(false);
+            } else {
+                aSmallArray.setAliquotValid(true);
                 aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
                 aSmallArray.setBirthdate(found.getBirthdate());
                 aSmallArray.setSex(found.getSex());
             }
         }
 
-        if (missing.size() > 0){
+        if (missing.size() > 0 && !forcedSave){
             throw new ValidationException(new Throwable("Aliquots not found"),
                     missing);
         }
