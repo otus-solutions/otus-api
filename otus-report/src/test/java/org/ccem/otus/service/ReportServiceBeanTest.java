@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ActivityDataSource;
@@ -159,7 +160,7 @@ public class ReportServiceBeanTest {
 	}
 
 	@Test
-	public void method_list_should_returns_list_reports() {
+	public void method_list_should_returns_list_reports() throws ValidationException {
 		ReportTemplate reportTemplate = new ReportTemplate();
 		ArrayList<String> fieldCenter = new ArrayList<>();
 		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
@@ -177,7 +178,7 @@ public class ReportServiceBeanTest {
 	}
 
 	@Test
-	public void method_getById_should_return_report() throws DataNotFoundException {
+	public void method_getById_should_return_report() throws DataNotFoundException, ValidationException {
 		ReportTemplate reportTemplate = new ReportTemplate();
 		ArrayList<String> fieldCenter = new ArrayList<>();
 		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
@@ -215,7 +216,7 @@ public class ReportServiceBeanTest {
 		mockStatic(ReportTemplate.class);
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(REPORT_UPDATE);
-		PowerMockito.when(reportDao.update(Mockito.anyObject())).thenReturn(updateReport);
+		PowerMockito.when(reportDao.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
 		assertEquals(updateReport, reportServiceBean.update(reportTemplate));
 	}
 

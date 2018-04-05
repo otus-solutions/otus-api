@@ -34,7 +34,7 @@ public class ReportServiceBean implements ReportService {
 	private ParticipantService participantService;
 
 	@Override
-	public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException {
+	public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException {
 		ObjectId reportObjectId = new ObjectId(reportId);
 		ReportTemplate report = reportDao.findReport(reportObjectId);
 		for (ReportDataSource dataSource : report.getDataSources()) {
@@ -50,7 +50,7 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException {
+	public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException {
 		Participant participant = participantService.getByRecruitmentNumber(recruitmentNumber);
 		String field = participant.getFieldCenter().getAcronym();
 		return reportDao.getByCenter(field);
@@ -68,19 +68,18 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public List<ReportTemplate> list() {
+	public List<ReportTemplate> list() throws ValidationException {
 		return reportDao.getAll();
 	}
 
 	@Override
-	public ReportTemplate getByID(String id) throws DataNotFoundException {
+	public ReportTemplate getByID(String id) throws DataNotFoundException, ValidationException {
 		return reportDao.getById(id);
 	}
 
 	@Override
 	public ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException {
-		ReportTemplate updateResult = reportDao.update(reportTemplate);
-		return updateResult;
+		return reportDao.updateFieldCenters(reportTemplate);
 	}
 
 }

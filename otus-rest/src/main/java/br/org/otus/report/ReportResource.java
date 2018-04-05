@@ -59,8 +59,7 @@ public class ReportResource {
     @Secured
     @Produces (MediaType.APPLICATION_JSON)
     public String update(String reportTemplateJson) {
-    	ReportTemplate examReport = ReportTemplate.deserialize(reportTemplateJson);
-    	ReportTemplate updatedReport = reportFacade.update(examReport);
+    	ReportTemplate updatedReport = reportFacade.update(reportTemplateJson);
     	return new Response().buildSuccess(updatedReport).toCustomJson(ReportTemplate.getGsonBuilder());
     }
     

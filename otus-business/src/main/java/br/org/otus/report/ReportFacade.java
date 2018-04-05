@@ -19,7 +19,7 @@ public class ReportFacade {
     public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId){
         try {
             return reportService.getParticipantReport(recruitmentNumber, reportId);
-        } catch (DataNotFoundException e) {
+        } catch (DataNotFoundException | ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
@@ -27,7 +27,7 @@ public class ReportFacade {
     public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber){
         try {
             return reportService.getReportByParticipant(recruitmentNumber);
-        } catch (DataNotFoundException e) {
+        } catch (DataNotFoundException | ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
@@ -35,20 +35,13 @@ public class ReportFacade {
     public ReportTemplate create(String reportUploadJson, String userEmail){
     	ReportTemplate insertedReport;
     	try {
-    		ReportTemplate reportTemplate = ReportTemplate.deserialize(reportUploadJson);
+            ReportTemplate reportTemplate = ReportTemplate.deserialize(reportUploadJson);
             reportTemplate.setSender(userEmail);
             insertedReport = reportService.create(reportTemplate);
-    	}catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+            return insertedReport;
         } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        } catch (Exception e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
-    	
-    	
-    	return insertedReport;
-    	
     }
     
     public void deleteById(String id){
@@ -60,7 +53,11 @@ public class ReportFacade {
     }
     
     public List<ReportTemplate> list(){
-        return reportService.list();
+        try {
+            return reportService.list();
+        } catch (ValidationException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
     }
     
     public ReportTemplate getById(String id){
@@ -68,17 +65,17 @@ public class ReportFacade {
             return reportService.getByID(id);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        } catch (ValidationException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
     
-    public ReportTemplate update(ReportTemplate reportTemplate) {
+    public ReportTemplate update(String updateReportJson) {
     	try {
+            ReportTemplate reportTemplate = ReportTemplate.deserialize(updateReportJson);
             return reportService.update(reportTemplate);
-        } catch (DataNotFoundException e) {
+        } catch (DataNotFoundException | ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        } catch (ValidationException e) {
-            throw new HttpResponseException(
-                    ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
         }
     }
 

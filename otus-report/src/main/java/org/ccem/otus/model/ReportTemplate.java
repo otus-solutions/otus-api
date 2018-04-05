@@ -3,6 +3,7 @@ package org.ccem.otus.model;
 import com.google.gson.GsonBuilder;
 
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
@@ -12,6 +13,7 @@ import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ReportTemplate {
 	private ObjectId _id;
@@ -26,8 +28,10 @@ public class ReportTemplate {
         return ReportTemplate.getGsonBuilder().create().toJson(reportTemplate);
     }
 
-    public static ReportTemplate deserialize(String reportTemplateJson) {
-        return ReportTemplate.getGsonBuilder().create().fromJson(reportTemplateJson, ReportTemplate.class);
+    public static ReportTemplate deserialize(String reportTemplateJson) throws ValidationException {
+        ReportTemplate reportTemplate = ReportTemplate.getGsonBuilder().create().fromJson(reportTemplateJson, ReportTemplate.class);
+        validate(reportTemplate);
+        return reportTemplate;
     }
 
     public static GsonBuilder getGsonBuilder() {
@@ -60,12 +64,59 @@ public class ReportTemplate {
 		return _id;
 	}
 
-
     public void setSender(String sender) {
         this.sender = sender;
     }
 
     public void setId(ObjectId id) {
         this._id = id;
+    }
+
+    private static void validate(ReportTemplate reportTemplate) throws ValidationException {
+        String result = "";
+        result = validateTemplate(reportTemplate.template, result);
+        result = validateLabel(reportTemplate.label, result);
+        result = validateSendingDate(reportTemplate.sendingDate, result);
+        result = validateFieldCenter(reportTemplate.fieldCenter, result);
+        result = validateDataSources(reportTemplate.dataSources, result);
+        if(!result.trim().isEmpty()){
+            throw new ValidationException(new Throwable("Required field(s) "+result+" is(are) invalid"));
+        }
+    }
+
+
+    private static String validateTemplate(String template, String result){
+        if(template == null || template.trim().isEmpty()) {
+            result = (result.equals("")) ? "Template" : result.concat(", Template");
+        }
+        return result;
+    }
+
+    private static String validateLabel(String label, String result){
+        if(label == null || label.trim().isEmpty()){
+            result = (result.equals("")) ? "Label" : result.concat(", Label");
+        }
+        return result;
+    }
+
+    private static String validateSendingDate(LocalDateTime sendingDate, String result){
+        if(sendingDate == null){
+            result = (result.equals("")) ? "SendingDate" : result.concat(", SendingDate");
+        }
+        return result;
+    }
+
+    private static String validateFieldCenter(ArrayList<String> fieldCenter, String result) {
+        if(fieldCenter == null){
+            result = (result.equals("")) ? "FieldCenter" : result.concat(", FieldCenter");
+        }
+        return result;
+    }
+
+    private static String validateDataSources(ArrayList<ReportDataSource> dataSources, String result){
+        if(dataSources == null){
+            result = (result.equals("")) ? "DataSources" : result.concat(", DataSources");
+        }
+        return result;
     }
 }

@@ -7,6 +7,7 @@ import br.org.otus.laboratory.project.exam.ExamLot;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportDao;
 
@@ -29,7 +30,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException {
+	public ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException {
 		Document result = this.collection.find(eq("_id", reportId)).first();
 		if (reportId == null) {
 			throw new DataNotFoundException("parameter reportId is NULL.");
@@ -60,7 +61,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public List<ReportTemplate> getByCenter(String fieldCenter) {
+	public List<ReportTemplate> getByCenter(String fieldCenter) throws ValidationException {
 		ArrayList<ReportTemplate> results = new ArrayList<>();
 		Document query = new Document("fieldCenter", fieldCenter);
 		Document projection = new Document("label", 1);
@@ -76,7 +77,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public List<ReportTemplate> getAll() {
+	public List<ReportTemplate> getAll() throws ValidationException {
 		ArrayList<ReportTemplate> results = new ArrayList<>();
 
 		MongoCursor iterator = collection.find().iterator();
@@ -91,7 +92,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public ReportTemplate getById(String id) throws DataNotFoundException {
+	public ReportTemplate getById(String id) throws DataNotFoundException, ValidationException {
 		Document query = new Document("_id", new ObjectId(id));
 
 		Document first = (Document) collection.find(query).first();
@@ -104,9 +105,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException {
-		Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
-		parsed.remove("_id");
+	public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
 
 		UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()),
 				new Document("$set", new Document("fieldCenter",reportTemplate.getFieldCenter())), new UpdateOptions().upsert(false));
