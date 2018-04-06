@@ -14,14 +14,14 @@ import javax.ws.rs.core.MediaType;
 @Path("/report")
 public class ReportResource {
 
-    @Inject
-    private ReportFacade reportFacade;
+	@Inject
+	private ReportFacade reportFacade;
 
-    @GET
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/participant/{recruitmentNumber}/{reportId}")
-    public String getByRecruitmentNumber(@PathParam("recruitmentNumber") Long recruitmentNumber,@PathParam("reportId") String reportId){
-        return new Response().buildSuccess(ReportTemplate.serialize(reportFacade.getParticipantReport(recruitmentNumber,reportId))).toJson();
-    }
+	@GET
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/participant/{recruitmentNumber}/{reportId}")
+	public String getByRecruitmentNumber(@PathParam("recruitmentNumber") Long recruitmentNumber, @PathParam("reportId") String reportId) {
+		return new Response().buildSuccess(reportFacade.getParticipantReport(recruitmentNumber, reportId)).toCustomJson(ReportTemplate.getResponseGsonBuilder());
+	}
 }

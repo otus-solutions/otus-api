@@ -1,6 +1,8 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.participant;
 
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
+import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.junit.Before;
 import org.junit.Test;

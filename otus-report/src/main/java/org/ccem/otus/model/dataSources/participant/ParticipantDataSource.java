@@ -1,13 +1,14 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.participant;
 
 import org.bson.Document;
+import org.ccem.otus.model.dataSources.ReportDataSource;
 
 import java.util.ArrayList;
 
 public class ParticipantDataSource extends ReportDataSource<ParticipantDataSourceResult> {
 
     @Override
-    public ArrayList<Document> builtQuery(Long recruitmentNumber) {
+    public ArrayList<Document> buildQuery(Long recruitmentNumber) {
         return null;
     }
 

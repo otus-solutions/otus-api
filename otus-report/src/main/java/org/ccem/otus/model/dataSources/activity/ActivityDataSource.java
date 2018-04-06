@@ -1,6 +1,7 @@
-package org.ccem.otus.model.dataSources;
+package org.ccem.otus.model.dataSources.activity;
 
 import org.bson.Document;
+import org.ccem.otus.model.dataSources.ReportDataSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,17 +16,17 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
     }
 
     @Override
-    public ArrayList<Document> builtQuery(Long recruitmentNumber) {
+    public ArrayList<Document> buildQuery(Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
-        buildMachStage(recruitmentNumber, query);
-        buildProjectionStage(query);
-        appendStatusHistoryFilter(query);
+        this.buildMachStage(recruitmentNumber, query);
+        this.buildProjectionStage(query);
+        this.appendStatusHistoryFilter(query);
+        
         return query;
     }
 
     private void buildMachStage(Long recruitmentNumber, ArrayList<Document> query) {
-        Document filters = new Document("participantData.recruitmentNumber", recruitmentNumber)
-                .append("surveyForm.surveyTemplate.identity.acronym", this.filters.getAcronym());
+        Document filters = new Document("participantData.recruitmentNumber", recruitmentNumber).append("surveyForm.surveyTemplate.identity.acronym", this.filters.getAcronym());
 
         if(this.filters.getCategory() != null){
             appendCategoryFilter(filters, this.filters.getCategory());

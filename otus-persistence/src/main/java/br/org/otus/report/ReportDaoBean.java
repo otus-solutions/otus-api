@@ -11,7 +11,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDao {
 
-    private static final String COLLECTION_NAME = "reports";
+    private static final String COLLECTION_NAME = "report";
     public ReportDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
