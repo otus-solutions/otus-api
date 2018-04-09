@@ -116,6 +116,9 @@ public class SurveyActivity {
 	 * 
 	 */
 	public static GsonBuilder getGsonBuilder() {
+		//antes de editar este método, levar em conta os usuários de Response.toSurveyJson()
+		//geralmente usam esse método por causa do adapter de Oid
+
 		GsonBuilder builder = SurveyForm.getGsonBuilder();
 
 		builder.registerTypeAdapter(AnswerFill.class, new AnswerAdapter());
