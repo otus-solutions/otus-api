@@ -1,8 +1,9 @@
 package br.org.otus.report;
 
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.examUploader.ExamSendingLot;
-import br.org.otus.laboratory.project.exam.ExamLot;
+import static com.mongodb.client.model.Filters.eq;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -16,10 +17,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
+import br.org.mongodb.MongoGenericDao;
 
 public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDao {
 
@@ -63,13 +61,11 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	@Override
 	public List<ReportTemplate> getByCenter(String fieldCenter) throws ValidationException {
 		ArrayList<ReportTemplate> results = new ArrayList<>();
-		Document query = new Document("fieldCenter", fieldCenter);
-		Document projection = new Document("label", 1);
-		MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).projection(projection).iterator();
+		MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).iterator();
 
 		while (iterator.hasNext()) {
 			Document next = (Document) iterator.next();
-			results.add(ReportTemplate.deserialize(next.toJson()));
+			results.add(ReportTemplate.deserializeWithoutValidation(next.toJson()));
 		}
 		iterator.close();
 
@@ -107,8 +103,8 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	@Override
 	public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
 
-		UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()),
-				new Document("$set", new Document("fieldCenter",reportTemplate.getFieldCenter())), new UpdateOptions().upsert(false));
+		UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()), new Document("$set", new Document("fieldCenter", reportTemplate.getFieldCenter())),
+				new UpdateOptions().upsert(false));
 
 		if (updateReportData.getMatchedCount() == 0) {
 			throw new DataNotFoundException(new Throwable("Exam Report not found"));
