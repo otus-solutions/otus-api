@@ -1,8 +1,9 @@
 package br.org.otus.report;
 
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.examUploader.ExamSendingLot;
-import br.org.otus.laboratory.project.exam.ExamLot;
+import static com.mongodb.client.model.Filters.eq;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -10,16 +11,14 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportDao;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
+import br.org.mongodb.MongoGenericDao;
 
 public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDao {
 
@@ -61,15 +60,14 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public List<ReportTemplate> getByCenter(String fieldCenter) throws ValidationException {
-		ArrayList<ReportTemplate> results = new ArrayList<>();
-		Document query = new Document("fieldCenter", fieldCenter);
-		Document projection = new Document("label", 1);
-		MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).projection(projection).iterator();
+	public List<ReportTemplateDTO> getByCenter(String fieldCenter) throws ValidationException {
+		ArrayList<ReportTemplateDTO> results = new ArrayList<>();
+		MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).iterator();
 
 		while (iterator.hasNext()) {
 			Document next = (Document) iterator.next();
-			results.add(ReportTemplate.deserialize(next.toJson()));
+			ReportTemplateDTO dto = new ReportTemplateDTO(ReportTemplate.deserializeWithoutValidation(next.toJson()));
+			results.add(dto);
 		}
 		iterator.close();
 
@@ -107,8 +105,8 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	@Override
 	public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
 
-		UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()),
-				new Document("$set", new Document("fieldCenter",reportTemplate.getFieldCenter())), new UpdateOptions().upsert(false));
+		UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()), new Document("$set", new Document("fieldCenter", reportTemplate.getFieldCenter())),
+				new UpdateOptions().upsert(false));
 
 		if (updateReportData.getMatchedCount() == 0) {
 			throw new DataNotFoundException(new Throwable("Exam Report not found"));

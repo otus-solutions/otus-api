@@ -4,12 +4,13 @@ import java.util.List;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 
 public interface ReportService {
 
     ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException;
     
-    List<ReportTemplate> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException;
+    List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException;
 
     ReportTemplate create(ReportTemplate reportTemplate);
     
@@ -19,6 +20,6 @@ public interface ReportService {
     
     ReportTemplate getByID(String id) throws DataNotFoundException, ValidationException;
     
-    ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
+    ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
 
 }

@@ -24,67 +24,67 @@ import javax.ws.rs.core.MediaType;
 @Path("/report")
 public class ReportResource {
 
-    @Inject
-    private ReportFacade reportFacade;
-    
-    @Inject
-    private SecurityContext securityContext;
+	@Inject
+	private ReportFacade reportFacade;
 
-    @POST
-    @Secured
-    @Produces (MediaType.APPLICATION_JSON)
-    @Consumes (MediaType.APPLICATION_JSON)
-    public String create(@Context HttpServletRequest request, String reportTemplateJson){
-    	String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    	String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    	return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toCustomJson(ReportTemplate.getGsonBuilder());
-    }
-    
-    @GET
-    @Secured
-    @Produces (MediaType.APPLICATION_JSON)
-    public String list(){
-    	return new Response().buildSuccess(reportFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
-    }
-    
-    @GET
-    @Secured
-    @Path("/{id}")
-    @Produces (MediaType.APPLICATION_JSON)
-    public String getById(@PathParam("id") String id){
-    	return new Response().buildSuccess(reportFacade.getById(id)).toCustomJson(ReportTemplate.getGsonBuilder());
-    }
-    
-    @PUT
-    @Secured
-    @Produces (MediaType.APPLICATION_JSON)
-    public String update(String reportTemplateJson) {
-    	ReportTemplate updatedReport = reportFacade.update(reportTemplateJson);
-    	return new Response().buildSuccess(updatedReport).toCustomJson(ReportTemplate.getGsonBuilder());
-    }
-    
-    @DELETE
-    @Secured
-    @Path("/{id}")
-    @Produces (MediaType.APPLICATION_JSON)
-    public String delete(@PathParam("id") String id){
-    	reportFacade.deleteById(id);
-    	return new Response().buildSuccess().toJson();
-    }
-    
-    @GET
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/participant/list/{recruitmentNumber}")
-    public String listByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber){
-    	return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toSurveyJson();
-    }
-    
-    @GET
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/participant/{recruitmentNumber}/{reportId}")
-    public String getParticipantReport(@PathParam("recruitmentNumber") Long recruitmentNumber,@PathParam("reportId") String reportId){
-    	return new Response().buildSuccess(reportFacade.getParticipantReport(recruitmentNumber, reportId)).toCustomJson(ReportTemplate.getResponseGsonBuilder());
-    }
+	@Inject
+	private SecurityContext securityContext;
+
+	@POST
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String create(@Context HttpServletRequest request, String reportTemplateJson) {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+		return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toCustomJson(ReportTemplate.getGsonBuilder());
+	}
+
+	@GET
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	public String list() {
+		return new Response().buildSuccess(reportFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
+	}
+
+	@GET
+	@Secured
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getById(@PathParam("id") String id) {
+		return new Response().buildSuccess(reportFacade.getById(id)).toCustomJson(ReportTemplate.getGsonBuilder());
+	}
+
+	@PUT
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	public String updateFieldCenters(String reportTemplateJson) {
+		ReportTemplate updatedReport = reportFacade.updateFieldCenters(reportTemplateJson);
+		return new Response().buildSuccess(updatedReport).toCustomJson(ReportTemplate.getGsonBuilder());
+	}
+
+	@DELETE
+	@Secured
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String delete(@PathParam("id") String id) {
+		reportFacade.deleteById(id);
+		return new Response().buildSuccess().toJson();
+	}
+
+	@GET
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/participant/list/{recruitmentNumber}")
+	public String listByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber) {
+		return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toSurveyJson();
+	}
+
+	@GET
+	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/participant/{recruitmentNumber}/{reportId}")
+	public String getParticipantReport(@PathParam("recruitmentNumber") Long recruitmentNumber, @PathParam("reportId") String reportId) {
+		return new Response().buildSuccess(reportFacade.getParticipantReport(recruitmentNumber, reportId)).toCustomJson(ReportTemplate.getResponseGsonBuilder());
+	}
 }

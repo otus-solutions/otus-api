@@ -18,6 +18,7 @@ import org.ccem.otus.participant.service.ParticipantServiceBean;
 import org.ccem.otus.persistence.ActivityDataSourceDao;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 import org.ccem.otus.persistence.ReportDao;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,10 +131,10 @@ public class ReportServiceBeanTest {
 		FieldCenter fieldCenter = new FieldCenter();
 		fieldCenter.setAcronym("SP");
 		participant.setFieldCenter(fieldCenter);
-		ArrayList<ReportTemplate> reports = new ArrayList<>();
+		ArrayList<ReportTemplateDTO> reports = new ArrayList<>();
 		Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
 		Whitebox.setInternalState(reportTemplate, "label", "teste");
-		reports.add(reportTemplate);
+		reports.add(new ReportTemplateDTO(reportTemplate));
 		PowerMockito.when(participantServiceBean.getByRecruitmentNumber(RECRUITMENTNUMBER)).thenReturn(participant);
 		PowerMockito.when(reportDao.getByCenter("SP")).thenReturn(reports);
 		assertEquals(reports, reportServiceBean.getReportByParticipant(RECRUITMENTNUMBER));
@@ -215,7 +216,7 @@ public class ReportServiceBeanTest {
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(REPORT_UPDATE);
 		PowerMockito.when(reportDao.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
-		assertEquals(updateReport, reportServiceBean.update(reportTemplate));
+		assertEquals(updateReport, reportServiceBean.updateFieldCenters(reportTemplate));
 	}
 
 }

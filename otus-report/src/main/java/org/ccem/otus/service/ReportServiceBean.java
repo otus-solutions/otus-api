@@ -14,6 +14,7 @@ import org.ccem.otus.persistence.ActivityDataSourceDao;
 import org.ccem.otus.persistence.ExamDataSourceDao;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 import org.ccem.otus.persistence.ReportDao;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -56,7 +57,7 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException {
+	public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException {
 		Participant participant = participantService.getByRecruitmentNumber(recruitmentNumber);
 		String field = participant.getFieldCenter().getAcronym();
 		return reportDao.getByCenter(field);
@@ -84,7 +85,7 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException {
+	public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
 		return reportDao.updateFieldCenters(reportTemplate);
 	}
 

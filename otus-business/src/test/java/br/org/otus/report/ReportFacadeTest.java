@@ -1,13 +1,21 @@
 package br.org.otus.report;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.service.ReportService;
 import org.ccem.otus.service.ReportServiceBean;
 import org.junit.Test;
@@ -20,14 +28,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ReportFacadeTest.class, ReportTemplate.class })
@@ -77,11 +79,14 @@ public class ReportFacadeTest {
 	@Test
 	public void method_getReportByParticipant_should_returns_list_reports() throws DataNotFoundException, ValidationException {
 		ReportTemplate reportTemplate = new ReportTemplate();
-		ArrayList<ReportTemplate> reports = new ArrayList<>();
+		ArrayList<ReportTemplateDTO> reports = new ArrayList<>();
+		
 		Whitebox.setInternalState(reportTemplate, "_id", objectId);
 		Whitebox.setInternalState(reportTemplate, "label", "teste");
-		reports.add(reportTemplate);
+		reports.add(new ReportTemplateDTO(reportTemplate));
+		
 		PowerMockito.when(reportService.getReportByParticipant(RECRUITMENTNUMBER)).thenReturn(reports);
+		
 		assertEquals(reports, reportFacade.getReportByParticipant(RECRUITMENTNUMBER));
 
 	}
@@ -200,8 +205,8 @@ public class ReportFacadeTest {
 		mockStatic(ReportTemplate.class);		
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(reportUploadJson);
-		PowerMockito.when(reportService.update(Mockito.anyObject())).thenReturn(updateReport);
-		assertEquals(updateReport, reportFacade.update(reportUploadJson));
+		PowerMockito.when(reportService.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
+		assertEquals(updateReport, reportFacade.updateFieldCenters(reportUploadJson));
 		
 		
 	}
@@ -209,16 +214,16 @@ public class ReportFacadeTest {
 	public void method_update_should_throw_DataNotFoundException()
 			throws HttpResponseException, DataNotFoundException, ValidationException {
 		doThrow(new DataNotFoundException(
-				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).update(Mockito.anyObject());
-		reportFacade.update(reportUploadJson);
+				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).updateFieldCenters(Mockito.anyObject());
+		reportFacade.updateFieldCenters(reportUploadJson);
 	}
 	
 	@Test(expected = HttpResponseException.class)
 	public void method_update_should_throw_ValidationException()
 			throws HttpResponseException, DataNotFoundException, ValidationException {
 		doThrow(new ValidationException(
-				new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService).update(Mockito.anyObject());
-		reportFacade.update(reportUploadJson);
+				new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService).updateFieldCenters(Mockito.anyObject());
+		reportFacade.updateFieldCenters(reportUploadJson);
 	}
 	
 	
