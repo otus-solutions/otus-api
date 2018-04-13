@@ -11,6 +11,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportDao;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
@@ -59,13 +60,14 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public List<ReportTemplate> getByCenter(String fieldCenter) throws ValidationException {
-		ArrayList<ReportTemplate> results = new ArrayList<>();
+	public List<ReportTemplateDTO> getByCenter(String fieldCenter) throws ValidationException {
+		ArrayList<ReportTemplateDTO> results = new ArrayList<>();
 		MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).iterator();
 
 		while (iterator.hasNext()) {
 			Document next = (Document) iterator.next();
-			results.add(ReportTemplate.deserializeWithoutValidation(next.toJson()));
+			ReportTemplateDTO dto = new ReportTemplateDTO(ReportTemplate.deserializeWithoutValidation(next.toJson()));
+			results.add(dto);
 		}
 		iterator.close();
 

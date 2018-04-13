@@ -9,6 +9,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
+import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.service.ReportService;
 
 public class ReportFacade {
@@ -24,7 +25,7 @@ public class ReportFacade {
         }
     }
     
-    public List<ReportTemplate> getReportByParticipant(Long recruitmentNumber){
+    public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber){
         try {
             return reportService.getReportByParticipant(recruitmentNumber);
         } catch (DataNotFoundException | ValidationException e) {
