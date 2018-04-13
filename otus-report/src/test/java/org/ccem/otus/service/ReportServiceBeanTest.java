@@ -215,7 +215,7 @@ public class ReportServiceBeanTest {
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(REPORT_UPDATE);
 		PowerMockito.when(reportDao.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
-		assertEquals(updateReport, reportServiceBean.update(reportTemplate));
+		assertEquals(updateReport, reportServiceBean.updateFieldCenters(reportTemplate));
 	}
 
 }

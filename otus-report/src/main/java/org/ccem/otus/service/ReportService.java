@@ -19,6 +19,6 @@ public interface ReportService {
     
     ReportTemplate getByID(String id) throws DataNotFoundException, ValidationException;
     
-    ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
+    ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
 
 }

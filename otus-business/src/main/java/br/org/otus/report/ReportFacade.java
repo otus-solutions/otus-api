@@ -70,10 +70,10 @@ public class ReportFacade {
         }
     }
     
-    public ReportTemplate update(String updateReportJson) {
+    public ReportTemplate updateFieldCenters(String updateReportJson) {
     	try {
             ReportTemplate reportTemplate = ReportTemplate.deserialize(updateReportJson);
-            return reportService.update(reportTemplate);
+            return reportService.updateFieldCenters(reportTemplate);
         } catch (DataNotFoundException | ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

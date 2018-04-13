@@ -84,7 +84,7 @@ public class ReportServiceBean implements ReportService {
 	}
 
 	@Override
-	public ReportTemplate update(ReportTemplate reportTemplate) throws DataNotFoundException {
+	public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
 		return reportDao.updateFieldCenters(reportTemplate);
 	}
 

@@ -174,8 +174,8 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
 		Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
 		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
-		PowerMockito.when(reportFacade.update(Mockito.anyObject())).thenReturn(updateReport);
-		assertEquals(REPORT_UPDATE, reportResource.update(Mockito.anyObject()));
+		PowerMockito.when(reportFacade.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
+		assertEquals(REPORT_UPDATE, reportResource.updateFieldCenters(Mockito.anyObject()));
 	}
 
 }
