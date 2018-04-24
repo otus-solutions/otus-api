@@ -46,30 +46,37 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 	private ArrayList<Document> buildQueryToExamSendingLot(Long recruitmentNumber) {
 		ArrayList<Document> query = new ArrayList<>();
 
-		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examSendingLotId").append("as", "exam"));
-		query.add(lookup);
+        Document match = new Document(
+            "$match",
+            new Document("objectType", "ExamResults")
+                .append("examName", this.filters.getExamName())
+                .append("recruitmentNumber", recruitmentNumber)
+        );
+        query.add(match);
 
-		Document objectType = new Document("$match", new Document("exam.objectType", "Exam"));
-		query.add(objectType);
+        Document lookup = new Document(
+            "$lookup",
+            new Document("from", "exam_sending_lot")
+                .append("localField", "examSendingLotId")
+                .append("foreignField", "_id")
+                .append("as", "sendingLot")
+        );
+        query.add(lookup);
 
-		if (this.filters.getExamName() != null) {
-			Document examName = new Document("$match", new Document("exam.name", this.filters.getExamName()));
-			query.add(examName);
-		}
+        Document matchFieldCenter = new Document("$match", new Document("sendingLot.fieldCenter.acronym", this.filters.getFieldCenter()));
+        query.add(matchFieldCenter);
 
-		Document participantRecruitmentNumber = new Document("$match", new Document("exam.recruitmentNumber", recruitmentNumber));
-		query.add(participantRecruitmentNumber);
+        Document sort = new Document("$sort", new Document("sendingLot.realizationDate", 1));
+        query.add(sort);
 
-		if (this.filters.getFieldCenter() != null) {
-			Document fieldCenters = new Document("$match", new Document("fieldCenter.acronym", this.filters.getFieldCenter()));
-			query.add(fieldCenters);
-		}
-
-		Document sortResults = new Document("$sort", new Document("realizationDate", 1));
-		query.add(sortResults);
-
-		Document limitToResults = new Document("$limit", 1);
+        Document limitToResults = new Document("$limit", 1);
 		query.add(limitToResults);
+
+        Document unwind = new Document("$unwind", new Document("path", "$sendingLot"));
+        query.add(unwind);
+
+        Document replaceRoot = new Document("$replaceRoot", new Document("newRoot", "$sendingLot"));
+        query.add(replaceRoot);
 
 		return query;
 	}

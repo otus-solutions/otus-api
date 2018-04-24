@@ -22,10 +22,10 @@ public class ExamDataSourceTest {
 	private static final String VALUE_EXAM_NAME = "TRIGLICÉRIDES - SANGUE";
 	private static final String VALUE_RS = "RS";
 
-	private static final String FILTER_EXAM_NAME = "exam.name";
+	private static final String FILTER_EXAM_NAME = "examName";
 	private static final CharSequence FILTER_FIELD_CENTER_ACRONYM = "fieldCenter.acronym";
 
-	private static final String EXPECTED_RESULT_QUERY_ONE = "[Document{{$lookup=Document{{from=exam_result, localField=_id, foreignField=examSendingLotId, as=exam}}}}, Document{{$match=Document{{exam.objectType=Exam}}}}, Document{{$match=Document{{exam.name=TRIGLICÉRIDES - SANGUE}}}}, Document{{$match=Document{{exam.recruitmentNumber=1063154}}}}, Document{{$match=Document{{fieldCenter.acronym=RS}}}}, Document{{$sort=Document{{realizationDate=1}}}}, Document{{$limit=1}}]";
+	private static final String EXPECTED_RESULT_QUERY_ONE = "[Document{{$match=Document{{objectType=ExamResults, examName=TRIGLICÉRIDES - SANGUE, recruitmentNumber=1063154}}}}, Document{{$lookup=Document{{from=exam_sending_lot, localField=examSendingLotId, foreignField=_id, as=sendingLot}}}}, Document{{$match=Document{{sendingLot.fieldCenter.acronym=RS}}}}, Document{{$sort=Document{{sendingLot.realizationDate=1}}}}, Document{{$limit=1}}, Document{{$unwind=Document{{path=$sendingLot}}}}, Document{{$replaceRoot=Document{{newRoot=$sendingLot}}}}]";
 	private static final String EXPECTED_RESULT_QUERY_TWO = "[Document{{$match=Document{{examSendingLotId=" + valueObjectId+ "}}}}, Document{{$match=Document{{objectType=Exam}}}}, Document{{$match=Document{{name=TRIGLICÉRIDES - SANGUE}}}}, Document{{$lookup=Document{{from=exam_result, localField=_id, foreignField=examId, as=examResults}}}}, Document{{$match=Document{{examResults.aliquotValid=true}}}}]";
 
 	private ExamDataSource examResultDataSource;
