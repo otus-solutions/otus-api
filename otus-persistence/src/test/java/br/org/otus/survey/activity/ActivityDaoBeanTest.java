@@ -1,12 +1,14 @@
 package br.org.otus.survey.activity;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,8 +28,6 @@ import br.org.mongodb.MongoGenericDao;
 @PrepareForTest({ ActivityDaoBean.class })
 public class ActivityDaoBeanTest {
 
-	private static final String COLLECTION_NAME = "activity";
-	private static final String QUERY_TO_GET_ACTIVITIES_TO_EXTRACTION = "{{$match=Document{{surveyForm.surveyTemplate.identity.acronym=CSJ, isDiscarded=false}}}}";
 	private static final String ACRONYM = "FORM";
 
 	@InjectMocks
@@ -47,63 +47,46 @@ public class ActivityDaoBeanTest {
 	private ArrayList<Document> query;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		this.query = new ArrayList<>();
 		this.query.add(new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", ACRONYM).append("isDiscarded", Boolean.FALSE)));
-	}
 
-	@Test
-	public void method_getActivitiesToExtraction_should_return_list_of_SurveyActivity() throws Exception {
 		Whitebox.setInternalState(activityDaoBean, "collection", collection);
 		Mockito.when(this.collection.aggregate(Mockito.anyList())).thenReturn(this.result);
 
 		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(this.activities);
 		PowerMockito.doReturn(1).when(this.activities).size();
+	}
 
-		this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
+	@Test
+	public void method_getActivitiesToExtraction_should_return_list_not_null() throws Exception {
 
-		// TODO:
+		Assert.assertNotNull(this.activityDaoBean.getActivitiesToExtraction(ACRONYM));
 	}
 
 	@Test
 	public void method_getActivitiesToExtraction_should_called_method_aggregate() throws Exception {
-		Whitebox.setInternalState(activityDaoBean, "collection", collection);
-		Mockito.when(this.collection.aggregate(Mockito.anyList())).thenReturn(this.result);
-
-		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(this.activities);
-		PowerMockito.doReturn(1).when(this.activities).size();
-
 		this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
 
 		Mockito.verify(this.collection, Mockito.times(1)).aggregate(Mockito.anyList());
 	}
 
 	@Test
-	public void method_getActivitiesToExtraction_should_return_create_query_correct_with_acronym_and_discarded_how_false() throws Exception {
-		Whitebox.setInternalState(activityDaoBean, "collection", collection);
-		Mockito.when(this.collection.aggregate(Mockito.anyList())).thenReturn(this.result);
-
-		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(this.activities);
-		PowerMockito.doReturn(1).when(this.activities).size();
-
-		List<SurveyActivity> extraction = this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
-
-		// TODO:
-
+	public void method_getActivitiesToExtraction_should_return_exception_when_list_of_activities_is_empty() {
+		PowerMockito.doReturn(0).when(this.activities).size();
+		try {
+			this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
+		} catch (DataNotFoundException e) {
+			assertTrue(e.getMessage().contains("OID {" + ACRONYM + "} not found."));
+		}
 	}
 
-	@Ignore
 	@Test
-	public void method_getActivitiesToExtraction_should_return_only_not_discarded_activities() throws Exception {
-		Whitebox.setInternalState(activityDaoBean, "collection", collection);
-		Mockito.when(this.collection.aggregate(Mockito.anyList())).thenReturn(this.result);
+	public void method_getActivitiesToExtraction_should_create_query_correct_with_acronym_and_discarded_how_false() throws Exception {
+		Document query = new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", ACRONYM).append("isDiscarded", Boolean.FALSE));
+		Document result = Whitebox.invokeMethod(this.activityDaoBean, "buildQueryToExtraction", ACRONYM);
+		this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
 
-		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(this.activities);
-		PowerMockito.doReturn(1).when(this.activities).size();
-
-		List<SurveyActivity> extraction = this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
-
-		// TODO:
+		Assert.assertEquals(query, result);
 	}
-
 }

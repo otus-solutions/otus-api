@@ -89,8 +89,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		ArrayList<SurveyActivity> activities = new ArrayList<>();
 		ArrayList<Document> query = new ArrayList<>();
 
-		Document match = new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", id).append("isDiscarded", Boolean.FALSE));
-		query.add(match);
+		query.add(this.buildQueryToExtraction(id));
 
 		AggregateIterable<Document> result = collection.aggregate(query);
 
@@ -100,6 +99,10 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		}
 
 		return activities;
+	}
+
+	private Document buildQueryToExtraction(String id) {
+		return new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", id).append("isDiscarded", Boolean.FALSE));
 	}
 
 	@Override
