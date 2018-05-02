@@ -3,6 +3,7 @@ package br.org.otus.survey.services;
 import br.org.otus.survey.SurveyDao;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -21,6 +22,17 @@ public class SurveyServiceBean implements SurveyService {
     @Override
     public SurveyForm saveSurvey(SurveyForm survey) throws AlreadyExistException {
         surveyValidorService.validateSurvey(surveyDao, survey);
+
+        try {
+            Integer lastVersion = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
+            survey.setVersion(lastVersion + 1);
+            //todo delete past higher version survey
+        } catch (DataNotFoundException e) {
+            //todo: verify if there's a survey w the given acronym?
+            survey.setVersion(1);
+//            throw e;
+        }
+
         surveyDao.persist(SurveyForm.serialize(survey));
         return survey;
     }
@@ -47,7 +59,7 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public boolean deleteByAcronym(String acronym) throws ValidationException {
-        if (acronym.isEmpty() || acronym == null) {
+        if (acronym.isEmpty()) {
             throw new ValidationException();
         } else {
             return surveyDao.deleteByAcronym(acronym);
