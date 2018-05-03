@@ -28,7 +28,8 @@ public class SurveyDao extends MongoGenericDao<Document> {
 
     public List<SurveyForm> find() {
         ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
-        list().forEach((Block<Document>) document -> {
+        Document query = new Document("isDiscarded", false);
+        collection.find(query).forEach((Block<Document>) document -> {
             surveys.add(SurveyForm.deserialize(document.toJson()));
         });
 

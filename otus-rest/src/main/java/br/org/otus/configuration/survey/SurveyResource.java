@@ -28,6 +28,8 @@ public class SurveyResource {
 		return new Response().buildSuccess(surveyFacade.list()).toSurveyJson();
 	}
 
+
+	//TODO 03/05/18: find out what's used for
 	@GET
 	@Secured
 	@Path("/{acronym}")
