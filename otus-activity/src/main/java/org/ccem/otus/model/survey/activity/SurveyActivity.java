@@ -102,7 +102,9 @@ public class SurveyActivity {
 	}
 
 	public static String serialize(SurveyActivity surveyActivity) {
-		return getGsonBuilder().create().toJson(surveyActivity);
+		String json = getGsonBuilder().create().toJson(surveyActivity);
+		//TODO 03/05/18: remove survey oid
+		return json;
 	}
 
 	public static SurveyActivity deserialize(String surveyActivity) {

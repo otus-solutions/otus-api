@@ -78,17 +78,21 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return deleteResult.getDeletedCount() > 0;
     }
 
-    public boolean discardSurvey(SurveyForm survey) {
-        Document query = new Document();
-        query.put("sendingDate", survey.getSendingDate().toString().concat("Z"));
-        query.put("sender", survey.getSender());
+    public boolean discardSurvey(ObjectId id) throws DataNotFoundException {
+        Document query = new Document("_id", id);
 
+        UpdateResult updateResult = collection
+                .updateOne(
+                        query,
+                        new Document("$set", new Document("isDiscarded", true)),
+                        new UpdateOptions().upsert(false)
+                );
 
-        survey.setDiscarded(true);
-        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("isDiscarded", true)), new UpdateOptions().upsert(false));
-        updateResult.getMatchedCount();
+        if(updateResult.getMatchedCount() == 0){
+            throw new DataNotFoundException("No survey found to discard");
+        }
 
-        return false;
+        return updateResult.getModifiedCount() != 0;
     }
 
     public SurveyForm getLastVersionByAcronym(String acronym) throws DataNotFoundException {
@@ -100,7 +104,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         Document higherVersionDocument = collection.find(query).sort(descending("version")).first();
 
         if (higherVersionDocument == null) {
-            throw new DataNotFoundException("No survey found for the given acronym");
+            return null;
         }
         //todo: test String.valueOf();
         return SurveyForm.deserialize(higherVersionDocument.toJson());

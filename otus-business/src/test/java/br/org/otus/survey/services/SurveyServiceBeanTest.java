@@ -56,20 +56,32 @@ public class SurveyServiceBeanTest {
 
 	@Test
 	public void saveSurvey_shoud_call_method_validateSurvey() throws AlreadyExistException {
-		service.saveSurvey(survey);
-		Mockito.verify(surveyValidorService).validateSurvey(surveyDao, survey);
+        try {
+            service.saveSurvey(survey);
+        } catch (org.ccem.otus.exceptions.webservice.common.DataNotFoundException e) {
+            e.printStackTrace();
+        }
+        Mockito.verify(surveyValidorService).validateSurvey(surveyDao, survey);
 	}
 
 	@Test
 	public void saveSurvey_should_call_method_persist() throws AlreadyExistException {
-		service.saveSurvey(survey);
-		Mockito.verify(surveyDao).persist(SurveyForm.serialize(survey));
+        try {
+            service.saveSurvey(survey);
+        } catch (org.ccem.otus.exceptions.webservice.common.DataNotFoundException e) {
+            e.printStackTrace();
+        }
+        Mockito.verify(surveyDao).persist(SurveyForm.serialize(survey));
 	}
 
 	@Test
 	public void saveSurvey_should_returns_same_survey() throws AlreadyExistException {
-		assertEquals(survey, service.saveSurvey(survey));
-	}
+        try {
+            assertEquals(survey, service.saveSurvey(survey));
+        } catch (org.ccem.otus.exceptions.webservice.common.DataNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@Test
 	public void list_should_call_surveyDao_find() {

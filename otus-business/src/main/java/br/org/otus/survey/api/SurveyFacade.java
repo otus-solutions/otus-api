@@ -4,7 +4,7 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import br.org.otus.survey.services.SurveyService;
-import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -29,14 +29,10 @@ public class SurveyFacade {
 		SurveyForm s = new SurveyForm(surveyTemplate, userEmail);
 		try {
 			return surveyService.saveSurvey(s);
-		} catch (AlreadyExistException e) {
-			if(e.getCause().getMessage().contains("Acronym")) {
-				throw new HttpResponseException(ResponseBuild.Survey.AcronymAlreadyExist.build());
-			} else {
-				throw new HttpResponseException(ResponseBuild.Survey.NonUniqueItemID.build());
-			}
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
-	}
+    }
 
 	public boolean updateSurveyFormType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
 		try {
