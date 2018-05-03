@@ -1,8 +1,7 @@
 package org.ccem.otus.persistence;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.dataSources.ActivityDataSource;
-import org.ccem.otus.model.dataSources.ActivityDataSourceResult;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 
 public interface ActivityDataSourceDao {
 

@@ -4,8 +4,8 @@ import br.org.mongodb.MongoGenericDao;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.dataSources.ParticipantDataSource;
-import org.ccem.otus.model.dataSources.ParticipantDataSourceResult;
+import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
+import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 
 import static com.mongodb.client.model.Filters.eq;

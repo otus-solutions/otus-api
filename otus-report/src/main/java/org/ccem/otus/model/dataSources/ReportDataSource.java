@@ -7,11 +7,12 @@ import java.util.ArrayList;
 public abstract class ReportDataSource<T> {
     private String key;
     private String dataSource;
+    private String label;
     private ArrayList<T> result = new ArrayList<>();
 
     public abstract void addResult(T result);
 
-    public abstract ArrayList<Document> builtQuery(Long recruitmentNumber);
+    public abstract ArrayList<Document> buildQuery(Long recruitmentNumber);
 
     public ArrayList<T> getResult() {
         return result;
@@ -24,4 +25,8 @@ public abstract class ReportDataSource<T> {
     public String getKey() {
         return key;
     }
+
+	public String getLabel() {
+		return label;
+	}
 }
