@@ -51,7 +51,7 @@ public class SurveyServiceBeanTest {
 		updateSurveyFormTypeDtoValid.newSurveyFormType = SurveyFormType.FORM_INTERVIEW;
 		PowerMockito.when(surveyDao.updateSurveyFormType(updateSurveyFormTypeDtoValid.acronym,
 				updateSurveyFormTypeDtoValid.newSurveyFormType.toString())).thenReturn(true);
-		PowerMockito.when(surveyDao.deleteByAcronym(ACRONYM)).thenReturn(true);
+		PowerMockito.when(surveyDao.deleteLastVersionByAcronym(ACRONYM)).thenReturn(true);
 	}
 
 	@Test
@@ -98,18 +98,18 @@ public class SurveyServiceBeanTest {
 
 	@Test(expected = ValidationException.class)
 	public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_empty() throws ValidationException {
-		service.deleteByAcronym(ACRONYM_EMPTY);
+		service.deleteLastVersionByAcronym(ACRONYM_EMPTY);
 	}
 
 	@Test(expected = ValidationException.class)
 	public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_null() throws ValidationException {
-		service.deleteByAcronym(ACRONYM_NULL);
+		service.deleteLastVersionByAcronym(ACRONYM_NULL);
 	}
 
 	@Test
 	public void deleteByAcronym_should_returns_positive_answer_case_acronym_not_be_null_or_empty()
 			throws ValidationException {
-		assertTrue(surveyDao.deleteByAcronym(ACRONYM));
+		assertTrue(surveyDao.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 }

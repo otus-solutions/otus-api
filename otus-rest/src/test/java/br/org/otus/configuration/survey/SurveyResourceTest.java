@@ -55,7 +55,7 @@ public class SurveyResourceTest {
 
 	@Test
 	public void method_DeleteByAcronym_should_return_positive_answer_in_responseJson() {
-		when(surveyFacade.deleteByAcronym(ACRONYM)).thenReturn(POSITIVE_RETURN);
+		when(surveyFacade.deleteLastVersionByAcronym(ACRONYM)).thenReturn(POSITIVE_RETURN);
 		assertTrue(surveyResource.deleteByAcronym(ACRONYM).contains(POSITIVE_RETURN.toString()));
 	}
 

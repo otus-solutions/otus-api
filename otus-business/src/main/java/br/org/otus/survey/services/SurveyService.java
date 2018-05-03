@@ -18,6 +18,6 @@ public interface SurveyService {
 	
 	boolean updateSurveyFormType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException;
 	
-	boolean deleteByAcronym(String acronym) throws ValidationException;
+	boolean deleteLastVersionByAcronym(String acronym) throws ValidationException;
 
 }

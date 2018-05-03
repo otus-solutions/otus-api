@@ -41,7 +41,7 @@ public class SurveyResource {
 	@Path("/{acronym}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteByAcronym(@PathParam("acronym") String acronym) {
-		return new Response().buildSuccess(surveyFacade.deleteByAcronym(acronym)).toJson();
+		return new Response().buildSuccess(surveyFacade.deleteLastVersionByAcronym(acronym)).toJson();
 	}
 
 	@PUT

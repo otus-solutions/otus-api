@@ -21,19 +21,21 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public SurveyForm saveSurvey(SurveyForm survey) throws AlreadyExistException {
-        surveyValidorService.validateSurvey(surveyDao, survey);
+//        surveyValidorService.validateSurvey(surveyDao, survey); todo: uncomment and fix
 
         try {
-            Integer lastVersion = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
-            survey.setVersion(lastVersion + 1);
-            //todo delete past higher version survey
+            SurveyForm lastVersionSurvey = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
+            survey.setVersion(lastVersionSurvey.getVersion() + 1);
+//            lastVersionSurvey.setDiscarded(true);
+
+            surveyDao.persist(survey);
+            surveyDao.discardSurvey(lastVersionSurvey);
+            return survey;
         } catch (DataNotFoundException e) {
-            //todo: verify if there's a survey w the given acronym?
             survey.setVersion(1);
-//            throw e;
+            surveyDao.persist(survey);
         }
 
-        surveyDao.persist(SurveyForm.serialize(survey));
         return survey;
     }
 
@@ -58,11 +60,11 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public boolean deleteByAcronym(String acronym) throws ValidationException {
+    public boolean deleteLastVersionByAcronym(String acronym) throws ValidationException {
         if (acronym.isEmpty()) {
             throw new ValidationException();
         } else {
-            return surveyDao.deleteByAcronym(acronym);
+            return surveyDao.deleteLastVersionByAcronym(acronym);
         }
     }
 

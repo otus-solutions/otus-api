@@ -119,20 +119,20 @@ public class SurveyFacadeTest {
 
 	@Test
 	public void method_deleteByAcronym_should_return_valid() throws ValidationException {
-		when(surveyService.deleteByAcronym(ACRONYM)).thenReturn(POSITIVE_ANSWER);
-		assertTrue(surveyFacade.deleteByAcronym(ACRONYM));
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenReturn(POSITIVE_ANSWER);
+		assertTrue(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 	@Test
 	public void method_deleteByAcronym_should_return_invalid() throws ValidationException {
-		when(surveyService.deleteByAcronym(ACRONYM)).thenReturn(NEGATIVE_ANSWER);
-		assertFalse(surveyFacade.deleteByAcronym(ACRONYM));
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenReturn(NEGATIVE_ANSWER);
+		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 	@Test(expected = HttpResponseException.class)
 	public void method_deleteByAcronym_should_throw_HttpResponseException() throws ValidationException {
-		when(surveyService.deleteByAcronym(ACRONYM)).thenThrow(ValidationException.class);
-		assertFalse(surveyFacade.deleteByAcronym(ACRONYM));
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(ValidationException.class);
+		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 }

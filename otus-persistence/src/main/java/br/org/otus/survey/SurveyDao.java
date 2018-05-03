@@ -2,10 +2,13 @@ package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
 import com.mongodb.Block;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
@@ -54,6 +57,14 @@ public class SurveyDao extends MongoGenericDao<Document> {
 
     }
 
+    public ObjectId persist(SurveyForm survey) {
+        Document parsed = Document.parse(SurveyForm.serialize(survey));
+        parsed.remove("_id");
+        collection.insertOne(parsed);
+
+        return parsed.getObjectId("_id");
+    }
+
     public boolean updateSurveyFormType(String acronym, String surveyFormType) {
         UpdateResult updateOne = collection.updateOne(eq("surveyTemplate.identity.acronym", acronym.toUpperCase()),
                 new Document("$set", new Document("surveyFormType", surveyFormType)));
@@ -61,18 +72,29 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return updateOne.getModifiedCount() > 0;
     }
 
-    public boolean deleteByAcronym(String acronym) {
+    public boolean deleteLastVersionByAcronym(String acronym) {
         DeleteResult deleteResult = collection.deleteOne(eq("surveyTemplate.identity.acronym", acronym.toUpperCase()));
 
         return deleteResult.getDeletedCount() > 0;
     }
 
-    public Integer getLastVersionByAcronym(String acronym) throws DataNotFoundException {
+    public boolean discardSurvey(SurveyForm survey) {
         Document query = new Document();
-        Document sorting = new Document();
+        query.put("sendingDate", survey.getSendingDate().toString().concat("Z"));
+        query.put("sender", survey.getSender());
+
+
+        survey.setDiscarded(true);
+        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("isDiscarded", true)), new UpdateOptions().upsert(false));
+        updateResult.getMatchedCount();
+
+        return false;
+    }
+
+    public SurveyForm getLastVersionByAcronym(String acronym) throws DataNotFoundException {
+        Document query = new Document();
 
         query.put("surveyTemplate.identity.acronym", acronym.toUpperCase());
-        sorting.put("version", "-1");
 
         //todo: check sorting
         Document higherVersionDocument = collection.find(query).sort(descending("version")).first();
@@ -80,7 +102,8 @@ public class SurveyDao extends MongoGenericDao<Document> {
         if (higherVersionDocument == null) {
             throw new DataNotFoundException("No survey found for the given acronym");
         }
-        return (Integer) higherVersionDocument.get("version");
+        //todo: test String.valueOf();
+        return SurveyForm.deserialize(higherVersionDocument.toJson());
 
     }
 
