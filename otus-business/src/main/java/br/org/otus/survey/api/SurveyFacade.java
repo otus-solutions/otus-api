@@ -45,7 +45,7 @@ public class SurveyFacade {
 	public boolean deleteLastVersionByAcronym(String acronym) {
 		try {
 			return surveyService.deleteLastVersionByAcronym(acronym);
-		} catch (ValidationException e) {
+		} catch (ValidationException | DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build());
 		}
 	}

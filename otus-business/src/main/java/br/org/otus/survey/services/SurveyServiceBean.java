@@ -65,11 +65,15 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public boolean deleteLastVersionByAcronym(String acronym) throws ValidationException {
+    public boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException {
         if (acronym.isEmpty()) {
             throw new ValidationException();
         } else {
-            return surveyDao.deleteLastVersionByAcronym(acronym);
+            try {
+                return surveyDao.deleteLastVersionByAcronym(acronym);
+            } catch (DataNotFoundException e) {
+                throw e;
+            }
         }
     }
 
