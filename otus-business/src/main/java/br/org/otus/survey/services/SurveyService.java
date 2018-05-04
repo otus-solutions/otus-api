@@ -11,7 +11,7 @@ public interface SurveyService {
 
 	SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException;
 	
-	List<SurveyForm> list();
+	List<SurveyForm> listUndiscarded();
 	
 	List<SurveyForm> findByAcronym(String acronym);
 	

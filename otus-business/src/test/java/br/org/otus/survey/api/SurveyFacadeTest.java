@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -59,8 +60,8 @@ public class SurveyFacadeTest {
 	public void method_list_should_return_surveys() {
 		surveys.add(survey);
 		surveys.add(surveyAcronym);
-		when(surveyService.list()).thenReturn(surveys);
-		assertEquals(surveys.size(), surveyFacade.list().size());
+		when(surveyService.listUndiscarded()).thenReturn(surveys);
+		assertEquals(surveys.size(), surveyFacade.listUndiscarded().size());
 	}
 
 	@Test
@@ -118,19 +119,19 @@ public class SurveyFacadeTest {
 	}
 
 	@Test
-	public void method_deleteByAcronym_should_return_valid() throws ValidationException {
+	public void method_deleteByAcronym_should_return_valid() throws ValidationException, DataNotFoundException {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenReturn(POSITIVE_ANSWER);
 		assertTrue(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 	@Test
-	public void method_deleteByAcronym_should_return_invalid() throws ValidationException {
+	public void method_deleteByAcronym_should_return_invalid() throws ValidationException, DataNotFoundException {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenReturn(NEGATIVE_ANSWER);
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_deleteByAcronym_should_throw_HttpResponseException() throws ValidationException {
+	public void method_deleteByAcronym_should_throw_HttpResponseException() throws ValidationException, DataNotFoundException {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(ValidationException.class);
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}

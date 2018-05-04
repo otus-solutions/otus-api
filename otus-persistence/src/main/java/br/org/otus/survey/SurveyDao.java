@@ -26,7 +26,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         super(COLLECTION_NAME, Document.class);
     }
 
-    public List<SurveyForm> find() {
+    public List<SurveyForm> findUndiscarded() {
         ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
         Document query = new Document("isDiscarded", false);
         collection.find(query).forEach((Block<Document>) document -> {

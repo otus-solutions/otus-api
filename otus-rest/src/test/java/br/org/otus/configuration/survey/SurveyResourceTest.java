@@ -43,8 +43,8 @@ public class SurveyResourceTest {
 
 	@Test
 	public void method_getAll_should_return_response_in_surveyJson() {
-		when(surveyFacade.list()).thenReturn(surveys);
-		assertTrue(surveyResource.getAll().contains(USER_EMAIL));
+		when(surveyFacade.listUndiscarded()).thenReturn(surveys);
+		assertTrue(surveyResource.getAllUndiscarded().contains(USER_EMAIL));
 	}
 
 	@Test

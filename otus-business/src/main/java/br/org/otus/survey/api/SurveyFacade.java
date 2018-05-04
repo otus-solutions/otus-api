@@ -17,8 +17,8 @@ public class SurveyFacade {
 	@Inject
 	private SurveyService surveyService;
 
-	public List<SurveyForm> list() {
-		return surveyService.list();
+	public List<SurveyForm> listUndiscarded() {
+		return surveyService.listUndiscarded();
 	}
 
 	public List<SurveyForm> findByAcronym(String acronym) {

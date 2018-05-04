@@ -9,9 +9,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Stateless
 public class SurveyServiceBean implements SurveyService {
@@ -45,8 +43,8 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public List<SurveyForm> list() {
-        return surveyDao.find();
+    public List<SurveyForm> listUndiscarded() {
+        return surveyDao.findUndiscarded();
     }
 
     @Override
@@ -66,7 +64,7 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException {
-        if (acronym.isEmpty()) {
+        if (acronym == null || acronym.isEmpty()) {
             throw new ValidationException();
         } else {
             try {
