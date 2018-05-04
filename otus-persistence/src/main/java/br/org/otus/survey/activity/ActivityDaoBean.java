@@ -89,8 +89,6 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	public List<SurveyActivity> findAllByID(String id) throws DataNotFoundException {
 		ArrayList<SurveyActivity> activities = new ArrayList<>();
 
-//		FindIterable<Document> result = collection.find(eq("surveyForm.surveyTemplate.identity.acronym", id));
-
 		Document query = new Document();
 		query.put("surveyForm.surveyTemplate.identity.acronym", id);
 
