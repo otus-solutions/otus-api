@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.form.SurveyFormType;
@@ -27,6 +28,7 @@ public class SurveyServiceBeanTest {
 	private static final String ACRONYM_EMPTY = "";
 	private static final String SURVEY_SERIALIZE = "{survey:'survey'}";
 	private static final String ACRONYM_NULL = "";
+	private static final Integer VERSION = 1;
 
 	@InjectMocks
 	private SurveyServiceBean service;
@@ -81,6 +83,13 @@ public class SurveyServiceBeanTest {
 	public void findByAcronym_should_call_method_findByAcronym_by_surveyDao() {
 		service.findByAcronym(ACRONYM);
 		Mockito.verify(surveyDao).findByAcronym(ACRONYM);
+
+	}
+	
+	@Test
+	public void findByAcronymWithVersion_should_call_method_findByAcronym_by_surveyDao() throws DataNotFoundException {
+		service.findByAcronymWithVersion(ACRONYM, VERSION);
+		Mockito.verify(surveyDao).findByAcronymWithVersion(ACRONYM, VERSION);
 
 	}
 

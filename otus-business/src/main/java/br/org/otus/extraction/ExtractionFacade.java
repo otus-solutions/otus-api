@@ -25,13 +25,13 @@ public class ExtractionFacade {
 	private ExtractionService extractionService;
 
 	public ExtractionFacade() {
-		extractionService = new ExtractionService();
-		activityFacade = new ActivityFacade();
-	}
+//		extractionService = new ExtractionService();
+//		activityFacade = new ActivityFacade();
+	} 
 
-	public byte[] createActivityExtraction(String id) {
+	public byte[] createActivityExtraction(String id, Integer version) {
 		List<SurveyActivity> activities = activityFacade.getAllByID(id);
-		SurveyForm surveyForm = surveyFacade.findByAcronym(id).get(0);  //TODO 04/12/17: implement a findFirst?
+		SurveyForm surveyForm = surveyFacade.findByAcronymWithVersion(id, version).get(0);
 		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
 		try {
 			return extractionService.createExtraction(extractor);
