@@ -74,6 +74,22 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- - - Dependency between modules - ! -->
+		
+		<!-- - - Test scope - ! -->
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-persistence</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+		</dependency>
+     	<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-extraction</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>			
+		</dependency>
+		
+		<!-- - - Provided scope - ! -->		
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-business</artifactId>
@@ -85,14 +101,7 @@
 			<artifactId>otus-participant</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ccem.otus</groupId>
-			<artifactId>otus-persistence</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>test</scope>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
