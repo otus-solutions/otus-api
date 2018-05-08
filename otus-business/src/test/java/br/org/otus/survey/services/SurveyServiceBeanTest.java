@@ -41,7 +41,7 @@ public class SurveyServiceBeanTest {
     @Mock
     private SurveyDao surveyDao;
     @Mock
-    private SurveyValidatorService surveyValidatorService;
+    private SurveyValidatorServiceBean surveyValidatorServiceBean;
     @Mock
     private UpdateSurveyFormTypeDto updateSurveyFormTypeDtoInvalid;
     @Mock
@@ -82,7 +82,7 @@ public class SurveyServiceBeanTest {
     @Test
     public void saveSurvey_shoud_call_method_validateSurvey() throws AlreadyExistException, DataNotFoundException {
         service.saveSurvey(survey);
-        Mockito.verify(surveyValidatorService).validateSurvey(surveyDao, survey);
+        Mockito.verify(surveyValidatorServiceBean).validateSurvey(surveyDao, survey);
     }
 
     @Test

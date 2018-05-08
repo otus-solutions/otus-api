@@ -10,7 +10,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Stateless
@@ -79,7 +79,9 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public List<Integer> listSurveyVersions(String acronym) {
-        return surveyDao.getSurveyVersions(acronym);
+        List<Integer> surveyVersions = surveyDao.getSurveyVersions(acronym);
+        Collections.reverse(surveyVersions);
+        return surveyVersions;
     }
 
     private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
