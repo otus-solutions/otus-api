@@ -47,14 +47,14 @@ public class CustomIdValidatorTest {
 	@Test
 	public void method_validate_should_return_validatorResponse_invalid() {
 		surveyFormList.add(surveyFormReal);
-		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds()))
+		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds(), ""))
 				.thenReturn(surveyFormList);
 		assertFalse(customIdValidator.validate().isValid());
 	}
 
 	@Test
 	public void method_validate_should_return_validatorResponse_valid() {
-		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds()))
+		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds(), ""))
 				.thenReturn(surveyFormList);
 		assertTrue(customIdValidator.validate().isValid());
 	}

@@ -23,7 +23,8 @@ public class CustomIdValidator implements SurveyValidator {
 	public ValidatorResponse validate() {
 		Response validatorResponse = new Response();
 		Set<String> customIds = surveyForm.getSurveyTemplate().getCustomIds();
-		List<Identity> conflicts = surveyDao.findByCustomId(customIds).stream()
+		String surveyAcronym = surveyForm.getSurveyTemplate().identity.acronym;
+		List<Identity> conflicts = surveyDao.findByCustomId(customIds, surveyAcronym).stream()
 				.map(foundedSurvey -> foundedSurvey.getSurveyTemplate().identity).collect(Collectors.toList());
 		validatorResponse.setConflicts(conflicts);
 		return validatorResponse;

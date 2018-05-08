@@ -3,6 +3,7 @@ package br.org.otus.survey.services;
 import br.org.otus.survey.SurveyDao;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -20,8 +21,8 @@ public class SurveyServiceBean implements SurveyService {
     private SurveyValidorService surveyValidorService;
 
     @Override
-    public SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException {
-//        surveyValidorService.validateSurvey(surveyDao, survey); todo: uncomment and fix
+    public SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException, AlreadyExistException {
+        surveyValidorService.validateSurvey(surveyDao, survey);
 
         SurveyForm lastVersionSurvey = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
 

@@ -1,8 +1,7 @@
 package br.org.otus.survey.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import br.org.otus.survey.SurveyDao;
+import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -22,8 +21,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.survey.SurveyDao;
-import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
+import static org.junit.Assert.assertTrue;
 
 @PrepareForTest(SurveyForm.class)
 @RunWith(PowerMockRunner.class)

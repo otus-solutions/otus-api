@@ -45,11 +45,19 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return surveys;
     }
 
-    public List<SurveyForm> findByCustomId(Set<String> ids) {
+    public List<SurveyForm> findByCustomId(Set<String> ids, String surveyAcronym) {
         ArrayList<SurveyForm> surveys = new ArrayList<>();
         collection
-                .find(or(in("surveyTemplate.itemContainer.customID", ids),
-                        in("surveyTemplate.itemContainer.options.customOptionID", ids)))
+                .find(and(
+                            not(
+                                    eq("surveyTemplate.identity.acronym", surveyAcronym) //TODO 07/05/18: check how survey acronym comes on set
+                            ),
+                            or(
+                                    in("surveyTemplate.itemContainer.customID", ids),
+                                    in("surveyTemplate.itemContainer.options.customOptionID", ids)
+                            )
+                        )
+                )
                 .forEach((Block<Document>) document -> {
                     surveys.add(SurveyForm.deserialize(document.toJson()));
                 });
