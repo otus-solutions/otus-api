@@ -10,6 +10,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -18,11 +19,11 @@ public class SurveyServiceBean implements SurveyService {
     @Inject
     private SurveyDao surveyDao;
     @Inject
-    private SurveyValidorService surveyValidorService;
+    private SurveyValidatorService surveyValidatorService;
 
     @Override
     public SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException, AlreadyExistException {
-        surveyValidorService.validateSurvey(surveyDao, survey);
+        surveyValidatorService.validateSurvey(surveyDao, survey);
 
         SurveyForm lastVersionSurvey = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
 
@@ -76,7 +77,12 @@ public class SurveyServiceBean implements SurveyService {
         }
     }
 
-    public void discardSurvey(SurveyForm survey) throws DataNotFoundException {
+    @Override
+    public List<Integer> listSurveyVersions(String acronym) {
+        return surveyDao.getSurveyVersions(acronym);
+    }
+
+    private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
         try {
             surveyDao.discardSurvey(survey.getSurveyID());
         } catch (DataNotFoundException e) {

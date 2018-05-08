@@ -2,6 +2,8 @@ package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
 import com.mongodb.Block;
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -49,13 +51,13 @@ public class SurveyDao extends MongoGenericDao<Document> {
         ArrayList<SurveyForm> surveys = new ArrayList<>();
         collection
                 .find(and(
-                            not(
-                                    eq("surveyTemplate.identity.acronym", surveyAcronym) //TODO 07/05/18: check how survey acronym comes on set
-                            ),
-                            or(
-                                    in("surveyTemplate.itemContainer.customID", ids),
-                                    in("surveyTemplate.itemContainer.options.customOptionID", ids)
-                            )
+                        not(
+                                eq("surveyTemplate.identity.acronym", surveyAcronym) //TODO 07/05/18: check how survey acronym comes on set
+                        ),
+                        or(
+                                in("surveyTemplate.itemContainer.customID", ids),
+                                in("surveyTemplate.itemContainer.options.customOptionID", ids)
+                        )
                         )
                 )
                 .forEach((Block<Document>) document -> {
@@ -82,8 +84,6 @@ public class SurveyDao extends MongoGenericDao<Document> {
     }
 
     public boolean deleteLastVersionByAcronym(String acronym) throws DataNotFoundException {
-        DeleteResult deleteResult = collection.deleteOne(eq("surveyTemplate.identity.acronym", acronym.toUpperCase()));
-
         Document query = new Document("surveyTemplate.identity.acronym", acronym);
         query.put("isDiscarded", false);
 
@@ -94,11 +94,12 @@ public class SurveyDao extends MongoGenericDao<Document> {
                         new UpdateOptions().upsert(false)
                 );
 
-        if(updateResult.getMatchedCount() == 0){
+        if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException("No survey found to discard");
         }
 
-        return updateResult.getModifiedCount() != 0;    }
+        return updateResult.getModifiedCount() != 0;
+    }
 
     public boolean discardSurvey(ObjectId id) throws DataNotFoundException {
         Document query = new Document("_id", id);
@@ -110,7 +111,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
                         new UpdateOptions().upsert(false)
                 );
 
-        if(updateResult.getMatchedCount() == 0){
+        if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException("No survey found to discard");
         }
 
@@ -122,7 +123,6 @@ public class SurveyDao extends MongoGenericDao<Document> {
 
         query.put("surveyTemplate.identity.acronym", acronym.toUpperCase());
 
-        //todo: check sorting
         Document higherVersionDocument = collection.find(query).sort(descending("version")).first();
 
         if (higherVersionDocument == null) {
@@ -130,7 +130,16 @@ public class SurveyDao extends MongoGenericDao<Document> {
         }
         //todo: test String.valueOf();
         return SurveyForm.deserialize(higherVersionDocument.toJson());
+    }
 
+    public List<Integer> getSurveyVersions(String acronym){
+        Document query = new Document("surveyTemplate.identity.acronym", acronym);
+        ArrayList<Integer> versions = new ArrayList<>();
+
+        for (Integer integer : collection.distinct("version", query, Integer.class)) {
+            versions.add(integer);
+        }
+        return versions;
     }
 
 }

@@ -46,6 +46,7 @@ public class SurveyResource {
 		return new Response().buildSuccess(surveyFacade.deleteLastVersionByAcronym(acronym)).toJson();
 	}
 
+	//todo: find out if its still in use
 	@PUT
 	@Secured
 	@Path("/{acronym}/type")
@@ -53,6 +54,14 @@ public class SurveyResource {
 	public String updateSurveyFormType(@PathParam("acronym") String acronym, UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
 		updateSurveyFormTypeDto.acronym = acronym;
 		return new Response().buildSuccess(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto)).toJson();
+	}
+
+	@GET
+	@Secured
+	@Path("/{acronym}/versions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getSurveyVersions(@PathParam("acronym") String acronym) {
+		return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toSurveyJson();
 	}
 
 }
