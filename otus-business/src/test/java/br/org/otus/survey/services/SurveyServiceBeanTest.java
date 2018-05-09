@@ -1,6 +1,6 @@
 package br.org.otus.survey.services;
 
-import br.org.otus.survey.SurveyDao;
+import br.org.otus.survey.SurveyDaoBean;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
@@ -11,7 +11,6 @@ import org.ccem.otus.survey.form.SurveyFormType;
 import org.ccem.otus.survey.template.SurveyTemplate;
 import org.ccem.otus.survey.template.identity.Identity;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,7 +38,7 @@ public class SurveyServiceBeanTest {
     @Mock
     private SurveyForm lastVersionSurvey;
     @Mock
-    private SurveyDao surveyDao;
+    private SurveyDaoBean surveyDaoBean;
     @Mock
     private SurveyValidatorServiceBean surveyValidatorServiceBean;
     @Mock
@@ -62,11 +61,11 @@ public class SurveyServiceBeanTest {
 
         updateSurveyFormTypeDtoValid.newSurveyFormType = SurveyFormType.FORM_INTERVIEW;
 
-        PowerMockito.when(surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDtoValid.acronym,
+        PowerMockito.when(surveyDaoBean.updateLastVersionSurveyType(updateSurveyFormTypeDtoValid.acronym,
                 updateSurveyFormTypeDtoValid.newSurveyFormType.toString())).thenReturn(true);
 
-        PowerMockito.when(surveyDao.deleteLastVersionByAcronym(ACRONYM)).thenReturn(true);
-        PowerMockito.when(surveyDao.getLastVersionByAcronym(ACRONYM)).thenReturn(lastVersionSurvey);
+        PowerMockito.when(surveyDaoBean.deleteLastVersionByAcronym(ACRONYM)).thenReturn(true);
+        PowerMockito.when(surveyDaoBean.getLastVersionByAcronym(ACRONYM)).thenReturn(lastVersionSurvey);
 
 
         surveyTemplate.identity = new Identity();
@@ -81,14 +80,14 @@ public class SurveyServiceBeanTest {
     @Test
     public void saveSurvey_shoud_call_method_validateSurvey() throws AlreadyExistException, DataNotFoundException {
         service.saveSurvey(survey);
-        Mockito.verify(surveyValidatorServiceBean).validateSurvey(surveyDao, survey);
+        Mockito.verify(surveyValidatorServiceBean).validateSurvey(surveyDaoBean, survey);
     }
 
     @Test
     public void saveSurvey_should_call_method_persist() throws AlreadyExistException, DataNotFoundException {
         service.saveSurvey(survey);
 
-        Mockito.verify(surveyDao).persist(survey);
+        Mockito.verify(surveyDaoBean).persist(survey);
     }
 
     @Test
@@ -100,12 +99,12 @@ public class SurveyServiceBeanTest {
     @Test
     public void should_discard_the_previous_latest_version_if_exists() throws AlreadyExistException, DataNotFoundException {
         service.saveSurvey(survey).getVersion();
-        Mockito.verify(surveyDao).discardSurvey(lastVersionSurvey.getSurveyID());
+        Mockito.verify(surveyDaoBean).discardSurvey(lastVersionSurvey.getSurveyID());
     }
 
     @Test
     public void should_set_the_survey_version_to_1_when_is_the_first() throws AlreadyExistException, DataNotFoundException {
-        PowerMockito.when(surveyDao.getLastVersionByAcronym(ACRONYM)).thenReturn(null);
+        PowerMockito.when(surveyDaoBean.getLastVersionByAcronym(ACRONYM)).thenReturn(null);
         service.saveSurvey(survey).getVersion();
         Mockito.verify(survey).setVersion(1);
     }
@@ -114,7 +113,7 @@ public class SurveyServiceBeanTest {
     public void should_set_survey_objectId_from_persistence() throws AlreadyExistException, DataNotFoundException {
         ObjectId objectId = new ObjectId();
 
-        PowerMockito.when(surveyDao.persist(survey)).thenReturn(objectId);
+        PowerMockito.when(surveyDaoBean.persist(survey)).thenReturn(objectId);
         service.saveSurvey(survey).getVersion();
         Mockito.verify(survey).setSurveyID(objectId);
     }
@@ -124,13 +123,13 @@ public class SurveyServiceBeanTest {
     @Test
     public void list_should_call_surveyDao_find() {
         service.listUndiscarded();
-        Mockito.verify(surveyDao).findUndiscarded();
+        Mockito.verify(surveyDaoBean).findUndiscarded();
     }
 
     @Test
     public void findByAcronym_should_call_method_findByAcronym_by_surveyDao() {
         service.findByAcronym(ACRONYM);
-        Mockito.verify(surveyDao).findByAcronym(ACRONYM);
+        Mockito.verify(surveyDaoBean).findByAcronym(ACRONYM);
 
     }
 
@@ -159,7 +158,7 @@ public class SurveyServiceBeanTest {
     @Test
     public void deleteByAcronym_should_returns_positive_answer_case_acronym_not_be_null_or_empty()
             throws ValidationException, DataNotFoundException {
-        assertTrue(surveyDao.deleteLastVersionByAcronym(ACRONYM));
+        assertTrue(surveyDaoBean.deleteLastVersionByAcronym(ACRONYM));
     }
 
 }

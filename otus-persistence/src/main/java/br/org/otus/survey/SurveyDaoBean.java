@@ -11,6 +11,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
@@ -20,14 +21,15 @@ import java.util.Set;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.descending;
 
-public class SurveyDao extends MongoGenericDao<Document> {
+public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDao{
 
     private static final String COLLECTION_NAME = "survey";
 
-    public SurveyDao() {
+    public SurveyDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
 
+    @Override
     public List<SurveyForm> findUndiscarded() {
         ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
         Document query = new Document("isDiscarded", false);
@@ -38,6 +40,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return surveys;
     }
 
+    @Override
     public List<SurveyForm> findByAcronym(String acronym) {
         ArrayList<SurveyForm> surveys = new ArrayList<>();
         collection.find(eq("surveyTemplate.identity.acronym", acronym)).forEach((Block<Document>) document -> {
@@ -47,6 +50,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return surveys;
     }
 
+    @Override
     public List<SurveyForm> findByCustomId(Set<String> ids, String surveyAcronym) {
         ArrayList<SurveyForm> surveys = new ArrayList<>();
         collection
@@ -68,6 +72,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
 
     }
 
+    @Override
     public ObjectId persist(SurveyForm survey) {
         Document parsed = Document.parse(SurveyForm.serialize(survey));
         parsed.remove("_id");
@@ -76,6 +81,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return parsed.getObjectId("_id");
     }
 
+    @Override
     public boolean updateLastVersionSurveyType(String acronym, String surveyFormType) {
         Document query = new Document("surveyTemplate.identity.acronym", acronym);
         query.put("isDiscarded", false);
@@ -86,6 +92,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return updateOne.getModifiedCount() > 0;
     }
 
+    @Override
     public boolean deleteLastVersionByAcronym(String acronym) throws DataNotFoundException {
         Document query = new Document("surveyTemplate.identity.acronym", acronym);
         query.put("isDiscarded", false);
@@ -104,6 +111,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return updateResult.getModifiedCount() != 0;
     }
 
+    @Override
     public boolean discardSurvey(ObjectId id) throws DataNotFoundException {
         Document query = new Document("_id", id);
 
@@ -121,6 +129,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return updateResult.getModifiedCount() != 0;
     }
 
+    @Override
     public SurveyForm getLastVersionByAcronym(String acronym) throws DataNotFoundException {
         Document query = new Document();
 
@@ -135,6 +144,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return SurveyForm.deserialize(higherVersionDocument.toJson());
     }
 
+    @Override
     public List<Integer> getSurveyVersions(String acronym){
         Document query = new Document("surveyTemplate.identity.acronym", acronym);
         ArrayList<Integer> versions = new ArrayList<>();

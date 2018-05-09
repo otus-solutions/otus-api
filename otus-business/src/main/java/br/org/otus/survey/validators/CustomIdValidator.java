@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.identity.Identity;
 
-import br.org.otus.survey.SurveyDao;
+import br.org.otus.survey.SurveyDaoBean;
 
 public class CustomIdValidator implements SurveyValidator {
-	private SurveyDao surveyDao;
+	private SurveyDaoBean surveyDaoBean;
 	private SurveyForm surveyForm;
 
-	public CustomIdValidator(SurveyDao surveyDao, SurveyForm surveyForm) {
-		this.surveyDao = surveyDao;
+	public CustomIdValidator(SurveyDaoBean surveyDaoBean, SurveyForm surveyForm) {
+		this.surveyDaoBean = surveyDaoBean;
 		this.surveyForm = surveyForm;
 	}
 
@@ -24,7 +24,7 @@ public class CustomIdValidator implements SurveyValidator {
 		Response validatorResponse = new Response();
 		Set<String> customIds = surveyForm.getSurveyTemplate().getCustomIds();
 		String surveyAcronym = surveyForm.getSurveyTemplate().identity.acronym;
-		List<Identity> conflicts = surveyDao.findByCustomId(customIds, surveyAcronym).stream()
+		List<Identity> conflicts = surveyDaoBean.findByCustomId(customIds, surveyAcronym).stream()
 				.map(foundedSurvey -> foundedSurvey.getSurveyTemplate().identity).collect(Collectors.toList());
 		validatorResponse.setConflicts(conflicts);
 		return validatorResponse;

@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import br.org.otus.survey.SurveyDao;
+import br.org.otus.survey.SurveyDaoBean;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomIdValidatorTest {
@@ -27,7 +27,7 @@ public class CustomIdValidatorTest {
 	@InjectMocks
 	private CustomIdValidator customIdValidator;
 	@Mock
-	private SurveyDao surveyDao;
+	private SurveyDaoBean surveyDaoBean;
 	@Mock
 	private SurveyForm surveyForm;
 	@Mock
@@ -54,14 +54,14 @@ public class CustomIdValidatorTest {
 	@Test
 	public void method_validate_should_return_validatorResponse_invalid() {
 		surveyFormList.add(surveyFormReal);
-		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds(), ACRONYM))
+		when(surveyDaoBean.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds(), ACRONYM))
 				.thenReturn(surveyFormList);
 		assertFalse(customIdValidator.validate().isValid());
 	}
 
 	@Test
 	public void method_validate_should_return_validatorResponse_valid() {
-		when(surveyDao.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds(), ACRONYM))
+		when(surveyDaoBean.findByCustomId(surveyForm.getSurveyTemplate().getCustomIds(), ACRONYM))
 				.thenReturn(surveyFormList);
 		assertTrue(customIdValidator.validate().isValid());
 	}
