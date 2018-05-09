@@ -15,7 +15,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.survey.SurveyDao;
-import br.org.otus.survey.validators.AcronymValidator;
 import br.org.otus.survey.validators.CustomIdValidator;
 import br.org.otus.survey.validators.ValidatorResponse;
 
@@ -30,8 +29,6 @@ public class SurveyValidatorServiceBeanTest {
 	@Mock
 	private SurveyForm surveyForm;
 	@Mock
-	private AcronymValidator acronymValidator;
-	@Mock
 	private CustomIdValidator customIdValidator;
 	@Mock
 	private ValidatorResponse acronymValidatorResponse;
@@ -43,8 +40,6 @@ public class SurveyValidatorServiceBeanTest {
 	@Before
 	public void setUp() throws Exception {
 		surveyValidatorServiceBean = spy(new SurveyValidatorServiceBean());
-		whenNew(AcronymValidator.class).withArguments(surveyDao, surveyForm).thenReturn(acronymValidator);
-		when(acronymValidator.validate()).thenReturn(validatorResponse);
 		whenNew(CustomIdValidator.class).withArguments(surveyDao, surveyForm).thenReturn(customIdValidator);
 		when(customIdValidator.validate()).thenReturn(validatorResponse);
 	}
