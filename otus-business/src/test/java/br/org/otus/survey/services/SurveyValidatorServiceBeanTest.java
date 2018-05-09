@@ -53,7 +53,6 @@ public class SurveyValidatorServiceBeanTest {
 	public void validateSurvey_call_validators_but_not_throws_exceptions() throws Exception {
 		when(validatorResponse.isValid()).thenReturn(POSITIVE_ANSWER);
 		surveyValidatorServiceBean.validateSurvey(surveyDao, surveyForm);
-		Mockito.verify(acronymValidator).validate();
 		Mockito.verify(customIdValidator).validate();
 	}
 

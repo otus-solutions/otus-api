@@ -78,7 +78,6 @@ public class SurveyServiceBeanTest {
     }
 
     //save survey unit tests
-    @Ignore
     @Test
     public void saveSurvey_shoud_call_method_validateSurvey() throws AlreadyExistException, DataNotFoundException {
         service.saveSurvey(survey);
