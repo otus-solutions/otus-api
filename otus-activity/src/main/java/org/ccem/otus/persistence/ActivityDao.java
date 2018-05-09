@@ -22,4 +22,6 @@ public interface ActivityDao {
 	List<SurveyActivity> findByCategory(String categoryName);
 
 	void updateCategory(ActivityCategory activityCategory);
+
+	List<SurveyActivity> findAllByIDWithVersion(String id, Integer version) throws DataNotFoundException;
 }

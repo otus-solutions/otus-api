@@ -107,6 +107,30 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
 		return activities;
 	}
+	
+	@Override
+	public List<SurveyActivity> findAllByIDWithVersion(String id, Integer version) throws DataNotFoundException {
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
+
+//		FindIterable<Document> result = collection.find(eq("surveyForm.surveyTemplate.identity.acronym", id));
+
+		Document query = new Document();
+		query.put("surveyForm.surveyTemplate.identity.acronym", id);
+		query.put("surveyForm.version", version);
+		
+		Bson projection = fields(exclude("surveyForm.surveyTemplate"));
+
+
+		FindIterable<Document> result = collection.find(query).projection(projection);
+
+		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
+		if (activities.size()== 0) {
+			throw new DataNotFoundException(
+					new Throwable("OID {" + id + "} not found."));
+		}
+
+		return activities;
+	}
 
 	@Override
 	public List<SurveyActivity> findByCategory(String categoryName) {

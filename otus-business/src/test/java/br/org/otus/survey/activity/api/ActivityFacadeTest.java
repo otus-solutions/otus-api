@@ -4,10 +4,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.survey.form.SurveyForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,7 @@ public class ActivityFacadeTest {
 	private static final String SURVEYACTIVITY_ID = "587723451798";
 	private static final String SURVEYACTIVITY_EXCEPTION = "notExist";
 	private static final String JSON = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
+	private static final Integer VERSION = 1;
 	@Mock
 	private SurveyActivity surveyActivityInvalid;
 	@Mock
@@ -53,6 +56,16 @@ public class ActivityFacadeTest {
 		when(activityService.getByID(SURVEYACTIVITY_ID)).thenReturn(surveyActivity);
 		activityFacade.getByID(SURVEYACTIVITY_ID);
 		verify(activityService).getByID(SURVEYACTIVITY_ID);
+	}
+	
+	@Test
+	public void method_should_verify_getAllByIDWithVersion_with_id_and_version() throws DataNotFoundException {
+		List<SurveyActivity> list = new ArrayList<SurveyActivity>();
+		list.add(surveyActivity);
+		list.add(surveyActivity);
+		when(activityService.getAllByIDWithVersion(SURVEYACTIVITY_ID, VERSION)).thenReturn(list);
+		activityFacade.getAllByIDWithVersion(SURVEYACTIVITY_ID, VERSION);
+		verify(activityService).getAllByIDWithVersion(SURVEYACTIVITY_ID, VERSION);
 	}
 
 	@Test(expected = HttpResponseException.class)

@@ -42,5 +42,9 @@ public class ActivityServiceBean implements ActivityService {
 	public List<SurveyActivity> getAllByID(String id) throws DataNotFoundException {		
 		return activityDao.findAllByID(id);
 	}
+	@Override
+	public List<SurveyActivity> getAllByIDWithVersion(String id, Integer version) throws DataNotFoundException {		
+		return activityDao.findAllByIDWithVersion(id, version);
+	}
 
 }

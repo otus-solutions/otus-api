@@ -37,6 +37,14 @@ public class ActivityFacade {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
+	
+	public List<SurveyActivity> getAllByIDWithVersion(String id, Integer version) {
+		try {
+			return activityService.getAllByIDWithVersion(id, version);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+	}
 
 	public String create(SurveyActivity surveyActivity) {
 		return activityService.create(surveyActivity);

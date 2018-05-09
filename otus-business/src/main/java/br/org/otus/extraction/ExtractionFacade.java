@@ -25,7 +25,7 @@ public class ExtractionFacade {
 	private ExtractionService extractionService;
 
 	public byte[] createActivityExtraction(String id, Integer version) {
-		List<SurveyActivity> activities = activityFacade.getAllByID(id);
+		List<SurveyActivity> activities = activityFacade.getAllByIDWithVersion(id,version);
 		SurveyForm surveyForm = surveyFacade.findByAcronymWithVersion(id, version).get(0);
 		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
 		try {
