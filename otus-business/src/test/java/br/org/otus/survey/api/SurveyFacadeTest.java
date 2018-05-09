@@ -102,20 +102,20 @@ public class SurveyFacadeTest {
 
 	@Test
 	public void method_updateSurveyFormType_should_return_valid() throws ValidationException {
-		when(surveyService.updateSurveyFormType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_ANSWER);
-		assertTrue(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto));
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_ANSWER);
+		assertTrue(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test
 	public void method_updateSurveyFormType_should_return_invalid() throws ValidationException {
-		when(surveyService.updateSurveyFormType(updateSurveyFormTypeDto)).thenReturn(NEGATIVE_ANSWER);
-		assertFalse(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto));
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(NEGATIVE_ANSWER);
+		assertFalse(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test(expected = HttpResponseException.class)
 	public void method_updateSurveyFormType_should_throw_HttpResponseException() throws ValidationException {
-		when(surveyService.updateSurveyFormType(updateSurveyFormTypeDto)).thenThrow(ValidationException.class);
-		assertFalse(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto));
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenThrow(ValidationException.class);
+		assertFalse(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test

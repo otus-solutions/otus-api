@@ -52,7 +52,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         collection
                 .find(and(
                         not(
-                                eq("surveyTemplate.identity.acronym", surveyAcronym) //TODO 07/05/18: check how survey acronym comes on set
+                                eq("surveyTemplate.identity.acronym", surveyAcronym)
                         ),
                         or(
                                 in("surveyTemplate.itemContainer.customID", ids),
@@ -76,8 +76,11 @@ public class SurveyDao extends MongoGenericDao<Document> {
         return parsed.getObjectId("_id");
     }
 
-    public boolean updateSurveyFormType(String acronym, String surveyFormType) {
-        UpdateResult updateOne = collection.updateOne(eq("surveyTemplate.identity.acronym", acronym.toUpperCase()),
+    public boolean updateLastVersionSurveyType(String acronym, String surveyFormType) {
+        Document query = new Document("surveyTemplate.identity.acronym", acronym);
+        query.put("isDiscarded", false);
+
+        UpdateResult updateOne = collection.updateOne(query,
                 new Document("$set", new Document("surveyFormType", surveyFormType)));
 
         return updateOne.getModifiedCount() > 0;
@@ -128,7 +131,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
         if (higherVersionDocument == null) {
             return null;
         }
-        //todo: test String.valueOf();
+
         return SurveyForm.deserialize(higherVersionDocument.toJson());
     }
 

@@ -55,9 +55,9 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public boolean updateSurveyFormType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException {
+    public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException {
         if (updateSurveyFormTypeDto.isValid()) {
-            return surveyDao.updateSurveyFormType(updateSurveyFormTypeDto.acronym,
+            return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym,
                     updateSurveyFormTypeDto.newSurveyFormType.toString());
         } else {
             throw new ValidationException();

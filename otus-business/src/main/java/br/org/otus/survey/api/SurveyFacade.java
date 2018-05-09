@@ -35,9 +35,9 @@ public class SurveyFacade {
         }
     }
 
-    public boolean updateSurveyFormType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
+    public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
         try {
-            return surveyService.updateSurveyFormType(updateSurveyFormTypeDto);
+            return surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto);
         } catch (ValidationException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build());
         }

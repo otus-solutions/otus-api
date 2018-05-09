@@ -62,7 +62,7 @@ public class SurveyServiceBeanTest {
 
         updateSurveyFormTypeDtoValid.newSurveyFormType = SurveyFormType.FORM_INTERVIEW;
 
-        PowerMockito.when(surveyDao.updateSurveyFormType(updateSurveyFormTypeDtoValid.acronym,
+        PowerMockito.when(surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDtoValid.acronym,
                 updateSurveyFormTypeDtoValid.newSurveyFormType.toString())).thenReturn(true);
 
         PowerMockito.when(surveyDao.deleteLastVersionByAcronym(ACRONYM)).thenReturn(true);
@@ -138,13 +138,13 @@ public class SurveyServiceBeanTest {
     @Test(expected = ValidationException.class)
     public void updateSurveyFormType_should_throw_exception_case_updateSurveyFormTypeDto_invalid()
             throws org.ccem.otus.exceptions.webservice.validation.ValidationException {
-        service.updateSurveyFormType(updateSurveyFormTypeDtoInvalid);
+        service.updateLastVersionSurveyType(updateSurveyFormTypeDtoInvalid);
     }
 
     @Test
     public void updateSurveyFormType_should_call_and_return_method_updateSurveyFormType_case_updateSurveyFormTypeDto_is_valid()
             throws ValidationException {
-        assertTrue(service.updateSurveyFormType(updateSurveyFormTypeDtoValid));
+        assertTrue(service.updateLastVersionSurveyType(updateSurveyFormTypeDtoValid));
     }
 
     @Test(expected = ValidationException.class)
