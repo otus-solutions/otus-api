@@ -1,21 +1,20 @@
 package br.org.otus.survey.validators;
 
+import org.ccem.otus.persistence.SurveyDao;
+import org.ccem.otus.survey.form.SurveyForm;
+import org.ccem.otus.survey.template.identity.Identity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.ccem.otus.survey.form.SurveyForm;
-import org.ccem.otus.survey.template.identity.Identity;
-
-import br.org.otus.survey.SurveyDaoBean;
-
 public class CustomIdValidator implements SurveyValidator {
-	private SurveyDaoBean surveyDaoBean;
+	private SurveyDao surveyDao;
 	private SurveyForm surveyForm;
 
-	public CustomIdValidator(SurveyDaoBean surveyDaoBean, SurveyForm surveyForm) {
-		this.surveyDaoBean = surveyDaoBean;
+	public CustomIdValidator(SurveyDao surveyDao, SurveyForm surveyForm) {
+		this.surveyDao = surveyDao;
 		this.surveyForm = surveyForm;
 	}
 
@@ -24,7 +23,7 @@ public class CustomIdValidator implements SurveyValidator {
 		Response validatorResponse = new Response();
 		Set<String> customIds = surveyForm.getSurveyTemplate().getCustomIds();
 		String surveyAcronym = surveyForm.getSurveyTemplate().identity.acronym;
-		List<Identity> conflicts = surveyDaoBean.findByCustomId(customIds, surveyAcronym).stream()
+		List<Identity> conflicts = surveyDao.findByCustomId(customIds, surveyAcronym).stream()
 				.map(foundedSurvey -> foundedSurvey.getSurveyTemplate().identity).collect(Collectors.toList());
 		validatorResponse.setConflicts(conflicts);
 		return validatorResponse;

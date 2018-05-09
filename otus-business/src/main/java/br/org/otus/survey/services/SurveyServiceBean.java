@@ -1,11 +1,11 @@
 package br.org.otus.survey.services;
 
-import br.org.otus.survey.SurveyDaoBean;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.ejb.Stateless;
@@ -17,15 +17,15 @@ import java.util.List;
 public class SurveyServiceBean implements SurveyService {
 
     @Inject
-    private SurveyDaoBean surveyDaoBean;
+    private SurveyDao surveyDao;
     @Inject
     private SurveyValidatorService surveyValidatorService;
 
     @Override
     public SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException, AlreadyExistException {
-        surveyValidatorService.validateSurvey(surveyDaoBean, survey);
+        surveyValidatorService.validateSurvey(surveyDao, survey);
 
-        SurveyForm lastVersionSurvey = surveyDaoBean.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
+        SurveyForm lastVersionSurvey = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
 
         if (lastVersionSurvey != null) {
             try {
@@ -38,7 +38,7 @@ public class SurveyServiceBean implements SurveyService {
             survey.setVersion(1);
         }
 
-        ObjectId persist = surveyDaoBean.persist(survey);
+        ObjectId persist = surveyDao.persist(survey);
         survey.setSurveyID(persist);
 
         return survey;
@@ -46,18 +46,18 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public List<SurveyForm> listUndiscarded() {
-        return surveyDaoBean.findUndiscarded();
+        return surveyDao.findUndiscarded();
     }
 
     @Override
     public List<SurveyForm> findByAcronym(String acronym) {
-        return surveyDaoBean.findByAcronym(acronym);
+        return surveyDao.findByAcronym(acronym);
     }
 
     @Override
     public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException {
         if (updateSurveyFormTypeDto.isValid()) {
-            return surveyDaoBean.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym,
+            return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym,
                     updateSurveyFormTypeDto.newSurveyFormType.toString());
         } else {
             throw new ValidationException();
@@ -70,7 +70,7 @@ public class SurveyServiceBean implements SurveyService {
             throw new ValidationException();
         } else {
             try {
-                return surveyDaoBean.deleteLastVersionByAcronym(acronym);
+                return surveyDao.deleteLastVersionByAcronym(acronym);
             } catch (DataNotFoundException e) {
                 throw e;
             }
@@ -79,14 +79,14 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public List<Integer> listSurveyVersions(String acronym) {
-        List<Integer> surveyVersions = surveyDaoBean.getSurveyVersions(acronym);
+        List<Integer> surveyVersions = surveyDao.getSurveyVersions(acronym);
         Collections.reverse(surveyVersions);
         return surveyVersions;
     }
 
     private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
         try {
-            surveyDaoBean.discardSurvey(survey.getSurveyID());
+            surveyDao.discardSurvey(survey.getSurveyID());
         } catch (DataNotFoundException e) {
             throw e;
         }

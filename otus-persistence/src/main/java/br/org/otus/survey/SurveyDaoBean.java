@@ -2,15 +2,11 @@ package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
 import com.mongodb.Block;
-import com.mongodb.client.DistinctIterable;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
