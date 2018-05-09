@@ -1,26 +1,27 @@
 package br.org.otus.survey.activity;
 
-import br.org.mongodb.MongoGenericDao;
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityDao;
 
-import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Projections.exclude;
-import static com.mongodb.client.model.Projections.fields;
+import br.org.mongodb.MongoGenericDao;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
@@ -33,6 +34,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
 	/**
 	 * Return activities considering that they were not discarded
+	 * 
 	 * @param rn
 	 * @return
 	 */
@@ -61,12 +63,10 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
 		Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
 		parsed.remove("_id");
-		UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()),
-				new Document("$set", parsed), new UpdateOptions().upsert(false));
+		UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()), new Document("$set", parsed), new UpdateOptions().upsert(false));
 
 		if (updateOne.getMatchedCount() == 0) {
-			throw new DataNotFoundException(
-					new Throwable("OID {" + surveyActivity.getActivityID().toString() + "} not found."));
+			throw new DataNotFoundException(new Throwable("OID {" + surveyActivity.getActivityID().toString() + "} not found."));
 		}
 
 		return surveyActivity;
@@ -78,34 +78,31 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		Document result = collection.find(eq("_id", oid)).first();
 
 		if (result == null) {
-			throw new DataNotFoundException(
-					new Throwable("OID {" + id + "} not found."));
+			throw new DataNotFoundException(new Throwable("OID {" + id + "} not found."));
 		}
 
 		return SurveyActivity.deserialize(result.toJson());
 	}
 
 	@Override
-	public List<SurveyActivity> findAllByID(String id) throws DataNotFoundException {
+	public List<SurveyActivity> getActivitiesToExtraction(String id) throws DataNotFoundException {
 		ArrayList<SurveyActivity> activities = new ArrayList<>();
+		ArrayList<Document> query = new ArrayList<>();
 
-//		FindIterable<Document> result = collection.find(eq("surveyForm.surveyTemplate.identity.acronym", id));
+		query.add(this.buildQueryToExtraction(id));
 
-		Document query = new Document();
-		query.put("surveyForm.surveyTemplate.identity.acronym", id);
-
-		Bson projection = fields(exclude("surveyForm.surveyTemplate"));
-
-
-		FindIterable<Document> result = collection.find(query).projection(projection);
+		AggregateIterable<Document> result = collection.aggregate(query);
 
 		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
-		if (activities.size()== 0) {
-			throw new DataNotFoundException(
-					new Throwable("OID {" + id + "} not found."));
+		if (activities.size() == 0) {
+			throw new DataNotFoundException(new Throwable("OID {" + id + "} not found."));
 		}
 
 		return activities;
+	}
+
+	private Document buildQueryToExtraction(String id) {
+		return new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", id).append("isDiscarded", Boolean.FALSE));
 	}
 
 	@Override
@@ -119,7 +116,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	}
 
 	@Override
-	public void updateCategory(ActivityCategory activityCategory){
+	public void updateCategory(ActivityCategory activityCategory) {
 		Document query = new Document();
 		query.put("category.name", activityCategory.getName());
 

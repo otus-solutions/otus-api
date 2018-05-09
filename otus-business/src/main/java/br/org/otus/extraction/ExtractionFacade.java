@@ -30,8 +30,8 @@ public class ExtractionFacade {
 	}
 
 	public byte[] createActivityExtraction(String id) {
-		List<SurveyActivity> activities = activityFacade.getAllByID(id);
-		SurveyForm surveyForm = surveyFacade.findByAcronym(id).get(0);  //TODO 04/12/17: implement a findFirst?
+		List<SurveyActivity> activities = activityFacade.getActivitiesToExtraction(id);
+		SurveyForm surveyForm = surveyFacade.findByAcronym(id).get(0); // TODO 04/12/17: implement a findFirst?
 		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
 		try {
 			return extractionService.createExtraction(extractor);
