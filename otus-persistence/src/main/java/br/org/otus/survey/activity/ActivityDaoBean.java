@@ -51,7 +51,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	@Override
 	public ObjectId persist(SurveyActivity surveyActivity) {
 		Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
-		parsed.remove("_id");
+
+        removeOids(parsed);
+
 		collection.insertOne(parsed);
 
 		return parsed.getObjectId("_id");
@@ -60,7 +62,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	@Override
 	public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
 		Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
-		parsed.remove("_id");
+
+        removeOids(parsed);
+
 		UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()),
 				new Document("$set", parsed), new UpdateOptions().upsert(false));
 
@@ -124,5 +128,10 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document("category.label", activityCategory.getLabel())), new UpdateOptions().upsert(false));
 
 	}
+
+	private void removeOids(Document parsedActivity){
+        parsedActivity.remove("_id");
+        ((Document) parsedActivity.get("surveyForm")).remove("_id");; //todo: remove when this id becomes standard
+    }
 
 }
