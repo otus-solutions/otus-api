@@ -1,27 +1,23 @@
 package org.ccem.otus.model.dataSources.activity;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
+
+import java.util.ArrayList;
+
 import org.bson.Document;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceFilters;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceStatusHistoryFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
-
 @RunWith(PowerMockRunner.class)
 public class ActivityDataSourceTest {
 	private static final Long RECRUITMENT_NUMBER = 343545345L;
-	private static final String EXPECTED_RESULT = "{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.surveyTemplate.identity.acronym\" : \"TF\", \"category.name\" : \"C0\" } }";
+	private static final String EXPECTED_RESULT = "{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.surveyTemplate.identity.acronym\" : \"TF\", \"category.name\" : \"C0\", \"isDiscarded\" : false } }";
 	private static final String EXPECTED_RESULT_PROJECTION = "{ \"$project\" : { \"_id\" : -1 } }";
 	private static final String EXPECTED_RESULT_PROJECTION_WHIT_STATUS_HISTORY = "{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : { \"$slice\" : [\"$statusHistory\", -1, 1] } } }";
 	private static final String EXPECTED_RESULT_MATCH_WHIT_STATUS_HISTORY = "{ \"$match\" : { \"statusHistory.name\" : \"FINALIZED\" } }";

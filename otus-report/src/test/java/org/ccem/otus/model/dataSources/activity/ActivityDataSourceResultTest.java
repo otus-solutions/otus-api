@@ -1,8 +1,10 @@
 package org.ccem.otus.model.dataSources.activity;
 
-import com.google.gson.GsonBuilder;
+import static org.junit.Assert.assertEquals;
 
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
@@ -11,10 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
+import com.google.gson.GsonBuilder;
 
 public class ActivityDataSourceResultTest {
 

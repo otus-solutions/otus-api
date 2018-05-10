@@ -1,14 +1,14 @@
 package org.ccem.otus.service;
 
-import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.persistence.ActivityDao;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import java.util.List;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.persistence.ActivityDao;
 
 @Stateless
 public class ActivityServiceBean implements ActivityService {
@@ -39,8 +39,8 @@ public class ActivityServiceBean implements ActivityService {
 	}
 
 	@Override
-	public List<SurveyActivity> getAllByID(String id) throws DataNotFoundException {		
-		return activityDao.findAllByID(id);
+	public List<SurveyActivity> getActivitiesToExtraction(String id) throws DataNotFoundException {		
+		return activityDao.getActivitiesToExtraction(id);
 	}
 	@Override
 	public List<SurveyActivity> getAllByIDWithVersion(String id, Integer version) throws DataNotFoundException {		

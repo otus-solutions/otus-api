@@ -8,10 +8,10 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 
+import com.google.gson.JsonSyntaxException;
+
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
-
-import com.google.gson.JsonSyntaxException;
 
 public class ActivityFacade {
 
@@ -30,9 +30,9 @@ public class ActivityFacade {
 		}
 	}
 	
-	public List<SurveyActivity> getAllByID(String id) {
+	public List<SurveyActivity> getActivitiesToExtraction(String id) {
 		try {
-			return activityService.getAllByID(id);
+			return activityService.getActivitiesToExtraction(id);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
