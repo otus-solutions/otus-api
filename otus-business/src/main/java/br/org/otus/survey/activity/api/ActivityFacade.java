@@ -30,17 +30,9 @@ public class ActivityFacade {
 		}
 	}
 	
-	public List<SurveyActivity> getActivitiesToExtraction(String id) {
+	public List<SurveyActivity> get(String id, Integer version) {
 		try {
-			return activityService.getActivitiesToExtraction(id);
-		} catch (DataNotFoundException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-	}
-	
-	public List<SurveyActivity> getAllByIDWithVersion(String id, Integer version) {
-		try {
-			return activityService.getAllByIDWithVersion(id, version);
+			return activityService.get(id, version);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}

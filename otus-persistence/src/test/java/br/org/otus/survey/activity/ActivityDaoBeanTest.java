@@ -4,16 +4,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import com.mongodb.client.FindIterable;
+import org.bson.BSON;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -27,8 +29,8 @@ import br.org.mongodb.MongoGenericDao;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ActivityDaoBean.class })
 public class ActivityDaoBeanTest {
-
 	private static final String ACRONYM = "FORM";
+	private static final Integer VERSION = 1;
 
 	@InjectMocks
 	private ActivityDaoBean activityDaoBean = PowerMockito.spy(new ActivityDaoBean());
@@ -38,7 +40,7 @@ public class ActivityDaoBeanTest {
 	@Mock
 	private MongoCollection<Document> collection;
 	@Mock
-	private AggregateIterable<Document> result;
+	private FindIterable<Document> result;
 	@Mock
 	private SurveyActivity surveyActivity;
 	@Mock
@@ -48,45 +50,45 @@ public class ActivityDaoBeanTest {
 
 	@Before
 	public void setup() throws Exception {
-		this.query = new ArrayList<>();
-		this.query.add(new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", ACRONYM).append("isDiscarded", Boolean.FALSE)));
-
 		Whitebox.setInternalState(activityDaoBean, "collection", collection);
-		Mockito.when(this.collection.aggregate(Mockito.anyList())).thenReturn(this.result);
+		Mockito.when(this.collection.find(Matchers.<Bson>any())).thenReturn(this.result);
+		Mockito.when(result.projection(Matchers.<Bson>any())).thenReturn(result);
 
 		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(this.activities);
 		PowerMockito.doReturn(1).when(this.activities).size();
 	}
 
 	@Test
-	public void method_getActivitiesToExtraction_should_return_list_not_null() throws Exception {
-
-		Assert.assertNotNull(this.activityDaoBean.getActivitiesToExtraction(ACRONYM));
+	public void method_get_should_return_list_not_null() throws Exception {
+		Assert.assertNotNull(this.activityDaoBean.getUndiscarded(ACRONYM, VERSION));
 	}
 
 	@Test
-	public void method_getActivitiesToExtraction_should_called_method_aggregate() throws Exception {
-		this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
+	public void method_get_should_called_method_find() throws Exception {
+		this.activityDaoBean.getUndiscarded(ACRONYM, VERSION);
 
-		Mockito.verify(this.collection, Mockito.times(1)).aggregate(Mockito.anyList());
+		Mockito.verify(this.collection, Mockito.times(1)).find(Matchers.<Bson>any());
 	}
 
 	@Test
-	public void method_getActivitiesToExtraction_should_return_exception_when_list_of_activities_is_empty() {
+	public void method_get_should_return_exception_when_list_of_activities_is_empty() {
 		PowerMockito.doReturn(0).when(this.activities).size();
 		try {
-			this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
+			this.activityDaoBean.getUndiscarded(ACRONYM, VERSION);
 		} catch (DataNotFoundException e) {
 			assertTrue(e.getMessage().contains("OID {" + ACRONYM + "} not found."));
 		}
 	}
 
 	@Test
-	public void method_getActivitiesToExtraction_should_create_query_correct_with_acronym_and_discarded_how_false() throws Exception {
-		Document query = new Document("$match", new Document("surveyForm.surveyTemplate.identity.acronym", ACRONYM).append("isDiscarded", Boolean.FALSE));
-		Document result = Whitebox.invokeMethod(this.activityDaoBean, "buildQueryToExtraction", ACRONYM);
-		this.activityDaoBean.getActivitiesToExtraction(ACRONYM);
+	public void method_get_should_create_query_correct() throws Exception {
+		Document query = new Document();
+		query.put(ActivityDaoBean.ACRONYM_PATH, ACRONYM);
+		query.put(ActivityDaoBean.VERSION_PATH, VERSION);
+		query.put(ActivityDaoBean.DISCARDED_PATH, Boolean.FALSE);
 
-		Assert.assertEquals(query, result);
+		this.activityDaoBean.getUndiscarded(ACRONYM, VERSION);
+
+		Mockito.verify(this.collection, Mockito.times(1)).find(query);
 	}
 }

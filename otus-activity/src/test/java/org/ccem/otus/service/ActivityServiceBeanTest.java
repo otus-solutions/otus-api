@@ -59,13 +59,13 @@ public class ActivityServiceBeanTest {
 	}
 	
 	@Test
-	public void method_getByIDWithVersion_should_call_ActivityDao_findByID() throws DataNotFoundException{
-		service.getAllByIDWithVersion(SURVEY_ID, VERSION);
-		Mockito.verify(activityDao).findAllByIDWithVersion(SURVEY_ID, VERSION);
+	public void method_get_should_call_ActivityDao_getUndiscarded() throws DataNotFoundException{
+		service.get(SURVEY_ID, VERSION);
+		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);
 	}
 	
 	@Test(expected = DataNotFoundException.class)
-	public void method_getByID_should_throw_DataNotFound_when_findByID_not_found() throws DataNotFoundException{
+	public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException{
 		Mockito.when(activityDao.findByID(SURVEY_ID)).thenThrow(DataNotFoundException.class);
 		service.getByID(SURVEY_ID);
 	}
