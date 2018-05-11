@@ -19,7 +19,6 @@ import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityDao;
 
 import com.mongodb.Block;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
@@ -138,7 +137,6 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         query.put("category.name", activityCategory.getName());
 
         UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())), new UpdateOptions().upsert(false));
-
     }
 
 }
