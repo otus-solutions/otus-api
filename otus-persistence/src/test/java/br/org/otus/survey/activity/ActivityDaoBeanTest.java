@@ -4,24 +4,24 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import com.mongodb.client.FindIterable;
-import org.bson.BSON;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 import br.org.mongodb.MongoGenericDao;
@@ -45,8 +45,6 @@ public class ActivityDaoBeanTest {
 	private SurveyActivity surveyActivity;
 	@Mock
 	private ArrayList<SurveyActivity> activities;
-
-	private ArrayList<Document> query;
 
 	@Before
 	public void setup() throws Exception {
