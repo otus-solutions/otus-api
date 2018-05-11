@@ -46,7 +46,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
 		return surveys;
 	}
 
-	public List<SurveyForm> findByAcronymWithVersion(String acronym, Integer version) throws DataNotFoundException {
+	public SurveyForm get(String acronym, Integer version) throws DataNotFoundException {
 		Document query = new Document();
 		ArrayList<SurveyForm> surveys = new ArrayList<>();
 		query.put("surveyTemplate.identity.acronym", acronym.toUpperCase());
@@ -60,7 +60,7 @@ public class SurveyDao extends MongoGenericDao<Document> {
 					"SURVEY ACRONYM {" + acronym.toUpperCase() + "} VERSION {" + version.toString() + "} not found."));
 		}
 
-		return surveys;
+		return surveys.get(0);
 	}
 
 	public List<SurveyForm> findByCustomId(Set<String> ids) {

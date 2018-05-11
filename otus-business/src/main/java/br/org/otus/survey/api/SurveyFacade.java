@@ -28,9 +28,9 @@ public class SurveyFacade {
 		return surveyService.findByAcronym(acronym);
 	}
 	
-	public List<SurveyForm> findByAcronymWithVersion(String acronym, Integer version) {
+	public SurveyForm get(String acronym, Integer version) {
 		try {
-			return surveyService.findByAcronymWithVersion(acronym, version);
+			return surveyService.get(acronym, version);
 			
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));

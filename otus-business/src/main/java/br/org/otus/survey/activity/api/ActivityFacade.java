@@ -30,9 +30,9 @@ public class ActivityFacade {
 		}
 	}
 	
-	public List<SurveyActivity> get(String id, Integer version) {
+	public List<SurveyActivity> get(String acronym, Integer version) {
 		try {
-			return activityService.get(id, version);
+			return activityService.get(acronym, version);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}

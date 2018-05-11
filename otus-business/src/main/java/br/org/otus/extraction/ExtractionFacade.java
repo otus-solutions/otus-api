@@ -22,9 +22,9 @@ public class ExtractionFacade {
     @Inject
     private ExtractionService extractionService;
 
-    public byte[] createActivityExtraction(String id, Integer version) {
-        List<SurveyActivity> activities = activityFacade.get(id, version);
-        SurveyForm surveyForm = surveyFacade.findByAcronymWithVersion(id, version).get(0);
+    public byte[] createActivityExtraction(String acronym, Integer version) {
+        List<SurveyActivity> activities = activityFacade.get(acronym, version);
+        SurveyForm surveyForm = surveyFacade.get(acronym, version);
         SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
 
         try {

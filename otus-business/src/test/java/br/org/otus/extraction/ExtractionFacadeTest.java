@@ -47,7 +47,7 @@ public class ExtractionFacadeTest {
 	
 	SurveyForm surveyForm = new SurveyForm(surveyTemplate, userEmail);
 	
-	private static final String id = "ANTC";
+	private static final String acronym = "ANTC";
 	private static final Integer version = 1;
 	private static final ArrayList<SurveyForm> surveys = new ArrayList<>();
 	
@@ -55,17 +55,17 @@ public class ExtractionFacadeTest {
 	public void setUp() throws Exception {
 		surveys.add(surveyForm);
 		surveys.add(surveyForm);
-		PowerMockito.when(surveyFacade.findByAcronymWithVersion(id, version)).thenReturn(surveys);
-		PowerMockito.when(activityFacade.get(id, version)).thenReturn(new ArrayList<>());
+		PowerMockito.when(surveyFacade.get(acronym, version)).thenReturn(surveys.get(0));
+		PowerMockito.when(activityFacade.get(acronym, version)).thenReturn(new ArrayList<>());
 		PowerMockito.whenNew(SurveyActivityExtraction.class).withAnyArguments().thenReturn(extractor);
 	}
 
 	@Test
 	public void should_return_newExtraction() throws Exception {
 		assertNotNull(extractionFacade);
-		extractionFacade.createActivityExtraction(id, version);
-		Mockito.verify(activityFacade).get(id, version);
-		Mockito.verify(surveyFacade).findByAcronymWithVersion(id, version);
+		extractionFacade.createActivityExtraction(acronym, version);
+		Mockito.verify(activityFacade).get(acronym, version);
+		Mockito.verify(surveyFacade).get(acronym, version);
 		Mockito.verify(extractionService).createExtraction(extractor);
 	}
 

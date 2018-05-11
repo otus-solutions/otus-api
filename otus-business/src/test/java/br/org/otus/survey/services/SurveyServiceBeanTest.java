@@ -88,8 +88,8 @@ public class SurveyServiceBeanTest {
 	
 	@Test
 	public void findByAcronymWithVersion_should_call_method_findByAcronym_by_surveyDao() throws DataNotFoundException {
-		service.findByAcronymWithVersion(ACRONYM, VERSION);
-		Mockito.verify(surveyDao).findByAcronymWithVersion(ACRONYM, VERSION);
+		service.get(ACRONYM, VERSION);
+		Mockito.verify(surveyDao).get(ACRONYM, VERSION);
 
 	}
 

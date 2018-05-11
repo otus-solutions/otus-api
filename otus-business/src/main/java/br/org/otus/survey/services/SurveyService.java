@@ -16,7 +16,7 @@ public interface SurveyService {
 	
 	List<SurveyForm> findByAcronym(String acronym);
 	
-	List<SurveyForm> findByAcronymWithVersion(String acronym, Integer version) throws DataNotFoundException;
+	SurveyForm get(String acronym, Integer version) throws DataNotFoundException;
 	
 	boolean updateSurveyFormType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException;
 	

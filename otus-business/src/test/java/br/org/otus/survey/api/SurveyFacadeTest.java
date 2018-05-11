@@ -75,8 +75,8 @@ public class SurveyFacadeTest {
 	@Test
 	public void method_findByAcronymWithVersion_should_return_survey_by_acronym() throws DataNotFoundException {
 		surveys.add(surveyAcronym);
-		when(surveyService.findByAcronymWithVersion(ACRONYM, VERSION)).thenReturn(surveys);
-		assertEquals(surveys.size(), surveyFacade.findByAcronymWithVersion(ACRONYM, VERSION).size());
+		when(surveyService.get(ACRONYM, VERSION)).thenReturn(surveys.get(0));
+		assertEquals(surveys.get(0), surveyFacade.get(ACRONYM, VERSION));
 	}
 
 	@Test

@@ -64,9 +64,11 @@ public class ActivityServiceBeanTest {
 		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test(expected = DataNotFoundException.class)
 	public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException{
-		Mockito.when(activityDao.findByID(SURVEY_ID)).thenThrow(DataNotFoundException.class);
-		service.getByID(SURVEY_ID);
+		Mockito.when(activityDao.getUndiscarded(SURVEY_ID, VERSION)).thenThrow(DataNotFoundException.class);
+		service.get(SURVEY_ID, VERSION);
+		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);
 	}
 }

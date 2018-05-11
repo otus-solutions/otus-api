@@ -37,8 +37,8 @@ public class SurveyServiceBean implements SurveyService {
     }
     
     @Override
-    public List<SurveyForm> findByAcronymWithVersion(String acronym, Integer version) throws DataNotFoundException {
-        return surveyDao.findByAcronymWithVersion(acronym, version);
+    public SurveyForm get(String acronym, Integer version) throws DataNotFoundException {
+        return surveyDao.get(acronym, version);
     }
 
     @Override
