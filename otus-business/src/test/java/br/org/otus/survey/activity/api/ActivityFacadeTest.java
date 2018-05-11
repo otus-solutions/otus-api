@@ -23,7 +23,7 @@ import br.org.otus.response.exception.HttpResponseException;
 @RunWith(MockitoJUnitRunner.class)
 public class ActivityFacadeTest {
 	private static final long RECRUITMENT_NUMBER = 5112345;
-	private static final String SURVEY_ACTIVITY_ID = "587723451798";
+	private static final String ACRONYM = "CISE";
 	private static final String SURVEY_ACTIVITY_EXCEPTION = "notExist";
 	private static final String JSON = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
 	private static final Integer VERSION = 1;
@@ -52,9 +52,9 @@ public class ActivityFacadeTest {
 
 	@Test
 	public void method_should_verify_get_with_id() throws DataNotFoundException {
-		when(activityService.getByID(SURVEY_ACTIVITY_ID)).thenReturn(surveyActivity);
-		activityFacade.getByID(SURVEY_ACTIVITY_ID);
-		verify(activityService).getByID(SURVEY_ACTIVITY_ID);
+		when(activityService.getByID(ACRONYM)).thenReturn(surveyActivity);
+		activityFacade.getByID(ACRONYM);
+		verify(activityService).getByID(ACRONYM);
 	}
 	
 	@Test
@@ -62,9 +62,9 @@ public class ActivityFacadeTest {
 		List<SurveyActivity> list = new ArrayList<SurveyActivity>();
 		list.add(surveyActivity);
 		list.add(surveyActivity);
-		when(activityService.get(SURVEY_ACTIVITY_ID, VERSION)).thenReturn(list);
-		activityFacade.get(SURVEY_ACTIVITY_ID, VERSION);
-		verify(activityService).get(SURVEY_ACTIVITY_ID, VERSION);
+		when(activityService.get(ACRONYM, VERSION)).thenReturn(list);
+		activityFacade.get(ACRONYM, VERSION);
+		verify(activityService).get(ACRONYM, VERSION);
 	}
 
 	@Test(expected = HttpResponseException.class)
@@ -75,7 +75,7 @@ public class ActivityFacadeTest {
 
 	@Test
 	public void method_should_verify_create_with_surveyActivity() {
-		when(activityService.create(surveyActivity)).thenReturn(SURVEY_ACTIVITY_ID);
+		when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
 		activityFacade.create(surveyActivity);
 		verify(activityService).create(surveyActivity);
 	}
