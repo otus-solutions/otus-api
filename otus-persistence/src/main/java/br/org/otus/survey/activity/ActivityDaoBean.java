@@ -28,115 +28,138 @@ import br.org.mongodb.MongoGenericDao;
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
 
-    public static final String COLLECTION_NAME = "activity";
-    public static final String ACRONYM_PATH = "surveyForm.surveyTemplate.identity.acronym";
-    public static final String VERSION_PATH = "surveyForm.version";
-    public static final String DISCARDED_PATH = "isDiscarded";
-    public static final String TEMPLATE_PATH = "surveyForm.surveyTemplate";
-    public static final String RECRUITMENT_NUMBER_PATH = "participantData.recruitmentNumber";
-    public static final String CATEGORY_NAME_PATH = "category.name";
-    public static final String CATEGORY_LABEL_PATH = "category.label";
+	public static final String COLLECTION_NAME = "activity";
+	public static final String ACRONYM_PATH = "surveyForm.surveyTemplate.identity.acronym";
+	public static final String VERSION_PATH = "surveyForm.version";
+	public static final String DISCARDED_PATH = "isDiscarded";
+	public static final String TEMPLATE_PATH = "surveyForm.surveyTemplate";
+	public static final String RECRUITMENT_NUMBER_PATH = "participantData.recruitmentNumber";
+	public static final String CATEGORY_NAME_PATH = "category.name";
+	public static final String CATEGORY_LABEL_PATH = "category.label";
+	private SurveyActivity surveyActivity;
 
-    public ActivityDaoBean() {
-        super(COLLECTION_NAME, Document.class);
-    }
+	public ActivityDaoBean() {
+		super(COLLECTION_NAME, Document.class);
+	}
 
-    /**
-     * Return activities considering that they were not discarded
-     *
-     * @param rn
-     * @return
-     */
-    @Override
-    public List<SurveyActivity> find(long rn) {
-        ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
+	/**
+	 * Return activities considering that they were not discarded
+	 *
+	 * @param rn
+	 * @return
+	 */
+	@Override
+	public List<SurveyActivity> find(long rn) {
+		ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
 
-        FindIterable<Document> result = collection.find(and(eq(RECRUITMENT_NUMBER_PATH, rn), eq(DISCARDED_PATH, false)));
-        result.forEach((Block<Document>) document -> {
-            activities.add(SurveyActivity.deserialize(document.toJson()));
-        });
+		FindIterable<Document> result = collection
+				.find(and(eq(RECRUITMENT_NUMBER_PATH, rn), eq(DISCARDED_PATH, false)));
+		result.forEach((Block<Document>) document -> {
+			activities.add(SurveyActivity.deserialize(document.toJson()));
+		});
 
-        return activities;
-    }
+		return activities;
+	}
 
-    @Override
-    public ObjectId persist(SurveyActivity surveyActivity) {
-        Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
-        parsed.remove("_id");
-        collection.insertOne(parsed);
+	@Override
+	public ObjectId persist(SurveyActivity surveyActivity) {
+		Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
+		parsed.remove("_id");
+		collection.insertOne(parsed);
 
-        return parsed.getObjectId("_id");
-    }
+		return parsed.getObjectId("_id");
+	}
 
-    @Override
-    public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
-        Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
-        parsed.remove("_id");
-        UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()), new Document("$set", parsed), new UpdateOptions().upsert(false));
+	@Override
+	public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
+		Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
+		parsed.remove("_id");
+		UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()),
+				new Document("$set", parsed), new UpdateOptions().upsert(false));
 
-        if (updateOne.getMatchedCount() == 0) {
-            throw new DataNotFoundException(new Throwable("OID {" + surveyActivity.getActivityID().toString() + "} not found."));
-        }
+		if (updateOne.getMatchedCount() == 0) {
+			throw new DataNotFoundException(
+					new Throwable("OID {" + surveyActivity.getActivityID().toString() + "} not found."));
+		}
 
-        return surveyActivity;
-    }
+		return surveyActivity;
+	}
 
-    /**
-     * This method return specific activity.
-     *
-     * @param id database id (_id)
-     * @return
-     * @throws DataNotFoundException
-     */
-    @Override
-    public SurveyActivity findByID(String id) throws DataNotFoundException {
-        ObjectId oid = new ObjectId(id);
-        Document result = collection.find(eq("_id", oid)).first();
+	/**
+	 * This method return specific activity.
+	 *
+	 * @param id
+	 *            database id (_id)
+	 * @return
+	 * @throws DataNotFoundException
+	 */
+	@Override
+	public SurveyActivity findByID(String id) throws DataNotFoundException {
+		ObjectId oid = new ObjectId(id);
+		Document result = collection.find(eq("_id", oid)).first();
 
-        if (result == null) {
-            throw new DataNotFoundException(new Throwable("OID {" + id + "} not found."));
-        }
+		if (result == null) {
+			throw new DataNotFoundException(new Throwable("OID {" + id + "} not found."));
+		}
 
-        return SurveyActivity.deserialize(result.toJson());
-    }
+		return SurveyActivity.deserialize(result.toJson());
+	}
 
-    @Override
-    public List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException {
-        ArrayList<SurveyActivity> activities = new ArrayList<>();
+	@Override
+	public List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException {
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
 
-        Document query = new Document();
-        query.put(ACRONYM_PATH, acronym);
-        query.put(VERSION_PATH, version);
-        query.put(DISCARDED_PATH, Boolean.FALSE);
-        Bson projection = fields(exclude(TEMPLATE_PATH));
+		Document query = new Document();
+		query.put(ACRONYM_PATH, acronym);
+		query.put(VERSION_PATH, version);
+		query.put(DISCARDED_PATH, Boolean.FALSE);
+		Bson projection = fields(exclude(TEMPLATE_PATH));
 
-        FindIterable<Document> result = collection.find(query).projection(projection);
+		FindIterable<Document> result = collection.find(query).projection(projection);
 
-        result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
-        if (activities.size() == 0) {
-            throw new DataNotFoundException(
-                    new Throwable("OID {" + acronym + "} not found."));
-        }
+		result.forEach((Block<Document>) document -> {
 
-        return activities;
-    }
+			try {
+				surveyActivity = null;
+				surveyActivity = SurveyActivity.deserialize(document.toJson());
+				activities.add(surveyActivity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} catch (OutOfMemoryError e) {
+				activities.clear();
+				Thread.currentThread().interrupt();
 
-    @Override
-    public List<SurveyActivity> findByCategory(String categoryName) {
-        ArrayList<SurveyActivity> activities = new ArrayList<>();
+				new Throwable("Error Extraction {" + acronym + "}.");
 
-        FindIterable<Document> result = collection.find(eq(CATEGORY_NAME_PATH, categoryName));
+			}
 
-        result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
-        return activities;
-    }
+		});
+		if (activities.size() == 0) {
+			throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
+		}
 
-    @Override
-    public void updateCategory(ActivityCategory activityCategory) {
-        Document query = new Document();
-        query.put("category.name", activityCategory.getName());
+		return activities;
+	}
 
-        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())), new UpdateOptions().upsert(false));
-    }
+	@Override
+	public List<SurveyActivity> findByCategory(String categoryName) {
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
+
+		FindIterable<Document> result = collection.find(eq(CATEGORY_NAME_PATH, categoryName));
+
+		result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
+		return activities;
+	}
+
+	@Override
+	public void updateCategory(ActivityCategory activityCategory) {
+		Document query = new Document();
+		query.put("category.name", activityCategory.getName());
+
+		UpdateResult updateResult = collection.updateOne(query,
+				new Document("$set", new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())),
+				new UpdateOptions().upsert(false));
+
+	}
 
 }
