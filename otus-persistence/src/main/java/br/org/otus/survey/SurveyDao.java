@@ -1,17 +1,23 @@
 package br.org.otus.survey;
 
-import br.org.mongodb.MongoGenericDao;
-import com.mongodb.Block;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-import org.bson.Document;
-import org.ccem.otus.survey.form.SurveyForm;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
+import static com.mongodb.client.model.Filters.or;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.mongodb.client.model.Filters.*;
+import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.survey.form.SurveyForm;
+
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+
+import br.org.mongodb.MongoGenericDao;
 
 public class SurveyDao extends MongoGenericDao<Document> {
 
@@ -37,6 +43,23 @@ public class SurveyDao extends MongoGenericDao<Document> {
 		});
 
 		return surveys;
+	}
+
+	public SurveyForm get(String acronym, Integer version) throws DataNotFoundException {
+		Document query = new Document();
+		ArrayList<SurveyForm> surveys = new ArrayList<>();
+		query.put("surveyTemplate.identity.acronym", acronym.toUpperCase());
+		query.put("version", version);
+
+		FindIterable<Document> result = collection.find(query);
+
+		result.forEach((Block<Document>) document -> surveys.add(SurveyForm.deserialize(document.toJson())));
+		if (surveys.size() == 0) {
+			throw new DataNotFoundException(new Throwable(
+					"SURVEY ACRONYM {" + acronym.toUpperCase() + "} VERSION {" + version.toString() + "} not found."));
+		}
+
+		return surveys.get(0);
 	}
 
 	public List<SurveyForm> findByCustomId(Set<String> ids) {

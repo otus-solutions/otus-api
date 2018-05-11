@@ -21,6 +21,7 @@ public class ActivityServiceBeanTest {
 	private static final String HASH = "58c83f502226685b94f8973a";
 	private static final long RECRUIMENT_NUMBER = 12345;
 	private static final String SURVEY_ID = "123456789";
+	private static final Integer VERSION = 1;
 	@InjectMocks
 	private ActivityServiceBean service;
 	@Mock
@@ -56,9 +57,18 @@ public class ActivityServiceBeanTest {
 		service.getByID(SURVEY_ID);
 		Mockito.verify(activityDao).findByID(SURVEY_ID);
 	}
+	
+	@Test
+	public void method_get_should_call_ActivityDao_getUndiscarded() throws DataNotFoundException{
+		service.get(SURVEY_ID, VERSION);
+		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Test(expected = DataNotFoundException.class)
-	public void method_getByID_should_throw_DataNotFound_when_findByID_not_found() throws DataNotFoundException{
-		Mockito.when(activityDao.findByID(SURVEY_ID)).thenThrow(DataNotFoundException.class);
-		service.getByID(SURVEY_ID);
+	public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException{
+		Mockito.when(activityDao.getUndiscarded(SURVEY_ID, VERSION)).thenThrow(DataNotFoundException.class);
+		service.get(SURVEY_ID, VERSION);
+		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);
 	}
 }

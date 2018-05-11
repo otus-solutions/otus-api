@@ -17,7 +17,7 @@ public interface ActivityDao {
 
 	SurveyActivity findByID(String id) throws DataNotFoundException;
 
-	List<SurveyActivity> getActivitiesToExtraction(String id) throws DataNotFoundException;
+	List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException;
 
 	List<SurveyActivity> findByCategory(String categoryName);
 

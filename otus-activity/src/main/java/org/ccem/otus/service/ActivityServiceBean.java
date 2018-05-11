@@ -39,8 +39,7 @@ public class ActivityServiceBean implements ActivityService {
 	}
 
 	@Override
-	public List<SurveyActivity> getActivitiesToExtraction(String id) throws DataNotFoundException {		
-		return activityDao.getActivitiesToExtraction(id);
+	public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException{
+		return activityDao.getUndiscarded(acronym, version);
 	}
-
 }

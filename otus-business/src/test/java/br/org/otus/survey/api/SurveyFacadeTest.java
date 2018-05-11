@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -34,6 +35,7 @@ public class SurveyFacadeTest {
 	private static final String ACRONYM_ALREADY_EXIST = "Acronym";
 	private static final Boolean POSITIVE_ANSWER = true;
 	private static final Boolean NEGATIVE_ANSWER = false;
+	private static final Integer VERSION = 1;
 	@InjectMocks
 	private SurveyFacade surveyFacade;
 	@Mock
@@ -68,6 +70,13 @@ public class SurveyFacadeTest {
 		surveys.add(surveyAcronym);
 		when(surveyService.findByAcronym(ACRONYM)).thenReturn(surveys);
 		assertEquals(surveys.size(), surveyFacade.findByAcronym(ACRONYM).size());
+	}
+	
+	@Test
+	public void method_findByAcronymWithVersion_should_return_survey_by_acronym() throws DataNotFoundException {
+		surveys.add(surveyAcronym);
+		when(surveyService.get(ACRONYM, VERSION)).thenReturn(surveys.get(0));
+		assertEquals(surveys.get(0), surveyFacade.get(ACRONYM, VERSION));
 	}
 
 	@Test

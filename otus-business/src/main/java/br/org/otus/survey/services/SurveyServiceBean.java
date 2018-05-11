@@ -3,6 +3,7 @@ package br.org.otus.survey.services;
 import br.org.otus.survey.SurveyDao;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -33,6 +34,11 @@ public class SurveyServiceBean implements SurveyService {
     @Override
     public List<SurveyForm> findByAcronym(String acronym) {
         return surveyDao.findByAcronym(acronym);
+    }
+    
+    @Override
+    public SurveyForm get(String acronym, Integer version) throws DataNotFoundException {
+        return surveyDao.get(acronym, version);
     }
 
     @Override

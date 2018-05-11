@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,20 +35,15 @@ public class ExtractionServiceTest {
 	@Mock
 	private CsvWriterService csvWriterServiceMock;
 	@InjectMocks
-	private ExtractionService ExtractionServiceMock;
+	private ExtractionServiceBean ExtractionServiceMock;
 
-	private ExtractionService extractionService;
+	private ExtractionServiceBean extractionService;
 	private Extractable extractable;
 
 	@Before
-	public void setup() {
-		extractionService = new ExtractionService();
+	public void setup() throws DataNotFoundException {
+		extractionService = new ExtractionServiceBean();
 		extractable = new ExtractionTest();
-	}
-
-	@Test
-	public void should_return_an_array_of_bytes() throws DataNotFoundException {
-		Assert.assertTrue(extractionService.createExtraction(extractable) instanceof byte[]);
 	}
 
 	@Test

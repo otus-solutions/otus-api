@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ActivityService {
 
-	String create(SurveyActivity surveyActivity);
+    String create(SurveyActivity surveyActivity);
 
-	SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException;
+    SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException;
 
-	List<SurveyActivity> list(long rn);
+    List<SurveyActivity> list(long rn);
 
-	SurveyActivity getByID(String id) throws DataNotFoundException;
-	
-	List<SurveyActivity> getActivitiesToExtraction(String id) throws DataNotFoundException;
+    SurveyActivity getByID(String id) throws DataNotFoundException;
+
+    List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException;
 }
