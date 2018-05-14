@@ -1,9 +1,16 @@
 package org.ccem.otus.utils;
 
-import com.google.gson.*;
+import java.lang.reflect.Type;
+
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 
-import java.lang.reflect.Type;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializer<AnswerFill> {
 
@@ -15,8 +22,7 @@ public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializ
 	}
 
 	@Override
-	public AnswerFill deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-			throws JsonParseException {
+	public AnswerFill deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
 		JsonPrimitive prim = (JsonPrimitive) json.getAsJsonObject().get(ANSWER_TYPE);
 		String answertType = prim.getAsString();
