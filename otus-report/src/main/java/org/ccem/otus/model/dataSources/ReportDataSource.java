@@ -9,6 +9,7 @@ public abstract class ReportDataSource<T> {
     private String dataSource;
     private String label;
     private ArrayList<T> result = new ArrayList<>();
+    private Boolean optional = false;
 
     public abstract void addResult(T result);
 
@@ -29,4 +30,9 @@ public abstract class ReportDataSource<T> {
 	public String getLabel() {
 		return label;
 	}
+
+	public Boolean getOptional() {
+		return optional;
+	}
+	
 }
