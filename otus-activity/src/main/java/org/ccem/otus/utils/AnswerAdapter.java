@@ -31,7 +31,7 @@ public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializ
 		String answertType = type.getAsString();
 
 		if (AnswerMapping.isEquals(AnswerMapping.INTEGER_QUESTION, answertType)) {
-			return this.decodeIntegerAnswer(json);
+			return this.deserializeIntegerAnswer(json);
 		} else if (AnswerMapping.isEquals(AnswerMapping.GRID_INTEGER_QUESTION, answertType)) {
 			// TODO:
 		}
@@ -39,11 +39,11 @@ public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializ
 		return context.deserialize(json, AnswerMapping.getEnumByObjectType(answertType).getAnswerClass());
 	}
 
-	private IntegerAnswer decodeIntegerAnswer(JsonElement json) {
+	private IntegerAnswer deserializeIntegerAnswer(JsonElement json) {
 		IntegerAnswer answer = new IntegerAnswer();
 
 		JsonElement numberLong = json.getAsJsonObject().get(ANSWER_VALUE);
-		Long value = Long.valueOf(numberLong.getAsJsonObject().getAsString());
+		Long value = numberLong.getAsJsonObject().get("$numberLong").getAsLong();
 		answer.setValue(value);
 
 		answer.setObjectType(json.getAsJsonObject().get(ANSWER_OBJECT_TYPE).getAsString());
