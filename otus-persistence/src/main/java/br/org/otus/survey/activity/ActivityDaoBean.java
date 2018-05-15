@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.el.ResourceBundleELResolver;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityDao;
@@ -36,7 +38,6 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	public static final String RECRUITMENT_NUMBER_PATH = "participantData.recruitmentNumber";
 	public static final String CATEGORY_NAME_PATH = "category.name";
 	public static final String CATEGORY_LABEL_PATH = "category.label";
-	private SurveyActivity surveyActivity;
 
 	public ActivityDaoBean() {
 		super(COLLECTION_NAME, Document.class);
@@ -106,35 +107,32 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 	}
 
 	@Override
-	public List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException {
-		ArrayList<SurveyActivity> activities = new ArrayList<>();
-
+	public List<SurveyActivity> getUndiscarded(String acronym, Integer version)
+			throws DataNotFoundException, MemoryExcededException {
 		Document query = new Document();
 		query.put(ACRONYM_PATH, acronym);
 		query.put(VERSION_PATH, version);
 		query.put(DISCARDED_PATH, Boolean.FALSE);
 		Bson projection = fields(exclude(TEMPLATE_PATH));
+		
+		Long len = collection.count(query);
 
 		FindIterable<Document> result = collection.find(query).projection(projection);
-
-		result.forEach((Block<Document>) document -> {
-
-			try {
-				surveyActivity = null;
-				surveyActivity = SurveyActivity.deserialize(document.toJson());
-				activities.add(surveyActivity);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} catch (OutOfMemoryError e) {
-				activities.clear();
-				Thread.currentThread().interrupt();
-
-				new Throwable("Error Extraction {" + acronym + "}.");
-
+		ArrayList<SurveyActivity> activities = new ArrayList<>(len.intValue());
+		if(len > 0) {
+			for (Document document : result) {
+				try {
+					activities.add(SurveyActivity.deserialize(document.toJson()));
+				} catch (OutOfMemoryError e) {
+					activities.clear();
+					activities = null;
+					throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
+				}
 			}
+		}
+		
 
-		});
-		if (activities.size() == 0) {
+		if (activities.isEmpty()) {
 			throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
 		}
 

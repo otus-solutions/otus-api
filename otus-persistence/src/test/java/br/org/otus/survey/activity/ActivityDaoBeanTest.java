@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,6 +52,7 @@ public class ActivityDaoBeanTest {
 		Whitebox.setInternalState(activityDaoBean, "collection", collection);
 		Mockito.when(this.collection.find(Matchers.<Bson>any())).thenReturn(this.result);
 		Mockito.when(result.projection(Matchers.<Bson>any())).thenReturn(result);
+		Mockito.when(this.collection.count(Matchers.<Bson>any())).thenReturn(Long.valueOf(0));
 
 		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(this.activities);
 		PowerMockito.doReturn(1).when(this.activities).size();
@@ -58,21 +60,21 @@ public class ActivityDaoBeanTest {
 
 	@Test
 	public void method_get_should_return_list_not_null() throws Exception {
-		Assert.assertNotNull(this.activityDaoBean.getUndiscarded(ACRONYM, VERSION));
+		Assert.assertNotNull(activityDaoBean.getUndiscarded(ACRONYM, VERSION));
 	}
 
 	@Test
 	public void method_get_should_called_method_find() throws Exception {
-		this.activityDaoBean.getUndiscarded(ACRONYM, VERSION);
-
+		activityDaoBean.getUndiscarded(ACRONYM, VERSION);
 		Mockito.verify(this.collection, Mockito.times(1)).find(Matchers.<Bson>any());
 	}
 
 	@Test
-	public void method_get_should_return_exception_when_list_of_activities_is_empty() {
-		PowerMockito.doReturn(0).when(this.activities).size();
+	public void method_get_should_return_exception_when_list_of_activities_is_empty() throws InterruptedException, DataNotFoundException, MemoryExcededException {
+		PowerMockito.doReturn(0).when(activities).size();
+		PowerMockito.doReturn(null).when(activityDaoBean).getUndiscarded(ACRONYM, VERSION);
 		try {
-			this.activityDaoBean.getUndiscarded(ACRONYM, VERSION);
+			activityDaoBean.getUndiscarded(ACRONYM, VERSION);
 		} catch (DataNotFoundException e) {
 			assertTrue(e.getMessage().contains("OID {" + ACRONYM + "} not found."));
 		}
@@ -88,5 +90,11 @@ public class ActivityDaoBeanTest {
 		this.activityDaoBean.getUndiscarded(ACRONYM, VERSION);
 
 		Mockito.verify(this.collection, Mockito.times(1)).find(query);
+	}
+	
+	@Test
+	public void method_get_should_return_count_result_query() throws Exception {
+		activityDaoBean.getUndiscarded(ACRONYM, VERSION);
+		Mockito.verify(this.collection, Mockito.times(1)).count(Matchers.<Bson>any());
 	}
 }

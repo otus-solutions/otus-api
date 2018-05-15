@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.persistence.ActivityDao;
 
@@ -39,7 +40,7 @@ public class ActivityServiceBean implements ActivityService {
 	}
 
 	@Override
-	public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException{
+	public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException{
 		return activityDao.getUndiscarded(acronym, version);
 	}
 }
