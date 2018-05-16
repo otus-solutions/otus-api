@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.el.ResourceBundleELResolver;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -22,6 +21,7 @@ import org.ccem.otus.persistence.ActivityDao;
 
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
@@ -114,23 +114,19 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 		query.put(VERSION_PATH, version);
 		query.put(DISCARDED_PATH, Boolean.FALSE);
 		Bson projection = fields(exclude(TEMPLATE_PATH));
-		
-		Long len = collection.count(query);
 
-		FindIterable<Document> result = collection.find(query).projection(projection);
-		ArrayList<SurveyActivity> activities = new ArrayList<>(len.intValue());
-		if(len > 0) {
-			for (Document document : result) {
-				try {
-					activities.add(SurveyActivity.deserialize(document.toJson()));
-				} catch (OutOfMemoryError e) {
-					activities.clear();
-					activities = null;
-					throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
-				}
+		FindIterable<Document> documents = collection.find(query).projection(projection);
+		MongoCursor<Document> iterator = documents.iterator();
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
+
+		while (iterator.hasNext()) {
+			try {
+				activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
+			} catch (OutOfMemoryError e) {
+				activities = null;
+				throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
 			}
 		}
-		
 
 		if (activities.isEmpty()) {
 			throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
