@@ -13,10 +13,6 @@ public class IntegerAnswer extends AnswerFill {
 		return value;
 	}
 
-	public void setValue(Long value) {
-		this.value = value;
-	}
-
 	@Override
 	public Map<String, Object> getAnswerExtract(String questionID) {
 		Map<String, Object> extraction = new LinkedHashMap<String, Object>();

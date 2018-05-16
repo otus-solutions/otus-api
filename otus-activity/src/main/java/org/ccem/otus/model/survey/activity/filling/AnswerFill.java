@@ -12,16 +12,8 @@ public class AnswerFill {
 		return objectType;
 	}
 
-	public void setObjectType(String objectType) {
-		this.objectType = objectType;
-	}
-
 	public String getType() {
 		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Map<String, Object> getAnswerExtract(String questionID) {
