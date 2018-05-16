@@ -123,6 +123,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 			try {
 				activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
 			} catch (OutOfMemoryError e) {
+				activities.clear();
 				activities = null;
 				throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
 			}
