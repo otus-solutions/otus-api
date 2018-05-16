@@ -138,13 +138,13 @@ public class SurveyServiceBeanTest {
 
     @Test(expected = ValidationException.class)
     public void updateLastVersionSurveyType_should_throw_exception_case_updateSurveyFormTypeDto_invalid()
-            throws org.ccem.otus.exceptions.webservice.validation.ValidationException {
+            throws org.ccem.otus.exceptions.webservice.validation.ValidationException, DataNotFoundException {
         service.updateLastVersionSurveyType(updateSurveyFormTypeDtoInvalid);
     }
 
     @Test
     public void updateLastVersionSurveyType_should_call_and_return_method_updateSurveyFormType_case_updateSurveyFormTypeDto_is_valid()
-            throws ValidationException {
+            throws ValidationException, DataNotFoundException {
         assertTrue(service.updateLastVersionSurveyType(updateSurveyFormTypeDtoValid));
     }
 

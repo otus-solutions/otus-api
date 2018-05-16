@@ -87,17 +87,6 @@ public class SurveyFacadeTest {
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_publishSurveyTemplate_should_throws_HttpResponseException_with_AcronymAlreadyExist()
-			throws Exception {
-		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
-		when(surveyService.saveSurvey(survey)).thenThrow(e);
-		when(e.getCause()).thenReturn(e);
-		when(e.getMessage()).thenReturn(ACRONYM_ALREADY_EXIST);
-
-		surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL);
-	}
-
-	@Test(expected = HttpResponseException.class)
 	public void method_publishSurveyTemplate_should_throws_HttpResponseException_with_NonUniqueItemID()
 			throws Exception {
 		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
@@ -109,20 +98,20 @@ public class SurveyFacadeTest {
 	}
 
 	@Test
-	public void method_updateSurveyFormType_should_return_valid() throws ValidationException {
+	public void method_updateSurveyFormType_should_return_valid() throws ValidationException, DataNotFoundException {
 		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_ANSWER);
 		assertTrue(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test
-	public void method_updateSurveyFormType_should_return_invalid() throws ValidationException {
+	public void method_updateSurveyFormType_should_return_invalid() throws ValidationException, DataNotFoundException {
 		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(NEGATIVE_ANSWER);
 		assertFalse(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_updateSurveyFormType_should_throw_HttpResponseException() throws ValidationException {
-		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenThrow(ValidationException.class);
+	public void method_updateSurveyFormType_should_throw_HttpResponseException() throws ValidationException, DataNotFoundException {
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenThrow(new ValidationException(new Throwable("")));
 		assertFalse(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
@@ -140,7 +129,7 @@ public class SurveyFacadeTest {
 
 	@Test(expected = HttpResponseException.class)
 	public void method_deleteByAcronym_should_throw_HttpResponseException() throws ValidationException, DataNotFoundException {
-		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(ValidationException.class);
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(new ValidationException(new Throwable("")));
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 

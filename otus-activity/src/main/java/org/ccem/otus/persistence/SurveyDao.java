@@ -18,7 +18,7 @@ public interface SurveyDao {
 
     ObjectId persist(SurveyForm survey);
 
-    boolean updateLastVersionSurveyType(String acronym, String surveyFormType);
+    boolean updateLastVersionSurveyType(String acronym, String surveyFormType) throws DataNotFoundException;
 
     boolean deleteLastVersionByAcronym(String acronym) throws DataNotFoundException;
 

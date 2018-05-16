@@ -48,8 +48,8 @@ public class SurveyFacade {
     public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
         try {
             return surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto);
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+        } catch (ValidationException | DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
 
@@ -57,7 +57,7 @@ public class SurveyFacade {
         try {
             return surveyService.deleteLastVersionByAcronym(acronym);
         } catch (ValidationException | DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
 

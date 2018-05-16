@@ -97,12 +97,16 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
     }
 
     @Override
-    public boolean updateLastVersionSurveyType(String acronym, String surveyFormType) {
+    public boolean updateLastVersionSurveyType(String acronym, String surveyFormType) throws DataNotFoundException {
         Document query = new Document("surveyTemplate.identity.acronym", acronym);
         query.put("isDiscarded", false);
 
         UpdateResult updateOne = collection.updateOne(query,
                 new Document("$set", new Document("surveyFormType", surveyFormType)));
+
+        if (updateOne.getMatchedCount() == 0) {
+            throw new DataNotFoundException("SURVEY ACRONYM {" + acronym.toUpperCase() + "} not found.");
+        }
 
         return updateOne.getModifiedCount() > 0;
     }

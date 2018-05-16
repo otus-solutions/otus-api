@@ -60,12 +60,16 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException {
+    public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException, DataNotFoundException {
         if (updateSurveyFormTypeDto.isValid()) {
-            return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym,
-                    updateSurveyFormTypeDto.newSurveyFormType.toString());
+            try {
+                return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym,
+                        updateSurveyFormTypeDto.newSurveyFormType.toString());
+            } catch (DataNotFoundException e) {
+                throw e;
+            }
         } else {
-            throw new ValidationException();
+            throw new ValidationException("Invalid UpdateSurveyFormTypeDto");
         }
     }
 
