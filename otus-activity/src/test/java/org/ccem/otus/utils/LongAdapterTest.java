@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -33,7 +32,7 @@ public class LongAdapterTest {
 
 	@Test
 	public void method_deserialize_should_return_type_long() {
-		JsonElement json = new JsonPrimitive(Mockito.anyLong());
+		JsonElement json = new JsonPrimitive(value1);
 
 		Assert.assertTrue(this.longAdapter.deserialize(json, type, context) instanceof Long);
 	}
