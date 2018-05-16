@@ -34,4 +34,8 @@ public class ExtractionFacade {
         }
         return null;
     }
+
+    public List<Integer> listSurveyVersions(String acronym){
+        return surveyFacade.listVersions(acronym);
+    }
 }

@@ -39,6 +39,14 @@ public class ExtractionResource {
 		return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
 	}
 
+	@GET
+	@SecuredExtraction
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Path("/activity/{acronym}/versions")
+	public String listActivityVersions(@PathParam("acronym") String acronym) {
+		return new Response().buildSuccess(extractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
+	}
+
 	@POST
 	@Secured
 	@Path("/enable")

@@ -58,7 +58,7 @@ public class SurveyResource {
 	@Path("/{acronym}/versions")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getSurveyVersions(@PathParam("acronym") String acronym) {
-		return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toSurveyJson();
+		return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toJson();
 	}
 
 }
