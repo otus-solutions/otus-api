@@ -2,16 +2,9 @@ package org.ccem.otus.utils;
 
 import java.lang.reflect.Type;
 
+import com.google.gson.*;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
-
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializer<AnswerFill> {
 
@@ -44,7 +37,7 @@ public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializ
 
 		JsonElement numberLong = json.getAsJsonObject().get(ANSWER_VALUE);
 
-		if(json.getAsJsonObject().has("$numberLong")) {
+		if((numberLong instanceof JsonObject) && (numberLong.getAsJsonObject().has("$numberLong"))) {
 			answer.setValue(numberLong.getAsJsonObject().get("$numberLong").getAsLong());
 		} else {
 			answer.setValue(numberLong.getAsLong());
