@@ -43,8 +43,12 @@ public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializ
 		IntegerAnswer answer = new IntegerAnswer();
 
 		JsonElement numberLong = json.getAsJsonObject().get(ANSWER_VALUE);
-		Long value = numberLong.getAsJsonObject().get("$numberLong").getAsLong();
-		answer.setValue(value);
+
+		if(json.getAsJsonObject().has("$numberLong")) {
+			answer.setValue(numberLong.getAsJsonObject().get("$numberLong").getAsLong());
+		} else {
+			answer.setValue(numberLong.getAsLong());
+		}
 
 		answer.setObjectType(json.getAsJsonObject().get(ANSWER_OBJECT_TYPE).getAsString());
 		answer.setType(json.getAsJsonObject().get(ANSWER_TYPE).getAsString());
