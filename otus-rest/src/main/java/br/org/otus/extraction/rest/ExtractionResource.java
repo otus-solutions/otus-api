@@ -43,7 +43,7 @@ public class ExtractionResource {
 	@SecuredExtraction
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/activity/{acronym}/versions")
-	public String listActivityVersions(@PathParam("acronym") String acronym) {
+	public String listSurveyVersions(@PathParam("acronym") String acronym) {
 		return new Response().buildSuccess(extractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
 	}
 
