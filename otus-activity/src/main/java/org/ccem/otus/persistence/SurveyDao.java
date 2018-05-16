@@ -14,6 +14,8 @@ public interface SurveyDao {
 
     List<SurveyForm> findByCustomId(Set<String> ids, String surveyAcronym);
 
+    SurveyForm get(String acronym, Integer version) throws DataNotFoundException;
+
     ObjectId persist(SurveyForm survey);
 
     boolean updateLastVersionSurveyType(String acronym, String surveyFormType);

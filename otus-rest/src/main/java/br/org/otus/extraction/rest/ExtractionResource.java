@@ -34,9 +34,9 @@ public class ExtractionResource {
 	@GET
 	@SecuredExtraction
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	@Path("/activity/{acronym}")
-	public byte[] extractActivities(@PathParam("acronym") String acronym) {
-		return extractionFacade.createActivityExtraction(acronym);
+	@Path("/activity/{acronym}/{version}")
+	public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
+		return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
 	}
 
 	@POST

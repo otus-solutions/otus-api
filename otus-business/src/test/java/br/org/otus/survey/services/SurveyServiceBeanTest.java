@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.form.SurveyFormType;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -30,6 +31,8 @@ public class SurveyServiceBeanTest {
     private static final String SURVEY_SERIALIZE = "{survey:'survey'}";
     private static final String ACRONYM_NULL = null;
     private static final Integer LATEST_VERSION = 1;
+    private static final Integer VERSION = 1;
+
 
     @InjectMocks
     private SurveyServiceBean service;
@@ -121,7 +124,7 @@ public class SurveyServiceBeanTest {
 
     //list method unit tests
     @Test
-    public void list_should_call_surveyDao_find() {
+    public void listUndiscarded_should_call_surveyDao_find() {
         service.listUndiscarded();
         Mockito.verify(surveyDaoBean).findUndiscarded();
     }
@@ -134,31 +137,38 @@ public class SurveyServiceBeanTest {
     }
 
     @Test(expected = ValidationException.class)
-    public void updateSurveyFormType_should_throw_exception_case_updateSurveyFormTypeDto_invalid()
+    public void updateLastVersionSurveyType_should_throw_exception_case_updateSurveyFormTypeDto_invalid()
             throws org.ccem.otus.exceptions.webservice.validation.ValidationException {
         service.updateLastVersionSurveyType(updateSurveyFormTypeDtoInvalid);
     }
 
     @Test
-    public void updateSurveyFormType_should_call_and_return_method_updateSurveyFormType_case_updateSurveyFormTypeDto_is_valid()
+    public void updateLastVersionSurveyType_should_call_and_return_method_updateSurveyFormType_case_updateSurveyFormTypeDto_is_valid()
             throws ValidationException {
         assertTrue(service.updateLastVersionSurveyType(updateSurveyFormTypeDtoValid));
     }
 
     @Test(expected = ValidationException.class)
-    public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_empty() throws ValidationException, DataNotFoundException {
+    public void deleteLastVersionByAcronym_should_throw_ValidationException_case_acronym_to_be_empty() throws ValidationException, DataNotFoundException {
         service.deleteLastVersionByAcronym(ACRONYM_EMPTY);
     }
 
     @Test(expected = ValidationException.class)
-    public void deleteByAcronym_should_throw_ValidationException_case_acronym_to_be_null() throws ValidationException, DataNotFoundException {
+    public void deleteLastVersionByAcronym_should_throw_ValidationException_case_acronym_to_be_null() throws ValidationException, DataNotFoundException {
         service.deleteLastVersionByAcronym(ACRONYM_NULL);
     }
 
     @Test
-    public void deleteByAcronym_should_returns_positive_answer_case_acronym_not_be_null_or_empty()
+    public void deleteLastVersionByAcronym_should_returns_positive_answer_case_acronym_not_be_null_or_empty()
             throws ValidationException, DataNotFoundException {
         assertTrue(surveyDaoBean.deleteLastVersionByAcronym(ACRONYM));
     }
+
+	@Test
+	public void get_should_call_method_findByAcronym_by_surveyDao() throws DataNotFoundException {
+		service.get(ACRONYM, VERSION);
+		Mockito.verify(surveyDaoBean).get(ACRONYM, VERSION);
+
+	}
 
 }

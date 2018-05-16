@@ -53,6 +53,11 @@ public class SurveyServiceBean implements SurveyService {
     public List<SurveyForm> findByAcronym(String acronym) {
         return surveyDao.findByAcronym(acronym);
     }
+    
+    @Override
+    public SurveyForm get(String acronym, Integer version) throws DataNotFoundException {
+        return surveyDao.get(acronym, version);
+    }
 
     @Override
     public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException {

@@ -22,9 +22,19 @@ public class SurveyFacade {
         return surveyService.listUndiscarded();
     }
 
-    public List<SurveyForm> findByAcronym(String acronym) {
-        return surveyService.findByAcronym(acronym);
-    }
+	public List<SurveyForm> findByAcronym(String acronym) {
+		return surveyService.findByAcronym(acronym);
+	}
+	
+	public SurveyForm get(String acronym, Integer version) {
+		try {
+			return surveyService.get(acronym, version);
+			
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+		
+	}
 
     public SurveyForm publishSurveyTemplate(SurveyTemplate surveyTemplate, String userEmail) {
         SurveyForm s = new SurveyForm(surveyTemplate, userEmail);
