@@ -58,4 +58,8 @@ public enum AnswerMapping {
 		return aux;
 	}
 
+	public static boolean isEquals(AnswerMapping answerMapping, String answertType) {
+		return answerMapping.getQuestionType().equals(answertType);
+	}
+
 }

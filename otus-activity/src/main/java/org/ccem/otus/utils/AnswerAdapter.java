@@ -15,8 +15,7 @@ public class AnswerAdapter implements JsonDeserializer<AnswerFill>, JsonSerializ
 	}
 
 	@Override
-	public AnswerFill deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-			throws JsonParseException {
+	public AnswerFill deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
 		JsonPrimitive prim = (JsonPrimitive) json.getAsJsonObject().get(ANSWER_TYPE);
 		String answertType = prim.getAsString();
