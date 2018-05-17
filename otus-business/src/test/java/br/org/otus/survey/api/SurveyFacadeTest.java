@@ -61,8 +61,8 @@ public class SurveyFacadeTest {
 	public void method_list_should_return_surveys() {
 		surveys.add(survey);
 		surveys.add(surveyAcronym);
-		when(surveyService.list()).thenReturn(surveys);
-		assertEquals(surveys.size(), surveyFacade.list().size());
+		when(surveyService.listUndiscarded()).thenReturn(surveys);
+		assertEquals(surveys.size(), surveyFacade.listUndiscarded().size());
 	}
 
 	@Test
@@ -87,17 +87,6 @@ public class SurveyFacadeTest {
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_publishSurveyTemplate_should_throws_HttpResponseException_with_AcronymAlreadyExist()
-			throws Exception {
-		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
-		when(surveyService.saveSurvey(survey)).thenThrow(e);
-		when(e.getCause()).thenReturn(e);
-		when(e.getMessage()).thenReturn(ACRONYM_ALREADY_EXIST);
-
-		surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL);
-	}
-
-	@Test(expected = HttpResponseException.class)
 	public void method_publishSurveyTemplate_should_throws_HttpResponseException_with_NonUniqueItemID()
 			throws Exception {
 		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
@@ -109,39 +98,39 @@ public class SurveyFacadeTest {
 	}
 
 	@Test
-	public void method_updateSurveyFormType_should_return_valid() throws ValidationException {
-		when(surveyService.updateSurveyFormType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_ANSWER);
-		assertTrue(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto));
+	public void method_updateSurveyFormType_should_return_valid() throws ValidationException, DataNotFoundException {
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_ANSWER);
+		assertTrue(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test
-	public void method_updateSurveyFormType_should_return_invalid() throws ValidationException {
-		when(surveyService.updateSurveyFormType(updateSurveyFormTypeDto)).thenReturn(NEGATIVE_ANSWER);
-		assertFalse(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto));
+	public void method_updateSurveyFormType_should_return_invalid() throws ValidationException, DataNotFoundException {
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(NEGATIVE_ANSWER);
+		assertFalse(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_updateSurveyFormType_should_throw_HttpResponseException() throws ValidationException {
-		when(surveyService.updateSurveyFormType(updateSurveyFormTypeDto)).thenThrow(ValidationException.class);
-		assertFalse(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto));
+	public void method_updateSurveyFormType_should_throw_HttpResponseException() throws ValidationException, DataNotFoundException {
+		when(surveyService.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenThrow(new ValidationException(new Throwable("")));
+		assertFalse(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto));
 	}
 
 	@Test
-	public void method_deleteByAcronym_should_return_valid() throws ValidationException {
-		when(surveyService.deleteByAcronym(ACRONYM)).thenReturn(POSITIVE_ANSWER);
-		assertTrue(surveyFacade.deleteByAcronym(ACRONYM));
+	public void method_deleteByAcronym_should_return_valid() throws ValidationException, DataNotFoundException {
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenReturn(POSITIVE_ANSWER);
+		assertTrue(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 	@Test
-	public void method_deleteByAcronym_should_return_invalid() throws ValidationException {
-		when(surveyService.deleteByAcronym(ACRONYM)).thenReturn(NEGATIVE_ANSWER);
-		assertFalse(surveyFacade.deleteByAcronym(ACRONYM));
+	public void method_deleteByAcronym_should_return_invalid() throws ValidationException, DataNotFoundException {
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenReturn(NEGATIVE_ANSWER);
+		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 	@Test(expected = HttpResponseException.class)
-	public void method_deleteByAcronym_should_throw_HttpResponseException() throws ValidationException {
-		when(surveyService.deleteByAcronym(ACRONYM)).thenThrow(ValidationException.class);
-		assertFalse(surveyFacade.deleteByAcronym(ACRONYM));
+	public void method_deleteByAcronym_should_throw_HttpResponseException() throws ValidationException, DataNotFoundException {
+		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(new ValidationException(new Throwable("")));
+		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
 
 }

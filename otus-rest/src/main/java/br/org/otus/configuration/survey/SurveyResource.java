@@ -24,8 +24,8 @@ public class SurveyResource {
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAll() {
-		return new Response().buildSuccess(surveyFacade.list()).toSurveyJson();
+	public String getAllUndiscarded() {
+		return new Response().buildSuccess(surveyFacade.listUndiscarded()).toSurveyJson();
 	}
 
 	@GET
@@ -40,17 +40,25 @@ public class SurveyResource {
 	@Secured
 	@Path("/{acronym}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteByAcronym(@PathParam("acronym") String acronym) {
-		return new Response().buildSuccess(surveyFacade.deleteByAcronym(acronym)).toJson();
+	public String deleteLastVersionSurveyByAcronym(@PathParam("acronym") String acronym) {
+		return new Response().buildSuccess(surveyFacade.deleteLastVersionByAcronym(acronym)).toJson();
 	}
 
 	@PUT
 	@Secured
 	@Path("/{acronym}/type")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String updateSurveyFormType(@PathParam("acronym") String acronym, UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
+	public String updateLastSurveySurveyType(@PathParam("acronym") String acronym, UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
 		updateSurveyFormTypeDto.acronym = acronym;
-		return new Response().buildSuccess(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto)).toJson();
+		return new Response().buildSuccess(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto)).toJson();
+	}
+
+	@GET
+	@Secured
+	@Path("/{acronym}/versions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getSurveyVersions(@PathParam("acronym") String acronym) {
+		return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toJson();
 	}
 
 }

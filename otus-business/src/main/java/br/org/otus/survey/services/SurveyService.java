@@ -10,16 +10,17 @@ import java.util.List;
 
 public interface SurveyService {
 
-	SurveyForm saveSurvey(SurveyForm survey) throws AlreadyExistException;
+	SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException, AlreadyExistException;
 	
-	List<SurveyForm> list();
+	List<SurveyForm> listUndiscarded();
 	
 	List<SurveyForm> findByAcronym(String acronym);
-	
-	SurveyForm get(String acronym, Integer version) throws DataNotFoundException;
-	
-	boolean updateSurveyFormType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException;
-	
-	boolean deleteByAcronym(String acronym) throws ValidationException;
 
+	SurveyForm get(String acronym, Integer version) throws DataNotFoundException;
+
+	boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException, DataNotFoundException;
+
+	boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException;
+
+	List<Integer> listSurveyVersions(String acronym);
 }

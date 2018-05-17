@@ -69,4 +69,11 @@ public class ExtractionFacadeTest {
 		Mockito.verify(extractionService).createExtraction(extractor);
 	}
 
+	@Test
+	public void should_call_listVersions_from_surveyFacade() throws Exception {
+		assertNotNull(extractionFacade);
+		extractionFacade.listSurveyVersions(acronym);
+		Mockito.verify(surveyFacade).listVersions(acronym);
+	}
+
 }

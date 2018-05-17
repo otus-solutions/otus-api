@@ -14,23 +14,20 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.survey.SurveyDao;
-import br.org.otus.survey.validators.AcronymValidator;
+import br.org.otus.survey.SurveyDaoBean;
 import br.org.otus.survey.validators.CustomIdValidator;
 import br.org.otus.survey.validators.ValidatorResponse;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SurveyDao.class, SurveyForm.class, SurveyValidorService.class })
-public class SurveyValidorServiceTest {
+@PrepareForTest({ SurveyDaoBean.class, SurveyForm.class, SurveyValidatorServiceBean.class })
+public class SurveyValidatorServiceBeanTest {
 	private static final Boolean POSITIVE_ANSWER = true;
 	private static final Boolean NEGATIVE_ANSWER = false;
-	private SurveyValidorService surveyValidorService;
+	private SurveyValidatorServiceBean surveyValidatorServiceBean;
 	@Mock
-	private SurveyDao surveyDao;
+	private SurveyDaoBean surveyDaoBean;
 	@Mock
 	private SurveyForm surveyForm;
-	@Mock
-	private AcronymValidator acronymValidator;
 	@Mock
 	private CustomIdValidator customIdValidator;
 	@Mock
@@ -42,31 +39,28 @@ public class SurveyValidorServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		surveyValidorService = spy(new SurveyValidorService());
-		whenNew(AcronymValidator.class).withArguments(surveyDao, surveyForm).thenReturn(acronymValidator);
-		when(acronymValidator.validate()).thenReturn(validatorResponse);
-		whenNew(CustomIdValidator.class).withArguments(surveyDao, surveyForm).thenReturn(customIdValidator);
+		surveyValidatorServiceBean = spy(new SurveyValidatorServiceBean());
+		whenNew(CustomIdValidator.class).withArguments(surveyDaoBean, surveyForm).thenReturn(customIdValidator);
 		when(customIdValidator.validate()).thenReturn(validatorResponse);
 	}
 
 	@Test
 	public void validateSurvey_call_validators_but_not_throws_exceptions() throws Exception {
 		when(validatorResponse.isValid()).thenReturn(POSITIVE_ANSWER);
-		surveyValidorService.validateSurvey(surveyDao, surveyForm);
-		Mockito.verify(acronymValidator).validate();
+		surveyValidatorServiceBean.validateSurvey(surveyDaoBean, surveyForm);
 		Mockito.verify(customIdValidator).validate();
 	}
 
 	@Test(expected = AlreadyExistException.class)
 	public void acronymValidator_should_throw_AlreadyExistException_case_Acronym_already_exist() throws Exception {
 		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
-		surveyValidorService.validateSurvey(surveyDao, surveyForm);
+		surveyValidatorServiceBean.validateSurvey(surveyDaoBean, surveyForm);
 	}
 
 	@Test(expected = AlreadyExistException.class)
 	public void customIdValidator_should_throw_AlreadyExistException_case_Item_ID_already_exist() throws Exception {
 		when(validatorResponse.isValid()).thenReturn(NEGATIVE_ANSWER);
-		surveyValidorService.validateSurvey(surveyDao, surveyForm);
+		surveyValidatorServiceBean.validateSurvey(surveyDaoBean, surveyForm);
 	}
 
 }
