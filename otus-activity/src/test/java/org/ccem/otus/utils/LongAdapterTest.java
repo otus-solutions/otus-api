@@ -15,8 +15,8 @@ import com.google.gson.JsonPrimitive;
 public class LongAdapterTest {
 
 	private static final String NUMBER_LONG = "$numberLong";
-	private Long value1 = 10L;
-	private Long value2 = 123456789101112L;
+	private static final Long VALUE1 = 10L;
+	private static final Long VALUE2 = 123456789101112L;
 
 	private LongAdapter longAdapter;
 
@@ -32,20 +32,20 @@ public class LongAdapterTest {
 
 	@Test
 	public void method_deserialize_should_return_type_long() {
-		JsonElement json = new JsonPrimitive(value1);
+		JsonElement json = new JsonPrimitive(VALUE1);
 
 		Assert.assertTrue(this.longAdapter.deserialize(json, type, context) instanceof Long);
 	}
 
 	@Test
 	public void method_deserialize_should_return_expected_values() {
-		JsonElement json = new JsonPrimitive(value1);
+		JsonElement json = new JsonPrimitive(VALUE1);
 
 		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty(NUMBER_LONG, 123456789101112L);
+		jsonObject.addProperty(NUMBER_LONG, VALUE2);
 
-		Assert.assertEquals(value1, this.longAdapter.deserialize(json, type, context));
-		Assert.assertEquals(value2, this.longAdapter.deserialize(jsonObject, type, context));
+		Assert.assertEquals(VALUE1, this.longAdapter.deserialize(json, type, context));
+		Assert.assertEquals(VALUE2, this.longAdapter.deserialize(jsonObject, type, context));
 	}
 
 }
