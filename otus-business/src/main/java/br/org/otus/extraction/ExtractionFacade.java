@@ -25,7 +25,7 @@ public class ExtractionFacade {
 	@Inject
 	private ExtractionService extractionService;
 
-	public byte[] createActivityExtraction(String acronym, Integer version) {
+	public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
 		List<SurveyActivity> activities = new ArrayList<>();
 		
 		activities = activityFacade.get(acronym, version);
@@ -34,8 +34,7 @@ public class ExtractionFacade {
 		try {
 			return extractionService.createExtraction(extractor);
 		} catch (DataNotFoundException e) {
-			e.printStackTrace();
+			throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
 		}
-		return null;
 	}
 }

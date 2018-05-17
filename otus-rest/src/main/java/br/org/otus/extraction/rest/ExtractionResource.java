@@ -12,6 +12,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
 import br.org.otus.extraction.ExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
@@ -35,7 +37,7 @@ public class ExtractionResource {
 	@SecuredExtraction
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/activity/{acronym}/{version}")
-	public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
+	public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
 		return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
 	}
 
