@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class ActivityFacadeTest {
 	}
 	
 	@Test
-	public void method_should_verify_get_with_id_and_version() throws DataNotFoundException {
+	public void method_should_verify_get_with_id_and_version() throws DataNotFoundException, InterruptedException, MemoryExcededException {
 		List<SurveyActivity> list = new ArrayList<SurveyActivity>();
 		list.add(surveyActivity);
 		list.add(surveyActivity);

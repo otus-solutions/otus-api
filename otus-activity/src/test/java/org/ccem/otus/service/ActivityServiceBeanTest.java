@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.persistence.ActivityDao;
 import org.junit.Before;
@@ -59,14 +60,14 @@ public class ActivityServiceBeanTest {
 	}
 	
 	@Test
-	public void method_get_should_call_ActivityDao_getUndiscarded() throws DataNotFoundException{
+	public void method_get_should_call_ActivityDao_getUndiscarded() throws DataNotFoundException, InterruptedException, MemoryExcededException{
 		service.get(SURVEY_ID, VERSION);
 		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Test(expected = DataNotFoundException.class)
-	public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException{
+	public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException, InterruptedException, MemoryExcededException{
 		Mockito.when(activityDao.getUndiscarded(SURVEY_ID, VERSION)).thenThrow(DataNotFoundException.class);
 		service.get(SURVEY_ID, VERSION);
 		Mockito.verify(activityDao).getUndiscarded(SURVEY_ID, VERSION);

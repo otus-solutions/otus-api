@@ -1,11 +1,13 @@
 package br.org.otus.extraction.rest;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 
@@ -40,7 +42,7 @@ public class ExtractionResourceTest {
 
 
 	@Test
-	public void should_verify_method_createActivityExtraction_have_been_called() {
+	public void should_verify_method_createActivityExtraction_have_been_called() throws DataNotFoundException {
 		extractionResource.extractActivities(acronym, version);
 		Mockito.verify(extractionFacade).createActivityExtraction(acronym, version);
 	}

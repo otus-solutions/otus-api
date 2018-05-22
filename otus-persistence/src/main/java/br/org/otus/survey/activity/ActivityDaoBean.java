@@ -14,12 +14,14 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.persistence.ActivityDao;
 
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
@@ -100,23 +102,32 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         return SurveyActivity.deserialize(result.toJson());
     }
 
-    @Override
-    public List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException {
-        ArrayList<SurveyActivity> activities = new ArrayList<>();
+	@Override
+	public List<SurveyActivity> getUndiscarded(String acronym, Integer version)
+			throws DataNotFoundException, MemoryExcededException {
+		Document query = new Document();
+		query.put(ACRONYM_PATH, acronym);
+		query.put(VERSION_PATH, version);
+		query.put(DISCARDED_PATH, Boolean.FALSE);
+		Bson projection = fields(exclude(TEMPLATE_PATH));
 
-        Document query = new Document();
-        query.put(ACRONYM_PATH, acronym);
-        query.put(VERSION_PATH, version);
-        query.put(DISCARDED_PATH, Boolean.FALSE);
-        Bson projection = fields(exclude(TEMPLATE_PATH));
+		FindIterable<Document> documents = collection.find(query).projection(projection);
+		MongoCursor<Document> iterator = documents.iterator();
+		ArrayList<SurveyActivity> activities = new ArrayList<>();
 
-        FindIterable<Document> result = collection.find(query).projection(projection);
+		while (iterator.hasNext()) {
+			try {
+				activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
+			} catch (OutOfMemoryError e) {
+				activities.clear();
+				activities = null;
+				throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
+			}
+		}
 
-        result.forEach((Block<Document>) document -> activities.add(SurveyActivity.deserialize(document.toJson())));
-        if (activities.size() == 0) {
-            throw new DataNotFoundException(
-                    new Throwable("OID {" + acronym + "} not found."));
-        }
+		if (activities.isEmpty()) {
+			throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
+		}
 
         return activities;
     }
