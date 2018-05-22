@@ -37,4 +37,8 @@ public class ExtractionFacade {
 			throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
 		}
 	}
+
+	public List<Integer> listSurveyVersions(String acronym){
+        return surveyFacade.listVersions(acronym);
+    }
 }
