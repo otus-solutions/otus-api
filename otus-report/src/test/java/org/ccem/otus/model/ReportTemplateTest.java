@@ -29,7 +29,7 @@ public class ReportTemplateTest {
 	private static final String REPORT_TEMPLATE_JSON_EMPTY_TEMPLATE = "{\"template\":\"  \",\"label\":\"labeTeste\",\"sendingDate\":\"2017-02-23T13:26:00Z\",\"fieldCenter\":[\"RS\",\"SP\"],\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[]}]}";
 	private static final String REPORT_TEMPLATE_JSON_EMPTY_LABEL = "{\"template\":\"<span>teste</span>\",\"label\":\"  \",\"sendingDate\":\"2017-02-23T13:26:00Z\",\"fieldCenter\":[\"RS\",\"SP\"],\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[]}]}";
 
-	private String reportTemplateJson = "{\"template\":\"<span>teste</span>\",\"label\":\"labeTeste\",\"sendingDate\":\"2017-02-23T13:26:00Z\",\"fieldCenter\":[\"RS\",\"SP\"],\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[]}]}";
+	private String reportTemplateJson = "{\"template\":\"<span>teste</span>\",\"label\":\"labeTeste\",\"sendingDate\":\"2017-02-23T13:26:00Z\",\"fieldCenter\":[\"RS\",\"SP\"],\"dataSources\":[{\"dataSource\":\"Participant\",\"result\":[],\"optional\":false}]}";
 	private String reportTemplateJsonIncomplete = "{\"label\":\"labeTeste\",\"fieldCenter\":[\"RS\",\"SP\"]}";
 	private String template = "<span>teste</span>";
 
