@@ -84,6 +84,7 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
                         //.append("status.month", new Document(MONTH, new Document("$dateFromString", new Document("dateString", "$status.date"))))
                         //.append("status.year", new Document(MONTH, new Document("$dateFromString", new Document("dateString", "$status.date"))))
                         //.append("status.name", 1)
+                        .append("status.name",1)
                         .append(RN,1)
                         .append(DISCARDED_PATH, 1)
                         .append("activityDate","$status.date")
