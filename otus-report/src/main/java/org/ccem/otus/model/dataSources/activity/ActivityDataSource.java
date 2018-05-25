@@ -19,8 +19,7 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
 	public ArrayList<Document> buildQuery(Long recruitmentNumber) {
 		ArrayList<Document> query = new ArrayList<>();
 		this.buildMachStage(recruitmentNumber, query);
-		this.buildProjectionStage(query);
-		this.appendStatusHistoryFilter(query);
+		this.buildStatusHistoryFilter(query);
 
 		return query;
 	}
@@ -37,19 +36,30 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
 		Document matchStage = new Document("$match", filters);
 		query.add(matchStage);
 	}
+	
+	//TODO: Melhorar!
+	private void buildStatusHistoryFilter(ArrayList<Document> query) {
+		if(this.filters.getStatusHistory() != null) {
+			this.buildProjectionStage(query);
+			this.appendStatusHistoryFilter(query);
+		} else {
+			Document matchStage = new Document("$match", "statusHistory");
+			query.add(matchStage);
+		}
+	}
 
 	private void buildProjectionStage(ArrayList<Document> query) {
-		Document projectionFields = new Document("_id", -1);
-		if (this.filters.getStatusHistory() != null) {
+		if (this.filters.getStatusHistory().getPosition() != null) {
+			Document projectionFields = new Document("_id", -1);
 			Document statusHistoryProjectionFilter = new Document("$slice", Arrays.asList("$statusHistory", this.filters.getStatusHistory().getPosition(), 1));
 			projectionFields.append("statusHistory", statusHistoryProjectionFilter);
+			Document projectStage = new Document("$project", projectionFields);
+			query.add(projectStage);
 		}
-		Document projectStage = new Document("$project", projectionFields);
-		query.add(projectStage);
 	}
 
 	private void appendStatusHistoryFilter(ArrayList<Document> query) {
-		if (this.filters.getStatusHistory() != null) {
+		if (this.filters.getStatusHistory().getName() != null) {
 			Document statusHistoryMatchStage = new Document("$match", new Document("statusHistory.name", this.filters.getStatusHistory().getName()));
 			query.add(statusHistoryMatchStage);
 		}
