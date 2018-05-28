@@ -19,11 +19,15 @@ public class ActivityDataSourceTest {
   private static final Long RECRUITMENT_NUMBER = 343545345L;
   private static final String EXPECTED_RESULT = "{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.surveyTemplate.identity.acronym\" : \"TF\", \"category.name\" : \"C0\", \"isDiscarded\" : false } }";
   private static final String EXPECTED_RESULT_PROJECTION = "{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : 1, \"mode\" : 1 } }";
+
   private static final String EXPECTED_RESULT_PROJECTION_WHIT_STATUS_HISTORY = "{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : 1, \"statusHistoryPosition\" : { \"$slice\" : [\"$statusHistory\", -1, 1] }, \"mode\" : 1 } }";
   private static final String EXPECTED_RESULT_MATCH_WHIT_STATUS_HISTORY = "{ \"$match\" : { \"statusHistoryPosition.name\" : \"FINALIZED\" } }";
 
+  private static final String EXPECTED_RESULT_PROJECTION_WHITOUT_POSITION_STATUS_HISTORY = "{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : 1, \"mode\" : 1 } }";
+  private static final String EXPECTED_RESULT_MATCH_WHITOUT_POSITION_STATUS_HISTORY = "{ \"$match\" : { \"statusHistory.name\" : \"FINALIZED\" } }";
+
   private ActivityDataSource activityDataSource;
-  private ActivityDataSourceStatusHistoryFilter activityDataSourceStatusHistoryFilter;
+  private ActivityDataSourceStatusHistoryFilter filter;
   private ActivityDataSourceFilters activityDataSourceFilters;
   private ActivityDataSource activityDataSourceAddResult = spy(new ActivityDataSource());
 
@@ -47,11 +51,11 @@ public class ActivityDataSourceTest {
 
   @Test
   public void method_builtQuery_with_StatusHistoryFilter() {
-    activityDataSourceStatusHistoryFilter = new ActivityDataSourceStatusHistoryFilter();
+    filter = new ActivityDataSourceStatusHistoryFilter();
 
-    Whitebox.setInternalState(activityDataSourceStatusHistoryFilter, "name", "FINALIZED");
-    Whitebox.setInternalState(activityDataSourceStatusHistoryFilter, "position", -1);
-    Whitebox.setInternalState(activityDataSourceFilters, "statusHistory", activityDataSourceStatusHistoryFilter);
+    Whitebox.setInternalState(filter, "name", "FINALIZED");
+    Whitebox.setInternalState(filter, "position", -1);
+    Whitebox.setInternalState(activityDataSourceFilters, "statusHistory", filter);
     Whitebox.setInternalState(activityDataSource, "filters", activityDataSourceFilters);
 
     ArrayList<Document> query = activityDataSource.buildQuery(RECRUITMENT_NUMBER);
@@ -68,4 +72,20 @@ public class ActivityDataSourceTest {
 
     verifyPrivate(activityDataSourceAddResult, times(1)).invoke("addResult", activityDataSourceResult);
   }
+
+  @Test
+  public void method_builtQuery_without_position_StatusHistoryFilter() {
+    filter = new ActivityDataSourceStatusHistoryFilter();
+
+    Whitebox.setInternalState(filter, "name", "FINALIZED");
+    Whitebox.setInternalState(activityDataSourceFilters, "statusHistory", filter);
+    Whitebox.setInternalState(activityDataSource, "filters", activityDataSourceFilters);
+
+    ArrayList<Document> query = activityDataSource.buildQuery(RECRUITMENT_NUMBER);
+
+    assertEquals(EXPECTED_RESULT, query.get(0).toJson());
+    assertEquals(EXPECTED_RESULT_PROJECTION_WHITOUT_POSITION_STATUS_HISTORY, query.get(1).toJson());
+    assertEquals(EXPECTED_RESULT_MATCH_WHITOUT_POSITION_STATUS_HISTORY, query.get(2).toJson());
+  }
+
 }
