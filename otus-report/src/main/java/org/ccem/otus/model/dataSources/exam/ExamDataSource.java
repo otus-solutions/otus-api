@@ -1,6 +1,7 @@
 package org.ccem.otus.model.dataSources.exam;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -20,25 +21,30 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 		return this.buildQueryToExamSendingLot(recruitmentNumber);
 	}
 
-	public ArrayList<Document> buildQueryToExamResults(ObjectId objectId) {
+	public ArrayList<Document> buildQueryToExamResults(ObjectId objectId, Long recruitmentNumber) {
 		ArrayList<Document> query = new ArrayList<>();
 
-		Document examSendingLotId = new Document("$match", new Document("examSendingLotId", objectId));
-		query.add(examSendingLotId);
+		Document match = new Document("$match", new Document("examSendingLotId", objectId)
+			.append("objectType", "Exam").append("name", this.filters.getExamName())
+		);
+		query.add(match);
 
-		Document objectType = new Document("$match", new Document("objectType", "Exam"));
-		query.add(objectType);
-
-		if (this.filters.getExamName() != null) {
-			Document examName = new Document("$match", new Document("name", this.filters.getExamName()));
-			query.add(examName);
-		}
-
-		Document lookup = new Document("$lookup", new Document("from", "exam_result").append("localField", "_id").append("foreignField", "examId").append("as", "examResults"));
+		Document lookup = new Document("$lookup", new Document("from", "exam_result")
+			.append("let", new Document("exam_oid", "$_id"))
+				.append("pipeline", Arrays.asList(
+						new Document("$match", new Document("recruitmentNumber", recruitmentNumber)
+								.append("aliquotValid", Boolean.TRUE)
+								.append("$expr", new Document("$and", Arrays.asList(
+										new Document("$eq", Arrays.asList("$examId", "$$exam_oid"))
+								)))
+						)
+				))
+				.append("as", "examResults")
+		);
 		query.add(lookup);
 
-		Document match = new Document("$match", new Document("examResults.aliquotValid", Boolean.TRUE));
-		query.add(match);
+		Document matchHasExamResult = new Document("$match", new Document("examResults.recruitmentNumber", new Document("$exists", 1)));
+		query.add(matchHasExamResult);
 
 		return query;
 	}

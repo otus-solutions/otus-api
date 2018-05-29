@@ -41,7 +41,7 @@ public class ExamDataSourceDaoBean extends MongoGenericDao<Document> implements 
 		}
 
 		if (examSendingLot != null) {
-			ArrayList<Document> queryToResults = examDataSource.buildQueryToExamResults(examSendingLot.getObjectId());
+			ArrayList<Document> queryToResults = examDataSource.buildQueryToExamResults(examSendingLot.getObjectId(), recruitmentNumber);
 			AggregateIterable<?> outputResults = collection.aggregate(queryToResults);
 
 			for (Object anOutput : outputResults) {
