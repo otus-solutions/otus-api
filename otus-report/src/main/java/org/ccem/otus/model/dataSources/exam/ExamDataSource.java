@@ -42,10 +42,10 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 
     @Override
     public ArrayList<Document> buildQuery(Long recruitmentNumber) {
-        return this.buildQueryToExamSendingLot(recruitmentNumber);
+        return this.buildQueryToExamResult(recruitmentNumber);
     }
 
-    public ArrayList<Document> buildQueryToExamResults(ObjectId objectId, Long recruitmentNumber) {
+    public ArrayList<Document> buildQueryToExam(ObjectId objectId, Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
 
         Document match = new Document(SIGN_MATCH, new Document(ID, objectId)
@@ -71,7 +71,7 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
         return query;
     }
 
-    private ArrayList<Document> buildQueryToExamSendingLot(Long recruitmentNumber) {
+    private ArrayList<Document> buildQueryToExamResult(Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
 
         Document match = new Document(
