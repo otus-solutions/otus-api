@@ -55,6 +55,10 @@ public class ExamResult {
         return recruitmentNumber;
     }
 
+    public ObjectId getExamId() {
+        return examId;
+    }
+
     public void setRecruitmentNumber(Long recruitmentNumber) {
         this.recruitmentNumber = recruitmentNumber;
     }

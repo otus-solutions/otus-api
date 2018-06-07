@@ -19,6 +19,7 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
     public static String SIGN_EXAM_OID = "$$exam_oid";
 
     public static String AS = "as";
+    public static String ID = "_id";
     public static String LET = "let";
     public static String FROM = "from";
     public static String NAME = "name";
@@ -29,7 +30,6 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
     public static String EXAM_RESULTS = "examResults";
     public static String ALIQUOT_VALID = "aliquotValid";
     public static String COLLECTION_EXAM_RESULT = "exam_result";
-    public static String EXAM_SENDING_LOT_ID = "examSendingLotId";
     public static String RECRUITMENT_NUMBER = "recruitmentNumber";
     public static String EXAM_RESULTS_RECRUITMENT_NUMBER = "examResults.recruitmentNumber";
 
@@ -42,13 +42,13 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
 
     @Override
     public ArrayList<Document> buildQuery(Long recruitmentNumber) {
-        return this.buildQueryToExamSendingLot(recruitmentNumber);
+        return this.buildQueryToExamResult(recruitmentNumber);
     }
 
-    public ArrayList<Document> buildQueryToExamResults(ObjectId objectId, Long recruitmentNumber) {
+    public ArrayList<Document> buildQueryToExam(ObjectId objectId, Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
 
-        Document match = new Document(SIGN_MATCH, new Document(EXAM_SENDING_LOT_ID, objectId)
+        Document match = new Document(SIGN_MATCH, new Document(ID, objectId)
                 .append(OBJECT_TYPE, EXAM).append(NAME, this.filters.getExamName())
         );
         query.add(match);
@@ -71,7 +71,7 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
         return query;
     }
 
-    private ArrayList<Document> buildQueryToExamSendingLot(Long recruitmentNumber) {
+    private ArrayList<Document> buildQueryToExamResult(Long recruitmentNumber) {
         ArrayList<Document> query = new ArrayList<>();
 
         Document match = new Document(
@@ -94,17 +94,33 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
         Document matchFieldCenter = new Document("$match", new Document("sendingLot.fieldCenter.acronym", this.filters.getFieldCenter()));
         query.add(matchFieldCenter);
 
-        Document sort = new Document("$sort", new Document("sendingLot.realizationDate", 1));
+        Document sort = new Document("$sort",
+                new Document("sendingLot.realizationDate", 1)
+                        .append("_id", 1)
+        );
         query.add(sort);
 
         Document limitToResults = new Document("$limit", 1);
         query.add(limitToResults);
 
-        Document unwind = new Document("$unwind", new Document("path", "$sendingLot"));
-        query.add(unwind);
-
-        Document replaceRoot = new Document("$replaceRoot", new Document("newRoot", "$sendingLot"));
-        query.add(replaceRoot);
+        Document project = new Document("$project", new Document("_id", 1)
+                .append("examSendingLotId", 1)
+                .append("examId", 1)
+                .append("objectType", 1)
+                .append("aliquotCode", 1)
+                .append("examName", 1)
+                .append("resultName", 1)
+                .append("value", 1)
+                .append("aliquotValid", 1)
+                .append("releaseDate", 1)
+                .append("observations", 1)
+                .append("recruitmentNumber", 1)
+                .append("sex", 1)
+                .append("birthdate", 1)
+                .append("sendingLot", 1)
+                .append("forcedSave", 1)
+        );
+        query.add(project);
 
         return query;
     }
