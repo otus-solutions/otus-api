@@ -73,9 +73,6 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
         Document unwind = new Document(UNWIND,"$status.date");
         query.add(unwind);
 
-        //Document unwind = new Document(UNWIND,Arrays.asList("$status.date",5,2));
-        //query.add(unwind);
-
         Document unwind2 = new Document(UNWIND,"$status.name");
         query.add(unwind2);
 
@@ -84,8 +81,6 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
                 new Document(ACRONYM, 1)
                         .append("status.month", new Document("$substr",Arrays.asList("$status.date",5,2)))
                         .append("status.year", new Document("$substr",Arrays.asList("$status.date",0,4)))
-                        //.append("status.month", new Document(MONTH, new Document("$dateFromString", new Document("dateString", "$status.date"))))
-                        //.append("status.year", new Document(MONTH, new Document("$dateFromString", new Document("dateString", "$status.date"))))
                         .append("status.name",1)
                         .append(RN,1)
                         .append(DISCARDED_PATH, 1)
