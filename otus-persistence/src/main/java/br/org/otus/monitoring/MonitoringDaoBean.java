@@ -73,6 +73,9 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
         Document unwind = new Document(UNWIND,"$status.date");
         query.add(unwind);
 
+        //Document unwind = new Document(UNWIND,Arrays.asList("$status.date",5,2));
+        //query.add(unwind);
+
         Document unwind2 = new Document(UNWIND,"$status.name");
         query.add(unwind2);
 
@@ -83,7 +86,6 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
                         .append("status.year", new Document("$substr",Arrays.asList("$status.date",0,4)))
                         //.append("status.month", new Document(MONTH, new Document("$dateFromString", new Document("dateString", "$status.date"))))
                         //.append("status.year", new Document(MONTH, new Document("$dateFromString", new Document("dateString", "$status.date"))))
-                        //.append("status.name", 1)
                         .append("status.name",1)
                         .append(RN,1)
                         .append(DISCARDED_PATH, 1)
@@ -136,8 +138,8 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
         Document project5 = new Document(
                 PROJECT,
                 new Document("fieldCenter", "$_id.fieldCenter")
-                        //.append("month", "$_id.month")
-                        //.append("year", "$_id.year")
+                        .append("month", "$_id.month")
+                        .append("year", "$_id.year")
                         .append(ACRONYM, "$_id.acronym")
                         .append("sum", "$sum")
                         .append("firstActivityDate", 1)
@@ -149,8 +151,8 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
                 "$sort",
                 new Document("fieldCenter", 1)
                         .append(ACRONYM, 1)
-                        //.append("year", 1)
-                        //.append("month", 1)
+                        .append("year", 1)
+                        .append("month", 1)
                         .append("sum", 1)
         );
         query.add(sort);
