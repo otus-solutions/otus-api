@@ -11,7 +11,6 @@ import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.exam.ExamDataSourceFilters;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -26,8 +25,8 @@ public class ExamDataSourceTest {
     private static final String FILTER_EXAM_NAME = "examName";
     private static final CharSequence FILTER_FIELD_CENTER_ACRONYM = "fieldCenter.acronym";
 
-    private static final String EXPECTED_RESULT_QUERY_ONE = "[Document{{$match=Document{{objectType=ExamResults, examName=TRIGLICÉRIDES - SANGUE, recruitmentNumber=1063154}}}}, Document{{$lookup=Document{{from=exam_sending_lot, localField=examSendingLotId, foreignField=_id, as=sendingLot}}}}, Document{{$match=Document{{sendingLot.fieldCenter.acronym=RS}}}}, Document{{$sort=Document{{sendingLot.realizationDate=1}}}}, Document{{$limit=1}}, Document{{$unwind=Document{{path=$sendingLot}}}}, Document{{$replaceRoot=Document{{newRoot=$sendingLot}}}}]";
-    private static final String EXPECTED_RESULT_QUERY_TWO = "[Document{{$match=Document{{examSendingLotId=" + valueObjectId + ", objectType=Exam, name=" + VALUE_EXAM_NAME + "}}}}, Document{{$lookup=Document{{from=exam_result, let=Document{{exam_oid=$_id}}, pipeline=[Document{{$match=Document{{recruitmentNumber=" + VALUE_RECRUITMENT_NUMBER + ", aliquotValid=true, $expr=Document{{$eq=[$examId, $$exam_oid]}}}}}}], as=examResults}}}}, Document{{$match=Document{{examResults.recruitmentNumber=Document{{$exists=1}}}}}}]";
+    private static final String EXPECTED_RESULT_QUERY_ONE = "[Document{{$match=Document{{objectType=ExamResults, examName=TRIGLICÉRIDES - SANGUE, recruitmentNumber=1063154}}}}, Document{{$lookup=Document{{from=exam_sending_lot, localField=examSendingLotId, foreignField=_id, as=sendingLot}}}}, Document{{$match=Document{{sendingLot.fieldCenter.acronym=RS}}}}, Document{{$sort=Document{{sendingLot.realizationDate=1, _id=1}}}}, Document{{$limit=1}}, Document{{$project=Document{{_id=1, examSendingLotId=1, examId=1, objectType=1, aliquotCode=1, examName=1, resultName=1, value=1, aliquotValid=1, releaseDate=1, observations=1, recruitmentNumber=1, sex=1, birthdate=1, sendingLot=1, forcedSave=1}}}}]";
+    private static final String EXPECTED_RESULT_QUERY_TWO = "[Document{{$match=Document{{_id=" + valueObjectId + ", objectType=Exam, name=" + VALUE_EXAM_NAME + "}}}}, Document{{$lookup=Document{{from=exam_result, let=Document{{exam_oid=$_id}}, pipeline=[Document{{$match=Document{{recruitmentNumber=" + VALUE_RECRUITMENT_NUMBER + ", aliquotValid=true, $expr=Document{{$eq=[$examId, $$exam_oid]}}}}}}], as=examResults}}}}, Document{{$match=Document{{examResults.recruitmentNumber=Document{{$exists=1}}}}}}]";
 
     private ExamDataSource examResultDataSource;
     private ExamDataSourceFilters filters;
@@ -66,14 +65,14 @@ public class ExamDataSourceTest {
 
     @Test
     public void method_buildQueryToExamResults_should_return_query() {
-        ArrayList<Document> query = examResultDataSource.buildQueryToExamResults(this.objectId, VALUE_RECRUITMENT_NUMBER);
+        ArrayList<Document> query = examResultDataSource.buildQueryToExam(this.objectId, VALUE_RECRUITMENT_NUMBER);
 
         Assert.assertNotNull(query);
     }
 
     @Test
     public void method_buildQueryToExamResults_should_return_query_with_center_and_exam_name() {
-        ArrayList<Document> query = examResultDataSource.buildQueryToExamResults(this.objectId, VALUE_RECRUITMENT_NUMBER);
+        ArrayList<Document> query = examResultDataSource.buildQueryToExam(this.objectId, VALUE_RECRUITMENT_NUMBER);
 
         assertEquals(EXPECTED_RESULT_QUERY_TWO, query.toString());
     }
