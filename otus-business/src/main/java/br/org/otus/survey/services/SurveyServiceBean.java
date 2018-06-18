@@ -92,6 +92,12 @@ public class SurveyServiceBean implements SurveyService {
         Collections.reverse(surveyVersions);
         return surveyVersions;
     }
+    
+    @Override
+    public List<String> getSurveys() throws ValidationException {
+        List<String> surveys = surveyDao.getSurveys();
+        return surveys;
+    }
 
     private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
         try {

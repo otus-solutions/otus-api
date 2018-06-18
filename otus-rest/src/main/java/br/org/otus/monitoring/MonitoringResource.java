@@ -16,11 +16,21 @@ public class MonitoringResource {
 
     @Inject
     private MonitoringFacade monitoringFacade;
+    
+    
 
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public String list() {
         return new Response().buildSuccess(monitoringFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
+    }
+    
+    @GET
+    @Secured
+    @Path("/activities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listActivities() {
+        return new Response().buildSuccess(monitoringFacade.listActivities()).toJson();
     }
 }
