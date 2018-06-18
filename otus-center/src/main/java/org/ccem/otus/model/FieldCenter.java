@@ -3,111 +3,129 @@ package org.ccem.otus.model;
 import com.google.gson.Gson;
 
 public class FieldCenter {
-    private String name;
+  private String name;
 
-    private	Integer code;
-    
-    private String acronym;
+  private Integer code;
 
-    private String country;
+  private String acronym;
 
-    private String state;
+  private String country;
 
-    private String address;
+  private String state;
 
-    private String complement;
+  private String address;
 
-    private String zip;
+  private String complement;
 
-    private String phone;
+  private String zip;
 
-    public Boolean isValid() {
-        return !name.isEmpty() &&
-                !acronym.isEmpty()
-                ? Boolean.TRUE : Boolean.FALSE;
+  private String phone;
+
+  private String backgroundColor;
+
+  private String borderColor;
+
+  public Boolean isValid() {
+    return !name.isEmpty() && !acronym.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
+  }
+
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this);
+  }
+
+  public static FieldCenter fromJson(String json) {
+    if (json != null) {
+      return new Gson().fromJson(json, FieldCenter.class);
+    } else {
+      return null;
     }
+  }
 
-    public String getAcronym() {
-        return acronym;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String toJson(){
-        return new Gson().toJson(this);
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public static FieldCenter fromJson(String json){
-        if(json != null){
-            return new Gson().fromJson(json, FieldCenter.class);
-        }else {
-            return null;
-        }
-    }
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getCountry() {
+    return country;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setCountry(String country) {
+    this.country = country;
+  }
 
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
-    }
+  public String getState() {
+    return state;
+  }
 
-    public String getCountry() {
-        return country;
-    }
+  public void setState(String state) {
+    this.state = state;
+  }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public String getState() {
-        return state;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public void setState(String state) {
-        this.state = state;
-    }
+  public String getComplement() {
+    return complement;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public void setComplement(String complement) {
+    this.complement = complement;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public String getZip() {
+    return zip;
+  }
 
-    public String getComplement() {
-        return complement;
-    }
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
 
-    public void setComplement(String complement) {
-        this.complement = complement;
-    }
+  public String getPhone() {
+    return phone;
+  }
 
-    public String getZip() {
-        return zip;
-    }
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
+  public Integer getCode() {
+    return code;
+  }
 
-    public String getPhone() {
-        return phone;
-    }
+  public void setCode(Integer code) {
+    this.code = code;
+  }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+  public String getBackgroundColor() {
+    return backgroundColor;
+  }
 
-	public Integer getCode() {
-		return code;
-	}
+  public void setBackgroundColor(String backgroundColor) {
+    this.backgroundColor = backgroundColor;
+  }
 
-	public void setCode(Integer code) {
-		this.code = code;
-	}
+  public String getBorderColor() {
+    return borderColor;
+  }
+
+  public void setBorderColor(String borderColor) {
+    this.borderColor = borderColor;
+  }
 }
