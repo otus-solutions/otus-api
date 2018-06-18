@@ -9,4 +9,5 @@ public interface MonitoringService {
 
     List<MonitoringDataSourceResult> list() throws ValidationException;
 
+    MonitoringDataSourceResult get(String acronym) throws ValidationException;
 }

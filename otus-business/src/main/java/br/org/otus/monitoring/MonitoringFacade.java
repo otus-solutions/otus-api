@@ -4,7 +4,6 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.MonitoringService;
 
 import javax.inject.Inject;
@@ -22,4 +21,14 @@ public class MonitoringFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
+
+    public MonitoringDataSourceResult get(String acronym){
+        try {
+            return monitoringService.get(acronym);
+        } catch (ValidationException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
+
+
 }

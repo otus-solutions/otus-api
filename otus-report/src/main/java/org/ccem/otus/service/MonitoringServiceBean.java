@@ -18,4 +18,9 @@ public class MonitoringServiceBean implements MonitoringService{
     public List<MonitoringDataSourceResult> list() throws ValidationException {
             return monitoringDao.getAll();
     }
+
+    @Override
+    public MonitoringDataSourceResult get(String acronym) throws ValidationException {
+        return monitoringDao.get(acronym);
+    }
 }
