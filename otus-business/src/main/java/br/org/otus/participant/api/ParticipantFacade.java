@@ -1,11 +1,13 @@
 package br.org.otus.participant.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Monitoring;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 
@@ -28,6 +30,11 @@ public class ParticipantFacade {
 
 	public List<Participant> list(FieldCenter fieldCenter) {
 		return participantService.list(fieldCenter);
+	}
+	
+
+	public List<Monitoring> getMonitoring(){
+	  return participantService.getMonitoring();
 	}
 
 }

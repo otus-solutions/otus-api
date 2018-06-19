@@ -42,4 +42,14 @@ public class MonitoringResource {
     public String get(@PathParam("acronym") String acronym) {
         return new Response().buildSuccess(monitoringFacade.get(acronym)).toJson();
     }
+    
+    @GET
+    @Secured
+    @Path("/centers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getMonitoring() {
+        return new Response().buildSuccess(monitoringFacade.getMonitoring()).toJson();
+    }
+    
+    
 }
