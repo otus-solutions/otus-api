@@ -6,6 +6,7 @@ import org.ccem.otus.persistence.MonitoringDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -20,7 +21,7 @@ public class MonitoringServiceBean implements MonitoringService{
     }
 
     @Override
-    public MonitoringDataSourceResult get(String acronym) throws ValidationException {
+    public ArrayList<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
         return monitoringDao.get(acronym);
     }
 }
