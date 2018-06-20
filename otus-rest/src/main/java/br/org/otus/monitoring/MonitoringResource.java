@@ -48,7 +48,7 @@ public class MonitoringResource {
     @Path("/centers")
     @Produces(MediaType.APPLICATION_JSON)
     public String getMonitoring() {
-        return new Response().buildSuccess(monitoringFacade.getMonitoring()).toJson();
+        return new Response().buildSuccess(monitoringFacade.getGoalsByCenter()).toJson();
     }
     
     

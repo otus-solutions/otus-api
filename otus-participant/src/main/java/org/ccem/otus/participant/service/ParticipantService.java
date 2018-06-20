@@ -18,6 +18,6 @@ public interface ParticipantService {
 
 	List<Participant> list(FieldCenter fieldCenter);
 	
-	List<Monitoring> getMonitoring();
+	List<Monitoring> getGoalsByCenter() throws DataNotFoundException;
 
 }

@@ -45,8 +45,8 @@ public class MonitoringFacade {
     return surveyFacade.getSurveys();
   }
   
-  public List<Monitoring> getMonitoring() {
-      return participantFacade.getMonitoring();
+  public List<Monitoring> getGoalsByCenter() {
+      return participantFacade.getGoalsByCenter();
   }
 
 }

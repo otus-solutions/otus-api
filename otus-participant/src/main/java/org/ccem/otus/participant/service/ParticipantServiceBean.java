@@ -43,8 +43,8 @@ public class ParticipantServiceBean implements ParticipantService {
   }
   
   @Override
-  public List<Monitoring> getMonitoring() {
-    return participantDao.getMonitoring();
+  public List<Monitoring> getGoalsByCenter() throws DataNotFoundException {
+    return participantDao.getGoalsByCenter();
   }
 
 }

@@ -17,6 +17,6 @@ public interface ParticipantDao {
 
   ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 
-  ArrayList<Monitoring> getMonitoring();
+  ArrayList<Monitoring> getGoalsByCenter() throws DataNotFoundException;
 
 }

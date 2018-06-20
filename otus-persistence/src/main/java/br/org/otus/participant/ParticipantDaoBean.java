@@ -3,7 +3,6 @@ package br.org.otus.participant;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -15,8 +14,6 @@ import org.ccem.otus.participant.model.Monitoring;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
-
-import com.mongodb.client.AggregateIterable;
 
 import br.org.mongodb.MongoGenericDao;
 
@@ -112,20 +109,21 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
   }
 
   @Override
-  public ArrayList<Monitoring> getMonitoring() {
+  public ArrayList<Monitoring> getGoalsByCenter() throws DataNotFoundException{
   
-    ArrayList<Monitoring> results = new ArrayList<>();
-    
+    ArrayList<Monitoring> results = new ArrayList<>();  
     Document query = new Document();
     ArrayList<String> centers = fieldCenterDao.listAcronyms();
+    
     for(String acronymCenter: centers) {
       Monitoring monitoring = new Monitoring();
       FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
-      monitoring.setCenter(fieldCenter);
       monitoring.setName(fieldCenter.getName());
       query.put("fieldCenter.acronym", acronymCenter);
       query.put("late", Boolean.FALSE);
       monitoring.setGoal(collection.count(query));
+      monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
+      monitoring.setBorderColor(fieldCenter.getBorderColor());
       results.add(monitoring);
       monitoring = null;
     }

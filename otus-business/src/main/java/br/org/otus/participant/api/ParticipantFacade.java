@@ -16,25 +16,28 @@ import br.org.otus.response.exception.HttpResponseException;
 
 public class ParticipantFacade {
 
-	@Inject
-	private ParticipantService participantService;
+  @Inject
+  private ParticipantService participantService;
 
-	public Participant getByRecruitmentNumber(long rn) {
-		try {
-			return participantService.getByRecruitmentNumber(rn);
-		} catch (DataNotFoundException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+  public Participant getByRecruitmentNumber(long rn) {
+    try {
+      return participantService.getByRecruitmentNumber(rn);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 
-		}
-	}
+    }
+  }
 
-	public List<Participant> list(FieldCenter fieldCenter) {
-		return participantService.list(fieldCenter);
-	}
-	
+  public List<Participant> list(FieldCenter fieldCenter) {
+    return participantService.list(fieldCenter);
+  }
 
-	public List<Monitoring> getMonitoring(){
-	  return participantService.getMonitoring();
-	}
+  public List<Monitoring> getGoalsByCenter() {
+    try {
+      return participantService.getGoalsByCenter();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 
 }
