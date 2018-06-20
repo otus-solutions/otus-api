@@ -6,7 +6,7 @@ import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import com.google.gson.GsonBuilder;
 
-public class Monitoring {
+public class MonitoringCenter {
 
   private String name;
   private Long goal;

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.Monitoring;
+import org.ccem.otus.participant.model.MonitoringCenter;
 import org.ccem.otus.participant.model.Participant;
 
 public interface ParticipantService {
@@ -18,6 +18,6 @@ public interface ParticipantService {
 
 	List<Participant> list(FieldCenter fieldCenter);
 	
-	List<Monitoring> getGoalsByCenter() throws DataNotFoundException;
+	List<MonitoringCenter> getGoalsByCenter() throws DataNotFoundException;
 
 }

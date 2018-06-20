@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.Monitoring;
+import org.ccem.otus.participant.model.MonitoringCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
@@ -109,18 +109,20 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
   }
 
   @Override
-  public ArrayList<Monitoring> getGoalsByCenter() throws DataNotFoundException{
+  public ArrayList<MonitoringCenter> getGoalsByCenter() throws DataNotFoundException{
   
-    ArrayList<Monitoring> results = new ArrayList<>();  
+    ArrayList<MonitoringCenter> results = new ArrayList<>();  
     Document query = new Document();
     ArrayList<String> centers = fieldCenterDao.listAcronyms();
     
     for(String acronymCenter: centers) {
-      Monitoring monitoring = new Monitoring();
+      MonitoringCenter monitoring = new MonitoringCenter();
       FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
-      monitoring.setName(fieldCenter.getName());
+     
       query.put("fieldCenter.acronym", acronymCenter);
       query.put("late", Boolean.FALSE);
+      
+      monitoring.setName(fieldCenter.getName());
       monitoring.setGoal(collection.count(query));
       monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
       monitoring.setBorderColor(fieldCenter.getBorderColor());
