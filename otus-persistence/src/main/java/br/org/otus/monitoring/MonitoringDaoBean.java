@@ -1,22 +1,13 @@
 package br.org.otus.monitoring;
 
 import br.org.mongodb.MongoGenericDao;
-import com.mongodb.Block;
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.ReportTemplate;
-import org.ccem.otus.model.monitoring.MonitoringDataSource;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.persistence.MonitoringDao;
 
 import javax.ejb.Stateless;
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -163,9 +154,9 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
     }
 
     @Override
-    public MonitoringDataSourceResult get(String acronym) throws ValidationException {
+    public ArrayList<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
 
-        MonitoringDataSourceResult monitoringData = null;
+        ArrayList<MonitoringDataSourceResult> monitoringData = new ArrayList<>();
 
         ArrayList<Document> query = new ArrayList<>();
         Document match0 = new Document(
@@ -279,7 +270,7 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
 
         for (Object anOutput : output) {
             Document result = (Document) anOutput;
-            monitoringData = MonitoringDataSourceResult.deserialize(result.toJson());
+            monitoringData.add(MonitoringDataSourceResult.deserialize(result.toJson()));
         }
 
         return monitoringData;

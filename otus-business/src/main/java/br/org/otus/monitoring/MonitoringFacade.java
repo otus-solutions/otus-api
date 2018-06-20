@@ -1,5 +1,6 @@
 package br.org.otus.monitoring;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,7 +34,7 @@ public class MonitoringFacade {
     }
   }
 
-  public MonitoringDataSourceResult get(String acronym) {
+  public ArrayList<MonitoringDataSourceResult> get(String acronym) {
     try {
       return monitoringService.get(acronym);
     } catch (ValidationException e) {
