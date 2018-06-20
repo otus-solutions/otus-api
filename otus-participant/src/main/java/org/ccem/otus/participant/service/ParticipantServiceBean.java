@@ -8,7 +8,6 @@ import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.MonitoringCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
@@ -43,8 +42,8 @@ public class ParticipantServiceBean implements ParticipantService {
   }
   
   @Override
-  public List<MonitoringCenter> getGoalsByCenter() throws DataNotFoundException {
-    return participantDao.getGoalsByCenter();
+  public Long getPartipantsActives(String acronymCenter) throws DataNotFoundException {
+    return participantDao.getPartipantsActives(acronymCenter);
   }
 
 }

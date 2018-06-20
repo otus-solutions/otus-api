@@ -7,7 +7,6 @@ import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.MonitoringCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 
@@ -32,9 +31,9 @@ public class ParticipantFacade {
     return participantService.list(fieldCenter);
   }
 
-  public List<MonitoringCenter> getGoalsByCenter() {
+  public Long getPartipantsActives(String acronymCenter) {
     try {
-      return participantService.getGoalsByCenter();
+      return participantService.getPartipantsActives(acronymCenter);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

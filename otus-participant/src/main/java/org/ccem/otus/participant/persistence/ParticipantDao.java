@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.MonitoringCenter;
 import org.ccem.otus.participant.model.Participant;
 
 public interface ParticipantDao {
@@ -17,6 +16,6 @@ public interface ParticipantDao {
 
   ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 
-  ArrayList<MonitoringCenter> getGoalsByCenter() throws DataNotFoundException;
+  Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
 
 }

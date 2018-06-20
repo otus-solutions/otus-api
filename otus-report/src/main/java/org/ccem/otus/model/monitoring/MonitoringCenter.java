@@ -1,4 +1,4 @@
-package org.ccem.otus.participant.model;
+package org.ccem.otus.model.monitoring;
 
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;

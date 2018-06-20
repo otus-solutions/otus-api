@@ -10,6 +10,7 @@ public class Participant {
     private Sex sex;
     private ImmutableDate birthdate;
     private FieldCenter fieldCenter;
+    private Boolean late;
     
 
 	public Participant(Long recruitmentNumber) {
@@ -65,6 +66,14 @@ public class Participant {
     @Override
     public int hashCode() {
         return recruitmentNumber != null ? recruitmentNumber.hashCode() : 0;
+    }
+
+    public Boolean getLate() {
+      return late;
+    }
+
+    public void setLate(Boolean late) {
+      this.late = late;
     }
    
 }

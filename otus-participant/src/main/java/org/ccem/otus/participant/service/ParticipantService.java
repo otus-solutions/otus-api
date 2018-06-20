@@ -5,19 +5,18 @@ import java.util.Set;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.MonitoringCenter;
 import org.ccem.otus.participant.model.Participant;
 
 public interface ParticipantService {
 
-    void create(Set<Participant> participants);
+  void create(Set<Participant> participants);
 
-    void create(Participant participant);
-    
-    Participant getByRecruitmentNumber(long rn) throws DataNotFoundException;
+  void create(Participant participant);
 
-	List<Participant> list(FieldCenter fieldCenter);
-	
-	List<MonitoringCenter> getGoalsByCenter() throws DataNotFoundException;
+  Participant getByRecruitmentNumber(long rn) throws DataNotFoundException;
+
+  List<Participant> list(FieldCenter fieldCenter);
+
+  Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
 
 }
