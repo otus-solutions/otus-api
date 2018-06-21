@@ -7,10 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import org.bson.Document;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.persistence.MonitoringDao;
 
@@ -178,19 +175,6 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
     }
 
     return monitoringData;
-  }
-
-  @Override
-  public MonitoringCenter getMonitoringCenter(FieldCenter center, Long goals) throws DataNotFoundException {
-
-    MonitoringCenter monitoring = new MonitoringCenter();
-   
-    monitoring.setName(center.getName());
-    monitoring.setGoal(goals);
-    monitoring.setBackgroundColor(center.getBackgroundColor());
-    monitoring.setBorderColor(center.getBorderColor());
-
-    return monitoring;
   }
 
 }
