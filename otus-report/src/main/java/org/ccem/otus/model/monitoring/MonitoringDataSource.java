@@ -57,12 +57,11 @@ public class MonitoringDataSource extends ReportDataSource<MonitoringDataSourceR
     private void buildStatusHistoryDataProjectionStages(ArrayList<Document> query){
         Document project = new Document(PROJECT,
                 new Document(ACRONYM, ACRONYM_PATH)
-                        .append("statusHistory", new Document("$slice", Arrays.asList("$statusHistory", -1))).append(RN, RN_PATH)
-                        .append(DISCARDED_PATH, 1));
+                        .append("statusHistory", new Document("$slice", Arrays.asList("$statusHistory", -1))).append(RN, RN_PATH));
         query.add(project);
 
         Document project2 = new Document(PROJECT, new Document(ACRONYM, 1).append("status.date", "$statusHistory.date")
-                .append("status.name", "$statusHistory.name").append(RN, 1).append(DISCARDED_PATH, 1));
+                .append("status.name", "$statusHistory.name").append(RN, 1));
         query.add(project2);
     }
 
@@ -78,7 +77,7 @@ public class MonitoringDataSource extends ReportDataSource<MonitoringDataSourceR
         Document project3 = new Document(PROJECT,
                 new Document(ACRONYM, 1).append("status.month", new Document("$substr", Arrays.asList("$status.date", 5, 2)))
                         .append("status.year", new Document("$substr", Arrays.asList("$status.date", 0, 4)))
-                        .append("status.name", 1).append(RN, 1).append(DISCARDED_PATH, 1).append("activityDate", "$status.date")
+                        .append("status.name", 1).append(RN, 1).append("activityDate", "$status.date")
                         .append("_id", 0));
         query.add(project3);
     }
@@ -95,7 +94,7 @@ public class MonitoringDataSource extends ReportDataSource<MonitoringDataSourceR
     }
 
     private void buildExtractAcronymProjectionStage(ArrayList<Document> query){
-        Document project4 = new Document(PROJECT, new Document(DISCARDED_PATH, 1).append(ACRONYM, 1).append(RN, 1)
+        Document project4 = new Document(PROJECT, new Document(ACRONYM, 1).append(RN, 1)
                 .append("status", 1).append("fieldCenter", FIELD_CENTER_PATH).append("activityDate", 1));
         query.add(project4);
     }

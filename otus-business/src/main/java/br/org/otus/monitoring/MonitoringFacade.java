@@ -23,17 +23,6 @@ public class MonitoringFacade {
 
   @Inject
   private SurveyFacade surveyFacade;
-  
-  @Inject
-  private ParticipantFacade participantFacade;
-
-  public List<MonitoringDataSourceResult> list() {
-    try {
-      return monitoringService.list();
-    } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    }
-  }
 
   public ArrayList<MonitoringDataSourceResult> get(String acronym) {
     try {

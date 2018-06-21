@@ -1,7 +1,6 @@
 package org.ccem.otus.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,11 +26,6 @@ public class MonitoringServiceBean implements MonitoringService {
   
   @Inject
   private ParticipantDao participantDao;
-
-  @Override
-  public List<MonitoringDataSourceResult> list() throws ValidationException {
-    return monitoringDao.getAll();
-  }
 
   @Override
   public ArrayList<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
