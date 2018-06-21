@@ -1,5 +1,6 @@
 package org.ccem.otus.persistence;
 
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -13,7 +14,7 @@ public interface MonitoringDao {
 
     List<MonitoringDataSourceResult> getAll() throws ValidationException;
 
-    ArrayList<MonitoringDataSourceResult> get(String acronym) throws ValidationException;
+    ArrayList<MonitoringDataSourceResult> get(ArrayList<Document> query) throws ValidationException;
 
     MonitoringCenter getMonitoringCenter(FieldCenter center, Long goals) throws DataNotFoundException;
 }

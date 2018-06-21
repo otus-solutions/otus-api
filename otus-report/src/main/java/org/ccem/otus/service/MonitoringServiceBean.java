@@ -10,6 +10,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
+import org.ccem.otus.model.monitoring.MonitoringDataSource;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
@@ -34,7 +35,8 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Override
   public ArrayList<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
-    return monitoringDao.get(acronym);
+    MonitoringDataSource monitoringDataSource = new MonitoringDataSource();
+    return monitoringDao.get(monitoringDataSource.buildQuery(acronym));
   }
 
   @Override
