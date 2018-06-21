@@ -1,11 +1,5 @@
 package org.ccem.otus.model.monitoring;
 
-import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
-import org.ccem.otus.survey.template.utils.date.ImmutableDate;
-
-import com.google.gson.GsonBuilder;
-
 public class MonitoringCenter {
 
   private String name;

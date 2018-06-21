@@ -13,5 +13,4 @@ public interface MonitoringDao {
 
     ArrayList<MonitoringDataSourceResult> get(ArrayList<Document> query) throws ValidationException;
 
-    MonitoringCenter getMonitoringCenter(FieldCenter center, Long goals) throws DataNotFoundException;
 }

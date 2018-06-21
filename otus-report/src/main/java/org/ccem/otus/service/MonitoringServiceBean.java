@@ -38,10 +38,20 @@ public class MonitoringServiceBean implements MonitoringService {
 
     ArrayList<MonitoringCenter> results = new ArrayList<>();
     ArrayList<String> centers = fieldCenterDao.listAcronyms();
+    
     for (String acronymCenter : centers) {
+      
       FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
-      Long goal = participantDao.getPartipantsActives(acronymCenter);
-      results.add(monitoringDao.getMonitoringCenter(fieldCenter, goal));
+      Long goals = participantDao.getPartipantsActives(acronymCenter);
+      
+      MonitoringCenter monitoring = new MonitoringCenter();  
+      monitoring.setName(fieldCenter.getName());
+      monitoring.setGoal(goals);
+      monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
+      monitoring.setBorderColor(fieldCenter.getBorderColor());
+      
+      results.add(monitoring);
+      monitoring = null;
     }
     return results;
   }
