@@ -1,16 +1,14 @@
 package br.org.otus.monitoring;
 
-import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
-import org.ccem.otus.model.ReportTemplate;
-
 import javax.inject.Inject;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
 
 @Path("/monitoring")
 public class MonitoringResource {
