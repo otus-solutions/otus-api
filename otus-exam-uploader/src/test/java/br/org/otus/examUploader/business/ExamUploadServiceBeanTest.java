@@ -11,6 +11,7 @@ import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -122,6 +123,7 @@ public class ExamUploadServiceBeanTest {
 
     }
 
+    @Ignore
     @Test
     public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_subSet_of_allAliquots() throws DataNotFoundException, ValidationException {
         List<ExamResult> resultsToVerify = new ArrayList<>(2);

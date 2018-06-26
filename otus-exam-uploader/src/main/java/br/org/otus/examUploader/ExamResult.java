@@ -89,4 +89,8 @@ public class ExamResult {
         builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         return builder;
     }
+
+    public String getExamName() {
+        return examName;
+    }
 }

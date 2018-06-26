@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.configuration;
 
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotCenterDescriptors;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
@@ -91,6 +92,11 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 				.findFirst()
 				.orElseThrow(() -> new DataNotFoundException("Any descriptor found for \"" + name + "\""));
 		return aliquotByName;
+	}
+
+	@Override
+	public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
+		return laboratoryConfigurationDao.getAliquotExamCorrelation();
 	}
 
 }

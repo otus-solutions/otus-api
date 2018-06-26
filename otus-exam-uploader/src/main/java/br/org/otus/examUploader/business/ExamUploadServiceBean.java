@@ -7,6 +7,8 @@ import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
+import br.org.otus.examUploader.utils.ResponseAliquot;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -100,9 +102,9 @@ public class ExamUploadServiceBean implements ExamUploadService{
     }
 
     /* Throws error if smallArray is not a subset of bigArray */
-    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray, Boolean forcedSave) throws ValidationException {
+    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray, Boolean forcedSave) throws ValidationException, DataNotFoundException {
         HashMap<String, WorkAliquot> hmap = new HashMap<>();
-        ArrayList<String> missing = new ArrayList<>();
+        ArrayList<ResponseAliquot> missing = new ArrayList<>();
 
         // hmap stores all the values of bigArray taking aliquotCode as key
         for (WorkAliquot aBigArray : bigArray) {
@@ -111,14 +113,27 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
         // loop to check if all elements of smallArray also
         // lies in bigArray
+        AliquotExamCorrelation aliquotExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
         for (ExamResult aSmallArray : smallArray) {
+            ResponseAliquot responseAliquot = new ResponseAliquot();
             String aliquotCode = aSmallArray.getAliquotCode();
             WorkAliquot found = hmap.get(aliquotCode);
             if (found == null) {
-                missing.add(aliquotCode);
+                responseAliquot.setAliquot(aliquotCode);
+                responseAliquot.setPossibleExams("");
+                responseAliquot.setReceivedExam("");
+                missing.add(responseAliquot);
                 aSmallArray.setAliquotValid(false);
             } else {
+                ArrayList possibleExams = (ArrayList) aliquotExamCorrelation.getHashMap().get(found.getName());
                 aSmallArray.setAliquotValid(true);
+                if(!possibleExams.contains(aSmallArray.getExamName())){
+                    responseAliquot.setAliquot(aliquotCode);
+                    responseAliquot.setPossibleExams(possibleExams.toString());
+                    responseAliquot.setReceivedExam(aSmallArray.getExamName());
+                    missing.add(responseAliquot);
+                    aSmallArray.setAliquotValid(false);
+                }
                 aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
                 aSmallArray.setBirthdate(found.getBirthdate());
                 aSmallArray.setSex(found.getSex());
