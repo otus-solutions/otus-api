@@ -15,7 +15,8 @@ public class WorkAliquotFactory {
 			ParticipantDao participantDao) throws DataNotFoundException {
 		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
 
-		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();
+		//List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();
+		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getParticipantLaboratoryByDatePeriod();
 
 		for (ParticipantLaboratory participantLaboratory : participantList) {
 			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());

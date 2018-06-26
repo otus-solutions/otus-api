@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ParticipantLaboratoryDao {
 
@@ -24,4 +25,6 @@ public interface ParticipantLaboratoryDao {
 	ArrayList<Aliquot> getFullAliquotsList();
 
 	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
+
+	List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod();
 }

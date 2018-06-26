@@ -9,16 +9,22 @@ import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 
 import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
 	private static final String COLLECTION_NAME = "participant_laboratory";
@@ -111,6 +117,35 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 		result.forEach((Block<Document>) document -> {
 			participantList.add(ParticipantLaboratory.deserialize(document.toJson()));
 		});
+		return participantList;
+	}
+
+	@Override
+	public List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod() {		
+		
+		ArrayList<ParticipantLaboratory> participantList = new ArrayList<ParticipantLaboratory>();
+		
+		String initialDate = "2018-06-26T13:55:38.112Z";
+		String finalDate = "2018-06-26T13:55:38.112Z";
+		
+		List<Bson> queryAggregateList = Arrays.asList(
+				Aggregates.match(new Document("tubes.aliquotes.aliquotCollectionData.processing", new Document()
+						.append("$gt", initialDate)						
+						.append("$lt", finalDate))),
+				Aggregates.lookup("participant", "recruitmentNumber", "recruitmentNumber", "participant"),
+				Aggregates.unwind("$participant")
+				//Aggregates.unwind("$tubes"),
+				//Aggregates.unwind("$tubes.aliquotes")
+				
+		);
+		
+		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);		
+
+		System.out.println(result);
+		result.forEach((Block<Document>) document -> {
+			System.out.println(document.toJson());
+			participantList.add(ParticipantLaboratory.deserialize(document.toJson()));
+		});		
 		return participantList;
 	}
 
