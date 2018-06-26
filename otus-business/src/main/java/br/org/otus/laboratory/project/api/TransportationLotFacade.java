@@ -64,4 +64,13 @@ public class TransportationLotFacade {
 		}
 	}
 
+	public List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate) {
+		try {
+			return transportationLotService.getAliquotsByPeriod(initialDate, finalDate);
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}		
+	}
+
 }

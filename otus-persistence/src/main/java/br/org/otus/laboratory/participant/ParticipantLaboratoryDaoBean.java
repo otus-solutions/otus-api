@@ -121,31 +121,33 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	}
 
 	@Override
-	public List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod() {		
+	public List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod(String initialDate, String finalDate) {		
 		
 		ArrayList<ParticipantLaboratory> participantList = new ArrayList<ParticipantLaboratory>();
+		ArrayList<Document> docs = new ArrayList<Document>();
 		
-		String initialDate = "2018-06-26T13:55:38.112Z";
-		String finalDate = "2018-06-26T13:55:38.112Z";
+		//String initialDate = "2018-06-26T13:55:38.112Z";
+		//String finalDate = "2018-06-26T13:55:38.112Z";
 		
 		List<Bson> queryAggregateList = Arrays.asList(
 				Aggregates.match(new Document("tubes.aliquotes.aliquotCollectionData.processing", new Document()
 						.append("$gt", initialDate)						
 						.append("$lt", finalDate))),
 				Aggregates.lookup("participant", "recruitmentNumber", "recruitmentNumber", "participant"),
-				Aggregates.unwind("$participant")
-				//Aggregates.unwind("$tubes"),
-				//Aggregates.unwind("$tubes.aliquotes")
-				
+				Aggregates.unwind("$participant"),
+				Aggregates.unwind("$tubes"),
+				Aggregates.unwind("$tubes.aliquotes"),
+				Aggregates.match(new Document("tubes.aliquotes.aliquotCollectionData.processing", new Document()
+						.append("$gt", initialDate)						
+						.append("$lt", finalDate)))
 		);
 		
-		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);		
-
-		System.out.println(result);
-		result.forEach((Block<Document>) document -> {
-			System.out.println(document.toJson());
-			participantList.add(ParticipantLaboratory.deserialize(document.toJson()));
+		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
+		
+		result.forEach((Block<Document>) document -> {			
+			docs.add(document);
 		});		
+		
 		return participantList;
 	}
 

@@ -62,6 +62,15 @@ public class TransportationResource {
 		transportationLotFacade.delete(code);
 		return new Response().buildSuccess().toJson();
 	}
+	
+	@POST
+	@Secured
+	@Path("/aliquots")
+	public String getAliquotsByPeriod(String initialDate, String finalDate) {
+		List<WorkAliquot> aliquots= transportationLotFacade.getAliquotsByPeriod(initialDate, finalDate);
+		GsonBuilder builder = TransportationLot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
+	}
 
 	@GET
 	@Secured

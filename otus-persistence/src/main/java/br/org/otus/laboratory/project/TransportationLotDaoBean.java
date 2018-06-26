@@ -80,6 +80,11 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     @Override
     public List<WorkAliquot> getAliquots() throws DataNotFoundException {
         return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
+        
+    }
+    
+    public List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate) throws DataNotFoundException {        
+        return WorkAliquotFactory.getAliquotListbyDatePeriod(participantLaboratoryDao, participantDao, initialDate, finalDate);
     }
 
     @Override

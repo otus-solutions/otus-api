@@ -21,5 +21,9 @@ public interface TransportationLotDao {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
+	List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate) throws DataNotFoundException;
+
 	HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException;
+
+	
 }

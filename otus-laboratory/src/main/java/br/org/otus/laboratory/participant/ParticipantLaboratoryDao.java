@@ -26,5 +26,5 @@ public interface ParticipantLaboratoryDao {
 
 	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 
-	List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod();
+	List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod(String initialDate, String finalDate);
 }

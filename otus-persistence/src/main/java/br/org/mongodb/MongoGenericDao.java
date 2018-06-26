@@ -1,13 +1,18 @@
 package br.org.mongodb;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 
 public abstract class MongoGenericDao<T> {
 
@@ -46,5 +51,6 @@ public abstract class MongoGenericDao<T> {
 	public T findFirst() {
 		return list().first();
 	}
+	
 
 }
