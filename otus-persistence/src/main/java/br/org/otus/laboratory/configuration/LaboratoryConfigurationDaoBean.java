@@ -13,6 +13,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -30,10 +31,14 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 	}
 
 	@Override
-	public AliquotExamCorrelation getAliquotExamCorrelation() {
+	public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
 		Document query = new Document("objectType","AliquotExamCorrelation");
 
 		Document first = collection.find(query).first();
+
+		if (first == null) {
+			throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
+		}
 
 		return AliquotExamCorrelation.deserialize(first.toJson());
 	}
