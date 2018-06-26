@@ -20,17 +20,9 @@ public class AliquotExamCorrelation {
 
 
     public Map getHashMap() {
-        Map<String,ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+        Map<String,ArrayList<String>> map = new HashMap<>();
 
         this.aliquots.forEach(aliquotPossibleExams -> map.put(aliquotPossibleExams.getName(),aliquotPossibleExams.getExams()));
-
-
-//        if ( example.containsKey( keyToSearch ) ) {
-//            System.out.println("Valor da Chave "+keyToSearch+
-//                    " = "+example.get(keyToSearch));
-//        }else{
-//            System.err.println("Chave não existe");
-//        }
 
         return map;
     }

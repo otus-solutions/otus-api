@@ -24,6 +24,9 @@ import java.util.List;
 @Stateless
 public class ExamUploadServiceBean implements ExamUploadService{
 
+    private static final String ALIQUOT_NOT_FOUND_MESSAGE = "Aliquot not found";
+    private static final String ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE = "Aliquot does not match exam";
+
     @Inject
     LaboratoryProjectService laboratoryProjectService;
 
@@ -105,6 +108,8 @@ public class ExamUploadServiceBean implements ExamUploadService{
     private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray, Boolean forcedSave) throws ValidationException, DataNotFoundException {
         HashMap<String, WorkAliquot> hmap = new HashMap<>();
         ArrayList<ResponseAliquot> missing = new ArrayList<>();
+        Boolean aliquotNotFound = false;
+        Boolean aliquotDoesNotMatchExam = false;
 
         // hmap stores all the values of bigArray taking aliquotCode as key
         for (WorkAliquot aBigArray : bigArray) {
@@ -120,18 +125,22 @@ public class ExamUploadServiceBean implements ExamUploadService{
             WorkAliquot found = hmap.get(aliquotCode);
             if (found == null) {
                 responseAliquot.setAliquot(aliquotCode);
+                responseAliquot.setMessage(ALIQUOT_NOT_FOUND_MESSAGE);
                 responseAliquot.setPossibleExams("");
-                responseAliquot.setReceivedExam("");
+                responseAliquot.setReceivedExam(aSmallArray.getExamName());
                 missing.add(responseAliquot);
+                aliquotNotFound = true;
                 aSmallArray.setAliquotValid(false);
             } else {
                 ArrayList possibleExams = (ArrayList) aliquotExamCorrelation.getHashMap().get(found.getName());
                 aSmallArray.setAliquotValid(true);
                 if(!possibleExams.contains(aSmallArray.getExamName())){
                     responseAliquot.setAliquot(aliquotCode);
+                    responseAliquot.setMessage(ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE);
                     responseAliquot.setPossibleExams(possibleExams.toString());
                     responseAliquot.setReceivedExam(aSmallArray.getExamName());
                     missing.add(responseAliquot);
+                    aliquotDoesNotMatchExam = true;
                     aSmallArray.setAliquotValid(false);
                 }
                 aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
@@ -140,9 +149,13 @@ public class ExamUploadServiceBean implements ExamUploadService{
             }
         }
 
-        if (missing.size() > 0 && !forcedSave){
-            throw new ValidationException(new Throwable("Aliquots not found"),
+        if(aliquotDoesNotMatchExam){
+            throw new ValidationException(new Throwable(ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE),
+                    missing);
+        }else if(aliquotNotFound && !forcedSave){
+            throw new ValidationException(new Throwable(ALIQUOT_NOT_FOUND_MESSAGE),
                     missing);
         }
+
     }
 }
