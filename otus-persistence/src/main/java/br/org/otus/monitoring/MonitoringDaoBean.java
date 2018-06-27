@@ -25,9 +25,9 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
   }
 
   @Override
-  public ArrayList<MonitoringDataSourceResult> get(ArrayList<Document> query) throws ValidationException {
+  public List<MonitoringDataSourceResult> get(List<Document> query) throws ValidationException {
 
-    ArrayList<MonitoringDataSourceResult> monitoringData = new ArrayList<>();
+    List<MonitoringDataSourceResult> monitoringData = new ArrayList<>();
     AggregateIterable output = collection.aggregate(query);
 
     for (Object anOutput : output) {

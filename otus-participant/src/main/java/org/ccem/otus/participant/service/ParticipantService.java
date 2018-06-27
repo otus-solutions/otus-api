@@ -13,7 +13,7 @@ public interface ParticipantService {
 
   void create(Participant participant);
 
-  Participant getByRecruitmentNumber(long rn) throws DataNotFoundException;
+  Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
   List<Participant> list(FieldCenter fieldCenter);
 

@@ -1,6 +1,7 @@
 package org.ccem.otus.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,12 +24,12 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Inject
   private FieldCenterDao fieldCenterDao;
-  
+
   @Inject
   private ParticipantDao participantDao;
 
   @Override
-  public ArrayList<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
+  public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
     MonitoringDataSource monitoringDataSource = new MonitoringDataSource();
     return monitoringDao.get(monitoringDataSource.buildQuery(acronym));
   }
@@ -38,18 +39,18 @@ public class MonitoringServiceBean implements MonitoringService {
 
     ArrayList<MonitoringCenter> results = new ArrayList<>();
     ArrayList<String> centers = fieldCenterDao.listAcronyms();
-    
+
     for (String acronymCenter : centers) {
-      
+
       FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
       Long goals = participantDao.getPartipantsActives(acronymCenter);
-      
-      MonitoringCenter monitoring = new MonitoringCenter();  
+
+      MonitoringCenter monitoring = new MonitoringCenter();
       monitoring.setName(fieldCenter.getName());
       monitoring.setGoal(goals);
       monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
       monitoring.setBorderColor(fieldCenter.getBorderColor());
-      
+
       results.add(monitoring);
       monitoring = null;
     }

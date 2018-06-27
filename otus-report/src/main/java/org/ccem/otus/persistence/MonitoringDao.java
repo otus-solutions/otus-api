@@ -8,9 +8,10 @@ import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface MonitoringDao {
 
-    ArrayList<MonitoringDataSourceResult> get(ArrayList<Document> query) throws ValidationException;
+    List<MonitoringDataSourceResult> get(List<Document> query) throws ValidationException;
 
 }

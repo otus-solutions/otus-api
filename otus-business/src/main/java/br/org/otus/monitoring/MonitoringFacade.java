@@ -24,7 +24,7 @@ public class MonitoringFacade {
   @Inject
   private SurveyFacade surveyFacade;
 
-  public ArrayList<MonitoringDataSourceResult> get(String acronym) {
+  public List<MonitoringDataSourceResult> get(String acronym) {
     try {
       return monitoringService.get(acronym);
     } catch (ValidationException e) {
@@ -35,7 +35,7 @@ public class MonitoringFacade {
   public List<String> listActivities() {
     return surveyFacade.getSurveys();
   }
-  
+
   public List<MonitoringCenter> getMonitoringCenters() {
       try {
         return monitoringService.getMonitoringCenter();
