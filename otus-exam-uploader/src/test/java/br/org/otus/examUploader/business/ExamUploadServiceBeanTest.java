@@ -6,6 +6,7 @@ import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -27,6 +28,8 @@ import java.util.stream.IntStream;
 @RunWith(PowerMockRunner.class)
 public class ExamUploadServiceBeanTest {
     String EXAM_SENDING_LOT_ID = "asfafw32f23f3q";
+    private static final String ALIQUOT_EXAM_CORRELATION = "{\"_id\" : \"5b2d5b936dcabba87ee60cfe\",\"objectType\" : \"AliquotExamCorrelation\", \"aliquots\" : [{\"name\" : \"a\",\"exams\" : [\"URÉIA - SANGUE\"]}]}";
+
 
     private static String EMAIL_STRING = "fulano@detal.com";
 
@@ -53,6 +56,10 @@ public class ExamUploadServiceBeanTest {
 
     @Mock
     private Exam exam;
+
+    @Mock
+    AliquotExamCorrelation aliquotExamCorrelation;
+
 
 
     @Test
@@ -123,7 +130,6 @@ public class ExamUploadServiceBeanTest {
 
     }
 
-    @Ignore
     @Test
     public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_subSet_of_allAliquots() throws DataNotFoundException, ValidationException {
         List<ExamResult> resultsToVerify = new ArrayList<>(2);
@@ -132,16 +138,20 @@ public class ExamUploadServiceBeanTest {
         IntStream.range(1,2).forEach(counter -> {
             ExamResult examResult = new ExamResult();
             examResult.setAliquotCode(String.valueOf(counter));
+            examResult.setExamName("URÉIA - SANGUE");
             resultsToVerify.add(examResult);
         });
 
         IntStream.range(1,11).forEach(counter -> {
             WorkAliquot mock = Mockito.mock(WorkAliquot.class);
+            Mockito.when(mock.getName()).thenReturn(String.valueOf("a"));
             Mockito.when(mock.getCode()).thenReturn(String.valueOf(counter));
             allAliquots.add(mock);
         });
+        aliquotExamCorrelation = AliquotExamCorrelation.deserialize(ALIQUOT_EXAM_CORRELATION);
 
         PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
+        PowerMockito.when(laboratoryProjectService.getAliquotExamCorrelation()).thenReturn(aliquotExamCorrelation);
 
         service.validateExamResults(resultsToVerify, examSendingLot.isForcedSave());
     }
@@ -186,4 +196,30 @@ public class ExamUploadServiceBeanTest {
         service.validateExamResultLot(examResults);
     }
 
+    @Test (expected = ValidationException.class)
+    public void validateExamResults_should_throw_ValidationException_when_aliquot_can_not_do_requested_exam() throws DataNotFoundException, ValidationException {
+        List<ExamResult> resultsToVerify = new ArrayList<>(2);
+        List<WorkAliquot> allAliquots = new ArrayList<>(10);
+
+        IntStream.range(1,2).forEach(counter -> {
+            ExamResult examResult = new ExamResult();
+            examResult.setAliquotCode(String.valueOf(counter));
+            resultsToVerify.add(examResult);
+        });
+
+        IntStream.range(1,10).forEach(counter -> {
+            WorkAliquot mock = Mockito.mock(WorkAliquot.class);
+            Mockito.when(mock.getName()).thenReturn(String.valueOf("a"));
+            Mockito.when(mock.getCode()).thenReturn(String.valueOf(counter));
+            allAliquots.add(mock);
+        });
+        aliquotExamCorrelation = AliquotExamCorrelation.deserialize("{\"_id\" : \"5b2d5b936dcabba87ee60cfe\",\"objectType\" : \"AliquotExamCorrelation\", \"aliquots\" : [{\"name\" : \"a\",\"exams\" : [\"URÉIA - SANGUE\"]}]}");
+
+        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
+        PowerMockito.when(laboratoryProjectService.getAliquotExamCorrelation()).thenReturn(aliquotExamCorrelation);
+
+        service.validateExamResults(resultsToVerify, examSendingLot.isForcedSave());
+    }
+
 }
+

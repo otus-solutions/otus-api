@@ -93,4 +93,8 @@ public class ExamResult {
     public String getExamName() {
         return examName;
     }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
+    }
 }
