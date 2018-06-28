@@ -166,6 +166,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 			String fieldCenterAcronym) {
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
+		
+		String ROLE_STATUS = "EXAM";
+		
 
 		List<Bson> queryAggregateList = Arrays.asList(
 				Aggregates.match(new Document(DATA_PROCESSING_MATCH,
@@ -190,7 +193,10 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 						Projections.computed(RECRUITMENT_NUMBER, $RECRUITMENT_NUMBER_VALUE),
 						Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
 						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
-						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))));
+						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
+				Aggregates.match(new Document("role",  ROLE_STATUS)));
+				
+				
 
 		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
 		result.forEach((Block<Document>) document -> {
