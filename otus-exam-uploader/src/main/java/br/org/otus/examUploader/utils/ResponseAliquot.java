@@ -1,10 +1,12 @@
 package br.org.otus.examUploader.utils;
 
+import java.util.ArrayList;
+
 public class ResponseAliquot {
 
     public String aliquot;
     public String message;
-    public String possibleExams;
+    public ArrayList<String> possibleExams;
     public String receivedExam;
 
     public void setAliquot(String aliquot) {
@@ -15,7 +17,7 @@ public class ResponseAliquot {
         this.message = message;
     }
 
-    public void setPossibleExams(String possibleExams) {
+    public void setPossibleExams(ArrayList<String> possibleExams) {
         this.possibleExams = possibleExams;
     }
 

@@ -124,7 +124,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
             String aliquotCode = aSmallArray.getAliquotCode();
             WorkAliquot found = hmap.get(aliquotCode);
             if (found == null) {
-                addInvalidResult(invalid,aliquotCode,ALIQUOT_NOT_FOUND_MESSAGE,"",aSmallArray);
+                addInvalidResult(invalid,aliquotCode,ALIQUOT_NOT_FOUND_MESSAGE,new ArrayList(),aSmallArray);
                 aliquotNotFound = true;
                 aSmallArray.setAliquotValid(false);
             } else {
@@ -133,7 +133,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
                 aSmallArray.setBirthdate(found.getBirthdate());
                 aSmallArray.setSex(found.getSex());
                 if(!possibleExams.contains(aSmallArray.getExamName())){
-                    addInvalidResult(invalid,aliquotCode,ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE,possibleExams.toString(),aSmallArray);
+                    addInvalidResult(invalid,aliquotCode,ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE,possibleExams,aSmallArray);
                     aliquotDoesNotMatchExam = true;
                     aSmallArray.setAliquotValid(false);
                 }
@@ -150,7 +150,7 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     }
 
-    private void addInvalidResult(ArrayList<ResponseAliquot> invalid, String aliquotCode, String message, String possibleExams, ExamResult aSmallArray){
+    private void addInvalidResult(ArrayList<ResponseAliquot> invalid, String aliquotCode, String message, ArrayList possibleExams, ExamResult aSmallArray){
         ResponseAliquot responseAliquot = new ResponseAliquot();
         responseAliquot.setAliquot(aliquotCode);
         responseAliquot.setMessage(message);
