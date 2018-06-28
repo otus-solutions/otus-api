@@ -32,25 +32,28 @@ public class WorkAliquotFactory {
 		return aliquotList;	
 	}
 	
-	public static List<WorkAliquot> getAliquotListbyDatePeriod(ParticipantLaboratoryDao participantLaboratoryDao,
-			ParticipantDao participantDao, String initialDate, String finalDate) throws DataNotFoundException {
+	public static List<WorkAliquot> getAliquotListByPeriod(ParticipantLaboratoryDao participantLaboratoryDao,
+			ParticipantDao participantDao, String initialDate, String finalDate, String fieldCenterAcronym) throws DataNotFoundException {
 		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
 		
-		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getParticipantLaboratoryByDatePeriod(initialDate, finalDate);
+		//List<ParticipantLaboratory> participantList = participantLaboratoryDao.getParticipantLaboratoryByPeriod(initialDate, finalDate);
+		aliquotList = participantLaboratoryDao.getWorkAliquotListByPeriod(initialDate, finalDate, fieldCenterAcronym);
+	
 
-		for (ParticipantLaboratory participantLaboratory : participantList) {
-			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
-
-			participantLaboratory.getTubes().forEach(tube -> {
-				tube.getAliquots().forEach(aliquot -> {
-					WorkAliquot workAliquot;
-					workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
-							participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
-					aliquotList.add(workAliquot);
-				});
-			});
-		}
+//		for (ParticipantLaboratory participantLaboratory : participantList) {
+//			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
+//
+//			participantLaboratory.getTubes().forEach(tube -> {
+//				tube.getAliquots().forEach(aliquot -> {
+//					WorkAliquot workAliquot;
+//					workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
+//							participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
+//					aliquotList.add(workAliquot);
+//				});
+//			});
+//		}
 		return aliquotList;	
 	}
 
+	
 }

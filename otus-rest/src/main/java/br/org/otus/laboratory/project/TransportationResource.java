@@ -7,6 +7,8 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
+
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
@@ -14,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+
+import org.apache.james.mime4j.field.address.AddressList;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/laboratory-project/transportation")
@@ -63,13 +69,13 @@ public class TransportationResource {
 		return new Response().buildSuccess().toJson();
 	}
 	
-	@POST
+	@GET
 	@Secured
-	@Path("/aliquots")
-	public String getAliquotsByPeriod(String initialDate, String finalDate) {
-		List<WorkAliquot> aliquots= transportationLotFacade.getAliquotsByPeriod(initialDate, finalDate);
-		GsonBuilder builder = TransportationLot.getGsonBuilder();
-		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
+	@Path("/aliquots/{initialDate}/{finalDate}/{fieldCenterAcronym}")
+	public String getWorkAliquotsByPeriod(@PathParam("initialDate") String initial, @PathParam("finalDate") String finalDate, @PathParam("fieldCenterAcronym") String fieldCenterAcronym) {
+		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(initial, finalDate, fieldCenterAcronym);
+		GsonBuilder builder = WorkAliquot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
 	}
 
 	@GET

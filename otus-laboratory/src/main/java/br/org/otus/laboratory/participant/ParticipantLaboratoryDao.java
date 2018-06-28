@@ -2,6 +2,8 @@ package br.org.otus.laboratory.participant;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -26,5 +28,5 @@ public interface ParticipantLaboratoryDao {
 
 	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 
-	List<ParticipantLaboratory> getParticipantLaboratoryByDatePeriod(String initialDate, String finalDate);
+	ArrayList<WorkAliquot> getWorkAliquotListByPeriod(String initialDate, String finalDate, String fieldCenterAcronym);
 }

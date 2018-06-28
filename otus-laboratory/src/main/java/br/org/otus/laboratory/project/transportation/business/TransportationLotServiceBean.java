@@ -56,8 +56,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate) throws DataNotFoundException {
-		return transportationLotDao.getAliquotsByPeriod(initialDate, finalDate);
+	public List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate, String fieldCenterAcronym) throws DataNotFoundException {
+		return transportationLotDao.getAliquotsByPeriod(initialDate, finalDate, fieldCenterAcronym);
 	}
 
 }
