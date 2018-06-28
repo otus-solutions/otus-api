@@ -15,7 +15,7 @@ public class AliquotExamCorrelationTest {
     private AliquotExamCorrelation aliquotExamCorrelation;
 
     @Test
-    public void method_getHashMap_should_map_with_exam_correlation() {
+    public void method_getHashMap_should_map_aliquot_exam_correlation() {
         aliquotExamCorrelation = AliquotExamCorrelation.deserialize(ALIQUOT_EXAM_CORRELATION);
         Map map = aliquotExamCorrelation.getHashMap();
         assertEquals(EXAM_NAME,map.get("a").toString());

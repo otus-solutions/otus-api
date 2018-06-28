@@ -203,6 +203,7 @@ public class ExamUploadServiceBeanTest {
 
         IntStream.range(1,2).forEach(counter -> {
             ExamResult examResult = new ExamResult();
+            examResult.setExamName("URÉIA - SANGUE CEENTRAL");
             examResult.setAliquotCode(String.valueOf(counter));
             resultsToVerify.add(examResult);
         });
