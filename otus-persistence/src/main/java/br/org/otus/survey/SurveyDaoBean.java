@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -172,6 +173,16 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
             versions.add(integer);
         }
         return versions;
+    }
+    
+    @Override
+    public List<String> getSurveys() throws ValidationException {
+      ArrayList<String> results = new ArrayList<>();
+      for(String acronym:collection.distinct("surveyTemplate.identity.acronym", String.class)) {
+        results.add(acronym);
+      };
+      return results;
+      
     }
 
 }

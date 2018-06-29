@@ -27,8 +27,10 @@ public class ParticipantCodec implements Codec<Participant> {
 
 		writer.writeStartDocument("fieldCenter");
 		writer.writeString("acronym", value.getFieldCenter().getAcronym());
+		
 		writer.writeEndDocument();
-
+		
+		writer.writeBoolean("late", value.getLate());
 		writer.writeEndDocument();
 	}
 
@@ -57,7 +59,11 @@ public class ParticipantCodec implements Codec<Participant> {
 		FieldCenter fieldCenter = new FieldCenter();
 		fieldCenter.setAcronym(fieldCenterAcronym);
 		participant.setFieldCenter(fieldCenter);
+		 
 		reader.readEndDocument();
+		
+		Boolean late = reader.readBoolean("late");
+		participant.setLate(late);
 
 		reader.readEndDocument();
 

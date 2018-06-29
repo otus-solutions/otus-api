@@ -64,5 +64,13 @@ public class SurveyFacade {
     public List<Integer> listVersions(String acronym) {
         return surveyService.listSurveyVersions(acronym);
     }
+    
+    public List<String> getSurveys() {
+      try {
+        return surveyService.getSurveys();     
+      } catch (ValidationException e) {
+        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 
 }

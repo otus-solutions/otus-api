@@ -2,6 +2,7 @@ package org.ccem.otus.persistence;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface SurveyDao {
     SurveyForm getLastVersionByAcronym(String acronym) throws DataNotFoundException;
 
     List<Integer> getSurveyVersions(String acronym);
+
+    List<String> getSurveys() throws ValidationException;
 }

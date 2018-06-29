@@ -8,11 +8,14 @@ import org.ccem.otus.participant.model.Participant;
 
 public interface ParticipantDao {
 
-    void persist(Participant participant);
-    
-    ArrayList<Participant> find();
-    
-    Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;
+  void persist(Participant participant);
 
-	ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
+  ArrayList<Participant> find();
+
+  Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;
+
+  ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
+
+  Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
+
 }

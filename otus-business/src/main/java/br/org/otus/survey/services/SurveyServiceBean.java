@@ -53,14 +53,14 @@ public class SurveyServiceBean implements SurveyService {
     public List<SurveyForm> findByAcronym(String acronym) {
         return surveyDao.findByAcronym(acronym);
     }
-    
+
     @Override
     public SurveyForm get(String acronym, Integer version) throws DataNotFoundException {
         return surveyDao.get(acronym, version);
     }
 
     @Override
-    public boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException, DataNotFoundException {
+    public Boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException, DataNotFoundException {
         if (updateSurveyFormTypeDto.isValid()) {
             try {
                 return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym,
@@ -74,7 +74,7 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException {
+    public Boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException {
         if (acronym == null || acronym.isEmpty()) {
             throw new ValidationException();
         } else {
@@ -91,6 +91,12 @@ public class SurveyServiceBean implements SurveyService {
         List<Integer> surveyVersions = surveyDao.getSurveyVersions(acronym);
         Collections.reverse(surveyVersions);
         return surveyVersions;
+    }
+
+    @Override
+    public List<String> getSurveys() throws ValidationException {
+        List<String> surveys = surveyDao.getSurveys();
+        return surveys;
     }
 
     private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
