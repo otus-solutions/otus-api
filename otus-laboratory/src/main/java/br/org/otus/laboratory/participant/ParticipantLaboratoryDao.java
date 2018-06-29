@@ -28,5 +28,6 @@ public interface ParticipantLaboratoryDao {
 
 	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 
-	ArrayList<WorkAliquot> getWorkAliquotListByPeriod(String initialDate, String finalDate, String fieldCenterAcronym);
+	ArrayList<WorkAliquot> getWorkAliquotListByPeriod(String code, String initialDate, String finalDate,
+			String fieldCenterAcronym, String role, String[] aliquotCodeList);
 }

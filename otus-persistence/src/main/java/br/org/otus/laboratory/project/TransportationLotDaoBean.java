@@ -24,82 +24,84 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
-    private static final String COLLECTION_NAME = "transportation_lot";
+	private static final String COLLECTION_NAME = "transportation_lot";
 
-    @Inject
-    private ParticipantLaboratoryDao participantLaboratoryDao;
-    @Inject
-    private ParticipantDao participantDao;
-    @Inject
-    private LaboratoryConfigurationDao laboratoryConfigurationDao;
+	@Inject
+	private ParticipantLaboratoryDao participantLaboratoryDao;
+	@Inject
+	private ParticipantDao participantDao;
+	@Inject
+	private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
-    public TransportationLotDaoBean() {
-        super(COLLECTION_NAME, Document.class);
-    }
+	public TransportationLotDaoBean() {
+		super(COLLECTION_NAME, Document.class);
+	}
 
-    @Override
-    public void persist(TransportationLot transportationLot) {
-        transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation());
+	@Override
+	public void persist(TransportationLot transportationLot) {
+		transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation());
 
-        super.persist(TransportationLot.serialize(transportationLot));
-    }
+		super.persist(TransportationLot.serialize(transportationLot));
+	}
 
-    @Override
-    public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
-        Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
-        parsed.remove("_id");
+	@Override
+	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
+		Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
+		parsed.remove("_id");
 
-        UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
-                new Document("$set", parsed), new UpdateOptions().upsert(false));
+		UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
+				new Document("$set", parsed), new UpdateOptions().upsert(false));
 
-        if (updateLotData.getMatchedCount() == 0) {
-            throw new DataNotFoundException(
-                    new Throwable("Transportation Lot not found"));
-        }
+		if (updateLotData.getMatchedCount() == 0) {
+			throw new DataNotFoundException(new Throwable("Transportation Lot not found"));
+		}
 
-        return transportationLot;
-    }
+		return transportationLot;
+	}
 
-    @Override
-    public List<TransportationLot> find() {
-        ArrayList<TransportationLot> transportationLots = new ArrayList<>();
+	@Override
+	public List<TransportationLot> find() {
+		ArrayList<TransportationLot> transportationLots = new ArrayList<>();
 
-        FindIterable<Document> result = collection.find();
-        result.forEach((Block<Document>) document -> transportationLots.add(TransportationLot.deserialize(document.toJson())));
-        return transportationLots;
-    }
+		FindIterable<Document> result = collection.find();
+		result.forEach(
+				(Block<Document>) document -> transportationLots.add(TransportationLot.deserialize(document.toJson())));
+		return transportationLots;
+	}
 
-    @Override
-    public void delete(String id) throws DataNotFoundException {
-        DeleteResult deleteResult = collection.deleteOne(eq("code", id));
-        if (deleteResult.getDeletedCount() == 0) {
-            throw new DataNotFoundException(new Throwable("Transportation Lot does not exist"));
-        }
-    }
+	@Override
+	public void delete(String id) throws DataNotFoundException {
+		DeleteResult deleteResult = collection.deleteOne(eq("code", id));
+		if (deleteResult.getDeletedCount() == 0) {
+			throw new DataNotFoundException(new Throwable("Transportation Lot does not exist"));
+		}
+	}
 
-    @Override
-    public List<WorkAliquot> getAliquots() throws DataNotFoundException {
-        return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
-        
-    }
-    
-    public List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate, String fieldCenterAcronym) throws DataNotFoundException {        
-        return WorkAliquotFactory.getAliquotListByPeriod(participantLaboratoryDao, participantDao, initialDate, finalDate, fieldCenterAcronym);
-    }
+	@Override
+	public List<WorkAliquot> getAliquots() throws DataNotFoundException {
+		return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
 
-    @Override
-    public HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException {
-        Document projection = new Document("aliquotsInfo", 1);
-        HashSet<Document> aliquotsInfos = new HashSet<>();
+	}
 
-        FindIterable<Document> documents = collection.find().projection(projection);
-        documents.forEach((Block<? super Document>) document -> {
-            List<Document> aliquotsInfo = (List<Document>) document.get("aliquotsInfo");
-            if (aliquotsInfo != null) {
-                aliquotsInfos.addAll(aliquotsInfo);
-            }
-        });
-        aliquotsInfos.remove(null);
-        return aliquotsInfos;
-    }
+	public List<WorkAliquot> getAliquotsByPeriod(String code, String initialDate, String finalDate,
+			String fieldCenterAcronym, String role, String[] aliquotCodeList) throws DataNotFoundException {
+		return WorkAliquotFactory.getAliquotListByPeriod(participantLaboratoryDao, participantDao, code, initialDate,
+				finalDate, fieldCenterAcronym, role, aliquotCodeList);
+	}
+
+	@Override
+	public HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException {
+		Document projection = new Document("aliquotsInfo", 1);
+		HashSet<Document> aliquotsInfos = new HashSet<>();
+
+		FindIterable<Document> documents = collection.find().projection(projection);
+		documents.forEach((Block<? super Document>) document -> {
+			List<Document> aliquotsInfo = (List<Document>) document.get("aliquotsInfo");
+			if (aliquotsInfo != null) {
+				aliquotsInfos.addAll(aliquotsInfo);
+			}
+		});
+		aliquotsInfos.remove(null);
+		return aliquotsInfos;
+	}
 }

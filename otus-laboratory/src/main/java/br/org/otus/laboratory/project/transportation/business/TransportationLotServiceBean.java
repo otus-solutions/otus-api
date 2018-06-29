@@ -20,7 +20,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	private TransportationLotDao transportationLotDao;
 
 	@Override
-	public TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException {
+	public TransportationLot create(TransportationLot transportationLot, String email)
+			throws ValidationException, DataNotFoundException {
 		_validateLot(transportationLot);
 		transportationLot.setOperator(email);
 		transportationLotDao.persist(transportationLot);
@@ -28,7 +29,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException {
+	public TransportationLot update(TransportationLot transportationLot)
+			throws DataNotFoundException, ValidationException {
 		_validateLot(transportationLot);
 		TransportationLot updateResult = transportationLotDao.update(transportationLot);
 		return updateResult;
@@ -51,13 +53,16 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	private void _validateLot(TransportationLot transportationLot) throws ValidationException {
-		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
+		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao,
+				transportationLot);
 		transportationLotValidator.validate();
 	}
 
 	@Override
-	public List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate, String fieldCenterAcronym) throws DataNotFoundException {
-		return transportationLotDao.getAliquotsByPeriod(initialDate, finalDate, fieldCenterAcronym);
+	public List<WorkAliquot> getAliquotsByPeriod(String code, String initialDate, String finalDate,
+			String fieldCenterAcronym, String role, String[] aliquotCodeList) throws DataNotFoundException {
+		return transportationLotDao.getAliquotsByPeriod(code, initialDate, finalDate, fieldCenterAcronym, role,
+				aliquotCodeList);
 	}
 
 }

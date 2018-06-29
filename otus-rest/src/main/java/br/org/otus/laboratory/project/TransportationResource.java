@@ -75,16 +75,8 @@ public class TransportationResource {
 	public String delete(@PathParam("id") String code) {
 		transportationLotFacade.delete(code);
 		return new Response().buildSuccess().toJson();
-	}
+	}	
 	
-	@GET
-	@Secured
-	@Path("/aliquots/{initialDate}/{finalDate}/{fieldCenterAcronym}")
-	public String getWorkAliquotsByPeriod(@PathParam("initialDate") String initial, @PathParam("finalDate") String finalDate, @PathParam("fieldCenterAcronym") String fieldCenterAcronym) {
-		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(initial, finalDate, fieldCenterAcronym);
-		GsonBuilder builder = WorkAliquot.getGsonBuilder();
-		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
-	}
 	
 	@POST
 	@Secured
@@ -95,19 +87,17 @@ public class TransportationResource {
 		
 		String filterWorkAliquot = filterWorkAliquotJson.toString();
 		JSONObject filter = new JSONObject(filterWorkAliquot);		
-		String inicialDate = (String) filter.get("inicialDate");
+		String code = (String) filter.get("code");
+		String initialDate = (String) filter.get("initialDate");
 		String finalDate = (String) filter.get("finalDate");
-		String role = (String) filter.get("role");
+		String fieldCenter = (String) filter.get("fieldCenter");
+		String role = (String) filter.get("role");	
 		String aliquotCodes = (String) filter.get("aliquotList");		
-		//aliquotCodes.substring(0, aliquotCodes.length()-1);
-		//String[]AliquotCodeList = aliquotCodes.trim().split("\\d");
-		String[]AliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
-		//"3530000003"
+		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");		
 	
-//		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(initial, finalDate, fieldCenterAcronym);
-//		GsonBuilder builder = WorkAliquot.getGsonBuilder();
-//		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();	
-		return new Response().buildSuccess(true).toJson();	
+		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(code, initialDate, finalDate, fieldCenter, role, aliquotCodeList);
+		GsonBuilder builder = WorkAliquot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();			
 
 	}
 

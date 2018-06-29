@@ -15,10 +15,11 @@ public class WorkAliquotFactory {
 			ParticipantDao participantDao) throws DataNotFoundException {
 		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
 
-		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();		
+		List<ParticipantLaboratory> participantList = participantLaboratoryDao.getAllParticipantLaboratory();
 
 		for (ParticipantLaboratory participantLaboratory : participantList) {
-			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
+			Participant participant = participantDao
+					.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
 
 			participantLaboratory.getTubes().forEach(tube -> {
 				tube.getAliquots().forEach(aliquot -> {
@@ -29,31 +30,35 @@ public class WorkAliquotFactory {
 				});
 			});
 		}
-		return aliquotList;	
+		return aliquotList;
 	}
-	
+
 	public static List<WorkAliquot> getAliquotListByPeriod(ParticipantLaboratoryDao participantLaboratoryDao,
-			ParticipantDao participantDao, String initialDate, String finalDate, String fieldCenterAcronym) throws DataNotFoundException {
+			ParticipantDao participantDao, String code, String initialDate, String finalDate, String fieldCenterAcronym,
+			String role, String[] aliquotCodeList) throws DataNotFoundException {
 		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
-		
-		//List<ParticipantLaboratory> participantList = participantLaboratoryDao.getParticipantLaboratoryByPeriod(initialDate, finalDate);
-		aliquotList = participantLaboratoryDao.getWorkAliquotListByPeriod(initialDate, finalDate, fieldCenterAcronym);
-	
 
-//		for (ParticipantLaboratory participantLaboratory : participantList) {
-//			Participant participant = participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
-//
-//			participantLaboratory.getTubes().forEach(tube -> {
-//				tube.getAliquots().forEach(aliquot -> {
-//					WorkAliquot workAliquot;
-//					workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
-//							participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
-//					aliquotList.add(workAliquot);
-//				});
-//			});
-//		}
-		return aliquotList;	
+		// List<ParticipantLaboratory> participantList =
+		// participantLaboratoryDao.getParticipantLaboratoryByPeriod(initialDate,
+		// finalDate);
+		aliquotList = participantLaboratoryDao.getWorkAliquotListByPeriod(code, initialDate, finalDate,
+				fieldCenterAcronym, role, aliquotCodeList);
+
+		// for (ParticipantLaboratory participantLaboratory : participantList) {
+		// Participant participant =
+		// participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
+		//
+		// participantLaboratory.getTubes().forEach(tube -> {
+		// tube.getAliquots().forEach(aliquot -> {
+		// WorkAliquot workAliquot;
+		// workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
+		// participant.getBirthdate(), participant.getSex(),
+		// participant.getFieldCenter());
+		// aliquotList.add(workAliquot);
+		// });
+		// });
+		// }
+		return aliquotList;
 	}
 
-	
 }
