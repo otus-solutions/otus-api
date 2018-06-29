@@ -174,8 +174,8 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 					Aggregates.match(new Document(CODE_MATCH, code)),
 					Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
 					Aggregates.unwind($PARTICIPANT), Aggregates.unwind($TUBES), Aggregates.unwind($TUBES_ALIQUOTES),
-
-					Aggregates.match(new Document(FIELD_CENTER_ACRONYM, fieldCenterAcronym)),
+					
+					Aggregates.match(and(new Document(CODE_MATCH, code),new Document(FIELD_CENTER_ACRONYM, fieldCenterAcronym))),
 					Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 					Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
 					Aggregates.project(Projections.fields(Projections.excludeId(),
