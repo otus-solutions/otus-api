@@ -1,5 +1,27 @@
 package br.org.otus.laboratory.project;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
@@ -7,20 +29,6 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-
-import org.apache.james.mime4j.field.address.AddressList;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Path("/laboratory-project/transportation")
 public class TransportationResource {
@@ -76,6 +84,31 @@ public class TransportationResource {
 		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(initial, finalDate, fieldCenterAcronym);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
+	}
+	
+	@POST
+	@Secured
+	@Path("/aliquots")
+	public String getWorkAliquotList(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();			
+		
+		String filterWorkAliquot = filterWorkAliquotJson.toString();
+		JSONObject filter = new JSONObject(filterWorkAliquot);		
+		String inicialDate = (String) filter.get("inicialDate");
+		String finalDate = (String) filter.get("finalDate");
+		String role = (String) filter.get("role");
+		String aliquotCodes = (String) filter.get("aliquotList");		
+		//aliquotCodes.substring(0, aliquotCodes.length()-1);
+		//String[]AliquotCodeList = aliquotCodes.trim().split("\\d");
+		String[]AliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
+		//"3530000003"
+	
+//		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(initial, finalDate, fieldCenterAcronym);
+//		GsonBuilder builder = WorkAliquot.getGsonBuilder();
+//		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();	
+		return new Response().buildSuccess(true).toJson();	
+
 	}
 
 	@GET

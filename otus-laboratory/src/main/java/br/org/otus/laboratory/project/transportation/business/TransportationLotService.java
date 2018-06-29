@@ -23,4 +23,6 @@ public interface TransportationLotService {
 	List<WorkAliquot> getAliquotsByPeriod(String initialDate, String finalDate, String fieldCenterAcronym) throws DataNotFoundException;
 
 	
+
+	
 }
