@@ -91,51 +91,44 @@ public class ExamUploadServiceBean implements ExamUploadService{
         return examResultDAO.getByExamSendingLotId(id);
     }
 
+    /**
+     * Throws error if aliquot is not a registered on the system or if result name
+     * is not in possible exams array for the specified aliquot
+     * @param examResults
+     * @param forcedSave
+     * @throws DataNotFoundException
+     * @throws ValidationException
+     */
     @Override
     public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException {
         List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
-        isSubset(allAliquots, examResults, forcedSave);
-    }
-
-    @Override
-    public void validateExamResultLot(List<ExamResult> examResults) throws ValidationException {
-        if (examResults.size() == 0){
-            throw new ValidationException(new Throwable("Empty Lot"));
-        }
-    }
-
-    /* Throws error if smallArray is not a subset of bigArray */
-    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray, Boolean forcedSave) throws ValidationException, DataNotFoundException {
         HashMap<String, WorkAliquot> hmap = new HashMap<>();
         ArrayList<ResponseAliquot> invalid = new ArrayList<>();
         Boolean aliquotNotFound = false;
         Boolean aliquotDoesNotMatchExam = false;
 
-        // hmap stores all the values of bigArray taking aliquotCode as key
-        for (WorkAliquot aBigArray : bigArray) {
-            hmap.putIfAbsent(aBigArray.getCode(), aBigArray);
+        for (WorkAliquot workAliquot : allAliquots) {
+            hmap.putIfAbsent(workAliquot.getCode(), workAliquot);
         }
 
-        // loop to check if all elements of smallArray also
-        // lies in bigArray
         AliquotExamCorrelation aliquotExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
-        for (ExamResult aSmallArray : smallArray) {
-            aSmallArray.setAliquotValid(true);
-            String aliquotCode = aSmallArray.getAliquotCode();
+        for (ExamResult examResult : examResults) {
+            examResult.setAliquotValid(true);
+            String aliquotCode = examResult.getAliquotCode();
             WorkAliquot found = hmap.get(aliquotCode);
             if (found == null) {
-                addInvalidResult(invalid,aliquotCode,ALIQUOT_NOT_FOUND_MESSAGE,new ArrayList(),aSmallArray);
+                addInvalidResult(invalid,aliquotCode,ALIQUOT_NOT_FOUND_MESSAGE,new ArrayList(),examResult);
                 aliquotNotFound = true;
-                aSmallArray.setAliquotValid(false);
+                examResult.setAliquotValid(false);
             } else {
                 ArrayList possibleExams = (ArrayList) aliquotExamCorrelation.getHashMap().get(found.getName());
-                aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
-                aSmallArray.setBirthdate(found.getBirthdate());
-                aSmallArray.setSex(found.getSex());
-                if(!possibleExams.contains(aSmallArray.getExamName())){
-                    addInvalidResult(invalid,aliquotCode,ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE,possibleExams,aSmallArray);
+                examResult.setRecruitmentNumber(found.getRecruitmentNumber());
+                examResult.setBirthdate(found.getBirthdate());
+                examResult.setSex(found.getSex());
+                if(!possibleExams.contains(examResult.getExamName())){
+                    addInvalidResult(invalid,aliquotCode,ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE,possibleExams,examResult);
                     aliquotDoesNotMatchExam = true;
-                    aSmallArray.setAliquotValid(false);
+                    examResult.setAliquotValid(false);
                 }
             }
         }
@@ -147,7 +140,13 @@ public class ExamUploadServiceBean implements ExamUploadService{
             throw new ValidationException(new Throwable(ALIQUOT_NOT_FOUND_MESSAGE),
                     invalid);
         }
+    }
 
+    @Override
+    public void validateExamResultLot(List<ExamResult> examResults) throws ValidationException {
+        if (examResults.size() == 0){
+            throw new ValidationException(new Throwable("Empty Lot"));
+        }
     }
 
     private void addInvalidResult(ArrayList<ResponseAliquot> invalid, String aliquotCode, String message, ArrayList possibleExams, ExamResult aSmallArray){
