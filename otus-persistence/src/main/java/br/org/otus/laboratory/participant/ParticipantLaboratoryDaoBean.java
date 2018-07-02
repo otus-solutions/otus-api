@@ -9,6 +9,7 @@ import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import com.mongodb.Block;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
@@ -162,23 +163,22 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	}
 
 	@Override
-	public ArrayList<WorkAliquot> getWorkAliquotListByPeriod(String code, String initialDate, String finalDate,
-			String fieldCenterAcronym, String role, String[] aliquotCodeList) {
+	public ArrayList<WorkAliquot> getWorkAliquotListByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
 
-		String[] aliquotCodeListLog = aliquotCodeList;
-		String ROLE_STATUS = role;
+//		String[] aliquotCodeListLog = aliquotCodeList;
+//		String ROLE_STATUS = role;
 
 		List<Bson> queryAggregateList = Arrays.asList(
-				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, initialDate).append($LTE, finalDate))),
+				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, workAliquotFiltersDTO.getInitialDate()).append($LTE, workAliquotFiltersDTO.getFinalDate()))),
 						Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
 						Aggregates.unwind($PARTICIPANT), 
 						Aggregates.unwind($TUBES), 
 						Aggregates.unwind($TUBES_ALIQUOTES),
 
-				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, initialDate).append($LTE, finalDate)),
-						new Document(FIELD_CENTER_ACRONYM, fieldCenterAcronym))),
+				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, workAliquotFiltersDTO.getInitialDate()).append($LTE, workAliquotFiltersDTO.getFinalDate())),
+						new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
 				Aggregates.project(Projections.fields(Projections.excludeId(),
@@ -192,7 +192,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 						Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
 						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
 						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
-				Aggregates.match(Filters.in("role", Arrays.asList("EXAM", role)))
+				Aggregates.match(Filters.in("role", Arrays.asList("EXAM", workAliquotFiltersDTO.getRole())))
 			);
 
 		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
@@ -205,18 +205,18 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	}
 
 	@Override
-	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) {
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
 		Document response = new Document();
 
-		List<Bson> queryAggregateList = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, code)),
+		List<Bson> queryAggregateList = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode())),
 				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
 				Aggregates.unwind($PARTICIPANT),
 				Aggregates.unwind($TUBES),
 				Aggregates.unwind($TUBES_ALIQUOTES),
 
-				Aggregates.match(and(new Document(CODE_MATCH, code), new Document(FIELD_CENTER_ACRONYM, fieldCenter))),
+				Aggregates.match(and(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode()), new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
 				Aggregates.project(Projections.fields(Projections.excludeId(),

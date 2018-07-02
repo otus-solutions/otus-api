@@ -7,6 +7,7 @@ import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.aliquot.WorkAliquotFactory;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.UpdateOptions;
@@ -83,15 +84,13 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
 	}
 
-	public List<WorkAliquot> getAliquotsByPeriod(String code, String initialDate, String finalDate,
-			String fieldCenterAcronym, String role, String[] aliquotCodeList) throws DataNotFoundException {
-		return WorkAliquotFactory.getAliquotListByPeriod(participantLaboratoryDao, participantDao, code, initialDate,
-				finalDate, fieldCenterAcronym, role, aliquotCodeList);
+	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException {
+		return WorkAliquotFactory.getAliquotListByPeriod(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
 	}
 
 	@Override
-	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) {
-		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, participantDao, code,fieldCenter, role, aliquotCodeList);
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
 		
 	}
 	

@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,19 +85,20 @@ public class TransportationResource {
 	@Path("/aliquots")
 	public String getWorkAliquotList(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();			
-		
-		String filterWorkAliquot = filterWorkAliquotJson.toString();
-		JSONObject filter = new JSONObject(filterWorkAliquot);		
-		String code = (String) filter.get("code");
-		String initialDate = (String) filter.get("initialDate");
-		String finalDate = (String) filter.get("finalDate");
-		String fieldCenter = (String) filter.get("fieldCenter");
-		String role = (String) filter.get("role");	
-		String aliquotCodes = (String) filter.get("aliquotList");		
-		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");		
-	
-		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(code, initialDate, finalDate, fieldCenter, role, aliquotCodeList);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);
+//		String filterWorkAliquot = filterWorkAliquotJson.toString();
+//		JSONObject filter = new JSONObject(filterWorkAliquot);
+//		String code = (String) filter.get("code");
+//		String initialDate = (String) filter.get("initialDate");
+//		String finalDate = (String) filter.get("finalDate");
+//		String fieldCenter = (String) filter.get("fieldCenter");
+//		String role = (String) filter.get("role");
+//		String aliquotCodes = (String) filter.get("aliquotList");
+//		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
+//
+		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(workAliquotFiltersDTO);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
 	}
@@ -106,18 +108,20 @@ public class TransportationResource {
 	@Path("/aliquot")
 	public String getAliquot(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException, DataNotFoundException {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();			
-		
-		String filterWorkAliquot = filterWorkAliquotJson.toString();
-		JSONObject filter = new JSONObject(filterWorkAliquot);		
-		String code = (String) filter.get("code");		
-		String fieldCenter = (String) filter.get("fieldCenter");
-		String role = (String) filter.get("role");	
-		String aliquotCodes = (String) filter.get("aliquotList");		
-		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);
+
+//		String filterWorkAliquot = filterWorkAliquotJson.toString();
+//		JSONObject filter = new JSONObject(filterWorkAliquot);
+//		String code = (String) filter.get("code");
+//		String fieldCenter = (String) filter.get("fieldCenter");
+//		String role = (String) filter.get("role");
+//		String aliquotCodes = (String) filter.get("aliquotList");
+//		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
 			
 	
-		WorkAliquot aliquot= transportationLotFacade.getAliquot(code, fieldCenter, role, aliquotCodeList);
+		WorkAliquot aliquot= transportationLotFacade.getAliquot(workAliquotFiltersDTO);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();		
 		return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
 	}

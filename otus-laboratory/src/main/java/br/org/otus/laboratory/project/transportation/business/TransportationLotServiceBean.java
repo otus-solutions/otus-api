@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -59,15 +60,13 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public List<WorkAliquot> getAliquotsByPeriod(String code, String initialDate, String finalDate,
-			String fieldCenterAcronym, String role, String[] aliquotCodeList) throws DataNotFoundException {
-		return transportationLotDao.getAliquotsByPeriod(code, initialDate, finalDate, fieldCenterAcronym, role,
-				aliquotCodeList);
+	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException {
+		return transportationLotDao.getAliquotsByPeriod(workAliquotFiltersDTO);
 	}
 
 	@Override
-	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) {
-		return transportationLotDao.getAliquot(code,fieldCenter, role, aliquotCodeList);
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+		return transportationLotDao.getAliquot(workAliquotFiltersDTO);
 		
 	}
 

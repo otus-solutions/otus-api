@@ -21,12 +21,11 @@ public interface TransportationLotDao {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
-	List<WorkAliquot> getAliquotsByPeriod(String code, String initialDate, String finalDate, String fieldCenterAcronym,
-			String role, String[] aliquotCodeList) throws DataNotFoundException;
+	List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException;
 
 	HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException;
 
-	WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList);
+	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO);
 
 	
 }
