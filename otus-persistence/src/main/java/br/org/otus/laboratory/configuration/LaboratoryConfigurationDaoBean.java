@@ -3,6 +3,8 @@ package br.org.otus.laboratory.configuration;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
 
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
+
 import org.bson.Document;
 
 import com.mongodb.client.model.FindOneAndUpdateOptions;
@@ -11,8 +13,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -27,6 +28,19 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 		Document document = super.findFirst();
 
 		return LaboratoryConfiguration.deserialize(document.toJson());
+	}
+
+	@Override
+	public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
+		Document query = new Document("objectType","AliquotExamCorrelation");
+
+		Document first = collection.find(query).first();
+
+		if (first == null) {
+			throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
+		}
+
+		return AliquotExamCorrelation.deserialize(first.toJson());
 	}
 
 	public void persist(LaboratoryConfiguration laboratoryConfiguration) {

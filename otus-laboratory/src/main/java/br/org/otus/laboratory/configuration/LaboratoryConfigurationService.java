@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.configuration;
 
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
@@ -27,7 +28,9 @@ public interface LaboratoryConfigurationService {
 
 	List<AliquoteDescriptor> getAliquotDescriptors();
 
-    	List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException;
+	List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException;
 
-    	AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException;
+	AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException;
+
+	AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 }

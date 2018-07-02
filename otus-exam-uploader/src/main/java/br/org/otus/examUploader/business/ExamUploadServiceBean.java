@@ -7,6 +7,8 @@ import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
+import br.org.otus.examUploader.utils.ResponseAliquot;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -21,6 +23,9 @@ import java.util.List;
 
 @Stateless
 public class ExamUploadServiceBean implements ExamUploadService{
+
+    private static final String ALIQUOT_NOT_FOUND_MESSAGE = "Aliquot not found";
+    private static final String ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE = "Aliquot does not match exam";
 
     @Inject
     LaboratoryProjectService laboratoryProjectService;
@@ -86,10 +91,55 @@ public class ExamUploadServiceBean implements ExamUploadService{
         return examResultDAO.getByExamSendingLotId(id);
     }
 
+    /**
+     * Throws error if aliquot is not a registered on the system or if result name
+     * is not in possible exams array for the specified aliquot
+     * @param examResults
+     * @param forcedSave
+     * @throws DataNotFoundException
+     * @throws ValidationException
+     */
     @Override
     public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException {
         List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
-        isSubset(allAliquots, examResults, forcedSave);
+        HashMap<String, WorkAliquot> hmap = new HashMap<>();
+        ArrayList<ResponseAliquot> invalid = new ArrayList<>();
+        Boolean aliquotNotFound = false;
+        Boolean aliquotDoesNotMatchExam = false;
+
+        for (WorkAliquot workAliquot : allAliquots) {
+            hmap.putIfAbsent(workAliquot.getCode(), workAliquot);
+        }
+
+        AliquotExamCorrelation aliquotExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
+        for (ExamResult examResult : examResults) {
+            examResult.setAliquotValid(true);
+            String aliquotCode = examResult.getAliquotCode();
+            WorkAliquot found = hmap.get(aliquotCode);
+            if (found == null) {
+                addInvalidResult(invalid,aliquotCode,ALIQUOT_NOT_FOUND_MESSAGE,new ArrayList(),examResult);
+                aliquotNotFound = true;
+                examResult.setAliquotValid(false);
+            } else {
+                ArrayList possibleExams = (ArrayList) aliquotExamCorrelation.getHashMap().get(found.getName());
+                examResult.setRecruitmentNumber(found.getRecruitmentNumber());
+                examResult.setBirthdate(found.getBirthdate());
+                examResult.setSex(found.getSex());
+                if(!possibleExams.contains(examResult.getExamName())){
+                    addInvalidResult(invalid,aliquotCode,ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE,possibleExams,examResult);
+                    aliquotDoesNotMatchExam = true;
+                    examResult.setAliquotValid(false);
+                }
+            }
+        }
+
+        if(aliquotDoesNotMatchExam){
+            throw new ValidationException(new Throwable(ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE),
+                    invalid);
+        }else if(aliquotNotFound && !forcedSave){
+            throw new ValidationException(new Throwable(ALIQUOT_NOT_FOUND_MESSAGE),
+                    invalid);
+        }
     }
 
     @Override
@@ -99,35 +149,12 @@ public class ExamUploadServiceBean implements ExamUploadService{
         }
     }
 
-    /* Throws error if smallArray is not a subset of bigArray */
-    private void isSubset(List<WorkAliquot> bigArray, List<ExamResult> smallArray, Boolean forcedSave) throws ValidationException {
-        HashMap<String, WorkAliquot> hmap = new HashMap<>();
-        ArrayList<String> missing = new ArrayList<>();
-
-        // hmap stores all the values of bigArray taking aliquotCode as key
-        for (WorkAliquot aBigArray : bigArray) {
-            hmap.putIfAbsent(aBigArray.getCode(), aBigArray);
-        }
-
-        // loop to check if all elements of smallArray also
-        // lies in bigArray
-        for (ExamResult aSmallArray : smallArray) {
-            String aliquotCode = aSmallArray.getAliquotCode();
-            WorkAliquot found = hmap.get(aliquotCode);
-            if (found == null) {
-                missing.add(aliquotCode);
-                aSmallArray.setAliquotValid(false);
-            } else {
-                aSmallArray.setAliquotValid(true);
-                aSmallArray.setRecruitmentNumber(found.getRecruitmentNumber());
-                aSmallArray.setBirthdate(found.getBirthdate());
-                aSmallArray.setSex(found.getSex());
-            }
-        }
-
-        if (missing.size() > 0 && !forcedSave){
-            throw new ValidationException(new Throwable("Aliquots not found"),
-                    missing);
-        }
+    private void addInvalidResult(ArrayList<ResponseAliquot> invalid, String aliquotCode, String message, ArrayList possibleExams, ExamResult aSmallArray){
+        ResponseAliquot responseAliquot = new ResponseAliquot();
+        responseAliquot.setAliquot(aliquotCode);
+        responseAliquot.setMessage(message);
+        responseAliquot.setPossibleExams(possibleExams);
+        responseAliquot.setReceivedExam(aSmallArray.getExamName());
+        invalid.add(responseAliquot);
     }
 }

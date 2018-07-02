@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project.business;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
@@ -59,6 +60,11 @@ public class LaboratoryProjectServiceBean implements LaboratoryProjectService {
             }
         }
         return aliquotDescriptors;
+    }
+
+    @Override
+    public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
+        return laboratoryConfigurationService.getAliquotExamCorrelation();
     }
 
 
