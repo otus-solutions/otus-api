@@ -17,6 +17,7 @@ import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
@@ -165,75 +166,87 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 			String fieldCenterAcronym, String role, String[] aliquotCodeList) {
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
-		
+
 		String[] aliquotCodeListLog = aliquotCodeList;
 		String ROLE_STATUS = role;
 
-		if (!code.isEmpty()) {
-			List<Bson> queryAggregateList = Arrays.asList(
-					Aggregates.match(new Document(CODE_MATCH, code)),
-					Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
-					Aggregates.unwind($PARTICIPANT), Aggregates.unwind($TUBES), Aggregates.unwind($TUBES_ALIQUOTES),
-					
-					Aggregates.match(and(new Document(CODE_MATCH, code),new Document(FIELD_CENTER_ACRONYM, fieldCenterAcronym))),
-					Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
-					Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
-					Aggregates.project(Projections.fields(Projections.excludeId(),
-							Projections.computed(CODE_ATTRIBUTE, $TUBES_ALIQUOTES_CODE_VALUE),
-							Projections.computed(NAME_ATTRIBUTE, $TUBES_ALIQUOTES_NAME_VALUE),
-							Projections.computed(CONTAINER_ATTRIBUTE, $TUBES_ALIQUOTES_CONTAINER_VALUE),
-							Projections.computed(ROLE_ATTRIBUTE, $TUBES_ALIQUOTES_ROLE_VALUE),
-							Projections.computed(ALIQUOT_COLLECTION_DATA_ATTRIBUTE,
-									$TUBES_ALIQUOTES_ALIQUOT_COLLECTION_DATA_VALUE),
-							Projections.computed(OBJECT_TYPE_ATTRIBUTE, $WORK_ALIQUOT_VALUE),
-							Projections.computed(RECRUITMENT_NUMBER, $RECRUITMENT_NUMBER_VALUE),
-							Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
-							Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
-							Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
-					Aggregates.match(new Document("role", ROLE_STATUS)));
+		List<Bson> queryAggregateList = Arrays.asList(
+				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, initialDate).append($LTE, finalDate))),
+						Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
+						Aggregates.unwind($PARTICIPANT), 
+						Aggregates.unwind($TUBES), 
+						Aggregates.unwind($TUBES_ALIQUOTES),
 
-			AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
-			result.forEach((Block<Document>) document -> {
-				WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
-				workAliquotList.add(aliquot);
-			});
-			
+				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, initialDate).append($LTE, finalDate)),
+						new Document(FIELD_CENTER_ACRONYM, fieldCenterAcronym))),
+				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
+				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
+				Aggregates.project(Projections.fields(Projections.excludeId(),
+						Projections.computed(CODE_ATTRIBUTE, $TUBES_ALIQUOTES_CODE_VALUE),
+						Projections.computed(NAME_ATTRIBUTE, $TUBES_ALIQUOTES_NAME_VALUE),
+						Projections.computed(CONTAINER_ATTRIBUTE, $TUBES_ALIQUOTES_CONTAINER_VALUE),
+						Projections.computed(ROLE_ATTRIBUTE, $TUBES_ALIQUOTES_ROLE_VALUE),
+						Projections.computed(ALIQUOT_COLLECTION_DATA_ATTRIBUTE,	$TUBES_ALIQUOTES_ALIQUOT_COLLECTION_DATA_VALUE),
+						Projections.computed(OBJECT_TYPE_ATTRIBUTE, $WORK_ALIQUOT_VALUE),
+						Projections.computed(RECRUITMENT_NUMBER, $RECRUITMENT_NUMBER_VALUE),
+						Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
+						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
+						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
+				Aggregates.match(Filters.in("role", Arrays.asList("EXAM", role)))
+			);
 
-		} else {
+		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
+		result.forEach((Block<Document>) document -> {
+			WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
+			workAliquotList.add(aliquot);
+		});
 
-			List<Bson> queryAggregateList = Arrays.asList(
-					Aggregates.match(new Document(DATA_PROCESSING_MATCH,
-							new Document().append($GTE, initialDate).append($LTE, finalDate))),
-					Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
-					Aggregates.unwind($PARTICIPANT), Aggregates.unwind($TUBES), Aggregates.unwind($TUBES_ALIQUOTES),
-
-					Aggregates.match(and(
-							new Document(DATA_PROCESSING_MATCH,
-									new Document().append($GTE, initialDate).append($LTE, finalDate)),
-							new Document(FIELD_CENTER_ACRONYM, fieldCenterAcronym))),
-					Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
-					Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
-					Aggregates.project(Projections.fields(Projections.excludeId(),
-							Projections.computed(CODE_ATTRIBUTE, $TUBES_ALIQUOTES_CODE_VALUE),
-							Projections.computed(NAME_ATTRIBUTE, $TUBES_ALIQUOTES_NAME_VALUE),
-							Projections.computed(CONTAINER_ATTRIBUTE, $TUBES_ALIQUOTES_CONTAINER_VALUE),
-							Projections.computed(ROLE_ATTRIBUTE, $TUBES_ALIQUOTES_ROLE_VALUE),
-							Projections.computed(ALIQUOT_COLLECTION_DATA_ATTRIBUTE,
-									$TUBES_ALIQUOTES_ALIQUOT_COLLECTION_DATA_VALUE),
-							Projections.computed(OBJECT_TYPE_ATTRIBUTE, $WORK_ALIQUOT_VALUE),
-							Projections.computed(RECRUITMENT_NUMBER, $RECRUITMENT_NUMBER_VALUE),
-							Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
-							Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
-							Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
-					Aggregates.match(new Document("role", ROLE_STATUS)));
-
-			AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
-			result.forEach((Block<Document>) document -> {
-				WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
-				workAliquotList.add(aliquot);
-			});
-		};
 		return workAliquotList;
+	}
+
+	@Override
+	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) {
+
+		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
+		Document response = new Document();
+
+		List<Bson> queryAggregateList = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, code)),
+				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
+				Aggregates.unwind($PARTICIPANT),
+				Aggregates.unwind($TUBES),
+				Aggregates.unwind($TUBES_ALIQUOTES),
+
+				Aggregates.match(and(new Document(CODE_MATCH, code), new Document(FIELD_CENTER_ACRONYM, fieldCenter))),
+				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
+				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
+				Aggregates.project(Projections.fields(Projections.excludeId(),
+						Projections.computed(CODE_ATTRIBUTE, $TUBES_ALIQUOTES_CODE_VALUE),
+						Projections.computed(NAME_ATTRIBUTE, $TUBES_ALIQUOTES_NAME_VALUE),
+						Projections.computed(CONTAINER_ATTRIBUTE, $TUBES_ALIQUOTES_CONTAINER_VALUE),
+						Projections.computed(ROLE_ATTRIBUTE, $TUBES_ALIQUOTES_ROLE_VALUE),
+						Projections.computed(ALIQUOT_COLLECTION_DATA_ATTRIBUTE,
+								$TUBES_ALIQUOTES_ALIQUOT_COLLECTION_DATA_VALUE),
+						Projections.computed(OBJECT_TYPE_ATTRIBUTE, $WORK_ALIQUOT_VALUE),
+						Projections.computed(RECRUITMENT_NUMBER, $RECRUITMENT_NUMBER_VALUE),
+						Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
+						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
+						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))));
+
+		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
+
+		result.forEach((Block<Document>) document -> {
+			WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
+			if (!aliquot.getCode().isEmpty()) {
+				workAliquotList.add(aliquot);
+			}
+		});
+
+		if (!workAliquotList.isEmpty()) {
+			return workAliquotList.get(0);
+		} else {
+			return null;
+		}
+
 	}
 
 }

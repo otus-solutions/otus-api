@@ -90,6 +90,12 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 	}
 
 	@Override
+	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) {
+		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, participantDao, code,fieldCenter, role, aliquotCodeList);
+		
+	}
+	
+	@Override
 	public HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException {
 		Document projection = new Document("aliquotsInfo", 1);
 		HashSet<Document> aliquotsInfos = new HashSet<>();
@@ -104,4 +110,5 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 		aliquotsInfos.remove(null);
 		return aliquotsInfos;
 	}
+
 }

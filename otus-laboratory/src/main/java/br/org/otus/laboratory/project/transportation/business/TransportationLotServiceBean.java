@@ -65,4 +65,10 @@ public class TransportationLotServiceBean implements TransportationLotService {
 				aliquotCodeList);
 	}
 
+	@Override
+	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) {
+		return transportationLotDao.getAliquot(code,fieldCenter, role, aliquotCodeList);
+		
+	}
+
 }

@@ -26,5 +26,7 @@ public interface TransportationLotDao {
 
 	HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException;
 
+	WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList);
+
 	
 }

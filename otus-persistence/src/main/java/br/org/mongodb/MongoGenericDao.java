@@ -1,5 +1,6 @@
 package br.org.mongodb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -50,7 +51,6 @@ public abstract class MongoGenericDao<T> {
 	
 	public T findFirst() {
 		return list().first();
-	}
-	
+	}	
 
 }

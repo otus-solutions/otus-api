@@ -61,4 +61,13 @@ public class WorkAliquotFactory {
 		return aliquotList;
 	}
 
+	public static WorkAliquot getAliquot(ParticipantLaboratoryDao participantLaboratoryDao,
+			ParticipantDao participantDao, String code, String fieldCenter, String role, String[] aliquotCodeList) {		
+		
+		WorkAliquot aliquotList = participantLaboratoryDao.getAliquot(code,	fieldCenter, role, aliquotCodeList);
+		
+		return aliquotList;
+		
+	}
+
 }

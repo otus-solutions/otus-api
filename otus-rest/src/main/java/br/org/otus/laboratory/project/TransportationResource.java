@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,9 +98,31 @@ public class TransportationResource {
 	
 		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(code, initialDate, finalDate, fieldCenter, role, aliquotCodeList);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();
-		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();			
-
+		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
 	}
+	
+	@POST
+	@Secured
+	@Path("/aliquot")
+	public String getAliquot(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException, DataNotFoundException {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();			
+		
+		String filterWorkAliquot = filterWorkAliquotJson.toString();
+		JSONObject filter = new JSONObject(filterWorkAliquot);		
+		String code = (String) filter.get("code");		
+		String fieldCenter = (String) filter.get("fieldCenter");
+		String role = (String) filter.get("role");	
+		String aliquotCodes = (String) filter.get("aliquotList");		
+		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
+			
+	
+		WorkAliquot aliquot= transportationLotFacade.getAliquot(code, fieldCenter, role, aliquotCodeList);
+		GsonBuilder builder = WorkAliquot.getGsonBuilder();		
+		return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
+	}
+	
+	
 
 	@GET
 	@Secured

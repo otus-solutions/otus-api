@@ -76,4 +76,12 @@ public class TransportationLotFacade {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
+
+	public WorkAliquot getAliquot(String code, String fieldCenter, String role, String[] aliquotCodeList) throws DataNotFoundException {
+		return transportationLotService.getAliquot(code, fieldCenter, role, aliquotCodeList);		
+	}
+
+	
+
+	
 }
