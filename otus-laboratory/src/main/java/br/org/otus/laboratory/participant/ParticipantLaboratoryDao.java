@@ -29,7 +29,8 @@ public interface ParticipantLaboratoryDao {
 
 	ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
 
-	ArrayList<WorkAliquot> getWorkAliquotListByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO);
+	ArrayList<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO);	
 
 	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO);
+
 }

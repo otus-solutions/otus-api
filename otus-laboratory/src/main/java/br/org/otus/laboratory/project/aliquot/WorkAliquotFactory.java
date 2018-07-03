@@ -34,39 +34,21 @@ public class WorkAliquotFactory {
 		return aliquotList;
 	}
 
-	public static List<WorkAliquot> getAliquotListByPeriod(ParticipantLaboratoryDao participantLaboratoryDao,
+	public static List<WorkAliquot> getAliquotsByPeriod(ParticipantLaboratoryDao participantLaboratoryDao,
 			ParticipantDao participantDao, WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException {
 		List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
-
-		// List<ParticipantLaboratory> participantList =
-		// participantLaboratoryDao.getParticipantLaboratoryByPeriod(initialDate,
-		// finalDate);
-		aliquotList = participantLaboratoryDao.getWorkAliquotListByPeriod(workAliquotFiltersDTO);
-
-		// for (ParticipantLaboratory participantLaboratory : participantList) {
-		// Participant participant =
-		// participantDao.findByRecruitmentNumber(participantLaboratory.getRecruitmentNumber());
-		//
-		// participantLaboratory.getTubes().forEach(tube -> {
-		// tube.getAliquots().forEach(aliquot -> {
-		// WorkAliquot workAliquot;
-		// workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(),
-		// participant.getBirthdate(), participant.getSex(),
-		// participant.getFieldCenter());
-		// aliquotList.add(workAliquot);
-		// });
-		// });
-		// }
+		
+		aliquotList = participantLaboratoryDao.getAliquotsByPeriod(workAliquotFiltersDTO);
+		
 		return aliquotList;
 	}
 
 	public static WorkAliquot getAliquot(ParticipantLaboratoryDao participantLaboratoryDao,
 			ParticipantDao participantDao, WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 		
-		WorkAliquot aliquotList = participantLaboratoryDao.getAliquot(workAliquotFiltersDTO);
+		WorkAliquot aliquot = participantLaboratoryDao.getAliquot(workAliquotFiltersDTO);
 		
-		return aliquotList;
+		return aliquot;
 		
 	}
-
 }

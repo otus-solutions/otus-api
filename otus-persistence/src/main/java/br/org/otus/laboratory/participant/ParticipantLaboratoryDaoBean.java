@@ -41,6 +41,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	private static final String CODE_MATCH = "tubes.aliquotes.code";
 	private static final String RECRUITMENT_NUMBER = "recruitmentNumber";
 	private static final String PARTICIPANT = "participant";
+	private static final String EXAM_FIELD = "EXAM";
 
 	private static final String FIELD_CENTER_ATTRIBUTE = "fieldCenter";
 	private static final String SEX_ATTRIBUTE = "sex";
@@ -164,12 +165,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	}
 
 	@Override
-	public ArrayList<WorkAliquot> getWorkAliquotListByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+	public ArrayList<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
-
-//		String[] aliquotCodeListLog = aliquotCodeList;
-//		String ROLE_STATUS = role;
 
 		List<Bson> queryAggregateList = Arrays.asList(
 				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document()
@@ -196,7 +194,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 						Projections.computed(BIRTHDATE_ATTRIBUTE, $PARTICIPANT_BIRTHDATE_VALUE),
 						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
 						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
-				Aggregates.match(Filters.in("role", Arrays.asList("EXAM", workAliquotFiltersDTO.getRole())))
+				Aggregates.match(Filters.in(ROLE_ATTRIBUTE, Arrays.asList(EXAM_FIELD, workAliquotFiltersDTO.getRole())))
 		);
 
 		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
