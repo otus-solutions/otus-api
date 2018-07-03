@@ -15,6 +15,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import javax.inject.Inject;
@@ -93,7 +94,16 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
 		
 	}
-	
+
+	@Override
+	public void CheckTransportedAliquot(String aliquotCode) throws ValidationException {
+		Document result = collection.find(eq("aliquotList.code", aliquotCode)).first();
+		if (result != null) {
+			throw new ValidationException(new Throwable("There are aliquots in another lot."),
+					aliquotCode);
+		}
+	}
+
 	@Override
 	public HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException {
 		Document projection = new Document("aliquotsInfo", 1);

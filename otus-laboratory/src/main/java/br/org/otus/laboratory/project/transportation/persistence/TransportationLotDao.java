@@ -5,6 +5,7 @@ import br.org.otus.laboratory.project.transportation.TransportationLot;
 
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,5 +28,5 @@ public interface TransportationLotDao {
 
 	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO);
 
-	
+	void CheckTransportedAliquot(String aliquotCode) throws ValidationException;
 }

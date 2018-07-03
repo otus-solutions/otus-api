@@ -23,7 +23,7 @@ public interface TransportationLotService {
 
 	List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException;
 
-	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO);
+	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws ValidationException;
 
 	
 	

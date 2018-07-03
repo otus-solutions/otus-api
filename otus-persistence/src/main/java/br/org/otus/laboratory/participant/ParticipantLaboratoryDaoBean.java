@@ -69,6 +69,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	private static final String $TUBES = "$tubes";
 	private static final String $LTE = "$lte";
 	private static final String $GTE = "$gte";
+	private static final String $NIN = "$nin";
 
 	public ParticipantLaboratoryDaoBean() {
 		super(COLLECTION_NAME, Document.class);
@@ -171,12 +172,15 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 //		String ROLE_STATUS = role;
 
 		List<Bson> queryAggregateList = Arrays.asList(
-				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, workAliquotFiltersDTO.getInitialDate()).append($LTE, workAliquotFiltersDTO.getFinalDate()))),
-						Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
-						Aggregates.unwind($PARTICIPANT), 
-						Aggregates.unwind($TUBES), 
-						Aggregates.unwind($TUBES_ALIQUOTES),
-
+				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document()
+						.append($GTE, workAliquotFiltersDTO.getInitialDate())
+						.append($LTE, workAliquotFiltersDTO.getFinalDate()))),
+				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
+				Aggregates.unwind($PARTICIPANT),
+				Aggregates.unwind($TUBES),
+				Aggregates.unwind($TUBES_ALIQUOTES),
+				Aggregates.match(new Document(TUBES_ALIQUOTES_CODE, new Document()
+						.append($NIN, workAliquotFiltersDTO.getAliquotList()))),
 				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, workAliquotFiltersDTO.getInitialDate()).append($LTE, workAliquotFiltersDTO.getFinalDate())),
 						new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
@@ -193,7 +197,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
 						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))),
 				Aggregates.match(Filters.in("role", Arrays.asList("EXAM", workAliquotFiltersDTO.getRole())))
-			);
+		);
 
 		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
 		result.forEach((Block<Document>) document -> {

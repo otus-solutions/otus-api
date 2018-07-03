@@ -18,6 +18,7 @@ import javax.ws.rs.core.HttpHeaders;
 
 import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -106,7 +107,7 @@ public class TransportationResource {
 	@POST
 	@Secured
 	@Path("/aliquot")
-	public String getAliquot(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException, DataNotFoundException {
+	public String getAliquot(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException, DataNotFoundException, ValidationException {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 

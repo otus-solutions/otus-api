@@ -65,9 +65,9 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws ValidationException {
+		transportationLotDao.CheckTransportedAliquot(workAliquotFiltersDTO.getCode());
 		return transportationLotDao.getAliquot(workAliquotFiltersDTO);
-		
 	}
 
 }

@@ -77,8 +77,13 @@ public class TransportationLotFacade {
 		}
 	}
 
-	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException {
-		return transportationLotService.getAliquot(workAliquotFiltersDTO);
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+
+		try {
+			return transportationLotService.getAliquot(workAliquotFiltersDTO);
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(),e.getData()));
+		}
 	}
 
 	
