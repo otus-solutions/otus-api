@@ -78,30 +78,20 @@ public class TransportationResource {
 	public String delete(@PathParam("id") String code) {
 		transportationLotFacade.delete(code);
 		return new Response().buildSuccess().toJson();
-	}	
-	
+	}
 	
 	@POST
 	@Secured
 	@Path("/aliquots")
-	public String getWorkAliquotList(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
+	public String getAliquotsByPeriod(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
 		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);
-//		String filterWorkAliquot = filterWorkAliquotJson.toString();
-//		JSONObject filter = new JSONObject(filterWorkAliquot);
-//		String code = (String) filter.get("code");
-//		String initialDate = (String) filter.get("initialDate");
-//		String finalDate = (String) filter.get("finalDate");
-//		String fieldCenter = (String) filter.get("fieldCenter");
-//		String role = (String) filter.get("role");
-//		String aliquotCodes = (String) filter.get("aliquotList");
-//		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
-//
+		
 		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(workAliquotFiltersDTO);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();
-		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
+		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();		
 	}
 	
 	@POST
@@ -111,23 +101,12 @@ public class TransportationResource {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);
-
-//		String filterWorkAliquot = filterWorkAliquotJson.toString();
-//		JSONObject filter = new JSONObject(filterWorkAliquot);
-//		String code = (String) filter.get("code");
-//		String fieldCenter = (String) filter.get("fieldCenter");
-//		String role = (String) filter.get("role");
-//		String aliquotCodes = (String) filter.get("aliquotList");
-//		String[]aliquotCodeList = aliquotCodes.trim().split("/[^0-9]/,");
-			
+		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);			
 	
 		WorkAliquot aliquot= transportationLotFacade.getAliquot(workAliquotFiltersDTO);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();		
 		return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
-	}
-	
-	
+	}	
 
 	@GET
 	@Secured
@@ -137,6 +116,4 @@ public class TransportationResource {
 		GsonBuilder builder = TransportationLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
 	}
-
-
 }
