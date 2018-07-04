@@ -26,14 +26,16 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
-	private static final String COLLECTION_NAME = "transportation_lot";
-
+	private static final String COLLECTION_NAME = "transportation_lot";	
+	
 	@Inject
 	private ParticipantLaboratoryDao participantLaboratoryDao;
 	@Inject
 	private ParticipantDao participantDao;
 	@Inject
 	private LaboratoryConfigurationDao laboratoryConfigurationDao;
+	
+	
 
 	public TransportationLotDaoBean() {
 		super(COLLECTION_NAME, Document.class);

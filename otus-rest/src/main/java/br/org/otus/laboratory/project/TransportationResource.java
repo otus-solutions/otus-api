@@ -83,7 +83,7 @@ public class TransportationResource {
 	@POST
 	@Secured
 	@Path("/aliquots")
-	public String getWorkAliquotList(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
+	public String getAliquotsByPeriod(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
@@ -91,7 +91,7 @@ public class TransportationResource {
 		
 		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(workAliquotFiltersDTO);
 		GsonBuilder builder = WorkAliquot.getGsonBuilder();
-		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();
+		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();		
 	}
 	
 	@POST
