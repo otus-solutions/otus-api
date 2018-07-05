@@ -24,10 +24,10 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
+import org.ccem.otus.service.ISOStringHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
@@ -169,6 +169,12 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
 
+		ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getInitialDate());
+
+		String formatedInitialDate = ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getInitialDate());
+		String formatedFinalDate = ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getFinalDate());
+
+
 		List<Bson> queryAggregateList = Arrays.asList(
 				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document()
 						.append($GTE, workAliquotFiltersDTO.getInitialDate())
@@ -179,7 +185,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 				Aggregates.unwind($TUBES_ALIQUOTES),
 				Aggregates.match(new Document(TUBES_ALIQUOTES_CODE, new Document()
 						.append($NIN, workAliquotFiltersDTO.getAliquotList()))),
-				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, workAliquotFiltersDTO.getInitialDate()).append($LTE, workAliquotFiltersDTO.getFinalDate())),
+				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, formatedInitialDate).append($LTE, formatedFinalDate)),
 						new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
