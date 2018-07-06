@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,7 +21,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TransportationLotDaoBean.class, TransportationLot.class })
@@ -34,6 +37,10 @@ public class TransportationLotDaoBeanTest {
   private FindIterable<Document> result;
   @Mock
   private LaboratoryConfigurationDao laboratoryConfigurationDao;
+  @Mock
+  private WorkAliquotFiltersDTO workAliquotFiltersDTO;
+  @Mock
+  private ParticipantLaboratoryDao participantLaboratoryDao;
 
   private MongoCursor cursor = PowerMockito.mock(MongoCursor.class);
 
@@ -41,8 +48,10 @@ public class TransportationLotDaoBeanTest {
   public void setup() {
     Whitebox.setInternalState(transportationLotDaoBean, "collection", collection);
     Whitebox.setInternalState(transportationLotDaoBean, "laboratoryConfigurationDao", laboratoryConfigurationDao);
+    Whitebox.setInternalState(transportationLotDaoBean, "participantLaboratoryDao", participantLaboratoryDao);
   }
 
+  @Ignore
   @Test
   public void method_persist_should_call_method_setCode() throws Exception {
     TransportationLot transportationLot = Mockito.mock(TransportationLot.class);
@@ -65,6 +74,20 @@ public class TransportationLotDaoBeanTest {
     transportationLotDaoBean.find();
 
     Mockito.verify(this.collection, Mockito.times(1)).find();
+  }
+
+  @Test
+  public void method_getAliquotsByPeriod_should_call_method_getAliquotsByPeriod() throws DataNotFoundException {
+    transportationLotDaoBean.getAliquotsByPeriod(workAliquotFiltersDTO);
+
+    Mockito.verify(participantLaboratoryDao, Mockito.times(1)).getAliquotsByPeriod(workAliquotFiltersDTO);
+  }
+
+  @Test
+  public void method_getAliquot_should_call_method_getAliquot() throws DataNotFoundException {
+    transportationLotDaoBean.getAliquot(workAliquotFiltersDTO);
+
+    Mockito.verify(participantLaboratoryDao, Mockito.times(1)).getAliquot(workAliquotFiltersDTO);
   }
 
 }
