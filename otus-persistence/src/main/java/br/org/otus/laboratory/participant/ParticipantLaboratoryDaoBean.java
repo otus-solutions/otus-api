@@ -24,10 +24,10 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
+import org.ccem.otus.service.ISOStringHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
@@ -71,10 +71,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	private static final String $LTE = "$lte";
 	private static final String $GTE = "$gte";
 	private static final String $NIN = "$nin";
-	
-	private AggregateIterable<Document> result;
-	private ArrayList<WorkAliquot> workAliquots;
-	private List<Bson> queryAggregate;
 
 	public ParticipantLaboratoryDaoBean() {
 		super(COLLECTION_NAME, Document.class);
@@ -171,9 +167,15 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	@Override
 	public ArrayList<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
-		workAliquots = new ArrayList<>();
+		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
 
-		queryAggregate = Arrays.asList(
+		ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getInitialDate());
+
+		String formatedInitialDate = ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getInitialDate());
+		String formatedFinalDate = ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getFinalDate());
+
+
+		List<Bson> queryAggregateList = Arrays.asList(
 				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document()
 						.append($GTE, workAliquotFiltersDTO.getInitialDate())
 						.append($LTE, workAliquotFiltersDTO.getFinalDate()))),
@@ -183,7 +185,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 				Aggregates.unwind($TUBES_ALIQUOTES),
 				Aggregates.match(new Document(TUBES_ALIQUOTES_CODE, new Document()
 						.append($NIN, workAliquotFiltersDTO.getAliquotList()))),
-				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, workAliquotFiltersDTO.getInitialDate()).append($LTE, workAliquotFiltersDTO.getFinalDate())),
+				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, formatedInitialDate).append($LTE, formatedFinalDate)),
 						new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
@@ -201,21 +203,22 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 				Aggregates.match(Filters.in(ROLE_ATTRIBUTE, Arrays.asList(EXAM_FIELD, workAliquotFiltersDTO.getRole())))
 		);
 
-		result = collection.aggregate(queryAggregate);
+		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
 		result.forEach((Block<Document>) document -> {
 			WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
-			workAliquots.add(aliquot);
+			workAliquotList.add(aliquot);
 		});
 
-		return workAliquots;
+		return workAliquotList;
 	}
 
 	@Override
 	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
-		workAliquots = new ArrayList<>();		
+		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
+		Document response = new Document();
 
-		queryAggregate = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode())),
+		List<Bson> queryAggregateList = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode())),
 				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
 				Aggregates.unwind($PARTICIPANT),
 				Aggregates.unwind($TUBES),
@@ -237,17 +240,17 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
 						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))));
 
-		result = collection.aggregate(queryAggregate);
+		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
 
 		result.forEach((Block<Document>) document -> {
 			WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
 			if (!aliquot.getCode().isEmpty()) {
-				workAliquots.add(aliquot);
+				workAliquotList.add(aliquot);
 			}
 		});
 
-		if (!workAliquots.isEmpty()) {
-			return workAliquots.get(0);
+		if (!workAliquotList.isEmpty()) {
+			return workAliquotList.get(0);
 		} else {
 			return null;
 		}
