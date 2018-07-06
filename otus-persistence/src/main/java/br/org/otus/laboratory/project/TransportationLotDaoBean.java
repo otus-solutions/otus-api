@@ -87,12 +87,12 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
 	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO)
 			throws DataNotFoundException {
-		return WorkAliquotFactory.getAliquotsByPeriod(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
+		return WorkAliquotFactory.getAliquotsByPeriod(participantLaboratoryDao, workAliquotFiltersDTO);
 	}
 
 	@Override
 	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
-		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
+		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, workAliquotFiltersDTO);
 
 	}
 
