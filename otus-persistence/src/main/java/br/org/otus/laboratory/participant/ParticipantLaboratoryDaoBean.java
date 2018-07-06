@@ -24,7 +24,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import org.ccem.otus.service.ISOStringHandler;
+import org.ccem.otus.service.ISOStringService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -169,10 +169,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
 
-		ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getInitialDate());
-
-		String formatedInitialDate = ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getInitialDate());
-		String formatedFinalDate = ISOStringHandler.removeTimePart(workAliquotFiltersDTO.getFinalDate());
+		List<String> dateRange = ISOStringService.handleDateRange(workAliquotFiltersDTO.getInitialDate(), workAliquotFiltersDTO.getFinalDate());
 
 
 		List<Bson> queryAggregateList = Arrays.asList(
@@ -185,7 +182,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 				Aggregates.unwind($TUBES_ALIQUOTES),
 				Aggregates.match(new Document(TUBES_ALIQUOTES_CODE, new Document()
 						.append($NIN, workAliquotFiltersDTO.getAliquotList()))),
-				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, formatedInitialDate).append($LTE, formatedFinalDate)),
+				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, dateRange.get(0)).append($LTE, dateRange.get(1))),
 						new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),
@@ -216,7 +213,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
-		Document response = new Document();
 
 		List<Bson> queryAggregateList = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode())),
 				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
