@@ -71,31 +71,25 @@ public class TransportationResourceTest {
 		when(securityContext.getSession(TOKEN)).thenReturn(sessionIdentifier);
 		when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
 		when(authenticationData.getUserEmail()).thenReturn(EMAIL);
-
+		
 		workAliquot = WorkAliquot.deserialize(ALIQUOT_TEXT);
 		workAliquots = Arrays.asList(workAliquot);
-
 		mockStatic(WorkAliquotFiltersDTO.class);
 		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);
 		when(WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson)).thenReturn(workAliquotFiltersDTO);
-
 		builder = WorkAliquot.getGsonBuilder();
-
 	}
 
 	@Test
 	public void method_getAliquotsByPeriod_should_return_response_with_stringArrayWorkAliquots() throws Exception {
-
-		when(transportationLotFacade.getAliquotsByPeriod(Mockito.any())).thenReturn(workAliquots);		
-
+		when(transportationLotFacade.getAliquotsByPeriod(Mockito.any())).thenReturn(workAliquots);
 		assertEquals(transportationResource.getAliquotsByPeriod(request, filterWorkAliquotJson),
 				new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson());
 	}
 
 	@Test
 	public void method_getAliquot_should_return_response_with_stringWorkAliquot() throws JSONException, DataNotFoundException, ValidationException {
-		when(transportationLotFacade.getAliquot(Mockito.any())).thenReturn(workAliquot);		
-
+		when(transportationLotFacade.getAliquot(Mockito.any())).thenReturn(workAliquot);
 		assertEquals(transportationResource.getAliquot(request, filterWorkAliquotJson),
 				new Response().buildSuccess(builder.create().toJson(workAliquot)).toJson());
 	}
