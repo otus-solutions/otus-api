@@ -71,6 +71,10 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	private static final String $LTE = "$lte";
 	private static final String $GTE = "$gte";
 	private static final String $NIN = "$nin";
+	
+	private AggregateIterable<Document> result;
+	private ArrayList<WorkAliquot> workAliquots;
+	private List<Bson> queryAggregate;
 
 	public ParticipantLaboratoryDaoBean() {
 		super(COLLECTION_NAME, Document.class);
@@ -167,9 +171,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	@Override
 	public ArrayList<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
-		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
+		workAliquots = new ArrayList<>();
 
-		List<Bson> queryAggregateList = Arrays.asList(
+		queryAggregate = Arrays.asList(
 				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document()
 						.append($GTE, workAliquotFiltersDTO.getInitialDate())
 						.append($LTE, workAliquotFiltersDTO.getFinalDate()))),
@@ -197,22 +201,21 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 				Aggregates.match(Filters.in(ROLE_ATTRIBUTE, Arrays.asList(EXAM_FIELD, workAliquotFiltersDTO.getRole())))
 		);
 
-		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
+		result = collection.aggregate(queryAggregate);
 		result.forEach((Block<Document>) document -> {
 			WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
-			workAliquotList.add(aliquot);
+			workAliquots.add(aliquot);
 		});
 
-		return workAliquotList;
+		return workAliquots;
 	}
 
 	@Override
 	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 
-		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
-		Document response = new Document();
+		workAliquots = new ArrayList<>();		
 
-		List<Bson> queryAggregateList = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode())),
+		queryAggregate = Arrays.asList(Aggregates.match(new Document(CODE_MATCH, workAliquotFiltersDTO.getCode())),
 				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
 				Aggregates.unwind($PARTICIPANT),
 				Aggregates.unwind($TUBES),
@@ -234,17 +237,17 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 						Projections.computed(SEX_ATTRIBUTE, $PARTICIPANT_SEX_VALUE),
 						Projections.computed(FIELD_CENTER_ATTRIBUTE, $PARTICIPANT_FIELD_CENTER_VALUE))));
 
-		AggregateIterable<Document> result = collection.aggregate(queryAggregateList);
+		result = collection.aggregate(queryAggregate);
 
 		result.forEach((Block<Document>) document -> {
 			WorkAliquot aliquot = WorkAliquot.deserialize(document.toJson());
 			if (!aliquot.getCode().isEmpty()) {
-				workAliquotList.add(aliquot);
+				workAliquots.add(aliquot);
 			}
 		});
 
-		if (!workAliquotList.isEmpty()) {
-			return workAliquotList.get(0);
+		if (!workAliquots.isEmpty()) {
+			return workAliquots.get(0);
 		} else {
 			return null;
 		}

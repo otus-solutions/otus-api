@@ -26,15 +26,13 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
-	private static final String COLLECTION_NAME = "transportation_lot";	
-	
+	private static final String COLLECTION_NAME = "transportation_lot";
 	@Inject
 	private ParticipantLaboratoryDao participantLaboratoryDao;
 	@Inject
 	private ParticipantDao participantDao;
 	@Inject
 	private LaboratoryConfigurationDao laboratoryConfigurationDao;
-	
 	
 
 	public TransportationLotDaoBean() {
@@ -87,22 +85,22 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
 	}
 
-	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException {
+	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO)
+			throws DataNotFoundException {
 		return WorkAliquotFactory.getAliquotsByPeriod(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
 	}
 
 	@Override
 	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
 		return WorkAliquotFactory.getAliquot(participantLaboratoryDao, participantDao, workAliquotFiltersDTO);
-		
+
 	}
 
 	@Override
 	public void CheckTransportedAliquot(String aliquotCode) throws ValidationException {
 		Document result = collection.find(eq("aliquotList.code", aliquotCode)).first();
 		if (result != null) {
-			throw new ValidationException(new Throwable("There are aliquots in another lot."),
-					aliquotCode);
+			throw new ValidationException(new Throwable("There are aliquots in another lot."), aliquotCode);
 		}
 	}
 
