@@ -94,7 +94,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   }
 
   @Override
-  public void CheckTransportedAliquot(String aliquotCode) throws ValidationException {
+  public void checkIfTransported(String aliquotCode) throws ValidationException {
     Document result = collection.find(eq("aliquotList.code", aliquotCode)).first();
     if (result != null) {
       throw new ValidationException(new Throwable("There are aliquots in another lot."), aliquotCode);

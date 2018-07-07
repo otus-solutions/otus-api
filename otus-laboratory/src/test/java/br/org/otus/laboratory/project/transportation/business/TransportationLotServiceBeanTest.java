@@ -56,6 +56,6 @@ public class TransportationLotServiceBeanTest {
     public void method_getAliquot_should_call_CheckTransportedAliquot() throws ValidationException {
         workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(ALIQUOT_CODE_JSON);
         transportationLotServiceBean.getAliquot(workAliquotFiltersDTO);
-        verify(transportationLotDao).CheckTransportedAliquot(ALIQUOT_CODE);
+        verify(transportationLotDao).checkIfTransported(ALIQUOT_CODE);
     }
 }

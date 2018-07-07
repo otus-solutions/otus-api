@@ -24,7 +24,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import org.ccem.otus.service.ISOStringService;
+import org.ccem.otus.service.ISOStringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -169,7 +169,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 		ArrayList<WorkAliquot> workAliquotList = new ArrayList<>();
 
-		List<String> dateRange = ISOStringService.handleDateRange(workAliquotFiltersDTO.getInitialDate(), workAliquotFiltersDTO.getFinalDate());
+		List<String> dateRange = ISOStringUtils.handleDateRange(workAliquotFiltersDTO.getInitialDate(), workAliquotFiltersDTO.getFinalDate());
 
 
 		List<Bson> queryAggregateList = Arrays.asList(

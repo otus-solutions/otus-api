@@ -28,5 +28,5 @@ public interface TransportationLotDao {
 
 	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO);
 
-	void CheckTransportedAliquot(String aliquotCode) throws ValidationException;
+	void checkIfTransported(String aliquotCode) throws ValidationException;
 }

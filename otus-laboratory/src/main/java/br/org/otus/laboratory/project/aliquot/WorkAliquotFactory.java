@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkAliquotFactory {
-
-  // TODO: verificar a necessidade deste método
+  
   public static List<WorkAliquot> getAliquotList(ParticipantLaboratoryDao participantLaboratoryDao, ParticipantDao participantDao) throws DataNotFoundException {
     List<WorkAliquot> aliquotList = new ArrayList<WorkAliquot>();
 
