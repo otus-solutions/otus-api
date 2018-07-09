@@ -37,7 +37,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 	private static final String TUBES_ALIQUOTES_CODE = "tubes.aliquotes.code";
 	private static final String TRANSPORTATION_LOT = "transportation_lot";
 	private static final String FIELD_CENTER_ACRONYM = "participant.fieldCenter.acronym";
-	private static final String DATA_PROCESSING_MATCH = "tubes.aliquotes.aliquotCollectionData.processing";
+	private static final String PROCESSING_DATE_MATCH = "tubes.aliquotes.aliquotCollectionData.processing";
 	private static final String CODE_MATCH = "tubes.aliquotes.code";
 	private static final String RECRUITMENT_NUMBER = "recruitmentNumber";
 	private static final String PARTICIPANT = "participant";
@@ -173,16 +173,16 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 
 		List<Bson> queryAggregateList = Arrays.asList(
-				Aggregates.match(new Document(DATA_PROCESSING_MATCH, new Document()
-						.append($GTE, workAliquotFiltersDTO.getInitialDate())
-						.append($LTE, workAliquotFiltersDTO.getFinalDate()))),
+				Aggregates.match(new Document(PROCESSING_DATE_MATCH, new Document()
+						.append($GTE, dateRange.get(0))
+						.append($LTE, dateRange.get(1)))),
 				Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT),
 				Aggregates.unwind($PARTICIPANT),
 				Aggregates.unwind($TUBES),
 				Aggregates.unwind($TUBES_ALIQUOTES),
 				Aggregates.match(new Document(TUBES_ALIQUOTES_CODE, new Document()
 						.append($NIN, workAliquotFiltersDTO.getAliquotList()))),
-				Aggregates.match(and(new Document(DATA_PROCESSING_MATCH,new Document().append($GTE, dateRange.get(0)).append($LTE, dateRange.get(1))),
+				Aggregates.match(and(new Document(PROCESSING_DATE_MATCH,new Document().append($GTE, dateRange.get(0)).append($LTE, dateRange.get(1))),
 						new Document(FIELD_CENTER_ACRONYM, workAliquotFiltersDTO.getFieldCenter()))),
 				Aggregates.lookup(TRANSPORTATION_LOT, TUBES_ALIQUOTES_CODE, ALIQUOT_LIST_CODE, TRANSPORTATION_LOT),
 				Aggregates.match(new Document(TRANSPORTATION_LOT_CODE, new Document().append($EXISTS, 0))),

@@ -8,10 +8,12 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static org.mockito.Mockito.any;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import org.ccem.otus.service.ISOStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -86,6 +88,8 @@ public class ParticipantLaboratoryDaoBeanTest<T> {
 	@Mock
 	private Bson bson;
 
+	private ISOStringUtils isoStringUtils;
+
 	private WorkAliquot workAliquot;
 	private ArrayList<WorkAliquot> workAliquots = spy(new ArrayList<WorkAliquot>());
 
@@ -108,10 +112,12 @@ public class ParticipantLaboratoryDaoBeanTest<T> {
 
 		participantLaboratoryDaoBean.getAliquotsByPeriod(workAliquotFiltersDTO);
 
+		List<String> dateRange = isoStringUtils.handleDateRange(workAliquotFiltersDTO.getInitialDate(), workAliquotFiltersDTO.getFinalDate());
+
 		verifyStatic(Aggregates.class, Mockito.times(1));
 		Aggregates.match(
-				new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, workAliquotFiltersDTO.getInitialDate())
-						.append($LTE, workAliquotFiltersDTO.getFinalDate())));
+				new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, dateRange.get(0))
+						.append($LTE, dateRange.get(1))));
 
 		verifyStatic(Aggregates.class, Mockito.times(1));
 		Aggregates.lookup(PARTICIPANT, RECRUITMENT_NUMBER, RECRUITMENT_NUMBER, PARTICIPANT);
@@ -126,8 +132,8 @@ public class ParticipantLaboratoryDaoBeanTest<T> {
 		Aggregates.unwind($TUBES_ALIQUOTES);
 
 		verifyStatic(Aggregates.class, Mockito.times(5));
-		Aggregates.match(and(new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, workAliquotFiltersDTO.getInitialDate())
-				.append($LTE,workAliquotFiltersDTO.getFinalDate())), new Document(FIELD_CENTER_ACRONYM, any())));
+		Aggregates.match(and(new Document(DATA_PROCESSING_MATCH, new Document().append($GTE, dateRange.get(0))
+				.append($LTE,dateRange.get(1))), new Document(FIELD_CENTER_ACRONYM, any())));
 
 		verifyStatic(Aggregates.class, Mockito.times(1));
 		Aggregates.match(new Document(TUBES_ALIQUOTES_CODE,	new Document().append($NIN, workAliquotFiltersDTO.getAliquotList())));
