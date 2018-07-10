@@ -1,32 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>otus-laboratory</artifactId>
-    <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>otus-laboratory</artifactId>
+  <packaging>jar</packaging>
 
-    <parent>
-        <groupId>org.ccem.otus</groupId>
-        <artifactId>otus-root</artifactId>
-        <version>1.13.5</version>
-        <relativePath>../otus-root/pom.xml</relativePath>
-    </parent>
+  <parent>
+    <groupId>org.ccem.otus</groupId>
+    <artifactId>otus-root</artifactId>
+    <version>1.14-SNAPSHOT</version>
+    <relativePath>../otus-root/pom.xml</relativePath>
+  </parent>
 
-    <dependencies>
-        <!--
+  <dependencies>
+    <!--
             -
             - External Dependencies
             -
         !-->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${google.gson.version}</version>
-            <scope>provided</scope>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>${google.gson.version}</version>
+          <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
-            <version>${mongodb.driver.version}</version>
-            <scope>provided</scope>
+          <groupId>org.mongodb</groupId>
+          <artifactId>mongodb-driver</artifactId>
+          <version>${mongodb.driver.version}</version>
+          <scope>provided</scope>
         </dependency>
         <!--
             -
@@ -34,34 +34,34 @@
             -
         !-->
         <dependency>
-            <groupId>org.ccem.otus</groupId>
-            <artifactId>survey-model</artifactId>
-            <version>${survey.model.version}</version>
-            <scope>provided</scope>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>survey-model</artifactId>
+          <version>${survey.model.version}</version>
+          <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.ccem.otus</groupId>
-            <artifactId>otus-participant</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>otus-participant</artifactId>
+          <version>${project.parent.version}</version>
+          <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.ccem.otus</groupId>
-            <artifactId>otus-center</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>otus-center</artifactId>
+          <version>${project.parent.version}</version>
+          <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.ccem.otus</groupId>
-            <artifactId>otus-activity</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>otus-activity</artifactId>
+          <version>${project.parent.version}</version>
+          <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.ccem.otus</groupId>
-            <artifactId>otus-commons</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>otus-commons</artifactId>
+          <version>${project.parent.version}</version>
+          <scope>provided</scope>
         </dependency>
-    </dependencies>
-</project>
+      </dependencies>
+    </project>

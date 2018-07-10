@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.ccem.otus</groupId>
 		<artifactId>otus-root</artifactId>
-		<version>1.13.5</version>
+    <version>1.14-SNAPSHOT</version>
 		<relativePath>../otus-root/pom.xml</relativePath>
 	</parent>
 
@@ -68,7 +68,7 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- - - Dependency between modules - ! -->
-		
+
 		<!-- - - Test scope - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
@@ -80,10 +80,10 @@
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-extraction</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>test</scope>			
+			<scope>test</scope>
 		</dependency>
-		
-		<!-- - - Provided scope - ! -->		
+
+		<!-- - - Provided scope - ! -->
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-business</artifactId>
@@ -95,7 +95,7 @@
 			<artifactId>otus-participant</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>survey-model</artifactId>
