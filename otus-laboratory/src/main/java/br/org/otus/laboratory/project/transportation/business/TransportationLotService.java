@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project.transportation.business;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -20,4 +21,12 @@ public interface TransportationLotService {
 
 	List<WorkAliquot> getAliquots() throws DataNotFoundException;
 
+	List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException;
+
+	WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws ValidationException;
+
+	
+	
+
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -20,7 +21,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	private TransportationLotDao transportationLotDao;
 
 	@Override
-	public TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException {
+	public TransportationLot create(TransportationLot transportationLot, String email)
+			throws ValidationException, DataNotFoundException {
 		_validateLot(transportationLot);
 		transportationLot.setOperator(email);
 		transportationLotDao.persist(transportationLot);
@@ -28,7 +30,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	@Override
-	public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException {
+	public TransportationLot update(TransportationLot transportationLot)
+			throws DataNotFoundException, ValidationException {
 		_validateLot(transportationLot);
 		TransportationLot updateResult = transportationLotDao.update(transportationLot);
 		return updateResult;
@@ -51,9 +54,20 @@ public class TransportationLotServiceBean implements TransportationLotService {
 	}
 
 	private void _validateLot(TransportationLot transportationLot) throws ValidationException {
-		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
+		TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao,
+				transportationLot);
 		transportationLotValidator.validate();
 	}
 
+	@Override
+	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException {
+		return transportationLotDao.getAliquotsByPeriod(workAliquotFiltersDTO);
+	}
+
+	@Override
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws ValidationException {
+		transportationLotDao.checkIfTransported(workAliquotFiltersDTO.getCode());
+		return transportationLotDao.getAliquot(workAliquotFiltersDTO);
+	}
 
 }
