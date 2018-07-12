@@ -129,6 +129,7 @@ public class ReportTemplate {
 		builder.serializeNulls();
 		builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
 
 		return builder;
 	}
