@@ -9,14 +9,16 @@ import br.org.otus.laboratory.project.exam.ExamLot;
 
 public interface ExamLotDao {
 
-	void persist(ExamLot examsLot);
+  void persist(ExamLot examsLot);
 
-	ExamLot update(ExamLot examsLot) throws DataNotFoundException;
+  ExamLot update(ExamLot examsLot) throws DataNotFoundException;
 
-	List<ExamLot> find();
+  List<ExamLot> find();
 
-	void delete(String id) throws DataNotFoundException;
+  void delete(String id) throws DataNotFoundException;
 
-	List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException;
+  List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException;
+
+  String checkIfThereInExamLot(String aliquotCode);
 
 }

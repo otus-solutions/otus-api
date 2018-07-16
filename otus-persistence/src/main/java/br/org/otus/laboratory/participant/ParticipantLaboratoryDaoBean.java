@@ -253,4 +253,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
 	}
 
+    @Override
+    public void deleteAliquot(String code) throws DataNotFoundException {
+      // TODO:
+    }
+
 }

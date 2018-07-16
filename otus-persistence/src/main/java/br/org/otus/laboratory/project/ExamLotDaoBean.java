@@ -27,61 +27,71 @@ import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
 
 public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLotDao {
 
-	private static final String COLLECTION_NAME = "exam_lot";
+  private static final String COLLECTION_NAME = "exam_lot";
 
-	@Inject
-	private ParticipantLaboratoryDao participantLaboratoryDao;
-	@Inject
-	private ParticipantDao participantDao;
-	@Inject
-	private LaboratoryConfigurationDao laboratoryConfigurationDao;
+  @Inject
+  private ParticipantLaboratoryDao participantLaboratoryDao;
+  @Inject
+  private ParticipantDao participantDao;
+  @Inject
+  private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
-	public ExamLotDaoBean() {
-		super(COLLECTION_NAME, Document.class);
-	}
+  public ExamLotDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
-	@Override
-	public void persist(ExamLot examLot) {
-		examLot.setCode(laboratoryConfigurationDao.createNewLotCodeForExam());
-		super.persist(ExamLot.serialize(examLot));
-	}
+  @Override
+  public void persist(ExamLot examLot) {
+    examLot.setCode(laboratoryConfigurationDao.createNewLotCodeForExam());
+    super.persist(ExamLot.serialize(examLot));
+  }
 
-	@Override
-	public ExamLot update(ExamLot examLot) throws DataNotFoundException {
-		Document parsed = Document.parse(ExamLot.serialize(examLot));
-		parsed.remove("_id");
+  @Override
+  public ExamLot update(ExamLot examLot) throws DataNotFoundException {
+    Document parsed = Document.parse(ExamLot.serialize(examLot));
+    parsed.remove("_id");
 
-		UpdateResult updateLotData = collection.updateOne(eq("code", examLot.getCode()), new Document("$set", parsed),
-				new UpdateOptions().upsert(false));
+    UpdateResult updateLotData = collection.updateOne(eq("code", examLot.getCode()), new Document("$set", parsed), new UpdateOptions().upsert(false));
 
-		if (updateLotData.getMatchedCount() == 0) {
-			throw new DataNotFoundException(new Throwable("Exam Lot not found"));
-		}
+    if (updateLotData.getMatchedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("Exam Lot not found"));
+    }
 
-		return examLot;
-	}
+    return examLot;
+  }
 
-	@Override
-	public List<ExamLot> find() {
-		ArrayList<ExamLot> ExamLots = new ArrayList<>();
-		
-		FindIterable<Document> result = collection.find();
-		result.forEach((Block<Document>) document -> ExamLots.add(ExamLot.deserialize(document.toJson())));
+  @Override
+  public List<ExamLot> find() {
+    ArrayList<ExamLot> ExamLots = new ArrayList<>();
 
-		return ExamLots;
-	}
+    FindIterable<Document> result = collection.find();
+    result.forEach((Block<Document>) document -> ExamLots.add(ExamLot.deserialize(document.toJson())));
 
-	@Override
-	public void delete(String id) throws DataNotFoundException {
-		DeleteResult deleteResult = collection.deleteOne(eq("code", id));
-		if (deleteResult.getDeletedCount() == 0) {
-			throw new DataNotFoundException(new Throwable("Exam Lot does not exist"));
-		}
-	}
+    return ExamLots;
+  }
 
-	@Override
-	public List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException {
-		return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
-	}
+  @Override
+  public void delete(String id) throws DataNotFoundException {
+    DeleteResult deleteResult = collection.deleteOne(eq("code", id));
+    if (deleteResult.getDeletedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("Exam Lot does not exist"));
+    }
+  }
+
+  @Override
+  public List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException {
+    return WorkAliquotFactory.getAliquotList(participantLaboratoryDao, participantDao);
+  }
+
+  @Override
+  public String checkIfThereInExamLot(String aliquotCode) {
+    Document document = collection.find(eq("aliquotList.code", aliquotCode)).first();
+    if (document != null) {
+      ExamLot lot = ExamLot.deserialize(document.toJson());
+      return lot.getCode();
+    } else {
+      return null;
+    }
+  }
 
 }
