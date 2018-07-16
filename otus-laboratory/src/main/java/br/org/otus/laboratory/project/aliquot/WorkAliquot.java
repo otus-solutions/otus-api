@@ -1,16 +1,21 @@
 package br.org.otus.laboratory.project.aliquot;
 
-import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
-import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.aliquot.AliquotCollectionData;
-import com.google.gson.Gson;
+import java.time.LocalDateTime;
+
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Sex;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
+import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.AliquotCollectionData;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
 
 public class WorkAliquot extends Aliquot {
 
@@ -56,9 +61,9 @@ public class WorkAliquot extends Aliquot {
 		this.sex = sex;
 	}
 
-	public static String serialize(List<Aliquot> aliquots) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.toJson(aliquots);
+	public static String serialize(WorkAliquot workAliquot) {
+		Gson builder = getGsonBuilder().create();
+		return builder.toJson(workAliquot);
 	}
 
 	public FieldCenter getFieldCenter() {
@@ -68,5 +73,20 @@ public class WorkAliquot extends Aliquot {
 	public void setFieldCenter(FieldCenter fieldCenter) {
 		this.fieldCenter = fieldCenter;
 	}
+
+	public static WorkAliquot deserialize(String workAliquot) {	
+		return getGsonBuilder().create().fromJson(workAliquot, WorkAliquot.class);
+	}
+
+	public static GsonBuilder getGsonBuilder() {
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.serializeNulls();
+
+		return builder;
+	}
+	
+	
 
 }

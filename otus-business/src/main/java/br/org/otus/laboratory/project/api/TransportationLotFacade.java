@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -23,10 +24,12 @@ public class TransportationLotFacade {
 			return transportationLotService.create(transportationLot, email);
 		} catch (ValidationException e) {
 			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+			throw new HttpResponseException(
+					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		} catch (DataNotFoundException e) {
 			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+			throw new HttpResponseException(
+					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
 	}
 
@@ -42,7 +45,8 @@ public class TransportationLotFacade {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		} catch (ValidationException e) {
 			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+			throw new HttpResponseException(
+					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
 	}
 
@@ -64,4 +68,26 @@ public class TransportationLotFacade {
 		}
 	}
 
+	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+		try {
+			return transportationLotService.getAliquotsByPeriod(workAliquotFiltersDTO);
+		} catch (DataNotFoundException e) {
+			e.printStackTrace();
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+			
+		}
+	}
+
+	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+
+		try {
+			return transportationLotService.getAliquot(workAliquotFiltersDTO);
+		} catch (ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(),e.getData()));
+		}
+	}
+
+	
+
+	
 }

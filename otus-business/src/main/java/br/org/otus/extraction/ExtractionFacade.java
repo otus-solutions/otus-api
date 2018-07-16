@@ -1,5 +1,6 @@
 package br.org.otus.extraction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,20 +25,20 @@ public class ExtractionFacade {
 	@Inject
 	private ExtractionService extractionService;
 
-	public ExtractionFacade() {
-		extractionService = new ExtractionService();
-		activityFacade = new ActivityFacade();
-	}
-
-	public byte[] createActivityExtraction(String id) {
-		List<SurveyActivity> activities = activityFacade.getAllByID(id);
-		SurveyForm surveyForm = surveyFacade.findByAcronym(id).get(0);  //TODO 04/12/17: implement a findFirst?
+	public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
+		List<SurveyActivity> activities = new ArrayList<>();
+		
+		activities = activityFacade.get(acronym, version);
+		SurveyForm surveyForm = surveyFacade.get(acronym, version);
 		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
 		try {
 			return extractionService.createExtraction(extractor);
 		} catch (DataNotFoundException e) {
-			e.printStackTrace();
+			throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
 		}
-		return null;
 	}
+
+	public List<Integer> listSurveyVersions(String acronym){
+        return surveyFacade.listVersions(acronym);
+    }
 }

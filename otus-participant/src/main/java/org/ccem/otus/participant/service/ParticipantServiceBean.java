@@ -14,31 +14,36 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 @Stateless
 public class ParticipantServiceBean implements ParticipantService {
 
-	@Inject
-	private ParticipantDao participantDao;
-	
-	@Override
-	public void create(Set<Participant> participants) {
-		participants.forEach(participant -> create(participant));
-	}
+  @Inject
+  private ParticipantDao participantDao;
 
-	@Override
-	public void create(Participant participant) {
-		participantDao.persist(participant);
-	}
+  @Override
+  public void create(Set<Participant> participants) {
+    participants.forEach(participant -> create(participant));
+  }
 
-	@Override
-	public List<Participant> list(FieldCenter fieldCenter) {
-		if(fieldCenter == null) {
-			return participantDao.find();
-		} else {
-			return participantDao.findByFieldCenter(fieldCenter);
-		}
-	}
+  @Override
+  public void create(Participant participant) {
+    participantDao.persist(participant);
+  }
 
-	@Override
-	public Participant getByRecruitmentNumber(long rn) throws DataNotFoundException {
-		return participantDao.findByRecruitmentNumber(rn);
-	}
+  @Override
+  public List<Participant> list(FieldCenter fieldCenter) {
+    if (fieldCenter == null) {
+      return participantDao.find();
+    } else {
+      return participantDao.findByFieldCenter(fieldCenter);
+    }
+  }
+
+  @Override
+  public Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException {
+    return participantDao.findByRecruitmentNumber(rn);
+  }
+
+  @Override
+  public Long getPartipantsActives(String acronymCenter) throws DataNotFoundException {
+    return participantDao.getPartipantsActives(acronymCenter);
+  }
 
 }

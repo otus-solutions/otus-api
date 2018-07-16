@@ -43,8 +43,8 @@ public class SurveyResourceTest {
 
 	@Test
 	public void method_getAll_should_return_response_in_surveyJson() {
-		when(surveyFacade.list()).thenReturn(surveys);
-		assertTrue(surveyResource.getAll().contains(USER_EMAIL));
+		when(surveyFacade.listUndiscarded()).thenReturn(surveys);
+		assertTrue(surveyResource.getAllUndiscarded().contains(USER_EMAIL));
 	}
 
 	@Test
@@ -55,14 +55,14 @@ public class SurveyResourceTest {
 
 	@Test
 	public void method_DeleteByAcronym_should_return_positive_answer_in_responseJson() {
-		when(surveyFacade.deleteByAcronym(ACRONYM)).thenReturn(POSITIVE_RETURN);
-		assertTrue(surveyResource.deleteByAcronym(ACRONYM).contains(POSITIVE_RETURN.toString()));
+		when(surveyFacade.deleteLastVersionByAcronym(ACRONYM)).thenReturn(POSITIVE_RETURN);
+		assertTrue(surveyResource.deleteLastVersionSurveyByAcronym(ACRONYM).contains(POSITIVE_RETURN.toString()));
 	}
 
 	@Test
 	public void method_UpdateSurveyFormType_should_return_positive_answer_in_responseJson() {
-		when(surveyFacade.updateSurveyFormType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_RETURN);
-		assertTrue(surveyResource.updateSurveyFormType(ACRONYM, updateSurveyFormTypeDto)
+		when(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto)).thenReturn(POSITIVE_RETURN);
+		assertTrue(surveyResource.updateLastSurveySurveyType(ACRONYM, updateSurveyFormTypeDto)
 				.contains(POSITIVE_RETURN.toString()));
 	}
 

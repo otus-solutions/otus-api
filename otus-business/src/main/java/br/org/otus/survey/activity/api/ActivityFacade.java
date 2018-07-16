@@ -2,16 +2,18 @@ package br.org.otus.survey.activity.api;
 
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 
+import com.google.gson.JsonSyntaxException;
+
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
-
-import com.google.gson.JsonSyntaxException;
 
 public class ActivityFacade {
 
@@ -30,10 +32,12 @@ public class ActivityFacade {
 		}
 	}
 	
-	public List<SurveyActivity> getAllByID(String id) {
+	public List<SurveyActivity> get(String acronym, Integer version){
 		try {
-			return activityService.getAllByID(id);
+			return activityService.get(acronym, version);
 		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		} catch (MemoryExcededException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}

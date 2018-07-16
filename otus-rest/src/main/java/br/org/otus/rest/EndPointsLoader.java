@@ -13,6 +13,7 @@ import br.org.otus.laboratory.ParticipantLaboratoryResource;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
 import br.org.otus.laboratory.project.ExamResource;
 import br.org.otus.laboratory.project.TransportationResource;
+import br.org.otus.monitoring.MonitoringResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.report.ReportResource;
 import br.org.otus.security.rest.AuthenticationResource;
@@ -30,6 +31,9 @@ import java.util.Set;
 
 @ApplicationPath("otus")
 public class EndPointsLoader extends Application {
+
+	@Inject
+	private MonitoringResource monitoringResource;
 
 	@Inject
 	private InstallerResource installerResource;
@@ -94,6 +98,7 @@ public class EndPointsLoader extends Application {
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> resources = new HashSet<Class<?>>();
+		resources.add(MonitoringResource.class);
 		resources.add(InstallerResource.class);
 		resources.add(AuthenticationResource.class);
 		resources.add(FieldCenterResource.class);
@@ -120,6 +125,7 @@ public class EndPointsLoader extends Application {
 	@Override
 	public Set<Object> getSingletons() {
 		Set<Object> resources = new HashSet<Object>();
+		resources.add(monitoringResource);
 		resources.add(installerResource);
 		resources.add(authenticationResource);
 		resources.add(fieldCenterResource);

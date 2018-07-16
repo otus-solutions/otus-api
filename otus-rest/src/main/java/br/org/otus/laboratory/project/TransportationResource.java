@@ -1,5 +1,30 @@
 package br.org.otus.laboratory.project;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
@@ -7,14 +32,6 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
-import com.google.gson.GsonBuilder;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import java.util.List;
 
 @Path("/laboratory-project/transportation")
 public class TransportationResource {
@@ -62,6 +79,34 @@ public class TransportationResource {
 		transportationLotFacade.delete(code);
 		return new Response().buildSuccess().toJson();
 	}
+	
+	@POST
+	@Secured
+	@Path("/aliquots")
+	public String getAliquotsByPeriod(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);
+		
+		List<WorkAliquot> workAliquots= transportationLotFacade.getAliquotsByPeriod(workAliquotFiltersDTO);
+		GsonBuilder builder = WorkAliquot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(workAliquots)).toJson();		
+	}
+	
+	@POST
+	@Secured
+	@Path("/aliquot")
+	public String getAliquot(@Context HttpServletRequest request, String filterWorkAliquotJson) throws JSONException, DataNotFoundException, ValidationException {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+		WorkAliquotFiltersDTO workAliquotFiltersDTO = WorkAliquotFiltersDTO.deserialize(filterWorkAliquotJson);			
+	
+		WorkAliquot aliquot= transportationLotFacade.getAliquot(workAliquotFiltersDTO);
+		GsonBuilder builder = WorkAliquot.getGsonBuilder();		
+		return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
+	}	
 
 	@GET
 	@Secured
@@ -71,6 +116,4 @@ public class TransportationResource {
 		GsonBuilder builder = TransportationLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
 	}
-
-
 }
