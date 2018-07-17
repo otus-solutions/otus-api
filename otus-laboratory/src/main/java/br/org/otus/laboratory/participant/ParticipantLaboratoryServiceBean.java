@@ -23,7 +23,8 @@ import br.org.otus.laboratory.participant.tube.TubeService;
 import br.org.otus.laboratory.participant.validators.AliquotDeletionValidator;
 import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
 import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
-import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 @Stateless
@@ -41,6 +42,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   private ExamLotDao examLotDao;
   @Inject
   private TransportationLotDao transportationLotDao;
+  @Inject
+  private ExamUploader examUploader;
 
   @Override
   public boolean hasLaboratory(Long recruitmentNumber) {
@@ -103,7 +106,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public void deleteAliquot(String code) throws DeletionException, DataNotFoundException {
-    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.examLotDao, this.transportationLotDao);
+    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.examLotDao, this.transportationLotDao, this.examUploader);
     validator.validate();
     this.participantLaboratoryDao.deleteAliquot(code);
   }

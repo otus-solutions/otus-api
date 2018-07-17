@@ -1,11 +1,11 @@
-package br.org.otus.laboratory.project.exam.persistence;
+package br.org.otus.laboratory.project.exam.examLot.persistence;
 
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.exam.ExamLot;
+import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 
 public interface ExamLotDao {
 

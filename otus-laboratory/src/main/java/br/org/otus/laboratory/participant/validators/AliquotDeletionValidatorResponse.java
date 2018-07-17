@@ -1,9 +1,14 @@
 package br.org.otus.laboratory.participant.validators;
 
-public class AliquotDeletionValidatorResult {
+public class AliquotDeletionValidatorResponse {
   private String examLot;
   private String transportationLot;
-  private String examResult;
+  private Boolean examResult;
+  private Boolean deletionValidated;
+
+  public AliquotDeletionValidatorResponse() {
+    this.deletionValidated = Boolean.TRUE;
+  }
 
   public String getExamLot() {
     return examLot;
@@ -21,12 +26,20 @@ public class AliquotDeletionValidatorResult {
     this.transportationLot = transportationLot;
   }
 
-  public String getExamResult() {
+  public Boolean getExamResult() {
     return examResult;
   }
 
-  public void setExamResult(String examResult) {
+  public void setExamResult(Boolean examResult) {
     this.examResult = examResult;
+  }
+
+  public Boolean isDeletionValidated() {
+    return deletionValidated;
+  }
+
+  public void setDeletionValidated(Boolean deletionValidated) {
+    this.deletionValidated = deletionValidated;
   }
 
 }

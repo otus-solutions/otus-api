@@ -90,7 +90,7 @@ public class ParticipantLaboratoryResource {
 
   @DELETE
   @Secured
-  @Path("/aliquot/{code")
+  @Path("/aliquot/{code}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String deleteAliquot(@PathParam("code") String code) {

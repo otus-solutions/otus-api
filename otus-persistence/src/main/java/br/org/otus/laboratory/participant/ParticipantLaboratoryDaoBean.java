@@ -4,31 +4,33 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.tube.Tube;
-import br.org.otus.laboratory.participant.tube.TubeCollectionData;
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
-import com.mongodb.Block;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.service.ISOStringUtils;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.Block;
+import com.mongodb.DBObject;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import org.ccem.otus.service.ISOStringUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.participant.tube.TubeCollectionData;
+import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
 	private static final String COLLECTION_NAME = "participant_laboratory";
@@ -256,6 +258,10 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     @Override
     public void deleteAliquot(String code) throws DataNotFoundException {
       // TODO:
+      DeleteResult deleteResult = collection.deleteOne(eq("tubes.aliquotes.code", code));
+      if (deleteResult.getDeletedCount() == 0) {
+        throw new DataNotFoundException(new Throwable("Aliquot does not exist"));
+      }
     }
 
 }

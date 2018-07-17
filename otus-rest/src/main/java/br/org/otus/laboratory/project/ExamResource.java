@@ -15,7 +15,7 @@ import com.google.gson.GsonBuilder;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.api.ExamLotFacade;
-import br.org.otus.laboratory.project.exam.ExamLot;
+import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;

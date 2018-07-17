@@ -3,7 +3,7 @@ package br.org.otus.laboratory.participant;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
 import org.bson.Document;

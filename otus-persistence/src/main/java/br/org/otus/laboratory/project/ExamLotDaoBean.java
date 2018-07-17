@@ -22,8 +22,8 @@ import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.aliquot.WorkAliquotFactory;
-import br.org.otus.laboratory.project.exam.ExamLot;
-import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examLot.ExamLot;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 
 public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLotDao {
 
