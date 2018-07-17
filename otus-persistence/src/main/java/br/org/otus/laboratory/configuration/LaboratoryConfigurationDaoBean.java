@@ -25,9 +25,11 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
 	@Override
 	public LaboratoryConfiguration find() {
-		Document document = super.findFirst();
+		Document query = new Document("objectType","LaboratoryConfiguration");
 
-		return LaboratoryConfiguration.deserialize(document.toJson());
+		Document first = collection.find(query).first();
+
+		return LaboratoryConfiguration.deserialize(first.toJson());
 	}
 
 	@Override
