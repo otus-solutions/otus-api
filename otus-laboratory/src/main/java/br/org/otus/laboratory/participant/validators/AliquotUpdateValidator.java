@@ -91,7 +91,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 
 	private boolean isAliquoted(String aliquotCode) {
 		try {
-			participantLaboratoryDao.findDocumentByAliquotCode(aliquotCode);
+			participantLaboratoryDao.findParticipantLaboratoryByAliquotCode(aliquotCode);
 			return true;
 
 		} catch (DataNotFoundException e) {

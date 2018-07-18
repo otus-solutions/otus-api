@@ -7,7 +7,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.DeletionException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
@@ -105,10 +104,23 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public void deleteAliquot(String code) throws DeletionException, DataNotFoundException {
+  public void deleteAliquot(String code) throws ValidationException, DataNotFoundException {
     AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.examLotDao, this.transportationLotDao, this.examUploader);
     validator.validate();
-    this.participantLaboratoryDao.deleteAliquot(code);
+    try {
+      ParticipantLaboratory participantLaboratory = this.participantLaboratoryDao.findParticipantLaboratoryByAliquotCode(code);
+      outerloop: for (Tube tube : participantLaboratory.getTubes()) {
+        for (Aliquot aliquot : tube.getAliquots()) {
+          if (aliquot.getCode().equals(code)) {
+            tube.getAliquots().remove(aliquot);
+            break outerloop;
+          }
+        }
+      }
+      this.participantLaboratoryDao.updateLaboratoryData(participantLaboratory);
+    } catch (Exception e) {
+      throw new DataNotFoundException(new Throwable("Aliquot code not found."), code);
+    }
   }
 
   private void syncronizedParticipantLaboratory(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratory participantLaboratory) {

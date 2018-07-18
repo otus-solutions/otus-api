@@ -13,16 +13,13 @@ import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.ISOStringUtils;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
-import com.mongodb.DBObject;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
@@ -133,13 +130,12 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 		return tube;
 	}
 
-	public Document findDocumentByAliquotCode(String aliquotCode) throws DataNotFoundException {
+	public ParticipantLaboratory findParticipantLaboratoryByAliquotCode(String aliquotCode) throws DataNotFoundException {
 		Document first = collection.find(eq(TUBES_ALIQUOTES_CODE, aliquotCode)).first();
 		if (first == null) {
 			throw new DataNotFoundException();
 		}
-		return first;
-
+		return ParticipantLaboratory.deserialize(first.toJson());
 	}
 
 	@Override
@@ -252,16 +248,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 		} else {
 			return null;
 		}
-
 	}
-
-    @Override
-    public void deleteAliquot(String code) throws DataNotFoundException {
-      // TODO:
-      DeleteResult deleteResult = collection.deleteOne(eq("tubes.aliquotes.code", code));
-      if (deleteResult.getDeletedCount() == 0) {
-        throw new DataNotFoundException(new Throwable("Aliquot does not exist"));
-      }
-    }
 
 }

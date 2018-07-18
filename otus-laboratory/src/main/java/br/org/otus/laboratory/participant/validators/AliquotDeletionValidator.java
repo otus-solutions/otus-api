@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.participant.validators;
 
-import org.ccem.otus.exceptions.webservice.validation.DeletionException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
@@ -22,12 +22,12 @@ public class AliquotDeletionValidator {
     this.aliquotDeletionValidatorResponse = new AliquotDeletionValidatorResponse();
   }
 
-  public void validate() throws DeletionException {
+  public void validate() throws ValidationException {
     this.aliquotInTransportation();
     this.aliquotInExamLot();
     this.aliquotInExamResult();
     if (!this.aliquotDeletionValidatorResponse.isDeletionValidated()) {
-      throw new DeletionException(new Throwable("Exclusion of unauthorized aliquot."), this.aliquotDeletionValidatorResponse);
+      throw new ValidationException(new Throwable("Exclusion of unauthorized aliquot."), this.aliquotDeletionValidatorResponse);
     }
   }
 

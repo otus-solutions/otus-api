@@ -1,13 +1,13 @@
 package br.org.otus.laboratory.participant;
 
+import java.util.ArrayList;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.DeletionException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-
-import java.util.ArrayList;
 
 public interface ParticipantLaboratoryService {
 
@@ -27,6 +27,6 @@ public interface ParticipantLaboratoryService {
 
   ArrayList<Aliquot> getAllAliquots(String fieldCenter);
 
-  void deleteAliquot(String code) throws DeletionException, DataNotFoundException;
+  void deleteAliquot(String code) throws ValidationException, DataNotFoundException;
 
 }
