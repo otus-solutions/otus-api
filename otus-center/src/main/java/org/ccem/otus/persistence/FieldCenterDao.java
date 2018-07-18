@@ -20,4 +20,6 @@ public interface FieldCenterDao {
   Map<String, FieldCenter> getFieldCentersMap();
 
   ArrayList<String> listAcronyms();
+
+  Boolean codeInUse(Integer code);
 }

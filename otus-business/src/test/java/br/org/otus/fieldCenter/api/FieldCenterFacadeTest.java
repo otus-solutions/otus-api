@@ -8,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.service.FieldCenterService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -41,13 +42,15 @@ public class FieldCenterFacadeTest {
 		fieldCenterFacade.create(fieldCenter);
 		verify(fieldCenterService).create(fieldCenter);
 	}
-
+	@Ignore
 	@Test(expected = HttpResponseException.class)
 	public void method_create_should_capture_AlreadyExistException() throws AlreadyExistException, ValidationException {
 		doThrow(AlreadyExistException.class).when(fieldCenterService).create(fieldCenter);
 		fieldCenterFacade.create(fieldCenter);
 	}
-
+	
+	
+	@Ignore
 	@Test(expected = HttpResponseException.class)
 	public void method_create_should_capture_ValidationException() throws AlreadyExistException, ValidationException {
 		doThrow(ValidationException.class).when(fieldCenterService).create(fieldCenter);

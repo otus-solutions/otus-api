@@ -11,32 +11,32 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class FieldCenterFacade {
+  private static final String ATTRIBUTE_ALREADY_EXISTS_MESSAGE = "FieldCenter Attribute already exists.";
 
-    @Inject
-    private FieldCenterService fieldCenterService;
+  @Inject
+  private FieldCenterService fieldCenterService;
 
-    public void create(FieldCenter fieldCenter) {
-        try {
-            fieldCenterService.create(fieldCenter);
+  public void create(FieldCenter fieldCenter) {
+    try {
+      fieldCenterService.create(fieldCenter);
 
-        } catch (AlreadyExistException e) {
-            throw new HttpResponseException(ResponseBuild.FieldCenter.AlreadyExist.build());
-
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build());
-        }
+    } catch (ValidationException e) {
+      throw new HttpResponseException(
+          ResponseBuild.Security.Validation.build(ATTRIBUTE_ALREADY_EXISTS_MESSAGE, e.getData()));
     }
+  }
 
-    public List<FieldCenter> list() {
-        return fieldCenterService.list();
+  public List<FieldCenter> list() {
+    return fieldCenterService.list();
+  }
+
+  public void update(FieldCenter fieldCenterUpdateDto) {
+    try {
+      fieldCenterService.update(fieldCenterUpdateDto);
+
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
     }
-
-    public void update(FieldCenter fieldCenterUpdateDto){
-        try {
-            fieldCenterService.update(fieldCenterUpdateDto);
-
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build());
-        }
-    }
+  }
 }
