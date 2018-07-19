@@ -152,6 +152,13 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-configuration</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
 		<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>${nimbusds.version}</version>

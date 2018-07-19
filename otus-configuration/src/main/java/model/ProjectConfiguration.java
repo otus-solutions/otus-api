@@ -1,4 +1,4 @@
-package br.org.otus.project.configuration.model;
+package model;
 
 
 public class ProjectConfiguration {

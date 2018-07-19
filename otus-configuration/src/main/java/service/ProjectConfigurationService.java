@@ -1,6 +1,6 @@
-package br.org.otus.project.configuration.service;
+package service;
 
-import br.org.otus.project.configuration.model.ProjectConfiguration;
+import model.ProjectConfiguration;
 
 public interface ProjectConfigurationService {
 

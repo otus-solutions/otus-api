@@ -1,6 +1,6 @@
-package br.org.otus.project.configuration.persistence;
+package persistence;
 
-import br.org.otus.project.configuration.model.ProjectConfiguration;
+import model.ProjectConfiguration;
 
 public interface ProjectConfigurationDao {
 

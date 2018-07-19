@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class ConfigurationDaoBean extends MongoGenericDao<Document> {
+public class ConfigurationDaoBean extends MongoGenericDao<Document>{
     public static final String COLLECTION_NAME = "activity";
 
     public ConfigurationDaoBean() {
@@ -23,8 +23,8 @@ public class ConfigurationDaoBean extends MongoGenericDao<Document> {
     void enableNewParticipants(boolean permission) {
     }
 
-    ProjectConfiguration getProjectConfiguration() {
-    }
+//    ProjectConfiguration getProjectConfiguration() {
+//    }
 
     public List<MonitoringDataSourceResult> get(List<Document> query) throws ValidationException {
 
