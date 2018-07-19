@@ -48,8 +48,8 @@ public class AliquotDeletionValidator {
   }
 
   private void aliquotInExamResult() {
-    String examResult = this.examUploader.checkIfThereInExamResultLot(this.code);
-    if (examResult != null) {
+    Boolean examResult = this.examUploader.checkIfThereInExamResultLot(this.code);
+    if (examResult) {
       this.aliquotDeletionValidatorResponse.setExamResult(Boolean.TRUE);
       this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
     }
