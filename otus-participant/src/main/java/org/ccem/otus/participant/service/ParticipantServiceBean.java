@@ -36,7 +36,7 @@ public class ParticipantServiceBean implements ParticipantService {
   public Participant create(Participant participant) throws ValidationException{
     Participant rn = participantDao.validateRecruitmentNumber(participant.getRecruitmentNumber());
     if(rn != null) {
-      String error = "RecruimentNumber ("+ rn.getRecruitmentNumber().toString() +") already exist";
+      String error = "RecruimentNumber {"+ rn.getRecruitmentNumber().toString() +"} already exist.";
       throw new ValidationException(new Throwable(error));
     }else {
       participantDao.persist(participant);
