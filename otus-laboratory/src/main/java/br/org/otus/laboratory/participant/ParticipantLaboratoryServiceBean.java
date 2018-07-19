@@ -108,7 +108,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.examLotDao, this.transportationLotDao, this.examUploader);
     validator.validate();
     try {
-      ParticipantLaboratory participantLaboratory = this.participantLaboratoryDao.findParticipantLaboratoryByAliquotCode(code);
+      ParticipantLaboratory participantLaboratory = this.participantLaboratoryDao.findParticipantLaboratory(code);
       outerloop: for (Tube tube : participantLaboratory.getTubes()) {
         for (Aliquot aliquot : tube.getAliquots()) {
           if (aliquot.getCode().equals(code)) {

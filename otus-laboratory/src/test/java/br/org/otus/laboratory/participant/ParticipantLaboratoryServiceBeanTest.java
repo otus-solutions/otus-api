@@ -117,16 +117,16 @@ public class ParticipantLaboratoryServiceBeanTest {
 
   @Test
   public void deleteAliquot_should_call_method_findParticipantLaboratoryByAliquotCode() throws ValidationException, DataNotFoundException {
-    Mockito.when(participantLaboratoryDao.findParticipantLaboratoryByAliquotCode(ALIQUOT_CODE)).thenReturn(participantLaboratory);
+    Mockito.when(participantLaboratoryDao.findParticipantLaboratory(ALIQUOT_CODE)).thenReturn(participantLaboratory);
 
     injectMocks.deleteAliquot(ALIQUOT_CODE);
 
-    Mockito.verify(participantLaboratoryDao, Mockito.times(1)).findParticipantLaboratoryByAliquotCode(ALIQUOT_CODE);
+    Mockito.verify(participantLaboratoryDao, Mockito.times(1)).findParticipantLaboratory(ALIQUOT_CODE);
   }
 
   @Test
   public void deleteAliquot_should_call_method_updateLaboratoryData() throws ValidationException, DataNotFoundException {
-    Mockito.when(participantLaboratoryDao.findParticipantLaboratoryByAliquotCode(ALIQUOT_CODE)).thenReturn(participantLaboratory);
+    Mockito.when(participantLaboratoryDao.findParticipantLaboratory(ALIQUOT_CODE)).thenReturn(participantLaboratory);
 
     injectMocks.deleteAliquot(ALIQUOT_CODE);
 
@@ -135,7 +135,7 @@ public class ParticipantLaboratoryServiceBeanTest {
 
   @Test
   public void deleteAliquot_should_return_exception_when_participant_laboratory_not_found() throws ValidationException, DataNotFoundException {
-    Mockito.when(participantLaboratoryDao.findParticipantLaboratoryByAliquotCode(ALIQUOT_CODE)).thenReturn(null);
+    Mockito.when(participantLaboratoryDao.findParticipantLaboratory(ALIQUOT_CODE)).thenReturn(null);
 
     try {
       injectMocks.deleteAliquot(ALIQUOT_CODE);

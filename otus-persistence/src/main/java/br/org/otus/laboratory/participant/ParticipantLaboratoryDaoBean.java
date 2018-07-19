@@ -130,7 +130,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 		return tube;
 	}
 
-	public ParticipantLaboratory findParticipantLaboratoryByAliquotCode(String aliquotCode) throws DataNotFoundException {
+	public ParticipantLaboratory findParticipantLaboratory(String aliquotCode) throws DataNotFoundException {
 		Document first = collection.find(eq(TUBES_ALIQUOTES_CODE, aliquotCode)).first();
 		if (first == null) {
 			throw new DataNotFoundException();

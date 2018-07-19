@@ -21,7 +21,7 @@ public interface ParticipantLaboratoryDao {
 
   Tube updateTubeCollectionData(long rn, Tube tube) throws DataNotFoundException;
 
-  ParticipantLaboratory findParticipantLaboratoryByAliquotCode(String aliquotCode) throws DataNotFoundException;
+  ParticipantLaboratory findParticipantLaboratory(String aliquotCode) throws DataNotFoundException;
 
   ArrayList<Aliquot> getFullAliquotsList();
 

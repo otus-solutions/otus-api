@@ -11,6 +11,7 @@ import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.Validation;
 
 public class ParticipantLaboratoryFacade {
 
@@ -73,10 +74,9 @@ public class ParticipantLaboratoryFacade {
     try {
       service.deleteAliquot(code);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     } catch (ValidationException e) {
-      e.printStackTrace();
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     }
   }
 
