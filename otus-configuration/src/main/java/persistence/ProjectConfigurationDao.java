@@ -1,10 +1,11 @@
 package persistence;
 
 import model.ProjectConfiguration;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface ProjectConfigurationDao {
 
-    void enableNewParticipants(boolean permission);
+    void enableParticipantRegistration(boolean permission) throws DataNotFoundException;
 
-    ProjectConfiguration getProjectConfiguration();
+    ProjectConfiguration getProjectConfiguration() throws DataNotFoundException;
 }

@@ -17,7 +17,8 @@ public class ProjectConfigurationResource {
 //	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProjectConfiguration() {
-		return new Response().buildSuccess(projectConfigurationFacade.getProjectConfiguration()).toSurveyJson();
+		//TODO 19/07/18: review toJson
+		return new Response().buildSuccess(projectConfigurationFacade.getProjectConfiguration()).toJson();
 	}
 
 	@PUT
