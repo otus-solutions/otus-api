@@ -8,9 +8,9 @@ import org.ccem.otus.persistence.FieldCenterDao;
 
 public class FieldCenterValidator {
   private static final String ATTRIBUTE_ALREADY_EXISTS_MESSAGE = "FieldCenter Attribute already exists.";
-  private static final String acronym = "acronym";
-  private static final String code = "code";
-  private static final boolean state = false;
+  private static final String ACRONYM_VALUE = "acronym";
+  private static final String CODE_VALUE = "code";
+  private static final boolean STATE = false;
   
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -21,22 +21,22 @@ public class FieldCenterValidator {
     this.fieldCenterValidationResult = new FieldCenterValidationResult();
   }
 
-  public void validate(FieldCenter fielCenter) throws ValidationException {
-    _checkForFieldCenterExistent(fielCenter);
+  public void validate(FieldCenter fieldCenter) throws ValidationException {
+    _checkForFieldCenterExistent(fieldCenter);
     if (!fieldCenterValidationResult.isValid()) {
       throw new ValidationException(new Throwable(ATTRIBUTE_ALREADY_EXISTS_MESSAGE),
           fieldCenterValidationResult);
     }
   }
 
-  private void _checkForFieldCenterExistent(FieldCenter fielCenter) {
-    if (fieldCenterDao.acronymInUse(fielCenter.getAcronym())) {
-      fieldCenterValidationResult.pushConflict(acronym);
-      fieldCenterValidationResult.setValid(state);
+  private void _checkForFieldCenterExistent(FieldCenter fieldCenter) {
+    if (fieldCenterDao.acronymInUse(fieldCenter.getAcronym())) {
+      fieldCenterValidationResult.pushConflict(ACRONYM_VALUE);
+      fieldCenterValidationResult.setValid(STATE);
     }
-    if (fieldCenterDao.codeInUse(fielCenter.getCode())) {
-      fieldCenterValidationResult.pushConflict(code);
-      fieldCenterValidationResult.setValid(state);
+    if (fieldCenterDao.codeInUse(fieldCenter.getCode())) {
+      fieldCenterValidationResult.pushConflict(CODE_VALUE);
+      fieldCenterValidationResult.setValid(STATE);
     }
   }
 }
