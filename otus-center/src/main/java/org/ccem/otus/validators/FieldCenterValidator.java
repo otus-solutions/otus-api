@@ -22,14 +22,14 @@ public class FieldCenterValidator {
   }
 
   public void validate(FieldCenter fieldCenter) throws ValidationException {
-    _checkForFieldCenterExistent(fieldCenter);
+    checkForFieldCenterExistent(fieldCenter);
     if (!fieldCenterValidationResult.isValid()) {
       throw new ValidationException(new Throwable(ATTRIBUTE_ALREADY_EXISTS_MESSAGE),
           fieldCenterValidationResult);
     }
   }
 
-  private void _checkForFieldCenterExistent(FieldCenter fieldCenter) {
+  private void checkForFieldCenterExistent(FieldCenter fieldCenter) {
     if (fieldCenterDao.acronymInUse(fieldCenter.getAcronym())) {
       fieldCenterValidationResult.pushConflict(ACRONYM_VALUE);
       fieldCenterValidationResult.setValid(STATE);
