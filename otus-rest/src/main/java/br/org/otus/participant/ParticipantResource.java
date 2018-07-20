@@ -1,7 +1,5 @@
 package br.org.otus.participant;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -17,8 +15,6 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
-
-import com.google.gson.GsonBuilder;
 
 import br.org.otus.model.User;
 import br.org.otus.participant.api.ParticipantFacade;
@@ -60,8 +56,6 @@ public class ParticipantResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public String create(@Context HttpServletRequest request, String participantJson) throws DataNotFoundException, ValidationException {
-	  String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-      String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
       return new Response().buildSuccess(participantFacade.create(participantJson)).toCustomJson(Participant.getGsonBuilder());
     }
 

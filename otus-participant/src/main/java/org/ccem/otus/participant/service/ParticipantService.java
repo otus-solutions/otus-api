@@ -18,8 +18,6 @@ public interface ParticipantService {
 
   Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
 
-//  void createAll(Set<Participant> participants);
-
   void create(Set<Participant> participants);
 
 }
