@@ -41,7 +41,7 @@ public class FieldCenterValidatorTest {
   }
 
   @Test
-  public void unitTest_should_verify_internal_calls_of_method_validate_() throws Exception {
+  public void unitTest_should_verify_internal_calls_of_validateMethod_without_throwing_ValidationException() throws Exception {
     when(fieldCenterDao.acronymInUse(ACRONYM)).thenReturn(POSITIVE_ANSWER);
     when(fieldCenterDao.codeInUse(CODE)).thenReturn(POSITIVE_ANSWER);
 
@@ -57,7 +57,7 @@ public class FieldCenterValidatorTest {
   }
 
   @Test(expected = ValidationException.class)
-  public void method_validate() throws Exception {
+  public void method_validate_should_capture_ValidationException() throws Exception {
     when(fieldCenterValidationResult.isValid()).thenReturn(NEGATIVE_ANSWER);
     fieldCenterValidator.validate(fieldCenter);
   }

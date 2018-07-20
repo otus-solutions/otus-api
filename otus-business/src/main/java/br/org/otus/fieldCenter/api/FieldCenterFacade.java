@@ -1,18 +1,18 @@
 package br.org.otus.fieldCenter.api;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.service.FieldCenterService;
+import org.ccem.otus.validators.FieldCenterValidationResult;
 
-import javax.inject.Inject;
-import java.util.List;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
 public class FieldCenterFacade {
-  private static final String ATTRIBUTE_ALREADY_EXISTS_MESSAGE = "FieldCenter Attribute already exists.";
-
   @Inject
   private FieldCenterService fieldCenterService;
 
@@ -21,8 +21,7 @@ public class FieldCenterFacade {
       fieldCenterService.create(fieldCenter);
 
     } catch (ValidationException e) {
-      throw new HttpResponseException(
-          ResponseBuild.Security.Validation.build(ATTRIBUTE_ALREADY_EXISTS_MESSAGE, e.getData()));
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage(), e.getData()));
     }
   }
 

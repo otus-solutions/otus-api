@@ -39,32 +39,32 @@ public class FieldCenterFacadeTest {
   }
 
   @Test
-  public void method_create_should_evocate_fieldCenterServiceCreateMethod()
+  public void createMethod_should_evocate_create_of_fieldCenterService()
       throws AlreadyExistException, ValidationException {
     fieldCenterFacade.create(fieldCenter);
     verify(fieldCenterService , times(1)).create(fieldCenter);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void method_create_should_capture_ValidationException() throws AlreadyExistException, ValidationException {
+  public void createMethod_should_capture_ValidationException() throws ValidationException {
     doThrow(ValidationException.class).when(fieldCenterService).create(fieldCenter);
     fieldCenterFacade.create(fieldCenter);
   }
 
   @Test
-  public void method_list_should_evocate_fieldCenterServiceListMethod() {
+  public void listMethod_should_invoke_list_of_fieldCenterService() {
     fieldCenterFacade.list();
     verify(fieldCenterService, times(1)).list();
   }
 
   @Test
-  public void testUpdate() throws ValidationException {
+  public void updateMethod_should_invoke_update_of_fieldCenterService() throws ValidationException {
     fieldCenterFacade.update(fieldCenter);
     verify(fieldCenterService, times(1)).update(fieldCenter);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void method_update_should_capture_ValidationException() throws ValidationException {
+  public void updateMethod_should_capture_ValidationException() throws ValidationException {
     doThrow(ValidationException.class).when(fieldCenterService).update(fieldCenter);
     fieldCenterFacade.update(fieldCenter);
   }

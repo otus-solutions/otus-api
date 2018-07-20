@@ -7,7 +7,7 @@ import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.persistence.FieldCenterDao;
 
 public class FieldCenterValidator {
-  private static final String ATTRIBUTE_ALREADY_EXISTS_MESSAGE = "FieldCenter Attribute already exists.";
+  private static final String ATTRIBUTE_ALREADY_EXISTS_MESSAGE = "FieldCenter attributes already exists.";
   private static final String ACRONYM_VALUE = "acronym";
   private static final String CODE_VALUE = "code";
   private static final boolean STATE = false;

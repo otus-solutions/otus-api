@@ -3,28 +3,29 @@ package org.ccem.otus.validators;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ccem.otus.model.FieldCenter;
-
-import com.google.gson.Gson;
-
 public class FieldCenterValidationResult {
 
-  private boolean isValid = true;
-  private ArrayList<String> conflits = new ArrayList<>();
+  private Boolean isValid;
+  private List<String> conflicts;
 
-  public void pushConflict(String value) {
-    this.conflits.add(value);
+  public FieldCenterValidationResult() {
+    isValid = true;
+    conflicts = new ArrayList<>();
   }
 
-  public ArrayList<String> getValue() {
-    return conflits;
+  public void pushConflict(String fieldExistent) {
+    this.conflicts.add(fieldExistent);
   }
 
-  public void setValid(boolean valid) {
-    isValid = valid;
+  public List<String> getConflicts(){
+    return conflicts;
   }
 
-  public boolean isValid() {
+  public void setValid(Boolean isValid) {
+    this.isValid = isValid;
+  }
+
+  public Boolean isValid() {
     return isValid;
   }
 

@@ -28,16 +28,16 @@ public class FieldCenterValidationResultTest {
   }
 
   @Test
-  public void method_pushConflict_should_add_in_list() {
-    assertTrue(fieldCenterValidationResult.getValue().isEmpty());
+  public void pushConflictMethod_should_add_conflictElement_in_list() {
+    assertTrue(fieldCenterValidationResult.getConflicts().isEmpty());
     fieldCenterValidationResult.pushConflict(CONFLICT);
-    assertEquals(expectedListConflits, fieldCenterValidationResult.getValue());
+    assertEquals(expectedListConflits, fieldCenterValidationResult.getConflicts());
   }
 
   @Test
-  public void method_getValue_should_deliver_contentList() {
+  public void getConflictsMethod_should_deliver_contentList() {
     fieldCenterValidationResult.pushConflict(CONFLICT);
-    assertEquals(expectedListConflits, fieldCenterValidationResult.getValue());
+    assertEquals(expectedListConflits, fieldCenterValidationResult.getConflicts());
   }
 
   @Test
