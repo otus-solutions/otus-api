@@ -5,7 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface ProjectConfigurationService {
 
-    void enableNewParticipants(boolean allowance) throws DataNotFoundException;
+    void enableParticipantRegistration(boolean permission) throws DataNotFoundException;
 
     ProjectConfiguration getProjectConfiguration() throws DataNotFoundException;
 

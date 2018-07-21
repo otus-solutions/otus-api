@@ -14,13 +14,8 @@ public class ProjectConfigurationServiceBean implements ProjectConfigurationServ
     ProjectConfigurationDao projectConfigurationDao;
 
     @Override
-    public void enableNewParticipants(boolean allowance) throws DataNotFoundException {
-        try {
-            projectConfigurationDao.enableParticipantRegistration(allowance);
-        } catch (DataNotFoundException e) {
-            throw e; //TODO 19/07/18: test throws
-        }
-
+    public void enableParticipantRegistration(boolean permission) throws DataNotFoundException {
+        projectConfigurationDao.enableParticipantRegistration(permission);
     }
 
     @Override

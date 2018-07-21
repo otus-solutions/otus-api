@@ -2,6 +2,7 @@ package br.org.otus.configuration.project;
 
 import br.org.otus.project.configuration.api.ProjectConfigurationFacade;
 import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -14,7 +15,7 @@ public class ProjectConfigurationResource {
 	private ProjectConfigurationFacade projectConfigurationFacade;
 
 	@GET
-//	@Secured
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProjectConfiguration() {
 		//TODO 19/07/18: review toJson
@@ -22,11 +23,11 @@ public class ProjectConfigurationResource {
 	}
 
 	@PUT
-//	@Secured TODO: uncomment
+	@Secured
 	@Path("/participant/registration/{permission}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String allowNewParticipants(@PathParam("permission") boolean permission) {
-		projectConfigurationFacade.enableNewParticipants(permission);
+		projectConfigurationFacade.enableParticipantRegistration(permission);
 		return new Response().buildSuccess().toJson();
 	}
 
