@@ -41,15 +41,15 @@ public class ProjectConfigurationFacadeTest {
   @Test
   public void enableNewParticipantsMethod_should_invoke_enableNewParticipants_of_projectConfigurationService()
       throws DataNotFoundException {
-    projectConfigurationFacade.enableNewParticipants(PERMISSION);
-    verify(projectConfigurationService, times(1)).enableNewParticipants(PERMISSION);
+    projectConfigurationFacade.enableParticipantRegistration(PERMISSION);
+    verify(projectConfigurationService, times(1)).enableParticipantRegistration(PERMISSION);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableNewParticipantsMethod_should_capture_DataNotFoundException() throws DataNotFoundException {
     DataNotFoundException e = spy(new DataNotFoundException());
-    PowerMockito.doThrow(e).when(projectConfigurationService).enableNewParticipants(PERMISSION);
-    projectConfigurationFacade.enableNewParticipants(PERMISSION);
+    PowerMockito.doThrow(e).when(projectConfigurationService).enableParticipantRegistration(PERMISSION);
+    projectConfigurationFacade.enableParticipantRegistration(PERMISSION);
   }
 
 }

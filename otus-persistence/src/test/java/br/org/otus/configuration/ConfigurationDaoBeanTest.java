@@ -30,7 +30,7 @@ public class ConfigurationDaoBeanTest {
   public static String DEFAULT_OBJECT_TYPE = "Project Configuration";
 
   @InjectMocks
-  private ConfigurationDaoBean configurationDaoBean = PowerMockito.spy(new ConfigurationDaoBean());
+  private ProjectConfigurationDaoBean ProjectConfigurationDaoBean = PowerMockito.spy(new ProjectConfigurationDaoBean());
   @Mock
   private MongoCollection collection;
   @Mock
@@ -45,26 +45,26 @@ public class ConfigurationDaoBeanTest {
   public void enableParticipantRegistrationMethod_should_not_throw_an_exception() throws Exception {
     when(collection.updateOne(any(), any())).thenReturn(updateResult);
     when(updateResult.getMatchedCount()).thenReturn(RETURN_VALID);
-    configurationDaoBean.enableParticipantRegistration(PERMISSION);
+    ProjectConfigurationDaoBean.enableParticipantRegistration(PERMISSION);
   }
 
   @Test(expected = DataNotFoundException.class)
   public void enableParticipantRegistrationMethod_should_throw_an_exception() throws DataNotFoundException {
     when(collection.updateOne(any(), any())).thenReturn(updateResult);
     when(updateResult.getMatchedCount()).thenReturn(RETURN_INVALID);
-    configurationDaoBean.enableParticipantRegistration(PERMISSION);
+    ProjectConfigurationDaoBean.enableParticipantRegistration(PERMISSION);
   }
 
   @Test
   public void GetProjectConfigurationMethod_should_return_deserialize_projectConfiguration() throws Exception {
     when(collection.find(Mockito.any(Document.class))).thenReturn(findleInterable);
     when(findleInterable.first()).thenReturn(first);
-    assertTrue(ProjectConfiguration.class.isInstance(configurationDaoBean.getProjectConfiguration()));
+    assertTrue(ProjectConfiguration.class.isInstance(ProjectConfigurationDaoBean.getProjectConfiguration()));
   }
 
   @Test(expected = DataNotFoundException.class)
   public void GetProjectConfigurationMethod_should_throw_DataNotFoundException() throws DataNotFoundException {
     when(collection.find(Mockito.any(Document.class))).thenReturn(findleInterable);
-    configurationDaoBean.getProjectConfiguration();
+    ProjectConfigurationDaoBean.getProjectConfiguration();
   }
 }

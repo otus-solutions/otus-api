@@ -15,23 +15,16 @@ import persistence.ProjectConfigurationDao;
 
 @RunWith(PowerMockRunner.class)
 public class ProjectConfigurationServiceBeanTest {
-  private static final boolean ALLOWANCE = true;
+  private static final boolean PERMISSION = true;
   @InjectMocks
   private ProjectConfigurationServiceBean projectConfigurationServiceBean;
   @Mock
   private ProjectConfigurationDao projectConfigurationDao;
 
   @Test
-  public void enableNewParticipantsMethod_should() throws DataNotFoundException {
-    projectConfigurationServiceBean.enableNewParticipants(ALLOWANCE);
-    Mockito.verify(projectConfigurationDao, Mockito.times(1)).enableParticipantRegistration(ALLOWANCE);
-  }
-
-  @Test(expected = DataNotFoundException.class)
-  public void getProjectConfigurationMethod_should_capture_DataNotFoundException() throws DataNotFoundException {
-    DataNotFoundException e = spy(new DataNotFoundException());
-    PowerMockito.doThrow(e).when(projectConfigurationDao).enableParticipantRegistration(ALLOWANCE);
-    projectConfigurationServiceBean.enableNewParticipants(ALLOWANCE);
+  public void enableParticipantsMethod_should() throws DataNotFoundException {
+    projectConfigurationServiceBean.enableParticipantRegistration(PERMISSION);
+    Mockito.verify(projectConfigurationDao, Mockito.times(1)).enableParticipantRegistration(PERMISSION);
   }
 
   @Test
