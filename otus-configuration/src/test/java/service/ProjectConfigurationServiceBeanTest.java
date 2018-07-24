@@ -1,14 +1,11 @@
 package service;
 
-import static org.powermock.api.mockito.PowerMockito.spy;
-
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import persistence.ProjectConfigurationDao;
@@ -32,5 +29,4 @@ public class ProjectConfigurationServiceBeanTest {
     projectConfigurationServiceBean.getProjectConfiguration();
     Mockito.verify(projectConfigurationDao, Mockito.times(1)).getProjectConfiguration();
   }
-
 }

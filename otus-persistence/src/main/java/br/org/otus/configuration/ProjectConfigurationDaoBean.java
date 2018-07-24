@@ -1,13 +1,15 @@
 package br.org.otus.configuration;
 
-import br.org.mongodb.MongoGenericDao;
-import com.mongodb.client.result.UpdateResult;
-import model.ProjectConfiguration;
+import javax.ejb.Stateless;
+
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import persistence.ProjectConfigurationDao;
 
-import javax.ejb.Stateless;
+import com.mongodb.client.result.UpdateResult;
+
+import br.org.mongodb.MongoGenericDao;
+import model.ProjectConfiguration;
+import persistence.ProjectConfigurationDao;
 
 @Stateless
 public class ProjectConfigurationDaoBean extends MongoGenericDao<Document> implements ProjectConfigurationDao {
@@ -21,9 +23,7 @@ public class ProjectConfigurationDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public void enableParticipantRegistration(boolean permission) throws DataNotFoundException {
-    Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE); // todo: STATIC ACCESS TO
-                                                                                          // CLASS OT
-
+    Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE);
     Document update = new Document("$set", new Document("participantRegistration", permission));
 
     UpdateResult updateResult = collection.updateOne(query, update);
@@ -35,9 +35,7 @@ public class ProjectConfigurationDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public ProjectConfiguration getProjectConfiguration() throws DataNotFoundException {
-    Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE); // todo: STATIC ACCESS TO
-                                                                                          // CLASS OT
-
+    Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE);
     Document first = collection.find(query).first();
 
     if (first == null) {

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.spy;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,7 +21,7 @@ public class ProjectConfigurationFacadeTest {
   @InjectMocks
   private ProjectConfigurationFacade projectConfigurationFacade;
   @Mock
-  private ProjectConfigurationService projectConfigurationService; 
+  private ProjectConfigurationService projectConfigurationService;
 
   @Test
   public void getProjectConfigurationMethod_should_invoke_getProjectConfiguration_of_projectConfigurationService()

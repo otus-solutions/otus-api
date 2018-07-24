@@ -22,7 +22,6 @@ import model.ProjectConfiguration;
 
 @RunWith(PowerMockRunner.class)
 public class ConfigurationDaoBeanTest {
-  private static String CONFIGURATION_JSON = "{\"objectType\": \"Project Configuration\", \"participantRegistration\": false\"}";
   private static final boolean PERMISSION = true;
   private static final Long RETURN_VALID = 1L;
   private static final Long RETURN_INVALID = 0L;
@@ -35,8 +34,6 @@ public class ConfigurationDaoBeanTest {
   private MongoCollection collection;
   @Mock
   private UpdateResult updateResult;
-  @Mock
-  private Document query;
   @Mock
   private FindIterable findleInterable;
   private Document first = PowerMockito.spy(new Document(OBJECT_TYPE, DEFAULT_OBJECT_TYPE));

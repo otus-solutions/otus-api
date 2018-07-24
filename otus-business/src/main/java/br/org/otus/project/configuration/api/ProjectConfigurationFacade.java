@@ -1,18 +1,18 @@
 package br.org.otus.project.configuration.api;
 
+import javax.inject.Inject;
+
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import model.ProjectConfiguration;
 import service.ProjectConfigurationService;
-
-import javax.inject.Inject;
 
 public class ProjectConfigurationFacade {
 
     @Inject
     private ProjectConfigurationService projectConfigurationService;
 
-    public ProjectConfiguration getProjectConfiguration() {
+  public ProjectConfiguration getProjectConfiguration() {
         try {
             return projectConfigurationService.getProjectConfiguration();
         } catch (Exception e) {
