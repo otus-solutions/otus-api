@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 
 public class ProjectConfiguration {
 
-    public static String DEFAULT_OBJECT_TYPE= "Project Configuration";
+    public static String DEFAULT_OBJECT_TYPE= "ProjectConfiguration";
 
     public String objectType;
     private boolean participantRegistration;

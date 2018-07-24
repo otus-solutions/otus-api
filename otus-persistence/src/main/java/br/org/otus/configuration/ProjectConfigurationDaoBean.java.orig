@@ -1,26 +1,31 @@
 package br.org.otus.configuration;
 
 import br.org.mongodb.MongoGenericDao;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.result.UpdateResult;
 import model.ProjectConfiguration;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.persistence.MonitoringDao;
 import persistence.ProjectConfigurationDao;
 
 import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.List;
+//TODO 20/07/18: rename?
 
 @Stateless
+<<<<<<< HEAD:otus-persistence/src/main/java/br/org/otus/configuration/ConfigurationDaoBean.java
 public class ConfigurationDaoBean extends MongoGenericDao<Document> implements ProjectConfigurationDao {
   public static final String COLLECTION_NAME = "project_configuration";
   public static final String OBJECT_TYPE = "objectType";
   public static final String PROJECT_CONFIGURATION_NOT_FOUND = "Project Configuration not found";
+=======
+public class ProjectConfigurationDaoBean extends MongoGenericDao<Document> implements ProjectConfigurationDao {
+    public static final String COLLECTION_NAME = "project_configuration";
+    public static final String OBJECT_TYPE = "objectType";
+    public static final String PROJECT_CONFIGURATION_NOT_FOUND= "Project Configuration not found";
+
+    public ProjectConfigurationDaoBean() {
+        super(COLLECTION_NAME, Document.class);
+    }
+>>>>>>> b3a5a0473f3fb443e0dab36ce8a452828e79657c:otus-persistence/src/main/java/br/org/otus/configuration/ProjectConfigurationDaoBean.java
 
   public ConfigurationDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -44,10 +49,18 @@ public class ConfigurationDaoBean extends MongoGenericDao<Document> implements P
   public ProjectConfiguration getProjectConfiguration() throws DataNotFoundException {
     Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE);
 
+<<<<<<< HEAD:otus-persistence/src/main/java/br/org/otus/configuration/ConfigurationDaoBean.java
     Document first = collection.find(query).first();
 
     if (first == null) {
       throw new DataNotFoundException(PROJECT_CONFIGURATION_NOT_FOUND);
+=======
+        if (first == null) {
+            throw new DataNotFoundException(PROJECT_CONFIGURATION_NOT_FOUND);
+        }
+
+        return ProjectConfiguration.deserialize(first.toJson());
+>>>>>>> b3a5a0473f3fb443e0dab36ce8a452828e79657c:otus-persistence/src/main/java/br/org/otus/configuration/ProjectConfigurationDaoBean.java
     }
 
     return ProjectConfiguration.deserialize(first.toJson());

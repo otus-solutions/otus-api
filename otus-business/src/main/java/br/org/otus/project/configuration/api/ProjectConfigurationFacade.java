@@ -1,9 +1,9 @@
 package br.org.otus.project.configuration.api;
 
-import model.ProjectConfiguration;
-import service.ProjectConfigurationService;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import model.ProjectConfiguration;
+import service.ProjectConfigurationService;
 
 import javax.inject.Inject;
 
@@ -20,9 +20,9 @@ public class ProjectConfigurationFacade {
         }
     }
 
-    public void enableNewParticipants(boolean permission) {
+    public void enableParticipantRegistration(boolean permission) {
         try {
-            projectConfigurationService.enableNewParticipants(permission);
+            projectConfigurationService.enableParticipantRegistration(permission);
         } catch (Exception e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
