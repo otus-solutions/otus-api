@@ -73,6 +73,10 @@
 							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-report</artifactId>
 						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-configuration</artifactId>
+						</ejbModule>
 					</modules>
 					<archive>
 						<manifest>
@@ -187,6 +191,12 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-report</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-configuration</artifactId>
 			<version>${project.parent.version}</version>
 			<type>ejb</type>
 		</dependency>
