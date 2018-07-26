@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.exam.businnes;
+package br.org.otus.laboratory.project.exam.examLot.businnes;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,9 +12,9 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.exam.ExamLot;
-import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
-import br.org.otus.laboratory.project.exam.validators.ExamLotValidator;
+import br.org.otus.laboratory.project.exam.examLot.ExamLot;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examLot.validators.ExamLotValidator;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 @Stateless

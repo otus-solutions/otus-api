@@ -1,4 +1,4 @@
-package br.org.otus.laboratory.project.exam;
+package br.org.otus.laboratory.project.exam.examLot;
 
 import java.time.LocalDateTime;
 import java.util.List;

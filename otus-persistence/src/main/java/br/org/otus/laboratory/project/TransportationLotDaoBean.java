@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import com.mongodb.Block;
@@ -94,10 +93,13 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   }
 
   @Override
-  public void checkIfTransported(String aliquotCode) throws ValidationException {
-    Document result = collection.find(eq("aliquotList.code", aliquotCode)).first();
-    if (result != null) {
-      throw new ValidationException(new Throwable("There are aliquots in another lot."), aliquotCode);
+  public String checkIfThereInTransport(String aliquotCode) {
+    Document document = collection.find(eq("aliquotList.code", aliquotCode)).first();
+    if (document != null) {
+      TransportationLot lot = TransportationLot.deserialize(document.toJson());
+      return lot.getCode();
+    } else {
+      return null;
     }
   }
 
