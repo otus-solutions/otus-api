@@ -18,4 +18,6 @@ public interface ParticipantDao {
 
   Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
 
+  Participant validateRecruitmentNumber(Long rn);
+
 }

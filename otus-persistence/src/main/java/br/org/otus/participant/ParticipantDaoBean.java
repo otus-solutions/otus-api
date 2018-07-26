@@ -43,7 +43,13 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
 
   @Override
   public void persist(Participant participant) {
-    this.collection.insertOne(participant);
+    this.collection.insertOne(participant); 
+  }
+  
+  @Override
+  public Participant validateRecruitmentNumber(Long rn) {
+    Participant result = this.collection.find(eq("recruitmentNumber", rn)).first();
+    return result;
   }
 
   @Override
