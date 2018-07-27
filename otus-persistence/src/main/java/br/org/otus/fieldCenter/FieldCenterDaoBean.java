@@ -23,13 +23,13 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
 	}
 
 	/**
-	 * Verify if exist acronym
+	 * Verify if exist code
 	 *
-	 * @param acronym
+	 * @param code
 	 * @return
 	 */
-	public Boolean acronymInUse(String acronym) {
-		if (fetchByAcronym(acronym) != null) {
+	public Boolean codeInUse(Integer code) {
+		if (fetchByCode(code) != null) {
 			return Boolean.TRUE;
 		} else {
 			return Boolean.FALSE;
@@ -37,13 +37,13 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
 	}
 
 	/**
-	 * Return field center by acronym or null
+	 * Return field center by code or null
 	 *
-	 * @param acronym
+	 * @param code
 	 * @return
 	 */
-	public FieldCenter fetchByAcronym(String acronym) {
-		Document document = collection.find(eq("acronym", acronym)).first();
+	public FieldCenter fetchByCode(Integer code) {
+		Document document = collection.find(eq("code", code)).first();
 		if (document != null) {
 			return FieldCenter.fromJson(document.toJson());
 		} else {
@@ -51,6 +51,37 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
 		}
 	}
 
+	/**
+     * Verify if exist acronym
+     *
+     * @param acronym
+     * @return
+     */
+    public Boolean acronymInUse(String acronym) {
+        if (fetchByAcronym(acronym) != null) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Return field center by acronym or null
+     *
+     * @param acronym
+     * @return
+     */
+    public FieldCenter fetchByAcronym(String acronym) {
+        Document document = collection.find(eq("acronym", acronym)).first();
+        if (document != null) {
+            return FieldCenter.fromJson(document.toJson());
+        } else {
+            return null;
+        }
+    }
+	
+	
+	
 	/**
 	 * Method responsible for performing the update of a field center. Ignore
 	 * possible to update the value of the acronym field because it is an
