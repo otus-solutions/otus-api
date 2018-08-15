@@ -3,6 +3,7 @@ package br.org.otus.security.api;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.AuthenticationDto;
+import br.org.otus.security.dtos.PasswordResetDto;
 import br.org.otus.security.dtos.ProjectAuthenticationDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.security.services.SecurityService;
@@ -36,7 +37,22 @@ public class SecurityFacade {
         }
     }
 
-    public void invalidate(String token) {
+  public String resetPassword(String email, String requestAddress) {
+    try {
+      PasswordResetDto passwordResetDto = new PasswordResetDto(email);
+
+      passwordResetDto.setRequestAddress(requestAddress);
+      securityService.requestResetPassword(passwordResetDto);
+      return "token";
+
+
+    } catch (AuthenticationException | TokenException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
+    }
+  }
+
+
+  public void invalidate(String token) {
         securityService.invalidate(token);
     }
 

@@ -28,5 +28,5 @@ public interface ManagementUserService {
 
     Boolean isUnique(String emailToVerify);
 
-    void requestPasswordReset(String email) throws EncryptedException, DataNotFoundException, EmailNotificationException;
+    void requestPasswordReset(String email, String token) throws EncryptedException, DataNotFoundException, EmailNotificationException;
 }

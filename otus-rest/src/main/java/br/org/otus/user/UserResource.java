@@ -3,11 +3,13 @@ package br.org.otus.user;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -90,9 +92,10 @@ public class UserResource {
 //  @Secured todo: uncommet
   @Path("/reset-password")
   @Produces(MediaType.TEXT_PLAIN)
-  public String getToken(String email) {
+  public String getToken(String email, @Context HttpServletRequest request) {
     Response response = new Response();
-    userFacade.requestPasswordReset(email);
+    String requestAddress = request.getRemoteAddr().toString();
+    userFacade.requestPasswordReset(email, requestAddress);
     return response.buildSuccess(email).toJson();
   }
 }

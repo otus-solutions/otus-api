@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
+import br.org.otus.security.dtos.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
@@ -38,7 +39,7 @@ public class SecurityServiceBean implements SecurityService {
                 if (user.isEnable()) {
                     UserSecurityAuthorizationDto userSecurityAuthorizationDto = new UserSecurityAuthorizationDto();
                     Equalizer.equalize(user, userSecurityAuthorizationDto);
-                   
+
                     if(user.getFieldCenter() != null) {
                     	userSecurityAuthorizationDto.getFieldCenter().acronym = user.getFieldCenter().getAcronym();
                     }
@@ -58,7 +59,19 @@ public class SecurityServiceBean implements SecurityService {
         }
     }
 
-    @Override
+  @Override
+  public void requestResetPassword(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
+    try {
+      User user = userDao.fetchByEmail(authenticationData.getUserEmail());
+
+      String token = initializeToken(authenticationData);
+
+    } catch (DataNotFoundException e) {
+      throw new AuthenticationException();
+    }
+  }
+
+  @Override
     public String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
         try {
             SystemConfig systemConfig = systemConfigDao.fetchSystemConfig();
