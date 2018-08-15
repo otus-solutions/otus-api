@@ -161,4 +161,12 @@ public class UserFacade {
 		}
 	}
 
+	public void requestPasswordReset (String email){
+    try {
+      managementUserService.requestPasswordReset(email);
+    } catch (EncryptedException | DataNotFoundException | EmailNotificationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
+
 }

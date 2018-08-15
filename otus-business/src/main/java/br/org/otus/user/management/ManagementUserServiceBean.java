@@ -1,11 +1,13 @@
 package br.org.otus.user.management;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.email.user.management.DisableUserNotificationEmail;
+import br.org.otus.email.user.management.EnableUserNotificationEmail;
+import br.org.otus.email.user.management.PasswordResetEmail;
+import br.org.otus.model.User;
+import br.org.otus.user.UserDao;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -13,13 +15,10 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.persistence.FieldCenterDao;
 
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.management.DisableUserNotificationEmail;
-import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.user.UserDao;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.tutty.Equalizer;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class ManagementUserServiceBean implements ManagementUserService {
@@ -53,6 +52,15 @@ public class ManagementUserServiceBean implements ManagementUserService {
 			throw new ValidationException();
 		}
 	}
+
+
+  @Override
+  public void requestPasswordReset(String email) throws EncryptedException, DataNotFoundException, EmailNotificationException {
+    PasswordResetEmail passwordResetEmail = new PasswordResetEmail();
+    passwordResetEmail.defineRecipient(email);
+    passwordResetEmail.setFrom(emailNotifierService.getSender());
+    emailNotifierService.sendEmail(passwordResetEmail);
+  }
 
 	@Override
 	public void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
@@ -116,7 +124,8 @@ public class ManagementUserServiceBean implements ManagementUserService {
 		}
 	}
 
-	@Override
+
+  @Override
 	public List<ManagementUserDto> list() {
 		List<ManagementUserDto> administrationUsersDtos = new ArrayList<>();
 		List<User> users = userDao.fetchAll();

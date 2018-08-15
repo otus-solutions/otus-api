@@ -23,66 +23,76 @@ import br.org.otus.user.dto.SignupDataDto;
 @Path("/user")
 public class UserResource {
 
-	@Inject
-	private UserFacade userFacade;
-	
-	@POST
-	@Path("/signup")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String signup(SignupDataDto signupDataDto) {
-		try {
-			signupDataDto.encrypt();
-			Response response = new Response();
-			userFacade.create(signupDataDto);
-			return response.buildSuccess().toJson();
+  @Inject
+  private UserFacade userFacade;
 
-		} catch (EncryptedException e) {
-			throw new HttpResponseException(Validation.build());
-		}
-	}
+  @POST
+  @Path("/signup")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String signup(SignupDataDto signupDataDto) {
+    try {
+      signupDataDto.encrypt();
+      Response response = new Response();
+      userFacade.create(signupDataDto);
+      return response.buildSuccess().toJson();
 
-	@GET
-	@Secured
-	@Path("/list")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String list() {
-		Response response = new Response();
-		List<ManagementUserDto> managementUserDtos = userFacade.list();
-		return response.buildSuccess(managementUserDtos).toJson();
-	}
+    } catch (EncryptedException e) {
+      throw new HttpResponseException(Validation.build());
+    }
+  }
 
-	@POST
-	@Secured
-	@Path("/disable")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String disableUsers(ManagementUserDto managementUserDto) {
-		Response response = new Response();
-		userFacade.disable(managementUserDto);
-		return response.buildSuccess().toJson();
-	}
-	
-	@POST
-	@Path("/field-center")
-	@Secured
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String updateFieldCenter(ManagementUserDto managementUserDto) {
-		Response response = new Response();
-		userFacade.updateFieldCenter(managementUserDto);
-		return response.buildSuccess().toJson();
-	}
+  @GET
+  @Secured
+  @Path("/list")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String list() {
+    Response response = new Response();
+    List<ManagementUserDto> managementUserDtos = userFacade.list();
+    return response.buildSuccess(managementUserDtos).toJson();
+  }
 
-	@POST
-	@Secured
-	@Path("/enable")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String enableUsers(ManagementUserDto managementUserDto) {
-		Response response = new Response();
-		userFacade.enable(managementUserDto);
-		return response.buildSuccess().toJson();
-	}
+  @POST
+  @Secured
+  @Path("/disable")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String disableUsers(ManagementUserDto managementUserDto) {
+    Response response = new Response();
+    userFacade.disable(managementUserDto);
+    return response.buildSuccess().toJson();
+  }
+
+  @POST
+  @Path("/field-center")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String updateFieldCenter(ManagementUserDto managementUserDto) {
+    Response response = new Response();
+    userFacade.updateFieldCenter(managementUserDto);
+    return response.buildSuccess().toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/enable")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String enableUsers(ManagementUserDto managementUserDto) {
+    Response response = new Response();
+    userFacade.enable(managementUserDto);
+    return response.buildSuccess().toJson();
+  }
+
+  @POST
+//  @Secured todo: uncommet
+  @Path("/reset-password")
+  @Produces(MediaType.TEXT_PLAIN)
+  public String getToken(String email) {
+    Response response = new Response();
+    userFacade.requestPasswordReset(email);
+    return response.buildSuccess(email).toJson();
+  }
 }

@@ -27,4 +27,6 @@ public interface ManagementUserService {
     void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 
     Boolean isUnique(String emailToVerify);
+
+    void requestPasswordReset(String email) throws EncryptedException, DataNotFoundException, EmailNotificationException;
 }
