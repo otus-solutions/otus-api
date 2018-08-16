@@ -167,7 +167,7 @@ public class UserFacade {
 
   public void requestPasswordReset(String email, String requestAddress) {
 
-    String token = securityFacade.resetPassword(email, requestAddress);
+    String token = securityFacade.requestPasswordReset(email, requestAddress);
 
     try {
       managementUserService.requestPasswordReset(email, token);

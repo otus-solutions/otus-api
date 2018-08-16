@@ -1,14 +1,5 @@
 package br.org.otus.security.services;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
-
-import br.org.otus.security.dtos.PasswordResetDto;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
-import org.ccem.otus.exceptions.webservice.security.TokenException;
-
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
@@ -17,6 +8,13 @@ import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.user.UserDao;
 import br.org.tutty.Equalizer;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
@@ -60,15 +58,16 @@ public class SecurityServiceBean implements SecurityService {
     }
 
   @Override
-  public void requestResetPassword(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
-    try {
-      User user = userDao.fetchByEmail(authenticationData.getUserEmail());
+  public String getPasswordResetToken(AuthenticationData authenticationData) throws TokenException, AuthenticationException, DataNotFoundException {
+      userDao.fetchByEmail(authenticationData.getUserEmail());
 
+      //TODO 16/08/18: uncomment
+      //aqui ele já cadastra o token na session
+      //usaremos a mesma?
       String token = initializeToken(authenticationData);
 
-    } catch (DataNotFoundException e) {
-      throw new AuthenticationException();
-    }
+      return token;
+
   }
 
   @Override

@@ -7,6 +7,7 @@ import br.org.otus.security.dtos.PasswordResetDto;
 import br.org.otus.security.dtos.ProjectAuthenticationDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.security.services.SecurityService;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 
@@ -37,16 +38,14 @@ public class SecurityFacade {
         }
     }
 
-  public String resetPassword(String email, String requestAddress) {
+  public String requestPasswordReset(String email, String requestAddress) {
     try {
       PasswordResetDto passwordResetDto = new PasswordResetDto(email);
-
       passwordResetDto.setRequestAddress(requestAddress);
-      securityService.requestResetPassword(passwordResetDto);
-      return "token";
 
+      return securityService.getPasswordResetToken(passwordResetDto);
 
-    } catch (AuthenticationException | TokenException e) {
+    } catch (AuthenticationException | TokenException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
     }
   }
