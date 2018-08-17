@@ -165,12 +165,12 @@ public class UserFacade {
     }
   }
 
-  public void requestPasswordReset(String email, String requestAddress) {
+  public void requestPasswordReset(String email, String requestAddress, String hostPath) {
 
 //    String token = securityFacade.requestPasswordReset(email, requestAddress);
 
     try {
-      managementUserService.requestPasswordReset(email, "token");
+      managementUserService.requestPasswordReset(email, requestAddress, hostPath);
     } catch (EncryptedException | DataNotFoundException | EmailNotificationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }

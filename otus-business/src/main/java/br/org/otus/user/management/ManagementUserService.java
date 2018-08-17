@@ -10,23 +10,26 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import java.util.List;
 
 public interface ManagementUserService {
-    List<ManagementUserDto> list();
+  List<ManagementUserDto> list();
 
-    User fetchByEmail(String email) throws DataNotFoundException;
+  User fetchByEmail(String email) throws DataNotFoundException;
 
-    void enable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
+  void enable(ManagementUserDto managementUserDto)
+      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
-    void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
+  void disable(ManagementUserDto managementUserDto)
+      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
-    void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
+  void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 
-    void disableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
+  void disableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 
-    void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException;
+  void updateFieldCenter(ManagementUserDto managementUserDto) throws DataNotFoundException;
 
-    void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
+  void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 
-    Boolean isUnique(String emailToVerify);
+  Boolean isUnique(String emailToVerify);
 
-    void requestPasswordReset(String email, String token) throws EncryptedException, DataNotFoundException, EmailNotificationException;
+  void requestPasswordReset(String email, String token, String hostPath)
+      throws EncryptedException, DataNotFoundException, EmailNotificationException;
 }

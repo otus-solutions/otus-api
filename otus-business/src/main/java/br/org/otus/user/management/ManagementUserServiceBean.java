@@ -56,10 +56,10 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
 
   @Override
-  public void requestPasswordReset(String email, String token) throws EncryptedException, DataNotFoundException, EmailNotificationException {
-
+  public void requestPasswordReset(String email, String token, String hostPath) throws EncryptedException, DataNotFoundException, EmailNotificationException {
+    token = "123-456-789";
     //TODO 15/08/18: send email
-    PasswordResetEmail passwordResetEmail = new PasswordResetEmail();
+    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(token, hostPath);
     passwordResetEmail.defineRecipient(email);
     passwordResetEmail.setFrom(emailNotifierService.getSender());
     emailNotifierService.sendEmail(passwordResetEmail);
