@@ -183,7 +183,6 @@ public class UserFacade {
   }
 
   public void updateUserPassword(PasswordResetDto passwordResetDto) {
-//    managementUserService.updateUserPassword();
     String requestEmail = securityFacade.getRequestEmail(passwordResetDto.getToken());
     passwordResetDto.setEmail(requestEmail);
     managementUserService.updateUserPassword(passwordResetDto);
