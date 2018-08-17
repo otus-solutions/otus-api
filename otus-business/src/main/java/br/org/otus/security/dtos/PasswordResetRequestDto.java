@@ -1,10 +1,8 @@
 package br.org.otus.security.dtos;
 
-import br.org.otus.security.EncryptorResources;
 import com.google.gson.GsonBuilder;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
-import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
   private static final String MODE = "password-reset";

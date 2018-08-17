@@ -5,9 +5,11 @@ import br.org.otus.email.user.management.DisableUserNotificationEmail;
 import br.org.otus.email.user.management.EnableUserNotificationEmail;
 import br.org.otus.email.user.management.PasswordResetEmail;
 import br.org.otus.model.User;
+import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.user.UserDao;
 import br.org.otus.user.dto.ManagementUserDto;
+import br.org.otus.user.dto.PasswordResetDto;
 import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -32,6 +34,9 @@ public class ManagementUserServiceBean implements ManagementUserService {
   @Inject
   private EmailNotifierService emailNotifierService;
 
+  @Inject
+  private SecurityFacade securityFacade;
+
 
   @Override
   public User fetchByEmail(String email) throws DataNotFoundException {
@@ -53,15 +58,6 @@ public class ManagementUserServiceBean implements ManagementUserService {
     } else {
       throw new ValidationException();
     }
-  }
-
-
-  @Override
-  public void requestPasswordReset(PasswordResetRequestDto requestData) throws EncryptedException, DataNotFoundException, EmailNotificationException {
-    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(), requestData.getRedirectUrl());
-    passwordResetEmail.defineRecipient(requestData.getEmail());
-    passwordResetEmail.setFrom(emailNotifierService.getSender());
-    emailNotifierService.sendEmail(passwordResetEmail);
   }
 
   @Override
@@ -156,4 +152,21 @@ public class ManagementUserServiceBean implements ManagementUserService {
     }
     userDao.update(user);
   }
+
+
+  @Override
+  public void requestPasswordReset(PasswordResetRequestDto requestData) throws EncryptedException, DataNotFoundException, EmailNotificationException {
+    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(), requestData.getRedirectUrl());
+    passwordResetEmail.defineRecipient(requestData.getEmail());
+    passwordResetEmail.setFrom(emailNotifierService.getSender());
+    emailNotifierService.sendEmail(passwordResetEmail);
+  }
+
+  public void updateUserPassword (PasswordResetDto passwordResetDto) {
+    //update password
+
+    //then remove all user tokens
+    securityFacade.removePasswordResetRequests(passwordResetDto.getEmail());
+  }
+
 }

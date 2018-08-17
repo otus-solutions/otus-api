@@ -3,6 +3,7 @@ package br.org.otus.user.management;
 import br.org.otus.model.User;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.user.dto.ManagementUserDto;
+import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -33,4 +34,6 @@ public interface ManagementUserService {
 
   void requestPasswordReset(PasswordResetRequestDto requestData)
       throws EncryptedException, DataNotFoundException, EmailNotificationException;
+
+  void updateUserPassword (PasswordResetDto passwordResetDto);
 }

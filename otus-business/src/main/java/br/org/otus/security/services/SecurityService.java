@@ -17,6 +17,8 @@ public interface SecurityService {
 
 	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, AuthenticationException, DataNotFoundException;
 
+	String getRequestEmail (String token) throws DataNotFoundException;
+
 	void validatePasswordReset(String token) throws TokenException;
 
 	void removePasswordResetRequests(String email);

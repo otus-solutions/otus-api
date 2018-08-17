@@ -91,8 +91,7 @@ public class UserResource {
     Response response =  new Response();
 
     userFacade.requestPasswordReset(requestData, requestData.getEmail(), requestData.getRedirectUrl());
-    //TODO 17/08/18: remove the request data from return
-    return response.buildSuccess(requestData).toJson();
+    return response.buildSuccess().toJson();
   }
 
   @GET
@@ -111,8 +110,7 @@ public class UserResource {
     Response response =  new Response();
 
    userFacade.updateUserPassword(resetData);
-    //TODO 17/08/18: remove the request data from return
-    return response.buildSuccess(resetData).toJson();
+   return response.buildSuccess().toJson();
   }
 
 }

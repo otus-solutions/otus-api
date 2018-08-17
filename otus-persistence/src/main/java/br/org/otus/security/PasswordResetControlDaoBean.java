@@ -6,6 +6,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
@@ -45,21 +46,14 @@ public class PasswordResetControlDaoBean extends MongoGenericDao<Document> imple
   public void removeRegister(String token) {
     Document query = new Document();
     query.append("token", token);
-    DeleteResult deleteResult = collection.deleteOne(query);
-
-    //TODO 17/08/18: treat this
-    deleteResult.wasAcknowledged();
-
+    collection.deleteOne(query);
   }
 
   @Override
   public void removeAllRegisters(String email) {
     Document query = new Document();
     query.append("email", email);
-    DeleteResult deleteResult = collection.deleteMany(query);
-
-    //TODO 17/08/18: treat this
-    deleteResult.wasAcknowledged();
+    collection.deleteMany(query);
   }
 
   @Override
@@ -76,5 +70,17 @@ public class PasswordResetControlDaoBean extends MongoGenericDao<Document> imple
     query.append("email", email);
     FindIterable<Document> found = collection.find(query);
     return found.first() != null;
+  }
+
+  @Override
+  public String getRequestEmail(String token) throws DataNotFoundException {
+    Document query = new Document();
+    query.append("token", token);
+    FindIterable<Document> request = collection.find(query);
+    Document first = request.first();
+    if (first == null){
+      throw  new DataNotFoundException("Invalid token");
+    }
+    return first.get("email").toString();
   }
 }

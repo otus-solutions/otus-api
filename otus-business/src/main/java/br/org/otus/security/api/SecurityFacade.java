@@ -57,13 +57,20 @@ public class SecurityFacade {
     try {
       securityService.validatePasswordReset(token);
     } catch (TokenException e) {
-      //TODO 17/08/18: improve exceptions - make specific - cause is null
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build("Invalid token"));
     }
   }
 
   public void removePasswordResetRequests(String email) {
     securityService.removePasswordResetRequests(email);
+  }
+
+  public String getRequestEmail (String token) {
+    try {
+      return securityService.getRequestEmail(token);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
   }
 
 }

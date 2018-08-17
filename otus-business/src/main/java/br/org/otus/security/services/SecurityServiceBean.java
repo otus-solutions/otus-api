@@ -99,6 +99,11 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
+  public String getRequestEmail (String token) throws DataNotFoundException {
+    return passwordResetContextServiceBean.getRequestEmail(token);
+  }
+
+  @Override
   public void validatePasswordReset(String token) throws TokenException {
     Boolean exists = passwordResetContextServiceBean.hasToken(token);
     if (!exists) {

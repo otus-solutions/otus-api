@@ -2,6 +2,7 @@ package br.org.otus.security.services;
 
 import br.org.otus.security.PasswordResetControlDao;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.inject.Inject;
 
@@ -23,5 +24,9 @@ public class PasswordResetContextServiceBean {
 
   public Boolean hasToken(String token) {
     return passwordResetControlDao.tokenExists(token);
+  }
+
+  public String getRequestEmail (String token) throws DataNotFoundException {
+    return passwordResetControlDao.getRequestEmail(token);
   }
 }

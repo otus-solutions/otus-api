@@ -8,9 +8,10 @@ import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class PasswordResetDto implements Dto {
-  private String token;
 
+  private String token;
   private String password;
+  private String email;
 
   public PasswordResetDto() {
   }
@@ -31,6 +32,14 @@ public class PasswordResetDto implements Dto {
 
   public void setToken(String token) {
     this.token = token;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public static PasswordResetDto deserialize(String passwordResetJson) {

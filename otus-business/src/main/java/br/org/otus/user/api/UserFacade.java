@@ -184,10 +184,8 @@ public class UserFacade {
 
   public void updateUserPassword(PasswordResetDto passwordResetDto) {
 //    managementUserService.updateUserPassword();
-    doNothing();
-  }
-  //TODO 17/08/18: remove
-  private void doNothing() {
-
+    String requestEmail = securityFacade.getRequestEmail(passwordResetDto.getToken());
+    passwordResetDto.setEmail(requestEmail);
+    managementUserService.updateUserPassword(passwordResetDto);
   }
 }
