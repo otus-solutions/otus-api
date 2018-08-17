@@ -89,7 +89,6 @@ public class UserResource {
   }
 
   @POST
-//  @Secured todo: uncommet
   @Path("/reset-password")
   @Produces(MediaType.TEXT_PLAIN)
   public String getToken(String email, @Context HttpServletRequest request) {

@@ -1,14 +1,11 @@
 package br.org.otus.security;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.model.User;
 import com.mongodb.MongoCommandException;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -21,11 +18,9 @@ public class PasswordResetDaoBean extends MongoGenericDao<Document> implements P
     try {
       this.collection.createIndex(
         new Document("creationDate", 1),
-        new IndexOptions().expireAfter(5L, TimeUnit.SECONDS)
+        new IndexOptions().expireAfter(1L, TimeUnit.HOURS)
       );
-    }finally {
-      
-    }
+    }catch (MongoCommandException ignored) {}
 
 
   }
