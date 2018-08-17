@@ -10,16 +10,18 @@ import java.util.Map;
 public class PasswordResetEmail extends Email implements OtusEmail {
 
   //TODO 14/08/18: change template
-  private final String TEMPLATE = "/template/user/management/enable-user-notification-template.html";
+  private final String TEMPLATE = "/template/user/management/password-reset-notification-template.html";
   private final String SUBJECT = "Pew!";
-  private Map<String, String> dataMap;
+  private Map<String, String> dataMap = new HashMap<>();
 
-  public PasswordResetEmail() {
-    //TODO 14/08/18: why is this used for?
-    this.dataMap = new HashMap<>();
-    defineSubject();
+  public PasswordResetEmail(String token, String hostPath) {
+    //TODO 14/08/18: why is this used for?     
+    this.dataMap.put("token", token);
+    this.dataMap.put("host", hostPath);
+    defineSubject();    
   }
 
+ 
   @Override
   public String getTemplatePath() {
     return TEMPLATE;
@@ -30,12 +32,10 @@ public class PasswordResetEmail extends Email implements OtusEmail {
     return dataMap;
   }
 
-
   @Override
   public String getContentType() {
     return Mailer.HTML;
   }
-
 
   public void defineRecipient(String email) {
     addTORecipient("recipient", email);

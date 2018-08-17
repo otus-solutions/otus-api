@@ -1,6 +1,7 @@
 package br.org.otus.user;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +95,11 @@ public class UserResource {
   public String getToken(String email, @Context HttpServletRequest request) {
     Response response = new Response();
     String requestAddress = request.getRemoteAddr().toString();
-    userFacade.requestPasswordReset(email, requestAddress);
+
+    String scheme = request.getScheme();
+    String hostPath = scheme + "://" + request.getHeader("Host");
+
+    userFacade.requestPasswordReset(email, requestAddress, hostPath);
     return response.buildSuccess(email).toJson();
   }
 }
