@@ -10,7 +10,7 @@ public class PasswordResetDto implements Dto, AuthenticationData {
 
   public String userEmail;
   public String password;
-  public String requestAddress; //TODO 16/08/18: check how it works
+  public String requestAddress;
 
   public PasswordResetDto(String userEmail) {
     this.userEmail = userEmail;

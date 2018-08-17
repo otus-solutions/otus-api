@@ -46,7 +46,7 @@ public class SecurityFacade {
       return securityService.getPasswordResetToken(passwordResetDto);
 
     } catch (AuthenticationException | TokenException | DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 

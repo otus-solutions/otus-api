@@ -25,7 +25,7 @@ public abstract class MongoGenericDao<T> {
 
 	@PostConstruct
 	private void setUp() {
-		collection = (MongoCollection<T>) db.getCollection(collectionName, typedClass);
+	  collection = (MongoCollection<T>) db.getCollection(collectionName, typedClass);
 	}
 
 	public MongoGenericDao(String collectionName, Class<T> clazz) {
@@ -33,14 +33,18 @@ public abstract class MongoGenericDao<T> {
 		this.typedClass = clazz;
 	}
 
-	public void persist(T document) {		
+	public void createCollection(String collectionName){
+	  db.createCollection(collectionName);
+  }
+
+	public void persist(T document) {
 		collection.insertOne(document);
 	}
-	
+
 	public void persist(String document) {
 		collection.insertOne((T) Document.parse(document));
 	}
-	
+
 	public FindIterable<T> list() {
 		return collection.find();
 	}
@@ -48,9 +52,9 @@ public abstract class MongoGenericDao<T> {
 	public long count() {
 		return collection.count();
 	}
-	
+
 	public T findFirst() {
 		return list().first();
-	}	
+	}
 
 }
