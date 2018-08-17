@@ -5,11 +5,10 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class PasswordResetDto implements Dto, AuthenticationData {
-  private static final String MODE = "password-reset";  //TODO 15/08/18: review
+public class PasswordResetDto implements Dto, JWTClaimSetBuilder {
+  private static final String MODE = "password-reset";
 
   public String userEmail;
-  public String password;
   public String requestAddress;
 
   public PasswordResetDto(String userEmail) {
@@ -19,31 +18,6 @@ public class PasswordResetDto implements Dto, AuthenticationData {
   @Override
   public Boolean isValid() {
     return (!userEmail.isEmpty() && userEmail != null) && (!password.isEmpty() && password != null) && (requestAddress != null);
-  }
-
-  @Override
-  public String getUserEmail() {
-    return userEmail;
-  }
-
-  @Override
-  public String getKey() {
-    return password;
-  }
-
-  @Override
-  public String getMode() {
-    return MODE;
-  }
-
-  @Override
-  public String getRequestAddress() {
-    return requestAddress;
-  }
-
-  @Override
-  public void setRequestAddress(String requestAddress) {
-    this.requestAddress = requestAddress;
   }
 
   @Override
