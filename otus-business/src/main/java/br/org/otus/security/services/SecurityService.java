@@ -15,7 +15,7 @@ public interface SecurityService {
 
 	String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
-	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, AuthenticationException, DataNotFoundException;
+	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
 
 	String getRequestEmail (String token) throws DataNotFoundException;
 
