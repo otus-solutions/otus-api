@@ -3,6 +3,7 @@ package br.org.mongodb;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import br.org.otus.security.CollectionConfiguration;
 import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
@@ -20,23 +21,11 @@ public abstract class MongoGenericDao<T> {
   @PostConstruct
   private void setUp() {
     collection = (MongoCollection<T>) db.getCollection(collectionName, typedClass);
-    ensureCollection(collectionName);
   }
 
   public MongoGenericDao(String collectionName, Class<T> clazz) {
     this.collectionName = collectionName;
     this.typedClass = clazz;
-  }
-
-  void ensureCollection(String collectionName) {
-    if (collection == null) {
-      try {
-        db.createCollection(collectionName);
-        collection = (MongoCollection<T>) db.getCollection(collectionName, typedClass);
-      } catch (RuntimeException e) {
-
-      }
-    }
   }
 
   public void persist(T document) {

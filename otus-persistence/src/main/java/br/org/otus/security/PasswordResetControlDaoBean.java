@@ -16,19 +16,6 @@ public class PasswordResetControlDaoBean extends MongoGenericDao<Document> imple
 
   private static final String COLLECTION_NAME = "password_reset_control";
 
-  @PostConstruct
-  private void setUp() {
-    //TODO 17/08/18: pull this to proper service
-    try {
-      this.collection.createIndex(
-        new Document("creationDate", 1),
-        new IndexOptions().expireAfter(1L, TimeUnit.HOURS)
-      );
-    }catch (MongoCommandException ignored) {}
-
-
-  }
-
   public PasswordResetControlDaoBean() {
     super(COLLECTION_NAME, Document.class);
   }
@@ -78,8 +65,8 @@ public class PasswordResetControlDaoBean extends MongoGenericDao<Document> imple
     query.append("token", token);
     FindIterable<Document> request = collection.find(query);
     Document first = request.first();
-    if (first == null){
-      throw  new DataNotFoundException("Invalid token");
+    if (first == null) {
+      throw new DataNotFoundException("Invalid token");
     }
     return first.get("email").toString();
   }
