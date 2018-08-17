@@ -38,10 +38,13 @@ public class SecurityFacade {
     }
   }
 
-  public String requestPasswordReset(String email, String requestAddress) {
-    try {
-      PasswordResetRequestDto passwordResetRequestDto = new PasswordResetRequestDto(email);
+  public void invalidate(String token) {
+    securityService.invalidate(token);
+  }
 
+
+  public String requestPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
+    try {
       return securityService.getPasswordResetToken(passwordResetRequestDto);
 
     } catch (AuthenticationException | TokenException | DataNotFoundException e) {
@@ -54,18 +57,13 @@ public class SecurityFacade {
     try {
       securityService.validatePasswordReset(token);
     } catch (TokenException e) {
-      //TODO 17/08/18: improve exceptions - make specific
+      //TODO 17/08/18: improve exceptions - make specific - cause is null
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
   public void removePasswordResetRequests(String email) {
     securityService.removePasswordResetRequests(email);
-  }
-
-
-  public void invalidate(String token) {
-    securityService.invalidate(token);
   }
 
 }

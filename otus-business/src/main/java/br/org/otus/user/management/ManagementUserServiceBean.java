@@ -5,6 +5,7 @@ import br.org.otus.email.user.management.DisableUserNotificationEmail;
 import br.org.otus.email.user.management.EnableUserNotificationEmail;
 import br.org.otus.email.user.management.PasswordResetEmail;
 import br.org.otus.model.User;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.user.UserDao;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.tutty.Equalizer;
@@ -56,11 +57,9 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
 
   @Override
-  public void requestPasswordReset(String email, String token, String hostPath) throws EncryptedException, DataNotFoundException, EmailNotificationException {
-    token = "123-456-789";
-    //TODO 15/08/18: send email
-    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(token, hostPath);
-    passwordResetEmail.defineRecipient(email);
+  public void requestPasswordReset(PasswordResetRequestDto requestData) throws EncryptedException, DataNotFoundException, EmailNotificationException {
+    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(), requestData.getRedirectUrl());
+    passwordResetEmail.defineRecipient(requestData.getEmail());
     passwordResetEmail.setFrom(emailNotifierService.getSender());
     emailNotifierService.sendEmail(passwordResetEmail);
   }

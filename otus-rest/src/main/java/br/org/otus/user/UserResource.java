@@ -1,18 +1,13 @@
 package br.org.otus.user;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import br.org.otus.response.exception.HttpResponseException;
@@ -90,16 +85,34 @@ public class UserResource {
   }
 
   @POST
-  @Path("/reset-password")
-  @Produces(MediaType.TEXT_PLAIN)
-  public String getToken(String email, @Context HttpServletRequest request) {
-    Response response = new Response();
-    String requestAddress = request.getRemoteAddr().toString();
+  @Path("/password-recovery")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String requestRecovery(PasswordResetRequestDto requestData) {
+    Response response =  new Response();
 
-    String scheme = request.getScheme();
-    String hostPath = scheme + "://" + request.getHeader("Host");
-
-    userFacade.requestPasswordReset(email, requestAddress, hostPath);
-    return response.buildSuccess(email).toJson();
+    userFacade.requestPasswordReset(requestData, requestData.getEmail(), requestData.getRedirectUrl());
+    //TODO 17/08/18: remove the request data from return
+    return response.buildSuccess(requestData).toJson();
   }
+
+  @GET
+  @Path("/password-recovery/validate/{token}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String validateToken (@PathParam("token") String token) {
+    Response response =  new Response();
+    userFacade.validatePasswordRecoveryRequest(token);
+    return response.buildSuccess().toJson();
+  }
+
+  @PUT
+  @Path("/password-recovery")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updatePassword(PasswordResetDto resetData) {
+    Response response =  new Response();
+
+   userFacade.updateUserPassword(resetData);
+    //TODO 17/08/18: remove the request data from return
+    return response.buildSuccess(resetData).toJson();
+  }
+
 }

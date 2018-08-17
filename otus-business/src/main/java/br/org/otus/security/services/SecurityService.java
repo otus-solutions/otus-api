@@ -11,13 +11,13 @@ public interface SecurityService {
 
 	UserSecurityAuthorizationDto authenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
+	void invalidate(String token);
+
+	String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
+
 	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, AuthenticationException, DataNotFoundException;
 
 	void validatePasswordReset(String token) throws TokenException;
 
 	void removePasswordResetRequests(String email);
-
-	void invalidate(String token);
-
-	String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 }

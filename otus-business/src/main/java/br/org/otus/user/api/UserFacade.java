@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import br.org.otus.extraction.ExtractionSecurityService;
 import br.org.otus.security.api.SecurityFacade;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -165,15 +167,27 @@ public class UserFacade {
     }
   }
 
-  public void requestPasswordReset(String email, String requestAddress, String hostPath) {
+  public void requestPasswordReset(PasswordResetRequestDto requestData, String email, String hostPath) {
 
-    String token = securityFacade.requestPasswordReset(email, requestAddress);
+    securityFacade.requestPasswordReset(requestData);
 
     try {
-      managementUserService.requestPasswordReset(email, requestAddress, hostPath);
+      managementUserService.requestPasswordReset(requestData);
     } catch (EncryptedException | DataNotFoundException | EmailNotificationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
   }
 
+  public void validatePasswordRecoveryRequest(String token) {
+    securityFacade.validatePasswordResetRequest(token);
+  }
+
+  public void updateUserPassword(PasswordResetDto passwordResetDto) {
+//    managementUserService.updateUserPassword();
+    doNothing();
+  }
+  //TODO 17/08/18: remove
+  private void doNothing() {
+
+  }
 }

@@ -1,5 +1,7 @@
 package br.org.otus.security.dtos;
 
+import br.org.otus.security.EncryptorResources;
+import com.google.gson.GsonBuilder;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -7,20 +9,21 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
   private static final String MODE = "password-reset";
 
-  public String userEmail;
-  public String token;
+  private String token;
+  private String userEmail;
+  private String redirectUrl;
 
-  public PasswordResetRequestDto(String userEmail) {
-    this.userEmail = userEmail;
+  public PasswordResetRequestDto() {
   }
 
   @Override
   public Boolean isValid() {
-    return (!userEmail.isEmpty() && userEmail != null);
+    return (userEmail != null && !userEmail.isEmpty());
   }
 
   @Override
-  public void encrypt() throws EncryptedException {}
+  public void encrypt() {
+  }
 
   @Override
   public JWTClaimsSet buildClaimSet() {
@@ -29,8 +32,6 @@ public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
     builder.claim("mode", MODE);
     return builder.build();
   }
-
-
 
   public String getToken() {
     return token;
@@ -44,7 +45,27 @@ public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
     return userEmail;
   }
 
-  public void setEmail(String email) {
-    this.userEmail = email;
+  public String getRedirectUrl() {
+    return redirectUrl;
+  }
+
+  public void setUserEmail(String userEmail) {
+    this.userEmail = userEmail;
+  }
+
+  public static PasswordResetRequestDto deserialize(String passwordRequestJson) {
+    PasswordResetRequestDto examUploadDTO = PasswordResetRequestDto.getGsonBuilder()
+      .create()
+      .fromJson(passwordRequestJson, PasswordResetRequestDto.class);
+    return examUploadDTO;
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    return builder;
+  }
+
+  public void setRedirectUrl(String redirectUrl) {
+    this.redirectUrl = redirectUrl;
   }
 }
