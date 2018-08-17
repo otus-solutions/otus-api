@@ -3,6 +3,8 @@ package br.org.otus.security.services;
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
+import br.org.otus.security.dtos.JWTClaimSetBuilder;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
@@ -87,19 +89,32 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
-  public String getPasswordResetToken(AuthenticationData authenticationData) throws TokenException, DataNotFoundException {
-    userDao.fetchByEmail(authenticationData.getUserEmail());
+  public String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
+    userDao.fetchByEmail(requestData.getEmail());
 
-    //TODO 16/08/18: choose between string token or session identifier
-    String token = buildToken(authenticationData);
-    passwordResetContextServiceBean.addSession(token);
+    String token = buildToken(requestData);
+    requestData.setToken(token);
+    passwordResetContextServiceBean.registerToken(requestData);
     return token;
   }
 
-  private String buildToken(AuthenticationData authenticationData) throws TokenException {
+  @Override
+  public void validatePasswordReset(String token) throws TokenException {
+    Boolean exists = passwordResetContextServiceBean.hasToken(token);
+    if (!exists) {
+      throw new TokenException();
+    }
+  }
+
+  @Override
+  public void removePasswordResetRequests(String email) {
+    passwordResetContextServiceBean.removeRequests(email);
+  }
+
+  private String buildToken(JWTClaimSetBuilder tokenData) throws TokenException {
     byte[] secretKey = securityContextService.generateSecretKey();
 
-    return securityContextService.generateToken(authenticationData, secretKey);
+    return securityContextService.generateToken(tokenData, secretKey);
   }
 
 

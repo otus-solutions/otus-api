@@ -1,29 +1,26 @@
 package br.org.otus.security.dtos;
 
-import br.org.otus.security.EncryptorResources;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class PasswordResetDto implements Dto, JWTClaimSetBuilder {
+public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
   private static final String MODE = "password-reset";
 
   public String userEmail;
-  public String requestAddress;
+  public String token;
 
-  public PasswordResetDto(String userEmail) {
+  public PasswordResetRequestDto(String userEmail) {
     this.userEmail = userEmail;
   }
 
   @Override
   public Boolean isValid() {
-    return (!userEmail.isEmpty() && userEmail != null) && (!password.isEmpty() && password != null) && (requestAddress != null);
+    return (!userEmail.isEmpty() && userEmail != null);
   }
 
   @Override
-  public void encrypt() throws EncryptedException {
-    this.password = EncryptorResources.encryptIrreversible(password);
-  }
+  public void encrypt() throws EncryptedException {}
 
   @Override
   public JWTClaimsSet buildClaimSet() {
@@ -31,6 +28,20 @@ public class PasswordResetDto implements Dto, JWTClaimSetBuilder {
     builder.issuer(userEmail);
     builder.claim("mode", MODE);
     return builder.build();
+  }
+
+
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public String getEmail() {
+    return userEmail;
   }
 
   public void setEmail(String email) {
