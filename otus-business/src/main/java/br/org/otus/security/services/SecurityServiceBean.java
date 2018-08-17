@@ -31,7 +31,7 @@ public class SecurityServiceBean implements SecurityService {
   private SecurityContextService securityContextService;
 
   @Inject
-  private PasswordResetContextServiceBean passwordResetContextServiceBean;
+  private PasswordResetContextService passwordResetContextService;
 
   @Override
   public UserSecurityAuthorizationDto authenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
@@ -94,18 +94,18 @@ public class SecurityServiceBean implements SecurityService {
 
     String token = buildToken(requestData);
     requestData.setToken(token);
-    passwordResetContextServiceBean.registerToken(requestData);
+    passwordResetContextService.registerToken(requestData);
     return token;
   }
 
   @Override
   public String getRequestEmail (String token) throws DataNotFoundException {
-    return passwordResetContextServiceBean.getRequestEmail(token);
+    return passwordResetContextService.getRequestEmail(token);
   }
 
   @Override
   public void validatePasswordReset(String token) throws TokenException {
-    Boolean exists = passwordResetContextServiceBean.hasToken(token);
+    Boolean exists = passwordResetContextService.hasToken(token);
     if (!exists) {
       throw new TokenException();
     }
@@ -113,7 +113,7 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public void removePasswordResetRequests(String email) {
-    passwordResetContextServiceBean.removeRequests(email);
+    passwordResetContextService.removeRequests(email);
   }
 
   private String buildToken(JWTClaimSetBuilder tokenData) throws TokenException {
