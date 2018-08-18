@@ -21,7 +21,7 @@ public class ActivityFacade {
 	private ActivityService activityService;
 
 	public List<SurveyActivity> list(long rn) {
-		return activityService.list(rn);		
+		return activityService.list(rn);
 	}
 
 	public SurveyActivity getByID(String id) {
@@ -31,9 +31,10 @@ public class ActivityFacade {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
-	
+
 	public List<SurveyActivity> get(String acronym, Integer version){
 		try {
+
 			return activityService.get(acronym, version);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
@@ -48,6 +49,7 @@ public class ActivityFacade {
 
 	public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
 		try {
+		  // TODO Call to Microservice
 			return activityService.update(surveyActivity);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
