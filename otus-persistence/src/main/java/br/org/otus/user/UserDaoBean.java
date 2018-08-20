@@ -84,4 +84,8 @@ public class UserDaoBean extends MongoGenericDao<User> implements UserDao {
 		return this.collection.findOneAndUpdate(eq(EMAIL, user.getEmail()), new Document("$set", user));
 	}
 
+	@Override
+	public void updatePassword(String email, String password) {
+		this.collection.updateOne(eq(EMAIL,email),new Document("$set",new Document("password", password)));
+	}
 }

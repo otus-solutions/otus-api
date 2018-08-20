@@ -87,6 +87,7 @@ public class UserResource {
   @POST
   @Path("/password-recovery")
   @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
   public String requestRecovery(PasswordResetRequestDto requestData) {
     Response response =  new Response();
 
@@ -106,6 +107,7 @@ public class UserResource {
   @PUT
   @Path("/password-recovery")
   @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
   public String updatePassword(PasswordResetDto resetData) {
     Response response =  new Response();
 

@@ -185,6 +185,10 @@ public class UserFacade {
   public void updateUserPassword(PasswordResetDto passwordResetDto) {
     String requestEmail = securityFacade.getRequestEmail(passwordResetDto.getToken());
     passwordResetDto.setEmail(requestEmail);
-    managementUserService.updateUserPassword(passwordResetDto);
+    try {
+      managementUserService.updateUserPassword(passwordResetDto);
+    } catch (EncryptedException e) {
+      e.printStackTrace();
+    }
   }
 }
