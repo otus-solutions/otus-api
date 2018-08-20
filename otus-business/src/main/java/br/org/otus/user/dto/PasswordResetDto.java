@@ -57,4 +57,8 @@ public class PasswordResetDto implements Dto {
     GsonBuilder builder = new GsonBuilder();
     return builder;
   }
+
+  public String getPassword() {
+    return this.password;
+  }
 }

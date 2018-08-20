@@ -35,5 +35,5 @@ public interface ManagementUserService {
   void requestPasswordReset(PasswordResetRequestDto requestData)
       throws EncryptedException, DataNotFoundException, EmailNotificationException;
 
-  void updateUserPassword (PasswordResetDto passwordResetDto);
+  void updateUserPassword (PasswordResetDto passwordResetDto) throws EncryptedException;
 }

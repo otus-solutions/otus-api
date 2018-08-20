@@ -19,4 +19,6 @@ public interface UserDao {
 	void persist(User user);
 	
 	User update(User user);
+
+    void updatePassword(String email, String password);
 }

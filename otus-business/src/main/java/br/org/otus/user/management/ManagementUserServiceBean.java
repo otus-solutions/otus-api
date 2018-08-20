@@ -162,10 +162,9 @@ public class ManagementUserServiceBean implements ManagementUserService {
     emailNotifierService.sendEmail(passwordResetEmail);
   }
 
-  public void updateUserPassword (PasswordResetDto passwordResetDto) {
-    //update password
-
-    //then remove all user tokens
+  public void updateUserPassword (PasswordResetDto passwordResetDto) throws EncryptedException {
+    passwordResetDto.encrypt();
+    userDao.updatePassword(passwordResetDto.getEmail(), passwordResetDto.getPassword());
     securityFacade.removePasswordResetRequests(passwordResetDto.getEmail());
   }
 
