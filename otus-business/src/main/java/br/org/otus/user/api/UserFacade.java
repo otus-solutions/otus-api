@@ -167,7 +167,7 @@ public class UserFacade {
     }
   }
 
-  public void requestPasswordReset(PasswordResetRequestDto requestData, String email, String hostPath) {
+  public void requestPasswordReset(PasswordResetRequestDto requestData) {
 
     securityFacade.requestPasswordReset(requestData);
 

@@ -90,7 +90,7 @@ public class UserResource {
   public String requestRecovery(PasswordResetRequestDto requestData) {
     Response response =  new Response();
 
-    userFacade.requestPasswordReset(requestData, requestData.getEmail(), requestData.getRedirectUrl());
+    userFacade.requestPasswordReset(requestData);
     return response.buildSuccess().toJson();
   }
 

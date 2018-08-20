@@ -3,7 +3,6 @@ package br.org.mongodb;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import br.org.otus.security.CollectionConfiguration;
 import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
