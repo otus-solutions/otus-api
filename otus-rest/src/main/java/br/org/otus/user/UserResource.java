@@ -85,7 +85,7 @@ public class UserResource {
   }
 
   @POST
-  @Path("/password-recovery")
+  @Path("/password-reset")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String requestRecovery(PasswordResetRequestDto requestData) {
@@ -95,7 +95,7 @@ public class UserResource {
   }
 
   @GET
-  @Path("/password-recovery/validate/{token}")
+  @Path("/password-reset/validate/{token}")
   @Produces(MediaType.APPLICATION_JSON)
   public String validateToken (@PathParam("token") String token) {
     Response response =  new Response();
@@ -104,7 +104,7 @@ public class UserResource {
   }
 
   @PUT
-  @Path("/password-recovery")
+  @Path("/password-reset")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updatePassword(PasswordResetDto resetData) {
