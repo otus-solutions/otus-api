@@ -1,9 +1,11 @@
 package br.org.otus.user.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -62,7 +65,7 @@ public class UserFacadeTest {
   private SecurityFacade securityFacade;
   @Mock
   private PasswordResetDto passwordResetDto;
-  private EncryptedException e = PowerMockito.spy(new EncryptedException());
+//  private EncryptedException e = PowerMockito.spy(new EncryptedException());
 
   private List<ManagementUserDto> managementUserDtos;
 
@@ -386,7 +389,9 @@ public class UserFacadeTest {
 
   @Test
   public void updateUserPasswordMethodMethod_should_treat_EncryptedException() throws Exception {
-    PowerMockito.doThrow(e).when(managementUserService, "updateUserPassword", passwordResetDto);
+    EncryptedException e = spy(new EncryptedException());    
+    doNothing().when(e).printStackTrace();    
+    doThrow(e).when(managementUserService, "updateUserPassword", passwordResetDto);
     userFacade.updateUserPassword(passwordResetDto);
     verify(e, times(1)).printStackTrace();
   }

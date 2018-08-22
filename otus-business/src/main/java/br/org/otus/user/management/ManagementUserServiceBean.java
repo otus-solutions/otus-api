@@ -37,14 +37,14 @@ public class ManagementUserServiceBean implements ManagementUserService {
   @Inject
   private SecurityFacade securityFacade;
 
-
   @Override
   public User fetchByEmail(String email) throws DataNotFoundException {
     return userDao.fetchByEmail(email);
   }
 
   @Override
-  public void enable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+  public void enable(ManagementUserDto managementUserDto)
+      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
       user.enable();
@@ -61,7 +61,8 @@ public class ManagementUserServiceBean implements ManagementUserService {
   }
 
   @Override
-  public void disable(ManagementUserDto managementUserDto) throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+  public void disable(ManagementUserDto managementUserDto)
+      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
 
@@ -103,7 +104,8 @@ public class ManagementUserServiceBean implements ManagementUserService {
   }
 
   @Override
-  public void updateExtractionIps(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException {
+  public void updateExtractionIps(ManagementUserDto managementUserDto)
+      throws ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
       user.setExtractionIps(managementUserDto.extractionIps);
@@ -121,7 +123,6 @@ public class ManagementUserServiceBean implements ManagementUserService {
       return true;
     }
   }
-
 
   @Override
   public List<ManagementUserDto> list() {
@@ -153,16 +154,17 @@ public class ManagementUserServiceBean implements ManagementUserService {
     userDao.update(user);
   }
 
-
   @Override
-  public void requestPasswordReset(PasswordResetRequestDto requestData) throws EncryptedException, DataNotFoundException, EmailNotificationException {
-    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(), requestData.getRedirectUrl());
+  public void requestPasswordReset(PasswordResetRequestDto requestData)
+      throws EncryptedException, DataNotFoundException, EmailNotificationException {
+    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(),
+        requestData.getRedirectUrl());
     passwordResetEmail.defineRecipient(requestData.getEmail());
     passwordResetEmail.setFrom(emailNotifierService.getSender());
     emailNotifierService.sendEmail(passwordResetEmail);
   }
 
-  public void updateUserPassword (PasswordResetDto passwordResetDto) throws EncryptedException {
+  public void updateUserPassword(PasswordResetDto passwordResetDto) throws EncryptedException {
     passwordResetDto.encrypt();
     userDao.updatePassword(passwordResetDto.getEmail(), passwordResetDto.getPassword());
     securityFacade.removePasswordResetRequests(passwordResetDto.getEmail());
