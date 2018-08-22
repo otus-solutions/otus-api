@@ -90,12 +90,14 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
-    userDao.fetchByEmail(requestData.getEmail());
-
-    String token = buildToken(requestData);
-    requestData.setToken(token);
-    passwordResetContextService.registerToken(requestData);
-    return token;
+    if(userDao.exists(requestData.getEmail())){
+      String token = buildToken(requestData);
+      requestData.setToken(token);
+      passwordResetContextService.registerToken(requestData);
+      return token;
+    }else{
+      throw new DataNotFoundException(new Throwable("User with email: {" + requestData.getEmail() + "} not found."));
+    }
   }
 
   @Override

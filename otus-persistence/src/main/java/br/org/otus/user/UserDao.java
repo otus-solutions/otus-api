@@ -21,4 +21,6 @@ public interface UserDao {
 	User update(User user);
 
     void updatePassword(String email, String password);
+
+    Boolean exists(String email);
 }

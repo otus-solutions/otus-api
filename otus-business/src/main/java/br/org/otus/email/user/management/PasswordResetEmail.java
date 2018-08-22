@@ -9,13 +9,11 @@ import java.util.Map;
 
 public class PasswordResetEmail extends Email implements OtusEmail {
 
-  // TODO 14/08/18: change template
   private final String TEMPLATE = "/template/user/management/password-reset-notification-template.html";
   private final String SUBJECT = "[RECUPERAÇÃO DE ACESSO]";
   private Map<String, String> dataMap = new HashMap<>();
 
   public PasswordResetEmail(String token, String hostPath) {
-    // TODO 14/08/18: why is this used for?
     this.dataMap.put("token", token);
     this.dataMap.put("host", hostPath);
     defineSubject();
