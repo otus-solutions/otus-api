@@ -37,8 +37,7 @@ public class SecurityContext{
     public Boolean hasToken(String token) {
         return sessions.stream().anyMatch(session -> session.getToken().equals(token));
     }
-
-    //TODO 17/08/18:  check this boolean
+    
     public Boolean verifySignature(String token) throws ParseException, JOSEException {
         SignedJWT signedJWT = SignedJWT.parse(token);
         SessionIdentifier session = getSession(token);
