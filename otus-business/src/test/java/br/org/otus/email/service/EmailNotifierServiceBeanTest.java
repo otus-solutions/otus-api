@@ -70,7 +70,7 @@ public class EmailNotifierServiceBeanTest {
   }
 
   @Test
-  public void sendSystemInstallationEmailMethod_should_invoke_sendEmailMethod() throws Exception {
+  public void sendSystemInstallationEmailMethod_should_invoke_sendEmail() throws Exception {
     mockStatic(BasicEmailSender.class);
     whenNew(BasicEmailSender.class).withAnyArguments().thenReturn(emailSenderDto);
     mockStatic(Equalizer.class);
