@@ -41,7 +41,7 @@ import br.org.otus.user.dto.PasswordResetDto;
 import br.org.owail.sender.email.Sender;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ManagementUserServiceBean.class })
+@PrepareForTest({ManagementUserServiceBean.class})
 public class ManagementUserServiceBeanTest {
   private static final String FIELD_CENTER_ATTRIBUITE = "fieldCenter";
   private static final String ACRONYM_ATTRIBUITE = "acronym";
@@ -131,7 +131,6 @@ public class ManagementUserServiceBeanTest {
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(emailNotifierService.getSender()).thenReturn(sender);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-
     managementUserServiceBean.enable(managementUserDto);
     Mockito.verify(emailNotifierService).sendEmail(enableUserNotification);
   }
@@ -177,7 +176,6 @@ public class ManagementUserServiceBeanTest {
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(emailNotifierService.getSender()).thenReturn(sender);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-
     managementUserServiceBean.disable(managementUserDto);
     Mockito.verify(emailNotifierService).sendEmail(disableUserNotification);
   }
@@ -189,7 +187,6 @@ public class ManagementUserServiceBeanTest {
     Mockito.when(user.isAdmin()).thenReturn(Boolean.TRUE);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-
     managementUserServiceBean.disable(managementUserDto);
     Mockito.verify(user).isAdmin();
     Mockito.verify(userDao, Mockito.never()).update(user);
