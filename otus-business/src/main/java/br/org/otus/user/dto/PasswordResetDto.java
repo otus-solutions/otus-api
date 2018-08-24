@@ -5,9 +5,10 @@ import br.org.otus.security.dtos.JWTClaimSetBuilder;
 import com.google.gson.GsonBuilder;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.exceptions.Encripting;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class PasswordResetDto implements Dto {
+public class PasswordResetDto implements Dto, Encripting {
 
   private String token;
   private String password;
@@ -56,6 +57,26 @@ public class PasswordResetDto implements Dto {
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     return builder;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PasswordResetDto that = (PasswordResetDto) o;
+
+    if (token != null ? !token.equals(that.token) : that.token != null) return false;
+    if (password != null ? !password.equals(that.password) : that.password != null) return false;
+    return email != null ? email.equals(that.email) : that.email == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = token != null ? token.hashCode() : 0;
+    result = 31 * result + (password != null ? password.hashCode() : 0);
+    result = 31 * result + (email != null ? email.hashCode() : 0);
+    return result;
   }
 
   public String getPassword() {

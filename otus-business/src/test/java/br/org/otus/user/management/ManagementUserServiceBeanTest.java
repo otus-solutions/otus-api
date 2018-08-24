@@ -1,6 +1,8 @@
 package br.org.otus.user.management;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -22,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -40,9 +43,11 @@ import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
 import br.org.owail.sender.email.Sender;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @PrepareForTest({ManagementUserServiceBean.class})
 public class ManagementUserServiceBeanTest {
+  private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
+  private static final String PROJECT_REST_URL = "https://api-otus.dev.ccem.ufrgs.br";
   private static final String FIELD_CENTER_ATTRIBUITE = "fieldCenter";
   private static final String ACRONYM_ATTRIBUITE = "acronym";
   private static final String FIELD_CENTER_ACRONYM = "RS";
@@ -50,6 +55,7 @@ public class ManagementUserServiceBeanTest {
   private static final String EMAIL = "otus@otus.com";
   private static final String NAME = "João";
   private static final String PASSWORD = "123456";
+
   private static String IP = "192.168.0.1";
 
   @InjectMocks
@@ -83,6 +89,10 @@ public class ManagementUserServiceBeanTest {
   private PasswordResetDto passwordResetDto;
   @Mock
   private SecurityFacade securityFacade;
+  @Mock
+  private EnableUserNotificationEmail enableUserNotificationEmail;
+  @Mock
+  private DisableUserNotificationEmail disableUserNotificationEmail;
 
   @Before
   public void setUp() throws DataNotFoundException {
@@ -126,13 +136,15 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_enable_should_send_email_to_user() throws Exception {
-    PowerMockito.whenNew(EnableUserNotificationEmail.class).withNoArguments().thenReturn(enableUserNotification);
+    enableUserNotificationEmail = new EnableUserNotificationEmail();
+    enableUserNotificationEmail.defineRecipient(user);
+    enableUserNotificationEmail.setFrom(sender);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(emailNotifierService.getSender()).thenReturn(sender);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
     managementUserServiceBean.enable(managementUserDto);
-    Mockito.verify(emailNotifierService).sendEmail(enableUserNotification);
+    Mockito.verify(emailNotifierService).sendEmail(enableUserNotificationEmail);
   }
 
   @Test
@@ -170,14 +182,15 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_disable_should_send_email_to_user() throws Exception {
-    Mockito.when(user.isAdmin()).thenReturn(Boolean.FALSE);
-    PowerMockito.whenNew(DisableUserNotificationEmail.class).withNoArguments().thenReturn(disableUserNotification);
+    disableUserNotificationEmail = new DisableUserNotificationEmail();
+    disableUserNotificationEmail.defineRecipient(user);
+    disableUserNotificationEmail.setFrom(sender);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(emailNotifierService.getSender()).thenReturn(sender);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
     managementUserServiceBean.disable(managementUserDto);
-    Mockito.verify(emailNotifierService).sendEmail(disableUserNotification);
+    Mockito.verify(emailNotifierService).sendEmail(disableUserNotificationEmail);
   }
 
   @Test
@@ -321,18 +334,20 @@ public class ManagementUserServiceBeanTest {
   }
 
   @Test
-  public void requestPasswordResetMethod_should_invoke_internal_methods() throws Exception {
-    whenNew(PasswordResetEmail.class).withAnyArguments().thenReturn(passwordResetEmail);
+  public void requestPasswordReset_Method_should_invoke_internal_methods() throws Exception {
+    when(requestData.getToken()).thenReturn(TOKEN);
+    when(requestData.getRedirectUrl()).thenReturn(PROJECT_REST_URL);
     when(requestData.getEmail()).thenReturn(EMAIL);
     when(emailNotifierService.getSender()).thenReturn(sender);
+    passwordResetEmail = new PasswordResetEmail(TOKEN,PROJECT_REST_URL);
+    passwordResetEmail.defineRecipient(EMAIL);
+    passwordResetEmail.setFrom(sender);
     managementUserServiceBean.requestPasswordReset(requestData);
-    verify(passwordResetEmail, times(1)).defineRecipient(EMAIL);
-    verify(passwordResetEmail, times(1)).setFrom(sender);
     verify(emailNotifierService, times(1)).sendEmail(passwordResetEmail);
   }
 
   @Test
-  public void updateUserPasswordMethod_invoke_internal_methods() throws EncryptedException {
+  public void updateUserPassword_Method_invoke_internal_methods() throws EncryptedException {
     when(passwordResetDto.getEmail()).thenReturn(EMAIL);
     when(passwordResetDto.getPassword()).thenReturn(PASSWORD);
     managementUserServiceBean.updateUserPassword(passwordResetDto);
@@ -340,4 +355,17 @@ public class ManagementUserServiceBeanTest {
     verify(userDao, times(1)).updatePassword(EMAIL, PASSWORD);
     verify(securityFacade, times(1)).removePasswordResetRequests(EMAIL);
   }
+
+  @Test
+  public void isUnique_Method_should_return_false() {
+    when(userDao.emailExists(EMAIL)).thenReturn(true);
+    assertFalse(managementUserServiceBean.isUnique(EMAIL));
+  }
+
+  @Test
+  public void isUnique_Method_with_nonUniqueEmail_should_return_true() {
+    when(userDao.emailExists(EMAIL)).thenReturn(false);
+    assertTrue(managementUserServiceBean.isUnique(EMAIL));
+  }
+
 }

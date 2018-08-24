@@ -20,10 +20,6 @@ public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
   }
 
   @Override
-  public void encrypt() {
-  }
-
-  @Override
   public JWTClaimsSet buildClaimSet() {
     JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
     builder.issuer(userEmail);

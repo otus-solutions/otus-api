@@ -4,9 +4,10 @@ import br.org.otus.email.dto.EmailSenderDto;
 import br.org.otus.project.dto.ProjectDto;
 import br.org.otus.user.dto.UserDto;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.exceptions.Encripting;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class OtusInitializationConfigDto implements Dto {
+public class OtusInitializationConfigDto implements Dto, Encripting {
 
 	private UserDto user;
 	private EmailSenderDto emailSender;
