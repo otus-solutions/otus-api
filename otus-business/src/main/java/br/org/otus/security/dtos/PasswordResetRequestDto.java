@@ -62,4 +62,24 @@ public class PasswordResetRequestDto implements Dto, JWTClaimSetBuilder {
   public void setRedirectUrl(String redirectUrl) {
     this.redirectUrl = redirectUrl;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PasswordResetRequestDto that = (PasswordResetRequestDto) o;
+
+    if (token != null ? !token.equals(that.token) : that.token != null) return false;
+    if (userEmail != null ? !userEmail.equals(that.userEmail) : that.userEmail != null) return false;
+    return redirectUrl != null ? redirectUrl.equals(that.redirectUrl) : that.redirectUrl == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = token != null ? token.hashCode() : 0;
+    result = 31 * result + (userEmail != null ? userEmail.hashCode() : 0);
+    result = 31 * result + (redirectUrl != null ? redirectUrl.hashCode() : 0);
+    return result;
+  }
 }

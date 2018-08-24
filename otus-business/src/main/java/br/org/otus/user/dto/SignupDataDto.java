@@ -76,7 +76,7 @@ public class SignupDataDto implements Dto, Encripting {
 
 	@Override
 	public Boolean isValid() {
-		Boolean isComplete = (!name.isEmpty() && !surname.isEmpty() && !phone.isEmpty() && !email.isEmpty() && !password.isEmpty() && !passwordConfirmation.isEmpty());
+		Boolean isComplete = (name != null && !name.isEmpty()) && (surname != null && !surname.isEmpty()) && (phone != null && !phone.isEmpty()) && (email != null && !email.isEmpty()) && (password != null && !password.isEmpty()) && (passwordConfirmation != null && !passwordConfirmation.isEmpty());
 		Boolean isPasswordConfirmed = isPasswordConfirmed();
 
 		return isComplete && isPasswordConfirmed;
