@@ -6,6 +6,7 @@ import br.org.owail.sender.email.Mailer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class PasswordResetEmail extends Email implements OtusEmail {
 
@@ -42,4 +43,18 @@ public class PasswordResetEmail extends Email implements OtusEmail {
     setSubject(SUBJECT);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PasswordResetEmail that = (PasswordResetEmail) o;
+    return Objects.equals(TEMPLATE, that.TEMPLATE) &&
+            Objects.equals(SUBJECT, that.SUBJECT) &&
+            Objects.equals(dataMap, that.dataMap);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(TEMPLATE, SUBJECT, dataMap);
+  }
 }
