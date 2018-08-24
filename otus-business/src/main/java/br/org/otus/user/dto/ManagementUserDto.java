@@ -1,6 +1,7 @@
 package br.org.otus.user.dto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -18,7 +19,7 @@ public class ManagementUserDto implements Dto {
 	public Boolean extraction;
 
 	@Equalization(name = "extraction_ips")
-	public ArrayList extractionIps;
+	public List extractionIps;
 
 	@Equalization(name = "phone")
 	public String phone;
@@ -42,16 +43,76 @@ public class ManagementUserDto implements Dto {
 		return email;
 	}
 
-	public ArrayList<String> getExtractionIps() {
+	public List<String> getExtractionIps() {
 		return extractionIps;
 	}
 
 	@Override
 	public Boolean isValid() {
-		return !name.isEmpty() && !surname.isEmpty() && !phone.isEmpty() && !email.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
+		return (name != null && !name.isEmpty()) && (surname != null && !surname.isEmpty()) && (phone != null && !phone.isEmpty()) && (email != null && !email.isEmpty()) ? Boolean.TRUE : Boolean.FALSE;
 	}
 
-	@Override
-	public void encrypt() throws EncryptedException {
-	}
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getSurname() {
+    return surname;
+  }
+
+  public void setSurname(String surname) {
+    this.surname = surname;
+  }
+
+  public Boolean getExtraction() {
+    return extraction;
+  }
+
+  public void setExtraction(Boolean extraction) {
+    this.extraction = extraction;
+  }
+
+  public void setExtractionIps(List extractionIps) {
+    this.extractionIps = extractionIps;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public FieldCenterDTO getFieldCenter() {
+    return fieldCenter;
+  }
+
+  public void setFieldCenter(FieldCenterDTO fieldCenter) {
+    this.fieldCenter = fieldCenter;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Boolean getAdmin() {
+    return admin;
+  }
+
+  public void setAdmin(Boolean admin) {
+    this.admin = admin;
+  }
+
+  public Boolean getEnable() {
+    return enable;
+  }
+
+  public void setEnable(Boolean enable) {
+    this.enable = enable;
+  }
 }

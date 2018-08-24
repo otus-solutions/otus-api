@@ -3,9 +3,10 @@ package br.org.otus.email.dto;
 import br.org.otus.security.EncryptorResources;
 import br.org.tutty.Equalization;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.exceptions.Encripting;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class EmailSenderDto implements Dto{
+public class EmailSenderDto implements Dto, Encripting{
 
     @Equalization(name = "name")
     private String name;
