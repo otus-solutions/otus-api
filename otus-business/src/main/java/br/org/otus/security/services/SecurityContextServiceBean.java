@@ -2,7 +2,7 @@ package br.org.otus.security.services;
 
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
-import br.org.otus.security.dtos.AuthenticationData;
+import br.org.otus.security.dtos.JWTClaimSetBuilder;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -25,12 +25,12 @@ public class SecurityContextServiceBean implements SecurityContextService {
     private SecurityContext securityContext;
 
     @Override
-    public String generateToken(AuthenticationData authenticationData, byte[] secretKey) throws TokenException {
+    public String generateToken(JWTClaimSetBuilder claimSetBuilder, byte[] secretKey) throws TokenException {
         try {
             JWSSigner signer = new MACSigner(secretKey);
 
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256),
-                    authenticationData.buildClaimSet());
+                    claimSetBuilder.buildClaimSet());
             signedJWT.sign(signer);
 
             return signedJWT.serialize();

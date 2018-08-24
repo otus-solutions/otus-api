@@ -1,21 +1,21 @@
 package br.org.otus.email.user.management;
 
 import br.org.otus.email.OtusEmail;
-import br.org.otus.model.User;
 import br.org.owail.sender.email.Email;
 import br.org.owail.sender.email.Mailer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DisableUserNotificationEmail extends Email implements OtusEmail {
+public class PasswordResetEmail extends Email implements OtusEmail {
 
-  private final String TEMPLATE = "/template/user/management/disable-user-notification-template.html";
-  private final String SUBJECT = "Alerta - Cadastro desabilitado Otus";
-  private Map<String, String> dataMap;
+  private final String TEMPLATE = "/template/user/management/password-reset-notification-template.html";
+  private final String SUBJECT = "[RECUPERAÇÃO DE ACESSO]";
+  private Map<String, String> dataMap = new HashMap<>();
 
-  public DisableUserNotificationEmail() {
-    dataMap = new HashMap<>();
+  public PasswordResetEmail(String token, String hostPath) {
+    this.dataMap.put("token", token);
+    this.dataMap.put("host", hostPath);
     defineSubject();
   }
 
@@ -34,8 +34,8 @@ public class DisableUserNotificationEmail extends Email implements OtusEmail {
     return Mailer.HTML;
   }
 
-  public void defineRecipient(User user) {
-    addTORecipient("recipient", user.getEmail());
+  public void defineRecipient(String email) {
+    addTORecipient("recipient", email);
   }
 
   private void defineSubject() {

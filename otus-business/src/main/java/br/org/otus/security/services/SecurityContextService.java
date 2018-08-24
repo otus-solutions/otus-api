@@ -1,12 +1,12 @@
 package br.org.otus.security.services;
 
 import br.org.otus.security.context.SessionIdentifier;
-import br.org.otus.security.dtos.AuthenticationData;
+import br.org.otus.security.dtos.JWTClaimSetBuilder;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 public interface SecurityContextService {
 
-	String generateToken(AuthenticationData authenticationData, byte[] secretKey) throws TokenException;
+	String generateToken(JWTClaimSetBuilder claimSetBuilder, byte[] secretKey) throws TokenException;
 
 	byte[] generateSecretKey();
 
