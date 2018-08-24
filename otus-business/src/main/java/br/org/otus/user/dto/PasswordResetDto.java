@@ -58,6 +58,26 @@ public class PasswordResetDto implements Dto {
     return builder;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PasswordResetDto that = (PasswordResetDto) o;
+
+    if (token != null ? !token.equals(that.token) : that.token != null) return false;
+    if (password != null ? !password.equals(that.password) : that.password != null) return false;
+    return email != null ? email.equals(that.email) : that.email == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = token != null ? token.hashCode() : 0;
+    result = 31 * result + (password != null ? password.hashCode() : 0);
+    result = 31 * result + (email != null ? email.hashCode() : 0);
+    return result;
+  }
+
   public String getPassword() {
     return this.password;
   }
