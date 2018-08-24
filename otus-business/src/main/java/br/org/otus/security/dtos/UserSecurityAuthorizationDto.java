@@ -13,7 +13,7 @@ public class UserSecurityAuthorizationDto implements Dto{
 
     @Equalization(name = "surname")
     private String surname;
-    
+
     private FieldCenterDTO fieldCenter;
 
     @Equalization(name = "phone")
@@ -32,11 +32,11 @@ public class UserSecurityAuthorizationDto implements Dto{
     public Boolean isValid() {
         return Boolean.TRUE;
     }
-    
+
     public UserSecurityAuthorizationDto() {
     	this.fieldCenter = new FieldCenterDTO();
     }
-    
+
     public FieldCenterDTO getFieldCenter() {
 		return fieldCenter;
 	}
@@ -44,10 +44,6 @@ public class UserSecurityAuthorizationDto implements Dto{
     public void setFieldCenter(FieldCenterDTO fieldCenter) {
 		this.fieldCenter = fieldCenter;
 	}
-
-	@Override
-    public void encrypt() throws EncryptedException {
-    }
 
     public void setToken(String token) {
         this.token = token;

@@ -42,10 +42,6 @@ public class ProjectAuthenticationDto implements AuthenticationData, Dto {
     }
 
     @Override
-    public void encrypt() throws EncryptedException {
-    }
-
-    @Override
     public JWTClaimsSet buildClaimSet() {
         JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
         builder.issuer(user);

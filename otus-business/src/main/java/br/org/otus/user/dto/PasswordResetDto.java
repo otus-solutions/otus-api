@@ -5,9 +5,10 @@ import br.org.otus.security.dtos.JWTClaimSetBuilder;
 import com.google.gson.GsonBuilder;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.exceptions.Encripting;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class PasswordResetDto implements Dto {
+public class PasswordResetDto implements Dto, Encripting {
 
   private String token;
   private String password;

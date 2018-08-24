@@ -14,7 +14,5 @@ public interface AuthenticationData extends JWTClaimSetBuilder{
 
     void setRequestAddress(String requestAddress);
 
-    void encrypt() throws EncryptedException;
-
     Boolean isValid();
 }

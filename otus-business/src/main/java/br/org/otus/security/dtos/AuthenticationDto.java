@@ -3,9 +3,10 @@ package br.org.otus.security.dtos;
 import br.org.otus.security.EncryptorResources;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.exceptions.Encripting;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public class AuthenticationDto implements Dto, AuthenticationData {
+public class AuthenticationDto implements Dto, Encripting, AuthenticationData {
     private static final String MODE = "user";
 
     public String userEmail;

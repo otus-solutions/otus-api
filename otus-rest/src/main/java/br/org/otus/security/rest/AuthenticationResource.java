@@ -23,48 +23,42 @@ import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 @Path("/authentication")
 public class AuthenticationResource {
 
-	@Inject
-	private SecurityFacade securityFacade;
+  @Inject
+  private SecurityFacade securityFacade;
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String authenticate(AuthenticationDto authenticationDto, @Context HttpServletRequest request) {
-		try {
-			authenticationDto.encrypt();
-			Response response = new Response();
-			String requestAddress = request.getRemoteAddr().toString();
-			UserSecurityAuthorizationDto userSecurityAuthorizationDto = securityFacade.userAuthentication(authenticationDto, requestAddress);
-			return response.buildSuccess(userSecurityAuthorizationDto).toJson();
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String authenticate(AuthenticationDto authenticationDto, @Context HttpServletRequest request) {
+    try {
+      authenticationDto.encrypt();
+      Response response = new Response();
+      String requestAddress = request.getRemoteAddr().toString();
+      UserSecurityAuthorizationDto userSecurityAuthorizationDto = securityFacade.userAuthentication(authenticationDto, requestAddress);
+      return response.buildSuccess(userSecurityAuthorizationDto).toJson();
 
-		} catch (EncryptedException e) {
-			throw new HttpResponseException(Validation.build());
-		}
-	}
+    } catch (EncryptedException e) {
+      throw new HttpResponseException(Validation.build());
+    }
+  }
 
-	@POST
-	@Path("/project")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String projectAuthenticate(ProjectAuthenticationDto projectAuthenticationDto, @Context HttpServletRequest request) {
-		try {
-			projectAuthenticationDto.encrypt();
-			Response response = new Response();
-			String requestAddress = request.getRemoteAddr().toString();
-			String jwt = securityFacade.projectAuthentication(projectAuthenticationDto, requestAddress);
-			return response.buildSuccess(jwt).toJson();
+  @POST
+  @Path("/project")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String projectAuthenticate(ProjectAuthenticationDto projectAuthenticationDto, @Context HttpServletRequest request) {
+    Response response = new Response();
+    String requestAddress = request.getRemoteAddr().toString();
+    String jwt = securityFacade.projectAuthentication(projectAuthenticationDto, requestAddress);
+    return response.buildSuccess(jwt).toJson();
+  }
 
-		} catch (EncryptedException e) {
-			throw new HttpResponseException(Validation.build());
-		}
-	}
-
-	@POST
-	@Path("/invalidate")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void invalidate(@Context HttpServletRequest request) {
-		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-		securityFacade.invalidate(token);
-	}
+  @POST
+  @Path("/invalidate")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public void invalidate(@Context HttpServletRequest request) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    securityFacade.invalidate(token);
+  }
 }
