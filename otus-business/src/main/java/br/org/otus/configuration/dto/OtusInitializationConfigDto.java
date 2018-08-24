@@ -42,10 +42,6 @@ public class OtusInitializationConfigDto implements Dto, Encripting {
 		this.project = project;
 	}
 
-	public DomainDto getDomain() {
-		return domain;
-	}
-
 	public void setDomain(DomainDto domain) {
 		this.domain = domain;
 	}
