@@ -22,8 +22,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.exam.ExamLot;
-import br.org.otus.laboratory.project.exam.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examLot.ExamLot;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examLot.validators.ExamLotValidator;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 @RunWith(PowerMockRunner.class)

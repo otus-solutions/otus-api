@@ -2,9 +2,10 @@ package br.org.otus.security.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.junit.Before;
@@ -20,11 +21,13 @@ import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.dtos.ProjectAuthenticationDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.security.services.SecurityService;
+import org.powermock.api.mockito.PowerMockito;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SecurityFacadeTest {
 	private static final String REQUEST_ADDRESS = "http://api.domain.dev.ccem.ufrgs.br:8080";
 	private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
+	private static final String EMAIL = "teste@gmail.com";
 	@InjectMocks
 	private SecurityFacade securityFacade;
 	@Mock
@@ -35,7 +38,8 @@ public class SecurityFacadeTest {
 	private UserSecurityAuthorizationDto userSecurityAuthorizationDto;
 	@Mock
 	private ProjectAuthenticationDto projectAuthenticationDto;
-
+	@Mock
+	private PasswordResetRequestDto passwordResetRequestDto;
 	
 	@Test
 	public void method_UserAuthentication_should_return_userSecurityAuthorizationDto()
@@ -93,4 +97,46 @@ public class SecurityFacadeTest {
 
 	}
 
+	@Test
+	public void method_requestPasswordReset_should_call_getPasswordResetToken() throws TokenException, DataNotFoundException {
+		securityFacade.requestPasswordReset(passwordResetRequestDto);
+		when(securityService.getPasswordResetToken(passwordResetRequestDto)).thenReturn(TOKEN);
+		verify(securityService, times(1)).getPasswordResetToken(passwordResetRequestDto);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_requestPasswordReset_should_Throw_TokenException() throws TokenException, DataNotFoundException {
+		when(securityService.getPasswordResetToken(passwordResetRequestDto)).thenThrow(new TokenException(new Throwable(TOKEN)));
+		securityFacade.requestPasswordReset(passwordResetRequestDto);
+	}
+
+	@Test
+	public void method_validatePasswordResetRequest_should_call_validatePasswordReset() throws TokenException {
+		securityFacade.validatePasswordResetRequest(TOKEN);
+		verify(securityService, times(1)).validatePasswordReset(TOKEN);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void  method_validatePasswordResetRequest_should_Throw_TokenException() throws TokenException {
+		doThrow(new TokenException()).when(securityService).validatePasswordReset(TOKEN);
+		securityFacade.validatePasswordResetRequest(TOKEN);
+	}
+
+	@Test
+	public void method_removePasswordResetRequests_should_call_securityService_removePasswordResetRequests(){
+		securityFacade.removePasswordResetRequests(EMAIL);
+		verify(securityService, times(1)).removePasswordResetRequests(EMAIL);
+	}
+
+	@Test
+	public void method_getRequestEmail_should_call_getRequestEmail() throws  DataNotFoundException {
+		securityFacade.getRequestEmail(TOKEN);
+		verify(securityService, times(1)).getRequestEmail(TOKEN);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void  method_getRequestEmail_should_Throw_TokenException() throws DataNotFoundException {
+		doThrow(new DataNotFoundException()).when(securityService).getRequestEmail(TOKEN);
+		securityFacade.getRequestEmail(TOKEN);
+	}
 }

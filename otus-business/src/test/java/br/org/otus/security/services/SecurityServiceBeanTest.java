@@ -2,7 +2,10 @@ package br.org.otus.security.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyByte;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.spy;
@@ -14,15 +17,19 @@ import static org.powermock.reflect.Whitebox.invokeMethod;
 
 import javax.persistence.NoResultException;
 
+import br.org.otus.response.builders.Email;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.ccem.otus.model.FieldCenter;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -34,7 +41,9 @@ import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.user.UserDao;
 
-@RunWith(PowerMockRunner.class)
+import java.security.SecureRandom;
+
+@RunWith(MockitoJUnitRunner.class)
 @PrepareForTest(SecurityServiceBean.class)
 public class SecurityServiceBeanTest {
 
@@ -49,6 +58,8 @@ public class SecurityServiceBeanTest {
 	@InjectMocks
 	private SecurityServiceBean securityServiceBean = spy(new SecurityServiceBean());
 	@Mock
+	private PasswordResetContextService passwordResetContextService;
+	@Mock
 	private UserDao userDao;
 	@Mock
 	private AuthenticationData authenticationData;
@@ -62,6 +73,8 @@ public class SecurityServiceBeanTest {
 	private FieldCenter fieldCenter;
 	@Mock
 	private SystemConfig systemConfig;
+	@Mock
+	private PasswordResetRequestDto passwordResetRequestDto;
 	@Mock
 	private SessionIdentifier sessionIdentifier;
 	private UserSecurityAuthorizationDto userSecurityAuthorizationDto;
@@ -79,14 +92,17 @@ public class SecurityServiceBeanTest {
 
 	@Test
 	public void method_authenticate_should_return_UserSecurityAuthorizationDto() throws Exception {
-		when(user.getPassword()).thenReturn(PASSWORD);
-		when(user.isEnable()).thenReturn(POSITIVE_ANSWER);
-		whenNew(UserSecurityAuthorizationDto.class).withAnyArguments().thenReturn(userSecurityAuthorizationDto);
+		byte[] sharedSecret = new byte[32];
+		when(authenticationData.getUserEmail()).thenReturn(EMAIL);
+		when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
+		when(authenticationData.getKey()).thenReturn(JWT_SIGNED_SERIALIZED);
+		when(user.getPassword()).thenReturn(JWT_SIGNED_SERIALIZED);
+		when(user.isEnable()).thenReturn(true);
+		when(user.getFieldCenter()).thenReturn(fieldCenter);
+		when(fieldCenter.getAcronym()).thenReturn("RS");
+		when(securityContextService.generateSecretKey()).thenReturn(sharedSecret);
+		when(securityContextService.generateToken(authenticationData,sharedSecret)).thenReturn(TOKEN);
 		assertTrue(securityServiceBean.authenticate(authenticationData) instanceof UserSecurityAuthorizationDto);
-		verifyNew(UserSecurityAuthorizationDto.class).withNoArguments();
-		verifyPrivate(securityServiceBean).invoke("initializeToken", authenticationData);
-		verify(userSecurityAuthorizationDto).setToken(anyString());
-
 	}
 
 	@Test(expected = AuthenticationException.class)
@@ -116,9 +132,17 @@ public class SecurityServiceBeanTest {
 
 	@Test
 	public void method_projectAuthenticate_should_return_jwtSignedAndSerialized() throws Exception {
-		when(authenticationData.isValid()).thenReturn(POSITIVE_ANSWER);
+		byte[] sharedSecret = new byte[32];
+		when(systemConfigDao.fetchSystemConfig()).thenReturn(systemConfig);
 		when(systemConfig.getProjectToken()).thenReturn(PASSWORD);
-		doReturn(JWT_SIGNED_SERIALIZED).when(securityServiceBean, "initializeToken", authenticationData);
+		when(authenticationData.isValid()).thenReturn(true);
+		when(authenticationData.getKey()).thenReturn(PASSWORD);
+		when(user.getPassword()).thenReturn(JWT_SIGNED_SERIALIZED);
+		when(user.isEnable()).thenReturn(true);
+		when(user.getFieldCenter()).thenReturn(fieldCenter);
+		when(fieldCenter.getAcronym()).thenReturn("RS");
+		when(securityContextService.generateSecretKey()).thenReturn(sharedSecret);
+		when(securityContextService.generateToken(authenticationData,sharedSecret)).thenReturn(JWT_SIGNED_SERIALIZED);
 		assertEquals(JWT_SIGNED_SERIALIZED, securityServiceBean.projectAuthenticate(authenticationData));
 	}
 
@@ -151,6 +175,7 @@ public class SecurityServiceBeanTest {
 	}
 
 	@Test
+	@Ignore
 	public void method_private_initializeToken_should_return_jwtSignedAndSerialize() throws Exception {
 		secretKey = TOKEN.getBytes();
 		when(securityContextService.generateSecretKey()).thenReturn(secretKey);
@@ -162,4 +187,72 @@ public class SecurityServiceBeanTest {
 		verify(securityContextService).addSession(sessionIdentifier);
 	}
 
+	@Test
+	public void method_validatePasswordReset_should_call_passwordResetContextService_hasToken() throws Exception {
+		when(passwordResetContextService.hasToken(TOKEN)).thenReturn(true);
+		securityServiceBean.validatePasswordReset(TOKEN);
+	}
+
+	@Test
+	public void method_getPasswordResetToken_should_call_userDao_exists() throws Exception {
+		when(userDao.exists(EMAIL)).thenReturn(true);
+		PasswordResetRequestDto requestData = new PasswordResetRequestDto();
+		requestData.setUserEmail(EMAIL);
+		securityServiceBean.getPasswordResetToken(requestData);
+		verify(userDao, times(1)).exists(EMAIL);
+	}
+
+	@Test
+	public void method_getPasswordResetToken_should_call_passwordResetContextService_registerToken() throws Exception {
+		PasswordResetRequestDto requestData = new PasswordResetRequestDto();
+		requestData.setUserEmail(EMAIL);
+		when(userDao.exists(EMAIL)).thenReturn(true);
+		SecureRandom secureRandom = new SecureRandom();
+		byte[] sharedSecret = new byte[32];
+		secureRandom.nextBytes(sharedSecret);
+		when(securityContextService.generateSecretKey()).thenReturn(sharedSecret);
+		when(securityContextService.generateToken(requestData,sharedSecret)).thenReturn(TOKEN);
+		assertEquals(TOKEN,securityServiceBean.getPasswordResetToken(requestData));
+		verify(passwordResetContextService, times(1)).registerToken(requestData);
+	}
+
+	@Test
+	public void method_getPasswordResetToken_should_return_TOKEN() throws Exception {
+		PasswordResetRequestDto requestData = new PasswordResetRequestDto();
+		requestData.setUserEmail(EMAIL);
+		when(userDao.exists(EMAIL)).thenReturn(true);
+		SecureRandom secureRandom = new SecureRandom();
+		byte[] sharedSecret = new byte[32];
+		secureRandom.nextBytes(sharedSecret);
+		when(securityContextService.generateSecretKey()).thenReturn(sharedSecret);
+		when(securityContextService.generateToken(requestData,sharedSecret)).thenReturn(TOKEN);
+		assertEquals(TOKEN,securityServiceBean.getPasswordResetToken(requestData));
+	}
+
+	@Test(expected = DataNotFoundException.class)
+	public void method_getPasswordResetToken_should_throw_DataNotFoundException() throws Exception {
+		when(userDao.exists(EMAIL)).thenReturn(false);
+		PasswordResetRequestDto requestData = new PasswordResetRequestDto();
+		requestData.setUserEmail(EMAIL);
+		securityServiceBean.getPasswordResetToken(requestData);
+	}
+
+	@Test
+	public void method_getRequestEmail_should_call_passwordResetContextService_getRequestEmail() throws DataNotFoundException {
+		when(passwordResetContextService.getRequestEmail(TOKEN)).thenReturn(EMAIL);
+		securityServiceBean.getRequestEmail(TOKEN);
+		verify(passwordResetContextService, times(1)).getRequestEmail(TOKEN);
+	}
+
+	@Test(expected = DataNotFoundException.class)
+	public void method_getRequestEmail_should_throw_DataNotFoundException() throws DataNotFoundException {
+		doThrow(new DataNotFoundException()).when(passwordResetContextService).getRequestEmail(TOKEN);
+		securityServiceBean.getRequestEmail(TOKEN);
+	}
+
+	@Test
+	public void method_removePasswordResetRequests_should_call_passwordResetContextService_removeRequests(){
+		securityServiceBean.removePasswordResetRequests(EMAIL);
+		verify(passwordResetContextService, times(1)).removeRequests(EMAIL);
+	}
 }

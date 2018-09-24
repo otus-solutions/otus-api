@@ -1,9 +1,9 @@
 package br.org.otus.participant.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
@@ -37,6 +37,19 @@ public class ParticipantFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
+
+  public Participant create(String participantJson)
+      throws DataNotFoundException, ValidationException {
+    Participant insertedParticipant = null;
+    try {
+      Participant participant = Participant.deserialize(participantJson);
+      insertedParticipant = participantService.create(participant);
+      return insertedParticipant;
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+
   }
 
 }

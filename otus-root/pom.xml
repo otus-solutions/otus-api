@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ccem.otus</groupId>
   <artifactId>otus-root</artifactId>
-  <version>1.14</version>
+  <version>1.15</version>
   <packaging>pom</packaging>
   <name>otus-api</name>
 
@@ -60,6 +60,7 @@
     <module>../otus-extraction</module>
     <module>../otus-exam-uploader</module>
     <module>../otus-report</module>
+    <module>../otus-configuration</module>
   </modules>
 
   <repositories>
@@ -160,6 +161,7 @@
         <artifactId>jgitflow-maven-plugin</artifactId>
         <version>1.0-m5.1</version>
         <configuration>
+          <noDeploy>true</noDeploy>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <flowInitContext>
             <masterBranchName>master</masterBranchName>

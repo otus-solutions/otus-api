@@ -1,42 +1,41 @@
 package br.org.otus.fieldCenter.api;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.service.FieldCenterService;
+import org.ccem.otus.validators.FieldCenterValidationResult;
 
-import javax.inject.Inject;
-import java.util.List;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 
 public class FieldCenterFacade {
+  @Inject
+  private FieldCenterService fieldCenterService;
 
-    @Inject
-    private FieldCenterService fieldCenterService;
+  public void create(FieldCenter fieldCenter) {
+    try {
+      fieldCenterService.create(fieldCenter);
 
-    public void create(FieldCenter fieldCenter) {
-        try {
-            fieldCenterService.create(fieldCenter);
-
-        } catch (AlreadyExistException e) {
-            throw new HttpResponseException(ResponseBuild.FieldCenter.AlreadyExist.build());
-
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build());
-        }
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage(), e.getData()));
     }
+  }
 
-    public List<FieldCenter> list() {
-        return fieldCenterService.list();
+  public List<FieldCenter> list() {
+    return fieldCenterService.list();
+  }
+
+  public void update(FieldCenter fieldCenterUpdateDto) {
+    try {
+      fieldCenterService.update(fieldCenterUpdateDto);
+
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build());
+
     }
-
-    public void update(FieldCenter fieldCenterUpdateDto){
-        try {
-            fieldCenterService.update(fieldCenterUpdateDto);
-
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build());
-        }
-    }
+  }
 }

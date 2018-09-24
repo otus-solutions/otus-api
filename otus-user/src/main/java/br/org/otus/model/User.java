@@ -4,6 +4,7 @@ import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.ccem.otus.model.FieldCenter;
@@ -47,7 +48,7 @@ public class User {
 	private String extractionToken;
 
 	@Equalization(name = "extraction_ips")
-	private ArrayList extractionIps;
+	private List extractionIps;
 
 	public User() {
 		this.uuid = UUID.randomUUID();
@@ -114,7 +115,7 @@ public class User {
 		return password;
 	}
 
-	public ArrayList getExtractionIps() {
+	public List getExtractionIps() {
 		return extractionIps;
 	}
 
@@ -163,7 +164,7 @@ public class User {
 		this.name = name;
 	}
 
-	public void setExtractionIps(ArrayList extractionIps) {
+	public void setExtractionIps(List extractionIps) {
 		this.extractionIps = extractionIps;
 	}
 

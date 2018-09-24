@@ -1,5 +1,6 @@
 package org.ccem.otus.participant.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -7,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
@@ -16,15 +18,30 @@ public class ParticipantServiceBean implements ParticipantService {
 
   @Inject
   private ParticipantDao participantDao;
-
+  
   @Override
   public void create(Set<Participant> participants) {
-    participants.forEach(participant -> create(participant));
+    ArrayList<Participant> insertedParticipants = new ArrayList<>();
+    participants.forEach(participant -> {
+      try {
+        insertedParticipants.add(create(participant));
+      } catch (ValidationException e) {
+        insertedParticipants.add(null);
+      }
+
+    });
   }
 
   @Override
-  public void create(Participant participant) {
-    participantDao.persist(participant);
+  public Participant create(Participant participant) throws ValidationException{
+    Participant rn = participantDao.validateRecruitmentNumber(participant.getRecruitmentNumber());
+    if(rn != null) {
+      String error = "RecruimentNumber {"+ rn.getRecruitmentNumber().toString() +"} already exist.";
+      throw new ValidationException(new Throwable(error));
+    }else {
+      participantDao.persist(participant);
+      return participant;  
+    } 
   }
 
   @Override

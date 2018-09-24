@@ -1,7 +1,16 @@
 package org.ccem.otus.participant.model;
 
+import java.time.LocalDateTime;
+
+
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+
+
+import com.google.gson.GsonBuilder;
 
 public class Participant {
 
@@ -75,5 +84,21 @@ public class Participant {
     public void setLate(Boolean late) {
       this.late = late;
     }
+    
+    public static String serialize(Participant participantJson) {
+      return Participant.getGsonBuilder().create().toJson(participantJson);
+  }
+
+  public static Participant deserialize(String participantJson) {
+    Participant participant = Participant.getGsonBuilder().create().fromJson(participantJson, Participant.class);
+      return participant;
+  }
+  
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    return builder;
+}
    
 }

@@ -1,6 +1,7 @@
 package br.org.otus.rest;
 
 import br.org.otus.configuration.datasource.DataSourceResource;
+import br.org.otus.configuration.project.ProjectConfigurationResource;
 import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
@@ -95,6 +96,9 @@ public class EndPointsLoader extends Application {
 	@Inject
 	private ExamUploadResource examUploadResource;
 
+	@Inject
+	private ProjectConfigurationResource projectConfigurationResource;
+
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -119,6 +123,7 @@ public class EndPointsLoader extends Application {
 		resources.add(ActivityConfigurationResource.class);
 		resources.add(ExamResource.class);
 		resources.add(ExamUploadResource.class);
+		resources.add(ProjectConfigurationResource.class);
 		return resources;
 	}
 
@@ -146,6 +151,7 @@ public class EndPointsLoader extends Application {
 		resources.add(activityConfigurationResource);
 		resources.add(examResource);
 		resources.add(examUploadResource);
+		resources.add(projectConfigurationResource);
 
 		return resources;
 	}
