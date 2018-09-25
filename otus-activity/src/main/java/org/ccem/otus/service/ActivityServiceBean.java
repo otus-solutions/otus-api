@@ -9,13 +9,18 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.permission.Permission;
 import org.ccem.otus.persistence.ActivityDao;
+import org.ccem.otus.service.permission.PermissionService;
 
 @Stateless
 public class ActivityServiceBean implements ActivityService {
 
 	@Inject
 	private ActivityDao activityDao;
+	
+	@Inject
+	private PermissionService permissionService;
 
 	@Override
 	public String create(SurveyActivity surveyActivity) {
@@ -30,6 +35,7 @@ public class ActivityServiceBean implements ActivityService {
 
 	@Override
 	public List<SurveyActivity> list(long rn) {
+	    List<Permission> permissions = permissionService.list();	    
 		return activityDao.find(rn);
 		
 	}
