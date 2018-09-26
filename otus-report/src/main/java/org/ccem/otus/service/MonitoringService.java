@@ -12,4 +12,6 @@ public interface MonitoringService {
     List<MonitoringDataSourceResult> get(String acronym) throws ValidationException;
 
     List<MonitoringCenter> getMonitoringCenter() throws ValidationException, DataNotFoundException;
+
+    void getActivityStatus();
 }

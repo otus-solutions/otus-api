@@ -1,20 +1,16 @@
 package br.org.otus.monitoring;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.model.monitoring.MonitoringCenter;
-import org.ccem.otus.service.MonitoringService;
-
-import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.api.SurveyFacade;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.monitoring.MonitoringCenter;
+import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
+import org.ccem.otus.service.MonitoringService;
+
+import javax.inject.Inject;
+import java.util.List;
 
 public class MonitoringFacade {
 
@@ -37,13 +33,21 @@ public class MonitoringFacade {
   }
 
   public List<MonitoringCenter> getMonitoringCenters() {
-      try {
-        return monitoringService.getMonitoringCenter();
-      } catch (ValidationException e) {
-        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-      } catch (DataNotFoundException e) {
-        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-      }
+    try {
+      return monitoringService.getMonitoringCenter();
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void getActivityStatus() {
+    try {
+      monitoringService.getActivityStatus();
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
   }
 
 }

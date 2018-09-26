@@ -56,4 +56,9 @@ public class MonitoringServiceBean implements MonitoringService {
     }
     return results;
   }
+
+  @Override
+  public void getActivityStatus() {
+    monitoringDao.getActivityStatus();
+  }
 }
