@@ -41,14 +41,13 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
     List<Bson> query = new ActivityStatusQueryBuilder()
       .matchFieldCenter("SP")
       .project()
+      .project2()
       .groupByParticipant()
       .build();
 
     Document first = collection.aggregate(query).first();
 
     System.out.println(first);
-
-
   }
 
 }

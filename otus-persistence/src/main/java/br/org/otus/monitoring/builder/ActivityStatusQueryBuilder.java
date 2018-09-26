@@ -27,24 +27,7 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
-  public ActivityStatusQueryBuilder project() {
-    Document projection = new Document();
-
-    projection.put("_id", 0);
-    projection.put("rn", "$participantData.recruitmentNumber");
-    projection.put("acronym", "$surveyForm.surveyTemplate.identity.acronym");
-    projection.put("lastStatus",
-      new Document("$arrayElemAt",
-        Arrays.asList(
-          new Document(
-            "$slice",
-            Arrays.asList("$statusHistory", -1)
-          ),
-          0)
-      )
-    );
-    pipeline.add(projection);
-
+  public ActivityStatusQueryBuilder project2() {
     Document p2 = parseQuery("{\n" +
       "        $project: {\n" +
       "            status:\n" +
@@ -67,7 +50,37 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
+  public ActivityStatusQueryBuilder project() {
+    Document projection = new Document();
+
+    projection.put("_id", 0);
+    projection.put("rn", "$participantData.recruitmentNumber");
+    projection.put("acronym", "$surveyForm.surveyTemplate.identity.acronym");
+    projection.put("lastStatus",
+      new Document("$arrayElemAt",
+        Arrays.asList(
+          new Document(
+            "$slice",
+            Arrays.asList("$statusHistory", -1)
+          ),
+          0)
+      )
+    );
+    pipeline.add(Aggregates.project(projection));
+    return this;
+  }
+
   public ActivityStatusQueryBuilder groupByParticipant() {
+//    pipeline.add(Aggregates.group(
+//      parseQuery("{\n" +
+//        "            _id: {\n" +
+//        "                rn: \"$rn\"\n" +
+//        "\n" +
+//        "            },\n" +
+//        "            activities: {\n" +
+//        "                $addToSet: \"$$ROOT\"\n" +
+//        "            }\n" +
+//        "        }")));
     pipeline.add(parseQuery("{\n" +
       "        $group: {\n" +
       "            _id: {\n" +
@@ -79,26 +92,11 @@ public class ActivityStatusQueryBuilder {
       "            }\n" +
       "        }\n" +
       "    }"));
-
     return this;
   }
 
 
 //  ===================
-
-  public static List<Document> parseAggregation(String stringQuery) {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    ArrayList agg = gsonBuilder.create().fromJson(stringQuery, ArrayList.class);
-
-
-    List<Document> list = new ArrayList<>();
-
-    for (Object jsonObject : agg) {
-      Document document = Document.parse(gsonBuilder.create().toJson(jsonObject));
-      list.add(document);
-    }
-    return list;
-  }
 
   private Document parseQuery(String query) {
     GsonBuilder gsonBuilder = new GsonBuilder();
