@@ -152,10 +152,8 @@
           <ejbVersion>3.1</ejbVersion>
         </configuration>
       </plugin>
-      <!-- * Maven Plugin : Control Workflow Development Team * - Start Feature
-        : mvn jgitflow:feature-start * - Finish Feature : mvn jgitflow:feature-finish
-        * - Start Hotfix : mvn jgitflow:hotfix-start * - Finish Hotfix : mvn jgitflow:hotfix-finish
-        * - Start Release : mvn jgitflow:release-start * - Finish Release : mvn jgitflow:release-finish -->
+      <!-- * Maven Plugin : Control Workflow Development Team * - Start Feature : mvn jgitflow:feature-start * - Finish Feature : mvn jgitflow:feature-finish * - Start Hotfix : mvn jgitflow:hotfix-start * - Finish Hotfix : mvn jgitflow:hotfix-finish * -
+      Start Release : mvn jgitflow:release-start * - Finish Release : mvn jgitflow:release-finish -->
       <plugin>
         <groupId>external.atlassian.jgitflow</groupId>
         <artifactId>jgitflow-maven-plugin</artifactId>
