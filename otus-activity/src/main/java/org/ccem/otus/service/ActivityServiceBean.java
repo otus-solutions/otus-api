@@ -13,7 +13,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
-import org.ccem.otus.service.activityAccessPermission.ActivityAccessPermissionService;
+import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 
 import com.mongodb.Block;
 
@@ -51,7 +51,6 @@ public class ActivityServiceBean implements ActivityService {
 
     List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionService.list();
     List<SurveyActivity> activities = (ArrayList<SurveyActivity>) activityDao.find(rn);
-
     List<SurveyActivity> filteredActivities = new ArrayList<SurveyActivity>();
 
     activities.forEach(activity -> {

@@ -10,8 +10,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.http.protocol.HttpRequestHandler;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
+import br.org.otus.model.User;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
@@ -24,13 +26,16 @@ public class ActivityResource {
 	private ActivityFacade activityFacade;
 	@Inject
 	private ParticipantFacade participantFacade;
+	
 
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAll(@PathParam("rn") long rn) {
-		isValidRecruitmentNumber(rn);
-
+		isValidRecruitmentNumber(rn);		
+		
+		//User user = userDao.fetchByEmail(authenticationData.getUserEmail());	
+		
 		return new Response().buildSuccess(activityFacade.list(rn)).toSurveyJson();
 	}
 
