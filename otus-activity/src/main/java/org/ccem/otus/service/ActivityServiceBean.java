@@ -45,9 +45,9 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public List<SurveyActivity> list(long rn) {
-    String emailFakeForTest1 = "fdrtec@gmail.com";
-    String emailFakeForTest2 = "vianna.emanoel@gmail.com";
+  public List<SurveyActivity> list(long rn, String userEmail) {
+//    String emailFakeForTest1 = "fdrtec@gmail.com";
+//    String emailFakeForTest2 = "vianna.emanoel@gmail.com";
 
     List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionService.list();
     List<SurveyActivity> activities = (ArrayList<SurveyActivity>) activityDao.find(rn);
@@ -55,10 +55,10 @@ public class ActivityServiceBean implements ActivityService {
 
     activities.forEach(activity -> {
       permissionStatus = true;
-      userStatusHistory = isUserInStatusHistory(activity, emailFakeForTest1);
+      userStatusHistory = isUserInStatusHistory(activity, userEmail);
 
       activityAccessPermissions.forEach(permission -> {
-        userInRestrictionList = permission.getExclusiveDisjunction().contains(emailFakeForTest1);
+        userInRestrictionList = permission.getExclusiveDisjunction().contains(userEmail);
         usersPermissionStatusHistory = isUsersPermissionInStatusHistory(permission, activity);
         acronymConfirmation = isSameAcronym(permission, activity);
         versionConfirmation = isSameVersion(permission, activity);

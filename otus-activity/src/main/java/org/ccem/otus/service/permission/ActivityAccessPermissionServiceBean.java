@@ -21,14 +21,13 @@ class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionSer
   }
 
   @Override
-  public void create(ActivityAccessPermission activityAccessPermissionDto) throws ValidationException {
-    // TODO Auto-generated method stub
+  public void create(ActivityAccessPermission activityAccessPermission) throws ValidationException {
+    activityAccessPermissionDao.persist(activityAccessPermission);
     
   }
 
   @Override
-  public void update(ActivityAccessPermission activityAccessPermissionDto) throws ValidationException {
-    // TODO Auto-generated method stub
-    
+  public void update(ActivityAccessPermission activityAccessPermission) throws ValidationException {
+    activityAccessPermissionDao.update(activityAccessPermission);   
   }
 }

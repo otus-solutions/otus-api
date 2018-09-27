@@ -1,9 +1,12 @@
 package br.org.otus.survey.activity.permission;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -16,42 +19,35 @@ import br.org.otus.security.Secured;
 
 @Path("/permission")
 public class ActivityAccessPermissionResource {
-  
+
   @Inject
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
-  
+  @Inject
+  private ActivityAccessPermission activityAccessPermission;
+
   @POST
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
-  public String create(FieldCenter fieldCenter) {
-    //activityAccessPermissionFacade.create(fieldCenter);
-      return new Response().buildSuccess().toJson();
+  public String create(String permission) {
+    activityAccessPermissionFacade.create(activityAccessPermission.deserialize(permission));
+    return new Response().buildSuccess().toJson();
   }
-  
+
   @GET
   @Secured
-  @Path("/list")    
   @Produces(MediaType.APPLICATION_JSON)
   public String getAll() {
-      Response response = new Response();
-//      List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionFacade.list();
-//      return response.setData(ActivityAccessPermissions).toJson();
-      return null;
+    Response response = new Response();
+    List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionFacade.getAll();
+    return response.setData(activityAccessPermissions).toJson();
   }
-  
-  @POST
+
+  @PUT
   @Secured
-  @Path("/update")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String update(ActivityAccessPermission permission) {
-//    activityAccessPermissionFacade.update(permission);
-      return new Response().buildSuccess().toJson();
+  public String update(String permission) {
+    activityAccessPermissionFacade.update(activityAccessPermission.deserialize(permission));
+    return new Response().buildSuccess().toJson();
   }
-  
-  
-  
-  
-  
-  
 
 }

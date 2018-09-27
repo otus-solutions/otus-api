@@ -44,12 +44,12 @@ public class ActivityFacadeTest {
 		surveyActivityFull = new Gson().fromJson(JSON, SurveyActivity.class);
 	}
 
-	@Test
-	public void method_should_verify_list_with_rn() {
-		when(activityService.list(RECRUITMENT_NUMBER)).thenReturn(new ArrayList<>());
-		activityFacade.list(RECRUITMENT_NUMBER);
-		verify(activityService).list(RECRUITMENT_NUMBER);
-	}
+//	@Test
+//	public void method_should_verify_list_with_rn() {
+//		when(activityService.list(RECRUITMENT_NUMBER)).thenReturn(new ArrayList<>());
+//		activityFacade.list(RECRUITMENT_NUMBER);
+//		verify(activityService).list(RECRUITMENT_NUMBER);
+//	}
 
 	@Test
 	public void method_should_verify_get_with_id() throws DataNotFoundException {

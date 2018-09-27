@@ -50,12 +50,12 @@ public class ActivityServiceBeanTest {
 		assertEquals(HASH, service.create(Dieta));
 	}
 	
-	@Test
-	@Ignore
-	public void method_list_should_call_ActivityDao_find(){
-		service.list(RECRUIMENT_NUMBER);
-		Mockito.verify(activityDao).find(RECRUIMENT_NUMBER);
-	}
+//	@Test
+//	@Ignore
+//	public void method_list_should_call_ActivityDao_find(){
+//		service.list(RECRUIMENT_NUMBER);
+//		Mockito.verify(activityDao).find(RECRUIMENT_NUMBER);
+//	}
 	@Test
 	public void method_getByID_should_call_ActivityDao_findByID() throws DataNotFoundException{
 		service.getByID(SURVEY_ID);

@@ -3,43 +3,53 @@ package org.ccem.otus.model.survey.activity.permission;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.filling.AnswerFill;
-import org.ccem.otus.survey.form.SurveyForm;
-import org.ccem.otus.utils.AnswerAdapter;
-import org.ccem.otus.utils.LongAdapter;
-import org.ccem.otus.utils.ObjectIdToStringAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ActivityAccessPermission {
-  
-  private String objectType;  
+
+  private ObjectId _id;
+  private String objectType;
   private Integer version;
   private String acronym;
-  private List<String> exclusiveDisjunction;  
-  
+  private List<String> exclusiveDisjunction;
+
+  public ObjectId getId() {
+    return _id;
+  }
+
   public Integer getVersion() {
     return version;
   }
+
   public String getAcronym() {
     return acronym;
   }
+
   public List<String> getExclusiveDisjunction() {
     return exclusiveDisjunction;
   }
-  
+
   public static String serialize(ActivityAccessPermission activityAccessPermission) {
     return getGsonBuilder().create().toJson(activityAccessPermission);
-}
+  }
 
-public static ActivityAccessPermission deserialize(String activityAccessPermission) {
-    GsonBuilder builder = getGsonBuilder();   
-    return builder.create().fromJson(activityAccessPermission, ActivityAccessPermission.class);
-}
+  public static ActivityAccessPermission deserialize(String activityAccessPermission) {
+    GsonBuilder builder = getGsonBuilder();
+    ActivityAccessPermission activityAccessPermissionTemplate = builder.create().fromJson(activityAccessPermission,
+        ActivityAccessPermission.class);
+    return activityAccessPermissionTemplate;
+  }
 
-public static GsonBuilder getGsonBuilder() {
-    GsonBuilder builder = new GsonBuilder();    
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
-    }
+  }
+
+  public String toJson() {
+    return new Gson().toJson(this);
+  }
 }

@@ -1,5 +1,7 @@
 package br.org.otus.survey.activity;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import br.org.mongodb.MongoGenericDao;
 @Stateless
 class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> implements ActivityAccessPermissionDao{
   
-  private static final String COLLECTION_NAME = "permission";
+  private static final String COLLECTION_NAME = "activity_access_permission";
 
   public ActivityAccessPermissionDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -36,6 +38,21 @@ class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> implemen
       });
     
     return permissions;
+  }
+
+  @Override
+  public void persist(ActivityAccessPermission activityAccessPermission) {
+    super.persist(activityAccessPermission.toJson());
+    
+  }
+
+  @Override
+  public void update(ActivityAccessPermission activityAccessPermission) {
+    Document document = Document.parse(activityAccessPermission.toJson());
+    super.collection.updateOne(eq("exclusiveDisjunction", activityAccessPermission.getExclusiveDisjunction()),new Document("$set",document));
+
+
+    
   }
   
 }
