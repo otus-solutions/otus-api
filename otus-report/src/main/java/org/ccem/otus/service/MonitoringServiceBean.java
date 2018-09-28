@@ -14,6 +14,7 @@ import org.ccem.otus.model.monitoring.MonitoringDataSource;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
+import org.ccem.otus.persistence.FlagReportDao;
 import org.ccem.otus.persistence.MonitoringDao;
 
 @Stateless
@@ -27,6 +28,9 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Inject
   private ParticipantDao participantDao;
+
+  @Inject
+  private FlagReportDao flagReportDao;
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
@@ -58,7 +62,7 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public void getActivityStatus() {
-    monitoringDao.getActivityStatus();
+  public void getActivitiesProgress() {
+    flagReportDao.getActivitiesProgressionReport();
   }
 }

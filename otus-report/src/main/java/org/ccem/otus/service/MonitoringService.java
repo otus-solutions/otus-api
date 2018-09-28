@@ -13,5 +13,5 @@ public interface MonitoringService {
 
     List<MonitoringCenter> getMonitoringCenter() throws ValidationException, DataNotFoundException;
 
-    void getActivityStatus();
+    void getActivitiesProgress();
 }

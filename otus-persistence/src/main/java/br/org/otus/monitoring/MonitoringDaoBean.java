@@ -37,7 +37,7 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
   }
 
   @Override
-  public void getActivityStatus() {
+  public void getActivitiesProgressionReport() {
     List<Bson> query = new ActivityStatusQueryBuilder()
       .matchFieldCenter("SP")
       .project()
@@ -45,9 +45,9 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
       .groupByParticipant()
       .build();
 
-    Document first = collection.aggregate(query).first();
+    collection.aggregate(query).iterator();
 
-    System.out.println(first);
+    System.out.println();
   }
 
 }

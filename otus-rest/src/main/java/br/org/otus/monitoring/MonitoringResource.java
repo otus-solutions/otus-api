@@ -53,19 +53,20 @@ public class MonitoringResource {
 
   @GET
 //  @Secured //TODO 19/09/18: uncomment
-  @Path("/activities/status/")
+  @Path("/activities/progress/")
   @Produces(MediaType.APPLICATION_JSON)
   public String getProjectStatus() {
-    monitoringFacade.getActivityStatus();
+    monitoringFacade.getActivitiesProgress();
     return new Response().buildSuccess().toJson();
   }
 
   @GET
-  @Secured
-  @Path("/activities/status/{rn}")
+//  @Secured
+  @Path("/activities/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getParticipantStatus(@PathParam("rn") String rn) {
-    return new Response().buildSuccess(monitoringFacade.get(rn)).toJson();
+  public String getParticipantStatus(@PathParam("center") String center) {
+    monitoringFacade.getActivitiesProgress(center);
+    return new Response().buildSuccess().toJson();
   }
 
 

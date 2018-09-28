@@ -42,9 +42,18 @@ public class MonitoringFacade {
     }
   }
 
-  public void getActivityStatus() {
+  public void getActivitiesProgress() {
     try {
-      monitoringService.getActivityStatus();
+      monitoringService.getActivitiesProgress();
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+
+  public void getActivitiesProgress(String center) {
+    try {
+      monitoringService.getActivitiesProgress();
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
