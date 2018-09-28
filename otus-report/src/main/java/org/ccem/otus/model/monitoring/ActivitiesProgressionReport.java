@@ -1,7 +1,6 @@
 package org.ccem.otus.model.monitoring;
 
 import com.google.gson.GsonBuilder;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class ActivitiesProgressionReport {
     return ActivitiesProgressionReport.getGsonBuilder().create().toJson(progressionReport);
   }
 
-  public static ActivitiesProgressionReport deserialize(String progressionReportJson) throws ValidationException {
+  public static ActivitiesProgressionReport deserialize(String progressionReportJson) {
     ActivitiesProgressionReport progressionReport = ActivitiesProgressionReport.getGsonBuilder().create().fromJson(progressionReportJson, ActivitiesProgressionReport.class);
     return progressionReport;
   }

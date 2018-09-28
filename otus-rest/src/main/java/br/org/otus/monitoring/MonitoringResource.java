@@ -41,23 +41,12 @@ public class MonitoringResource {
     return new Response().buildSuccess(monitoringFacade.getMonitoringCenters()).toJson();
   }
 
-
-  //TODO 19/09/18: review below
-  @GET
-  @Secured
-  @Path("/activities/status/{center}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String getStatus(@PathParam("center") String acronym) {
-    return new Response().buildSuccess(monitoringFacade.get(acronym)).toJson();
-  }
-
   @GET
 //  @Secured //TODO 19/09/18: uncomment
   @Path("/activities/progress/")
   @Produces(MediaType.APPLICATION_JSON)
   public String getProjectStatus() {
-    monitoringFacade.getActivitiesProgress();
-    return new Response().buildSuccess().toJson();
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress()).toJson();
   }
 
   @GET
@@ -65,8 +54,7 @@ public class MonitoringResource {
   @Path("/activities/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getParticipantStatus(@PathParam("center") String center) {
-    monitoringFacade.getActivitiesProgress(center);
-    return new Response().buildSuccess().toJson();
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson();
   }
 
 

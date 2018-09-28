@@ -36,18 +36,4 @@ public class MonitoringDaoBean extends MongoGenericDao<Document> implements Moni
     return monitoringData;
   }
 
-  @Override
-  public void getActivitiesProgressionReport() {
-    List<Bson> query = new ActivityStatusQueryBuilder()
-      .matchFieldCenter("SP")
-      .project()
-      .project2()
-      .groupByParticipant()
-      .build();
-
-    collection.aggregate(query).iterator();
-
-    System.out.println();
-  }
-
 }

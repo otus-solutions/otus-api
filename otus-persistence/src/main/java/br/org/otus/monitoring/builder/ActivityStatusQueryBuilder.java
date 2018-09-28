@@ -34,8 +34,10 @@ public class ActivityStatusQueryBuilder {
       "                {\n" +
       "                    $switch: {\n" +
       "                        branches: [\n" +
-      "                            {case: {$eq: [\"$lastStatus.name\", \"FINALIZED\"]}, then: 1},\n" +
-      "                            {case: {$eq: [\"$lastStatus.name\", \"SAVED\"]}, then: 0}\n" +
+      "                            {case: {$eq: [\"$lastStatus.name\", \"CREATED\"]}, then: -1},\n" +
+//      "                            {case: {$eq: [\"$lastStatus.name\", \"NOT MANDATORY\"]}, then: 0},\n" + Not required - not implemented yet
+      "                            {case: {$eq: [\"$lastStatus.name\", \"SAVED\"]}, then: 1},\n" +
+      "                            {case: {$eq: [\"$lastStatus.name\", \"FINALIZED\"]}, then: 2}\n" +
       "                        ],\n" +
       "                        default: -1\n" +
       "                    }\n" +
@@ -70,17 +72,19 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
+  public ActivityStatusQueryBuilder projecta() {
+    pipeline.add(parseQuery("     {\n" +
+      "         $project:{\n" +
+      "             \"rn\": \"$_id.rn\",\n" +
+      "             \"activities\": 1,\n" +
+      "             \"_id\": 0\n" +
+      "         }\n" +
+      "     }"));
+
+    return this;
+  }
+
   public ActivityStatusQueryBuilder groupByParticipant() {
-//    pipeline.add(Aggregates.group(
-//      parseQuery("{\n" +
-//        "            _id: {\n" +
-//        "                rn: \"$rn\"\n" +
-//        "\n" +
-//        "            },\n" +
-//        "            activities: {\n" +
-//        "                $addToSet: \"$$ROOT\"\n" +
-//        "            }\n" +
-//        "        }")));
     pipeline.add(parseQuery("{\n" +
       "        $group: {\n" +
       "            _id: {\n" +

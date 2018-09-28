@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.model.monitoring.ActivitiesProgressionReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSource;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
@@ -16,6 +17,7 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.FlagReportDao;
 import org.ccem.otus.persistence.MonitoringDao;
+import org.ccem.otus.persistence.SurveyDao;
 
 @Stateless
 public class MonitoringServiceBean implements MonitoringService {
@@ -31,6 +33,9 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Inject
   private FlagReportDao flagReportDao;
+
+  @Inject
+  private SurveyDao surveyDao;
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
@@ -62,7 +67,15 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public void getActivitiesProgress() {
-    flagReportDao.getActivitiesProgressionReport();
+  public ArrayList<ActivitiesProgressionReport> getActivitiesProgress() {
+    return flagReportDao.getActivitiesProgressionReport();
+  }
+
+  @Override
+  public ArrayList<ActivitiesProgressionReport> getActivitiesProgress(String center) {
+    List<String> strings = surveyDao.listAcronyms();
+    //fill
+    ArrayList<ActivitiesProgressionReport> report = flagReportDao.getActivitiesProgressionReport(center);
+    return report;
   }
 }

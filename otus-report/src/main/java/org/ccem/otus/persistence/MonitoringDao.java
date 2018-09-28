@@ -14,6 +14,4 @@ public interface MonitoringDao {
 
     List<MonitoringDataSourceResult> get(List<Document> query) throws ValidationException;
 
-    void getActivitiesProgressionReport();
-
 }

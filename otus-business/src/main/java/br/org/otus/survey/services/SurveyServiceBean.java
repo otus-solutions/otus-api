@@ -94,8 +94,8 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public List<String> getSurveys() throws ValidationException {
-        List<String> surveys = surveyDao.getSurveys();
+    public List<String> listAcronyms() {
+        List<String> surveys = surveyDao.listAcronyms();
         return surveys;
     }
 
