@@ -46,8 +46,6 @@ public class ActivityServiceBean implements ActivityService {
 
   @Override
   public List<SurveyActivity> list(long rn, String userEmail) {
-//    String emailFakeForTest1 = "fdrtec@gmail.com";
-//    String emailFakeForTest2 = "vianna.emanoel@gmail.com";
 
     List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionService.list();
     List<SurveyActivity> activities = (ArrayList<SurveyActivity>) activityDao.find(rn);

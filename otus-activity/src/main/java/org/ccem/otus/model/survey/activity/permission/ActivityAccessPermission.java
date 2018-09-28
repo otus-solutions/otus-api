@@ -5,7 +5,6 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ActivityAccessPermission {
@@ -45,11 +44,8 @@ public class ActivityAccessPermission {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());    
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
-  }
-
-  public String toJson() {
-    return new Gson().toJson(this);
   }
 }

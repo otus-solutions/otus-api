@@ -19,11 +19,10 @@ class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionSer
   public List<ActivityAccessPermission> list() {
     return activityAccessPermissionDao.find();
   }
-
+  
   @Override
   public void create(ActivityAccessPermission activityAccessPermission) throws ValidationException {
-    activityAccessPermissionDao.persist(activityAccessPermission);
-    
+    activityAccessPermissionDao.persist(activityAccessPermission);    
   }
 
   @Override

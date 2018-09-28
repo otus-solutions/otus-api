@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 
 import br.org.otus.rest.Response;
@@ -36,10 +37,9 @@ public class ActivityAccessPermissionResource {
   @GET
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
-  public String getAll() {
-    Response response = new Response();
-    List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionFacade.getAll();
-    return response.setData(activityAccessPermissions).toJson();
+  public String getAll() {    
+    return new Response().buildSuccess(activityAccessPermissionFacade.getAll())
+        .toCustomJson(ActivityAccessPermission.getGsonBuilder());
   }
 
   @PUT
