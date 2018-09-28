@@ -19,7 +19,7 @@ import br.org.mongodb.MongoGenericDao;
 @Stateless
 class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> implements ActivityAccessPermissionDao {
 
-  private static final String COLLECTION_NAME = "activity_access_permission";
+  private static final String COLLECTION_NAME = "permission";
 
   public ActivityAccessPermissionDaoBean() {
     super(COLLECTION_NAME, Document.class);
