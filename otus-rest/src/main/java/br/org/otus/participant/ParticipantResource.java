@@ -40,7 +40,7 @@ public class ParticipantResource {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 		User user = userFacade.fetchByEmail(userEmail);
-		return new Response().buildSuccess(participantFacade.list(user.getFieldCenter())).toCustomJson(Participant.getGsonBuilder());
+		return new Response().buildSuccess(participantFacade.list(user.getFieldCenter())).toJson(Participant.getGsonBuilder());
 	}
 
 	@GET
@@ -56,7 +56,7 @@ public class ParticipantResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public String create(@Context HttpServletRequest request, String participantJson) throws DataNotFoundException, ValidationException {
-      return new Response().buildSuccess(participantFacade.create(participantJson)).toCustomJson(Participant.getGsonBuilder());
+      return new Response().buildSuccess(participantFacade.create(participantJson)).toJson(Participant.getGsonBuilder());
     }
 
 }

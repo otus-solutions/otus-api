@@ -23,11 +23,12 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
   @Override
   public ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport() {
     List<Bson> query = new ActivityStatusQueryBuilder()
-      .project()
-      .project2()
-      .groupByParticipant()
-      .projecta()
-      .build();
+        .project()
+        .sortByDate()
+        .removeStatusDate()
+        .groupByParticipant()
+        .projecta()
+        .build();
 
     MongoCursor<Document> iterator = collection.aggregate(query).iterator();
 
@@ -37,26 +38,27 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
   @Override
   public ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport(String center) {
     List<Bson> query = new ActivityStatusQueryBuilder()
-      .matchFieldCenter(center)
-      .project()
-      .project2()
-      .groupByParticipant()
-      .projecta()
-      .build();
+        .matchFieldCenter(center)
+        .project()
+        .sortByDate()
+        .removeStatusDate()
+        .groupByParticipant()
+        .projecta()
+        .build();
 
     MongoCursor<Document> iterator = collection.aggregate(query).iterator();
 
     return deserializeReport(iterator);
   }
 
-  private ArrayList<ActivitiesProgressionReport> deserializeReport (MongoCursor<Document> iterator) {
+  private ArrayList<ActivitiesProgressionReport> deserializeReport(MongoCursor<Document> iterator) {
 
     ArrayList<ActivitiesProgressionReport> reports = new ArrayList<>();
 
     try {
       while (iterator.hasNext()) {
         reports.add(
-          ActivitiesProgressionReport.deserialize(iterator.next().toJson())
+            ActivitiesProgressionReport.deserialize(iterator.next().toJson())
         );
       }
     } finally {
