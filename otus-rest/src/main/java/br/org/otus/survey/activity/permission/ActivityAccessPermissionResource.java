@@ -30,7 +30,7 @@ public class ActivityAccessPermissionResource {
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   public String create(String permission) {
-    activityAccessPermissionFacade.create(activityAccessPermission.deserialize(permission));
+    activityAccessPermissionFacade.create(ActivityAccessPermission.deserialize(permission));
     return new Response().buildSuccess().toJson();
   }
 
@@ -46,7 +46,7 @@ public class ActivityAccessPermissionResource {
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   public String update(String permission) {
-    activityAccessPermissionFacade.update(activityAccessPermission.deserialize(permission));
+    activityAccessPermissionFacade.update(ActivityAccessPermission.deserialize(permission));
     return new Response().buildSuccess().toJson();
   }
 
