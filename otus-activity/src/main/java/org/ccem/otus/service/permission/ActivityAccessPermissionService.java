@@ -7,9 +7,9 @@ import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 
 public interface ActivityAccessPermissionService {
   
-  void create(ActivityAccessPermission activityAccessPermissionDto) throws ValidationException;
+  void create(ActivityAccessPermission activityAccessPermissionDto);
 
-  void update(ActivityAccessPermission activityAccessPermissionDto) throws ValidationException;
+  void update(ActivityAccessPermission activityAccessPermissionDto);
   
   List<ActivityAccessPermission> list();
 

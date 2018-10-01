@@ -44,8 +44,7 @@ public class ActivityAccessPermission {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());    
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());     
     return builder;
   }
 }

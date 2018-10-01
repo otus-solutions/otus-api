@@ -21,12 +21,12 @@ class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionSer
   }
   
   @Override
-  public void create(ActivityAccessPermission activityAccessPermission) throws ValidationException {
+  public void create(ActivityAccessPermission activityAccessPermission) {
     activityAccessPermissionDao.persist(activityAccessPermission);    
   }
 
   @Override
-  public void update(ActivityAccessPermission activityAccessPermission) throws ValidationException {
+  public void update(ActivityAccessPermission activityAccessPermission) {
     activityAccessPermissionDao.update(activityAccessPermission);   
   }
 }

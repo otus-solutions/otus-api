@@ -19,27 +19,15 @@ public class ActivityAccessPermissionFacade {
   @Inject
   private ActivityAccessPermissionService activityAccessPermissionService;
   
-  public void create(ActivityAccessPermission permission) {
-    try {
-      activityAccessPermissionService.create(permission);
-
-    } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage(), e.getData()));
-    }
+  public void create(ActivityAccessPermission permission) {    
+      activityAccessPermissionService.create(permission);  
   }
   
   public List<ActivityAccessPermission> getAll() {
     return activityAccessPermissionService.list();
   }
   
-  public void update(ActivityAccessPermission permission) {
-    try {
+  public void update(ActivityAccessPermission permission) {    
       activityAccessPermissionService.update(permission);
-
-    } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build());
-
-    }
-  }
-  
+  }  
 }
