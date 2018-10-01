@@ -37,8 +37,6 @@ public class MonitoringFacade {
   public List<MonitoringCenter> getMonitoringCenters() {
     try {
       return monitoringService.getMonitoringCenter();
-    } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

@@ -42,7 +42,7 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ArrayList<MonitoringCenter> getMonitoringCenter() throws ValidationException, DataNotFoundException {
+  public ArrayList<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException {
 
     ArrayList<MonitoringCenter> results = new ArrayList<> ();
     ArrayList<String> centers = fieldCenterDao.listAcronyms ();
