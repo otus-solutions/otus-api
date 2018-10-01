@@ -25,62 +25,61 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 @Path("participants/{rn}/activities")
 public class ActivityResource {
 
-	@Inject
-	private ActivityFacade activityFacade;
-	@Inject
-	private ParticipantFacade participantFacade;
-	
-	@Inject
-    private SecurityContext securityContext;
-	
+  @Inject
+  private ActivityFacade activityFacade;
+  @Inject
+  private ParticipantFacade participantFacade;
 
-	@GET
-	@Secured
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getAll(@Context HttpServletRequest request, @PathParam("rn") long rn) {
-	  String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-      String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-		isValidRecruitmentNumber(rn);		
-		
-		return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
-	}
+  @Inject
+  private SecurityContext securityContext;
 
-	@POST
-	@Secured
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String createActivity(@PathParam("rn") long rn, String surveyActivity) {
-		isValidRecruitmentNumber(rn);
-		String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity));
+  @GET
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getAll(@Context HttpServletRequest request, @PathParam("rn") long rn) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    isValidRecruitmentNumber(rn);
 
-		return new Response().buildSuccess(objectID).toJson();
-	}
+    return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
+  }
 
-	@GET
-	@Secured
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getByID(@PathParam("rn") long rn, @PathParam("id") String id) {
-		isValidRecruitmentNumber(rn);
+  @POST
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String createActivity(@PathParam("rn") long rn, String surveyActivity) {
+    isValidRecruitmentNumber(rn);
+    String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity));
 
-		return new Response().buildSuccess(activityFacade.getByID(id)).toSurveyJson();
-	}
+    return new Response().buildSuccess(objectID).toJson();
+  }
 
-	@PUT
-	@Secured
-	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String update(@PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
-		isValidRecruitmentNumber(rn);
-		SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
-		SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
+  @GET
+  @Secured
+  @Path("/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getByID(@PathParam("rn") long rn, @PathParam("id") String id) {
+    isValidRecruitmentNumber(rn);
 
-		return new Response().buildSuccess(updatedActivity).toSurveyJson();
-	}
+    return new Response().buildSuccess(activityFacade.getByID(id)).toSurveyJson();
+  }
 
-	private void isValidRecruitmentNumber(long rn) {
-		participantFacade.getByRecruitmentNumber(rn);
-	}
+  @PUT
+  @Secured
+  @Path("/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String update(@PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
+    isValidRecruitmentNumber(rn);
+    SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
+    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
+
+    return new Response().buildSuccess(updatedActivity).toSurveyJson();
+  }
+
+  private void isValidRecruitmentNumber(long rn) {
+    participantFacade.getByRecruitmentNumber(rn);
+  }
 
 }

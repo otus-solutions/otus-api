@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
@@ -20,79 +22,103 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.context.SecurityContext;
+import br.org.otus.security.context.SessionIdentifier;
+import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.survey.activity.api.ActivityFacade;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(AuthorizationHeaderReader.class)
+
 public class ActivityResourceTest {
-	private static final long RECRUIMENT_NUMBER = 3051442;
-	private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
-	private static final String ACTIVITY_EXPECTED = "{\"data\":\"591a40807b65e4045b9011e7\"}";
-	@Mock
-	private ActivityFacade activityFacade;
-	@InjectMocks
-	private ActivityResource activityResource;
-	@Mock
-	private SurveyActivity surveyActivity;
-	@Mock
-	private ParticipantFacade participantFacade;
-	@Mock
-	private ActivityService activityService;
-	private String jsonString;
-	private SurveyActivity activityDeserialize;
-	private List<SurveyActivity> listSurveyActivity;
-	private Participant participant;
+  private static final long RECRUIMENT_NUMBER = 3051442;
+  private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
+  private static final String ACTIVITY_EXPECTED = "{\"data\":\"591a40807b65e4045b9011e7\"}";
+  private static final String userEmail = "otus@otus.com";
+  private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 
-	@Before
-	public void setUp() {
-		participant = new Participant((long) RECRUIMENT_NUMBER);
-		when(participantFacade.getByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
-//		jsonString = ActivitySimplifiedFactory.create().toString();
-		activityDeserialize = SurveyActivity.deserialize(jsonString);
-		listSurveyActivity = new ArrayList<SurveyActivity>();
-		listSurveyActivity.add(SurveyActivity.deserialize(jsonString));
-	}
+  @InjectMocks
+  private ActivityResource activityResource;
+  @Mock
+  private SurveyActivity surveyActivity;
+  @Mock
+  private ParticipantFacade participantFacade;
+  @Mock
+  private ActivityService activityService;
+  @Mock
+  private ActivityFacade activityFacade;
 
-//	@Test
-//	public void method_getAll_should_return_entire_list_by_recuitment_number() {
-//		when(activityFacade.list(RECRUIMENT_NUMBER)).thenReturn(listSurveyActivity);
-//		String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
-//		assertEquals(listSurveyActivityExpected, activityResource.getAll(RECRUIMENT_NUMBER));
-//		Mockito.verify(participantFacade).getByRecruitmentNumber(RECRUIMENT_NUMBER);
-//	}
+  private String jsonActivity = "activity";
+  private SurveyActivity activityDeserialize;
+  private List<SurveyActivity> listSurveyActivity;
+  private Participant participant;
 
-	@Test
-	public void method_createActivity_should_return_ObjectResponse() {
-		when(activityFacade.deserialize(jsonString)).thenReturn(activityDeserialize);
-		when(activityFacade.create(activityDeserialize)).thenReturn(ID_SURVEY_ACITIVITY);
-		assertEquals(ACTIVITY_EXPECTED, activityResource.createActivity(RECRUIMENT_NUMBER, jsonString));
-		verify(participantFacade).getByRecruitmentNumber(anyLong());
-		verify(activityFacade).deserialize(anyString());
-		verify(activityFacade).create(anyObject());
-	}
+  @Mock
+  private HttpServletRequest request;
+  @Mock
+  private SecurityContext securityContext;
+  @Mock
+  private SessionIdentifier sessionIdentifier;
+  @Mock
+  private AuthenticationData authenticationData;
 
-	@Test
-	public void method_getByID_should_return_ObjectResponse() throws DataNotFoundException {
-		when(participantFacade.getByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
-		when(activityFacade.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
-		when(activityService.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
-		String responseExpected = new Response().buildSuccess(activityFacade.getByID(ID_SURVEY_ACITIVITY))
-				.toSurveyJson();
-		assertEquals(responseExpected, activityResource.getByID(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY));
-	}
+  @Before
+  public void setUp() {
+    participant = new Participant((long) RECRUIMENT_NUMBER);
+    when(participantFacade.getByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
+    jsonActivity = ActivitySimplifiedFactory.create().toString();
+    activityDeserialize = SurveyActivity.deserialize(jsonActivity);
+    listSurveyActivity = new ArrayList<SurveyActivity>();
+    listSurveyActivity.add(SurveyActivity.deserialize(jsonActivity));
+  }
 
-	@Test
-	public void method_update_should_return_update_ObjectResponse() {
-		when(activityFacade.deserialize(jsonString)).thenReturn(activityDeserialize);
-		when(activityFacade.updateActivity(activityFacade.deserialize(jsonString))).thenReturn(activityDeserialize);
-		SurveyActivity deserializeActivityUpdate = activityFacade
-				.updateActivity(activityFacade.deserialize(jsonString));
-		SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate);
-		String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
-		assertEquals(responseExpected, activityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonString));
-		verify(participantFacade).getByRecruitmentNumber(anyLong());
-	}
+  @Test
+  public void method_getAll_should_return_entire_list_by_recruitment_number() throws Exception {
+    when(request.getHeader(Mockito.anyString())).thenReturn(TOKEN);
+    PowerMockito.mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.readToken(TOKEN)).thenReturn(TOKEN);
+    when(securityContext.getSession(TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(userEmail);
+    when(activityFacade.list(RECRUIMENT_NUMBER, userEmail)).thenReturn(listSurveyActivity);
+    String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.getAll(request, RECRUIMENT_NUMBER));
+  }
+
+  @Test
+  public void method_createActivity_should_return_ObjectResponse() {
+    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
+    when(activityFacade.create(activityDeserialize)).thenReturn(ID_SURVEY_ACITIVITY);
+    assertEquals(ACTIVITY_EXPECTED, activityResource.createActivity(RECRUIMENT_NUMBER, jsonActivity));
+    verify(participantFacade).getByRecruitmentNumber(anyLong());
+    verify(activityFacade).deserialize(anyString());
+    verify(activityFacade).create(anyObject());
+  }
+
+  @Test
+  public void method_getByID_should_return_ObjectResponse() throws DataNotFoundException {
+    when(participantFacade.getByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
+    when(activityFacade.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
+    when(activityService.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
+    String responseExpected = new Response().buildSuccess(activityFacade.getByID(ID_SURVEY_ACITIVITY)).toSurveyJson();
+    assertEquals(responseExpected, activityResource.getByID(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY));
+  }
+
+  @Test
+  public void method_update_should_return_update_ObjectResponse() {
+    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
+    when(activityFacade.updateActivity(activityFacade.deserialize(jsonActivity))).thenReturn(activityDeserialize);
+    SurveyActivity deserializeActivityUpdate = activityFacade.updateActivity(activityFacade.deserialize(jsonActivity));
+    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate);
+    String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
+    assertEquals(responseExpected, activityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
+    verify(participantFacade).getByRecruitmentNumber(anyLong());
+  }
 }
