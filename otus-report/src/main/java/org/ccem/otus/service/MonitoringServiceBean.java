@@ -37,28 +37,28 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
-    MonitoringDataSource monitoringDataSource = new MonitoringDataSource ();
-    return monitoringDao.get (monitoringDataSource.buildQuery (acronym));
+    MonitoringDataSource monitoringDataSource = new MonitoringDataSource();
+    return monitoringDao.get(monitoringDataSource.buildQuery(acronym));
   }
 
   @Override
   public ArrayList<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException {
 
-    ArrayList<MonitoringCenter> results = new ArrayList<> ();
-    ArrayList<String> centers = fieldCenterDao.listAcronyms ();
+    ArrayList<MonitoringCenter> results = new ArrayList<>();
+    ArrayList<String> centers = fieldCenterDao.listAcronyms();
 
     for (String acronymCenter : centers) {
 
-      FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym (acronymCenter);
-      Long goals = participantDao.getPartipantsActives (acronymCenter);
+      FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
+      Long goals = participantDao.getPartipantsActives(acronymCenter);
 
-      MonitoringCenter monitoring = new MonitoringCenter ();
-      monitoring.setName (fieldCenter.getName ());
-      monitoring.setGoal (goals);
-      monitoring.setBackgroundColor (fieldCenter.getBackgroundColor ());
-      monitoring.setBorderColor (fieldCenter.getBorderColor ());
+      MonitoringCenter monitoring = new MonitoringCenter();
+      monitoring.setName(fieldCenter.getName());
+      monitoring.setGoal(goals);
+      monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
+      monitoring.setBorderColor(fieldCenter.getBorderColor());
 
-      results.add (monitoring);
+      results.add(monitoring);
       monitoring = null;
     }
     return results;
@@ -66,16 +66,33 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Override
   public ArrayList<ActivitiesProgressionReport> getActivitiesProgress() {
-    return flagReportDao.getActivitiesProgressionReport ();
+    List<String> surveys = surveyDao.listAcronyms();
+
+    ArrayList<ActivitiesProgressionReport> report = flagReportDao.getActivitiesProgressionReport();
+
+    normalizeProgressionReports(report, surveys);
+
+    return report;
   }
 
   @Override
   public ArrayList<ActivitiesProgressionReport> getActivitiesProgress(String center) {
-    List<String> strings = surveyDao.listAcronyms ();
+    List<String> surveys = surveyDao.listAcronyms();
 
-    HashMap<String, ActivityFlagReport> map = normalize (strings);
+    ArrayList<ActivitiesProgressionReport> report = flagReportDao.getActivitiesProgressionReport(center);
 
-    ArrayList<ActivitiesProgressionReport> report = flagReportDao.getActivitiesProgressionReport (center);
+    normalizeProgressionReports(report, surveys);
+
+    return report;
+  }
+
+  private ArrayList<ActivitiesProgressionReport> normalizeProgressionReports(ArrayList<ActivitiesProgressionReport> report, List<String> surveys) {
+    HashMap<String, ActivityFlagReport> map = new HashMap<>();
+
+    for (String acronym : surveys) {
+      map.put(acronym, new ActivityFlagReport(acronym));
+    }
+
 
     for (ActivitiesProgressionReport activitiesProgressionReport : report) {
       activitiesProgressionReport.normalize(map);
@@ -83,17 +100,5 @@ public class MonitoringServiceBean implements MonitoringService {
 
     return report;
   }
-
-  private HashMap<String, ActivityFlagReport> normalize(List<String> strings) {
-    HashMap<String, ActivityFlagReport> map = new HashMap<> ();
-
-    for (String acronym : strings) {
-      map.put(acronym, new ActivityFlagReport(acronym));
-    }
-
-
-    return map;
-  }
-
 
 }

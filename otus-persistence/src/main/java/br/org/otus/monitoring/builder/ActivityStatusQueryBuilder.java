@@ -32,7 +32,7 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
-  public ActivityStatusQueryBuilder project() {
+  public ActivityStatusQueryBuilder toStatusValue() {
     Document projection = new Document();
 
     projection.put("_id", 0);
@@ -57,7 +57,7 @@ public class ActivityStatusQueryBuilder {
         "                    $switch: {\n" +
         "                        branches: [\n" +
         "                            {case: {$eq: [\"$lastStatus.name\", \"CREATED\"]}, then: -1},\n" +
-//      "                            {case: {$eq: [\"$lastStatus.name\", \"NOT MANDATORY\"]}, then: 0},\n" + Not required - not implemented yet
+//      "                            {case: {$eq: [\"$lastStatus.name\", \"NOT MANDATORY\"]}, then: 0},\n" + // Not required - not implemented yet
         "                            {case: {$eq: [\"$lastStatus.name\", \"SAVED\"]}, then: 1},\n" +
         "                            {case: {$eq: [\"$lastStatus.name\", \"FINALIZED\"]}, then: 2}\n" +
         "                        ],\n" +
@@ -75,7 +75,7 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
-  public ActivityStatusQueryBuilder projecta() {
+  public ActivityStatusQueryBuilder projectId() {
     pipeline.add(parseQuery("     {\n" +
         "         $project:{\n" +
         "             \"rn\": \"$_id.rn\",\n" +

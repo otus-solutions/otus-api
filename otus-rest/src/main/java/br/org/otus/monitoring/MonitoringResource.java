@@ -33,7 +33,6 @@ public class MonitoringResource {
     return new Response().buildSuccess(monitoringFacade.get(acronym)).toJson();
   }
 
-
   @GET
   @Secured
   @Path("/centers")
@@ -43,7 +42,7 @@ public class MonitoringResource {
   }
 
   @GET
-//  @Secured //TODO 19/09/18: uncomment
+  @Secured
   @Path("/activities/progress/")
   @Produces(MediaType.APPLICATION_JSON)
   public String getProjectStatus() {
@@ -51,10 +50,10 @@ public class MonitoringResource {
   }
 
   @GET
-//  @Secured
+  @Secured
   @Path("/activities/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getParticipantStatus(@PathParam("center") String center) {
+  public String getActivitiesProgress(@PathParam("center") String center) {
     return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressionReport.getGsonBuilder());
   }
 

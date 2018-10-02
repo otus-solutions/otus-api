@@ -34,8 +34,7 @@ public class ActivitiesProgressionReport {
   }
 
   public static ActivitiesProgressionReport deserialize(String progressionReportJson) {
-    ActivitiesProgressionReport progressionReport = ActivitiesProgressionReport.getGsonBuilder().create().fromJson(progressionReportJson, ActivitiesProgressionReport.class);
-    return progressionReport;
+    return ActivitiesProgressionReport.getGsonBuilder().create().fromJson(progressionReportJson, ActivitiesProgressionReport.class);
   }
 
   public static GsonBuilder getGsonBuilder() {

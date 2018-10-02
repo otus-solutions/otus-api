@@ -23,11 +23,11 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
   @Override
   public ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport() {
     List<Bson> query = new ActivityStatusQueryBuilder()
-        .project()
+        .toStatusValue()
         .sortByDate()
         .removeStatusDate()
         .groupByParticipant()
-        .projecta()
+        .projectId()
         .build();
 
     MongoCursor<Document> iterator = collection.aggregate(query).iterator();
@@ -39,11 +39,11 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
   public ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport(String center) {
     List<Bson> query = new ActivityStatusQueryBuilder()
         .matchFieldCenter(center)
-        .project()
+        .toStatusValue()
         .sortByDate()
         .removeStatusDate()
         .groupByParticipant()
-        .projecta()
+        .projectId()
         .build();
 
     MongoCursor<Document> iterator = collection.aggregate(query).iterator();
