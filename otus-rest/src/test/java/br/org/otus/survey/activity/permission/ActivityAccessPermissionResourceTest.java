@@ -64,7 +64,7 @@ public class ActivityAccessPermissionResourceTest {
   }
 
   @Test
-  public void updateMethod() {
+  public void updateMethod_should_invoke_update_activityAccessPermissionFacade() {
     assertEquals(EXPECTED_RESPONSE, resource.update(permissionJson));
     verify(activityAccessPermissionFacade, Mockito.times(1)).update(permissionObject);
   }

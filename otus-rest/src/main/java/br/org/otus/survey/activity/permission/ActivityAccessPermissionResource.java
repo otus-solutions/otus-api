@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
+import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermissionDTO;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
@@ -25,6 +26,7 @@ public class ActivityAccessPermissionResource {
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
   @Inject
   private ActivityAccessPermission activityAccessPermission;
+  
 
   @POST
   @Secured
@@ -39,7 +41,7 @@ public class ActivityAccessPermissionResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getAll() {    
     return new Response().buildSuccess(activityAccessPermissionFacade.getAll())
-        .toCustomJson(ActivityAccessPermission.getGsonBuilder());
+        .toCustomJson(ActivityAccessPermissionDTO.getGsonBuilder());
   }
 
   @PUT
@@ -49,5 +51,4 @@ public class ActivityAccessPermissionResource {
     activityAccessPermissionFacade.update(ActivityAccessPermission.deserialize(permission));
     return new Response().buildSuccess().toJson();
   }
-
 }
