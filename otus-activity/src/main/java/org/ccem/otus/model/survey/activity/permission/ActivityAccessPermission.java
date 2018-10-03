@@ -36,15 +36,12 @@ public class ActivityAccessPermission {
   }
 
   public static ActivityAccessPermission deserialize(String activityAccessPermission) {
-    GsonBuilder builder = getGsonBuilder();
-    ActivityAccessPermission activityAccessPermissionTemplate = builder.create().fromJson(activityAccessPermission,
-        ActivityAccessPermission.class);
-    return activityAccessPermissionTemplate;
+    return ActivityAccessPermission.getGsonBuilder().create().fromJson(activityAccessPermission, ActivityAccessPermission.class);
   }
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());     
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
   }
 }
