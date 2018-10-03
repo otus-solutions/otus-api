@@ -1,7 +1,5 @@
 package br.org.otus.survey.activity.permission;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,10 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
-import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermissionDTO;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
@@ -41,7 +36,7 @@ public class ActivityAccessPermissionResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getAll() {    
     return new Response().buildSuccess(activityAccessPermissionFacade.getAll())
-        .toCustomJson(ActivityAccessPermissionDTO.getGsonBuilder());
+        .toCustomJson(ActivityAccessPermission.getGsonBuilder());
   }
 
   @PUT
