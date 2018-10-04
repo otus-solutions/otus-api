@@ -20,8 +20,8 @@ public class ActivityFacade {
 	@Inject
 	private ActivityService activityService;
 
-	public List<SurveyActivity> list(long rn) {
-		return activityService.list(rn);		
+	public List<SurveyActivity> list(long rn, String userEmail) {
+		return activityService.list(rn, userEmail);		
 	}
 
 	public SurveyActivity getByID(String id) {
