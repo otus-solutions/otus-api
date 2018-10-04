@@ -65,28 +65,28 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ArrayList<ActivitiesProgressionReport> getActivitiesProgress() {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgress() {
     List<String> surveys = surveyDao.listAcronyms();
 
-    ArrayList<ActivitiesProgressionReport> report = flagReportDao.getActivitiesProgressionReport();
+    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressionReport();
 
-    normalizeProgressionReports(report, surveys);
+    normalizeProgressReports(report, surveys);
 
     return report;
   }
 
   @Override
-  public ArrayList<ActivitiesProgressionReport> getActivitiesProgress(String center) {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center) {
     List<String> surveys = surveyDao.listAcronyms();
 
-    ArrayList<ActivitiesProgressionReport> report = flagReportDao.getActivitiesProgressionReport(center);
+    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressionReport(center);
 
-    normalizeProgressionReports(report, surveys);
+    normalizeProgressReports(report, surveys);
 
     return report;
   }
 
-  private ArrayList<ActivitiesProgressionReport> normalizeProgressionReports(ArrayList<ActivitiesProgressionReport> report, List<String> surveys) {
+  private ArrayList<ActivitiesProgressReport> normalizeProgressReports(ArrayList<ActivitiesProgressReport> report, List<String> surveys) {
     HashMap<String, ActivityFlagReport> map = new HashMap<>();
 
     for (String acronym : surveys) {
@@ -94,8 +94,8 @@ public class MonitoringServiceBean implements MonitoringService {
     }
 
 
-    for (ActivitiesProgressionReport activitiesProgressionReport : report) {
-      activitiesProgressionReport.normalize(map);
+    for (ActivitiesProgressReport activitiesProgressReport : report) {
+      activitiesProgressReport.normalize(map);
     }
 
     return report;

@@ -5,7 +5,7 @@ import br.org.otus.monitoring.builder.ActivityStatusQueryBuilder;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.ccem.otus.model.monitoring.ActivitiesProgressionReport;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.persistence.FlagReportDao;
 
 import java.util.ArrayList;
@@ -21,9 +21,10 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
 
 
   @Override
-  public ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport() {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport() {
     List<Bson> query = new ActivityStatusQueryBuilder()
-        .toStatusValue()
+        .projectLastStatus()
+        .getStatusValue()
         .sortByDate()
         .removeStatusDate()
         .groupByParticipant()
@@ -36,10 +37,11 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
   }
 
   @Override
-  public ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport(String center) {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport(String center) {
     List<Bson> query = new ActivityStatusQueryBuilder()
         .matchFieldCenter(center)
-        .toStatusValue()
+        .projectLastStatus()
+        .getStatusValue()
         .sortByDate()
         .removeStatusDate()
         .groupByParticipant()
@@ -51,14 +53,14 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
     return deserializeReport(iterator);
   }
 
-  private ArrayList<ActivitiesProgressionReport> deserializeReport(MongoCursor<Document> iterator) {
+  private ArrayList<ActivitiesProgressReport> deserializeReport(MongoCursor<Document> iterator) {
 
-    ArrayList<ActivitiesProgressionReport> reports = new ArrayList<>();
+    ArrayList<ActivitiesProgressReport> reports = new ArrayList<>();
 
     try {
       while (iterator.hasNext()) {
         reports.add(
-            ActivitiesProgressionReport.deserialize(iterator.next().toJson())
+            ActivitiesProgressReport.deserialize(iterator.next().toJson())
         );
       }
     } finally {

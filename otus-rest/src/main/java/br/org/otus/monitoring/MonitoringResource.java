@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
-import org.ccem.otus.model.monitoring.ActivitiesProgressionReport;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 
 @Path("/monitoring")
 public class MonitoringResource {
@@ -54,7 +54,7 @@ public class MonitoringResource {
   @Path("/activities/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getActivitiesProgress(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressionReport.getGsonBuilder());
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
   }
 
 

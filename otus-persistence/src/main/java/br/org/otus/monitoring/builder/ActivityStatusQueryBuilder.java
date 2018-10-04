@@ -32,25 +32,28 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
-  public ActivityStatusQueryBuilder toStatusValue() {
+  public ActivityStatusQueryBuilder projectLastStatus() {
     Document projection = new Document();
 
     projection.put("_id", 0);
     projection.put("rn", "$participantData.recruitmentNumber");
     projection.put("acronym", "$surveyForm.surveyTemplate.identity.acronym");
     projection.put("lastStatus",
-        new Document("$arrayElemAt",
-            Arrays.asList(
-                new Document(
-                    "$slice",
-                    Arrays.asList("$statusHistory", -1)
-                ),
-                0)
-        )
+      new Document("$arrayElemAt",
+        Arrays.asList(
+          new Document(
+            "$slice",
+            Arrays.asList("$statusHistory", -1)
+          ),
+          0)
+      )
     );
     pipeline.add(Aggregates.project(projection));
+    return this;
+  }
 
-    Document p2 = parseQuery("{\n" +
+  public ActivityStatusQueryBuilder getStatusValue() {
+    Document projection = parseQuery("{\n" +
         "        $project: {\n" +
         "            status:\n" +
         "                {\n" +
@@ -71,7 +74,7 @@ public class ActivityStatusQueryBuilder {
         "        }\n" +
         "    }");
 
-    pipeline.add(p2);
+    pipeline.add(projection);
     return this;
   }
 

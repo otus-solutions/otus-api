@@ -1,12 +1,12 @@
 package org.ccem.otus.persistence;
 
-import org.ccem.otus.model.monitoring.ActivitiesProgressionReport;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 
 import java.util.ArrayList;
 
 public interface FlagReportDao {
 
-  ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport();
+  ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport();
 
-  ArrayList<ActivitiesProgressionReport> getActivitiesProgressionReport(String center);
+  ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport(String center);
 }

@@ -2,7 +2,7 @@ package org.ccem.otus.service;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.ActivitiesProgressionReport;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 
@@ -15,7 +15,7 @@ public interface MonitoringService {
 
     List<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException;
 
-    ArrayList<ActivitiesProgressionReport> getActivitiesProgress();
+    ArrayList<ActivitiesProgressReport> getActivitiesProgress();
 
-    ArrayList<ActivitiesProgressionReport> getActivitiesProgress(String center);
+    ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center);
 }

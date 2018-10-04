@@ -5,7 +5,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.ActivitiesProgressionReport;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.service.MonitoringService;
@@ -42,7 +42,7 @@ public class MonitoringFacade {
     }
   }
 
-  public ArrayList<ActivitiesProgressionReport> getActivitiesProgress() {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgress() {
     try {
       return monitoringService.getActivitiesProgress();
     } catch (Exception e) {
@@ -51,7 +51,7 @@ public class MonitoringFacade {
   }
 
 
-  public ArrayList<ActivitiesProgressionReport> getActivitiesProgress(String center) {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center) {
     try {
       return monitoringService.getActivitiesProgress(center);
     } catch (Exception e) {
