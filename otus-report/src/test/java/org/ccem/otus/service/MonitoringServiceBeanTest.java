@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 public class MonitoringServiceBeanTest {
 
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
-  private static final ArrayList<String> SURVEY_ACRONYM_LIST = new ArrayList<>();
+  private static ArrayList<String> SURVEY_ACRONYM_LIST = new ArrayList<>();
   private static final ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
   private static final String reportJson1 = "{\n" +
     "    \"activities\": [\n" +
@@ -95,6 +95,7 @@ public class MonitoringServiceBeanTest {
     when(fieldCenterDao.fetchByAcronym(fieldCenter.getAcronym())).thenReturn(fieldCenter);
     when(participantDao.getPartipantsActives(fieldCenter.getAcronym())).thenReturn(GOAL);
 
+    SURVEY_ACRONYM_LIST = new ArrayList<>();
     SURVEY_ACRONYM_LIST.add("HVSD");
     SURVEY_ACRONYM_LIST.add("PSEC");
     SURVEY_ACRONYM_LIST.add("ABC");
