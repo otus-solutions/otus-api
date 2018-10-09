@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface FlagReportDao {
 
-  ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport();
+  ArrayList<ActivitiesProgressReport> getActivitiesProgressReport();
 
-  ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport(String center);
+  ArrayList<ActivitiesProgressReport> getActivitiesProgressReport(String center);
 }

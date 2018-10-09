@@ -21,7 +21,7 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
 
 
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport() {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgressReport() {
     List<Bson> query = new ActivityStatusQueryBuilder()
         .projectLastStatus()
         .getStatusValue()
@@ -37,7 +37,7 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
   }
 
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgressionReport(String center) {
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgressReport(String center) {
     List<Bson> query = new ActivityStatusQueryBuilder()
         .matchFieldCenter(center)
         .projectLastStatus()

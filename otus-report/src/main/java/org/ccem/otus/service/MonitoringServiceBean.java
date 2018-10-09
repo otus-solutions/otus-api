@@ -68,7 +68,7 @@ public class MonitoringServiceBean implements MonitoringService {
   public ArrayList<ActivitiesProgressReport> getActivitiesProgress() {
     List<String> surveys = surveyDao.listAcronyms();
 
-    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressionReport();
+    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport();
 
     normalizeProgressReports(report, surveys);
 
@@ -79,7 +79,7 @@ public class MonitoringServiceBean implements MonitoringService {
   public ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center) {
     List<String> surveys = surveyDao.listAcronyms();
 
-    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressionReport(center);
+    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport(center);
 
     normalizeProgressReports(report, surveys);
 

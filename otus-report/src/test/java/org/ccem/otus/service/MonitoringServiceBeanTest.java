@@ -103,8 +103,8 @@ public class MonitoringServiceBeanTest {
 
     PROGRESS_REPORT_LIST.add(ActivitiesProgressReport.deserialize(reportJson1));
     PROGRESS_REPORT_LIST.add(ActivitiesProgressReport.deserialize(reportJson2));
-    when(flagReportDao.getActivitiesProgressionReport("BA")).thenReturn(PROGRESS_REPORT_LIST);
-    when(flagReportDao.getActivitiesProgressionReport()).thenReturn(PROGRESS_REPORT_LIST);
+    when(flagReportDao.getActivitiesProgressReport("BA")).thenReturn(PROGRESS_REPORT_LIST);
+    when(flagReportDao.getActivitiesProgressReport()).thenReturn(PROGRESS_REPORT_LIST);
 
   }
 
