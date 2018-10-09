@@ -21,7 +21,7 @@ public class ActivityAccessPermissionResource {
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
   @Inject
   private ActivityAccessPermission activityAccessPermission;
-  
+
 
   @POST
   @Secured
@@ -34,9 +34,9 @@ public class ActivityAccessPermissionResource {
   @GET
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
-  public String getAll() {    
+  public String getAll() {
     return new Response().buildSuccess(activityAccessPermissionFacade.getAll())
-        .toCustomJson(ActivityAccessPermission.getGsonBuilder());
+        .toJson(ActivityAccessPermission.getGsonBuilder());
   }
 
   @PUT
