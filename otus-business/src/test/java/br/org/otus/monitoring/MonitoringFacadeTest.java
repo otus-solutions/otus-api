@@ -28,11 +28,6 @@ public class MonitoringFacadeTest {
   @Mock
   private MonitoringService monitoringService;
 
-
-  @Before
-  public void setUp() throws Exception {
-  }
-
   @Test
   public void get_should_call_method_get() throws ValidationException {
     monitoringFacade.get(ACRONYM);
