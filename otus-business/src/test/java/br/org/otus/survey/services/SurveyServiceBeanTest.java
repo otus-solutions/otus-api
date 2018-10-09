@@ -164,11 +164,25 @@ public class SurveyServiceBeanTest {
         assertTrue(surveyDaoBean.deleteLastVersionByAcronym(ACRONYM));
     }
 
-	@Test
-	public void get_should_call_method_findByAcronym_by_surveyDao() throws DataNotFoundException {
-		service.get(ACRONYM, VERSION);
-		Mockito.verify(surveyDaoBean).get(ACRONYM, VERSION);
+  @Test
+  public void get_should_call_method_findByAcronym_by_surveyDao() throws DataNotFoundException {
+    service.get(ACRONYM, VERSION);
+    Mockito.verify(surveyDaoBean).get(ACRONYM, VERSION);
 
-	}
+  }
+
+  @Test
+  public void listSurveyVersions_should_call_method_getSurveyVersions_by_surveyDao() throws DataNotFoundException {
+    service.listSurveyVersions(ACRONYM);
+    Mockito.verify(surveyDaoBean).getSurveyVersions(ACRONYM);
+
+  }
+
+  @Test
+  public void listAcronyms_should_call_method_listAcronyms_by_surveyDao() throws DataNotFoundException {
+    service.listAcronyms();
+    Mockito.verify(surveyDaoBean).listAcronyms();
+
+  }
 
 }
