@@ -25,6 +25,6 @@ public interface SurveyService {
 
   List<Integer> listSurveyVersions(String acronym);
 
-  List<String> getSurveys() throws ValidationException;
+  List<String> listAcronyms();
 
 }

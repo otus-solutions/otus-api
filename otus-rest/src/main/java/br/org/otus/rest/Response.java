@@ -23,7 +23,7 @@ public class Response {
 		return gson.toJson(this);
 	}
 
-	public String toCustomJson(GsonBuilder builder){
+	public String toJson(GsonBuilder builder){
 		return builder.create().toJson(this);
 	}
 

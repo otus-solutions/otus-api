@@ -176,11 +176,11 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
     }
     
     @Override
-    public List<String> getSurveys() throws ValidationException {
+    public List<String> listAcronyms() {
       ArrayList<String> results = new ArrayList<>();
       for(String acronym:collection.distinct("surveyTemplate.identity.acronym", String.class)) {
         results.add(acronym);
-      };
+      }
       return results;
       
     }

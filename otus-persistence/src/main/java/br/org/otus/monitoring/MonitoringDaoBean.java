@@ -1,19 +1,17 @@
 package br.org.otus.monitoring;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.ejb.Stateless;
-
+import br.org.mongodb.MongoGenericDao;
+import br.org.otus.monitoring.builder.ActivityStatusQueryBuilder;
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.persistence.MonitoringDao;
 
-import com.mongodb.client.AggregateIterable;
-
-import br.org.mongodb.MongoGenericDao;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class MonitoringDaoBean extends MongoGenericDao<Document> implements MonitoringDao {

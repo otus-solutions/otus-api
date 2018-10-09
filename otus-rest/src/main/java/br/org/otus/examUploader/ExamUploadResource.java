@@ -26,7 +26,7 @@ public class ExamUploadResource {
     @Secured
     @Produces (MediaType.APPLICATION_JSON)
     public String list(){
-        return new Response().buildSuccess(examUploadFacade.list()).toCustomJson(ExamUploadDTO.getGsonBuilder());
+        return new Response().buildSuccess(examUploadFacade.list()).toJson(ExamUploadDTO.getGsonBuilder());
     }
 
     @GET
@@ -34,7 +34,7 @@ public class ExamUploadResource {
     @Path("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public String getById(@PathParam("id") String id){
-        return new Response().buildSuccess(examUploadFacade.getById(id)).toCustomJson(ExamUploadDTO.getGsonBuilder());
+        return new Response().buildSuccess(examUploadFacade.getById(id)).toJson(ExamUploadDTO.getGsonBuilder());
     }
 
     @POST
@@ -61,7 +61,7 @@ public class ExamUploadResource {
     @Path("/results/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public String getResults(@PathParam("id") String examLotId){
-        return new Response().buildSuccess(examUploadFacade.listResults(examLotId)).toCustomJson(ExamUploadDTO.getGsonBuilder());
+        return new Response().buildSuccess(examUploadFacade.listResults(examLotId)).toJson(ExamUploadDTO.getGsonBuilder());
     }
 
 }
