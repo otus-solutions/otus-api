@@ -1,13 +1,10 @@
 package br.org.otus.monitoring;
 
-import br.org.mongodb.MongoGenericDao;
 import br.org.otus.monitoring.builder.ActivityStatusQueryBuilder;
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,12 +12,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.ArrayList;
-
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({ActivityStatusQueryBuilder.class, FlagReportDaoBean.class})
 public class FlagReportDaoBeanTest {
   private static final String CENTER = "MG";
 
@@ -44,6 +42,13 @@ public class FlagReportDaoBeanTest {
     Whitebox.setInternalState(flagReportDaoBean, "collection", collection);
     Mockito.when(this.collection.aggregate(Matchers.anyList())).thenReturn(result);
     Mockito.when(result.iterator()).thenReturn(iterator);
+
+
+    builder = PowerMockito.spy(new ActivityStatusQueryBuilder());
+    PowerMockito
+      .whenNew(ActivityStatusQueryBuilder.class)
+      .withNoArguments()
+      .thenReturn(builder);
   }
 
   @Test
@@ -51,14 +56,14 @@ public class FlagReportDaoBeanTest {
     flagReportDaoBean.getActivitiesProgressReport(CENTER);
 
 
-    Mockito.verify(builder).matchFieldCenter(CENTER);
-    Mockito.verify(builder).projectLastStatus();
-    Mockito.verify(builder).getStatusValue();
-    Mockito.verify(builder).sortByDate();
-    Mockito.verify(builder).removeStatusDate();
-    Mockito.verify(builder).groupByParticipant();
-    Mockito.verify(builder).projectId();
-    Mockito.verify(builder).build();
+    Mockito.verify(builder, Mockito.times(1)).matchFieldCenter(CENTER);
+    Mockito.verify(builder, Mockito.times(1)).projectLastStatus();
+    Mockito.verify(builder, Mockito.times(1)).getStatusValue();
+    Mockito.verify(builder, Mockito.times(1)).sortByDate();
+    Mockito.verify(builder, Mockito.times(1)).removeStatusDate();
+    Mockito.verify(builder, Mockito.times(1)).groupByParticipant();
+    Mockito.verify(builder, Mockito.times(1)).projectId();
+    Mockito.verify(builder, Mockito.times(1)).build();
 
 
   }
@@ -67,12 +72,13 @@ public class FlagReportDaoBeanTest {
   public void getActivitiesProgressReport_should_build_the_query_accordingly() {
     flagReportDaoBean.getActivitiesProgressReport();
 
-    Mockito.verify(builder).projectLastStatus();
-    Mockito.verify(builder).getStatusValue();
-    Mockito.verify(builder).sortByDate();
-    Mockito.verify(builder).removeStatusDate();
-    Mockito.verify(builder).groupByParticipant();
-    Mockito.verify(builder).projectId();
-    Mockito.verify(builder).build();
+    Mockito.verify(builder, Mockito.times(0)).matchFieldCenter(CENTER);
+    Mockito.verify(builder, Mockito.times(1)).projectLastStatus();
+    Mockito.verify(builder, Mockito.times(1)).getStatusValue();
+    Mockito.verify(builder, Mockito.times(1)).sortByDate();
+    Mockito.verify(builder, Mockito.times(1)).removeStatusDate();
+    Mockito.verify(builder, Mockito.times(1)).groupByParticipant();
+    Mockito.verify(builder, Mockito.times(1)).projectId();
+    Mockito.verify(builder, Mockito.times(1)).build();
   }
 }
