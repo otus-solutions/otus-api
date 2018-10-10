@@ -48,4 +48,9 @@ public class ActivitiesProgressReportTest {
 
     assertEquals(NORMALIZER_MAP.size(), PROGRESS_REPORT.getActivities().size());
   }
+
+  @Test
+  public void should_deserialize() {
+    assert(PROGRESS_REPORT.getRn().equals(5113372));
+  }
 }
