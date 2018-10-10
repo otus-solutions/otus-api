@@ -21,6 +21,7 @@ import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
+import br.org.otus.survey.activity.permission.ActivityAccessPermissionResource;
 import br.org.otus.user.UserResource;
 
 import javax.inject.Inject;
@@ -98,6 +99,9 @@ public class EndPointsLoader extends Application {
 
 	@Inject
 	private ProjectConfigurationResource projectConfigurationResource;
+	
+	@Inject
+    private ActivityAccessPermissionResource activityAccessPermissionResource;
 
 	@Override
 	public Set<Class<?>> getClasses() {
@@ -124,6 +128,7 @@ public class EndPointsLoader extends Application {
 		resources.add(ExamResource.class);
 		resources.add(ExamUploadResource.class);
 		resources.add(ProjectConfigurationResource.class);
+		resources.add(ActivityAccessPermissionResource.class);
 		return resources;
 	}
 
@@ -152,6 +157,7 @@ public class EndPointsLoader extends Application {
 		resources.add(examResource);
 		resources.add(examUploadResource);
 		resources.add(projectConfigurationResource);
+		resources.add(activityAccessPermissionResource);
 
 		return resources;
 	}
