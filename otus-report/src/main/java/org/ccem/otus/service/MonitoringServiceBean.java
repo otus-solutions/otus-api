@@ -1,8 +1,6 @@
 package org.ccem.otus.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -66,36 +64,31 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Override
   public ArrayList<ActivitiesProgressReport> getActivitiesProgress() {
-    List<String> surveys = surveyDao.listAcronyms();
+    LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
     ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport();
 
-    normalizeProgressReports(report, surveys);
+    normalizeProgressReports(report, surveyAcronyms);
 
     return report;
   }
 
   @Override
   public ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center) {
-    List<String> surveys = surveyDao.listAcronyms();
+    LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
     ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport(center);
 
-    normalizeProgressReports(report, surveys);
+    normalizeProgressReports(report, surveyAcronyms);
 
     return report;
   }
 
-  private ArrayList<ActivitiesProgressReport> normalizeProgressReports(ArrayList<ActivitiesProgressReport> report, List<String> surveys) {
-    HashMap<String, ActivityFlagReport> map = new HashMap<>();
-
-    for (String acronym : surveys) {
-      map.put(acronym, new ActivityFlagReport(acronym));
-    }
-
+  private ArrayList<ActivitiesProgressReport> normalizeProgressReports(ArrayList<ActivitiesProgressReport> report,
+                                                                       LinkedList<String> surveys) {
 
     for (ActivitiesProgressReport activitiesProgressReport : report) {
-      activitiesProgressReport.normalize(map);
+      activitiesProgressReport.normalize(surveys);
     }
 
     return report;

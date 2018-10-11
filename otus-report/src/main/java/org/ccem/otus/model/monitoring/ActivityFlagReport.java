@@ -13,6 +13,11 @@ public class ActivityFlagReport {
     this.status = null;
   }
 
+  public ActivityFlagReport(Integer rn, String acronym) {
+    this.rn = rn;
+    this.acronym = acronym;
+  }
+
   public String getAcronym() {
     return acronym;
   }
