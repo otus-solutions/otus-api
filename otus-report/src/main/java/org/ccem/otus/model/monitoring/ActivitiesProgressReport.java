@@ -3,22 +3,26 @@ package org.ccem.otus.model.monitoring;
 import com.google.gson.GsonBuilder;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ActivitiesProgressReport {
 
   private Integer rn;
   private List<ActivityFlagReport> activities;
 
-  public void normalize(HashMap<String, ActivityFlagReport> normalizerMap) {
-    for (ActivityFlagReport activity : activities) {
-      normalizerMap.put(activity.getAcronym(), activity);
-    }
+  public void normalize(LinkedList<String> pattern) {
+    LinkedList<ActivityFlagReport> temp = new LinkedList<>();
 
-    this.activities = new ArrayList<>(normalizerMap.values());
+    pattern.stream().forEach(acronym -> {
+      temp.add(
+        activities.stream()
+          .filter(act -> act.getAcronym().equals(acronym))
+          .findFirst()
+          .orElse(new ActivityFlagReport(this.rn, acronym))
+      );
+    });
 
-    for (ActivityFlagReport activity : this.activities) {
-      activity.setRn(this.rn);
-    }
+    this.activities = temp;
   }
 
   public Integer getRn() {
