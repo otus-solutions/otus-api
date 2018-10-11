@@ -125,10 +125,20 @@ public class MonitoringServiceBeanTest {
 
     assertEquals(reportList.get(0).getActivities().size(), SURVEY_ACRONYM_LIST.size());
     assertEquals(reportList.get(1).getActivities().size(), SURVEY_ACRONYM_LIST.size());
+    assertEquals(reportList.get(0).getActivities().get(0).getAcronym(), reportList.get(1).getActivities().get(0).getAcronym());
+    assertEquals(reportList.get(0).getActivities().get(1).getAcronym(), reportList.get(1).getActivities().get(1).getAcronym());
+    assertEquals(reportList.get(0).getActivities().get(2).getAcronym(), reportList.get(1).getActivities().get(2).getAcronym());
+    assertEquals(reportList.get(0).getActivities().get(3).getAcronym(), reportList.get(1).getActivities().get(3).getAcronym());
+
 
     reportList = monitoringServiceBean.getActivitiesProgress();
     assertEquals(reportList.get(0).getActivities().size(), SURVEY_ACRONYM_LIST.size());
     assertEquals(reportList.get(1).getActivities().size(), SURVEY_ACRONYM_LIST.size());
+
+    assertEquals(reportList.get(0).getActivities().get(0).getAcronym(), reportList.get(1).getActivities().get(0).getAcronym());
+    assertEquals(reportList.get(0).getActivities().get(1).getAcronym(), reportList.get(1).getActivities().get(1).getAcronym());
+    assertEquals(reportList.get(0).getActivities().get(2).getAcronym(), reportList.get(1).getActivities().get(2).getAcronym());
+    assertEquals(reportList.get(0).getActivities().get(3).getAcronym(), reportList.get(1).getActivities().get(3).getAcronym());
   }
 
 }
