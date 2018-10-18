@@ -9,7 +9,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
-import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
@@ -115,7 +114,7 @@ public class SurveyActivityExtractionRecordsFactory {
       switch (surveyItem.objectType) {
         case "SingleSelectionQuestion": {
           //TODO 17/10/18: check whan getValue comes null
-          this.surveyInformation.replace(customIDMap.get(key), sinleSelectionFix(surveyItem, pair.getValue()));
+          this.surveyInformation.replace(customIDMap.get(key), getSingleSelectionExtractionValue(surveyItem, pair.getValue()));
           break;
         }
         //TODO CheckboxQuestion Option ID FIX
@@ -143,12 +142,12 @@ public class SurveyActivityExtractionRecordsFactory {
     this.surveyInformation.replace(questionID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, ExtractionVariables.SKIPPED_ANSWER.getValue());
   }
 
-  private String sinleSelectionFix(SurveyItem surveyItem,  Object value) {
-    if (value == null) {
+  private String getSingleSelectionExtractionValue(SurveyItem surveyItem, Object answerValue) {
+    if (answerValue == null) {
       return null;
     }
 
-    int intValue = Integer.parseInt(value.toString());
+    int intValue = Integer.parseInt(answerValue.toString());
     RadioOption radioOption1 = ((SingleSelectionQuestion) surveyItem).options.stream().filter(radioOption -> radioOption.value.equals(intValue)).findFirst().orElseThrow(RuntimeException::new);
     return radioOption1.extractionValue;
   }
