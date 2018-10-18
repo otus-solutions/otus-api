@@ -111,21 +111,24 @@ public class SurveyActivityExtractionRecordsFactory {
     for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
       String key = pair.getKey();
 
-      //TODO CheckboxQuestion Option ID FIX
-      if (surveyItem.objectType.equals("CheckboxQuestion") ||
-        surveyItem.objectType.equals("GridTextQuestion") ||
-        surveyItem.objectType.equals("GridIntegerQuestion")) {
-        this.surveyInformation.replace(key, pair.getValue());
-      } else {
 
-        //TODO 17/10/18: check whan getValue comes null
-        if (surveyItem.objectType.equals("SingleSelectionQuestion") && pair.getValue() != null) {
-          this.surveyInformation.replace(customIDMap.get(key), sinleSelectionFix(surveyItem, Integer.parseInt(pair.getValue().toString())));
-        } else {
-          this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
-
+      switch (surveyItem.objectType) {
+        case "SingleSelectionQuestion": {
+          //TODO 17/10/18: check whan getValue comes null
+          this.surveyInformation.replace(customIDMap.get(key), sinleSelectionFix(surveyItem, pair.getValue()));
+          break;
         }
-
+        //TODO CheckboxQuestion Option ID FIX
+        case "CheckboxQuestion":
+        case "GridTextQuestion":
+        case "GridIntegerQuestion": {
+          this.surveyInformation.replace(key, pair.getValue());
+          break;
+        }
+        default: {
+          this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
+          break;
+        }
       }
     }
 
@@ -140,9 +143,13 @@ public class SurveyActivityExtractionRecordsFactory {
     this.surveyInformation.replace(questionID + SurveyActivityExtractionHeaders.QUESTION_METADATA_SUFFIX, ExtractionVariables.SKIPPED_ANSWER.getValue());
   }
 
-  private String sinleSelectionFix(SurveyItem surveyItem, Integer value) {
+  private String sinleSelectionFix(SurveyItem surveyItem,  Object value) {
+    if (value == null) {
+      return null;
+    }
 
-    RadioOption radioOption1 = ((SingleSelectionQuestion) surveyItem).options.stream().filter(radioOption -> radioOption.value.equals(value)).findFirst().orElseThrow(RuntimeException::new);
+    int intValue = Integer.parseInt(value.toString());
+    RadioOption radioOption1 = ((SingleSelectionQuestion) surveyItem).options.stream().filter(radioOption -> radioOption.value.equals(intValue)).findFirst().orElseThrow(RuntimeException::new);
     return radioOption1.extractionValue;
   }
 
