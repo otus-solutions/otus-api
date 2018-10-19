@@ -148,8 +148,8 @@ public class SurveyActivityExtractionRecordsFactory {
     }
 
     int intValue = Integer.parseInt(answerValue.toString());
-    RadioOption radioOption1 = ((SingleSelectionQuestion) surveyItem).options.stream().filter(radioOption -> radioOption.value.equals(intValue)).findFirst().orElseThrow(RuntimeException::new);
-    return radioOption1.extractionValue;
+    RadioOption radioOption = ((SingleSelectionQuestion) surveyItem).options.stream().filter(option -> option.value.equals(intValue)).findFirst().orElseThrow(RuntimeException::new);
+    return radioOption.extractionValue;
   }
 
 }
