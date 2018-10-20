@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.hamcrest.CoreMatchers;
 
-public class CsvWriterServiceTest {
+public class CsvWriterTest {
 
 	private static final String RECORD = "id;name;age" + "\n" + "1;\"Emano;el\";23" + "\n";
 
-	private CsvWriterService service;
+	private CsvWriter service;
 
 	private List<String> headers;
 	private List<List<Object>> values;
@@ -20,7 +20,7 @@ public class CsvWriterServiceTest {
 
 	@Before
 	public void setup() {
-		service = new CsvWriterService();
+		service = new CsvWriter();
 		headers = new ArrayList<String>();
 		headers.add("id");
 		headers.add("name");

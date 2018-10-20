@@ -11,53 +11,62 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
-import br.org.otus.service.CsvWriterService;
+import br.org.otus.service.CsvWriter;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ExtractionServiceBean.class)
 public class ExtractionServiceTest {
 
-	/* utility class for the test */
-	class ExtractionTest implements Extractable {
+  /* utility class for the test */
+  class ExtractionTest implements Extractable {
 
-		@Override
-		public LinkedHashSet<String> getHeaders() {
-			return new LinkedHashSet<String>();
-		}
+    @Override
+    public LinkedHashSet<String> getHeaders() {
+      return new LinkedHashSet<String>();
+    }
 
-		@Override
-		public List<List<Object>> getValues() throws DataNotFoundException {
-			return new ArrayList<List<Object>>();
-		}
-	}
+    @Override
+    public List<List<Object>> getValues() throws DataNotFoundException {
+      return new ArrayList<List<Object>>();
+    }
+  }
 
-	@Mock
-	private CsvWriterService csvWriterServiceMock;
-	@InjectMocks
-	private ExtractionServiceBean ExtractionServiceMock;
+  @InjectMocks
+  private ExtractionServiceBean ExtractionServiceMock;
 
-	private ExtractionServiceBean extractionService;
-	private Extractable extractable;
+  @Mock
+  private CsvWriter csvWriter;
 
-	@Before
-	public void setup() throws DataNotFoundException {
-		extractionService = new ExtractionServiceBean();
-		extractable = new ExtractionTest();
-	}
+  private Extractable extractable;
 
-	@Test
-	public void should_call_the_write_method_to_write_the_csv() throws DataNotFoundException {
-		ExtractionServiceMock.createExtraction(extractable);
+  @Before
+  public void setup() throws Exception {
+    extractable = new ExtractionTest();
 
-		Mockito.verify(csvWriterServiceMock, Mockito.times(1)).write(extractable.getHeaders(), extractable.getValues());
-	}
+    PowerMockito
+      .whenNew(CsvWriter.class)
+      .withNoArguments()
+      .thenReturn(csvWriter);
+  }
 
-	@Test
-	public void should_call_the_method_getResult_to_find_result() throws DataNotFoundException {
-		ExtractionServiceMock.createExtraction(extractable);
+  @Test
+  public void should_call_the_write_method_to_write_the_csv() throws DataNotFoundException {
+    ExtractionServiceMock.createExtraction(extractable);
 
-		Mockito.verify(csvWriterServiceMock, Mockito.times(1)).getResult();
-	}
+    Mockito.verify(csvWriter, Mockito.times(1) )
+      .write(extractable.getHeaders(), extractable.getValues());
+  }
+
+  @Test
+  public void should_call_the_method_getResult_to_find_result() throws DataNotFoundException {
+    ExtractionServiceMock.createExtraction(extractable);
+
+    Mockito.verify(csvWriter, Mockito.times(1))
+      .getResult();
+  }
 
 }

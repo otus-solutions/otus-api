@@ -9,7 +9,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
-public class CsvWriterService {
+public class CsvWriter {
 
 	private static final char DELIMITER = ';';
 	private static final String RECORD_SEPARATOR = "\n";
@@ -18,7 +18,7 @@ public class CsvWriterService {
 	private CSVPrinter csvFilePrinter;
 	private ByteArrayOutputStream out;
 
-	public CsvWriterService() {
+	public CsvWriter() {
 		try {
 			out = new ByteArrayOutputStream();
 			csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"').withQuoteMode(QuoteMode.MINIMAL);
