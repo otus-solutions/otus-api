@@ -18,7 +18,7 @@
 	    	  	<artifactId>cdi-api</artifactId>
 	    	  	<version>1.1</version>
 	    	  	<scope>provided</scope>
-	    		</dependency>
+	    	</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver</artifactId>
