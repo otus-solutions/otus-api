@@ -21,11 +21,14 @@ public class ExtractionAuthenticationFilter implements ContainerRequestFilter {
 
 	@Context
 	private HttpServletRequest requestContext;
+	
+	public static final String HEADER = "X-Real-IP";
 
 	@Override
 	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+		
 		String authorizationToken = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-		String ipAddress = requestContext.getRemoteAddr();
+		String ipAddress = requestContext.getHeader(HEADER);
 		try {
 			Boolean authorization = extractionSecurityService.validateSecurityCredentials(authorizationToken, ipAddress);
 			validateAuthorization(authorization);

@@ -1,20 +1,18 @@
 package br.org.otus.monitoring;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.model.monitoring.MonitoringCenter;
-import org.ccem.otus.service.MonitoringService;
-
-import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.api.SurveyFacade;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+import org.ccem.otus.model.monitoring.MonitoringCenter;
+import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
+import org.ccem.otus.service.MonitoringService;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MonitoringFacade {
 
@@ -33,17 +31,32 @@ public class MonitoringFacade {
   }
 
   public List<String> listActivities() {
-    return surveyFacade.getSurveys();
+    return surveyFacade.listAcronyms();
   }
 
   public List<MonitoringCenter> getMonitoringCenters() {
-      try {
-        return monitoringService.getMonitoringCenter();
-      } catch (ValidationException e) {
-        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-      } catch (DataNotFoundException e) {
-        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-      }
+    try {
+      return monitoringService.getMonitoringCenter();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgress() {
+    try {
+      return monitoringService.getActivitiesProgress();
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+
+  public ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center) {
+    try {
+      return monitoringService.getActivitiesProgress(center);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
   }
 
 }

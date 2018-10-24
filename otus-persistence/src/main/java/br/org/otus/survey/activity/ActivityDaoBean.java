@@ -53,7 +53,10 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public List<SurveyActivity> find(long rn) {
         ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
 
-        FindIterable<Document> result = collection.find(and(eq(RECRUITMENT_NUMBER_PATH, rn), eq(DISCARDED_PATH, false)));
+        FindIterable<Document> result = collection.find(and(eq(RECRUITMENT_NUMBER_PATH, rn),
+            eq(DISCARDED_PATH, false)            
+         ));        
+        
         result.forEach((Block<Document>) document -> {
             activities.add(SurveyActivity.deserialize(document.toJson()));
         });

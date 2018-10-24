@@ -37,14 +37,14 @@ public class ReportResource {
 	public String create(@Context HttpServletRequest request, String reportTemplateJson) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-		return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toCustomJson(ReportTemplate.getGsonBuilder());
+		return new Response().buildSuccess(reportFacade.create(reportTemplateJson, userEmail)).toJson(ReportTemplate.getGsonBuilder());
 	}
 
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String list() {
-		return new Response().buildSuccess(reportFacade.list()).toCustomJson(ReportTemplate.getGsonBuilder());
+		return new Response().buildSuccess(reportFacade.list()).toJson(ReportTemplate.getGsonBuilder());
 	}
 
 	@GET
@@ -52,7 +52,7 @@ public class ReportResource {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getById(@PathParam("id") String id) {
-		return new Response().buildSuccess(reportFacade.getById(id)).toCustomJson(ReportTemplate.getGsonBuilder());
+		return new Response().buildSuccess(reportFacade.getById(id)).toJson(ReportTemplate.getGsonBuilder());
 	}
 
 	@PUT
@@ -60,7 +60,7 @@ public class ReportResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateFieldCenters(String reportTemplateJson) {
 		ReportTemplate updatedReport = reportFacade.updateFieldCenters(reportTemplateJson);
-		return new Response().buildSuccess(updatedReport).toCustomJson(ReportTemplate.getGsonBuilder());
+		return new Response().buildSuccess(updatedReport).toJson(ReportTemplate.getGsonBuilder());
 	}
 
 	@DELETE
@@ -85,6 +85,6 @@ public class ReportResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/participant/{recruitmentNumber}/{reportId}")
 	public String getParticipantReport(@PathParam("recruitmentNumber") Long recruitmentNumber, @PathParam("reportId") String reportId) {
-		return new Response().buildSuccess(reportFacade.getParticipantReport(recruitmentNumber, reportId)).toCustomJson(ReportTemplate.getResponseGsonBuilder());
+		return new Response().buildSuccess(reportFacade.getParticipantReport(recruitmentNumber, reportId)).toJson(ReportTemplate.getResponseGsonBuilder());
 	}
 }

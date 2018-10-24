@@ -12,7 +12,7 @@ public interface ActivityService {
 
     SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException;
 
-    List<SurveyActivity> list(long rn);
+    List<SurveyActivity> list(long rn, String userEmail);
 
     SurveyActivity getByID(String id) throws DataNotFoundException;
 

@@ -29,5 +29,5 @@ public interface SurveyDao {
 
     List<Integer> getSurveyVersions(String acronym);
 
-    List<String> getSurveys() throws ValidationException;
+    List<String> listAcronyms();
 }
