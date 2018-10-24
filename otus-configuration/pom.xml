@@ -3,11 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>otus-configuration</artifactId>
     <packaging>jar</packaging>
+    <parent>
+        <groupId>org.ccem.otus</groupId>
+        <artifactId>otus-root</artifactId>
+        <version>1.16-SNAPSHOT</version>
+        <relativePath>../otus-root/pom.xml</relativePath>
+    </parent>
+
     <dependencies>
         <dependency>
             <groupId>org.ccem.otus</groupId>
             <artifactId>otus-commons</artifactId>
-            <version>1.15.1</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!--External Dependencies-->
@@ -17,13 +24,6 @@
             <version>${google.gson.version}</version>
             <scope>provided</scope>
         </dependency>
-    </dependencies>
-
-    <parent>
-        <groupId>org.ccem.otus</groupId>
-        <artifactId>otus-root</artifactId>
-        <version>1.15.1</version>
-        <relativePath>../otus-root/pom.xml</relativePath>
-    </parent>
+    </dependencies> 
     
 </project>
