@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.project.api;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.inject.Inject;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import br.org.otus.response.builders.Security;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -25,7 +28,7 @@ public class ExamLotFacade {
     private ExamLotService examLotService;
 
     @Inject
-    private LaboratoryConfigurationService laboratoryConfigurationService;
+    private AliquotService aliquotService;
 
     @Inject
     private LaboratoryProjectService laboratoryProjectService;
@@ -57,9 +60,9 @@ public class ExamLotFacade {
         }
     }
 
-    public void delete(String id) {
+    public void delete(String code) {
         try {
-            examLotService.delete(id);
+            examLotService.delete(code);
         } catch (DataNotFoundException e) {
             e.printStackTrace();
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
@@ -70,9 +73,9 @@ public class ExamLotFacade {
         return examLotService.list();
     }
 
-    public List<WorkAliquot> getAliquots() {
+    public List<Aliquot> getAliquots() {
         try {
-            return examLotService.getAliquots();
+            return aliquotService.getAliquots();
         } catch (DataNotFoundException e) {
             e.printStackTrace();
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));

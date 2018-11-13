@@ -11,9 +11,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.api.ExamLotFacade;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.rest.Response;
@@ -70,7 +70,7 @@ public class ExamResource {
 	@Secured
 	@Path("/aliquots")
 	public String getAliquots() {
-		List<WorkAliquot> aliquots = examLotFacade.getAliquots();
+		List<Aliquot> aliquots = examLotFacade.getAliquots();
 		GsonBuilder builder = ExamLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
 	}

@@ -3,7 +3,9 @@ package br.org.otus.laboratory.project.exam.examLot.businnes;
 import java.util.HashSet;
 import java.util.List;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -18,9 +20,7 @@ public interface ExamLotService {
 
 	List<ExamLot> list();
 
-	void delete(String id) throws DataNotFoundException;
+	void delete(String code) throws DataNotFoundException;
 
-	List<WorkAliquot> getAliquots() throws DataNotFoundException;
-
-    HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
+	HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
 }

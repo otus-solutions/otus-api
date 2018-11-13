@@ -9,6 +9,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -21,7 +23,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examLot.validators.ExamLotValidator;
@@ -45,10 +46,12 @@ public class ExamLotValidatorTest {
 	private ExamLotDao examLotDao;
 	@Mock
 	private TransportationLotDao transportationLotDao;
+    @Mock
+    private AliquotDao aliquotDao;
 	@Mock
-	private WorkAliquot workAliquot1;
+	private Aliquot aliquot1;
 	@Mock
-	private WorkAliquot workAliquot2;
+	private Aliquot aliquot2;
 	@Mock
 	private FieldCenter fieldCenter1;
 	@Mock
@@ -61,29 +64,29 @@ public class ExamLotValidatorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		examLotValidator = spy(new ExamLotValidator(examLotDao, transportationLotDao, examLot));
+		examLotValidator = spy(new ExamLotValidator(examLotDao, transportationLotDao, examLot, aliquotDao));
 	}
 
 	@Test
 	public void method_validate_should_called_methods_of_validation() throws Exception {
-		when(workAliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot1.getCode()).thenReturn("354005012");
-		when(workAliquot1.getFieldCenter()).thenReturn(fieldCenter1);
+		when(aliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getFieldCenter()).thenReturn(fieldCenter1);
 		when(fieldCenter1.getAcronym()).thenReturn(FIELD_CENTER_RS);
 
-		when(workAliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot2.getCode()).thenReturn("354005012");
+		when(aliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot2.getCode()).thenReturn("354005012");
 
-		List<WorkAliquot> aliquotList = new ArrayList<>();
-		aliquotList.add(workAliquot1);
+		List<Aliquot> aliquotList = new ArrayList<>();
+		aliquotList.add(aliquot1);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(examLot.getFieldCenter()).thenReturn(fieldCenter1);
 		when(fieldCenter1.getAcronym()).thenReturn(FIELD_CENTER_RS);
 
-		List<WorkAliquot> resultDao = new ArrayList<>();
-		resultDao.add(workAliquot2);
-		when(examLotDao.getAllAliquotsInDB()).thenReturn(resultDao);
+		List<Aliquot> resultDao = new ArrayList<>();
+		resultDao.add(aliquot2);
+		when(aliquotDao.getAliquots()).thenReturn(resultDao);
 
 		examLotValidator.validate();
 
@@ -94,16 +97,16 @@ public class ExamLotValidatorTest {
 
 	@Test
 	public void method_validate_should_throw_ValidationException_for_Aliquots_not_found() throws DataNotFoundException {
-		when(workAliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot1.getCode()).thenReturn("354005012");
 
-		List<WorkAliquot> aliquotList = new ArrayList<>();
-		aliquotList.add(workAliquot1);
+		List<Aliquot> aliquotList = new ArrayList<>();
+		aliquotList.add(aliquot1);
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 
-		List<WorkAliquot> resultDao = new ArrayList<>();
-		when(examLotDao.getAllAliquotsInDB()).thenReturn(resultDao);
+		List<Aliquot> resultDao = new ArrayList<>();
+		when(aliquotDao.getAliquots()).thenReturn(resultDao);
 
 		try {
 			examLotValidator.validate();
@@ -115,15 +118,15 @@ public class ExamLotValidatorTest {
 
 	@Test
 	public void method_validate_should_return_exception_when_different_aliquots_in_lot() throws DataNotFoundException {
-		when(workAliquot1.getCode()).thenReturn("354005012");
-		when(workAliquot1.getName()).thenReturn(FASTING_HORMONE_CENTRAL);
+		when(aliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getName()).thenReturn(FASTING_HORMONE_CENTRAL);
 
-		List<WorkAliquot> aliquotList = new ArrayList<>();
-		aliquotList.add(workAliquot1);
+		List<Aliquot> aliquotList = new ArrayList<>();
+		aliquotList.add(aliquot1);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 
-		when(examLotDao.getAllAliquotsInDB()).thenReturn(aliquotList);
+		when(aliquotDao.getAliquots()).thenReturn(aliquotList);
 
 		try {
 			examLotValidator.validate();
@@ -136,22 +139,22 @@ public class ExamLotValidatorTest {
 	@Test
 	public void method_validate_should_return_exception_when_exist_aliquots_duplicate_in_DB()
 			throws DataNotFoundException {
-		when(workAliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot1.getCode()).thenReturn("354005012");
 
-		when(workAliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot2.getCode()).thenReturn("354005012");
+		when(aliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot2.getCode()).thenReturn("354005012");
 
-		List<WorkAliquot> aliquotList = new ArrayList<>();
-		aliquotList.add(workAliquot1);
+		List<Aliquot> aliquotList = new ArrayList<>();
+		aliquotList.add(aliquot1);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 
 		when(otherLot.getAliquotList()).thenReturn(aliquotList);
 
-		List<WorkAliquot> resultFindAliquotsInDB = new ArrayList<>();
-		resultFindAliquotsInDB.add(workAliquot2);
-		when(examLotDao.getAllAliquotsInDB()).thenReturn(resultFindAliquotsInDB);
+		List<Aliquot> resultFindAliquotsInDB = new ArrayList<>();
+		resultFindAliquotsInDB.add(aliquot2);
+		when(aliquotDao.getAliquots()).thenReturn(resultFindAliquotsInDB);
 
 		List<ExamLot> resultFindExamInDB = new ArrayList<>();
 		resultFindExamInDB.add(otherLot);
@@ -168,24 +171,24 @@ public class ExamLotValidatorTest {
 	@Test
 	public void method_validate_should_return_exception_when_aliquots_different_from_the_center_an_not_exist_in_lot_of_transport()
 			throws DataNotFoundException {
-		when(workAliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot1.getCode()).thenReturn("354005012");
-		when(workAliquot1.getFieldCenter()).thenReturn(fieldCenter1);
+		when(aliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getFieldCenter()).thenReturn(fieldCenter1);
 		when(fieldCenter1.getAcronym()).thenReturn(FIELD_CENTER_RS);
 
-		when(workAliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
-		when(workAliquot2.getCode()).thenReturn("354005012");
+		when(aliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
+		when(aliquot2.getCode()).thenReturn("354005012");
 
-		List<WorkAliquot> aliquotList = new ArrayList<>();
-		aliquotList.add(workAliquot1);
+		List<Aliquot> aliquotList = new ArrayList<>();
+		aliquotList.add(aliquot1);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(examLot.getFieldCenter()).thenReturn(fieldCenter2);
 		when(fieldCenter2.getAcronym()).thenReturn(FIELD_CENTER_RJ);
 
-		List<WorkAliquot> resultDao = new ArrayList<>();
-		resultDao.add(workAliquot2);
-		when(examLotDao.getAllAliquotsInDB()).thenReturn(resultDao);
+		List<Aliquot> resultDao = new ArrayList<>();
+		resultDao.add(aliquot2);
+		when(aliquotDao.getAliquots()).thenReturn(resultDao);
 
 		try {
 			examLotValidator.validate();
