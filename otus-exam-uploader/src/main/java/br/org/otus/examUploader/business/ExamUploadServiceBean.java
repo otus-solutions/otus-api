@@ -9,6 +9,8 @@ import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.examUploader.utils.ResponseAliquot;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -35,6 +37,9 @@ public class ExamUploadServiceBean implements ExamUploadService{
 
     @Inject
     private ExamDao examDAO;
+
+    @Inject
+    private AliquotDao aliquotDao;
 
     @Inject
     private ExamResultDao examResultDAO;
@@ -101,21 +106,21 @@ public class ExamUploadServiceBean implements ExamUploadService{
      */
     @Override
     public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException {
-        List<WorkAliquot> allAliquots = laboratoryProjectService.getAllAliquots();
-        HashMap<String, WorkAliquot> hmap = new HashMap<>();
+        List<Aliquot> allAliquots = aliquotDao.getAliquots();
+        HashMap<String, Aliquot> hmap = new HashMap<>();
         ArrayList<ResponseAliquot> invalid = new ArrayList<>();
         Boolean aliquotNotFound = false;
         Boolean aliquotDoesNotMatchExam = false;
 
-        for (WorkAliquot workAliquot : allAliquots) {
-            hmap.putIfAbsent(workAliquot.getCode(), workAliquot);
+        for (Aliquot aliquot : allAliquots) {
+            hmap.putIfAbsent(aliquot.getCode(), aliquot);
         }
 
         AliquotExamCorrelation aliquotExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
         for (ExamResult examResult : examResults) {
             examResult.setAliquotValid(true);
             String aliquotCode = examResult.getAliquotCode();
-            WorkAliquot found = hmap.get(aliquotCode);
+            Aliquot found = hmap.get(aliquotCode);
             if (found == null) {
                 addInvalidResult(invalid,aliquotCode,ALIQUOT_NOT_FOUND_MESSAGE,new ArrayList(),examResult);
                 aliquotNotFound = true;

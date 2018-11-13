@@ -7,6 +7,8 @@ import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
 import org.bson.types.ObjectId;
@@ -37,7 +39,10 @@ public class ExamUploadServiceBeanTest {
     private ExamUploadServiceBean service;
 
     @Mock
-    LaboratoryProjectService laboratoryProjectService;
+    private AliquotDao aliquotDao;
+
+    @Mock
+    private LaboratoryProjectService laboratoryProjectService;
 
     @Mock
     private ExamSendingLotDao examResultLotDAO;
@@ -133,7 +138,7 @@ public class ExamUploadServiceBeanTest {
     @Test
     public void validateExamResults_should_not_throw_ValidationException_when_resultsToVerify_is_subSet_of_allAliquots() throws DataNotFoundException, ValidationException {
         List<ExamResult> resultsToVerify = new ArrayList<>(2);
-        List<WorkAliquot> allAliquots = new ArrayList<>(10);
+        List<Aliquot> allAliquots = new ArrayList<>(10);
 
         IntStream.range(1,2).forEach(counter -> {
             ExamResult examResult = new ExamResult();
@@ -143,14 +148,14 @@ public class ExamUploadServiceBeanTest {
         });
 
         IntStream.range(1,11).forEach(counter -> {
-            WorkAliquot mock = Mockito.mock(WorkAliquot.class);
+            Aliquot mock = Mockito.mock(Aliquot.class);
             Mockito.when(mock.getName()).thenReturn(String.valueOf("a"));
             Mockito.when(mock.getCode()).thenReturn(String.valueOf(counter));
             allAliquots.add(mock);
         });
         aliquotExamCorrelation = AliquotExamCorrelation.deserialize(ALIQUOT_EXAM_CORRELATION);
 
-        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
+        PowerMockito.when(aliquotDao.getAliquots()).thenReturn(allAliquots);
         PowerMockito.when(laboratoryProjectService.getAliquotExamCorrelation()).thenReturn(aliquotExamCorrelation);
 
         service.validateExamResults(resultsToVerify, examSendingLot.isForcedSave());
@@ -165,7 +170,7 @@ public class ExamUploadServiceBeanTest {
 
         resultsToVerify.add(examResult);
 
-        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
+        PowerMockito.when(aliquotDao.getAliquots()).thenReturn(new ArrayList<>());
         service.validateExamResults(resultsToVerify, false);
 
     }
@@ -179,9 +184,8 @@ public class ExamUploadServiceBeanTest {
 
         resultsToVerify.add(examResult);
 
-        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(new ArrayList<>());
+        PowerMockito.when(aliquotDao.getAliquots()).thenReturn(new ArrayList<>());
         service.validateExamResults(resultsToVerify, true);
-
     }
 
     @Test (expected = ValidationException.class)
@@ -199,7 +203,7 @@ public class ExamUploadServiceBeanTest {
     @Test (expected = ValidationException.class)
     public void validateExamResults_should_throw_ValidationException_when_aliquot_can_not_do_requested_exam() throws DataNotFoundException, ValidationException {
         List<ExamResult> resultsToVerify = new ArrayList<>(2);
-        List<WorkAliquot> allAliquots = new ArrayList<>(10);
+        List<Aliquot> allAliquots = new ArrayList<>(10);
 
         IntStream.range(1,2).forEach(counter -> {
             ExamResult examResult = new ExamResult();
@@ -209,14 +213,14 @@ public class ExamUploadServiceBeanTest {
         });
 
         IntStream.range(1,10).forEach(counter -> {
-            WorkAliquot mock = Mockito.mock(WorkAliquot.class);
+            Aliquot mock = Mockito.mock(Aliquot.class);
             Mockito.when(mock.getName()).thenReturn(String.valueOf("a"));
             Mockito.when(mock.getCode()).thenReturn(String.valueOf(counter));
             allAliquots.add(mock);
         });
         aliquotExamCorrelation = AliquotExamCorrelation.deserialize("{\"_id\" : \"5b2d5b936dcabba87ee60cfe\",\"objectType\" : \"AliquotExamCorrelation\", \"aliquots\" : [{\"name\" : \"a\",\"exams\" : [\"URÉIA - SANGUE\"]}]}");
 
-        PowerMockito.when(laboratoryProjectService.getAllAliquots()).thenReturn(allAliquots);
+        PowerMockito.when(aliquotDao.getAliquots()).thenReturn(allAliquots);
         PowerMockito.when(laboratoryProjectService.getAliquotExamCorrelation()).thenReturn(aliquotExamCorrelation);
 
         service.validateExamResults(resultsToVerify, examSendingLot.isForcedSave());
