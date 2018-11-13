@@ -20,18 +20,11 @@ import java.util.List;
 public class LaboratoryProjectServiceBean implements LaboratoryProjectService {
 
     @Inject
-    TransportationLotService transportationLotService;
-
-    @Inject
     ExamLotService examLotService;
 
     @Inject
     LaboratoryConfigurationService laboratoryConfigurationService;
 
-    @Override
-    public List<WorkAliquot> getAllAliquots() throws DataNotFoundException {
-        return transportationLotService.getAliquots();
-    }
 
     @Override
     public LinkedHashSet<AliquoteDescriptor> getAvailableExams(String center) throws DataNotFoundException {

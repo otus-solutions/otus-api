@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface LaboratoryProjectService {
 
-    List<WorkAliquot> getAllAliquots() throws DataNotFoundException;
-
     LinkedHashSet<AliquoteDescriptor> getAvailableExams(String center) throws DataNotFoundException;
 
     AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
