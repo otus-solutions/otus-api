@@ -130,4 +130,13 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
           throw new DataNotFoundException(new Throwable("Transportation Lot not found"));
       }
     }
+
+    @Override
+    public TransportationLot find(ObjectId transportationLotId) throws DataNotFoundException {
+      Document result = collection.find(eq("_id", transportationLotId)).first();
+      if(result == null ){
+        throw new DataNotFoundException(new Throwable("Transportation Lot not found"));
+      }
+      return TransportationLot.deserialize(result.toJson());
+    }
 }

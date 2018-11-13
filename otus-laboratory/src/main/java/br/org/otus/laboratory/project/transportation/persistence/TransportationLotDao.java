@@ -24,4 +24,6 @@ public interface TransportationLotDao {
   HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException;
 
   TransportationLot findByCode(String code) throws DataNotFoundException;
+
+  TransportationLot find(ObjectId transportationLotId) throws DataNotFoundException;
 }
