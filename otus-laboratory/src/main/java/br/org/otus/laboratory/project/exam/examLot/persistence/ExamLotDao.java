@@ -20,4 +20,5 @@ public interface ExamLotDao {
 
   String checkIfThereInExamLot(String aliquotCode);
 
+  ExamLot find(ObjectId examLotId) throws DataNotFoundException;
 }
