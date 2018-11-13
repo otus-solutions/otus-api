@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import br.org.otus.laboratory.project.transportation.persistence.WorkAliquotFiltersDTO;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
+import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.business.TransportationLotService;
 import br.org.otus.response.builders.ResponseBuild;
@@ -18,6 +19,8 @@ public class TransportationLotFacade {
 
 	@Inject
 	private TransportationLotService transportationLotService;
+	@Inject
+	private AliquotService aliquotService;
 
 	public TransportationLot create(TransportationLot transportationLot, String email) {
 		try {
@@ -59,35 +62,30 @@ public class TransportationLotFacade {
 		}
 	}
 
-	public List<WorkAliquot> getAliquots() {
+	public List<Aliquot> getAliquots() {
 		try {
-			return transportationLotService.getAliquots();
+			return aliquotService.getAliquots();
 		} catch (DataNotFoundException e) {
 			e.printStackTrace();
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
 
-	public List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
+	public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
 		try {
-			return transportationLotService.getAliquotsByPeriod(workAliquotFiltersDTO);
+			return aliquotService.getAliquotsByPeriod(transportationAliquotFiltersDTO);
 		} catch (DataNotFoundException e) {
 			e.printStackTrace();
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-			
 		}
 	}
 
-	public WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO) {
-
+	public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
 		try {
-			return transportationLotService.getAliquot(workAliquotFiltersDTO);
-		} catch (ValidationException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(),e.getData()));
+			return aliquotService.getAliquot(transportationAliquotFiltersDTO);
+		} catch (DataNotFoundException | ValidationException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
-
-	
-
-	
 }
+

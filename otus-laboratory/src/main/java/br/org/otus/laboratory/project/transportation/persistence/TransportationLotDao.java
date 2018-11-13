@@ -4,14 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 
 public interface TransportationLotDao {
 
-  void persist(TransportationLot transportationLot);
+  ObjectId persist(TransportationLot transportationLot);
 
   TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 
@@ -19,13 +19,9 @@ public interface TransportationLotDao {
 
   void delete(String id) throws DataNotFoundException;
 
-  List<WorkAliquot> getAliquots() throws DataNotFoundException;
-
-  List<WorkAliquot> getAliquotsByPeriod(WorkAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException;
+  String checkIfThereInTransport(String aliquotCode);
 
   HashSet<Document> getAliquotsInfoInTransportationLots() throws DataNotFoundException;
 
-  WorkAliquot getAliquot(WorkAliquotFiltersDTO workAliquotFiltersDTO);
-
-  String checkIfThereInTransport(String aliquotCode);
+  TransportationLot findByCode(String code) throws DataNotFoundException;
 }
