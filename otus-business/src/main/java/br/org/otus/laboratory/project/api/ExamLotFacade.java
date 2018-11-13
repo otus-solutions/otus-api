@@ -74,12 +74,7 @@ public class ExamLotFacade {
     }
 
     public List<Aliquot> getAliquots() {
-        try {
-            return aliquotService.getAliquots();
-        } catch (DataNotFoundException e) {
-            e.printStackTrace();
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+        return aliquotService.getAliquots();
     }
 
     public LinkedHashSet<AliquoteDescriptor> getAvailableExams(String center) {
