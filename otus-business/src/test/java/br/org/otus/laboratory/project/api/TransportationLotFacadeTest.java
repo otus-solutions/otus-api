@@ -105,14 +105,6 @@ public class TransportationLotFacadeTest {
 		verify(aliquotService, times(1)).getAliquots();
 	}
 
-	@Test(expected = HttpResponseException.class)
-	public void getAliquotsMethod_should_capture_DataNotFoundException() throws DataNotFoundException {
-		DataNotFoundException e = spy(new DataNotFoundException());
-		doNothing().when(e).printStackTrace();
-		doThrow(e).when(aliquotService).getAliquots();
-		transportationLotFacade.getAliquots();
-	}
-
 	@Test
 	public void getAliquotsByPeriodMethod_should_invoke_getAliquotsByPeriodService() throws DataNotFoundException {
 		transportationLotFacade.getAliquotsByPeriod(transportationAliquotFiltersDTO);

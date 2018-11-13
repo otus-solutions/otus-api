@@ -63,12 +63,7 @@ public class TransportationLotFacade {
 	}
 
 	public List<Aliquot> getAliquots() {
-		try {
 			return aliquotService.getAliquots();
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
 	}
 
 	public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
