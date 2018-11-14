@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.aliquot;
 
 import java.time.LocalDateTime;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Sex;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
@@ -13,29 +14,34 @@ import com.google.gson.GsonBuilder;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.aliquot.AliquotCollectionData;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
 
-public class WorkAliquot extends Aliquot {
+public class WorkAliquot extends SimpleAliquot {
 
 	private static String objectType = "WorkAliquot";
+	private String tubeCode;
+	private ObjectId transportationLotId;
+	private ObjectId examLotId;
 	private Long recruitmentNumber;
-	private ImmutableDate birthdate;
 	private Sex sex;
 	private FieldCenter fieldCenter;
+	private ImmutableDate birthdate;
 
-	public WorkAliquot(String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
-		super(objectType, code, name, container, role, aliquotCollectionData);
-	}
+  public WorkAliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData) {
+    super(objectType, code, name, container, role, aliquotCollectionData);
+  }
 
-	public WorkAliquot(Aliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex, FieldCenter aliquotCenter) {
-		super(objectType, aliquot.getCode(), aliquot.getName(), aliquot.getContainer(), aliquot.getRole(), aliquot.getAliquotCollectionData());
-		this.setRecruitmentNumber(recruitmentNumber);
-		this.setBirthdate(birthdate);
-		this.setSex(sex);
-		this.setFieldCenter(aliquotCenter);
-	}
+//	public WorkAliquot(String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData, FieldCenter aliquotCenter) {
+//
+//	}
+//
+//	public WorkAliquot(SimpleAliquot aliquot, Long recruitmentNumber, ImmutableDate birthdate, Sex sex, FieldCenter aliquotCenter) {
+//		this.setRecruitmentNumber(recruitmentNumber);
+//		this.setBirthdate(birthdate);
+//		this.setSex(sex);
+//		this.setFieldCenter(aliquotCenter);
+//	}
 
 	public Long getRecruitmentNumber() {
 		return recruitmentNumber;
@@ -75,7 +81,7 @@ public class WorkAliquot extends Aliquot {
 	}
 
 	public static WorkAliquot deserialize(String workAliquot) {	
-		return getGsonBuilder().create().fromJson(workAliquot, WorkAliquot.class);
+		return WorkAliquot.getGsonBuilder().create().fromJson(workAliquot, WorkAliquot.class);
 	}
 
 	public static GsonBuilder getGsonBuilder() {
@@ -86,7 +92,13 @@ public class WorkAliquot extends Aliquot {
 
 		return builder;
 	}
-	
-	
 
+
+	public void setTransportationLotId(ObjectId transportationLotId) {
+		this.transportationLotId = transportationLotId;
+	}
+
+	public void setExamLotId(ObjectId examLotId) {
+		this.examLotId = examLotId;
+	}
 }

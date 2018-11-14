@@ -22,8 +22,8 @@ public class WorkAliquotFactory {
 
       participantLaboratory.getTubes().forEach(tube -> {
         tube.getAliquots().forEach(aliquot -> {
-          WorkAliquot workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(), participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
-          aliquotList.add(workAliquot);
+//          WorkAliquot workAliquot = new WorkAliquot(aliquot, participant.getRecruitmentNumber(), participant.getBirthdate(), participant.getSex(), participant.getFieldCenter());
+//          aliquotList.add(workAliquot);
         });
       });
     }

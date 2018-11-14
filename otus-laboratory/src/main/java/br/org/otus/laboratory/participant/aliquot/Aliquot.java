@@ -1,71 +1,119 @@
 package br.org.otus.laboratory.participant.aliquot;
+import java.time.LocalDateTime;
 
-import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContainer;
-import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import org.bson.types.ObjectId;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.model.Sex;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.util.List;
+public class Aliquot extends SimpleAliquot {
 
-public class Aliquot {
+    private String tubeCode;
+    private ObjectId transportationLotId;
+    private ObjectId examLotId;
+    private Long recruitmentNumber;
+    private Sex sex;
+    private FieldCenter fieldCenter;
+    private ImmutableDate birthdate;
 
-	private String objectType;
-	private String code;
-	private String name;
-	private AliquotContainer container;
-	private AliquotRole role;
-	private AliquotCollectionData aliquotCollectionData;
+    public Aliquot(){
+      super();
+    }
 
-	public Aliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData) {
-		this.objectType = objectType;
-		this.code = code;
-		this.name = name;
-		this.container = container;
-		this.role = role;
-		this.aliquotCollectionData = aliquotCollectionData;
-	}
+    public Aliquot(SimpleAliquot simpleAliquot){
+      super(simpleAliquot.getObjectType(), simpleAliquot.getCode(), simpleAliquot.getName(), simpleAliquot.getContainer(), simpleAliquot.getRole(), simpleAliquot.getAliquotCollectionData());
+    }
 
-	public String getObjectType() {
-		return objectType;
-	}
+  public void setParticipatData(Participant participant) {
+    this.setRecruitmentNumber(participant.getRecruitmentNumber());
+    this.setBirthdate(participant.getBirthdate());
+    this.setFieldCenter(participant.getFieldCenter());
+    this.setSex(participant.getSex());
+  }
 
-	public String getCode() {
-		return code;
-	}
+  public SimpleAliquot getSimpleAliquot() {
+      return SimpleAliquot.deserialize(
+        serialize(this)
+      );
+    }
 
-	public AliquotContainer getContainer() {
-		return container;
-	}
+    public Long getRecruitmentNumber() {
+        return recruitmentNumber;
+    }
 
-	public AliquotRole getRole() {
-		return role;
-	}
+    public void setRecruitmentNumber(Long recruitmentNumber) {
+        this.recruitmentNumber = recruitmentNumber;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public ImmutableDate getBirthdate() {
+        return birthdate;
+    }
 
-	public AliquotCollectionData getAliquotCollectionData() {
-		return aliquotCollectionData;
-	}
+    public void setBirthdate(ImmutableDate birthdate) {
+        this.birthdate = birthdate;
+    }
 
-	public static String serialize(List<Aliquot> aliquots) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.toJson(aliquots);
-	}
+    public Sex getSex() {
+        return sex;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
 
-		Aliquot aliquot = (Aliquot) o;
+    public FieldCenter getFieldCenter() {
+        return fieldCenter;
+    }
 
-		return code.equals(aliquot.code);
-	}
+    public void setFieldCenter(FieldCenter fieldCenter) {
+        this.fieldCenter = fieldCenter;
+    }
 
-	@Override
-	public int hashCode() {
-		return code.hashCode();
-	}
+    public String getTubeCode() {
+        return tubeCode;
+    }
+
+    public ObjectId getTransportationLotId() {
+        return transportationLotId;
+    }
+
+    public ObjectId getExamLotId() {
+        return examLotId;
+    }
+
+    public void setTubeCode(String tubeCode) {
+        this.tubeCode = tubeCode;
+    }
+
+    public void setTransportationLotId(ObjectId transportationLotId) {
+        this.transportationLotId = transportationLotId;
+    }
+
+    public void setExamLotId(ObjectId examLotId) {
+        this.examLotId = examLotId;
+    }
+
+    public static String serialize(Aliquot aliquot) {
+        Gson builder = getGsonBuilder().create();
+        return builder.toJson(aliquot);
+    }
+
+    public static Aliquot deserialize(String aliquot) {
+        return getGsonBuilder().create().fromJson(aliquot, Aliquot.class);
+    }
+
+    public static GsonBuilder getGsonBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+        builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        builder.serializeNulls();
+
+        return builder;
+    }
 }
