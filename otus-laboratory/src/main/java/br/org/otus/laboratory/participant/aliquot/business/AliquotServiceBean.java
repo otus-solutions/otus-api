@@ -48,9 +48,10 @@ public class AliquotServiceBean implements AliquotService {
 
   @Override
   public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException, ValidationException {
-    if (transportationLotDao.checkIfThereInTransport(transportationAliquotFiltersDTO.getCode()) != null)
+    Aliquot aliquot = aliquotDao.getAliquot(transportationAliquotFiltersDTO);
+    if(aliquot.getTransportationLotId() != null)
       throw new ValidationException(new Throwable("There are aliquots in another lot."), transportationAliquotFiltersDTO.getCode());
-    return aliquotDao.getAliquot(transportationAliquotFiltersDTO);
+    return aliquot;
   }
 
   @Override
