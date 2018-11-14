@@ -2,7 +2,6 @@ package br.org.otus.laboratory.project.transportation.validators;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
