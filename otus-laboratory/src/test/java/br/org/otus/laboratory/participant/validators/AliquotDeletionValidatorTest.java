@@ -62,7 +62,7 @@ public class AliquotDeletionValidatorTest {
   private AliquotDeletionValidator aliquotDeletionValidator;
 
   @Before
-  public void setup() {
+  public void setup() throws DataNotFoundException {
     aliquot = Aliquot.deserialize("{code:300000624 }");
     when(aliquotDao.find(ALIQUOT_CODE)).thenReturn(aliquot);
     aliquotDeletionValidator = PowerMockito.spy(new AliquotDeletionValidator(ALIQUOT_CODE, aliquotDao, examUploader, examLotDao, transportationLotDao));
@@ -128,7 +128,7 @@ public class AliquotDeletionValidatorTest {
   }
 
   @Test
-  public void validate_should_return_validationException_when_contains_aliquot_in_exam_result() throws ValidationException {
+  public void validate_should_return_validationException_when_contains_aliquot_in_exam_result() throws ValidationException, DataNotFoundException {
     when(examUploader.checkIfThereInExamResultLot(ALIQUOT_CODE)).thenReturn(Boolean.TRUE);
 
     try {
@@ -140,7 +140,7 @@ public class AliquotDeletionValidatorTest {
   }
 
   @Test
-  public void validate_not_should_return_validationException() throws ValidationException {
+  public void validate_not_should_return_validationException() throws ValidationException, DataNotFoundException {
     when(examLotDao.checkIfThereInExamLot(ALIQUOT_CODE)).thenReturn(null);
     when(transportationLotDao.checkIfThereInTransport(ALIQUOT_CODE)).thenReturn(null);
     when(examUploader.checkIfThereInExamResultLot(ALIQUOT_CODE)).thenReturn(Boolean.FALSE);
