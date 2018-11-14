@@ -51,9 +51,7 @@ public class ParticipantLaboratoryServiceBeanTest {
   // TODO: This test needs to be refactored
 
   @InjectMocks
-  private ParticipantLaboratoryServiceBean injectMocks = PowerMockito.spy(new ParticipantLaboratoryServiceBean());
-  @Mock
-  private ParticipantLaboratoryServiceBean participantLaboratoryService;
+  private ParticipantLaboratoryServiceBean participantLaboratoryServiceBean= PowerMockito.spy(new ParticipantLaboratoryServiceBean());
   @Mock
   private ParticipantDao participantDao;
   @Mock
@@ -98,19 +96,18 @@ public class ParticipantLaboratoryServiceBeanTest {
     JsonObjecParticipantLaboratoryFactory jsonObjecParticipantLaboratoryFactory = new JsonObjecParticipantLaboratoryFactory();
     participantLaboratory = ParticipantLaboratory.deserialize(jsonObjecParticipantLaboratoryFactory.create().toString());
 
-    when(participantLaboratoryService.getLaboratory(RECRUIMENT_NUMBER)).thenReturn(participantLaboratory);
   }
 
   @Test
   public void hasLaboratory_method_should_return_true() throws DataNotFoundException {
     when(participantLaboratoryDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participantLaboratory);
-    assertTrue(injectMocks.hasLaboratory(RECRUIMENT_NUMBER));
+    assertTrue(participantLaboratoryServiceBean.hasLaboratory(RECRUIMENT_NUMBER));
   }
 
   @Test
   public void hasLaboratory_method_should_return_false() throws DataNotFoundException {
     when(participantLaboratoryDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenThrow(new DataNotFoundException());
-    assertFalse(injectMocks.hasLaboratory(RECRUIMENT_NUMBER));
+    assertFalse(participantLaboratoryServiceBean.hasLaboratory(RECRUIMENT_NUMBER));
   }
 
   @Test
@@ -124,7 +121,7 @@ public class ParticipantLaboratoryServiceBeanTest {
     List<SimpleAliquot> simpleAliquotList = new ArrayList<>();
     simpleAliquotList.add(SIMPLE_ALIQUOT);
 
-    participantLaboratory = injectMocks.getLaboratory(RECRUIMENT_NUMBER);
+    participantLaboratory = participantLaboratoryServiceBean.getLaboratory(RECRUIMENT_NUMBER);
 
     assertEquals(simpleAliquotList, participantLaboratory.getAliquotsList());
   }
@@ -135,25 +132,25 @@ public class ParticipantLaboratoryServiceBeanTest {
     when(groupRaffle.perform(participant)).thenReturn(collectGroup);
     when(tubeService.generateTubes(TubeSeed.generate(participant, collectGroup))).thenReturn(participantLaboratory.getTubes());
     whenNew(ParticipantLaboratory.class).withAnyArguments().thenReturn(participantLaboratory);
-    injectMocks.create(RECRUIMENT_NUMBER);
+    participantLaboratoryServiceBean.create(RECRUIMENT_NUMBER);
     verify(participantLaboratoryDao, Mockito.times(1)).persist(participantLaboratory);
   }
 
   @Test
   public void updateAliquots_method_should_call_method_validate() throws Exception {
-    doReturn(participantLaboratory).when(injectMocks, "getLaboratory", RECRUIMENT_NUMBER);
+    doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
     whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
-    injectMocks.updateAliquots(updateAliquotsDTO);
-    verify(aliquotUpdateValidator).validate();
+    participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
+    verify(aliquotUpdateValidator,times(1)).validate();
   }
 
   @Test
   public void UpdateAliquots_method_when_executed_with_success_should_call_method_aliquotDao_persist() throws Exception {
-    doReturn(participantLaboratory).when(injectMocks, "getLaboratory", RECRUIMENT_NUMBER);
+    doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
     whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
-    injectMocks.updateAliquots(updateAliquotsDTO);
+    participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
     verify(aliquotDao, times(1)).persist(any());
   }
 
@@ -161,14 +158,14 @@ public class ParticipantLaboratoryServiceBeanTest {
   public void UpdateAliquots_method_should_throw_an_exception_when_aliquots_is_invalid() throws ValidationException, DataNotFoundException {
 
     doThrow(new Exception()).when(aliquotUpdateValidator).validate();
-    participantLaboratoryService.updateAliquots(updateAliquotsDTO);
+    participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
   }
 
   @Test
   public void deleteAliquot_should_call_method_validate() throws Exception {
 
     AliquotDeletionValidator aliquotDeletionValidator = Mockito.mock(AliquotDeletionValidator.class);
-    PowerMockito.whenNew(AliquotDeletionValidator.class).withArguments(ALIQUOT_CODE,aliquotDao, examUploader, examLotDao, transportationLotDao).thenReturn(aliquotDeletionValidator);
+    whenNew(AliquotDeletionValidator.class).withArguments(ALIQUOT_CODE,aliquotDao, examUploader, examLotDao, transportationLotDao).thenReturn(aliquotDeletionValidator);
 
     aliquotDeletionValidator.validate();
 

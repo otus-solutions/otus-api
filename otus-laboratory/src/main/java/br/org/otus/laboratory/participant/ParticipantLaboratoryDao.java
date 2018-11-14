@@ -9,7 +9,7 @@ import br.org.otus.laboratory.participant.tube.Tube;
 
 public interface ParticipantLaboratoryDao {
 
-  abstract void persist(ParticipantLaboratory laboratoryParticipant);
+  void persist(ParticipantLaboratory laboratoryParticipant);
 
   ParticipantLaboratory find();
 

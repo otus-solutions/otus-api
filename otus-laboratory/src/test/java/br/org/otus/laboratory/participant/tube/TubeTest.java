@@ -24,12 +24,12 @@ public class TubeTest {
   public static final String GROUPNAME = "DEFAULT";
   public static final String ALIQUOTS = null;
   public static final Integer ORDER = 1;
-  public static final String TUBE_JSON_STRING = "{\"objectType\":\"Tube\",\"type\":\"GEL\",\"moment\":\"FASTING\",\"code\":\"351286082\",\"groupName\":\"DEFAULT\",\"aliquots\":null,\"order\":1,\"tubeCollectionData\":{\"objectType\":\"TubeCollectionData\",\"isCollected\":true,\"metadata\":\"\",\"operator\":\"email@gmail.com\",\"time\":\"2018-11-12T15:57:34.315Z\"}}";
+  public static final String TUBE_JSON = "{\"objectType\":\"Tube\",\"type\":\"GEL\",\"moment\":\"FASTING\",\"code\":\"351286082\",\"groupName\":\"DEFAULT\",\"aliquots\":null,\"order\":1,\"tubeCollectionData\":{\"objectType\":\"TubeCollectionData\",\"isCollected\":true,\"metadata\":\"\",\"operator\":\"email@gmail.com\",\"time\":\"2018-11-12T15:57:34.315Z\"}}";
 
   private TubeCollectionData tubeCollectionData;
 
   @InjectMocks
-  private Tube tubeFromJson;
+  private Tube tube;
   @Mock
   private Aliquot aliquot;
   @Mock
@@ -37,51 +37,51 @@ public class TubeTest {
 
   @Before
   public void setUp(){
-    tubeFromJson = Tube.deserialize(TUBE_JSON_STRING);
+    tube = Tube.deserialize(TUBE_JSON);
   }
 
   @Test
   public void method_getType_should_return_type() {
-    assertEquals(TYPE, tubeFromJson.getType());
+    assertEquals(TYPE, tube.getType());
   }
 
   @Test
   public void method_getObjectType_should_return_objectType() {
-    assertEquals(OBJECT_TYPE, tubeFromJson.getObjectType());
+    assertEquals(OBJECT_TYPE, tube.getObjectType());
   }
 
   @Test
   public void method_getMoment_should_return_moment() {
-    assertEquals(MOMENT, tubeFromJson.getMoment());
+    assertEquals(MOMENT, tube.getMoment());
   }
 
   @Test
   public void method_getCode_should_return_code() {
-    assertEquals(CODE, tubeFromJson.getCode());
+    assertEquals(CODE, tube.getCode());
   }
 
   @Test
   public void method_getGroupName_should_return_groupName(){
-    assertEquals(GROUPNAME, tubeFromJson.getGroupName());
+    assertEquals(GROUPNAME, tube.getGroupName());
   }
 
   @Test
   public void method_getAliquots_should_return_aliquots(){
-    assertEquals(ALIQUOTS, tubeFromJson.getAliquots());
+    assertEquals(ALIQUOTS, tube.getAliquots());
   }
 
   @Test
   public void method_getOrder_should_return_order(){
-    assertEquals(ORDER, tubeFromJson.getOrder());
+    assertEquals(ORDER, tube.getOrder());
   }
 
   @Test
   public void method_getTubeCollectionData_should_return_collectionData(){
-    assertEquals("TubeCollectionData", tubeFromJson.getTubeCollectionData().getObjectType());
+    assertEquals("TubeCollectionData", tube.getTubeCollectionData().getObjectType());
   }
 
   @Test
   public void method_serialize_should_return_tubeJson(){
-    assertEquals(Tube.serialize(tubeFromJson),TUBE_JSON_STRING);
+    assertEquals(Tube.serialize(tube), TUBE_JSON);
   }
 }
