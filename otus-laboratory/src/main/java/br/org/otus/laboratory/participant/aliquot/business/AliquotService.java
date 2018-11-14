@@ -1,9 +1,6 @@
 package br.org.otus.laboratory.participant.aliquot.business;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
