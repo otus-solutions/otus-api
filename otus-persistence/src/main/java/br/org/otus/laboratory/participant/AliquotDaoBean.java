@@ -101,7 +101,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     public Aliquot find(String code) throws DataNotFoundException {
         Document result = collection.find(eq("code", code)).first();
         if(result == null ){
-            throw new DataNotFoundException(new Throwable("Transportation Lot not found"));
+            throw new DataNotFoundException(new Throwable("Aliquot not found"));
         }
         return Aliquot.deserialize(result.toJson());
     }
