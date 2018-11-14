@@ -1,20 +1,20 @@
 package br.org.otus.laboratory.participant.dto;
 
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 
 import java.util.List;
 
 public class UpdateTubeAliquotsDTO {
 
-	private String code;
-	private List<Aliquot> aliquots;
+  private String code;
+  private List<SimpleAliquot> aliquots;
 
-	public String getTubeCode() {
-		return code;
-	}
+  public String getTubeCode() {
+    return code;
+  }
 
-	public List<Aliquot> getAliquots() {
-		return aliquots;
-	}
+  public List<SimpleAliquot> getAliquots() {
+    return aliquots;
+  }
 
 }

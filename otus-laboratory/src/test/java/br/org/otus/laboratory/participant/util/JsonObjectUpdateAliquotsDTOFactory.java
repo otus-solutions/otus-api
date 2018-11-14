@@ -38,7 +38,7 @@ public class JsonObjectUpdateAliquotsDTOFactory implements JsonObjectFactory {
 
 		tube = new JsonObject();
 		tube.addProperty("code", "200000");
-		tube.add("aliquotes", aliquots);
+		tube.add("aliquots", aliquots);
 
 		tubes = new JsonArray();
 		tubes.add(tube);

@@ -19,8 +19,8 @@ public class JsonObjecParticipantLaboratoryFactory implements JsonObjectFactory 
 		tube.addProperty("moment", "FASTING");
 		tube.addProperty("code", "200000");
 		tube.addProperty("groupName", "DEFAULT");
-		JsonArray aliquotes = new JsonArray();
-		tube.add("aliquotes", aliquotes);
+		JsonArray aliquots = new JsonArray();
+		tube.add("aliquots", aliquots);
 		tube.addProperty("order", 1);
 
 		JsonArray tubes = new JsonArray();

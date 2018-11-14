@@ -2,7 +2,8 @@ package br.org.otus.laboratory.participant.validators;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
@@ -17,13 +18,13 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 
 	private UpdateAliquotsDTO updateAliquotsDTO;
 	private AliquotUpdateValidateResponse aliquotUpdateValidateResponse;
-	private ParticipantLaboratoryDao participantLaboratoryDao;
+	private AliquotDao aliquotDao;
 	private ParticipantLaboratory participantLaboratory;
 
-	public AliquotUpdateValidator(UpdateAliquotsDTO updateAliquotsDTO, ParticipantLaboratoryDao participantLaboratoryDao, ParticipantLaboratory participantLaboratory) {
+	public AliquotUpdateValidator(UpdateAliquotsDTO updateAliquotsDTO, AliquotDao aliquotDao, ParticipantLaboratory participantLaboratory) {
 		this.aliquotUpdateValidateResponse = new AliquotUpdateValidateResponse();
 		this.updateAliquotsDTO = updateAliquotsDTO;
-		this.participantLaboratoryDao = participantLaboratoryDao;
+		this.aliquotDao = aliquotDao;
 		this.participantLaboratory = participantLaboratory;
 	}
 
@@ -65,11 +66,11 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 		}
 	}
 
-	private List<Aliquot> getDuplicatesAliquotsOnDTO() {
+	private List<SimpleAliquot> getDuplicatesAliquotsOnDTO() {
 		Set<String> set = new HashSet<>();
 
 		for (UpdateTubeAliquotsDTO updateTubeAliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
-			for (Aliquot aliquot : updateTubeAliquotDTO.getAliquots()) {
+			for (SimpleAliquot aliquot : updateTubeAliquotDTO.getAliquots()) {
 				if (!set.add(aliquot.getCode())) {
 					aliquotUpdateValidateResponse.getConflicts().add(aliquot);
 				}
@@ -78,9 +79,9 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 		return aliquotUpdateValidateResponse.getConflicts();
 	}
 
-	private List<Aliquot> verifyConflictsOnDB() {
+	private List<SimpleAliquot> verifyConflictsOnDB() {
 		for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
-			for (Aliquot aliquot : aliquotDTO.getAliquots()) {
+			for (SimpleAliquot aliquot : aliquotDTO.getAliquots()) {
 				if (isAliquoted(aliquot.getCode())) {
 					aliquotUpdateValidateResponse.getConflicts().add(aliquot);
 				}
@@ -90,13 +91,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 	}
 
 	private boolean isAliquoted(String aliquotCode) {
-		try {
-			participantLaboratoryDao.findParticipantLaboratory(aliquotCode);
-			return true;
-
-		} catch (DataNotFoundException e) {
-			return false;
-		}
+	  return aliquotDao.exists(aliquotCode);
 	}
 
 }

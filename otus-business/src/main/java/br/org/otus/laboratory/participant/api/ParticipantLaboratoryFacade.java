@@ -18,15 +18,6 @@ public class ParticipantLaboratoryFacade {
   @Inject
   private ParticipantLaboratoryService service;
 
-  public ParticipantLaboratory update(ParticipantLaboratory participantLaboratory) {
-    try {
-      return service.update(participantLaboratory);
-    } catch (DataNotFoundException e) {
-      e.printStackTrace();
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    }
-  }
-
   public Tube updateTubeCollectionData(Long rn, Tube tube) {
     try {
       return service.updateTubeCollectionData(rn, tube);
