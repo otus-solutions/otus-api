@@ -11,6 +11,7 @@ import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class Aliquot extends SimpleAliquot {
 
@@ -112,6 +113,7 @@ public class Aliquot extends SimpleAliquot {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
         builder.serializeNulls();
 
         return builder;
