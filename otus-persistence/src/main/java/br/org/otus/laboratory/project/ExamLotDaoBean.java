@@ -108,7 +108,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
   public ExamLot find(ObjectId examLotId) throws DataNotFoundException {
       Document result = collection.find(eq("_id", examLotId)).first();
       if(result == null ){
-          throw new DataNotFoundException(new Throwable("Transportation Lot not found"));
+          throw new DataNotFoundException(new Throwable("Exam Lot not found"));
       }
       return ExamLot.deserialize(result.toJson());
   }
