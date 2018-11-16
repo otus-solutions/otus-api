@@ -9,6 +9,7 @@ public class ProjectConfiguration {
 
     public String objectType;
     private boolean participantRegistration;
+    private boolean autoGenerateRecruitmentNumber;
 
 
     public static String serialize(ProjectConfiguration configuration) {

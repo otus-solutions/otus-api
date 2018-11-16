@@ -44,4 +44,16 @@ public class ProjectConfigurationDaoBean extends MongoGenericDao<Document> imple
 
     return ProjectConfiguration.deserialize(first.toJson());
   }
+
+  @Override
+  public void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException {
+    Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE);
+    Document update = new Document("$set", new Document("autoGenerateRecruitmentNumber", permission));
+
+    UpdateResult updateResult = collection.updateOne(query, update);
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException(PROJECT_CONFIGURATION_NOT_FOUND);
+    }
+  }
 }

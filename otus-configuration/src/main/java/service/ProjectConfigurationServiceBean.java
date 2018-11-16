@@ -23,4 +23,9 @@ public class ProjectConfigurationServiceBean implements ProjectConfigurationServ
   public ProjectConfiguration getProjectConfiguration() throws DataNotFoundException {
     return projectConfigurationDao.getProjectConfiguration();
   }
+
+  @Override
+  public void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException{
+    projectConfigurationDao.autoGenerateRecruitmentNumber(permission);
+  }
 }
