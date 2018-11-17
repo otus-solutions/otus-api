@@ -29,4 +29,10 @@ public class ProjectConfigurationServiceBeanTest {
     projectConfigurationServiceBean.getProjectConfiguration();
     Mockito.verify(projectConfigurationDao, Mockito.times(1)).getProjectConfiguration();
   }
+
+  @Test
+  public void autoGenerateRecruitmentNumber_should_call_projectConfigurationDao_autoGenerateRecruitmentNumber() throws DataNotFoundException {
+    projectConfigurationServiceBean.autoGenerateRecruitmentNumber(PERMISSION);
+    Mockito.verify(projectConfigurationDao, Mockito.times(1)).autoGenerateRecruitmentNumber(PERMISSION);
+  }
 }
