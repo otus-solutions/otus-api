@@ -56,7 +56,7 @@ public class ParticipantServiceBeanTest {
   }
 
   @Test
-  public void method_create_with_Participant_shoud_evocate_persist_of_ParticipantDao() throws ValidationException {
+  public void method_create_with_Participant_shoud_evocate_persist_of_ParticipantDao() throws ValidationException, DataNotFoundException {
     participantServiceBean.create(participant);
     verify(participantDao, times(1)).persist(participant);
   }
@@ -71,20 +71,20 @@ public class ParticipantServiceBeanTest {
   @Test
   public void method_create_participants_validate_recruitmentNumber_should_inserts_successful() throws ValidationException {
     setParticipants.add(participant);
-    when(participantDao.validateRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(null);
+    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(null);
     participantServiceBean.create(setParticipants);
   }
 
   @Test
   public void method_create_participants_validate_recruitmentNumber_should_return_exception() throws ValidationException {
     setParticipants.add(participant);
-    when(participantDao.validateRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
+    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
     participantServiceBean.create(setParticipants);
   }
   
   @Test(expected = ValidationException.class)
-  public void method_create_a_participant_validate_recruitmentNumber_should_return_exception() throws ValidationException {
-    when(participantDao.validateRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
+  public void method_create_a_participant_validate_recruitmentNumber_should_return_exception() throws ValidationException, DataNotFoundException {
+    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
     assertNull(participantServiceBean.create(participant));
   }
 

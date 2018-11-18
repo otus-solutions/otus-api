@@ -11,4 +11,6 @@ public interface ProjectConfigurationService {
   ProjectConfiguration getProjectConfiguration() throws DataNotFoundException;
 
     void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException;
+
+  boolean isRnProvided() throws DataNotFoundException;
 }
