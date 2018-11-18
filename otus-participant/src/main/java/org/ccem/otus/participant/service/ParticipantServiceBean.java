@@ -80,7 +80,7 @@ public class ParticipantServiceBean implements ParticipantService {
 
   @Override
   public Long getPartipantsActives(String acronymCenter) throws DataNotFoundException {
-    return participantDao.getPartipantsActives(acronymCenter);
+    return participantDao.countParticipantActivities(acronymCenter);
   }
 
 }

@@ -18,7 +18,7 @@ public interface ParticipantDao {
 
   ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 
-  Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
+  Long countParticipantActivities(String centerAcronym) throws DataNotFoundException;
 
   boolean exists(Long rn);
 

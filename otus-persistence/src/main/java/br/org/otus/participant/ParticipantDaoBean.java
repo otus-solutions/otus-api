@@ -122,14 +122,12 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
     return result;
   }
 
-
-  // TODO: 17/11/18  review this method
   @Override
-  public Long getPartipantsActives(String acronymCenter) throws DataNotFoundException {
+  public Long countParticipantActivities(String centerAcronym) throws DataNotFoundException {
 
     Document query = new Document();
-    ArrayList<String> centers = fieldCenterDao.listAcronyms();
-    query.put("fieldCenter.acronym", acronymCenter);
+
+    query.put("fieldCenter.acronym", centerAcronym);
     query.put("late", Boolean.FALSE);
 
     return collection.count(query);
