@@ -43,13 +43,26 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
 
   @Override
   public void persist(Participant participant) {
-    this.collection.insertOne(participant); 
+    this.collection.insertOne(participant);
   }
   
   @Override
-  public Participant validateRecruitmentNumber(Long rn) {
+  public boolean exists(Long rn) {
     Participant result = this.collection.find(eq("recruitmentNumber", rn)).first();
+    return result != null;
+  }
+
+  @Override
+  public Participant getLastInsertion(String fieldCenter) throws DataNotFoundException {
+    Participant result = this.collection.find(eq("fieldCenter.acronym", fieldCenter))
+        .sort(new Document("_id", -1))
+        .first();
+
+    if (result == null) {
+      throw new DataNotFoundException("No results for given field center");
+    }
     return result;
+
   }
 
   @Override
@@ -95,6 +108,22 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
     return result;
   }
 
+  @Override
+  public Participant findLastInsertion(String fieldCenter) throws DataNotFoundException {
+    Participant result = this.collection.find(eq("fieldCenter.acronym", fieldCenter))
+        .sort(new Document("_id", -1))
+        .first();
+
+    if (result == null) {
+      throw new DataNotFoundException(
+          new Throwable("Any participant found for the given field center"));
+    }
+
+    return result;
+  }
+
+
+  // TODO: 17/11/18  review this method
   @Override
   public Long getPartipantsActives(String acronymCenter) throws DataNotFoundException {
 
