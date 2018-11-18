@@ -72,6 +72,7 @@ public class ParticipantServiceBeanTest {
 
   @Test
   public void method_list_should_execute_find_of_participantDao() {
+    fieldCenter = null;
     when(participantDao.find()).thenReturn(listParticipants);
     assertEquals(PARTICIPANT_NAME, participantServiceBean.list(fieldCenter).get(0).getName());
     verify(participantDao, times(0)).findByFieldCenter(fieldCenter);
