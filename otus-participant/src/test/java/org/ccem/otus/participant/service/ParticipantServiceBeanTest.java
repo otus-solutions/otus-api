@@ -1,16 +1,5 @@
 package org.ccem.otus.participant.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -23,6 +12,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import service.ProjectConfigurationService;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParticipantServiceBeanTest {
@@ -33,6 +32,10 @@ public class ParticipantServiceBeanTest {
   ParticipantServiceBean participantServiceBean;
   @Mock
   ParticipantDao participantDao;
+  @Mock
+  ProjectConfigurationService projectConfigurationService;
+  @Mock
+  RecruitmentNumberService recruitmentNumberService;
   private Set<Participant> setParticipants;
   private Participant participant;
   private FieldCenter fieldCenter;
@@ -40,9 +43,15 @@ public class ParticipantServiceBeanTest {
 
   @Before
   public void setUp() {
+    fieldCenter = new FieldCenter();
+    fieldCenter.setAcronym(ACRONYM);
+
     setParticipants = Mockito.spy(new HashSet<>());
+
     participant = new Participant(RECRUIMENT_NUMBER);
     participant.setName(PARTICIPANT_NAME);
+    participant.setFieldCenter(fieldCenter);
+
     listParticipants = new ArrayList<>();
     listParticipants.add(participant);
     listParticipants.add(participant);
@@ -69,14 +78,14 @@ public class ParticipantServiceBeanTest {
   }
   
   @Test
-  public void method_create_participants_validate_recruitmentNumber_should_inserts_successful() throws ValidationException {
+  public void method_create_participant_should_insert_successfully_when_a_participant_with_given_rn_doesnt_exist() throws ValidationException {
     setParticipants.add(participant);
-    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(null);
+    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(false);
     participantServiceBean.create(setParticipants);
   }
 
   @Test
-  public void method_create_participants_validate_recruitmentNumber_should_return_exception() throws ValidationException {
+  public void method_create_participants_validate_recruitmentNumber_should_return_exception() {
     setParticipants.add(participant);
     when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
     participantServiceBean.create(setParticipants);
@@ -90,9 +99,6 @@ public class ParticipantServiceBeanTest {
 
   @Test
   public void method_list_should_execute_findByFieldCenter_of_participantDao() {
-    fieldCenter = new FieldCenter();
-    fieldCenter.setAcronym(ACRONYM);
-    participant.setFieldCenter(fieldCenter);
     when(participantDao.findByFieldCenter(fieldCenter)).thenReturn(listParticipants);
     assertEquals(participant.getName(), participantServiceBean.list(fieldCenter).get(0).getName());
     assertEquals(ACRONYM, participantServiceBean.list(fieldCenter).get(0).getFieldCenter().getAcronym());
@@ -104,5 +110,27 @@ public class ParticipantServiceBeanTest {
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     assertEquals(PARTICIPANT_NAME, participantServiceBean.getByRecruitmentNumber(RECRUIMENT_NUMBER).getName());
   }
+
+  @Test
+  public void create_should_call_ask_for_recruitment_number_when_the_auto_generation_is_on() throws DataNotFoundException, ValidationException {
+    when(projectConfigurationService.isRnProvided()).thenReturn(true);
+    when(recruitmentNumberService.get(ACRONYM)).thenReturn(RECRUIMENT_NUMBER);
+
+    Participant result = participantServiceBean.create(this.participant);
+
+    verify(recruitmentNumberService).get(this.participant.getFieldCenter().getAcronym());
+    assertEquals(result.getRecruitmentNumber(), (Long) RECRUIMENT_NUMBER);
+  }
+
+
+  @Test(expected = ValidationException.class)
+  public void create_should_throw_error_when_rn_is_null_and_not_provided() throws DataNotFoundException, ValidationException {
+    when(projectConfigurationService.isRnProvided()).thenReturn(false);
+    participant.setRecruitmentNumber(null);
+
+    participantServiceBean.create(this.participant);
+
+  }
+
 
 }

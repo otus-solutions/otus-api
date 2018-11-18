@@ -14,8 +14,6 @@ public interface ParticipantDao {
 
   Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
-  Participant findLastInsertion (String fieldCenter) throws DataNotFoundException;
-
   ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 
   Long countParticipantActivities(String centerAcronym) throws DataNotFoundException;

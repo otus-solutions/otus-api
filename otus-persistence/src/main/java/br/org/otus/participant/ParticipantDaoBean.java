@@ -109,20 +109,6 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
   }
 
   @Override
-  public Participant findLastInsertion(String fieldCenter) throws DataNotFoundException {
-    Participant result = this.collection.find(eq("fieldCenter.acronym", fieldCenter))
-        .sort(new Document("_id", -1))
-        .first();
-
-    if (result == null) {
-      throw new DataNotFoundException(
-          new Throwable("Any participant found for the given field center"));
-    }
-
-    return result;
-  }
-
-  @Override
   public Long countParticipantActivities(String centerAcronym) throws DataNotFoundException {
 
     Document query = new Document();

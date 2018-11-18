@@ -41,7 +41,6 @@ public class ParticipantServiceBean implements ParticipantService {
 
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {
-    // TODO: 16/11/18  improve test
     if (projectConfigurationService.isRnProvided()) {
       Long rn = recruitmentNumberService.get(participant.getFieldCenter().getAcronym());
 
