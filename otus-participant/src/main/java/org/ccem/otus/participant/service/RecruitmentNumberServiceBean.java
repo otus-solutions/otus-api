@@ -53,7 +53,7 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
     String prefix = rnString.substring(0, codeString.length());
 
     if(!prefix.equals(codeString)) {
-      throw new ValidationException("RN inconsistency. RN " + rnString + "does not match with given center: " + fieldCenter.getAcronym());
+      throw new ValidationException(new Throwable("RN inconsistency. RN " + rnString + " does not match with given center: " + fieldCenter.getAcronym()));
     }
   }
 
