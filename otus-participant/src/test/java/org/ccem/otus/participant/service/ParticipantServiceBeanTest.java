@@ -128,10 +128,18 @@ public class ParticipantServiceBeanTest {
   public void create_should_throw_error_when_rn_is_null_and_not_provided() throws DataNotFoundException, ValidationException {
     when(projectConfigurationService.isRnProvided()).thenReturn(false);
     participant.setRecruitmentNumber(null);
-
+    doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(),null);
     participantServiceBean.create(this.participant);
 
   }
 
+  @Test(expected = ValidationException.class)
+  public void validate_should_throw_error_when_rn_is_null_and_not_provided() throws DataNotFoundException, ValidationException {
+    when(projectConfigurationService.isRnProvided()).thenReturn(false);
+    participant.setRecruitmentNumber(null);
+    doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(),null);
+    participantServiceBean.create(this.participant);
+
+  }
 
 }

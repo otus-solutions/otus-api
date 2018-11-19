@@ -13,11 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
 public class RecruitmentNumberServiceBeanTest {
   private static final long RECRUIMENT_NUMBER = 4000123L;
   private static final String ACRONYM = "RS";
@@ -79,12 +81,31 @@ public class RecruitmentNumberServiceBeanTest {
   }
 
   @Test(expected = DataNotFoundException.class)
-  public void get_should_throw_an_exception_when_fielc_center_is_not_found() throws ValidationException, DataNotFoundException {
+  public void get_should_throw_an_exception_when_field_center_is_not_found() throws ValidationException, DataNotFoundException {
     when(fieldCenterDao.fetchByAcronym("IA"))
         .thenReturn(null);
     recruitmentNumberService.get("IA");
 
   }
 
+  @Test(expected = ValidationException.class)
+  public void validate_should_throw_an_ValidationException_when_recruitment_number_is_null() throws ValidationException {
+    recruitmentNumberService.validate(fieldCenter,null);
+  }
 
+  @Test(expected = ValidationException.class)
+  public void validate_should_throw_an_ValidationException_when_recruitment_number_is_invalid() throws ValidationException {
+    fieldCenter.setCode(1);
+    recruitmentNumberService.validate(fieldCenter,(long) 2);
+  }
+
+  @Test
+  public void validate_should_throw_nothing_when_recruitment_number_is_valid() {
+    fieldCenter.setCode(1);
+    try {
+      recruitmentNumberService.validate(fieldCenter,(long) 1);
+    } catch (ValidationException e) {
+      fail();
+    }
+  }
 }

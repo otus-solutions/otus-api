@@ -50,9 +50,7 @@ public class ParticipantServiceBean implements ParticipantService {
       return participant;
 
     } else {
-      if (participant.getRecruitmentNumber() == null) {
-        throw new ValidationException(new Throwable("RecruimentNumber not provided"));
-      }
+      recruitmentNumberService.validate(participant.getFieldCenter(),participant.getRecruitmentNumber());
 
       if(participantDao.exists(participant.getRecruitmentNumber())){
         String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} already exists.";

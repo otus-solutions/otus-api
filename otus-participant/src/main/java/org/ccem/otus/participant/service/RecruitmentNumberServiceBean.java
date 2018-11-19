@@ -41,8 +41,13 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
     }
   }
 
-  private Long getNextRecruitmentNumber(Long rn, FieldCenter fieldCenter) throws ValidationException {
-    String rnString = rn.toString();
+  @Override
+  public void validate(FieldCenter fieldCenter, Long recruitmentNumber) throws ValidationException {
+    if (recruitmentNumber == null) {
+      throw new ValidationException(new Throwable("RecruimentNumber not provided"));
+    }
+
+    String rnString = recruitmentNumber.toString();
     String codeString = fieldCenter.getCode().toString();
 
     String prefix = rnString.substring(0, codeString.length());
@@ -50,6 +55,13 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
     if(!prefix.equals(codeString)) {
       throw new ValidationException("RN inconsistency. RN " + rnString + "does not match with given center: " + fieldCenter.getAcronym());
     }
+  }
+
+  private Long getNextRecruitmentNumber(Long rn, FieldCenter fieldCenter) throws ValidationException {
+    this.validate(fieldCenter,rn);
+
+    String rnString = rn.toString();
+    String codeString = fieldCenter.getCode().toString();
 
     String substring = rnString.substring(codeString.length());
     Long aLong = new Long(substring) + 1 ;

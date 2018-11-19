@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class ActivitiesProgressReport {
 
-  private Integer rn;
+  private Long rn;
   private List<ActivityFlagReport> activities;
 
   public void normalize(LinkedList<String> pattern) {
@@ -25,7 +25,7 @@ public class ActivitiesProgressReport {
     this.activities = temp;
   }
 
-  public Integer getRn() {
+  public Long getRn() {
     return rn;
   }
 
