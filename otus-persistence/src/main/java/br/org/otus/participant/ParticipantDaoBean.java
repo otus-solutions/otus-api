@@ -67,6 +67,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
     query.add(new Document("$match", new Document("convertedRN", new Document("$regex","^"+fieldCenter.getCode()))));
     query.add(new Document("$sort", new Document("_id",-1)));
     query.add(new Document("$limit", 1));
+    query.add(new Document("$project",new Document("convertedRN",0)));
     Participant participant = this.collection.aggregate(query).first();
 
     return participant;
