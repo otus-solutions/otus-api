@@ -33,7 +33,7 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
 
     try {
       Participant lastInsertion = participantDao.getLastInsertion(fieldCenter);
-      return getNextRecruitmentNumber(lastInsertion.getRecruitmentNumber(), fieldCenter);
+      return getNextValidRecruitmentNumber(lastInsertion.getRecruitmentNumber(), fieldCenter);
 
     } catch (DataNotFoundException e) {
 
@@ -57,7 +57,7 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
     }
   }
 
-  private Long getNextRecruitmentNumber(Long rn, FieldCenter fieldCenter) throws ValidationException {
+  private Long getNextValidRecruitmentNumber(Long rn, FieldCenter fieldCenter) throws ValidationException {
     this.validate(fieldCenter,rn);
 
     String rnString = rn.toString();
@@ -67,7 +67,14 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
     Long aLong = new Long(substring) + 1 ;
 
     String newRnString =  padZeroes(aLong.toString(), RN_MIN_SIZE -1);
-    return new Long(codeString + newRnString);
+    Long result = new Long(codeString + newRnString);
+    
+    if (!participantDao.exists(result)) {
+      return result;
+    } else {
+      return getNextValidRecruitmentNumber(result, fieldCenter);
+    }
+
   }
 
   private Long createFirst (Integer centerCode) {
