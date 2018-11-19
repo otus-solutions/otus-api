@@ -1,16 +1,22 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -53,16 +59,17 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
   }
 
   @Override
-  public Participant getLastInsertion(String fieldCenter) throws DataNotFoundException {
-    Participant result = this.collection.find(eq("fieldCenter.acronym", fieldCenter))
-        .sort(new Document("_id", -1))
-        .first();
+  public Participant getLastInsertion(FieldCenter fieldCenter) throws DataNotFoundException {
+    List<Bson> query = new ArrayList<>();
+    Participant result = null;
+    query.add(new Document("$match",new Document("fieldCenter.acronym", fieldCenter.getAcronym())));
+    query.add(new Document("$addFields",new Document("convertedRN",new Document("$toString","$recruitmentNumber"))));
+    query.add(new Document("$match", new Document("convertedRN", new Document("$regex","^"+fieldCenter.getCode()))));
+    query.add(new Document("$sort", new Document("_id",-1)));
+    query.add(new Document("$limit", 1));
+    Participant participant = this.collection.aggregate(query).first();
 
-    if (result == null) {
-      throw new DataNotFoundException("No results for given field center");
-    }
-    return result;
-
+    return participant;
   }
 
   @Override

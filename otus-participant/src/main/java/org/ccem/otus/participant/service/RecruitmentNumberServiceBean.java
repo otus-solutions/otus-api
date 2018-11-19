@@ -32,7 +32,7 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
     }
 
     try {
-      Participant lastInsertion = participantDao.getLastInsertion(centerAcronym);
+      Participant lastInsertion = participantDao.getLastInsertion(fieldCenter);
       return getNextRecruitmentNumber(lastInsertion.getRecruitmentNumber(), fieldCenter);
 
     } catch (DataNotFoundException e) {

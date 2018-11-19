@@ -20,5 +20,5 @@ public interface ParticipantDao {
 
   boolean exists(Long rn);
 
-  Participant getLastInsertion (String fieldCenter) throws DataNotFoundException;
+  Participant getLastInsertion (FieldCenter fieldCenter) throws DataNotFoundException;
 }
