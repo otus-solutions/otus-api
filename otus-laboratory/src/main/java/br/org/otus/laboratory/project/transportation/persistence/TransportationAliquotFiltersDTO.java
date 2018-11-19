@@ -1,10 +1,11 @@
 package br.org.otus.laboratory.project.transportation.persistence;
 
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
-public class WorkAliquotFiltersDTO {
+public class TransportationAliquotFiltersDTO {
 
     private String code;
     private String initialDate;
@@ -12,6 +13,7 @@ public class WorkAliquotFiltersDTO {
     private String fieldCenter;
     private String role;
     private ArrayList aliquotList;
+    private ObjectId transportationLotId;
 
     public String getCode() {
         return code;
@@ -37,14 +39,18 @@ public class WorkAliquotFiltersDTO {
         return aliquotList;
     }
 
+    public ObjectId getTransportationLotId() {
+        return transportationLotId;
+    }
 
-    public static String serialize(WorkAliquotFiltersDTO participantDataSourceResult) {
+
+    public static String serialize(TransportationAliquotFiltersDTO participantDataSourceResult) {
         return getGsonBuilder().create().toJson(participantDataSourceResult);
     }
 
-    public static WorkAliquotFiltersDTO deserialize(String DataSource) {
-        GsonBuilder builder = WorkAliquotFiltersDTO.getGsonBuilder();
-        return builder.create().fromJson(DataSource, WorkAliquotFiltersDTO.class);
+    public static TransportationAliquotFiltersDTO deserialize(String DataSource) {
+        GsonBuilder builder = TransportationAliquotFiltersDTO.getGsonBuilder();
+        return builder.create().fromJson(DataSource, TransportationAliquotFiltersDTO.class);
     }
 
     private static GsonBuilder getGsonBuilder() {

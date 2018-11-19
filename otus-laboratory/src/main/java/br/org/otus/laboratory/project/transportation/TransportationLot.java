@@ -1,14 +1,14 @@
 package br.org.otus.laboratory.project.transportation;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,12 +16,13 @@ import java.util.List;
 
 public class TransportationLot {
 
+	private ObjectId _id;
 	private String objectType;
 	private String code;
-	private List<WorkAliquot> aliquotList;
 	private LocalDateTime shipmentDate;
 	private LocalDateTime processingDate;
 	private String operator;
+	private ArrayList<Aliquot> aliquotList;
 	private ArrayList<AliquotInfo> aliquotsInfo;
 	private FieldCenter fieldCenter;
 
@@ -41,9 +42,7 @@ public class TransportationLot {
 		return code;
 	}
 
-	public List<WorkAliquot> getAliquotList() {
-		return aliquotList;
-	}
+	public List<Aliquot> getAliquotList() { return aliquotList;	}
 
 	public LocalDateTime getShipmentDate() {
 		return shipmentDate;
@@ -57,9 +56,21 @@ public class TransportationLot {
 		return operator;
 	}
 
+	public ArrayList<String> getAliquotCodeList () {
+		ArrayList<String> codeList = new ArrayList<>();
+		if(aliquotList != null) {
+			aliquotList.forEach(aliquot -> {
+				codeList.add(aliquot.getCode());
+			});
+		}
+		return codeList;
+
+	}
+
 	public void setOperator(String operator) {
 		this.operator = operator;
 	}
+
 	public static String serialize(TransportationLot transportationLot) {
 		Gson builder = getGsonBuilder().create();
 		return builder.toJson(transportationLot);
@@ -73,17 +84,18 @@ public class TransportationLot {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
 		builder.serializeNulls();
 
 		return builder;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
 
-		TransportationLot that = (TransportationLot) o;
+		TransportationLot that = (TransportationLot) obj;
 
 		return code.equals(that.code);
 	}
@@ -100,4 +112,6 @@ public class TransportationLot {
 	public void setCenter(FieldCenter center) {
 		this.fieldCenter = center;
 	}
-}
+
+	public ObjectId getLotId() { return  _id;}
+	}
