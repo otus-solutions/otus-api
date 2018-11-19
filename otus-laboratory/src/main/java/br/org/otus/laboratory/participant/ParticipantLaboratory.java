@@ -6,6 +6,7 @@ import br.org.otus.laboratory.participant.tube.Tube;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.utils.LongAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,21 +58,22 @@ public class ParticipantLaboratory {
 	}
 
 	public static String serialize(ParticipantLaboratory laboratory) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.toJson(laboratory);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.create().toJson(laboratory);
 	}
 
 	public static ParticipantLaboratory deserialize(String laboratoryJson) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.fromJson(laboratoryJson, ParticipantLaboratory.class);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		builder.registerTypeAdapter(Long.class, new LongAdapter());
+		return builder.create().fromJson(laboratoryJson, ParticipantLaboratory.class);
 	}
 
-	public static Gson getGsonBuilder() {
+	public static GsonBuilder getGsonBuilder() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 		builder.serializeNulls();
 
-		return builder.create();
+		return builder;
 	}
 
 }
