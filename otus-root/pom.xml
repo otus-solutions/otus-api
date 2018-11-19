@@ -37,6 +37,7 @@
     <!-- External plugins -->
     <maven.war.version>2.6</maven.war.version>
     <maven.ear.version>2.8</maven.ear.version>
+    <jacoco.skip.instrument>true</jacoco.skip.instrument>
   </properties>
 
   <scm>
@@ -127,6 +128,9 @@
             <goals>
               <goal>instrument</goal>
             </goals>
+            <configuration>
+              <skip>${jacoco.skip.instrument}</skip>
+            </configuration>
           </execution>
           <execution>
             <id>jacoco-restore-instrumented-classes</id>
