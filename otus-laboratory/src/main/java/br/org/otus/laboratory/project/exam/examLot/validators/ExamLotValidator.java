@@ -3,10 +3,10 @@ package br.org.otus.laboratory.project.exam.examLot.validators;
 import java.util.Iterator;
 import java.util.List;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
@@ -16,12 +16,14 @@ public class ExamLotValidator {
 
 	private ExamLot examLot;
 	private ExamLotDao examLotDao;
+	private AliquotDao aliquotDao;
 	private TransportationLotDao transportationLotDao;
 	private ExamLotValidationResult examLotValidationResult;
 
-	public ExamLotValidator(ExamLotDao examLotDao, TransportationLotDao transportationLotDao, ExamLot examLot) {
+	public ExamLotValidator(ExamLotDao examLotDao, TransportationLotDao transportationLotDao, ExamLot examLot, AliquotDao aliquotDao) {
 		this.examLotDao = examLotDao;
 		this.transportationLotDao = transportationLotDao;
+		this.aliquotDao = aliquotDao;
 		this.examLot = examLot;
 		this.examLotValidationResult = new ExamLotValidationResult();
 	}
@@ -52,30 +54,26 @@ public class ExamLotValidator {
 	}
 
 	private void checkIfAliquotsExist() {
-		try {
-			List<WorkAliquot> workAliquotListInDB = examLotDao.getAllAliquotsInDB();
-			examLot.getAliquotList().forEach(workAliquot -> {
-				boolean contains = false;
-				for (WorkAliquot workAliquotInDB : workAliquotListInDB) {
-					if (workAliquotInDB.getCode().equals(workAliquot.getCode())) {
-						contains = true;
-						break;
-					}
+		List<Aliquot> aliquotListInDB = aliquotDao.getAliquots();
+		examLot.getAliquotList().forEach( AliquotInLot -> {
+			boolean contains = false;
+			for (Aliquot aliquotInDB : aliquotListInDB) {
+				if (aliquotInDB.getCode().equals(AliquotInLot.getCode())) {
+					contains = true;
+					break;
 				}
+			}
 
-				if (!contains) {
-					examLotValidationResult.setValid(false);
-					examLotValidationResult.pushConflict(workAliquot.getCode());
-				}
-			});
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-		}
+			if (!contains) {
+				examLotValidationResult.setValid(false);
+				examLotValidationResult.pushConflict(AliquotInLot.getCode());
+			}
+		});
 	}
 
 	private void checkOfTypesInLot() {
-		for (WorkAliquot workAliquot : examLot.getAliquotList()) {
-			if (!workAliquot.getName().equals(examLot.getAliquotName())) {
+		for (Aliquot aliquot : examLot.getAliquotList()) {
+			if (!aliquot.getName().equals(examLot.getAliquotName())) {
 				examLotValidationResult.setValid(false);
 				break;
 			}
@@ -87,12 +85,12 @@ public class ExamLotValidator {
 
 		examLotList.remove(examLot);
 
-		for (WorkAliquot workAliquotInLot : examLot.getAliquotList()) {
+		for (Aliquot aliquotInLot : examLot.getAliquotList()) {
 			for (ExamLot examLotInDB : examLotList) {
-				for (WorkAliquot workAliquotInDB : examLotInDB.getAliquotList()) {
-					if (workAliquotInDB.getCode().equals(workAliquotInLot.getCode())) {
+				for (Aliquot aliquotInDB : examLotInDB.getAliquotList()) {
+					if (aliquotInDB.getCode().equals(aliquotInLot.getCode())) {
 						examLotValidationResult.setValid(false);
-						examLotValidationResult.pushConflict(workAliquotInLot.getCode());
+						examLotValidationResult.pushConflict(aliquotInLot.getCode());
 						break;
 					}
 				}
@@ -101,7 +99,7 @@ public class ExamLotValidator {
 	}
 
 	private void checkOriginOfAliquots() {
-		for (WorkAliquot aliquot : examLot.getAliquotList()) {
+		for (Aliquot aliquot : examLot.getAliquotList()) {
 			if (!checkIfEqualsCenter(aliquot)) {
 				if (!checkForAliquotsInLotOfTransport(aliquot)) {
 					examLotValidationResult.setValid(false);
@@ -110,15 +108,15 @@ public class ExamLotValidator {
 		}
 	}
 
-	private boolean checkForAliquotsInLotOfTransport(WorkAliquot aliquot) {
+	private boolean checkForAliquotsInLotOfTransport(Aliquot aliquot) {
 		List<TransportationLot> listOfTransportation = transportationLotDao.find();
 
 		Iterator<TransportationLot> iterator = listOfTransportation.iterator();
 		boolean exist = false;
 		while (iterator.hasNext()) {
 			TransportationLot transportationLot = iterator.next();
-			for (WorkAliquot workAliquotInTransport : transportationLot.getAliquotList()) {
-				if (workAliquotInTransport.getCode().equals(aliquot.getCode())) {
+			for (Aliquot aliquotInTransport : aliquotDao.getAliquots()) {
+				if (aliquotInTransport.getCode().equals(aliquot.getCode())) {
 					exist = true;
 					break;
 				}
@@ -127,7 +125,7 @@ public class ExamLotValidator {
 		return exist;
 	}
 
-	private boolean checkIfEqualsCenter(WorkAliquot aliquot) {
+	private boolean checkIfEqualsCenter(Aliquot aliquot) {
 		if (aliquot.getFieldCenter().getAcronym().equals(examLot.getFieldCenter().getAcronym()))
 			return true;
 		return false;
