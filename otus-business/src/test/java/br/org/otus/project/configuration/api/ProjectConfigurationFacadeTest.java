@@ -51,4 +51,18 @@ public class ProjectConfigurationFacadeTest {
     projectConfigurationFacade.enableParticipantRegistration(PERMISSION);
   }
 
+  @Test
+  public void autoGenerateRecruitmentNumber_should_invoke_autoGenerateRecruitmentNumber_of_projectConfigurationService()
+          throws DataNotFoundException {
+    projectConfigurationFacade.autoGenerateRecruitmentNumber(PERMISSION);
+    verify(projectConfigurationService, times(1)).autoGenerateRecruitmentNumber(PERMISSION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void autoGenerateRecruitmentNumber_should_capture_DataNotFoundException() throws DataNotFoundException {
+    DataNotFoundException e = spy(new DataNotFoundException());
+    PowerMockito.doThrow(e).when(projectConfigurationService).autoGenerateRecruitmentNumber(PERMISSION);
+    projectConfigurationFacade.autoGenerateRecruitmentNumber(PERMISSION);
+  }
+
 }

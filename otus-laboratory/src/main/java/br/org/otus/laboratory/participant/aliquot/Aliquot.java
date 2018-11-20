@@ -4,6 +4,7 @@ import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContain
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -50,8 +51,8 @@ public class Aliquot {
 	}
 
 	public static String serialize(List<Aliquot> aliquots) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.toJson(aliquots);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.create().toJson(aliquots);
 	}
 
 	@Override

@@ -6,8 +6,11 @@ import model.ProjectConfiguration;
 
 public interface ProjectConfigurationService {
 
-    void enableParticipantRegistration(boolean permission) throws DataNotFoundException;
+  void enableParticipantRegistration(boolean permission) throws DataNotFoundException;
 
   ProjectConfiguration getProjectConfiguration() throws DataNotFoundException;
 
+  void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException;
+
+  boolean isRnProvided() throws DataNotFoundException;
 }

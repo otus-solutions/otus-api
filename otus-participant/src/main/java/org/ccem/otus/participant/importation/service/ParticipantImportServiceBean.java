@@ -1,5 +1,6 @@
 package org.ccem.otus.participant.importation.service;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.builder.ParticipantBuilder;
 import org.ccem.otus.participant.importation.model.ParticipantImport;
@@ -24,11 +25,11 @@ public class ParticipantImportServiceBean implements ParticipantImportService {
 	private ParticipantImportValidatorService participantImportValidatorService;
 
 	@Override
-	public void importation(Set<ParticipantImport> participantImports) throws ValidationException {
+	public void importation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException {
 		performImportation(participantImports);
 	}
 
-	private void performImportation(Set<ParticipantImport> participantImports) throws ValidationException {
+	private void performImportation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException {
 		participantImportValidatorService.isImportable(participantImports);
 		ParticipantBuilder participantBuilder = new ParticipantBuilder(fieldCenterDao.find());
 

@@ -48,6 +48,6 @@ public class ActivitiesProgressReportTest {
 
   @Test
   public void should_deserialize() {
-    assert(PROGRESS_REPORT.getRn().equals(5113372));
+    assert(PROGRESS_REPORT.getRn().equals((long) 5113372));
   }
 }

@@ -93,7 +93,7 @@ public class MonitoringServiceBeanTest {
     LIST_ACRONYMS_CENTERS.add(fieldCenter.getAcronym());
     when(fieldCenterDao.listAcronyms()).thenReturn(LIST_ACRONYMS_CENTERS);
     when(fieldCenterDao.fetchByAcronym(fieldCenter.getAcronym())).thenReturn(fieldCenter);
-    when(participantDao.getPartipantsActives(fieldCenter.getAcronym())).thenReturn(GOAL);
+    when(participantDao.countParticipantActivities(fieldCenter.getAcronym())).thenReturn(GOAL);
 
     SURVEY_ACRONYM_LIST = new ArrayList<>();
     SURVEY_ACRONYM_LIST.add("HVSD");

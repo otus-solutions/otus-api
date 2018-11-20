@@ -27,4 +27,12 @@ public class ProjectConfigurationFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
+
+    public void autoGenerateRecruitmentNumber(boolean permission) {
+        try {
+            projectConfigurationService.autoGenerateRecruitmentNumber(permission);
+        } catch (Exception e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
 }

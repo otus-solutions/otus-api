@@ -48,7 +48,7 @@ public class MonitoringServiceBean implements MonitoringService {
     for (String acronymCenter : centers) {
 
       FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
-      Long goals = participantDao.getPartipantsActives(acronymCenter);
+      Long goals = participantDao.countParticipantActivities(acronymCenter);
 
       MonitoringCenter monitoring = new MonitoringCenter();
       monitoring.setName(fieldCenter.getName());
