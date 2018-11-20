@@ -37,7 +37,7 @@
     <!-- External plugins -->
     <maven.war.version>2.6</maven.war.version>
     <maven.ear.version>2.8</maven.ear.version>
-    <jacoco.skip.instrument>true</jacoco.skip.instrument>
+    <jacoco.skip.instrument>false</jacoco.skip.instrument>
   </properties>
 
   <scm>
@@ -117,7 +117,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.2</version>
+        <version>0.8.0</version>
         <configuration>
           <output>file</output>
           <append>true</append>
@@ -200,7 +200,7 @@
       <artifactId>org.jacoco.agent</artifactId>
       <classifier>runtime</classifier>
       <scope>test</scope>
-      <version>0.8.2</version>
+      <version>0.8.0</version>
     </dependency>
     <dependency>
       <groupId>javax</groupId>
