@@ -35,4 +35,13 @@ public class ProjectConfigurationResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @PUT
+  @Secured
+  @Path("/participant/autoGenerateRecruitmentNumber/{permission}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String autoGenerateRecruitmentNumber(@PathParam("permission") boolean permission) {
+    projectConfigurationFacade.autoGenerateRecruitmentNumber(permission);
+    return new Response().buildSuccess().toJson();
+  }
+
 }

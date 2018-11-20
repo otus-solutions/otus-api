@@ -10,7 +10,7 @@ import org.ccem.otus.participant.model.Participant;
 
 public interface ParticipantService {
 
-  Participant create(Participant participant) throws ValidationException;
+  Participant create(Participant participant) throws ValidationException, DataNotFoundException;
 
   Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException;
 

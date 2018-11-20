@@ -55,7 +55,7 @@ public class ParticipantResource {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String create(@Context HttpServletRequest request, String participantJson) throws DataNotFoundException, ValidationException {
+    public String create(@Context HttpServletRequest request, String participantJson) {
       return new Response().buildSuccess(participantFacade.create(participantJson)).toJson(Participant.getGsonBuilder());
     }
 

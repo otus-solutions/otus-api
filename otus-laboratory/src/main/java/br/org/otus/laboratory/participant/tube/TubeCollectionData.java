@@ -43,13 +43,13 @@ public class TubeCollectionData {
 	}
 
 	public static String serialize(TubeCollectionData tubeCollectionData) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.toJson(tubeCollectionData);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.create().toJson(tubeCollectionData);
 	}
 
 	public static Tube deserialize(String tubeJson) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.fromJson(tubeJson, Tube.class);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.create().fromJson(tubeJson, Tube.class);
 	}
 
 	public static Gson getGsonBuilder() {

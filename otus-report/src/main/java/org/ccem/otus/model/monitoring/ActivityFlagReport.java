@@ -1,10 +1,8 @@
 package org.ccem.otus.model.monitoring;
 
-import com.google.gson.GsonBuilder;
-
 public class ActivityFlagReport {
 
-  private Integer rn;
+  private Long rn;
   private String acronym;
   private Integer status;
 
@@ -13,7 +11,7 @@ public class ActivityFlagReport {
     this.status = null;
   }
 
-  public ActivityFlagReport(Integer rn, String acronym) {
+  public ActivityFlagReport(Long rn, String acronym) {
     this.rn = rn;
     this.acronym = acronym;
   }
@@ -22,7 +20,7 @@ public class ActivityFlagReport {
     return acronym;
   }
 
-  public void setRn(Integer rn) {
+  public void setRn(Long rn) {
     this.rn = rn;
   }
 

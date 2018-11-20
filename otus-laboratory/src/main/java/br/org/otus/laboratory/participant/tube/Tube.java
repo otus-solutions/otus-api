@@ -116,13 +116,13 @@ public class Tube implements Comparable<Tube> {
 	}
 
 	public static String serialize(Tube tube) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.toJson(tube);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.create().toJson(tube);
 	}
 
 	public static Tube deserialize(String tubeJson) {
-		Gson builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.fromJson(tubeJson, Tube.class);
+		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+		return builder.create().fromJson(tubeJson, Tube.class);
 	}
 
 	public static Gson getGsonBuilder() {
