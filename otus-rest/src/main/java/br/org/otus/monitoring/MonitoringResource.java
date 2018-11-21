@@ -58,8 +58,8 @@ public class MonitoringResource {
   @Secured
   @Path("/activities/progress/{rn}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getParticipantActivitiesProgress(@PathParam("rn") String center) {
-    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
+  public String getParticipantActivitiesProgress(@PathParam("rn") Long rn) {
+    return new Response().buildSuccess(monitoringFacade.getParticipantActivitiesProgress(rn)).toJson(ActivitiesProgressReport.getGsonBuilder());
   }
 
   @PUT

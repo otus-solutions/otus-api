@@ -17,7 +17,7 @@ public interface MonitoringService {
 
     ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center);
 
-    ParticipantActivityReportDto getParticipantActivities(Long rn);
+    ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
     ParticipantActivityRelationship setActivityApplicability(ActivityApplicability applicability);
 }

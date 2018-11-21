@@ -8,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
+import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 import org.ccem.otus.service.MonitoringService;
 
 import javax.inject.Inject;
@@ -59,7 +60,7 @@ public class MonitoringFacade {
     }
   }
 
-  public void getParticipantActivitiesProgress(Long rn) {
+  public ArrayList<ParticipantActivityReportDto> getParticipantActivitiesProgress(Long rn) {
     try {
       return monitoringService.getParticipantActivities(rn);
     } catch (Exception e) {

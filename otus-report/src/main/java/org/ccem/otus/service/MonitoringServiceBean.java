@@ -85,7 +85,7 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ParticipantActivityReportDto getParticipantActivities(Long rn) {
+  public ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn) {
     return surveyMonitoringDao.getParticipantActivities(rn);
   }
 
