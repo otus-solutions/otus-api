@@ -1,15 +1,12 @@
 package br.org.otus.monitoring;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/monitoring")
 public class MonitoringResource {
@@ -56,6 +53,23 @@ public class MonitoringResource {
   public String getActivitiesProgress(@PathParam("center") String center) {
     return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
   }
+
+  @GET
+  @Secured
+  @Path("/activities/progress/{rn}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getParticipantActivitiesProgress(@PathParam("rn") String center) {
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
+  }
+
+  @PUT
+  @Secured
+  @Path("/activities/progress/{rn}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String defineActivityAppliance(@PathParam("rn") String center) {
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
+  }
+
 
 
 }

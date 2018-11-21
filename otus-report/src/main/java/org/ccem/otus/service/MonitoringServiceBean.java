@@ -10,16 +10,16 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.*;
 import org.ccem.otus.participant.persistence.ParticipantDao;
-import org.ccem.otus.persistence.FieldCenterDao;
-import org.ccem.otus.persistence.FlagReportDao;
-import org.ccem.otus.persistence.MonitoringDao;
-import org.ccem.otus.persistence.SurveyDao;
+import org.ccem.otus.persistence.*;
 
 @Stateless
 public class MonitoringServiceBean implements MonitoringService {
 
   @Inject
   private MonitoringDao monitoringDao;
+
+  @Inject
+  private SurveyMonitoringDao surveyMonitoringDao;
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -82,6 +82,16 @@ public class MonitoringServiceBean implements MonitoringService {
     normalizeProgressReports(report, surveyAcronyms);
 
     return report;
+  }
+
+  @Override
+  public ParticipantActivityReportDto getParticipantActivities(Long rn) {
+    return surveyMonitoringDao.getParticipantActivities(rn);
+  }
+
+  @Override
+  public ParticipantActivityRelationship setActivityApplicability(ActivityApplicability applicability) {
+    return null;
   }
 
   private ArrayList<ActivitiesProgressReport> normalizeProgressReports(ArrayList<ActivitiesProgressReport> report,

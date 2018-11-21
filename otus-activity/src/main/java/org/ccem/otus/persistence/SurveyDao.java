@@ -1,10 +1,11 @@
 package org.ccem.otus.persistence;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,4 +31,6 @@ public interface SurveyDao {
     List<Integer> getSurveyVersions(String acronym);
 
     List<String> listAcronyms();
+
+    List<String> aggregate(ArrayList<Document> query);
 }

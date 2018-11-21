@@ -59,4 +59,12 @@ public class MonitoringFacade {
     }
   }
 
+  public void getParticipantActivitiesProgress(Long rn) {
+    try {
+      return monitoringService.getParticipantActivities(rn);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
 }
