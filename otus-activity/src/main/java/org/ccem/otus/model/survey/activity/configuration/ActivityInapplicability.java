@@ -1,6 +1,6 @@
 package org.ccem.otus.model.survey.activity.configuration;
 
-public class ActivityApplicability {
+public class ActivityInapplicability {
 
   private Long recruitmentNumber;
   private String acronym;

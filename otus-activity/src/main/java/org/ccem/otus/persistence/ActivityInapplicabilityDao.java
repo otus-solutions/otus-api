@@ -1,4 +1,8 @@
 package org.ccem.otus.persistence;
 
-public interface ActivityApplicabilityDao {
+public interface ActivityInapplicabilityDao {
+
+  void update();
+
+  void delete();
 }

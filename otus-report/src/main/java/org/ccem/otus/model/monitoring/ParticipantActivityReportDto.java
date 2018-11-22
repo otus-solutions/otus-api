@@ -1,6 +1,7 @@
 package org.ccem.otus.model.monitoring;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public class ParticipantActivityReportDto {
   private String acronym;
   private String name;
   private ArrayList<ParticipantActivityRelationship> activities;
-  private ActivityApplicability doesNotApply;
+  private ActivityInapplicability doesNotApply;
 
   public static String serialize(ParticipantActivityReportDto reportTemplate) {
     return ParticipantActivityReportDto.getGsonBuilder().create().toJson(reportTemplate);

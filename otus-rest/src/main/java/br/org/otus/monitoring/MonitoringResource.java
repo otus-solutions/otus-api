@@ -55,7 +55,7 @@ public class MonitoringResource {
   }
 
   @GET
-  @Secured
+//  @Secured
   @Path("/activities/progress/{rn}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getParticipantActivitiesProgress(@PathParam("rn") Long rn) {
@@ -63,7 +63,7 @@ public class MonitoringResource {
   }
 
   @PUT
-  @Secured
+//  @Secured //TODO 22/11/18: uncomment
   @Path("/activities/progress/{rn}")
   @Consumes (MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
