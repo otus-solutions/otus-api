@@ -23,6 +23,9 @@ public class MonitoringServiceBean implements MonitoringService {
   private SurveyMonitoringDao surveyMonitoringDao;
 
   @Inject
+  private ActivityInapplicabilityDao activityInapplicabilityDao;
+
+  @Inject
   private FieldCenterDao fieldCenterDao;
 
   @Inject
@@ -91,8 +94,8 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ParticipantActivityRelationship setActivityApplicability(ActivityInapplicability applicability) {
-    return null;
+  public void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException {
+    activityInapplicabilityDao.update(applicability);
   }
 
   @Override

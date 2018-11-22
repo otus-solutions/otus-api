@@ -20,7 +20,7 @@ public interface MonitoringService {
 
   ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
-  ParticipantActivityRelationship setActivityApplicability(ActivityInapplicability applicability);
+  void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
 
   ParticipantActivityRelationship deleteActivityApplicability(ActivityInapplicability applicability);
 }

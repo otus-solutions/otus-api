@@ -4,6 +4,7 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -56,22 +57,31 @@ public class MonitoringResource {
   }
 
   @GET
-//  @Secured
-  @Path("/activities/progress/{rn}")
+  @Secured
+  @Path("/activities/progress/participant/{rn}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getParticipantActivitiesProgress(@PathParam("rn") Long rn) {
     return new Response().buildSuccess(monitoringFacade.getParticipantActivitiesProgress(rn)).toJson(ParticipantActivityReportDto.getGsonBuilder());
   }
 
   @PUT
-//  @Secured //TODO 22/11/18: uncomment
-  @Path("/activities/progress/{rn}")
+  @Secured
+  @Path("/activities/progress/not-apply")
   @Consumes (MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String defineActivityInapplicability(@PathParam("rn") Long rn, String activityApplicability) {
-    return new Response().buildSuccess(monitoringFacade.setActivityApplicability(rn, activityApplicability)).toJson(ActivitiesProgressReport.getGsonBuilder());
+  public String defineActivityInapplicability(String activityApplicability) {
+    ActivityInapplicability activityInapplicability = ActivityInapplicability.deserialize(activityApplicability);
+    monitoringFacade.setActivityApplicability(activityInapplicability);
+    return new Response().buildSuccess().toJson();
   }
 
+  @DELETE
+  @Secured
+  @Path("/activities/progress/not-apply/{rn}/{acronym}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String deleteActivityInapplicability(@PathParam("rn") Long rn,@PathParam("acronym") String acronym) {
+    return new Response().buildSuccess().toJson();
+  }
 
 
 }

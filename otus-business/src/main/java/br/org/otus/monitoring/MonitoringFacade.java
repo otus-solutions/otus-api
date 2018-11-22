@@ -9,6 +9,7 @@ import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.service.MonitoringService;
 
 import javax.inject.Inject;
@@ -68,16 +69,15 @@ public class MonitoringFacade {
     }
   }
 
-  public ArrayList<ParticipantActivityReportDto> setActivityApplicability(Long rn, String applicabilityJson) {
+  public void setActivityApplicability(ActivityInapplicability activityInapplicability) {
     try {
-      return null;
-      //return monitoringService.getParticipantActivities(rn);
+      monitoringService.setActivityApplicability(activityInapplicability);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public ArrayList<ParticipantActivityReportDto> deleteActivityApplicability(Long rn, String applicabilityJson) {
+  public ArrayList<ParticipantActivityReportDto> deleteActivityApplicability(Long rn, String acronym) {
     try {
       return null;
       //return monitoringService.getParticipantActivities(rn);
