@@ -3,12 +3,14 @@ package br.org.otus.monitoring;
 import br.org.mongodb.MongoGenericDao;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 import org.ccem.otus.persistence.SurveyMonitoringDao;
+import org.json.JSONObject;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -41,7 +43,6 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
     );
 
     MongoCursor<Document> iterator = collection.aggregate(aggregation).iterator();
-
 
     ArrayList<ParticipantActivityReportDto> dtos = new ArrayList<>();
 
@@ -80,7 +81,7 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
   }
 
   private Bson lookupAct(Long rn) {
-    return new Document("lookup", new Document("from", "activity")
+    return new Document("$lookup", new Document("from", "activity")
       .append("let", new Document("acronym", "$surveyTemplate.identity.acronym"))
       .append("pipeline", lookupPipeline(rn))
       .append("as", "activities")
@@ -102,13 +103,13 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
 
 
     return Arrays.asList(
-      match(matchExpr),
-      project(projectExpr)
+      new Document("$match", matchExpr),
+      new Document("$project", projectExpr)
     );
   }
 
   private Bson lookupNotApply(Long rn) {
-    return new Document("lookup", new Document("from", "doesNotApply")
+    return new Document("$lookup", new Document("from", "activity_inapplicability")
       .append("let", new Document("acronym", "$surveyTemplate.identity.acronym"))
       .append("pipeline", lookupPipelineNotApply(rn))
       .append("as", "doesNotApply")
@@ -128,8 +129,8 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
     Document projectExpr = new Document("statusHistory", new Document("$slice", Arrays.asList("$statusHistory", -1)));
 
     return Arrays.asList(
-      match(matchExpr),
-      project(projectExpr)
+      new Document("$match", matchExpr),
+      new Document("$project", projectExpr)
     );
   }
 }
