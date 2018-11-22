@@ -99,7 +99,7 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
     )
     );
 
-    Document projectExpr = new Document("statusHistory", new Document("$slice", Arrays.asList("$statusHistory", -1)));
+    Document projectExpr = new Document("statusHistory", new Document("$arrayElemAt", Arrays.asList("$statusHistory", -1)));
 
 
     return Arrays.asList(
@@ -126,11 +126,8 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
     )
     );
 
-    Document projectExpr = new Document("statusHistory", new Document("$slice", Arrays.asList("$statusHistory", -1)));
-
     return Arrays.asList(
-      new Document("$match", matchExpr),
-      new Document("$project", projectExpr)
+      new Document("$match", matchExpr)
     );
   }
 }
