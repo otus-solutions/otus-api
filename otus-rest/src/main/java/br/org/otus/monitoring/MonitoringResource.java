@@ -3,6 +3,7 @@ package br.org.otus.monitoring;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -59,7 +60,7 @@ public class MonitoringResource {
   @Path("/activities/progress/{rn}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getParticipantActivitiesProgress(@PathParam("rn") Long rn) {
-    return new Response().buildSuccess(monitoringFacade.getParticipantActivitiesProgress(rn)).toJson(ActivitiesProgressReport.getGsonBuilder());
+    return new Response().buildSuccess(monitoringFacade.getParticipantActivitiesProgress(rn)).toJson(ParticipantActivityReportDto.getGsonBuilder());
   }
 
   @PUT
@@ -67,7 +68,7 @@ public class MonitoringResource {
   @Path("/activities/progress/{rn}")
   @Consumes (MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String defineActivityAppliance(@PathParam("rn") Long rn, String activityApplicability) {
+  public String defineActivityInapplicability(@PathParam("rn") Long rn, String activityApplicability) {
     return new Response().buildSuccess(monitoringFacade.setActivityApplicability(rn, activityApplicability)).toJson(ActivitiesProgressReport.getGsonBuilder());
   }
 
