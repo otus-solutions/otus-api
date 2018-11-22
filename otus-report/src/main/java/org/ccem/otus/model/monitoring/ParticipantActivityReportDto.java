@@ -1,8 +1,9 @@
 package org.ccem.otus.model.monitoring;
 
 import com.google.gson.GsonBuilder;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ParticipantActivityReportDto {
@@ -23,6 +24,7 @@ public class ParticipantActivityReportDto {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 
     builder.serializeNulls();
     return builder;

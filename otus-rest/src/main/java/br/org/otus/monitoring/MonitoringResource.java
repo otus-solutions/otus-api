@@ -65,9 +65,10 @@ public class MonitoringResource {
   @PUT
   @Secured
   @Path("/activities/progress/{rn}")
+  @Consumes (MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String defineActivityAppliance(@PathParam("rn") String center) {
-    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
+  public String defineActivityAppliance(@PathParam("rn") Long rn, String activityApplicability) {
+    return new Response().buildSuccess(monitoringFacade.setActivityApplicability(rn, activityApplicability)).toJson(ActivitiesProgressReport.getGsonBuilder());
   }
 
 

@@ -68,4 +68,12 @@ public class MonitoringFacade {
     }
   }
 
+  public ArrayList<ParticipantActivityReportDto> setActivityApplicability(Long rn, String applicabilityJson) {
+    try {
+      return null;
+      //return monitoringService.getParticipantActivities(rn);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 }
