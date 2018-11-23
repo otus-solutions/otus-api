@@ -1,16 +1,12 @@
 package br.org.otus.monitoring;
 
 import br.org.mongodb.MongoGenericDao;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 import org.ccem.otus.persistence.SurveyMonitoringDao;
-import org.json.JSONObject;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -31,10 +27,10 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
   @Override
   public ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn) {
     List<Bson> aggregation = Arrays.asList(
-      match(new Document("isDiscarded", false)),
-      lookupAct(rn),
-      lookupNotApply(rn),
-      project(
+      aggregateMatch(new Document("isDiscarded", false)),
+      lookupActivities(rn),
+      lookupInapplicability(rn),
+      aggregateProjection(
         new Document("acronym", "$surveyTemplate.identity.acronym")
           .append("name", "$surveyTemplate.identity.name")
           .append("doesNotApply", new Document("$arrayElemAt", Arrays.asList("$doesNotApply", 0)))
@@ -58,29 +54,15 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
 
   }
 
-  private Document deserializeDocument(String json) {
-    return getGsonBuilder().fromJson(json, Document.class);
-  }
-
-  private ArrayList deserializeArray(String json) {
-    return getGsonBuilder().fromJson(json, ArrayList.class);
-  }
-
-
-  private Gson getGsonBuilder() {
-    GsonBuilder builder = new GsonBuilder();
-    return builder.create();
-  }
-
-  private Bson match(Document query) {
+  private Bson aggregateMatch(Document query) {
     return Aggregates.match(query);
   }
 
-  private Bson project(Document projection) {
+  private Bson aggregateProjection(Document projection) {
     return Aggregates.project(projection);
   }
 
-  private Bson lookupAct(Long rn) {
+  private Bson lookupActivities(Long rn) {
     return new Document("$lookup", new Document("from", "activity")
       .append("let", new Document("acronym", "$surveyTemplate.identity.acronym"))
       .append("pipeline", lookupPipeline(rn))
@@ -108,15 +90,15 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
     );
   }
 
-  private Bson lookupNotApply(Long rn) {
+  private Bson lookupInapplicability(Long rn) {
     return new Document("$lookup", new Document("from", "activity_inapplicability")
       .append("let", new Document("acronym", "$surveyTemplate.identity.acronym"))
-      .append("pipeline", lookupPipelineNotApply(rn))
+      .append("pipeline", lookupPipelineInapplicability(rn))
       .append("as", "doesNotApply")
     );
   }
 
-  private List lookupPipelineNotApply(Long rn) {
+  private List lookupPipelineInapplicability(Long rn) {
     Document matchExpr = new Document(
       "$expr", new Document(
       "$and", Arrays.asList(
