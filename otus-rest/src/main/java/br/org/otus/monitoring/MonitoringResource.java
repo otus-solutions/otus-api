@@ -4,6 +4,7 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
