@@ -77,10 +77,9 @@ public class MonitoringFacade {
     }
   }
 
-  public ArrayList<ParticipantActivityReportDto> deleteActivityApplicability(Long rn, String acronym) {
+  public void deleteActivityApplicability(Long rn, String acronym) {
     try {
-      return null;
-      //return monitoringService.getParticipantActivities(rn);
+      monitoringService.deleteActivityApplicability(rn, acronym);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

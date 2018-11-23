@@ -80,6 +80,7 @@ public class MonitoringResource {
   @Path("/activities/progress/not-apply/{rn}/{acronym}")
   @Produces(MediaType.APPLICATION_JSON)
   public String deleteActivityInapplicability(@PathParam("rn") Long rn,@PathParam("acronym") String acronym) {
+    monitoringFacade.deleteActivityApplicability(rn, acronym);
     return new Response().buildSuccess().toJson();
   }
 

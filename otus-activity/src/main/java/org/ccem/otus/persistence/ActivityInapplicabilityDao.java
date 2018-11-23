@@ -7,5 +7,5 @@ public interface ActivityInapplicabilityDao {
 
   void update(ActivityInapplicability applicability) throws DataNotFoundException;
 
-  void delete();
+  void delete(Long rn, String acronym) throws DataNotFoundException;
 }

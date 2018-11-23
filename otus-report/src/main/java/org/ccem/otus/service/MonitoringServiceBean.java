@@ -99,8 +99,8 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ParticipantActivityRelationship deleteActivityApplicability(ActivityInapplicability applicability) {
-    return null;
+  public void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException {
+    activityInapplicabilityDao.delete(rn, acronym);
   }
 
   private ArrayList<ActivitiesProgressReport> normalizeProgressReports(ArrayList<ActivitiesProgressReport> report,

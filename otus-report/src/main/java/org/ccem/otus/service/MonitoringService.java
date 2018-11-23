@@ -22,5 +22,5 @@ public interface MonitoringService {
 
   void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
 
-  ParticipantActivityRelationship deleteActivityApplicability(ActivityInapplicability applicability);
+  void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;
 }
