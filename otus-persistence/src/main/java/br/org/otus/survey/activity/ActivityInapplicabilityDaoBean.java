@@ -14,7 +14,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ActivityInapplicabilityDaoBean extends MongoGenericDao<Document> implements ActivityInapplicabilityDao {
 
-  private static final String COLLECTION_NAME = "activity_inapplicability";
+  public static final String COLLECTION_NAME = "activity_inapplicability";
   private static final String RECRUITMENT_NUMBER = "recruitmentNumber";
   private static final String ACRONYM = "acronym";
 

@@ -1,6 +1,7 @@
 package br.org.otus.monitoring;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.survey.activity.ActivityInapplicabilityDaoBean;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
@@ -91,7 +92,7 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
   }
 
   private Bson lookupInapplicability(Long rn) {
-    return new Document("$lookup", new Document("from", "activity_inapplicability")
+    return new Document("$lookup", new Document("from", ActivityInapplicabilityDaoBean.COLLECTION_NAME)
       .append("let", new Document("acronym", "$surveyTemplate.identity.acronym"))
       .append("pipeline", lookupPipelineInapplicability(rn))
       .append("as", "doesNotApply")
