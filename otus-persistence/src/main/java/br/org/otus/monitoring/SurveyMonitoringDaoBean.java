@@ -77,6 +77,7 @@ public class SurveyMonitoringDaoBean extends MongoGenericDao<Document> implement
       "$expr", new Document(
       "$and", Arrays.asList(
       new Document("$eq", Arrays.asList("$participantData.recruitmentNumber", rn)),
+      new Document("$eq", Arrays.asList("isDiscarded", false)),
       new Document("$eq", Arrays.asList("$surveyForm.surveyTemplate.identity.acronym", "$$acronym"))
     )
     )
