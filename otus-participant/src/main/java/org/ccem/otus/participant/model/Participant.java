@@ -26,7 +26,11 @@ public class Participant {
 		this.recruitmentNumber = recruitmentNumber;
 	}
 
-	public Long getRecruitmentNumber() {
+  public void setRecruitmentNumber(Long recruitmentNumber) {
+    this.recruitmentNumber = recruitmentNumber;
+  }
+
+  public Long getRecruitmentNumber() {
 		return recruitmentNumber;
 	}
 

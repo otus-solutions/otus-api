@@ -1,13 +1,14 @@
 package org.ccem.otus.model.monitoring;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.utils.LongAdapter;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ActivitiesProgressReport {
 
-  private Integer rn;
+  private Long rn;
   private List<ActivityFlagReport> activities;
 
   public void normalize(LinkedList<String> pattern) {
@@ -25,7 +26,7 @@ public class ActivitiesProgressReport {
     this.activities = temp;
   }
 
-  public Integer getRn() {
+  public Long getRn() {
     return rn;
   }
 
@@ -38,7 +39,9 @@ public class ActivitiesProgressReport {
   }
 
   public static ActivitiesProgressReport deserialize(String progressionReportJson) {
-    return ActivitiesProgressReport.getGsonBuilder().create().fromJson(progressionReportJson, ActivitiesProgressReport.class);
+    GsonBuilder builder = ActivitiesProgressReport.getGsonBuilder();
+    builder.registerTypeAdapter(Long.class, new LongAdapter());
+    return builder.create().fromJson(progressionReportJson, ActivitiesProgressReport.class);
   }
 
   public static GsonBuilder getGsonBuilder() {

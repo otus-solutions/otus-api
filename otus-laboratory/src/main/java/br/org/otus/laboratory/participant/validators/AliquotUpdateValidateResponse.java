@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.participant.validators;
 
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,19 +8,19 @@ import java.util.List;
 public class AliquotUpdateValidateResponse {
 
 	private static final String NAME = "AliquotUpdateValidateResponse";
-	private List<Aliquot> conflicts;
+	private List<SimpleAliquot> conflicts;
 	private List<String> tubesNotFound;
 
 	public AliquotUpdateValidateResponse() {
-		this.conflicts = new ArrayList<Aliquot>();
+		this.conflicts = new ArrayList<SimpleAliquot>();
 		this.tubesNotFound = new ArrayList<String>();
 	}
 
-	public List<Aliquot> getConflicts() {
+	public List<SimpleAliquot> getConflicts() {
 		return conflicts;
 	}
 
-	public void setConflicts(List<Aliquot> conflicts) {
+	public void setConflicts(List<SimpleAliquot> conflicts) {
 		this.conflicts = conflicts;
 	}
 

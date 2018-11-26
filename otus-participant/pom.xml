@@ -31,6 +31,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-configuration</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- - - External Dependencies- ! -->
+    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>${google.gson.version}</version>

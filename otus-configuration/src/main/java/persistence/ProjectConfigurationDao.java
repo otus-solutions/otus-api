@@ -8,4 +8,6 @@ public interface ProjectConfigurationDao {
     void enableParticipantRegistration(boolean permission) throws DataNotFoundException;
 
     ProjectConfiguration getProjectConfiguration() throws DataNotFoundException;
+
+    void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException;
 }

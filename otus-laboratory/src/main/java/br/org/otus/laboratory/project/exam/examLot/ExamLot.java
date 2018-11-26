@@ -1,24 +1,26 @@
 package br.org.otus.laboratory.project.exam.examLot;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExamLot {
 
+	private ObjectId _id;
 	private String objectType;
 	private String aliquotName;
 	private String code;
-	private List<WorkAliquot> aliquotList;
+	private List<Aliquot> aliquotList;
 	private LocalDateTime realizationDate;
 	private String operator;
 	private FieldCenter fieldCenter;
@@ -40,6 +42,7 @@ public class ExamLot {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
 		builder.serializeNulls();
 
 		return builder;
@@ -49,11 +52,11 @@ public class ExamLot {
 		return objectType;
 	}
 
-	public List<WorkAliquot> getAliquotList() {
+	public List<Aliquot> getAliquotList() {
 		return aliquotList;
 	}
 
-	public void setAliquotList(List<WorkAliquot> aliquotList) {
+	public void setAliquotList(List<Aliquot> aliquotList) {
 		this.aliquotList = aliquotList;
 	}
 
@@ -112,5 +115,47 @@ public class ExamLot {
 	@Override
 	public int hashCode() {
 		return code.hashCode();
+	}
+
+	public ArrayList<String> getAliquotCodeList() {
+		ArrayList<String> codeList = new ArrayList<>();
+
+		if(aliquotList != null) {
+			aliquotList.forEach(aliquot -> {
+				codeList.add(aliquot.getCode());
+			});
+		}
+		return codeList;
+	}
+
+	public ArrayList<String> getNewAliquotCodeList(ArrayList<String> aliquotCodeList) {
+		ArrayList<String> newAliquots = new ArrayList<>();
+		aliquotCodeList.forEach(aliquotCode -> {
+			if (!getAliquotCodeList().contains(aliquotCode)){
+				newAliquots.add(aliquotCode);
+			}
+		});
+		return newAliquots;
+	}
+
+	public ArrayList<String> getRemovedAliquotCodeList(ArrayList<String> aliquotCodeList) {
+		ArrayList<String> removedAliquots = new ArrayList<>();
+		if (aliquotList!=null){
+			if (aliquotCodeList.isEmpty()){
+				removedAliquots.addAll(getAliquotCodeList());
+			}
+			else {
+				aliquotList.forEach(aliquot -> {
+					if (!aliquotCodeList.contains(aliquot.getCode())) {
+						removedAliquots.add(aliquot.getCode());
+					}
+				});
+			}
+		}
+		return removedAliquots;
+	}
+
+	public ObjectId getLotId() {
+		return _id;
 	}
 }

@@ -21,7 +21,7 @@ public class ProjectConfigurationResourceTest {
   @Mock
   private ProjectConfigurationFacade projectConfigurationFacade;
   private ProjectConfiguration result;
-  private String permissionResponse;  
+  private String permissionResponse;
 
   @Test
   public void getProjectConfigurationMethod_should_return_configurationResponse() {
@@ -33,6 +33,12 @@ public class ProjectConfigurationResourceTest {
   @Test
   public void allowNewParticipantsMethod_should_return_permissionResponse() {
     permissionResponse = projectConfigurationResource.allowNewParticipants(Boolean.TRUE);
+    assertTrue(permissionResponse.contains(POSITIVE_ANSWER));
+  }
+
+  @Test
+  public void autoGenerateRecruitmentNumber_should_return_permissionResponse() {
+    permissionResponse = projectConfigurationResource.autoGenerateRecruitmentNumber(Boolean.TRUE);
     assertTrue(permissionResponse.contains(POSITIVE_ANSWER));
   }
 }

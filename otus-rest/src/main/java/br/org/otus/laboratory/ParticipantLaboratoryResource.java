@@ -54,17 +54,6 @@ public class ParticipantLaboratoryResource {
 
   @PUT
   @Secured
-  @Path("/{rn}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public String update(@PathParam("rn") long rn, String participantLaboratory) {
-    ParticipantLaboratory deserialized = ParticipantLaboratory.deserialize(participantLaboratory);
-    ParticipantLaboratory updatedLaboratory = participantLaboratoryFacade.update(deserialized);
-    return new Response().buildSuccess(ParticipantLaboratory.serialize(updatedLaboratory)).toJson();
-  }
-
-  @PUT
-  @Secured
   @Path("/tube-collection-data/{rn}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
