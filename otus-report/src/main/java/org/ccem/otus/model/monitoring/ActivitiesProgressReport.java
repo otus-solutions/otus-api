@@ -4,15 +4,18 @@ import com.google.gson.GsonBuilder;
 import org.ccem.otus.utils.LongAdapter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ActivitiesProgressReport {
 
+  //TODO 28/11/18: review this Long
   private Long rn;
-  private List<ActivityFlagReport> activities;
+  private LinkedList<ActivityFlagReport> activities;
+  private LinkedList<String> acronyms;
 
   public void normalize(LinkedList<String> pattern) {
     LinkedList<ActivityFlagReport> temp = new LinkedList<>();
+
+    acronyms = pattern;
 
     pattern.stream().forEach(acronym -> {
       temp.add(
@@ -30,8 +33,12 @@ public class ActivitiesProgressReport {
     return rn;
   }
 
-  public List<ActivityFlagReport> getActivities() {
+  public LinkedList<ActivityFlagReport> getActivities() {
     return activities;
+  }
+
+  public LinkedList<String> getAcronyms() {
+    return acronyms;
   }
 
   public static String serialize(ActivitiesProgressReport progressionReport) {
@@ -49,5 +56,38 @@ public class ActivitiesProgressReport {
     builder.serializeNulls();
 
     return builder;
+  }
+
+  class ActivityFlagReport {
+
+    private Long rn;
+    private String acronym;
+    private Integer status;
+
+    public ActivityFlagReport(String acronym) {
+      this.acronym = acronym;
+      this.status = null;
+    }
+
+    public ActivityFlagReport(Long rn, String acronym) {
+      this.rn = rn;
+      this.acronym = acronym;
+    }
+
+    public String getAcronym() {
+      return acronym;
+    }
+
+    public Integer getStatus() {
+      return status;
+    }
+
+    public void setRn(Long rn) {
+      this.rn = rn;
+    }
+
+    public void setStatus(Integer status) {
+      this.status = status;
+    }
   }
 }

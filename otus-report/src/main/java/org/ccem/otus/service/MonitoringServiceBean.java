@@ -63,35 +63,31 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgress() {
+  public ActivityProgressReportDto getActivitiesProgress() {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
     ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport();
 
-    normalizeProgressReports(report, surveyAcronyms);
-
-    return report;
+    return buildDto(report, surveyAcronyms);
   }
 
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgress(String center) {
+  public ActivityProgressReportDto getActivitiesProgress(String center) {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
     ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport(center);
 
-    normalizeProgressReports(report, surveyAcronyms);
-
-    return report;
+    return buildDto(report, surveyAcronyms);
   }
 
-  private ArrayList<ActivitiesProgressReport> normalizeProgressReports(ArrayList<ActivitiesProgressReport> report,
-                                                                       LinkedList<String> surveys) {
+  private ActivityProgressReportDto buildDto(ArrayList<ActivitiesProgressReport> report,
+                                             LinkedList<String> surveys) {
 
     for (ActivitiesProgressReport activitiesProgressReport : report) {
       activitiesProgressReport.normalize(surveys);
     }
 
-    return report;
+    return new ActivityProgressReportDto(report);
   }
 
 }
