@@ -68,7 +68,7 @@ public class MonitoringServiceBean implements MonitoringService {
 
     ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport();
 
-    return buildDto(report, surveyAcronyms);
+    return new ActivityProgressReportDto(report, surveyAcronyms);
   }
 
   @Override
@@ -77,13 +77,7 @@ public class MonitoringServiceBean implements MonitoringService {
 
     ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport(center);
 
-    return buildDto(report, surveyAcronyms);
-  }
-
-  private ActivityProgressReportDto buildDto(ArrayList<ActivitiesProgressReport> report,
-                                             LinkedList<String> surveys) {
-
-    return new ActivityProgressReportDto(report,surveys);
+    return new ActivityProgressReportDto(report, surveyAcronyms);
   }
 
 }
