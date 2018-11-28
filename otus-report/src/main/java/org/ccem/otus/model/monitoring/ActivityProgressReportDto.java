@@ -12,6 +12,10 @@ public class ActivityProgressReportDto {
   private LinkedList<LinkedList<Integer>> data;
 
   public ActivityProgressReportDto(ArrayList<ActivitiesProgressReport> progressReport) {
+    this.columns = new LinkedList<>();
+    this.index = new LinkedList<>();
+    this.data = new LinkedList<>();
+
     setColumns(progressReport.get(0).getAcronyms());
 
     progressReport.stream().forEach(report -> {
