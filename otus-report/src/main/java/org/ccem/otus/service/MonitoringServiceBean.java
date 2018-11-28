@@ -83,11 +83,7 @@ public class MonitoringServiceBean implements MonitoringService {
   private ActivityProgressReportDto buildDto(ArrayList<ActivitiesProgressReport> report,
                                              LinkedList<String> surveys) {
 
-    for (ActivitiesProgressReport activitiesProgressReport : report) {
-      activitiesProgressReport.normalize(surveys);
-    }
-
-    return new ActivityProgressReportDto(report);
+    return new ActivityProgressReportDto(report,surveys);
   }
 
 }

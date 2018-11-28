@@ -7,7 +7,6 @@ import java.util.*;
 
 public class ActivitiesProgressReport {
 
-  //TODO 28/11/18: review this Long
   private Long rn;
   private LinkedList<ActivityFlagReport> activities;
   private LinkedList<String> acronyms;

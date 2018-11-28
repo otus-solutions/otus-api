@@ -1,9 +1,11 @@
 package org.ccem.otus.service;
 
+import com.google.gson.GsonBuilder;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
@@ -27,7 +29,8 @@ public class MonitoringServiceBeanTest {
 
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
   private static ArrayList<String> SURVEY_ACRONYM_LIST = new ArrayList<>();
-  private static final ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
+  private ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
+  private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";;
   private static final String reportJson1 = "{\n" +
     "    \"activities\": [\n" +
     "    {\n" +
@@ -118,28 +121,11 @@ public class MonitoringServiceBeanTest {
     assertEquals(GOAL, response.get(0).getGoal());
   }
 
-
-  //TODO 28/11/18: uncomment
-//  @Test
-//  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() {
-//    ArrayList<ActivitiesProgressReport> reportList = monitoringServiceBean.getActivitiesProgress("BA");
-//
-//    assertEquals(reportList.get(0).getActivities().size(), SURVEY_ACRONYM_LIST.size());
-//    assertEquals(reportList.get(1).getActivities().size(), SURVEY_ACRONYM_LIST.size());
-//    assertEquals(reportList.get(0).getActivities().get(0).getAcronym(), reportList.get(1).getActivities().get(0).getAcronym());
-//    assertEquals(reportList.get(0).getActivities().get(1).getAcronym(), reportList.get(1).getActivities().get(1).getAcronym());
-//    assertEquals(reportList.get(0).getActivities().get(2).getAcronym(), reportList.get(1).getActivities().get(2).getAcronym());
-//    assertEquals(reportList.get(0).getActivities().get(3).getAcronym(), reportList.get(1).getActivities().get(3).getAcronym());
-//
-//
-//    reportList = monitoringServiceBean.getActivitiesProgress();
-//    assertEquals(reportList.get(0).getActivities().size(), SURVEY_ACRONYM_LIST.size());
-//    assertEquals(reportList.get(1).getActivities().size(), SURVEY_ACRONYM_LIST.size());
-//
-//    assertEquals(reportList.get(0).getActivities().get(0).getAcronym(), reportList.get(1).getActivities().get(0).getAcronym());
-//    assertEquals(reportList.get(0).getActivities().get(1).getAcronym(), reportList.get(1).getActivities().get(1).getAcronym());
-//    assertEquals(reportList.get(0).getActivities().get(2).getAcronym(), reportList.get(1).getActivities().get(2).getAcronym());
-//    assertEquals(reportList.get(0).getActivities().get(3).getAcronym(), reportList.get(1).getActivities().get(3).getAcronym());
-//  }
+  @Test
+  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() {
+    ActivityProgressReportDto activityProgressReportDto = monitoringServiceBean.getActivitiesProgress("BA");
+    GsonBuilder builder = new GsonBuilder();
+    assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(activityProgressReportDto));
+  }
 
 }

@@ -11,16 +11,16 @@ public class ActivityProgressReportDto {
   private LinkedList<Long> index;
   private LinkedList<LinkedList<Integer>> data;
 
-  public ActivityProgressReportDto(ArrayList<ActivitiesProgressReport> progressReport) {
+  public ActivityProgressReportDto(ArrayList<ActivitiesProgressReport> progressReport,LinkedList<String> surveys) {
     this.columns = new LinkedList<>();
     this.index = new LinkedList<>();
     this.data = new LinkedList<>();
 
-    setColumns(progressReport.get(0).getAcronyms());
+    setColumns(surveys);
 
     progressReport.stream().forEach(report -> {
+      report.normalize(surveys);
       index.add(report.getRn());
-
       addToData(report.getActivities());
     });
   }
