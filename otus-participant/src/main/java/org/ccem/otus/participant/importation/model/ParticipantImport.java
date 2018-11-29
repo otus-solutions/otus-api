@@ -37,6 +37,13 @@ public class ParticipantImport {
     this.late = late;
   }
 
+  public boolean containsNullAttribute() {
+    if (rn == null || name == null || birthdate == null || center == null || late == null)
+      return true;
+    else
+      return false;
+  }
+
   @Override
   public String toString() {
     return "ParticipantImport [rn=" + rn + ", name=" + name + ", sex=" + sex + ", birthdate=" + birthdate + ", center=" + center + ", late=" + late + "]";

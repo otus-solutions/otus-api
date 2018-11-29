@@ -21,14 +21,12 @@ public class ParticipantBuilder {
   }
 
   public Participant buildFromPartipantToImport(ParticipantImport participantToImport) {
-    // TODO: Quando alguns dos dados aqui presentes estar null, deve ser lançado uma execção!  
-    
     participant = new Participant(participantToImport.getRn());
     participant.setName(participantToImport.getName());
     participant.setSex(Sex.valueOf(participantToImport.getSex()));
     participant.setBirthdate(new ImmutableDate(LocalDate.parse(participantToImport.getBirthdate())));
-    participant.setLate(participantToImport.getLate());
     participant.setFieldCenter(getFieldCenterByInitials(participantToImport.getCenter()));
+    participant.setLate(participantToImport.getLate());
 
     return participant;
   }
