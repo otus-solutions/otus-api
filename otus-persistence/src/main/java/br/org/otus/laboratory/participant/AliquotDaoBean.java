@@ -1,24 +1,19 @@
 package br.org.otus.laboratory.participant;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.persistence.ParticipantDao;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
@@ -43,23 +38,6 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
   @Override
   public void persist(Aliquot aliquot) {
     super.persist(Aliquot.serialize(aliquot));
-  }
-
-  @Override
-  public void create(Aliquot aliquot) {
-    Document parsed = Document.parse(Aliquot.serialize(aliquot));
-    collection.insertOne(parsed);
-  }
-
-  @Override
-  public void create(List<Aliquot> aliquotList) {
-    ArrayList<Document> documents = new ArrayList<>();
-
-    aliquotList.forEach(aliquot -> {
-      documents.add(Document.parse(Aliquot.serialize(aliquot)));
-    });
-
-    collection.insertMany(documents);
   }
 
   @Override
@@ -104,6 +82,20 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
             throw new DataNotFoundException(new Throwable("Aliquot not found"));
         }
         return Aliquot.deserialize(result.toJson());
+    }
+
+    @Override
+    public List<Aliquot> getExamLotAliquots(ObjectId lotOId) {
+        Document query = new Document("examLotId", lotOId);
+        FindIterable<Document> documents = collection.find(query);
+
+        ArrayList<Aliquot> aliquotList = new ArrayList<>();
+        for (Object oneDocument : documents) {
+            Document next = (Document) oneDocument;
+            aliquotList.add(Aliquot.deserialize(next.toJson()));
+        }
+
+        return aliquotList;
     }
 
     @Override

@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotAliquotFilterDTO;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -22,4 +22,6 @@ public interface ExamLotService {
 	void delete(String code) throws DataNotFoundException;
 
 	HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
+
+	Aliquot validateNewAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) throws DataNotFoundException, ValidationException;
 }
