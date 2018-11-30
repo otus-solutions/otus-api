@@ -81,7 +81,7 @@ public class ExamLotServiceBean implements ExamLotService {
 	}
 
 	private boolean validateAliquotLocation(Aliquot aliquot,String lotCenter){
-		return (aliquot.getFieldCenter().getAcronym().equals(lotCenter) && (aliquot.getTransportationLotId() == null));
+		return (aliquot.getFieldCenter().getAcronym().equals(lotCenter) && (aliquot.getTransportationLotId() != null));
 	}
 
 	private boolean validateAliquotType(String aliquotName,String lotType){
