@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.exam.validators;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -158,7 +159,7 @@ public class ExamLotValidatorTest {
 
 		List<ExamLot> resultFindExamInDB = new ArrayList<>();
 		resultFindExamInDB.add(otherLot);
-		when(examLotDao.find()).thenReturn(resultFindExamInDB);
+		when(examLotDao.find(anyString())).thenReturn(resultFindExamInDB);
 
 		try {
 			examLotValidator.validate();

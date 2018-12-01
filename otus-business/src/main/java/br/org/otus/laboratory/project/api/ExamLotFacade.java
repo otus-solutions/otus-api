@@ -67,8 +67,8 @@ public class ExamLotFacade {
         }
     }
 
-    public List<ExamLot> getLots() {
-        return examLotService.list();
+    public List<ExamLot> getLots(String centerAcronym) {
+        return examLotService.list(centerAcronym);
     }
 
     public Aliquot getAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) {

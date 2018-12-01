@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.exam.examLot.businnes;
 
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import static org.mockito.Matchers.anyString;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotAliquotFilterDTO;
@@ -113,8 +114,8 @@ public class ExamLotServiceBeanTest {
 
     @Test
     public void list_should_call_exam_lot_dao_find() throws Exception {
-        examLotServiceBean.list();
-        Mockito.verify(examLotDao, Mockito.times(1)).find();
+        examLotServiceBean.list(anyString());
+        Mockito.verify(examLotDao, Mockito.times(1)).find(anyString());
     }
 
     @Test

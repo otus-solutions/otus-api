@@ -50,8 +50,8 @@ public class ExamLotServiceBean implements ExamLotService {
 	}
 
 	@Override
-	public List<ExamLot> list() {
-		return examLotDao.find();
+	public List<ExamLot> list(String centerAcronym) {
+		return examLotDao.find(centerAcronym);
 	}
 
 	@Override

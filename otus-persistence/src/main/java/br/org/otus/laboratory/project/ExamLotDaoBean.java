@@ -72,10 +72,10 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
   }
 
   @Override
-  public List<ExamLot> find() {
+  public List<ExamLot> find(String centerAcronym) {
     ArrayList<ExamLot> ExamLots = new ArrayList<>();
 
-    FindIterable<Document> output = collection.find();
+    FindIterable<Document> output = collection.find(new Document("fieldCenter.acronym",centerAcronym));
 
     for (Object anOutput : output) {
       Document next = (Document) anOutput;

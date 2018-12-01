@@ -17,7 +17,7 @@ public interface ExamLotService {
 
 	ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException;
 
-	List<ExamLot> list();
+	List<ExamLot> list(String centerAcronym);
 
 	void delete(String code) throws DataNotFoundException;
 

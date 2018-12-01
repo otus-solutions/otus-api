@@ -2,6 +2,7 @@ package br.org.otus.laboratory.participant.validators;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.mockito.Matchers.any;
@@ -29,6 +30,8 @@ import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Arrays;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AliquotDeletionValidator.class)
@@ -96,7 +99,7 @@ public class AliquotDeletionValidatorTest {
     Whitebox.setInternalState(aliquotDeletionValidatorInjected,"aliquotDao", aliquotDao);
     Whitebox.setInternalState(aliquotDeletionValidatorInjected,"examLotDao", examLotDao);
     when(aliquotDao.find(ALIQUOT_CODE)).thenReturn(aliquot);
-    when(examLotDao.find(any())).thenReturn(examLot);
+    when(examLotDao.find(anyString())).thenReturn(Arrays.asList(examLot));
     when(examLot.getCode()).thenReturn(LOT_CODE);
     when(examUploader.checkIfThereInExamResultLot(ALIQUOT_CODE)).thenReturn(Boolean.FALSE);
 

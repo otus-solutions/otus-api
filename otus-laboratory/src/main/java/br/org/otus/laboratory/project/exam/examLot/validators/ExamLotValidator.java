@@ -81,7 +81,7 @@ public class ExamLotValidator {
 	}
 
 	private void checkForAliquotsOnAnotherLots() {
-		final List<ExamLot> examLotList = examLotDao.find();
+		final List<ExamLot> examLotList = examLotDao.find(examLot.getFieldCenter().getAcronym());
 
 		examLotList.remove(examLot);
 

@@ -61,8 +61,9 @@ public class ExamResource {
 
 	@GET
 	@Secured
-	public String getLots() {
-		List<ExamLot> lots = examLotFacade.getLots();
+	@Path("/center-lots/{acronym}")
+	public String getLots(@PathParam("acronym") String centerAcronym) {
+		List<ExamLot> lots = examLotFacade.getLots(centerAcronym);
 		GsonBuilder builder = ExamLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
 	}
