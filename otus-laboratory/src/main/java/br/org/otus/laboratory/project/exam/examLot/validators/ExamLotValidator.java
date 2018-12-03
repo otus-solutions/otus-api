@@ -81,19 +81,11 @@ public class ExamLotValidator {
 	}
 
 	private void checkForAliquotsOnAnotherLots() {
-		final List<ExamLot> examLotList = examLotDao.find(examLot.getFieldCenter().getAcronym());
-
-		examLotList.remove(examLot);
-
 		for (Aliquot aliquotInLot : examLot.getAliquotList()) {
-			for (ExamLot examLotInDB : examLotList) {
-				for (Aliquot aliquotInDB : examLotInDB.getAliquotList()) {
-					if (aliquotInDB.getCode().equals(aliquotInLot.getCode())) {
-						examLotValidationResult.setValid(false);
-						examLotValidationResult.pushConflict(aliquotInLot.getCode());
-						break;
-					}
-				}
+			if (aliquotInLot.getExamLotId() != null) {
+				examLotValidationResult.setValid(false);
+				examLotValidationResult.pushConflict(aliquotInLot.getCode());
+				break;
 			}
 		}
 	}
