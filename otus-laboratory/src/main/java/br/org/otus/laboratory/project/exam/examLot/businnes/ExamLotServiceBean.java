@@ -89,7 +89,7 @@ public class ExamLotServiceBean implements ExamLotService {
 	}
 
 	private void validateLot(ExamLot examLot) throws ValidationException {
-		ExamLotValidator examLotValidator = new ExamLotValidator(examLotDao, transportationLotDao, examLot, aliquotDao);
+		ExamLotValidator examLotValidator = new ExamLotValidator(examLot, aliquotDao);
 		examLotValidator.validate();
 	}
 

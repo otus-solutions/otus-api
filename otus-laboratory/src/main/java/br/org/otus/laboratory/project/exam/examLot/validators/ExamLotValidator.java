@@ -1,6 +1,5 @@
 package br.org.otus.laboratory.project.exam.examLot.validators;
 
-import java.util.Iterator;
 import java.util.List;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
@@ -8,21 +7,14 @@ import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
-import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 public class ExamLotValidator {
 
 	private ExamLot examLot;
-	private ExamLotDao examLotDao;
 	private AliquotDao aliquotDao;
-	private TransportationLotDao transportationLotDao;
 	private ExamLotValidationResult examLotValidationResult;
 
-	public ExamLotValidator(ExamLotDao examLotDao, TransportationLotDao transportationLotDao, ExamLot examLot, AliquotDao aliquotDao) {
-		this.examLotDao = examLotDao;
-		this.transportationLotDao = transportationLotDao;
+	public ExamLotValidator( ExamLot examLot, AliquotDao aliquotDao) {
 		this.aliquotDao = aliquotDao;
 		this.examLot = examLot;
 		this.examLotValidationResult = new ExamLotValidationResult();
@@ -92,35 +84,14 @@ public class ExamLotValidator {
 
 	private void checkOriginOfAliquots() {
 		for (Aliquot aliquot : examLot.getAliquotList()) {
-			if (!checkIfEqualsCenter(aliquot)) {
-				if (!checkForAliquotsInLotOfTransport(aliquot)) {
+			if (!checkIfEqualsCenter(aliquot) && aliquot.getTransportationLotId() == null) {
 					examLotValidationResult.setValid(false);
-				}
 			}
 		}
-	}
-
-	private boolean checkForAliquotsInLotOfTransport(Aliquot aliquot) {
-		List<TransportationLot> listOfTransportation = transportationLotDao.find();
-
-		Iterator<TransportationLot> iterator = listOfTransportation.iterator();
-		boolean exist = false;
-		while (iterator.hasNext()) {
-			TransportationLot transportationLot = iterator.next();
-			for (Aliquot aliquotInTransport : aliquotDao.getAliquots()) {
-				if (aliquotInTransport.getCode().equals(aliquot.getCode())) {
-					exist = true;
-					break;
-				}
-			}
-		}
-		return exist;
 	}
 
 	private boolean checkIfEqualsCenter(Aliquot aliquot) {
-		if (aliquot.getFieldCenter().getAcronym().equals(examLot.getFieldCenter().getAcronym()))
-			return true;
-		return false;
+		return aliquot.getFieldCenter().getAcronym().equals(examLot.getFieldCenter().getAcronym());
 	}
 
 }

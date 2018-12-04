@@ -12,6 +12,7 @@ import java.util.List;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -65,7 +66,7 @@ public class ExamLotValidatorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		examLotValidator = spy(new ExamLotValidator(examLotDao, transportationLotDao, examLot, aliquotDao));
+		examLotValidator = spy(new ExamLotValidator(examLot, aliquotDao));
 	}
 
 	@Test
@@ -142,6 +143,7 @@ public class ExamLotValidatorTest {
 			throws DataNotFoundException {
 		when(aliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(aliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getExamLotId()).thenReturn(new ObjectId());
 
 		when(aliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(aliquot2.getCode()).thenReturn("354005012");
