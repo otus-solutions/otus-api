@@ -15,79 +15,83 @@ import java.util.Set;
 @Stateless
 public class ParticipantImportValidatorServiceBean implements ParticipantImportValidatorService {
 
-	@Inject
-	private FieldCenterDao fieldCenterDao;
+  @Inject
+  private FieldCenterDao fieldCenterDao;
 
-	@Inject
-	private ParticipantDao participantDao;
+  @Inject
+  private ParticipantDao participantDao;
 
-	private ArrayList<FieldCenter> fieldCenters;
-	private ArrayList<String> availableFieldCenterAcronyms;
-	private ArrayList<Participant> registeredParticipants;
-	private ArrayList<Long> recruitmentNumberList;
+  private ArrayList<FieldCenter> fieldCenters;
+  private ArrayList<String> availableFieldCenterAcronyms;
+  private ArrayList<Participant> registeredParticipants;
+  private ArrayList<Long> recruitmentNumberList;
 
-	private void setUp() {
-		getAvailableFieldCenterAcronyms();
-		getRecruitmentNumberList();
-	}
+  private void setUp() {
+    getAvailableFieldCenterAcronyms();
+    getRecruitmentNumberList();
+  }
 
-	@Override
-	public boolean isImportable(Set<ParticipantImport> participantToImports) throws ValidationException {
-		setUp();
+  @Override
+  public boolean isImportable(Set<ParticipantImport> participantToImports) throws ValidationException {
+    setUp();
 
-		if (availableFieldCenterAcronyms.isEmpty()) {
-			throw new ValidationException(new Throwable("There are no registered FieldCenters."));
-		}
-		
-		for (ParticipantImport participantImport : participantToImports) {
-			hasValidFieldCenter(participantImport);
-		}
+    if (availableFieldCenterAcronyms.isEmpty()) {
+      throw new ValidationException(new Throwable("There are no registered FieldCenters."));
+    }
 
-		if (!recruitmentNumberList.isEmpty()) {
-			for (ParticipantImport participantImport : participantToImports) {
-				isAvailableRecruitmentNumber(participantImport);
-			}
-		}
+    for (ParticipantImport participantImport : participantToImports) {
+      hasValidAttribute(participantImport);
+      hasValidFieldCenter(participantImport);
+    }
 
-		return true;
-	}
+    if (!recruitmentNumberList.isEmpty()) {
+      for (ParticipantImport participantImport : participantToImports) {
+        isAvailableRecruitmentNumber(participantImport);
+      }
+    }
 
-	private void hasValidFieldCenter(ParticipantImport participantToImport) throws ValidationException {
-		if (!availableFieldCenterAcronyms.contains(participantToImport.getCenter())) {
-			throw new ValidationException(new Throwable("Invalid field center. " + participantToImport.toString()));
-		}
-	}
+    return true;
+  }
 
-	private void isAvailableRecruitmentNumber(ParticipantImport participantToImport) throws ValidationException {
-		if (recruitmentNumberList.contains(participantToImport.getRn())) {
-			throw new ValidationException(
-					new Throwable("Recruitment number already exists. " + participantToImport.toString()));
-		}
-	}
+  private void hasValidAttribute(ParticipantImport participantToImport) throws ValidationException {
+    if (participantToImport.containsNullAttribute())
+      throw new ValidationException(new Throwable("Invalid attribute. " + participantToImport.toString()));
+  }
 
-	private ArrayList<Long> getRecruitmentNumberList() {
-		recruitmentNumberList = new ArrayList<Long>();
-		getRegisteredParticipants().forEach(
-				registeredParticipant -> recruitmentNumberList.add(registeredParticipant.getRecruitmentNumber()));
-		return recruitmentNumberList;
-	}
+  private void hasValidFieldCenter(ParticipantImport participantToImport) throws ValidationException {
+    if (!availableFieldCenterAcronyms.contains(participantToImport.getCenter())) {
+      throw new ValidationException(new Throwable("Invalid field center. " + participantToImport.toString()));
+    }
+  }
 
-	private ArrayList<Participant> getRegisteredParticipants() {
-		registeredParticipants = new ArrayList<Participant>();
-		registeredParticipants = participantDao.find();
-		return registeredParticipants;
-	}
+  private void isAvailableRecruitmentNumber(ParticipantImport participantToImport) throws ValidationException {
+    if (recruitmentNumberList.contains(participantToImport.getRn())) {
+      throw new ValidationException(new Throwable("Recruitment number already exists. " + participantToImport.toString()));
+    }
+  }
 
-	private ArrayList<String> getAvailableFieldCenterAcronyms() {
-		availableFieldCenterAcronyms = new ArrayList<String>();
-		getAllFieldCenters().forEach(fieldCenter -> availableFieldCenterAcronyms.add(fieldCenter.getAcronym()));
-		return availableFieldCenterAcronyms;
-	}
+  private ArrayList<Long> getRecruitmentNumberList() {
+    recruitmentNumberList = new ArrayList<Long>();
+    getRegisteredParticipants().forEach(registeredParticipant -> recruitmentNumberList.add(registeredParticipant.getRecruitmentNumber()));
+    return recruitmentNumberList;
+  }
 
-	private ArrayList<FieldCenter> getAllFieldCenters() {
-		fieldCenters = new ArrayList<FieldCenter>();
-		fieldCenters = fieldCenterDao.find();
-		return fieldCenters;
-	}
+  private ArrayList<Participant> getRegisteredParticipants() {
+    registeredParticipants = new ArrayList<Participant>();
+    registeredParticipants = participantDao.find();
+    return registeredParticipants;
+  }
+
+  private ArrayList<String> getAvailableFieldCenterAcronyms() {
+    availableFieldCenterAcronyms = new ArrayList<String>();
+    getAllFieldCenters().forEach(fieldCenter -> availableFieldCenterAcronyms.add(fieldCenter.getAcronym()));
+    return availableFieldCenterAcronyms;
+  }
+
+  private ArrayList<FieldCenter> getAllFieldCenters() {
+    fieldCenters = new ArrayList<FieldCenter>();
+    fieldCenters = fieldCenterDao.find();
+    return fieldCenters;
+  }
 
 }

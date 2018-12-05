@@ -75,7 +75,7 @@ public class ParticipantLaboratory {
     }
   }
 
-public static String serialize(ParticipantLaboratory laboratory) {
+	public static String serialize(ParticipantLaboratory laboratory) {
 		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
 		return builder.create().toJson(laboratory);
 	}
