@@ -1,9 +1,11 @@
 package br.org.otus.laboratory.project.exam.examLot.validators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
@@ -46,19 +48,23 @@ public class ExamLotValidator {
   }
 
   private void checkIfAliquotsExist() {
-    List<Aliquot> aliquotListInDB = aliquotDao.getAliquots();
+    List<Aliquot> aliquotsRenewed = new ArrayList<>();
     examLot.getAliquotList().forEach(AliquotInLot -> {
       boolean contains = false;
-      for (Aliquot aliquotInDB : aliquotListInDB) {
-        if (aliquotInDB.getCode().equals(AliquotInLot.getCode())) {
-          contains = true;
-          break;
-        }
+      try {
+        Aliquot aliquotFound = aliquotDao.find(AliquotInLot.getCode());
+        aliquotsRenewed.add(aliquotFound);
+        contains = true;
+      } catch (DataNotFoundException e) {
+        examLotValidationResult.setValid(false);
+        examLotValidationResult.pushConflict(AliquotInLot.getCode());
       }
 
       if (!contains) {
         examLotValidationResult.setValid(false);
         examLotValidationResult.pushConflict(AliquotInLot.getCode());
+      } else {
+        examLot.setAliquotList(aliquotsRenewed);
       }
     });
   }

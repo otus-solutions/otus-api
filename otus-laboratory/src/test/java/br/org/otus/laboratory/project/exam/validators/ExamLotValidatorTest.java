@@ -107,8 +107,8 @@ public class ExamLotValidatorTest {
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 
-		List<Aliquot> resultDao = new ArrayList<>();
-		when(aliquotDao.getAliquots()).thenReturn(resultDao);
+
+		when(aliquotDao.find("354005012")).thenThrow(new DataNotFoundException());
 
 		try {
 			examLotValidator.validate();
