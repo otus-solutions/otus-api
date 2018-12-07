@@ -40,11 +40,29 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException {
-		validateLot(examLot);
-		ExamLot oldExamLot = examLotDao.findByCode(examLot.getCode());
+		ExamLot diffExamLot = examLotDao.findByCode(examLot.getCode());
+
+		List<Aliquot> newAliquots = new ArrayList<>();
+
+		for (Aliquot newAliquot : examLot.getAliquotList())
+		{
+			boolean isNewAliquot = true;
+			for (Aliquot oldAliquot : diffExamLot.getAliquotList()) {
+				if (oldAliquot.getCode().equals(newAliquot.getCode())) {
+					isNewAliquot = false;
+				}
+			}
+			if (isNewAliquot){
+				newAliquots.add(newAliquot);
+			}
+		}
+
+		diffExamLot.setAliquotList(newAliquots);
+
+		validateLot(diffExamLot);
 
 		ArrayList<String> aliquotCodeList = examLot.getAliquotCodeList();
-		aliquotDao.updateExamLotId(aliquotCodeList, oldExamLot.getLotId());
+		aliquotDao.updateExamLotId(aliquotCodeList, diffExamLot.getLotId());
 
 		return examLot;
 	}
