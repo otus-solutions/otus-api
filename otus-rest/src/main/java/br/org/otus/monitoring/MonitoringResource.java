@@ -84,5 +84,13 @@ public class MonitoringResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @GET
+  @Secured
+  @Path("/orphan/exams/progress")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getLaboratoryProgress() {
+    return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
+  }
+
 
 }

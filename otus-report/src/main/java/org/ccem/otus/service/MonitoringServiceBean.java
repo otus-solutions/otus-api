@@ -4,9 +4,11 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.*;
+import org.ccem.otus.model.monitoring.laboratory.OrphanExamsProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.*;
+import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -34,6 +36,9 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Inject
   private SurveyMonitoringDao surveyMonitoringDao;
+
+  @Inject
+  private LaboratoryProgressDao laboratoryProgressDao;
 
   @Inject
   private ActivityInapplicabilityDao activityInapplicabilityDao;
@@ -98,6 +103,11 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException {
     activityInapplicabilityDao.delete(rn, acronym);
+  }
+
+  @Override
+  public OrphanExamsProgressDTO getOrphanExams() {
+    return laboratoryProgressDao.getOrphanExams();
   }
 
 }

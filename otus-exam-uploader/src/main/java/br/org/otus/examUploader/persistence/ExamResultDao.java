@@ -2,6 +2,8 @@ package br.org.otus.examUploader.persistence;
 
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
+import com.mongodb.client.AggregateIterable;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -14,4 +16,6 @@ public interface ExamResultDao {
     void deleteByExamSendingLotId(String id) throws DataNotFoundException;
 
     List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException;
+
+    AggregateIterable<Document> aggregate(List<Document> query);
 }

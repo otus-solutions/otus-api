@@ -62,6 +62,11 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   }
 
   @Override
+  public AggregateIterable<Document> aggregate(List<Document> query) {
+    return collection.aggregate(query).allowDiskUse(true);
+  }
+
+  @Override
   public Boolean checkIfThereInExamResultLot(String aliquotCode) {
     Document document = collection.find(eq("aliquotCode", aliquotCode)).first();
     if (document != null) {

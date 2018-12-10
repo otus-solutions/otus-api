@@ -5,11 +5,8 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
-import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
-import org.ccem.otus.model.monitoring.MonitoringCenter;
-import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.monitoring.*;
+import org.ccem.otus.model.monitoring.laboratory.OrphanExamsProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.service.MonitoringService;
 
@@ -85,4 +82,12 @@ public class MonitoringFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
+
+    public OrphanExamsProgressDTO getOrphanExams() {
+        try {
+          return monitoringService.getOrphanExams();
+        } catch (Exception e) {
+          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
 }

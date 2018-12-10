@@ -6,6 +6,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
@@ -104,6 +105,11 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
             throw new DataNotFoundException(new Throwable("Aliquot not found"));
         }
         return Aliquot.deserialize(result.toJson());
+    }
+
+    @Override
+    public AggregateIterable<Document> aggregate(List<Document> query) {
+        return collection.aggregate(query).allowDiskUse(true);
     }
 
     @Override
