@@ -86,7 +86,7 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("laboratory/orphans")
+  @Path("laboratory/orphan")
   @Produces(MediaType.APPLICATION_JSON)
   public String getDataOrphanByExam() {
     return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
@@ -118,7 +118,7 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("laboratory/results")
+  @Path("laboratory/result")
   @Produces(MediaType.APPLICATION_JSON)
   public String getDataOfResultsByExam() {
     return new Response().buildSuccess().toJson();
