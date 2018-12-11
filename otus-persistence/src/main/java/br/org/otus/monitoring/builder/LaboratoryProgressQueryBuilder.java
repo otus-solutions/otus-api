@@ -303,6 +303,34 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getStorageByAliquotQuery() {
+        pipeline.add(parseQuery(" {\n" +
+                "    $match: {\n" +
+                "      \"role\": \"STORAGE\"\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $group: {\n" +
+                "      _id: \"$name\",\n" +
+                "      count: {\n" +
+                "        $sum: 1\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $group: {\n" +
+                "      _id: {},\n" +
+                "      storageByAliquot: {\n" +
+                "        $push: {\n" +
+                "          title: \"$_id\",\n" +
+                "          storage: \"$count\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        return this.pipeline;
+    }
+
     private Document parseQuery(String query) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().fromJson(query, Document.class);

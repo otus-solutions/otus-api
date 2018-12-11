@@ -106,4 +106,12 @@ public class MonitoringFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public LaboratoryProgressDTO getDataOfStorageByAliquot() {
+    try {
+      return monitoringService.getDataOfStorageByAliquot();
+    } catch (Exception e){
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 }

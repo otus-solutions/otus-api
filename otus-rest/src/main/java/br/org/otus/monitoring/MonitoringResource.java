@@ -113,7 +113,7 @@ public class MonitoringResource {
   @Path("laboratory/storage")
   @Produces(MediaType.APPLICATION_JSON)
   public String getDataOfStorageByAliquot() {
-    return new Response().buildSuccess().toJson();
+    return new Response().buildSuccess(monitoringFacade.getDataOfStorageByAliquot()).toJson();
   }
 
   @GET

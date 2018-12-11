@@ -9,4 +9,6 @@ public interface LaboratoryProgressDao {
     LaboratoryProgressDTO getQuantitativeByTypeOfAliquots();
 
     LaboratoryProgressDTO getDataOfPendingResultsByAliquot();
+
+    LaboratoryProgressDTO getDataOfStorageByAliquot();
 }
