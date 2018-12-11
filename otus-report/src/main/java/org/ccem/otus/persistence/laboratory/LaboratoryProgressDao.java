@@ -1,16 +1,17 @@
 package org.ccem.otus.persistence.laboratory;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 
 public interface LaboratoryProgressDao {
 
-    LaboratoryProgressDTO getOrphanExams();
+    LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException;
 
-    LaboratoryProgressDTO getQuantitativeByTypeOfAliquots();
+    LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfPendingResultsByAliquot();
+    LaboratoryProgressDTO getDataOfPendingResultsByAliquot() throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfStorageByAliquot();
+    LaboratoryProgressDTO getDataOfStorageByAliquot() throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfResultsByExam();
+    LaboratoryProgressDTO getDataOfResultsByExam() throws DataNotFoundException;
 }

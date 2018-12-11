@@ -86,7 +86,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getOrphanExams() {
       try {
         return monitoringService.getOrphanExams();
-      } catch (Exception e) {
+      } catch (DataNotFoundException e) {
         throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
       }
   }
@@ -94,7 +94,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() {
     try {
       return monitoringService.getQuantitativeByTypeOfAliquots();
-    } catch (Exception e) {
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
@@ -102,7 +102,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataOfPendingResultsByAliquot() {
     try {
       return monitoringService.getDataOfPendingResultsByAliquot();
-    } catch (Exception e){
+    } catch (DataNotFoundException e){
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
@@ -110,7 +110,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataOfStorageByAliquot() {
     try {
       return monitoringService.getDataOfStorageByAliquot();
-    } catch (Exception e){
+    } catch (DataNotFoundException e){
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
@@ -118,7 +118,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataOfResultsByExam() {
     try {
       return monitoringService.getDataOfResultsByExam();
-    } catch (Exception e){
+    } catch (DataNotFoundException e){
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
