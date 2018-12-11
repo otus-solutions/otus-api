@@ -331,6 +331,45 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getResultsByExamQuery() {
+        pipeline.add(parseQuery("{\n" +
+                "    $match: {\n" +
+                "      objectType: \"ExamResults\",\n" +
+                "      aliquotValid: true\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $group: {\n" +
+                "      _id: {\n" +
+                "        examId: \"$examId\",\n" +
+                "        examName: \"$examName\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery(" {\n" +
+                "        $group:\n" +
+                "        {\n" +
+                "            _id:\"$_id.examName\",\n" +
+                "            exams: { $sum : 1}\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{\n" +
+                "        $group:\n" +
+                "        {\n" +
+                "            _id:{},\n" +
+                "            examsQuantitative:\n" +
+                "            {\n" +
+                "                $push:\n" +
+                "                {\n" +
+                "                    title:\"$_id\",\n" +
+                "                    exams:\"$exams\"\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }"));
+        return this.pipeline;
+    }
+
     private Document parseQuery(String query) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().fromJson(query, Document.class);

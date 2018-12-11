@@ -118,9 +118,9 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("laboratory/result")
+  @Path("laboratory/exam")
   @Produces(MediaType.APPLICATION_JSON)
   public String getDataOfResultsByExam() {
-    return new Response().buildSuccess().toJson();
+    return new Response().buildSuccess(monitoringFacade.getDataOfResultsByExam()).toJson();
   }
 }

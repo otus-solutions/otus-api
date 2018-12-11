@@ -38,4 +38,10 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
         return LaboratoryProgressDTO.deserialize(aliquotDao.aggregate(laboratoryProgressQueryBuilder.getStorageByAliquotQuery()).first().toJson());
     }
+
+    @Override
+    public LaboratoryProgressDTO getDataOfResultsByExam() {
+        LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
+        return LaboratoryProgressDTO.deserialize(examResultDao.aggregate(laboratoryProgressQueryBuilder.getResultsByExamQuery()).first().toJson());
+    }
 }

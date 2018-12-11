@@ -10,6 +10,7 @@ public class LaboratoryProgressDTO {
     ArrayList<AliquotStats> quantitativeByTypeOfAliquots;
     ArrayList<PendingResults> pendingResultsByAliquot;
     ArrayList<StorageData> storageByAliquot;
+    ArrayList<ExamData> examsQuantitative;
 
     private class OrphanExam {
         private String title;
@@ -33,6 +34,11 @@ public class LaboratoryProgressDTO {
     private class StorageData {
         private String title;
         private Integer storage;
+    }
+
+    private class ExamData {
+        private String title;
+        private Integer exams;
     }
 
     public static String serialize(LaboratoryProgressDTO orphanExamsProgressDTO) {

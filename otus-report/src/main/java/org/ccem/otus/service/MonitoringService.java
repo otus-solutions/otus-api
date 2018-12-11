@@ -32,4 +32,6 @@ public interface MonitoringService {
     LaboratoryProgressDTO getDataOfPendingResultsByAliquot();
 
     LaboratoryProgressDTO getDataOfStorageByAliquot();
+
+    LaboratoryProgressDTO getDataOfResultsByExam();
 }
