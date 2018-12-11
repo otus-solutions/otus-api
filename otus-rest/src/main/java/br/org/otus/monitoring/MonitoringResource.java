@@ -86,10 +86,18 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("/orphan/exams/progress")
+  @Path("laboratory/orphan/exams/progress")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getLaboratoryProgress() {
+  public String getOrphanExams() {
     return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/aliquots/progress")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getQuantitativeByTypeOfAliquots() {
+    return new Response().buildSuccess(monitoringFacade.getQuantitativeByTypeOfAliquots()).toJson();
   }
 
 

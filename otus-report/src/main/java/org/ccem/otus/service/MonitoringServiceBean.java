@@ -4,7 +4,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.*;
-import org.ccem.otus.model.monitoring.laboratory.OrphanExamsProgressDTO;
+import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.*;
@@ -106,8 +106,13 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public OrphanExamsProgressDTO getOrphanExams() {
+  public LaboratoryProgressDTO getOrphanExams() {
     return laboratoryProgressDao.getOrphanExams();
+  }
+
+  @Override
+  public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() {
+    return laboratoryProgressDao.getQuantitativeByTypeOfAliquots();
   }
 
 }
