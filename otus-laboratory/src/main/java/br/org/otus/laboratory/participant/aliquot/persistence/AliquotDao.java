@@ -4,6 +4,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -38,5 +39,5 @@ public interface AliquotDao {
 
   Aliquot find(String code) throws DataNotFoundException;
 
-  AggregateIterable<Document> aggregate(List<Document> query);
+  AggregateIterable<Document> aggregate(List<Bson> query);
 }

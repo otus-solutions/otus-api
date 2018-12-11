@@ -7,4 +7,6 @@ public interface LaboratoryProgressDao {
     LaboratoryProgressDTO getOrphanExams();
 
     LaboratoryProgressDTO getQuantitativeByTypeOfAliquots();
+
+    LaboratoryProgressDTO getDataOfPendingResultsByAliquot();
 }

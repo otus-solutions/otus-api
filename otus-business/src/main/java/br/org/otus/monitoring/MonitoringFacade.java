@@ -98,4 +98,12 @@ public class MonitoringFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot() {
+    try {
+      return monitoringService.getDataOfPendingResultsByAliquot();
+    } catch (Exception e){
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 }

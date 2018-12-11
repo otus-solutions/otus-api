@@ -4,6 +4,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -17,5 +18,5 @@ public interface ExamResultDao {
 
     List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException;
 
-    AggregateIterable<Document> aggregate(List<Document> query);
+    AggregateIterable<Document> aggregate(List<Bson> query);
 }

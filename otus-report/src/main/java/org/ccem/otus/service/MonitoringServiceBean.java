@@ -115,4 +115,9 @@ public class MonitoringServiceBean implements MonitoringService {
     return laboratoryProgressDao.getQuantitativeByTypeOfAliquots();
   }
 
+  @Override
+  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot() {
+    return laboratoryProgressDao.getDataOfPendingResultsByAliquot();
+  }
+
 }

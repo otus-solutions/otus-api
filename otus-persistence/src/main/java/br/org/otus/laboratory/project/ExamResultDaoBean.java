@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -62,7 +63,7 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   }
 
   @Override
-  public AggregateIterable<Document> aggregate(List<Document> query) {
+  public AggregateIterable<Document> aggregate(List<Bson> query) {
     return collection.aggregate(query).allowDiskUse(true);
   }
 

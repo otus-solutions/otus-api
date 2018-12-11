@@ -13,6 +13,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.persistence.ParticipantDao;
@@ -108,7 +109,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     }
 
     @Override
-    public AggregateIterable<Document> aggregate(List<Document> query) {
+    public AggregateIterable<Document> aggregate(List<Bson> query) {
         return collection.aggregate(query).allowDiskUse(true);
     }
 

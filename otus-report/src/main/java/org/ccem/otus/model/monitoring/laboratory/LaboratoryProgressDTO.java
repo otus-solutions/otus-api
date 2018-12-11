@@ -8,6 +8,7 @@ public class LaboratoryProgressDTO {
 
     ArrayList<OrphanExam> orphanExamsProgress;
     ArrayList<AliquotStats> quantitativeByTypeOfAliquots;
+    ArrayList<PendingResults> pendingResultsByAliquot;
 
     private class OrphanExam {
         private String title;
@@ -18,6 +19,12 @@ public class LaboratoryProgressDTO {
         private String title;
         private Integer transported;
         private Integer prepared;
+        private Integer received;
+    }
+
+    private class PendingResults {
+        private String title;
+        private Integer waiting;
         private Integer received;
     }
 

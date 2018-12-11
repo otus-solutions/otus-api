@@ -88,7 +88,7 @@ public class MonitoringResource {
   @Secured
   @Path("laboratory/orphans")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOrphanByExams() {
+  public String getDataOrphanByExam() {
     return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
   }
 
@@ -96,7 +96,7 @@ public class MonitoringResource {
   @Secured
   @Path("laboratory/quantitative")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataQuantitativeByTypeOfAliquots() {
+  public String getDataQuantitativeByTypeOfAliquot() {
     return new Response().buildSuccess(monitoringFacade.getQuantitativeByTypeOfAliquots()).toJson();
   }
 
@@ -104,15 +104,15 @@ public class MonitoringResource {
   @Secured
   @Path("laboratory/pending")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOfPendingResultsByAliquots() {
-    return new Response().buildSuccess().toJson();
+  public String getDataOfPendingResultsByAliquot() {
+    return new Response().buildSuccess(monitoringFacade.getDataOfPendingResultsByAliquot()).toJson();
   }
 
   @GET
   @Secured
   @Path("laboratory/storage")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOfStorageByAliquots() {
+  public String getDataOfStorageByAliquot() {
     return new Response().buildSuccess().toJson();
   }
 

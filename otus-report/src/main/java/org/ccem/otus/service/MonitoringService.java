@@ -28,4 +28,6 @@ public interface MonitoringService {
     LaboratoryProgressDTO getOrphanExams();
 
     LaboratoryProgressDTO getQuantitativeByTypeOfAliquots();
+
+    LaboratoryProgressDTO getDataOfPendingResultsByAliquot();
 }
