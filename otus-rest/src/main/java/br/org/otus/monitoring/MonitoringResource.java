@@ -86,19 +86,41 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("laboratory/orphan/exams/progress")
+  @Path("laboratory/orphans")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getOrphanExams() {
+  public String getDataOrphanByExams() {
     return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
   }
 
   @GET
   @Secured
-  @Path("laboratory/aliquots/progress")
+  @Path("laboratory/quantitative")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getQuantitativeByTypeOfAliquots() {
+  public String getDataQuantitativeByTypeOfAliquots() {
     return new Response().buildSuccess(monitoringFacade.getQuantitativeByTypeOfAliquots()).toJson();
   }
 
+  @GET
+  @Secured
+  @Path("laboratory/pending")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataOfPendingResultsByAliquots() {
+    return new Response().buildSuccess().toJson();
+  }
 
+  @GET
+  @Secured
+  @Path("laboratory/storage")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataOfStorageByAliquots() {
+    return new Response().buildSuccess().toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/results")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataOfResultsByExam() {
+    return new Response().buildSuccess().toJson();
+  }
 }
