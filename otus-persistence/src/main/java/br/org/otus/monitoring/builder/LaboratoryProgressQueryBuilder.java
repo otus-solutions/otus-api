@@ -14,7 +14,7 @@ public class LaboratoryProgressQueryBuilder {
         this.pipeline = new ArrayList<>();
     }
 
-    public ArrayList<Bson> getOrphansQuery() {
+    public ArrayList<Bson> getOrphansQuery(String center) {
         pipeline.add(parseQuery("{\n" +
                 "        $match:{\"aliquotValid\":false}\n" +
                 "    }"));
@@ -49,10 +49,11 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getQuantitativeQuery() {
+    public List<Bson> getQuantitativeQuery(String center) {
         pipeline.add(parseQuery("{\n" +
-                "    \"$match\": {\n" +
-                "      \"role\": \"EXAM\"\n" +
+                "    $match: {\n" +
+                "      \"role\": \"EXAM\",\n" +
+                "      \"fieldCenter.acronym\":" + center +
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
@@ -176,7 +177,12 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getPendingResultsQuery() {
+    public List<Bson> getPendingResultsQuery(String center) {
+        pipeline.add(parseQuery("{\n" +
+                "    $match: {\n" +
+                "      \"fieldCenter.acronym\":"+ center +
+                "    }\n" +
+                "  }"));
         pipeline.add(parseQuery("{\n" +
                 "    $group: {\n" +
                 "      _id: \"$name\",\n" +
@@ -303,10 +309,11 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getStorageByAliquotQuery() {
+    public List<Bson> getStorageByAliquotQuery(String center) {
         pipeline.add(parseQuery(" {\n" +
                 "    $match: {\n" +
-                "      \"role\": \"STORAGE\"\n" +
+                "      \"role\": \"STORAGE\",\n" +
+                "      \"fieldCenter.acronym\":" + center +
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
@@ -331,7 +338,7 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getResultsByExamQuery() {
+    public List<Bson> getResultsByExamQuery(String center) {
         pipeline.add(parseQuery("{\n" +
                 "    $match: {\n" +
                 "      objectType: \"ExamResults\",\n" +

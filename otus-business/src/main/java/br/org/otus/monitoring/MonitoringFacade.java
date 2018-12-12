@@ -83,41 +83,41 @@ public class MonitoringFacade {
     }
   }
 
-  public LaboratoryProgressDTO getOrphanExams() {
+  public LaboratoryProgressDTO getOrphanExams(String center) {
       try {
-        return monitoringService.getOrphanExams();
+        return monitoringService.getOrphanExams(center);
       } catch (DataNotFoundException e) {
         throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
       }
   }
 
-  public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() {
+  public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) {
     try {
-      return monitoringService.getQuantitativeByTypeOfAliquots();
+      return monitoringService.getQuantitativeByTypeOfAliquots(center);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot() {
+  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) {
     try {
-      return monitoringService.getDataOfPendingResultsByAliquot();
+      return monitoringService.getDataOfPendingResultsByAliquot(center);
     } catch (DataNotFoundException e){
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public LaboratoryProgressDTO getDataOfStorageByAliquot() {
+  public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) {
     try {
-      return monitoringService.getDataOfStorageByAliquot();
+      return monitoringService.getDataOfStorageByAliquot(center);
     } catch (DataNotFoundException e){
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public LaboratoryProgressDTO getDataOfResultsByExam() {
+  public LaboratoryProgressDTO getDataOfResultsByExam(String center) {
     try {
-      return monitoringService.getDataOfResultsByExam();
+      return monitoringService.getDataOfResultsByExam(center);
     } catch (DataNotFoundException e){
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

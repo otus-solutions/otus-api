@@ -5,13 +5,13 @@ import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 
 public interface LaboratoryProgressDao {
 
-    LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException;
+    LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() throws DataNotFoundException;
+    LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfPendingResultsByAliquot() throws DataNotFoundException;
+    LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfStorageByAliquot() throws DataNotFoundException;
+    LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfResultsByExam() throws DataNotFoundException;
+    LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException;
 }

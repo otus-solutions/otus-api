@@ -86,41 +86,41 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("laboratory/orphan")
+  @Path("laboratory/orphan/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOrphanByExam() {
-    return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
+  public String getDataOrphanByExam(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getOrphanExams(center)).toJson();
   }
 
   @GET
   @Secured
-  @Path("laboratory/quantitative")
+  @Path("laboratory/quantitative/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataQuantitativeByTypeOfAliquot() {
-    return new Response().buildSuccess(monitoringFacade.getQuantitativeByTypeOfAliquots()).toJson();
+  public String getDataQuantitativeByTypeOfAliquot(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getQuantitativeByTypeOfAliquots(center)).toJson();
   }
 
   @GET
   @Secured
-  @Path("laboratory/pending")
+  @Path("laboratory/pending/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOfPendingResultsByAliquot() {
-    return new Response().buildSuccess(monitoringFacade.getDataOfPendingResultsByAliquot()).toJson();
+  public String getDataOfPendingResultsByAliquot(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataOfPendingResultsByAliquot(center)).toJson();
   }
 
   @GET
   @Secured
-  @Path("laboratory/storage")
+  @Path("laboratory/storage/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOfStorageByAliquot() {
-    return new Response().buildSuccess(monitoringFacade.getDataOfStorageByAliquot()).toJson();
+  public String getDataOfStorageByAliquot(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataOfStorageByAliquot(center)).toJson();
   }
 
   @GET
   @Secured
-  @Path("laboratory/exam")
+  @Path("laboratory/exam/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOfResultsByExam() {
-    return new Response().buildSuccess(monitoringFacade.getDataOfResultsByExam()).toJson();
+  public String getDataOfResultsByExam(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataOfResultsByExam(center)).toJson();
   }
 }

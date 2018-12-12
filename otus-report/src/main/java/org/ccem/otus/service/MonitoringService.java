@@ -25,13 +25,13 @@ public interface MonitoringService {
 
     void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException;
+    LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() throws DataNotFoundException;
+    LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfPendingResultsByAliquot() throws DataNotFoundException;
+    LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfStorageByAliquot() throws DataNotFoundException;
+    LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfResultsByExam() throws DataNotFoundException;
+    LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException;
 }

@@ -18,41 +18,41 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     private AliquotDao aliquotDao;
 
     @Override
-    public LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException {
+    public LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getOrphansQuery()).first();
+        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getOrphansQuery(center)).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
 
     @Override
-    public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() throws DataNotFoundException {
+    public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getQuantitativeQuery()).first();
+        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getQuantitativeQuery(center)).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
 
     @Override
-    public LaboratoryProgressDTO getDataOfPendingResultsByAliquot() throws DataNotFoundException {
+    public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getPendingResultsQuery()).first();
+        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getPendingResultsQuery(center)).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
 
     @Override
-    public LaboratoryProgressDTO getDataOfStorageByAliquot() throws DataNotFoundException {
+    public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getStorageByAliquotQuery()).first();
+        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getStorageByAliquotQuery(center)).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
 
     @Override
-    public LaboratoryProgressDTO getDataOfResultsByExam() throws DataNotFoundException {
+    public LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getResultsByExamQuery()).first();
+        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getResultsByExamQuery(center)).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }

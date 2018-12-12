@@ -106,28 +106,28 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException {
-    return laboratoryProgressDao.getOrphanExams();
+  public LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getOrphanExams(center);
   }
 
   @Override
-  public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots() throws DataNotFoundException {
-    return laboratoryProgressDao.getQuantitativeByTypeOfAliquots();
+  public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getQuantitativeByTypeOfAliquots(center);
   }
 
   @Override
-  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot() throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOfPendingResultsByAliquot();
+  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getDataOfPendingResultsByAliquot(center);
   }
 
   @Override
-  public LaboratoryProgressDTO getDataOfStorageByAliquot() throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOfStorageByAliquot();
+  public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getDataOfStorageByAliquot(center);
   }
 
   @Override
-  public LaboratoryProgressDTO getDataOfResultsByExam() throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOfResultsByExam();
+  public LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getDataOfResultsByExam(center);
   }
 
 }
