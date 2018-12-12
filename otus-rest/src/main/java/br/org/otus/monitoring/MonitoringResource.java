@@ -86,10 +86,10 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("laboratory/orphan/{center}")
+  @Path("laboratory/orphan")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOrphanByExam(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getOrphanExams(center)).toJson();
+  public String getDataOrphanByExam() {
+    return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
   }
 
   @GET

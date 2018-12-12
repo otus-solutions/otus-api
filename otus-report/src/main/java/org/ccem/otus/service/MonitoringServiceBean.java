@@ -106,8 +106,8 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getOrphanExams(center);
+  public LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException {
+    return laboratoryProgressDao.getOrphanExams();
   }
 
   @Override

@@ -83,9 +83,9 @@ public class MonitoringFacade {
     }
   }
 
-  public LaboratoryProgressDTO getOrphanExams(String center) {
+  public LaboratoryProgressDTO getOrphanExams() {
       try {
-        return monitoringService.getOrphanExams(center);
+        return monitoringService.getOrphanExams();
       } catch (DataNotFoundException e) {
         throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
       }

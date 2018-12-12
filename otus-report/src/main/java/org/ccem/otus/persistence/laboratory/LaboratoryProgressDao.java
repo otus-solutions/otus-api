@@ -5,7 +5,7 @@ import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 
 public interface LaboratoryProgressDao {
 
-    LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException;
+    LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException;
 
     LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException;
 

@@ -14,7 +14,7 @@ public class LaboratoryProgressQueryBuilder {
         this.pipeline = new ArrayList<>();
     }
 
-    public ArrayList<Bson> getOrphansQuery(String center) {
+    public ArrayList<Bson> getOrphansQuery() {
         pipeline.add(parseQuery("{\n" +
                 "        $match:{\"aliquotValid\":false}\n" +
                 "    }"));
@@ -248,29 +248,29 @@ public class LaboratoryProgressQueryBuilder {
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
-                "    $group: {\n" +
-                "      _id: {},\n" +
-                "      pendingResultsByAliquot: {\n" +
-                "        $push: {\n" +
-                "          title: \"$_id\",\n" +
-                "          waiting: {\n" +
-                "            $cond: {\n" +
-                "              if: {\n" +
-                "                $gte: [\n" +
+                "    \"$group\": {\n" +
+                "      \"_id\": {},\n" +
+                "      \"pendingResultsByAliquot\": {\n" +
+                "        \"$push\": {\n" +
+                "          \"title\": \"$_id\",\n" +
+                "          \"waiting\": {\n" +
+                "            \"$cond\": {\n" +
+                "              \"if\": {\n" +
+                "                \"$gte\": [\n" +
                 "                  {\n" +
-                "                    $size: \"$aliquotswithResults\"\n" +
+                "                    \"$size\": \"$aliquotswithResults\"\n" +
                 "                  },\n" +
                 "                  1\n" +
                 "                ]\n" +
                 "              },\n" +
-                "              then: {\n" +
-                "                $subtract: [\n" +
+                "              \"then\": {\n" +
+                "                \"$subtract\": [\n" +
                 "                  {\n" +
-                "                    $size: \"$aliquotsInDb\"\n" +
+                "                    \"$size\": \"$aliquotsInDb\"\n" +
                 "                  },\n" +
                 "                  {\n" +
-                "                    $size: {\n" +
-                "                      $arrayElemAt: [\n" +
+                "                    \"$size\": {\n" +
+                "                      \"$arrayElemAt\": [\n" +
                 "                        \"$aliquotswithResults.aliquots\",\n" +
                 "                        0\n" +
                 "                      ]\n" +
@@ -278,28 +278,30 @@ public class LaboratoryProgressQueryBuilder {
                 "                  }\n" +
                 "                ]\n" +
                 "              },\n" +
-                "              else: 0\n" +
+                "              \"else\": {\n" +
+                "                \"$size\": \"$aliquotsInDb\"\n" +
+                "              }\n" +
                 "            }\n" +
                 "          },\n" +
-                "          received: {\n" +
-                "            $cond: {\n" +
-                "              if: {\n" +
-                "                $gte: [\n" +
+                "          \"received\": {\n" +
+                "            \"$cond\": {\n" +
+                "              \"if\": {\n" +
+                "                \"$gte\": [\n" +
                 "                  {\n" +
-                "                    $size: \"$aliquotswithResults\"\n" +
+                "                    \"$size\": \"$aliquotswithResults\"\n" +
                 "                  },\n" +
                 "                  1\n" +
                 "                ]\n" +
                 "              },\n" +
-                "              then: {\n" +
-                "                $size: {\n" +
-                "                  $arrayElemAt: [\n" +
+                "              \"then\": {\n" +
+                "                \"$size\": {\n" +
+                "                  \"$arrayElemAt\": [\n" +
                 "                    \"$aliquotswithResults.aliquots\",\n" +
                 "                    0\n" +
                 "                  ]\n" +
                 "                }\n" +
                 "              },\n" +
-                "              else: 0\n" +
+                "              \"else\": 0\n" +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
@@ -341,39 +343,80 @@ public class LaboratoryProgressQueryBuilder {
     public List<Bson> getResultsByExamQuery(String center) {
         pipeline.add(parseQuery("{\n" +
                 "    $match: {\n" +
-                "      objectType: \"ExamResults\",\n" +
-                "      aliquotValid: true\n" +
+                "      \"role\": \"EXAM\",\n" +
+                "      \"fieldCenter.acronym\":" + center +
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
                 "    $group: {\n" +
-                "      _id: {\n" +
-                "        examId: \"$examId\",\n" +
-                "        examName: \"$examName\"\n" +
+                "      _id: {},\n" +
+                "      aliquotCodes: {\n" +
+                "        $push: \"$code\"\n" +
                 "      }\n" +
                 "    }\n" +
                 "  }"));
-        pipeline.add(parseQuery(" {\n" +
-                "        $group:\n" +
-                "        {\n" +
-                "            _id:\"$_id.examName\",\n" +
-                "            exams: { $sum : 1}\n" +
-                "        }\n" +
-                "    }"));
         pipeline.add(parseQuery("{\n" +
-                "        $group:\n" +
+                "    $lookup: {\n" +
+                "      from: \"exam_result\",\n" +
+                "      let: {\n" +
+                "        \"aliquotCodes\": \"$aliquotCodes\"\n" +
+                "      },\n" +
+                "      pipeline: [\n" +
                 "        {\n" +
-                "            _id:{},\n" +
-                "            examsQuantitative:\n" +
-                "            {\n" +
-                "                $push:\n" +
+                "          $match: {\n" +
+                "            $expr: {\n" +
+                "              $and: [\n" +
                 "                {\n" +
-                "                    title:\"$_id\",\n" +
-                "                    exams:\"$exams\"\n" +
+                "                  $in: [\n" +
+                "                    \"$aliquotCode\",\n" +
+                "                    \"$$aliquotCodes\"\n" +
+                "                  ]\n" +
                 "                }\n" +
+                "              ]\n" +
                 "            }\n" +
+                "          }\n" +
+                "        },\n" +
+                "        {\n" +
+                "          $group: {\n" +
+                "            _id: {\n" +
+                "              examId: \"$examId\",\n" +
+                "              examName: \"$examName\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        },\n" +
+                "        {\n" +
+                "          $group: {\n" +
+                "            _id: \"$_id.examName\",\n" +
+                "            received: {\n" +
+                "              $sum: 1\n" +
+                "            }\n" +
+                "          }\n" +
+                "        },\n" +
+                "        {\n" +
+                "          $group: {\n" +
+                "            _id: {},\n" +
+                "            examsQuantitative: {\n" +
+                "              $push: {\n" +
+                "                title: \"$_id\",\n" +
+                "                exams: \"$received\"\n" +
+                "              }\n" +
+                "            }\n" +
+                "          }\n" +
                 "        }\n" +
-                "    }"));
+                "      ],\n" +
+                "      as: \"receivedCount\"\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $project: {\n" +
+                "      examsQuantitative: {\n" +
+                "        $arrayElemAt: [\n" +
+                "          \"$receivedCount.examsQuantitative\",\n" +
+                "          0\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
         return this.pipeline;
     }
 

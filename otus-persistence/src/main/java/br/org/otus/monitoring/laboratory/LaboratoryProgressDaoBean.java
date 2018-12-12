@@ -18,9 +18,9 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     private AliquotDao aliquotDao;
 
     @Override
-    public LaboratoryProgressDTO getOrphanExams(String center) throws DataNotFoundException {
+    public LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getOrphansQuery(center)).first();
+        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getOrphansQuery()).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
@@ -52,7 +52,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     @Override
     public LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException {
         LaboratoryProgressQueryBuilder laboratoryProgressQueryBuilder = new LaboratoryProgressQueryBuilder();
-        Document first = examResultDao.aggregate(laboratoryProgressQueryBuilder.getResultsByExamQuery(center)).first();
+        Document first = aliquotDao.aggregate(laboratoryProgressQueryBuilder.getResultsByExamQuery(center)).first();
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
