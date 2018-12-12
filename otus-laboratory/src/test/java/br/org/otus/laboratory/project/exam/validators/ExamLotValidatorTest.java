@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.exam.validators;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -64,7 +66,7 @@ public class ExamLotValidatorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		examLotValidator = spy(new ExamLotValidator(examLotDao, transportationLotDao, examLot, aliquotDao));
+		examLotValidator = spy(new ExamLotValidator(examLot, aliquotDao));
 	}
 
 	@Test
@@ -105,8 +107,8 @@ public class ExamLotValidatorTest {
 		when(examLot.getAliquotName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(examLot.getAliquotList()).thenReturn(aliquotList);
 
-		List<Aliquot> resultDao = new ArrayList<>();
-		when(aliquotDao.getAliquots()).thenReturn(resultDao);
+
+		when(aliquotDao.find("354005012")).thenThrow(new DataNotFoundException());
 
 		try {
 			examLotValidator.validate();
@@ -141,6 +143,7 @@ public class ExamLotValidatorTest {
 			throws DataNotFoundException {
 		when(aliquot1.getName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(aliquot1.getCode()).thenReturn("354005012");
+		when(aliquot1.getExamLotId()).thenReturn(new ObjectId());
 
 		when(aliquot2.getName()).thenReturn(BIOCHEMICAL_SERUM);
 		when(aliquot2.getCode()).thenReturn("354005012");
@@ -158,7 +161,7 @@ public class ExamLotValidatorTest {
 
 		List<ExamLot> resultFindExamInDB = new ArrayList<>();
 		resultFindExamInDB.add(otherLot);
-		when(examLotDao.find()).thenReturn(resultFindExamInDB);
+		when(examLotDao.find(anyString())).thenReturn(resultFindExamInDB);
 
 		try {
 			examLotValidator.validate();

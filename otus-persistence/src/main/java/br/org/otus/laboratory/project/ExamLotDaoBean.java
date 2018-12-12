@@ -5,7 +5,7 @@ import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
-import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
@@ -72,10 +72,10 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
   }
 
   @Override
-  public List<ExamLot> find() {
+  public List<ExamLot> find(String centerAcronym) {
     ArrayList<ExamLot> ExamLots = new ArrayList<>();
 
-    AggregateIterable output = collection.aggregate(Arrays.asList(Aggregates.lookup("aliquot","_id","examLotId","aliquotList")));
+    FindIterable<Document> output = collection.find(new Document("fieldCenter.acronym",centerAcronym));
 
     for (Object anOutput : output) {
       Document next = (Document) anOutput;

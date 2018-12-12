@@ -2,9 +2,8 @@ package br.org.otus.laboratory.participant.validators;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
+import static org.mockito.Matchers.*;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static org.mockito.Matchers.any;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
@@ -20,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.Any;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -29,6 +27,7 @@ import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import org.powermock.reflect.Whitebox;
+
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AliquotDeletionValidator.class)
@@ -46,8 +45,6 @@ public class AliquotDeletionValidatorTest {
   private ExamUploader examUploader;
   @Mock
   private Aliquot aliquot;
-  @Mock
-  private AliquotDeletionValidatorResponse aliquotDeletionValidatorResponse;
   @Mock
   private TransportationLot transportationLot;
   @Mock
@@ -95,8 +92,9 @@ public class AliquotDeletionValidatorTest {
     Whitebox.setInternalState(aliquotDeletionValidatorInjected,"code", ALIQUOT_CODE);
     Whitebox.setInternalState(aliquotDeletionValidatorInjected,"aliquotDao", aliquotDao);
     Whitebox.setInternalState(aliquotDeletionValidatorInjected,"examLotDao", examLotDao);
+
     when(aliquotDao.find(ALIQUOT_CODE)).thenReturn(aliquot);
-    when(examLotDao.find(any())).thenReturn(examLot);
+    when(examLotDao.find(EXAM_LOT_ID)).thenReturn(examLot);
     when(examLot.getCode()).thenReturn(LOT_CODE);
     when(examUploader.checkIfThereInExamResultLot(ALIQUOT_CODE)).thenReturn(Boolean.FALSE);
 
