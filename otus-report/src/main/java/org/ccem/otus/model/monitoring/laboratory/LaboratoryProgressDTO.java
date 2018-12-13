@@ -12,7 +12,8 @@ public class LaboratoryProgressDTO {
     ArrayList<PendingResults> pendingResultsByAliquot;
     ArrayList<StorageData> storageByAliquot;
     ArrayList<ExamData> examsQuantitative;
-    PendingCsvData csvOfPendingAliquots;
+    ArrayList<PendingAliquot> pendingAliquotsCsvData;
+    OrphanExamsCsvData orphanExamsCsvData;
 
     private class OrphanExam {
         private String title;
@@ -44,10 +45,15 @@ public class LaboratoryProgressDTO {
 
     }
 
-    private class PendingCsvData {
+    private class PendingAliquot {
+        private String aliquot;
+        private Integer transported;
+        private Integer prepared;
+    }
+
+    private class OrphanExamsCsvData {
         private LinkedList<String> aliquots;
-        private LinkedList<Integer> transported;
-        private LinkedList<Integer> prepared;
+        private LinkedList<String> examNames;
     }
 
     public static String serialize(LaboratoryProgressDTO orphanExamsProgressDTO) {

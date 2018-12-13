@@ -420,7 +420,7 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getPendenciesCsvQuery(String center){
+    public List<Bson> getCSVOfPendingResultsQuery(String center){
         pipeline.add(parseQuery("{\n" +
                 "    $match: {\n" +
                 "      \"role\": \"EXAM\",\n" +
@@ -475,24 +475,12 @@ public class LaboratoryProgressQueryBuilder {
         pipeline.add(parseQuery("{\n" +
                 "    $group: {\n" +
                 "      _id: {},\n" +
-                "      aliquots: {\n" +
-                "        $push: \"$code\"\n" +
-                "      },\n" +
-                "      transported: {\n" +
-                "        $push: \"$transported\"\n" +
-                "      },\n" +
-                "      prepared: {\n" +
-                "        $push: \"$prepared\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $project: {\n" +
-                "      _id: 0,\n" +
-                "      csvOfPendingAliquots: {\n" +
-                "        aliquots: \"$aliquots\",\n" +
-                "        transported: \"$transported\",\n" +
-                "        prepared: \"$prepared\"\n" +
+                "      pendingAliquotsCsvData: {\n" +
+                "        $push: {\n" +
+                "          aliquot: \"$code\",\n" +
+                "          transported: \"$transported\",\n" +
+                "          prepared: \"$prepared\"\n" +
+                "        }\n" +
                 "      }\n" +
                 "    }\n" +
                 "  }"));

@@ -46,7 +46,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
     @Override
     public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws  DataNotFoundException{
-        return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getPendenciesCsvQuery(center));
+        return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getCSVOfPendingResultsQuery(center));
     }
 
     private LaboratoryProgressDTO aliquotDaoAggregate(List<Bson> query) throws  DataNotFoundException{
@@ -60,8 +60,6 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
         validateFirst(first);
         return LaboratoryProgressDTO.deserialize(first.toJson());
     }
-
-
 
     private void validateFirst(Document first) throws DataNotFoundException {
         if (first == null){
