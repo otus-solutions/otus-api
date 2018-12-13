@@ -122,4 +122,12 @@ public class MonitoringFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) {
+    try {
+      return monitoringService.getDataToCSVOfPendingResultsByAliquots(center);
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 }

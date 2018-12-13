@@ -420,6 +420,86 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getPendenciesCsvQuery(String center){
+        pipeline.add(parseQuery("{\n" +
+                "    $match: {\n" +
+                "      \"role\": \"EXAM\",\n" +
+                "      \"fieldCenter.acronym\":" + center +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $project: {\n" +
+                "      code: \"$code\",\n" +
+                "      transported: {\n" +
+                "        $cond: {\n" +
+                "          if: {\n" +
+                "            $ne: [\n" +
+                "              \"$transportationLotId\",\n" +
+                "              null\n" +
+                "            ]\n" +
+                "          },\n" +
+                "          then: 1,\n" +
+                "          else: 0\n" +
+                "        }\n" +
+                "      },\n" +
+                "      prepared: {\n" +
+                "        $cond: {\n" +
+                "          if: {\n" +
+                "            $ne: [\n" +
+                "              \"$examLotId\",\n" +
+                "              null\n" +
+                "            ]\n" +
+                "          },\n" +
+                "          then: 1,\n" +
+                "          else: 0\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $lookup: {\n" +
+                "      from: \"exam_result\",\n" +
+                "      localField: \"code\",\n" +
+                "      foreignField: \"aliquotCode\",\n" +
+                "      as: \"results\"\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $match: {\n" +
+                "      results: {\n" +
+                "        $exists: true,\n" +
+                "        $size: 0\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $group: {\n" +
+                "      _id: {},\n" +
+                "      aliquots: {\n" +
+                "        $push: \"$code\"\n" +
+                "      },\n" +
+                "      transported: {\n" +
+                "        $push: \"$transported\"\n" +
+                "      },\n" +
+                "      prepared: {\n" +
+                "        $push: \"$prepared\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $project: {\n" +
+                "      _id: 0,\n" +
+                "      csvOfPendingAliquots: {\n" +
+                "        aliquots: \"$aliquots\",\n" +
+                "        transported: \"$transported\",\n" +
+                "        prepared: \"$prepared\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        return this.pipeline;
+
+    }
+
     private Document parseQuery(String query) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().fromJson(query, Document.class);

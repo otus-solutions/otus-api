@@ -123,4 +123,12 @@ public class MonitoringResource {
   public String getDataOfResultsByExam(@PathParam("center") String center) {
     return new Response().buildSuccess(monitoringFacade.getDataOfResultsByExam(center)).toJson();
   }
+
+  @GET
+  @Secured
+  @Path("laboratory/pending/csv/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataToCSVOfPendingResultsByAliquots(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataToCSVOfPendingResultsByAliquots(center)).toJson();
+  }
 }

@@ -130,4 +130,9 @@ public class MonitoringServiceBean implements MonitoringService {
     return laboratoryProgressDao.getDataOfResultsByExam(center);
   }
 
+  @Override
+  public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getDataToCSVOfPendingResultsByAliquots(center);
+  }
+
 }

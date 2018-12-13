@@ -34,4 +34,6 @@ public interface MonitoringService {
     LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException;
 
     LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException;
+
+    LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException;
 }
