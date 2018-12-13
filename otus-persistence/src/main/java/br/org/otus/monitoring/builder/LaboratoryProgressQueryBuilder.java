@@ -46,6 +46,13 @@ public class LaboratoryProgressQueryBuilder {
                 "            }\n" +
                 "        }\n" +
                 "    }"));
+        pipeline.add(parseQuery("{\n" +
+                "    \"$match\": {\n" +
+                "      \"orphanExamsProgress\": {\n" +
+                "        \"$exists\": true\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
         return this.pipeline;
     }
 
