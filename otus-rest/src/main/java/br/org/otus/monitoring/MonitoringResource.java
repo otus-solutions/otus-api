@@ -89,7 +89,7 @@ public class MonitoringResource {
   @Path("laboratory/orphan")
   @Produces(MediaType.APPLICATION_JSON)
   public String getDataOrphanByExam() {
-    return new Response().buildSuccess(monitoringFacade.getOrphanExams()).toJson();
+    return new Response().buildSuccess(monitoringFacade.getDataOrphanByExams()).toJson();
   }
 
   @GET
@@ -97,7 +97,7 @@ public class MonitoringResource {
   @Path("laboratory/quantitative/{center}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getDataQuantitativeByTypeOfAliquot(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getQuantitativeByTypeOfAliquots(center)).toJson();
+    return new Response().buildSuccess(monitoringFacade.getDataQuantitativeByTypeOfAliquots(center)).toJson();
   }
 
   @GET
@@ -120,8 +120,8 @@ public class MonitoringResource {
   @Secured
   @Path("laboratory/exam/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getDataOfResultsByExam(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getDataOfResultsByExam(center)).toJson();
+  public String getDataByExam(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataByExam(center)).toJson();
   }
 
   @GET

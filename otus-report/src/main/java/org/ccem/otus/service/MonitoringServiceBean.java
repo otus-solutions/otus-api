@@ -106,13 +106,13 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException {
-    return laboratoryProgressDao.getOrphanExams();
+  public LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException {
+    return laboratoryProgressDao.getDataOrphanByExams();
   }
 
   @Override
-  public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getQuantitativeByTypeOfAliquots(center);
+  public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getDataQuantitativeByTypeOfAliquots(center);
   }
 
   @Override
@@ -126,8 +126,8 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOfResultsByExam(center);
+  public LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException {
+    return laboratoryProgressDao.getDataByExam(center);
   }
 
   @Override

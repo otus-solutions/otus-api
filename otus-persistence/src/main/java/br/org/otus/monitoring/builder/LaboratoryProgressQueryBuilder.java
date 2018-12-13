@@ -340,7 +340,7 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getResultsByExamQuery(String center) {
+    public List<Bson> getDataByExamQuery(String center) {
         pipeline.add(parseQuery("{\n" +
                 "    $match: {\n" +
                 "      \"role\": \"EXAM\",\n" +

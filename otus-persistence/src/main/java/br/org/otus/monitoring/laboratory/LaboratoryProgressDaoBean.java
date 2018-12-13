@@ -20,12 +20,12 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     private AliquotDao aliquotDao;
 
     @Override
-    public LaboratoryProgressDTO getOrphanExams() throws DataNotFoundException {
+    public LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException {
         return examResultDaoAggregate(new LaboratoryProgressQueryBuilder().getOrphansQuery());
     }
 
     @Override
-    public LaboratoryProgressDTO getQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
+    public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
         return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getQuantitativeQuery(center));
     }
 
@@ -40,8 +40,8 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     }
 
     @Override
-    public LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException {
-        return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getResultsByExamQuery(center));
+    public LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException {
+        return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getDataByExamQuery(center));
     }
 
     @Override
