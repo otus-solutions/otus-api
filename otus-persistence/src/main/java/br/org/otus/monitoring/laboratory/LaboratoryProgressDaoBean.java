@@ -49,6 +49,11 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
         return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getCSVOfPendingResultsQuery(center));
     }
 
+    @Override
+    public LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException {
+        return examResultDaoAggregate(new LaboratoryProgressQueryBuilder().getCSVOfOrphansByExamQuery());
+    }
+
     private LaboratoryProgressDTO aliquotDaoAggregate(List<Bson> query) throws  DataNotFoundException{
         Document first = aliquotDao.aggregate(query).first();
         validateFirst(first);

@@ -131,4 +131,12 @@ public class MonitoringResource {
   public String getDataToCSVOfPendingResultsByAliquots(@PathParam("center") String center) {
     return new Response().buildSuccess(monitoringFacade.getDataToCSVOfPendingResultsByAliquots(center)).toJson();
   }
+
+  @GET
+  @Secured
+  @Path("laboratory/orphan/csv")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataToCSVOfOrphansByExam() {
+    return new Response().buildSuccess(monitoringFacade.getDataToCSVOfOrphansByExam()).toJson();
+  }
 }

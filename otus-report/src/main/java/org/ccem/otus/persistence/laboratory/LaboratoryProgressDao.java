@@ -16,4 +16,6 @@ public interface LaboratoryProgressDao {
     LaboratoryProgressDTO getDataOfResultsByExam(String center) throws DataNotFoundException;
 
     LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws  DataNotFoundException;
+
+    LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException;
 }

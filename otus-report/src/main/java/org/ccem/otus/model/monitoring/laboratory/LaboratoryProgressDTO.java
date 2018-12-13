@@ -3,7 +3,6 @@ package org.ccem.otus.model.monitoring.laboratory;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class LaboratoryProgressDTO {
 
@@ -12,8 +11,8 @@ public class LaboratoryProgressDTO {
     ArrayList<PendingResults> pendingResultsByAliquot;
     ArrayList<StorageData> storageByAliquot;
     ArrayList<ExamData> examsQuantitative;
-    ArrayList<PendingAliquot> pendingAliquotsCsvData;
-    OrphanExamsCsvData orphanExamsCsvData;
+    ArrayList<PendingAliquotCsv> pendingAliquotsCsvData;
+    ArrayList<OrphanExamCsv> orphanExamsCsvData;
 
     private class OrphanExam {
         private String title;
@@ -45,15 +44,15 @@ public class LaboratoryProgressDTO {
 
     }
 
-    private class PendingAliquot {
+    private class PendingAliquotCsv {
         private String aliquot;
         private Integer transported;
         private Integer prepared;
     }
 
-    private class OrphanExamsCsvData {
-        private LinkedList<String> aliquots;
-        private LinkedList<String> examNames;
+    private class OrphanExamCsv {
+        private String aliquotCode;
+        private String examName;
     }
 
     public static String serialize(LaboratoryProgressDTO orphanExamsProgressDTO) {

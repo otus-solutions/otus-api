@@ -488,6 +488,35 @@ public class LaboratoryProgressQueryBuilder {
 
     }
 
+    public List<Bson> getCSVOfOrphansByExamQuery() {
+        pipeline.add(parseQuery("{\n" +
+                "    $match: {\n" +
+                "      \"aliquotValid\": false\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $group: {\n" +
+                "      _id: {\n" +
+                "        examId: \"$examId\",\n" +
+                "        aliquotCode: \"$aliquotCode\",\n" +
+                "        examName: \"$examName\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    $group: {\n" +
+                "      _id: {},\n" +
+                "      orphanExamsCsvData: {\n" +
+                "        $push: {\n" +
+                "          aliquotCode: \"$_id.aliquotCode\",\n" +
+                "          examName: \"$_id.examName\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }"));
+        return this.pipeline;
+    }
+
     private Document parseQuery(String query) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().fromJson(query, Document.class);

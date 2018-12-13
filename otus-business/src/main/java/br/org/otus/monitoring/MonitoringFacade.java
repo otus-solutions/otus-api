@@ -130,4 +130,12 @@ public class MonitoringFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public Object getDataToCSVOfOrphansByExam() {
+    try {
+      return monitoringService.getDataToCSVOfOrphansByExam();
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 }
