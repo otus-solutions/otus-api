@@ -1,10 +1,7 @@
 package br.org.otus.monitoring;
 
-import java.util.ArrayList;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
+import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,36 +9,44 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.report.ReportResource;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.reflect.Whitebox.setInternalState;
 
 @RunWith(PowerMockRunner.class)
 public class MonitoringResourceTest {
-  
-  private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
-  private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
-  private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
+
   private static final MonitoringCenter MONITORING_CENTERS = new MonitoringCenter();
   private static final String responseMonitoringCenters = "{\"data\":[{\"name\":\"Bahia\",\"goal\":3025,\"backgroundColor\":\"rgba(255, 99, 132, 0.2)\",\"borderColor\":\"rgba(255, 99, 132, 1)\"}]}";
   private static final String responseListAcronyms = "{\"data\":[\"ACTA\",\"MONC\",\"CISE\"]}";
+  private static final String responseMonitoringDataSourceResults = "{\"data\":[{\"acronym\":\"ACTA\"}]}";
   private static final Long GOAL = (long) 3025L;
+  private static final String ACRONYM = "ACTA";
+  private static final String CENTER = "RS";
+
   @InjectMocks
   private MonitoringResource monitoringResource;
-  
   @Mock
   private MonitoringFacade monitoringFacade;
-  
-  
-  private ArrayList<MonitoringCenter> monitoringCenters = new ArrayList<MonitoringCenter>();
-  private ArrayList<String> acronymsList = new ArrayList<>();
-  
-  
+
+
+  private MonitoringDataSourceResult monitoringDataSourceResult;
+  private ArrayList<MonitoringCenter> monitoringCenters;
+  private ArrayList<String> acronymsList;
+  List<MonitoringDataSourceResult> monitoringDataSourceResults;
+
   @Before
-  public void setUp() throws DataNotFoundException {
-    
+  public void setUp() {
+
+    monitoringCenters = new ArrayList();
+    acronymsList = new ArrayList();
+    monitoringDataSourceResults = new ArrayList();
+
     MONITORING_CENTERS.setGoal(GOAL);;
     MONITORING_CENTERS.setName("Bahia");
     MONITORING_CENTERS.setBackgroundColor("rgba(255, 99, 132, 0.2)");
@@ -50,22 +55,79 @@ public class MonitoringResourceTest {
     acronymsList.add("ACTA");
     acronymsList.add("MONC");
     acronymsList.add("CISE");
-    
+
+    monitoringDataSourceResult = new MonitoringDataSourceResult();
+    setInternalState(monitoringDataSourceResult, "acronym", ACRONYM);
+    monitoringDataSourceResults.add(monitoringDataSourceResult);
+
     monitoringCenters.add(MONITORING_CENTERS);
     when(monitoringFacade.getMonitoringCenters()).thenReturn(monitoringCenters);
     when(monitoringFacade.listActivities()).thenReturn(acronymsList);
-    
+    when(monitoringFacade.get(ACRONYM)).thenReturn(monitoringDataSourceResults);
+  }
+
+  @Test
+  public void method_listActivities_should_return_Acronyms_Activities_list() {
+    monitoringResource.listActivities();
+    assertEquals(responseListAcronyms, monitoringResource.listActivities());
   }
   
   @Test
   public void method_getMonitoring_should_return_MonitoringCenter_list() {
     assertEquals(responseMonitoringCenters, monitoringResource.getMonitoring());
   }
-  
+
   @Test
-  public void method_listActivities_should_return_Acronyms_Activities_list() {
-    System.out.println(monitoringResource.listActivities());
-    assertEquals(responseListAcronyms, monitoringResource.listActivities());
+  public void getMethod_should_returns_MonitoringDataSourceResult_by_Acronym() {
+    assertEquals(responseMonitoringDataSourceResults, monitoringResource.get(ACRONYM));
   }
 
+  @Test
+  public void getProjectStatus_should_invoke_getActivitiesProgress_of_facade_by_Monitoring() {
+    monitoringResource.getProjectStatus();
+    verify(monitoringFacade, times(1)).getActivitiesProgress();
+  }
+
+  @Test
+  public void getDataOrphanByExamMethod_should_invoke_getDataOrphanByExams_of_facade_by_Monitoring() {
+    monitoringResource.getDataOrphanByExam();
+    verify(monitoringFacade, times(1)).getDataOrphanByExams();
+  }
+
+  @Test
+  public void getDataQuantitativeByTypeOfAliquotMethod_should_invoke_getDataQuantitativeByTypeOfAliquots_of_facade_by_Monitoring() {
+    monitoringResource.getDataQuantitativeByTypeOfAliquot(CENTER);
+    verify(monitoringFacade, times(1)).getDataQuantitativeByTypeOfAliquots(CENTER);
+  }
+
+  @Test
+  public void getDataOfPendingResultsByAliquotMethod_should_invoke_getDataOfPendingResultsByAliquot_of_facade_by_Monitoring() {
+    monitoringResource.getDataOfPendingResultsByAliquot(CENTER);
+    verify(monitoringFacade, times(1)).getDataOfPendingResultsByAliquot(CENTER);
+  }
+
+  @Test
+  public void getDataOfStorageByAliquotMethod_should_invoke_getDataOfStorageByAliquot_of_facade_by_Monitoring() {
+    monitoringResource.getDataOfStorageByAliquot(CENTER);
+    verify(monitoringFacade, times(1)).getDataOfStorageByAliquot(CENTER);
+  }
+
+  @Test
+  public void getDataByExamMethod_should_invoke_getDataByExam_of_facade_by_Monitoring() {
+    monitoringResource.getDataByExam(CENTER);
+    verify(monitoringFacade, times(1)).getDataByExam(CENTER);
+  }
+
+    @Test
+  public void getDataToCSVOfPendingResultsByAliquotsMethod_should_invoke_getDataToCSVOfPendingResultsByAliquots_of_facade_by_Monitoring() {
+    monitoringResource.getDataToCSVOfPendingResultsByAliquots(CENTER);
+    verify(monitoringFacade, times(1)).getDataToCSVOfPendingResultsByAliquots(CENTER);
+  }
+
+
+    @Test
+  public void getDataToCSVOfOrphansByExamMethod_should_invoke_getDataToCSVOfOrphansByExam_of_facade_by_Monitoring() {
+    monitoringResource.getDataToCSVOfOrphansByExam();
+    verify(monitoringFacade, times(1)).getDataToCSVOfOrphansByExam();
+  }
 }
