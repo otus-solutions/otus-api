@@ -14,7 +14,7 @@ public class LaboratoryProgressQueryBuilder {
         this.pipeline = new ArrayList<>();
     }
 
-    public ArrayList<Bson> getOrphansQuery() {
+    public List<Bson> getOrphansQuery() {
         pipeline.add(parseQuery("{\n" +
                 "        $match:{\"aliquotValid\":false}\n" +
                 "    }"));

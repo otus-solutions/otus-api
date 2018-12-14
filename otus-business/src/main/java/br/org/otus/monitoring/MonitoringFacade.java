@@ -2,6 +2,7 @@ package br.org.otus.monitoring;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -90,7 +91,7 @@ public class MonitoringFacade {
       try {
         return monitoringService.getDataOrphanByExams();
       } catch (DataNotFoundException e) {
-        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        throw new HttpResponseException(NotFound.build());
       }
   }
 
@@ -98,7 +99,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataQuantitativeByTypeOfAliquots(center);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build());
     }
   }
 
@@ -106,7 +107,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataOfPendingResultsByAliquot(center);
     } catch (DataNotFoundException e){
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build());
     }
   }
 
@@ -114,7 +115,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataOfStorageByAliquot(center);
     } catch (DataNotFoundException e){
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build());
     }
   }
 
@@ -122,7 +123,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataByExam(center);
     } catch (DataNotFoundException e){
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build());
     }
   }
 
@@ -130,7 +131,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataToCSVOfPendingResultsByAliquots(center);
     } catch (DataNotFoundException e){
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build());
     }
   }
 
@@ -138,7 +139,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataToCSVOfOrphansByExam();
     } catch (DataNotFoundException e){
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build());
     }
   }
 }
