@@ -55,12 +55,12 @@ public class LaboratoryProgressDTO {
         private String examName;
     }
 
-    public static String serialize(LaboratoryProgressDTO orphanExamsProgressDTO) {
-        return LaboratoryProgressDTO.getGsonBuilder().create().toJson(orphanExamsProgressDTO);
+    public static String serialize(LaboratoryProgressDTO laboratoryProgressDTO) {
+        return LaboratoryProgressDTO.getGsonBuilder().create().toJson(laboratoryProgressDTO);
     }
 
-    public static LaboratoryProgressDTO deserialize(String orphanExamsProgressJson) {
-        return LaboratoryProgressDTO.getGsonBuilder().create().fromJson(orphanExamsProgressJson, LaboratoryProgressDTO.class);
+    public static LaboratoryProgressDTO deserialize(String laboratoryProgressJson) {
+        return LaboratoryProgressDTO.getGsonBuilder().create().fromJson(laboratoryProgressJson, LaboratoryProgressDTO.class);
     }
 
     public static GsonBuilder getGsonBuilder() {
