@@ -1,5 +1,9 @@
 package br.org.otus.laboratory.participant.validators;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
@@ -8,21 +12,25 @@ import br.org.otus.laboratory.project.transportation.persistence.TransportationL
 
 public class AliquotDeletionValidator {
 
+  private Aliquot aliquotToValidate;
   private String code;
   private ExamLotDao examLotDao;
   private TransportationLotDao transportationLotDao;
+  private AliquotDao aliquotDao;
   private ExamUploader examUploader;
   private AliquotDeletionValidatorResponse aliquotDeletionValidatorResponse;
 
-  public AliquotDeletionValidator(String code, ExamLotDao examLotDao, TransportationLotDao transportationLotDao, ExamUploader examUploader) {
+  public AliquotDeletionValidator(String code, AliquotDao aliquotDao, ExamUploader examUploader, ExamLotDao examLotDao, TransportationLotDao transportationLotDao) {
     this.code = code;
+    this.aliquotDao = aliquotDao;
+    this.examUploader = examUploader;
     this.examLotDao = examLotDao;
     this.transportationLotDao = transportationLotDao;
-    this.examUploader = examUploader;
     this.aliquotDeletionValidatorResponse = new AliquotDeletionValidatorResponse();
   }
 
-  public void validate() throws ValidationException {
+  public void validate() throws ValidationException, DataNotFoundException {
+    aliquotToValidate = aliquotDao.find(this.code);
     this.aliquotInTransportation();
     this.aliquotInExamLot();
     this.aliquotInExamResult();
@@ -32,17 +40,25 @@ public class AliquotDeletionValidator {
   }
 
   private void aliquotInTransportation() {
-    String transported = this.transportationLotDao.checkIfThereInTransport(this.code);
-    if (transported != null) {
-      this.aliquotDeletionValidatorResponse.setTransportationLot(transported);
+    ObjectId transportationLotId = this.aliquotToValidate.getTransportationLotId();
+    if (transportationLotId != null) {
+      try {
+        this.aliquotDeletionValidatorResponse.setTransportationLot(transportationLotDao.find(transportationLotId).getCode());
+      } catch (DataNotFoundException e) {
+        this.aliquotDeletionValidatorResponse.setTransportationLot("Not Found");
+      }
       this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
     }
   }
 
   private void aliquotInExamLot() {
-    String examLot = this.examLotDao.checkIfThereInExamLot(this.code);
-    if (examLot != null) {
-      this.aliquotDeletionValidatorResponse.setExamLot(examLot);
+    ObjectId examLotId = this.aliquotToValidate.getExamLotId();
+    if (examLotId != null) {
+      try {
+        this.aliquotDeletionValidatorResponse.setExamLot(examLotDao.find(examLotId).getCode());
+      } catch (DataNotFoundException e) {
+        this.aliquotDeletionValidatorResponse.setExamLot("Not Found");
+      }
       this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
     }
   }

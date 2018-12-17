@@ -2,6 +2,7 @@ package br.org.otus.laboratory.participant.tube;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
@@ -17,7 +18,7 @@ public class Tube implements Comparable<Tube> {
 	private String moment;
 	private String code;
 	private String groupName;
-	private List<Aliquot> aliquotes;
+	private List<SimpleAliquot> aliquots;
 	private Integer order;
 	private TubeCollectionData tubeCollectionData;
 
@@ -27,14 +28,14 @@ public class Tube implements Comparable<Tube> {
 		this.moment = moment;
 		this.code = code;
 		this.groupName = groupName;
-		this.aliquotes = new ArrayList<Aliquot>();
+		this.aliquots = new ArrayList<SimpleAliquot>();
 		this.tubeCollectionData = new TubeCollectionData();
 	}
 
-	public void addAllAliquotsThatNotContainsInList(List<Aliquot> aliquots) {
-		for (Aliquot aliquot : aliquots) {
-			if (!aliquotes.contains(aliquot))
-				aliquotes.add(aliquot);
+	public void addAllAliquotsThatNotContainsInList(List<SimpleAliquot> aliquots) {
+		for (SimpleAliquot aliquot : aliquots) {
+			if (!aliquots.contains(aliquot))
+				aliquots.add(aliquot);
 		}
 	}
 
@@ -54,8 +55,8 @@ public class Tube implements Comparable<Tube> {
 		return groupName;
 	}
 
-	public List<Aliquot> getAliquots() {
-		return aliquotes;
+	public List<SimpleAliquot> getAliquots() {
+		return aliquots;
 	}
 
 	public Integer getOrder() {
@@ -74,7 +75,18 @@ public class Tube implements Comparable<Tube> {
 		}
 	}
 
-	public String getObjectType() {
+  public void addAliquot(Aliquot aliquot) {
+	  if (this.aliquots == null ) {
+	    this.aliquots = new ArrayList<>();
+    }
+    this.aliquots.add(aliquot.getSimpleAliquot());
+  }
+
+	public void setAliquots(List<SimpleAliquot> aliquots) {
+    this.aliquots = aliquots;
+  }
+
+  public String getObjectType() {
 		return objectType;
 	}
 

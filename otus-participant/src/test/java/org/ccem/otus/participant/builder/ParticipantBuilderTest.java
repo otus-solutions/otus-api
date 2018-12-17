@@ -21,32 +21,36 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ParticipantBuilder.class)
 public class ParticipantBuilderTest {
-	private static final long RN = 1063154;
-	private static final String NAME = "Luis Alberto";
-	private static final String SEX = "M";
-	private static final String BIRTHDATE = "1954-09-20";
-	private static final String CENTER = "SP";
-	@InjectMocks
-	private ParticipantBuilder participantBuilder;
-	@Mock
-	private List<FieldCenter> availablefieldCenters;
-	@Mock
-	ParticipantImport participantImport;
-	@Mock
-	private FieldCenter fieldCenter;
-	Participant participant;
+  private static final long RN = 1063154;
+  private static final String NAME = "Luis Alberto";
+  private static final String SEX = "M";
+  private static final String BIRTHDATE = "1954-09-20";
+  private static final String CENTER = "SP";
+  private static final Boolean LATE = false;
 
-	@Test
-	public void method_buildFromPartipantToImport_should_return_participant() throws Exception {
-		participantBuilder = spy(new ParticipantBuilder(availablefieldCenters));
-		when(participantImport.getRn()).thenReturn(RN);
-		when(participantImport.getName()).thenReturn(NAME);
-		when(participantImport.getSex()).thenReturn(SEX);
-		when(participantImport.getBirthdate()).thenReturn(BIRTHDATE);
-		when(participantImport.getCenter()).thenReturn(CENTER);
-		doReturn(fieldCenter).when(participantBuilder, "getFieldCenterByInitials", CENTER);
-		assertEquals(NAME, participantBuilder.buildFromPartipantToImport(participantImport).getName());
-		assertTrue(participantBuilder.buildFromPartipantToImport(participantImport) instanceof Participant);
-	}
+  @InjectMocks
+  private ParticipantBuilder participantBuilder;
+  @Mock
+  private List<FieldCenter> availablefieldCenters;
+  @Mock
+  ParticipantImport participantImport;
+  @Mock
+  private FieldCenter fieldCenter;
+  Participant participant;
+
+  @Test
+  public void method_buildFromPartipantToImport_should_return_participant() throws Exception {
+    participantBuilder = spy(new ParticipantBuilder(availablefieldCenters));
+    when(participantImport.getRn()).thenReturn(RN);
+    when(participantImport.getName()).thenReturn(NAME);
+    when(participantImport.getSex()).thenReturn(SEX);
+    when(participantImport.getBirthdate()).thenReturn(BIRTHDATE);
+    when(participantImport.getCenter()).thenReturn(CENTER);
+    when(participantImport.getLate()).thenReturn(LATE);
+    doReturn(fieldCenter).when(participantBuilder, "getFieldCenterByInitials", CENTER);
+
+    assertEquals(NAME, participantBuilder.buildFromPartipantToImport(participantImport).getName());
+    assertTrue(participantBuilder.buildFromPartipantToImport(participantImport) instanceof Participant);
+  }
 
 }

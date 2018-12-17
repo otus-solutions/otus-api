@@ -11,9 +11,10 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotAliquotFilterDTO;
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.api.ExamLotFacade;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.rest.Response;
@@ -60,17 +61,29 @@ public class ExamResource {
 
 	@GET
 	@Secured
-	public String getLots() {
-		List<ExamLot> lots = examLotFacade.getLots();
+	@Path("/center-lots/{acronym}")
+	public String getLots(@PathParam("acronym") String centerAcronym) {
+		List<ExamLot> lots = examLotFacade.getLots(centerAcronym);
 		GsonBuilder builder = ExamLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
 	}
 
+	@POST
+	@Secured
+	@Path("/aliquot")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getAliquot(String examLotAliquotFilterJson) {
+		ExamLotAliquotFilterDTO examLotAliquotFilterDTO = ExamLotAliquotFilterDTO.deserialize(examLotAliquotFilterJson);
+		Aliquot aliquot = examLotFacade.getAliquot(examLotAliquotFilterDTO);
+		GsonBuilder builder = ExamLot.getGsonBuilder();
+		return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
+	}
+
 	@GET
 	@Secured
-	@Path("/aliquots")
-	public String getAliquots() {
-		List<WorkAliquot> aliquots = examLotFacade.getAliquots();
+	@Path("/aliquots/{lotId}")
+	public String getAliquots(@PathParam("lotId") String lotId) {
+		List<Aliquot> aliquots = examLotFacade.getAliquots(lotId);
 		GsonBuilder builder = ExamLot.getGsonBuilder();
 		return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
 	}

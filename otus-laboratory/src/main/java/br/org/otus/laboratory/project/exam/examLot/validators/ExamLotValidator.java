@@ -1,136 +1,103 @@
 package br.org.otus.laboratory.project.exam.examLot.validators;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
-import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 public class ExamLotValidator {
 
-	private ExamLot examLot;
-	private ExamLotDao examLotDao;
-	private TransportationLotDao transportationLotDao;
-	private ExamLotValidationResult examLotValidationResult;
+  private ExamLot examLot;
+  private AliquotDao aliquotDao;
+  private ExamLotValidationResult examLotValidationResult;
 
-	public ExamLotValidator(ExamLotDao examLotDao, TransportationLotDao transportationLotDao, ExamLot examLot) {
-		this.examLotDao = examLotDao;
-		this.transportationLotDao = transportationLotDao;
-		this.examLot = examLot;
-		this.examLotValidationResult = new ExamLotValidationResult();
-	}
+  public ExamLotValidator(ExamLot examLot, AliquotDao aliquotDao) {
+    this.aliquotDao = aliquotDao;
+    this.examLot = examLot;
+    this.examLotValidationResult = new ExamLotValidationResult();
+  }
 
-	public void validate() throws ValidationException {
-		checkIfAliquotsExist();
-		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(new Throwable("Aliquots not found"), examLotValidationResult);
-		}
+  public void validate() throws ValidationException {
+    checkIfAliquotsExist();
+    if (!examLotValidationResult.isValid()) {
+      throw new ValidationException(new Throwable("Aliquots not found"), examLotValidationResult);
+    }
 
-		checkOfTypesInLot();
-		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(new Throwable("There are different types of aliquots in lot"),
-					examLotValidationResult);
-		}
+    checkOfTypesInLot();
+    if (!examLotValidationResult.isValid()) {
+      throw new ValidationException(new Throwable("There are different types of aliquots in lot"),
+        examLotValidationResult);
+    }
 
-		checkForAliquotsOnAnotherLots();
-		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(new Throwable("There are aliquots in another lot"), examLotValidationResult);
-		}
+    checkForAliquotsOnAnotherLots();
+    if (!examLotValidationResult.isValid()) {
+      throw new ValidationException(new Throwable("There are aliquots in another lot"), examLotValidationResult);
+    }
 
-		checkOriginOfAliquots();
-		if (!examLotValidationResult.isValid()) {
-			throw new ValidationException(
-					new Throwable("There are aliquots different from the center and not exist in lot of transport"),
-					examLotValidationResult);
-		}
-	}
+    checkOriginOfAliquots();
+    if (!examLotValidationResult.isValid()) {
+      throw new ValidationException(
+        new Throwable("There are aliquots different from the center and not exist in lot of transport"),
+        examLotValidationResult);
+    }
+  }
 
-	private void checkIfAliquotsExist() {
-		try {
-			List<WorkAliquot> workAliquotListInDB = examLotDao.getAllAliquotsInDB();
-			examLot.getAliquotList().forEach(workAliquot -> {
-				boolean contains = false;
-				for (WorkAliquot workAliquotInDB : workAliquotListInDB) {
-					if (workAliquotInDB.getCode().equals(workAliquot.getCode())) {
-						contains = true;
-						break;
-					}
-				}
+  private void checkIfAliquotsExist() {
+    List<Aliquot> aliquotsRenewed = new ArrayList<>();
+    examLot.getAliquotList().forEach(AliquotInLot -> {
+      boolean contains = false;
+      try {
+        Aliquot aliquotFound = aliquotDao.find(AliquotInLot.getCode());
+        aliquotsRenewed.add(aliquotFound);
+        contains = true;
+      } catch (DataNotFoundException e) {
+        examLotValidationResult.setValid(false);
+        examLotValidationResult.pushConflict(AliquotInLot.getCode());
+      }
 
-				if (!contains) {
-					examLotValidationResult.setValid(false);
-					examLotValidationResult.pushConflict(workAliquot.getCode());
-				}
-			});
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+      if (!contains) {
+        examLotValidationResult.setValid(false);
+        examLotValidationResult.pushConflict(AliquotInLot.getCode());
+      } else {
+        examLot.setAliquotList(aliquotsRenewed);
+      }
+    });
+  }
 
-	private void checkOfTypesInLot() {
-		for (WorkAliquot workAliquot : examLot.getAliquotList()) {
-			if (!workAliquot.getName().equals(examLot.getAliquotName())) {
-				examLotValidationResult.setValid(false);
-				break;
-			}
-		}
-	}
+  private void checkOfTypesInLot() {
+    for (Aliquot aliquot : examLot.getAliquotList()) {
+      if (!aliquot.getName().equals(examLot.getAliquotName())) {
+        examLotValidationResult.setValid(false);
+        break;
+      }
+    }
+  }
 
-	private void checkForAliquotsOnAnotherLots() {
-		final List<ExamLot> examLotList = examLotDao.find();
+  private void checkForAliquotsOnAnotherLots() {
+    for (Aliquot aliquotInLot : examLot.getAliquotList()) {
+      if (aliquotInLot.getExamLotId() != null) {
+        examLotValidationResult.setValid(false);
+        examLotValidationResult.pushConflict(aliquotInLot.getCode());
+        break;
+      }
+    }
+  }
 
-		examLotList.remove(examLot);
+  private void checkOriginOfAliquots() {
+    for (Aliquot aliquot : examLot.getAliquotList()) {
+      if (!checkIfEqualsCenter(aliquot) && aliquot.getTransportationLotId() == null) {
+        examLotValidationResult.setValid(false);
+      }
+    }
+  }
 
-		for (WorkAliquot workAliquotInLot : examLot.getAliquotList()) {
-			for (ExamLot examLotInDB : examLotList) {
-				for (WorkAliquot workAliquotInDB : examLotInDB.getAliquotList()) {
-					if (workAliquotInDB.getCode().equals(workAliquotInLot.getCode())) {
-						examLotValidationResult.setValid(false);
-						examLotValidationResult.pushConflict(workAliquotInLot.getCode());
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	private void checkOriginOfAliquots() {
-		for (WorkAliquot aliquot : examLot.getAliquotList()) {
-			if (!checkIfEqualsCenter(aliquot)) {
-				if (!checkForAliquotsInLotOfTransport(aliquot)) {
-					examLotValidationResult.setValid(false);
-				}
-			}
-		}
-	}
-
-	private boolean checkForAliquotsInLotOfTransport(WorkAliquot aliquot) {
-		List<TransportationLot> listOfTransportation = transportationLotDao.find();
-
-		Iterator<TransportationLot> iterator = listOfTransportation.iterator();
-		boolean exist = false;
-		while (iterator.hasNext()) {
-			TransportationLot transportationLot = iterator.next();
-			for (WorkAliquot workAliquotInTransport : transportationLot.getAliquotList()) {
-				if (workAliquotInTransport.getCode().equals(aliquot.getCode())) {
-					exist = true;
-					break;
-				}
-			}
-		}
-		return exist;
-	}
-
-	private boolean checkIfEqualsCenter(WorkAliquot aliquot) {
-		if (aliquot.getFieldCenter().getAcronym().equals(examLot.getFieldCenter().getAcronym()))
-			return true;
-		return false;
-	}
+  private boolean checkIfEqualsCenter(Aliquot aliquot) {
+    return aliquot.getFieldCenter().getAcronym().equals(examLot.getFieldCenter().getAcronym());
+  }
 
 }

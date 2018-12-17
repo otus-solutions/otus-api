@@ -1,24 +1,24 @@
 package br.org.otus.laboratory.project.exam.examLot.persistence;
 
-import java.util.List;
-
+import br.org.otus.laboratory.project.exam.examLot.ExamLot;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
-import br.org.otus.laboratory.project.exam.examLot.ExamLot;
+import java.util.List;
 
 public interface ExamLotDao {
 
-  void persist(ExamLot examsLot);
+  ObjectId persist(ExamLot examsLot);
+
+  ExamLot findByCode(String code) throws DataNotFoundException;
 
   ExamLot update(ExamLot examsLot) throws DataNotFoundException;
 
-  List<ExamLot> find();
+  List<ExamLot> find(String centerAcronym);
 
-  void delete(String id) throws DataNotFoundException;
-
-  List<WorkAliquot> getAllAliquotsInDB() throws DataNotFoundException;
+  void delete(ObjectId id) throws DataNotFoundException;
 
   String checkIfThereInExamLot(String aliquotCode);
 
+  ExamLot find(ObjectId examLotId) throws DataNotFoundException;
 }

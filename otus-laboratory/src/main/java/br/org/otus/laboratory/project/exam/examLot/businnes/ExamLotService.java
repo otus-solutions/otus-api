@@ -3,11 +3,12 @@ package br.org.otus.laboratory.project.exam.examLot.businnes;
 import java.util.HashSet;
 import java.util.List;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotAliquotFilterDTO;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.laboratory.project.aliquot.WorkAliquot;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 
 public interface ExamLotService {
@@ -16,11 +17,11 @@ public interface ExamLotService {
 
 	ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException;
 
-	List<ExamLot> list();
+	List<ExamLot> list(String centerAcronym);
 
-	void delete(String id) throws DataNotFoundException;
+	void delete(String code) throws DataNotFoundException;
 
-	List<WorkAliquot> getAliquots() throws DataNotFoundException;
+	HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
 
-    HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
+	Aliquot validateNewAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) throws DataNotFoundException, ValidationException;
 }
