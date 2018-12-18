@@ -251,7 +251,7 @@ public class LaboratoryProgressQueryBuilder {
                 "          }\n" +
                 "        }\n" +
                 "      ],\n" +
-                "      as: \"aliquotswithResults\"\n" +
+                "      as: \"aliquotsWithResults\"\n" +
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
@@ -265,7 +265,7 @@ public class LaboratoryProgressQueryBuilder {
                 "              \"if\": {\n" +
                 "                \"$gte\": [\n" +
                 "                  {\n" +
-                "                    \"$size\": \"$aliquotswithResults\"\n" +
+                "                    \"$size\": \"$aliquotsWithResults\"\n" +
                 "                  },\n" +
                 "                  1\n" +
                 "                ]\n" +
@@ -278,7 +278,7 @@ public class LaboratoryProgressQueryBuilder {
                 "                  {\n" +
                 "                    \"$size\": {\n" +
                 "                      \"$arrayElemAt\": [\n" +
-                "                        \"$aliquotswithResults.aliquots\",\n" +
+                "                        \"$aliquotsWithResults.aliquots\",\n" +
                 "                        0\n" +
                 "                      ]\n" +
                 "                    }\n" +
@@ -295,7 +295,7 @@ public class LaboratoryProgressQueryBuilder {
                 "              \"if\": {\n" +
                 "                \"$gte\": [\n" +
                 "                  {\n" +
-                "                    \"$size\": \"$aliquotswithResults\"\n" +
+                "                    \"$size\": \"$aliquotsWithResults\"\n" +
                 "                  },\n" +
                 "                  1\n" +
                 "                ]\n" +
@@ -303,7 +303,7 @@ public class LaboratoryProgressQueryBuilder {
                 "              \"then\": {\n" +
                 "                \"$size\": {\n" +
                 "                  \"$arrayElemAt\": [\n" +
-                "                    \"$aliquotswithResults.aliquots\",\n" +
+                "                    \"$aliquotsWithResults.aliquots\",\n" +
                 "                    0\n" +
                 "                  ]\n" +
                 "                }\n" +
@@ -412,6 +412,16 @@ public class LaboratoryProgressQueryBuilder {
                 "        }\n" +
                 "      ],\n" +
                 "      as: \"receivedCount\"\n" +
+                "    }\n" +
+                "  }"));
+        pipeline.add(parseQuery("{\n" +
+                "    \"$match\": {\n" +
+                "      \"receivedCount.examsQuantitative\": {\n" +
+                "        \"$exists\": true,\n" +
+                "        \"$not\": {\n" +
+                "          \"$size\": 0.0\n" +
+                "        }\n" +
+                "      }\n" +
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +

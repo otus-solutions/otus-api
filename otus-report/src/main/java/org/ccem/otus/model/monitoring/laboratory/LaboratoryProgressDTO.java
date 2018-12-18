@@ -21,15 +21,15 @@ public class LaboratoryProgressDTO {
     }
     private class AliquotStats {
         private String title;
-        private Integer transported;
-        private Integer prepared;
         private Integer received;
+        private Integer prepared;
+        private Integer transported;
 
     }
     private class PendingResults {
         private String title;
-        private Integer waiting;
         private Integer received;
+        private Integer waiting;
 
 
     }
