@@ -18,7 +18,7 @@ public class LaboratoryProgressQueryBuilderTest {
 
     @Test
     public void getOrphansQuery() {
-        String ORPHANS_QUERY = "[{\"$match\":{\"aliquotValid\":false}},{\"$group\":{\"_id\":{\"examId\":\"$examId\",\"examName\":\"$examName\"}}},{\"$group\":{\"_id\":\"$_id.examName\",\"examIds\":{\"$push\":\"$_id.examId\"},\"count\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"orphanExamsProgress\":{\"$push\":{\"title\":\"$_id\",\"orphans\":\"$count\"}}}},{\"$match\":{\"orphanExamsProgress\":{\"$exists\":true}}}]";
+        String ORPHANS_QUERY = "[{\"$match\":{\"aliquotValid\":false}},{\"$group\":{\"_id\":{\"examId\":\"$examId\",\"examName\":\"$examName\"}}},{\"$group\":{\"_id\":\"$_id.examName\",\"count\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"orphanExamsProgress\":{\"$push\":{\"title\":\"$_id\",\"orphans\":\"$count\"}}}},{\"$match\":{\"orphanExamsProgress\":{\"$exists\":true}}}]";
         assertEquals(ORPHANS_QUERY, builder.toJson(new LaboratoryProgressQueryBuilder().getOrphansQuery()));
     }
 
@@ -30,7 +30,7 @@ public class LaboratoryProgressQueryBuilderTest {
 
     @Test
     public void getPendingResultsQuery() {
-        String PENDING_RESULT_QUERY = "[{\"$match\":{\"fieldCenter.acronym\":\"RS\"}},{\"$group\":{\"_id\":\"$name\",\"aliquotsInDb\":{\"$push\":\"$code\"}}},{\"$lookup\":{\"from\":\"exam_result\",\"let\":{\"aliquotCodes\":\"$aliquotsInDb\"},\"pipeline\":[{\"$match\":{\"$expr\":{\"$and\":[{\"$in\":[\"$aliquotCode\",\"$$aliquotCodes\"]},{\"$eq\":[\"$aliquotValid\",true]}]}}},{\"$group\":{\"_id\":{\"examId\":\"$examId\",\"examName\":\"$examName\",\"aliquotCode\":\"$aliquotCode\"}}},{\"$group\":{\"_id\":\"$_id.aliquotCode\",\"aliquots\":{\"$push\":\"$_id.aliquotCode\"}}},{\"$group\":{\"_id\":{},\"aliquots\":{\"$push\":\"$_id\"}}}],\"as\":\"aliquotsWithResults\"}},{\"$group\":{\"_id\":{},\"pendingResultsByAliquot\":{\"$push\":{\"title\":\"$_id\",\"waiting\":{\"$cond\":{\"if\":{\"$gte\":[{\"$size\":\"$aliquotsWithResults\"},1.0]},\"then\":{\"$subtract\":[{\"$size\":\"$aliquotsInDb\"},{\"$size\":{\"$arrayElemAt\":[\"$aliquotsWithResults.aliquots\",0.0]}}]},\"else\":{\"$size\":\"$aliquotsInDb\"}}},\"received\":{\"$cond\":{\"if\":{\"$gte\":[{\"$size\":\"$aliquotsWithResults\"},1.0]},\"then\":{\"$size\":{\"$arrayElemAt\":[\"$aliquotsWithResults.aliquots\",0.0]}},\"else\":0.0}}}}}}]";
+        String PENDING_RESULT_QUERY = "[{\"$match\":{\"fieldCenter.acronym\":\"RS\"}},{\"$group\":{\"_id\":\"$name\",\"aliquotsInDb\":{\"$push\":\"$code\"}}},{\"$lookup\":{\"from\":\"exam_result\",\"let\":{\"aliquotCodes\":\"$aliquotsInDb\"},\"pipeline\":[{\"$match\":{\"$expr\":{\"$and\":[{\"$in\":[\"$aliquotCode\",\"$$aliquotCodes\"]},{\"$eq\":[\"$aliquotValid\",true]}]}}},{\"$group\":{\"_id\":{},\"aliquots\":{\"$addToSet\":\"$aliquotCode\"}}}],\"as\":\"aliquotsWithResults\"}},{\"$group\":{\"_id\":{},\"pendingResultsByAliquot\":{\"$push\":{\"title\":\"$_id\",\"waiting\":{\"$cond\":{\"if\":{\"$gte\":[{\"$size\":\"$aliquotsWithResults\"},1.0]},\"then\":{\"$subtract\":[{\"$size\":\"$aliquotsInDb\"},{\"$size\":{\"$arrayElemAt\":[\"$aliquotsWithResults.aliquots\",0.0]}}]},\"else\":{\"$size\":\"$aliquotsInDb\"}}},\"received\":{\"$cond\":{\"if\":{\"$gte\":[{\"$size\":\"$aliquotsWithResults\"},1.0]},\"then\":{\"$size\":{\"$arrayElemAt\":[\"$aliquotsWithResults.aliquots\",0.0]}},\"else\":0.0}}}}}}]";
         assertEquals(PENDING_RESULT_QUERY, builder.toJson(new LaboratoryProgressQueryBuilder().getPendingResultsQuery(CENTER)));
     }
 

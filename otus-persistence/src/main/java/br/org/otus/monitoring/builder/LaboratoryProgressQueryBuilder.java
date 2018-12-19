@@ -28,7 +28,6 @@ public class LaboratoryProgressQueryBuilder {
                 "        $group:\n" +
                 "        {\n" +
                 "            _id:\"$_id.examName\",\n" +
-                "            examIds:{$push:\"$_id.examId\"},\n" +
                 "            count:{$sum:1}\n" +
                 "        }\n" +
                 "    }"));
@@ -199,24 +198,24 @@ public class LaboratoryProgressQueryBuilder {
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
-                "    $lookup: {\n" +
-                "      from: \"exam_result\",\n" +
-                "      let: {\n" +
+                "    \"$lookup\": {\n" +
+                "      \"from\": \"exam_result\",\n" +
+                "      \"let\": {\n" +
                 "        \"aliquotCodes\": \"$aliquotsInDb\"\n" +
                 "      },\n" +
-                "      pipeline: [\n" +
+                "      \"pipeline\": [\n" +
                 "        {\n" +
-                "          $match: {\n" +
-                "            $expr: {\n" +
-                "              $and: [\n" +
+                "          \"$match\": {\n" +
+                "            \"$expr\": {\n" +
+                "              \"$and\": [\n" +
                 "                {\n" +
-                "                  $in: [\n" +
+                "                  \"$in\": [\n" +
                 "                    \"$aliquotCode\",\n" +
                 "                    \"$$aliquotCodes\"\n" +
                 "                  ]\n" +
                 "                },\n" +
                 "                {\n" +
-                "                  $eq: [\n" +
+                "                  \"$eq\": [\n" +
                 "                    \"$aliquotValid\",\n" +
                 "                    true\n" +
                 "                  ]\n" +
@@ -226,32 +225,15 @@ public class LaboratoryProgressQueryBuilder {
                 "          }\n" +
                 "        },\n" +
                 "        {\n" +
-                "          $group: {\n" +
-                "            _id: {\n" +
-                "              examId: \"$examId\",\n" +
-                "              examName: \"$examName\",\n" +
-                "              aliquotCode: \"$aliquotCode\"\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          $group: {\n" +
-                "            _id: \"$_id.aliquotCode\",\n" +
-                "            aliquots: {\n" +
-                "              $push: \"$_id.aliquotCode\"\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          $group: {\n" +
-                "            _id: {},\n" +
-                "            aliquots: {\n" +
-                "              $push: \"$_id\"\n" +
+                "          \"$group\": {\n" +
+                "            \"_id\": {},\n" +
+                "            \"aliquots\": {\n" +
+                "              \"$addToSet\": \"$aliquotCode\"\n" +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
                 "      ],\n" +
-                "      as: \"aliquotsWithResults\"\n" +
+                "      \"as\": \"aliquotsWithResults\"\n" +
                 "    }\n" +
                 "  }"));
         pipeline.add(parseQuery("{\n" +
