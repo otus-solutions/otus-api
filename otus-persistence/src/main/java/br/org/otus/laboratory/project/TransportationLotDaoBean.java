@@ -18,7 +18,6 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
@@ -30,10 +29,8 @@ import br.org.otus.laboratory.project.transportation.persistence.TransportationL
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
   private static final String COLLECTION_NAME = "transportation_lot";
-  @Inject
-  private ParticipantLaboratoryDao participantLaboratoryDao;
-  @Inject
-  private ParticipantDao participantDao;
+  private static final int CODE_TRANSPORTATION_LOT = 300000000;
+
   @Inject
   private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
@@ -56,13 +53,23 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
   @Override
   public ObjectId persist(TransportationLot transportationLot) {
-    transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation());
+    transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation(getLastTransportationLotCode()));
     Document parsed =  Document.parse(TransportationLot.serialize(transportationLot));
     parsed.remove("aliquotList");
     parsed.remove("_id");
     super.persist(parsed);
     return (ObjectId)parsed.get("_id");
+  }
 
+
+  public Integer getLastTransportationLotCode(){
+    Integer newLotCode = new Integer(CODE_TRANSPORTATION_LOT);
+    FindIterable lastTransportationLotCode = super.findLast().projection(new Document("code", -1).append("_id", 0));
+    for(Object result: lastTransportationLotCode){
+      Document document = (Document) result;
+      newLotCode = Integer.parseInt(document.get("code").toString());
+    }
+    return newLotCode;
   }
 
   @Override

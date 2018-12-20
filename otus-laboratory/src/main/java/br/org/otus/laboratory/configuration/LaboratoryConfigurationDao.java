@@ -13,7 +13,7 @@ public interface LaboratoryConfigurationDao {
 
 	void update(LaboratoryConfiguration configuration) throws Exception;
 
-	String createNewLotCodeForTransportation();
+	String createNewLotCodeForTransportation(Integer code);
 
-	String createNewLotCodeForExam();
+	String createNewLotCodeForExam(Integer code);
 }

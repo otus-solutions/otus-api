@@ -47,4 +47,8 @@ public abstract class MongoGenericDao<T> {
     return list().first();
   }
 
+  public FindIterable<T> findLast(){
+    return collection.find().sort(new Document("_id", -1)).limit(1);
+  }
+
 }

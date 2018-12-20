@@ -5,6 +5,7 @@ import static com.mongodb.client.model.Filters.exists;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
+import com.mongodb.client.FindIterable;
 import org.bson.Document;
 
 import com.mongodb.client.model.FindOneAndUpdateOptions;
@@ -18,6 +19,9 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
 	private static final String COLLECTION_NAME = "laboratory_configuration";
+	private static final String TRANSPORTATION = "transportation";
+	private static final String EXAM = "exam";
+	private static final Integer DEFAULT_CODE = 300000000;
 
 	public LaboratoryConfigurationDaoBean() {
 		super(COLLECTION_NAME, Document.class);
@@ -62,7 +66,32 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 		}
 	}
 
-	public String createNewLotCodeForTransportation() {
+	public Integer getLastInsertion(String lot){
+		LaboratoryConfiguration laboratoryConfiguration = new LaboratoryConfiguration();
+		FindIterable<Document> output  = collection.find(new Document("objectType", "LaboratoryConfiguration")).projection(new Document("lotConfiguration", 1));
+		for(Object anOutput : output){
+			Document next = (Document) anOutput;
+			laboratoryConfiguration = LaboratoryConfiguration.deserialize(next.toJson());
+		}
+
+		switch (lot){
+			case TRANSPORTATION:
+				return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation();
+			case EXAM:
+				return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam();
+			default:
+				return DEFAULT_CODE;
+		}
+
+	}
+
+	public String createNewLotCodeForTransportation(Integer code) {
+		Integer lastCode = getLastInsertion(TRANSPORTATION);
+
+		if(lastCode < code){
+			collection.updateOne(new Document("objectType", "LaboratoryConfiguration"), new Document("$set", new Document("lotConfiguration.lastInsertionTransportation", code)));
+		}
+
 		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionTransportation"),
 				new Document("$inc", new Document("lotConfiguration.lastInsertionTransportation", 1)),
 				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
@@ -72,7 +101,13 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 		return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation().toString();
 	}
 
-	public String createNewLotCodeForExam() {
+	public String createNewLotCodeForExam(Integer code) {
+		Integer lastCode = getLastInsertion(EXAM);
+
+		if(lastCode < code){
+			collection.updateOne(new Document("objectType", "LaboratoryConfiguration"), new Document("$set", new Document("lotConfiguration.lastInsertionExam", code)));
+		}
+
 		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionExam"),
 				new Document("$inc", new Document("lotConfiguration.lastInsertionExam", 1)),
 				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
