@@ -16,4 +16,8 @@ public interface LaboratoryConfigurationDao {
 	String createNewLotCodeForTransportation(Integer code);
 
 	String createNewLotCodeForExam(Integer code);
+
+	Integer getLastInsertion(String lot);
+
+	void restoreLotConfiguration(String config, Integer code);
 }

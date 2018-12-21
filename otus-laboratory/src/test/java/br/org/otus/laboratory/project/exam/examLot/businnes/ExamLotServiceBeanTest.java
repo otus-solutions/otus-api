@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project.exam.examLot.businnes;
 
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import static org.mockito.Matchers.anyString;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
@@ -30,14 +31,17 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class ExamLotServiceBeanTest {
     private static final String OPERATOR = "test";
     private static final ObjectId OBJECT_ID = new ObjectId();
-    private static final String LOT_CODE = "2131244534";
+    private static final String LOT_CODE = "331244534";
+    private static final String LOT_CODE_INCREMENT = "331244535";
     private static final String ALIQUOT_CODE = "333244534";
+    private static final String EXAM = "exam_lot";
+    private static final Integer LAST_INSERTION_CODE = 300000001;
 
     @InjectMocks
     private ExamLotServiceBean examLotServiceBean = PowerMockito.spy(new ExamLotServiceBean());
 
     @Mock
-    private TransportationLotDao transportationLotDao;
+    private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
     @Mock
     private AliquotDao aliquotDao;
@@ -73,9 +77,20 @@ public class ExamLotServiceBeanTest {
     }
 
     @Test
+    public void create_should_set_code() throws Exception {
+        when(examLotDao.getLastExamLotCode()).thenReturn(Integer.parseInt(LOT_CODE));
+        when(laboratoryConfigurationDao.createNewLotCodeForExam(Integer.parseInt(LOT_CODE))).thenReturn(LOT_CODE_INCREMENT);
+        examLotServiceBean.create(examLot,OPERATOR);
+        Mockito.verify(examLot, Mockito.times(1)).setCode(LOT_CODE_INCREMENT);
+    }
+
+    @Test
     public void create_should_persist_lot() throws Exception {
+        when(examLotDao.getLastExamLotCode()).thenReturn(Integer.parseInt(LOT_CODE));
         examLotServiceBean.create(examLot,OPERATOR);
         Mockito.verify(examLotDao, Mockito.times(1)).persist(examLot);
+        Mockito.verify(examLotDao, Mockito.times(1)).getLastExamLotCode();
+        Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).createNewLotCodeForExam(Integer.parseInt(LOT_CODE));
     }
 
     @Test
@@ -83,10 +98,10 @@ public class ExamLotServiceBeanTest {
         aliquotList.add(aliquot);
         examLot.setAliquotList(aliquotList);
         when(examLotDao.persist(examLot)).thenReturn(OBJECT_ID);
-        ArrayList<String> caodeList = new ArrayList<>();
-        caodeList.add("354005011");
-        caodeList.add("354005012");
-        when(examLot.getAliquotCodeList()).thenReturn(caodeList);
+        ArrayList<String> codeList = new ArrayList<>();
+        codeList.add("354005011");
+        codeList.add("354005012");
+        when(examLot.getAliquotCodeList()).thenReturn(codeList);
         examLotServiceBean.create(examLot,OPERATOR);
         Mockito.verify(aliquotDao, Mockito.times(1)).updateExamLotId(examLot.getAliquotCodeList(),OBJECT_ID);
     }
@@ -102,14 +117,14 @@ public class ExamLotServiceBeanTest {
     @Test
     public void update_should_call_updateExamLotId() throws Exception {
         when(examLot.getCode()).thenReturn(LOT_CODE);
-        ArrayList<String> caodeList = new ArrayList<>();
-        caodeList.add("354005011");
-        when(examLot.getAliquotCodeList()).thenReturn(caodeList);
-        when(examLot.getNewAliquotCodeList(caodeList)).thenReturn(caodeList);
+        ArrayList<String> codeList = new ArrayList<>();
+        codeList.add("354005011");
+        when(examLot.getAliquotCodeList()).thenReturn(codeList);
+        when(examLot.getNewAliquotCodeList(codeList)).thenReturn(codeList);
         when(examLot.getLotId()).thenReturn(OBJECT_ID);
         when(examLotDao.findByCode(LOT_CODE)).thenReturn(examLot);
         examLotServiceBean.update(examLot);
-        Mockito.verify(aliquotDao, Mockito.times(1)).updateExamLotId(caodeList,OBJECT_ID);
+        Mockito.verify(aliquotDao, Mockito.times(1)).updateExamLotId(codeList,OBJECT_ID);
     }
 
     @Test
@@ -122,20 +137,40 @@ public class ExamLotServiceBeanTest {
     public void delete_should_call_updateExamLotId() throws Exception {
         when(examLot.getLotId()).thenReturn(OBJECT_ID);
         when(examLotDao.findByCode(LOT_CODE)).thenReturn(examLot);
-        ArrayList<String> caodeList = new ArrayList<>();
-        when(examLot.getAliquotCodeList()).thenReturn(caodeList);
+        ArrayList<String> codeList = new ArrayList<>();
+        when(examLot.getAliquotCodeList()).thenReturn(codeList);
         examLotServiceBean.delete(LOT_CODE);
-        Mockito.verify(aliquotDao, Mockito.times(1)).updateExamLotId(caodeList,OBJECT_ID);
+        Mockito.verify(aliquotDao, Mockito.times(1)).updateExamLotId(codeList,OBJECT_ID);
     }
 
     @Test
     public void delete_should_call_exam_lot_dao_delete() throws Exception {
+        when(examLotDao.getLastExamLotCode()).thenReturn(LAST_INSERTION_CODE);
+        when(laboratoryConfigurationDao.getLastInsertion(EXAM)).thenReturn(Integer.parseInt(LOT_CODE));
         when(examLot.getLotId()).thenReturn(OBJECT_ID);
         when(examLotDao.findByCode(LOT_CODE)).thenReturn(examLot);
-        ArrayList<String> caodeList = new ArrayList<>();
-        when(examLot.getAliquotCodeList()).thenReturn(caodeList);
+        ArrayList<String> codeList = new ArrayList<>();
+        when(examLot.getAliquotCodeList()).thenReturn(codeList);
         examLotServiceBean.delete(LOT_CODE);
         Mockito.verify(examLotDao, Mockito.times(1)).delete(OBJECT_ID);
+        Mockito.verify(laboratoryConfigurationDao, Mockito.times(0)).restoreLotConfiguration(EXAM, Integer.parseInt(LOT_CODE));
+        Mockito.verify(examLotDao, Mockito.times(1)).getLastExamLotCode();
+
+    }
+
+    @Test
+    public void delete_should_call_exam_lot_dao_delete_with_restore_configuration() throws Exception {
+        when(examLotDao.getLastExamLotCode()).thenReturn(Integer.parseInt(LOT_CODE));
+        when(laboratoryConfigurationDao.getLastInsertion(EXAM)).thenReturn(LAST_INSERTION_CODE);
+        when(examLot.getLotId()).thenReturn(OBJECT_ID);
+        when(examLotDao.findByCode(LOT_CODE)).thenReturn(examLot);
+        ArrayList<String> codeList = new ArrayList<>();
+        when(examLot.getAliquotCodeList()).thenReturn(codeList);
+        examLotServiceBean.delete(LOT_CODE);
+        Mockito.verify(examLotDao, Mockito.times(1)).delete(OBJECT_ID);
+        Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).restoreLotConfiguration(EXAM, Integer.parseInt(LOT_CODE));
+        Mockito.verify(examLotDao, Mockito.times(1)).getLastExamLotCode();
+
     }
 
     @Test

@@ -1,8 +1,6 @@
 package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
-import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import com.mongodb.client.FindIterable;
@@ -13,9 +11,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.persistence.ParticipantDao;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,11 +22,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 
   private static final String COLLECTION_NAME = "exam_lot";
 
-  @Inject
-  private LaboratoryConfigurationDao laboratoryConfigurationDao;
-
   private final static Integer CODE_EXAM_LOT = 300000000;
-
 
   public ExamLotDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -38,7 +30,6 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 
   @Override
   public ObjectId persist(ExamLot examLot) {
-    examLot.setCode(laboratoryConfigurationDao.createNewLotCodeForExam(getLastExamLotCode()));
     Document parsed = Document.parse(ExamLot.serialize(examLot));
     parsed.remove("aliquotList");
     parsed.remove("_id");
@@ -112,13 +103,14 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
       return ExamLot.deserialize(result.toJson());
   }
 
+  @Override
   public Integer getLastExamLotCode(){
-    Integer newLotCode = new Integer(CODE_EXAM_LOT);
+    Integer lastLotCode = new Integer(CODE_EXAM_LOT);
     FindIterable lastExamLotCode = super.findLast().projection(new Document("code", -1).append("_id", 0));
     for(Object result: lastExamLotCode){
       Document document = (Document) result;
-      newLotCode = Integer.parseInt(document.get("code").toString());
+      lastLotCode = Integer.parseInt(document.get("code").toString());
     }
-    return newLotCode;
+    return lastLotCode;
   }
 }

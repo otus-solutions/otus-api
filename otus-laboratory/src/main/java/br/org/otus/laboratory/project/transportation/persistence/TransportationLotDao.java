@@ -26,4 +26,6 @@ public interface TransportationLotDao {
   TransportationLot findByCode(String code) throws DataNotFoundException;
 
   TransportationLot find(ObjectId transportationLotId) throws DataNotFoundException;
+
+  Integer getLastTransportationLotCode();
 }

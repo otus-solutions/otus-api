@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.project.exam.examLot.businnes;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
@@ -21,18 +22,22 @@ import java.util.List;
 @Stateless
 public class ExamLotServiceBean implements ExamLotService {
 
+	private static final String EXAM = "exam_lot";
 	@Inject
 	private ExamLotDao examLotDao;
 	@Inject
 	private TransportationLotDao transportationLotDao;
 	@Inject
 	private AliquotDao aliquotDao;
+	@Inject
+	private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
 
 	@Override
 	public ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException {
 		validateLot(examLot);
 		examLot.setOperator(email);
+		examLot.setCode(laboratoryConfigurationDao.createNewLotCodeForExam(examLotDao.getLastExamLotCode()));
 		ObjectId examLotId = examLotDao.persist(examLot);
 		aliquotDao.updateExamLotId(examLot.getAliquotCodeList(), examLotId);
 		return examLot;
@@ -74,6 +79,12 @@ public class ExamLotServiceBean implements ExamLotService {
 
 	@Override
 	public void delete(String code) throws DataNotFoundException {
+		Integer lastLotCode = examLotDao.getLastExamLotCode();
+
+		if (laboratoryConfigurationDao.getLastInsertion(EXAM) < lastLotCode) {
+			laboratoryConfigurationDao.restoreLotConfiguration(EXAM, lastLotCode);
+		}
+
 		ExamLot examLot = examLotDao.findByCode(code);
 		aliquotDao.updateExamLotId(new ArrayList<>(), examLot.getLotId());
 		examLotDao.delete(examLot.getLotId());
