@@ -80,9 +80,9 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
 
 
     @Override
-    public void delete(String id) throws DataNotFoundException {
-        DeleteResult deleteResult = collection.deleteOne(eq("code", id));
-        if (deleteResult.getDeletedCount() == 0) {
+    public void delete(String code) throws DataNotFoundException {
+        Document updateResult = collection.findOneAndReplace(new Document("code", code), new Document("objectType","DeletedTransportationLot").append("code", code));
+        if (updateResult.size() == 0) {
             throw new DataNotFoundException(new Throwable("Transportation Lot does not exist"));
         }
     }
@@ -120,6 +120,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
         Document document = collection.aggregate(
                 Arrays.asList(
                         Aggregates.match(eq("code", code)),
+                        Aggregates.match(eq("objectType", "TransportationLot")),
                         Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")
                 )).first();
 

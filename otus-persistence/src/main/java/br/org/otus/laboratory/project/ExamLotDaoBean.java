@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.UpdateOptions;
@@ -77,8 +78,8 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 
   @Override
   public void delete(ObjectId id) throws DataNotFoundException {
-    DeleteResult deleteResult = collection.deleteOne(eq("_id", id));
-    if (deleteResult.getDeletedCount() == 0) {
+    Document updateResult = collection.findOneAndReplace(new Document("_id",id), new Document("objectType", "DeletedExamLot").append("code", find(id).getCode()));
+    if (updateResult.size() == 0) {
       throw new DataNotFoundException(new Throwable("Exam Lot does not exist"));
     }
   }
