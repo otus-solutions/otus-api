@@ -87,7 +87,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
 
     @Override
     public List<Aliquot> getExamLotAliquots(ObjectId lotOId) {
-        FindIterable<Document> documents = collection.find(new Document("$or", Arrays.asList(new Document("examLotData.id",lotOId),new Document("examLotId",lotOId)))).sort(new Document("examLotData.position",1));
+        FindIterable<Document> documents = collection.find(new Document("$or", Arrays.asList(new Document("examLotData.id",lotOId),new Document("examLotId",lotOId)))).sort(new Document("examLotData.position",-1));
 
         ArrayList<Aliquot> aliquotList = new ArrayList<>();
         for (Object oneDocument : documents) {
