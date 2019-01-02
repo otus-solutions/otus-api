@@ -31,7 +31,7 @@ public class CsvToJson {
 			String line = scanner.nextLine();
 			String[] fields = line.split(delimiter);
 			jsonObject.addProperty("value", fields[0]);
-			jsonObject.addProperty("extractionValue", fields[1]);
+			jsonObject.addProperty("extractionValue", Integer.parseInt(fields[1]));
 			elements.add(jsonObject);
 		}
 

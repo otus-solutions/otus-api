@@ -1,12 +1,7 @@
 package br.org.otus.configuration.datasource;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.model.DataSource;
@@ -29,6 +24,15 @@ public class DataSourceResource {
 	public String post(@MultipartForm DataSourceFormPOJO form){
 		DataSource dataSource = new DataSource(form.getId(), form.getName(), new CsvToJson(form.getDelimiter(), form.getFile()).execute(form.getDelimiter()));
 		dataSourceFacade.create(dataSource);
+		return new Response().buildSuccess().toJson();
+	}
+
+	@PUT
+	@Secured
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String put(@MultipartForm DataSourceFormPOJO form){
+		DataSource dataSource = new DataSource(form.getId(), form.getName(), new CsvToJson(form.getDelimiter(), form.getFile()).execute(form.getDelimiter()));
+		dataSourceFacade.update(dataSource);
 		return new Response().buildSuccess().toJson();
 	}
 	

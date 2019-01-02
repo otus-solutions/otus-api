@@ -2,11 +2,15 @@ package br.org.otus.datasource;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.json.JsonArray;
 
+import com.mongodb.client.model.UpdateOptions;
+import netscape.javascript.JSObject;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -33,6 +37,34 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
 			throw new AlreadyExistException(new Throwable("This ID {" + dataSource.getId() + "} already exists."));
 		}
 		collection.insertOne(Document.parse(DataSource.serialize(dataSource)));
+	}
+
+	@Override
+	public void update(DataSource dataSource) throws AlreadyExistException {
+		if (!isAvailableID(dataSource.getId())) {
+			DataSource ds = new DataSource(null,null, null);
+			try {
+				ds = findByID(dataSource.getId());
+			} catch (DataNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			if(dataSource.equals(ds))
+			{
+
+			}
+
+
+			collection.updateOne(
+				new Document("id", dataSource.getId()),
+				new Document("$set", new Document("data", Document.parse(DataSource.serialize(dataSource)).get("data"))),
+				new UpdateOptions().upsert(false));
+
+		} else {
+						throw new AlreadyExistException(new Throwable("This ID {" + dataSource.getId() + "} not exists."));
+
+		}
+
 	}
 
 	@Override

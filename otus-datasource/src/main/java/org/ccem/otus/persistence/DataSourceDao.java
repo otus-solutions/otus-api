@@ -11,6 +11,8 @@ public interface DataSourceDao {
 	
 	void persist(DataSource dataSource) throws AlreadyExistException;
 
+	void update(DataSource dataSource) throws AlreadyExistException, DataNotFoundException;
+
 	List<DataSource> find();
 
 	DataSource findByID(String id) throws DataNotFoundException;

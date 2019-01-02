@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import netscape.javascript.JSObject;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.DataSource;
@@ -19,6 +20,16 @@ public class DataSourceServiceBean implements DataSourceService {
 	@Override
 	public void create(DataSource dataSource) throws AlreadyExistException {
 		dataSourceDao.persist(dataSource);
+	}
+
+	@Override
+	public void update(DataSource dataSource) throws AlreadyExistException, DataNotFoundException {
+		DataSource dataSourcePersisted = dataSourceDao.findByID(dataSource.getId());
+
+		if(dataSource.getDataAsSet().containsAll(dataSourcePersisted.getDataAsSet())){
+
+			dataSourceDao.update(dataSource);
+		}
 	}
 
 	@Override

@@ -23,6 +23,14 @@ public class DataSourceFacade {
 		}
 	}
 
+	public void update(DataSource dataSource) {
+		try {
+			dataSourceService.update(dataSource);
+		} catch (Exception e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+	}
+
 	public List<DataSource> getAll() {
 		return dataSourceService.list();
 	}
