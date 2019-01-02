@@ -14,7 +14,7 @@ public interface ExamLotDao {
 
   ExamLot update(ExamLot examsLot) throws DataNotFoundException;
 
-  List<ExamLot> find();
+  List<ExamLot> find(String centerAcronym);
 
   void delete(ObjectId id) throws DataNotFoundException;
 

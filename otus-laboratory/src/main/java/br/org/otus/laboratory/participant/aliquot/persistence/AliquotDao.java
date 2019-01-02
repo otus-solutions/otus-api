@@ -17,10 +17,6 @@ public interface AliquotDao {
 
   void persist(Aliquot aliquot);
 
-  void create (Aliquot aliquot);
-
-  void create (List<Aliquot> aliquotList);
-
   List<Aliquot> list(Long recruitmentNumber);
 
   List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO);
@@ -40,4 +36,6 @@ public interface AliquotDao {
   Aliquot find(String code) throws DataNotFoundException;
 
   AggregateIterable<Document> aggregate(List<Bson> query);
+
+  List<Aliquot> getExamLotAliquots(ObjectId lotOId);
 }

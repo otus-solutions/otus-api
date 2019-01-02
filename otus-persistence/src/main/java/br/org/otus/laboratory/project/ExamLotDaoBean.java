@@ -5,7 +5,7 @@ import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
-import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
@@ -49,7 +49,24 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 
   @Override
   public ExamLot findByCode(String code) throws DataNotFoundException {
-    Document document = collection.aggregate(Arrays.asList(Aggregates.match(new Document("code", code)),Aggregates.lookup("aliquot","_id","examLotId","aliquotList"))).first();
+    Document document = collection.aggregate(Arrays.asList(
+            new Document("$match",new Document("code", code)),
+            new Document("$lookup",
+                    new Document("from","aliquot")
+                            .append("let",new Document("lotId","$_id"))
+                            .append("pipeline",Arrays.asList(
+                                    new Document("$match",
+                                            new Document("$expr",
+                                                    new Document("$or",Arrays.asList(
+                                                            new Document("$eq",Arrays.asList("$examLotId",  "$$lotId"))
+                                                            ,new Document("$eq",Arrays.asList("$examLotData.id", "$$lotId"))
+                                                    )
+                                                    )
+                                            )
+                                    ),new Document("$sort",
+                                            new Document("examLotData.position",1))
+                                    )
+                            ).append("as","aliquotList")))).first();
     if (document != null) {
       return ExamLot.deserialize(document.toJson());
     } else {
@@ -72,10 +89,10 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
   }
 
   @Override
-  public List<ExamLot> find() {
+  public List<ExamLot> find(String centerAcronym) {
     ArrayList<ExamLot> ExamLots = new ArrayList<>();
 
-    AggregateIterable output = collection.aggregate(Arrays.asList(Aggregates.lookup("aliquot","_id","examLotId","aliquotList")));
+    FindIterable<Document> output = collection.find(new Document("fieldCenter.acronym",centerAcronym));
 
     for (Object anOutput : output) {
       Document next = (Document) anOutput;

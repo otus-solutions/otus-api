@@ -9,6 +9,7 @@ import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class ExamLot {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-		builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+		builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
 		builder.serializeNulls();
 
 		return builder;

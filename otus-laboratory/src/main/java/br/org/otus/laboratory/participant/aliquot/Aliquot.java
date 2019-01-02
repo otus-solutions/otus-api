@@ -20,6 +20,7 @@ public class Aliquot extends SimpleAliquot {
   private String tubeCode;
   private ObjectId transportationLotId;
   private ObjectId examLotId;
+  private ExamLotData examLotData;
   private Long recruitmentNumber;
   private Sex sex;
   private FieldCenter fieldCenter;
@@ -31,6 +32,11 @@ public class Aliquot extends SimpleAliquot {
 
   public Aliquot(SimpleAliquot simpleAliquot) {
     super(simpleAliquot.getObjectType(), simpleAliquot.getCode(), simpleAliquot.getName(), simpleAliquot.getContainer(), simpleAliquot.getRole(), simpleAliquot.getAliquotCollectionData());
+  }
+
+  private class ExamLotData {
+    private ObjectId id;
+    private Integer position;
   }
 
   public void setParticipatData(Participant participant) {
@@ -87,7 +93,13 @@ public class Aliquot extends SimpleAliquot {
   }
 
   public ObjectId getExamLotId() {
-    return examLotId;
+    ObjectId lotId = null;
+    if(this.examLotData != null){
+      lotId = this.examLotData.id;
+    } else if(this.examLotId != null){
+      lotId = this.examLotId;
+    }
+    return lotId;
   }
 
   public void setTubeCode(String tubeCode) {
