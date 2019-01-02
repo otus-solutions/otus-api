@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
@@ -86,8 +87,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
 
     @Override
     public List<Aliquot> getExamLotAliquots(ObjectId lotOId) {
-        Document query = new Document("examLotId", lotOId);
-        FindIterable<Document> documents = collection.find(query);
+        FindIterable<Document> documents = collection.find(new Document("$or", Arrays.asList(new Document("examLotData.id",lotOId),new Document("examLotId",lotOId)))).sort(new Document("examLotData.position",-1));
 
         ArrayList<Aliquot> aliquotList = new ArrayList<>();
         for (Object oneDocument : documents) {
@@ -99,15 +99,10 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     }
 
     @Override
-    public void updateExamLotId(ArrayList<String> codeList, ObjectId loId) throws DataNotFoundException {
-      Document query = new Document("code", new Document("$in", codeList));
-
-      collection.updateMany(new Document("examLotId", loId), new Document("$set", new Document("examLotId", null)));
+    public void updateExamLotId(ArrayList<String> codeList, ObjectId lotId) throws DataNotFoundException {
+      collection.updateMany(new Document("$or", Arrays.asList(new Document("examLotData.id",lotId),new Document("examLotId",lotId))), new Document("$set", new Document("examLotId", null).append("examLotData",null)));
       if (!codeList.isEmpty()) {
-          UpdateResult updateManyResult = collection.updateMany(query, new Document("$set", new Document("examLotId", loId)));
-          if (updateManyResult.getMatchedCount() == 0) {
-              throw new DataNotFoundException(new Throwable("aliquots not found"));
-          }
+          codeList.forEach(aliquotCode -> collection.updateOne(new Document("code",aliquotCode), new Document("$set", new Document("examLotData", new Document("id", lotId).append("position",codeList.indexOf(aliquotCode))))));
       }
   }
 
