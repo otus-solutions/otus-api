@@ -21,7 +21,7 @@ public class DataSourceResource {
 	@POST
 	@Secured
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public String post(@MultipartForm DataSourceFormPOJO form){
+	public String create(@MultipartForm DataSourceFormPOJO form){
 		DataSource dataSource = new DataSource(form.getId(), form.getName(), new CsvToJson(form.getDelimiter(), form.getFile()).execute(form.getDelimiter()));
 		dataSourceFacade.create(dataSource);
 		return new Response().buildSuccess().toJson();
@@ -30,7 +30,7 @@ public class DataSourceResource {
 	@PUT
 	@Secured
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public String put(@MultipartForm DataSourceFormPOJO form){
+	public String update(@MultipartForm DataSourceFormPOJO form){
 		DataSource dataSource = new DataSource(form.getId(), form.getName(), new CsvToJson(form.getDelimiter(), form.getFile()).execute(form.getDelimiter()));
 		dataSourceFacade.update(dataSource);
 		return new Response().buildSuccess().toJson();
