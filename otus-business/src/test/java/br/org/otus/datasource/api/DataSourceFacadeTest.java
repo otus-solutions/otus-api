@@ -1,6 +1,8 @@
 package br.org.otus.datasource.api;
 
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.service.DataSourceServiceBean;
 import org.junit.Test;
@@ -24,11 +26,19 @@ public class DataSourceFacadeTest {
 	private DataSource dataSource;
 	
 	@Test(expected = HttpResponseException.class)
-	public void test_exception() throws AlreadyExistException {
+	public void test_exception_create() throws AlreadyExistException {
 		Exception alreadyExistsException = new AlreadyExistException(new Throwable(""));
 		Mockito.doThrow(alreadyExistsException).when(service).create(dataSource);
 		
 		facade.create(dataSource);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void test_exception_update() throws ValidationException, DataNotFoundException {
+		Exception validation = new ValidationException(new Throwable(""));
+		Mockito.doThrow(validation).when(service).update(dataSource);
+
+		facade.update(dataSource);
 	}
 	
 	@Test
@@ -36,5 +46,12 @@ public class DataSourceFacadeTest {
 		facade.create(dataSource);
 		Mockito.verify(service).create(dataSource);
 	}
+
+	@Test
+	public void method_update_should_call_DataSourceServiceBean_create_with_dataSource_argument() throws ValidationException, DataNotFoundException {
+		facade.update(dataSource);
+		Mockito.verify(service).update(dataSource);
+	}
+
 
 }

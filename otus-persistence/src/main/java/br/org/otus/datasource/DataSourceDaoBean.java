@@ -14,6 +14,7 @@ import netscape.javascript.JSObject;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.persistence.DataSourceDao;
 
@@ -40,31 +41,15 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
 	}
 
 	@Override
-	public void update(DataSource dataSource) throws AlreadyExistException {
+	public void update(DataSource dataSource) throws ValidationException {
 		if (!isAvailableID(dataSource.getId())) {
-			DataSource ds = new DataSource(null,null, null);
-			try {
-				ds = findByID(dataSource.getId());
-			} catch (DataNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			if(dataSource.equals(ds))
-			{
-
-			}
-
-
 			collection.updateOne(
-				new Document("id", dataSource.getId()),
-				new Document("$set", new Document("data", Document.parse(DataSource.serialize(dataSource)).get("data"))),
-				new UpdateOptions().upsert(false));
+					new Document("id", dataSource.getId()),
+					new Document("$set", new Document("data", Document.parse(DataSource.serialize(dataSource)).get("data"))));
 
 		} else {
-						throw new AlreadyExistException(new Throwable("This ID {" + dataSource.getId() + "} not exists."));
-
+			throw new ValidationException(new Throwable("This ID {" + dataSource.getId() + "} not exists."));
 		}
-
 	}
 
 	@Override

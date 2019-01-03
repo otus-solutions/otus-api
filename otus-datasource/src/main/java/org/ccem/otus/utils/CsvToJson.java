@@ -19,8 +19,6 @@ public class CsvToJson {
 		}
 		InputStream is = new ByteArrayInputStream(bytes);
 		this.scanner = new Scanner(is, CHARSET_UTF_8);
-		//TODO: não será necessário, avaliar e remover
-//		this.scanner.useDelimiter(delimiter);
 	}
 
 	public JsonArray execute(String delimiter) {
@@ -31,7 +29,7 @@ public class CsvToJson {
 			String line = scanner.nextLine();
 			String[] fields = line.split(delimiter);
 			jsonObject.addProperty("value", fields[0]);
-			jsonObject.addProperty("extractionValue", Integer.parseInt(fields[1]));
+			jsonObject.addProperty("extractionValue", fields[1]);
 			elements.add(jsonObject);
 		}
 

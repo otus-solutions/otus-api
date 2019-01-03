@@ -54,6 +54,14 @@ public class DataSourceResourceTest {
 	}
 
 	@Test
+	public void method_put_should_return_reponse_buildSucess() throws Exception {
+		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
+		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
+		assertEquals(dataSourceResource.put(form), new Response().buildSuccess().toJson());
+		verify(dataSourceFacade).update(dataSource);
+	}
+
+	@Test
 	public void method_getAll_should_return_dataSourceList() {
 		when(dataSourceFacade.getAll()).thenReturn(dataSourceList);
 		assertEquals(new Response().buildSuccess(dataSourceFacade.getAll()).toJson(), dataSourceResource.getAll());

@@ -36,6 +36,10 @@ public class DataSource {
 		return data;
 	}
 
+	public void setData(JsonArray data) {
+		this.data = data;
+	}
+
 	public Set<DataSourceElement> getDataAsSet() {
 		Type type = new TypeToken<Set<DataSourceElement>>() {
 		}.getType();

@@ -6,6 +6,21 @@ public class DataSourceElement {
     private String value;
     private String extractionValue;
 
+    public DataSourceElement(){}
+
+    public DataSourceElement(String value, String extractionValue){
+        this.value = value;
+        this.extractionValue = extractionValue;
+    }
+
+    public String getValue(){
+        return this.value;
+    }
+
+    public String getExtractionValue(){
+        return this.extractionValue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
