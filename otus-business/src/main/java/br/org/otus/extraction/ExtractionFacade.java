@@ -7,6 +7,8 @@ import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.service.DataSourceService;
+import org.ccem.otus.service.DataSourceServiceBean;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -25,12 +27,15 @@ public class ExtractionFacade {
 	@Inject
 	private ExtractionService extractionService;
 
+	@Inject
+	private DataSourceService dataSourceService;
+
 	public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
 		List<SurveyActivity> activities = new ArrayList<>();
 		
 		activities = activityFacade.get(acronym, version);
 		SurveyForm surveyForm = surveyFacade.get(acronym, version);
-		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
+		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities, this.dataSourceService);
 		try {
 			return extractionService.createExtraction(extractor);
 		} catch (DataNotFoundException e) {

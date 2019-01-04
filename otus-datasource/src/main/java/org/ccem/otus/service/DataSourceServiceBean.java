@@ -1,16 +1,5 @@
 package org.ccem.otus.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import netscape.javascript.JSObject;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -18,11 +7,17 @@ import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.DataSourceElement;
 import org.ccem.otus.persistence.DataSourceDao;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.List;
+
 @Stateless
 public class DataSourceServiceBean implements DataSourceService {
 	
 	@Inject
 	private DataSourceDao dataSourceDao;
+
+	public DataSourceServiceBean (){};
 
 	@Override
 	public void create(DataSource dataSource) throws AlreadyExistException {
@@ -43,8 +38,6 @@ public class DataSourceServiceBean implements DataSourceService {
 		}
 	}
 
-
-
 	@Override
 	public List<DataSource> list() {
 		return dataSourceDao.find();
@@ -53,6 +46,11 @@ public class DataSourceServiceBean implements DataSourceService {
 	@Override
 	public DataSource getByID(String id) throws DataNotFoundException {
 		return dataSourceDao.findByID(id);
+	}
+
+	@Override
+	public DataSourceElement getElementDatasource(String value) throws DataNotFoundException {
+		return dataSourceDao.getElementDatasource(value);
 	}
 
 }

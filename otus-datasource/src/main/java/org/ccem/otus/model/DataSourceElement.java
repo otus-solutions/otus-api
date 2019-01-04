@@ -1,5 +1,8 @@
 package org.ccem.otus.model;
 
+import com.google.gson.GsonBuilder;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class DataSourceElement {
@@ -33,5 +36,19 @@ public class DataSourceElement {
     @Override
     public int hashCode() {
         return Objects.hash(value, extractionValue);
+    }
+
+    public static String serialize(DataSourceElement dataSourceElement) {
+        return getGsonBuilder().create().toJson(dataSourceElement);
+    }
+
+    public static DataSourceElement deserialize(String DataSource) {
+        GsonBuilder builder = DataSourceElement.getGsonBuilder();
+        return builder.create().fromJson(DataSource, DataSourceElement.class);
+    }
+
+    private static GsonBuilder getGsonBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+        return builder;
     }
 }

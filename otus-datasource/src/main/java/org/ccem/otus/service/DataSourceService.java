@@ -6,6 +6,7 @@ import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
+import org.ccem.otus.model.DataSourceElement;
 
 public interface DataSourceService {
 	
@@ -16,5 +17,7 @@ public interface DataSourceService {
 	List<DataSource> list();
 
 	DataSource getByID(String id) throws DataNotFoundException;
+
+	DataSourceElement getElementDatasource(String value) throws DataNotFoundException;
 
 }

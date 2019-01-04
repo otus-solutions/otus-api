@@ -6,16 +6,20 @@ import com.google.gson.JsonObject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
+import org.ccem.otus.model.DataSourceElement;
 import org.ccem.otus.persistence.DataSourceDao;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -89,5 +93,21 @@ public class DataSourceServiceBeanTest {
         when(dataSourceDao.findByID(DATASOURCE.getId())).thenReturn(DATASOURCE_PERSISTED);
         dataSourceServiceBean.update(DATASOURCE);
         Mockito.doThrow(new ValidationException()).when(dataSourceServiceBean).update(DATASOURCE);
+    }
+
+    @Test
+    public void should_method_getElementDataSource_return_a_DataSourceElement() throws DataNotFoundException {
+        DataSourceElement dataSourceElement = new DataSourceElement(VALUE_1,EXTRACTION_VALUE_1);
+        when(dataSourceDao.getElementDatasource(VALUE_1)).thenReturn(dataSourceElement);
+        Assert.assertEquals(dataSourceServiceBean.getElementDatasource(VALUE_1), dataSourceElement);
+        verify(dataSourceDao, times(1)).getElementDatasource(VALUE_1);
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void should_method_getElementDataSource_return_a_DataNotFoundException() throws DataNotFoundException {
+        when(dataSourceDao.getElementDatasource(VALUE_1)).thenThrow(DataNotFoundException.class);
+        dataSourceServiceBean.getElementDatasource(VALUE_1);
+        verify(dataSourceDao, times(1)).getElementDatasource(VALUE_1);
+        Mockito.doThrow(new DataNotFoundException()).when(dataSourceServiceBean).getElementDatasource(VALUE_1);
     }
 }

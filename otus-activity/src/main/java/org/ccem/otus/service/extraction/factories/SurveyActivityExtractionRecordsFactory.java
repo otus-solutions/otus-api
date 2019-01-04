@@ -1,10 +1,5 @@
 package org.ccem.otus.service.extraction.factories;
 
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.ExtractionFill;
@@ -12,6 +7,10 @@ import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
+import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.service.ActivityServiceBean;
+import org.ccem.otus.service.DataSourceService;
+import org.ccem.otus.service.DataSourceServiceBean;
 import org.ccem.otus.service.extraction.enums.ExtractionVariables;
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -21,17 +20,30 @@ import org.ccem.otus.survey.template.item.questions.metadata.MetadataOption;
 import org.ccem.otus.survey.template.item.questions.selectable.SingleSelectionQuestion;
 import org.ccem.otus.survey.template.item.questions.selectable.options.RadioOption;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+
 public class SurveyActivityExtractionRecordsFactory {
+
+
+  private DataSourceService dataSourceService;
 
   private LinkedHashMap<String, Object> surveyInformation;
   private SurveyForm surveyForm;
 
-  public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet<String> headers) {
+
+
+  public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet<String> headers, DataSourceService dataSourceService) {
     this.surveyInformation = new LinkedHashMap<>();
     this.surveyForm = surveyForm;
     for (Object header : headers) {
       this.surveyInformation.put(header.toString(), "");
     }
+    this.dataSourceService = dataSourceService;
   }
 
   public LinkedHashMap<String, Object> getSurveyInformation() {
@@ -117,6 +129,11 @@ public class SurveyActivityExtractionRecordsFactory {
           this.surveyInformation.replace(customIDMap.get(key), getSingleSelectionExtractionValue(surveyItem, pair.getValue()));
           break;
         }
+        case "AutocompleteQuestion": {
+          if (!pair.getValue().equals(null) || !pair.getValue().equals("")){
+            this.surveyInformation.replace(customIDMap.get(key), getAutoCompleteExtractionValue(pair.getValue().toString()));
+          }
+        }
         //TODO CheckboxQuestion Option ID FIX
         case "CheckboxQuestion":
         case "GridTextQuestion":
@@ -150,6 +167,10 @@ public class SurveyActivityExtractionRecordsFactory {
     int intValue = Integer.parseInt(answerValue.toString());
     RadioOption radioOption = ((SingleSelectionQuestion) surveyItem).options.stream().filter(option -> option.value.equals(intValue)).findFirst().orElseThrow(RuntimeException::new);
     return radioOption.extractionValue;
+  }
+
+  private String getAutoCompleteExtractionValue(String value) throws DataNotFoundException {
+    return this.dataSourceService.getElementDatasource(value).getExtractionValue();
   }
 
 }
