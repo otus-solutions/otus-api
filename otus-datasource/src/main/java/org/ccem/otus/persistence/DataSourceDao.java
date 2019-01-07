@@ -19,6 +19,6 @@ public interface DataSourceDao {
 
 	DataSource findByID(String id) throws DataNotFoundException;
 
-	public DataSourceElement getElementDatasource(String value) throws DataNotFoundException;
+	public DataSourceElement getElementDataSource(String value);
 
 }

@@ -6,11 +6,10 @@ import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecord
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.item.SurveyItem;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 
-public class AutocompleteQuestionPreProcessor implements PreProcessingActivity {
+public class AutocompleteQuestionPreProcessor implements ActivityPreProcessor {
 
     @Inject
     private DataSourceService dataSourceService;
@@ -23,7 +22,7 @@ public class AutocompleteQuestionPreProcessor implements PreProcessingActivity {
             if(iterator.objectType.equals(QUESTION)){
                 String value = result.getSurveyInformation().get(iterator.customID).toString();
                 if (!value.equals(null) || !value.equals("")){
-                    String extractionValue = dataSourceService.getElementDatasource(value).getExtractionValue();
+                    String extractionValue = dataSourceService.getElementDataSource(value).getExtractionValue();
                     result.getSurveyInformation().replace(iterator.customID, extractionValue);
                 }
             }

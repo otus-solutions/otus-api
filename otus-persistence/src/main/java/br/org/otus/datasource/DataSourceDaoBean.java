@@ -86,25 +86,19 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
 
 
 	@Override
-	public DataSourceElement getElementDatasource(String value) throws DataNotFoundException{
+	public DataSourceElement getElementDataSource(String value) {
 		ArrayList<Document> query = new ArrayList<>();
 		Document project = new Document("$project", new Document("_id",0).append("data",1));
 		Document unwind = new Document("$unwind", "$data");
 		Document match = new Document("$match", new Document("data.value", value));
-		Document group = new Document("$group", new Document("_id", "$data.extractionValue").append("data", new Document("$first", "$data")));
 		Document elementProject = new Document("$project", new Document("_id",0).append("value", "$data.value").append("extractionValue", "$data.extractionValue"));
 		query.add(project);
 		query.add(unwind);
 		query.add(match);
-		query.add(group);
 		query.add(elementProject);
 
-		AggregateIterable<?> output = collection.aggregate(query);
-		DataSourceElement result = new DataSourceElement();
-		for (Object anOutput : output) {
-			Document next = (Document) anOutput;
-			result = DataSourceElement.deserialize(new JSONObject(next).toString());
-		}
+		Document output = collection.aggregate(query).first();
+		DataSourceElement result = DataSourceElement.deserialize(new JSONObject(output).toString());
 
 		return result;
 	}

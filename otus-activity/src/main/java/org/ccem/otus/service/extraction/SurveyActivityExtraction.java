@@ -5,7 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionHeadersFactory;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecordsFactory;
-import org.ccem.otus.service.extraction.preprocessing.PreProcessingActivity;
+import org.ccem.otus.service.extraction.preprocessing.ActivityPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
@@ -19,9 +19,7 @@ public class SurveyActivityExtraction implements Extractable {
 	private SurveyActivityExtractionHeadersFactory headersFactory;
 	private SurveyActivityExtractionRecordsFactory recordsFactory;
 
-	private List<PreProcessingActivity> processors = new ArrayList<>();
-
-
+	private List<ActivityPreProcessor> processors = new ArrayList<>();
 
 	public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities) {
 		this.surveyActivities = surveyActivities;
@@ -58,8 +56,8 @@ public class SurveyActivityExtraction implements Extractable {
 		return values;
 	}
 
-	public void addPreProcessor(PreProcessingActivity preProcessingActivity){
-		this.processors.add(preProcessingActivity);
+	public void addPreProcessor(ActivityPreProcessor activityPreProcessor){
+		this.processors.add(activityPreProcessor);
 	}
 
 

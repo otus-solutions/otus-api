@@ -49,8 +49,8 @@ public class DataSourceServiceBean implements DataSourceService {
 	}
 
 	@Override
-	public DataSourceElement getElementDatasource(String value) throws DataNotFoundException {
-		return dataSourceDao.getElementDatasource(value);
+	public DataSourceElement getElementDataSource(String value) {
+		return dataSourceDao.getElementDataSource(value);
 	}
 
 }

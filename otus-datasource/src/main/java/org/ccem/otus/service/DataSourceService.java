@@ -18,6 +18,6 @@ public interface DataSourceService {
 
 	DataSource getByID(String id) throws DataNotFoundException;
 
-	DataSourceElement getElementDatasource(String value) throws DataNotFoundException;
+	DataSourceElement getElementDataSource(String value) throws DataNotFoundException;
 
 }

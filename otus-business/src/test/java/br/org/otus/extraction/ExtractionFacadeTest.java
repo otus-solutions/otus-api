@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
+import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 import org.junit.Before;
@@ -43,6 +44,9 @@ public class ExtractionFacadeTest {
 	
 	@Mock
 	SurveyActivityExtraction extractor;
+
+	@Mock
+	private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
 	
 	
 	SurveyForm surveyForm = new SurveyForm(surveyTemplate, userEmail);
@@ -66,6 +70,7 @@ public class ExtractionFacadeTest {
 		extractionFacade.createActivityExtraction(acronym, version);
 		Mockito.verify(activityFacade).get(acronym, version);
 		Mockito.verify(surveyFacade).get(acronym, version);
+		Mockito.verify(extractor, Mockito.times(1 )).addPreProcessor(autocompleteQuestionPreProcessor);
 		Mockito.verify(extractionService).createExtraction(extractor);
 	}
 

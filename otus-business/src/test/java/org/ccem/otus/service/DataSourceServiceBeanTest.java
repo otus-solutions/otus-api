@@ -1,6 +1,5 @@
 package org.ccem.otus.service;
 
-import br.org.otus.response.info.Validation;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -15,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.mockito.Mockito.times;
@@ -98,16 +96,16 @@ public class DataSourceServiceBeanTest {
     @Test
     public void should_method_getElementDataSource_return_a_DataSourceElement() throws DataNotFoundException {
         DataSourceElement dataSourceElement = new DataSourceElement(VALUE_1,EXTRACTION_VALUE_1);
-        when(dataSourceDao.getElementDatasource(VALUE_1)).thenReturn(dataSourceElement);
-        Assert.assertEquals(dataSourceServiceBean.getElementDatasource(VALUE_1), dataSourceElement);
-        verify(dataSourceDao, times(1)).getElementDatasource(VALUE_1);
+        when(dataSourceDao.getElementDataSource(VALUE_1)).thenReturn(dataSourceElement);
+        Assert.assertEquals(dataSourceServiceBean.getElementDataSource(VALUE_1), dataSourceElement);
+        verify(dataSourceDao, times(1)).getElementDataSource(VALUE_1);
     }
 
     @Test(expected = DataNotFoundException.class)
     public void should_method_getElementDataSource_return_a_DataNotFoundException() throws DataNotFoundException {
-        when(dataSourceDao.getElementDatasource(VALUE_1)).thenThrow(DataNotFoundException.class);
-        dataSourceServiceBean.getElementDatasource(VALUE_1);
-        verify(dataSourceDao, times(1)).getElementDatasource(VALUE_1);
-        Mockito.doThrow(new DataNotFoundException()).when(dataSourceServiceBean).getElementDatasource(VALUE_1);
+        when(dataSourceDao.getElementDataSource(VALUE_1)).thenThrow(DataNotFoundException.class);
+        dataSourceServiceBean.getElementDataSource(VALUE_1);
+        verify(dataSourceDao, times(1)).getElementDataSource(VALUE_1);
+        Mockito.doThrow(new DataNotFoundException()).when(dataSourceServiceBean).getElementDataSource(VALUE_1);
     }
 }
