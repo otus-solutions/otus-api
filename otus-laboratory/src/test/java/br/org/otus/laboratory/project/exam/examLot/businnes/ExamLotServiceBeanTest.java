@@ -99,8 +99,8 @@ public class ExamLotServiceBeanTest {
         examLot.setAliquotList(aliquotList);
         when(examLotDao.persist(examLot)).thenReturn(OBJECT_ID);
         ArrayList<String> codeList = new ArrayList<>();
-        codeList.add("354005011");
-        codeList.add("354005012");
+        codeList.add(LOT_CODE);
+        codeList.add(LOT_CODE_INCREMENT);
         when(examLot.getAliquotCodeList()).thenReturn(codeList);
         examLotServiceBean.create(examLot,OPERATOR);
         Mockito.verify(aliquotDao, Mockito.times(1)).updateExamLotId(examLot.getAliquotCodeList(),OBJECT_ID);
@@ -118,7 +118,7 @@ public class ExamLotServiceBeanTest {
     public void update_should_call_updateExamLotId() throws Exception {
         when(examLot.getCode()).thenReturn(LOT_CODE);
         ArrayList<String> codeList = new ArrayList<>();
-        codeList.add("354005011");
+        codeList.add(LOT_CODE);
         when(examLot.getAliquotCodeList()).thenReturn(codeList);
         when(examLot.getNewAliquotCodeList(codeList)).thenReturn(codeList);
         when(examLot.getLotId()).thenReturn(OBJECT_ID);
