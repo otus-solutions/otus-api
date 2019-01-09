@@ -7,12 +7,36 @@ import java.util.ArrayList;
 public class LaboratoryProgressDTO {
 
     ArrayList<OrphanExam> orphanExamsProgress;
-    ArrayList<AliquotStats> quantitativeByTypeOfAliquots;
-    ArrayList<PendingResults> pendingResultsByAliquot;
+    private ArrayList<AliquotStats> quantitativeByTypeOfAliquots;
+    private ArrayList<PendingResults> pendingResultsByAliquot;
     ArrayList<StorageData> storageByAliquot;
     ArrayList<ExamData> examsQuantitative;
     ArrayList<PendingAliquotCsv> pendingAliquotsCsvData;
     ArrayList<OrphanExamCsv> orphanExamsCsvData;
+
+    public void concatReceivedToPendingResults(LaboratoryProgressDTO received){
+        for (PendingResults pendingResult : this.pendingResultsByAliquot) {
+            Integer examsReceived = 0;
+            for(PendingResults receivedPendingResults: received.pendingResultsByAliquot){
+                if(receivedPendingResults.title.equals(pendingResult.title)){
+                    examsReceived = receivedPendingResults.received;
+                }
+            }
+            pendingResult.received = examsReceived;
+        }
+    }
+
+    public void concatReceivedToAliquotStats(LaboratoryProgressDTO received){
+        for (AliquotStats aliquotStats : this.quantitativeByTypeOfAliquots) {
+            Integer examsReceived = 0;
+            for(AliquotStats receivedAliquotStats: received.quantitativeByTypeOfAliquots){
+                if(receivedAliquotStats.title.equals(aliquotStats.title)){
+                    examsReceived = receivedAliquotStats.received;
+                }
+            }
+            aliquotStats.received = examsReceived;
+        }
+    }
 
     private class OrphanExam {
         private String title;
@@ -24,19 +48,15 @@ public class LaboratoryProgressDTO {
         private Integer received;
         private Integer prepared;
         private Integer transported;
-
     }
     private class PendingResults {
         private String title;
         private Integer received;
         private Integer waiting;
-
-
     }
     private class StorageData {
         private String title;
         private Integer storage;
-
     }
     private class ExamData {
         private String title;
