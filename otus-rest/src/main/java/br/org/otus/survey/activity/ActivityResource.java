@@ -78,6 +78,16 @@ public class ActivityResource {
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
 
+  @PUT
+  @Secured
+  @Path("/update-checker-activity")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateCheckerActivity(String checkerUpdated) {
+    boolean updateCheckerActivity = activityFacade.updateCheckerActivity(checkerUpdated);
+    return new Response().buildSuccess(updateCheckerActivity).toJson();
+  }
+
   private void isValidRecruitmentNumber(long rn) {
     participantFacade.getByRecruitmentNumber(rn);
   }

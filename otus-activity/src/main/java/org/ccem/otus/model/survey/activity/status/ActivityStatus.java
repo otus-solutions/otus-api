@@ -1,6 +1,12 @@
 package org.ccem.otus.model.survey.activity.status;
 
+import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.User;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.time.LocalDateTime;
 
@@ -26,5 +32,20 @@ public class ActivityStatus {
 	public User getUser() {
 		if (user != null) return user;
 		throw new UserNotFoundException();
+	}
+
+	public static String serialize(ActivityStatus activityStatus) {
+		return ActivityStatus.getGsonBuilder().create().toJson(activityStatus);
+	}
+
+	public static ActivityStatus deserialize(String activityStatusJson) {
+		ActivityStatus activityStatus = ActivityStatus.getGsonBuilder().create().fromJson(activityStatusJson, ActivityStatus.class);
+		return activityStatus;
+	}
+
+	public static GsonBuilder getGsonBuilder() {
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+		return builder;
 	}
 }
