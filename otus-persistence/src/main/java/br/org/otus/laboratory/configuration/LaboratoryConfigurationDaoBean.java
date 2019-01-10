@@ -5,7 +5,9 @@ import static com.mongodb.client.model.Filters.exists;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
 
 import com.mongodb.client.model.FindOneAndUpdateOptions;
@@ -15,6 +17,8 @@ import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import java.util.Arrays;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -68,13 +72,15 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
     @Override
     public Integer getLastInsertion(String lot) {
-        LaboratoryConfiguration laboratoryConfiguration = new LaboratoryConfiguration();
-        FindIterable<Document> output = collection.find(new Document("objectType", "LaboratoryConfiguration")).projection(new Document("lotConfiguration", 1));
-        for (Object anOutput : output) {
-            Document next = (Document) anOutput;
-            laboratoryConfiguration = LaboratoryConfiguration.deserialize(next.toJson());
-        }
+        Document output = collection.aggregate(Arrays.asList(
+                Aggregates.match(new Document("objectType", "LaboratoryConfiguration")),
+                Aggregates.project(new Document("lotConfiguration.lastInsertionTransportation",
+                        new Document("$ifNull", Arrays.asList("$lotConfiguration.lastInsertionTransportation", 0)))
+                        .append("lotConfiguration.lastInsertionExam",
+                                new Document("$ifNull", Arrays.asList("$lotConfiguration.lastInsertionExam", 0)))))).first();
 
+        LaboratoryConfiguration laboratoryConfiguration;
+        laboratoryConfiguration = LaboratoryConfiguration.deserialize(output.toJson());
         switch (lot) {
             case TRANSPORTATION:
                 return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation();
