@@ -83,7 +83,8 @@ public class ActivityResource {
   @Path("/update-checker-activity")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String updateCheckerActivity(String checkerUpdated) {
+  public String updateCheckerActivity(@PathParam("rn") long rn, String checkerUpdated) {
+    isValidRecruitmentNumber(rn);
     boolean updateCheckerActivity = activityFacade.updateCheckerActivity(checkerUpdated);
     return new Response().buildSuccess(updateCheckerActivity).toJson();
   }

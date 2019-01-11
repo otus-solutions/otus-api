@@ -1,12 +1,8 @@
 package org.ccem.otus.model.survey.activity.status;
 
 import com.google.gson.GsonBuilder;
-import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.User;
-import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
-import org.ccem.otus.survey.template.utils.date.ImmutableDate;
-import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.time.LocalDateTime;
 

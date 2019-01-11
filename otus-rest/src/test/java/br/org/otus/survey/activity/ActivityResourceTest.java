@@ -120,8 +120,8 @@ public class ActivityResourceTest {
   }
 
   @Test
-  public void updateCheckerActivityMethod_should_return_responseBolleanData() {
+  public void updateCheckerActivityMethod_should_return_responseBooleanData() {
     when(activityFacade.updateCheckerActivity(checkerUpdated)).thenReturn(Boolean.TRUE);
-    assertEquals(ACTIVITY_EXPECTED_BOOLEAN, activityResource.updateCheckerActivity(checkerUpdated));
+    assertEquals(ACTIVITY_EXPECTED_BOOLEAN, activityResource.updateCheckerActivity(RECRUIMENT_NUMBER, checkerUpdated));
   }
 }
