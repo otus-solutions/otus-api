@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>otus-exam-uploader</artifactId>
   <packaging>jar</packaging>
@@ -11,62 +12,60 @@
   </parent>
 
   <dependencies>
-    <!--
-            -
-            - External Dependencies
-            -
-        !-->
-        <dependency>
-          <groupId>com.google.code.gson</groupId>
-          <artifactId>gson</artifactId>
-          <version>${google.gson.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.mongodb</groupId>
-          <artifactId>mongodb-driver</artifactId>
-          <version>${mongodb.driver.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <!--
-            -
-            - Dependency between modules
-            -
-        !-->
-        <dependency>
-          <groupId>org.ccem.otus</groupId>
-          <artifactId>survey-model</artifactId>
-          <version>${survey.model.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.ccem.otus</groupId>
-          <artifactId>otus-participant</artifactId>
-          <version>${project.parent.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.ccem.otus</groupId>
-          <artifactId>otus-center</artifactId>
-          <version>${project.parent.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.ccem.otus</groupId>
-          <artifactId>otus-activity</artifactId>
-          <version>${project.parent.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.ccem.otus</groupId>
-          <artifactId>otus-commons</artifactId>
-          <version>${project.parent.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.ccem.otus</groupId>
-          <artifactId>otus-laboratory</artifactId>
-          <version>${project.parent.version}</version>
-        </dependency>
-      </dependencies>
-    </project>
+    <!-- - - External Dependencies - ! -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${google.gson.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver</artifactId>
+      <version>${mongodb.driver.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- - - Dependency between modules - ! -->
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>survey-model</artifactId>
+      <version>${survey.model.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-participant</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-center</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-activity</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-commons</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-laboratory</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-extraction</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
