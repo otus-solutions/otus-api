@@ -30,10 +30,13 @@ public class LaboratoryConfigurationServiceBeanTest {
 	private LaboratoryConfigurationServiceBean laboratoryConfigurationServiceBean;
 
 	@Mock
-	private LaboratoryConfigurationDao laboratorioConfigurationDao;
+	private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
 	@Mock
 	private LaboratoryConfiguration laboratoryConfiguration;
+
+	@Mock
+	private CodeConfiguration codeConfiguration;
 
 	@Mock
 	private TubeSeed seed;
@@ -42,7 +45,7 @@ public class LaboratoryConfigurationServiceBeanTest {
 
 	@Before
 	public void setup() throws Exception {
-		PowerMockito.when(laboratorioConfigurationDao.find()).thenReturn(laboratoryConfiguration);
+		PowerMockito.when(laboratoryConfigurationDao.find()).thenReturn(laboratoryConfiguration);
 	}
 
 	@Test
@@ -119,12 +122,13 @@ public class LaboratoryConfigurationServiceBeanTest {
 
 	@Test
 	public void method_generateCodes_should_use_correct_starting_point() {
-//		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
+		Mockito.when(laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount())).thenReturn(startingPoint);
+		Mockito.when(laboratoryConfiguration.getCodeConfiguration()).thenReturn(codeConfiguration);
 
 		laboratoryConfigurationServiceBean.generateCodes(seed);
 
-//		Mockito.verify(laboratoryConfiguration).allocNextCodeList(seed);
-		Mockito.verify(laboratoryConfiguration).generateNewCodeList(seed, startingPoint);
+		Mockito.verify(laboratoryConfigurationDao).updateLastTubeInsertion(seed.getTubeCount());
+		Mockito.verify(laboratoryConfiguration).generateNewCodeList(seed, ++startingPoint);
 	}
 
 	@Test
@@ -133,8 +137,9 @@ public class LaboratoryConfigurationServiceBeanTest {
 		codes.add("33100031");
 		codes.add("33100032");
 
-//		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
-		Mockito.when(laboratoryConfiguration.generateNewCodeList(seed, startingPoint)).thenReturn(codes);
+		Mockito.when(laboratoryConfiguration.getCodeConfiguration()).thenReturn(codeConfiguration);
+		Mockito.when(laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount())).thenReturn(startingPoint);
+		Mockito.when(laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint)).thenReturn(codes);
 
 		List<String> expectedCodes = new ArrayList<>();
 		expectedCodes.add("33100031");

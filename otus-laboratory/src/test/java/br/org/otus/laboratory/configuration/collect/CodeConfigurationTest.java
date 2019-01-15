@@ -29,15 +29,4 @@ public class CodeConfigurationTest {
 		assertEquals(expected, codeDefinitions.getLastInsertion());
 	}
 
-	@Test
-	public void should_increments_startingPoint_and_lastInsertion() {
-		Integer expectedStartingPoint = codeDefinitions.getLastInsertion();
-		Integer alloc = 3;
-		++expectedStartingPoint;
-
-//		Integer startingPoint = codeDefinitions.allocCodeAndGetStartingPoint(alloc);
-//		assertEquals(expectedStartingPoint, startingPoint);
-	}
-
-
 }
