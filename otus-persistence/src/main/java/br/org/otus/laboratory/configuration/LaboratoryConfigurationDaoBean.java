@@ -3,9 +3,8 @@ package br.org.otus.laboratory.configuration;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
 
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
@@ -13,73 +12,77 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
-	private static final String COLLECTION_NAME = "laboratory_configuration";
+  private static final String COLLECTION_NAME = "laboratory_configuration";
 
-	public LaboratoryConfigurationDaoBean() {
-		super(COLLECTION_NAME, Document.class);
-	}
+  public LaboratoryConfigurationDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
-	@Override
-	public LaboratoryConfiguration find() {
-		Document query = new Document("objectType","LaboratoryConfiguration");
+  @Override
+  public LaboratoryConfiguration find() {
+    Document query = new Document("objectType", "LaboratoryConfiguration");
 
-		Document first = collection.find(query).first();
+    Document first = collection.find(query).first();
 
-		return LaboratoryConfiguration.deserialize(first.toJson());
-	}
+    return LaboratoryConfiguration.deserialize(first.toJson());
+  }
 
-	@Override
-	public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
-		Document query = new Document("objectType","AliquotExamCorrelation");
+  @Override
+  public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
+    Document query = new Document("objectType", "AliquotExamCorrelation");
 
-		Document first = collection.find(query).first();
+    Document first = collection.find(query).first();
 
-		if (first == null) {
-			throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
-		}
+    if (first == null) {
+      throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
+    }
 
-		return AliquotExamCorrelation.deserialize(first.toJson());
-	}
+    return AliquotExamCorrelation.deserialize(first.toJson());
+  }
 
-	public void persist(LaboratoryConfiguration laboratoryConfiguration) {
-		super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));
-	}
+  public void persist(LaboratoryConfiguration laboratoryConfiguration) {
+    super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));
+  }
 
-	@Override
-	public void update(LaboratoryConfiguration configuration) throws Exception {
-		Document parsed = Document.parse(LaboratoryConfiguration.serialize(configuration));
-		parsed.remove("_id");
+  @Override
+  public void update(LaboratoryConfiguration configuration) throws Exception {
+    Document parsed = Document.parse(LaboratoryConfiguration.serialize(configuration));
+    parsed.remove("_id");
 
-		UpdateResult updatedData = collection.updateOne(eq("_id", configuration.getId()), new Document("$set", parsed),
-				new UpdateOptions().upsert(false));
+    UpdateResult updatedData = collection.updateOne(eq("_id", configuration.getId()), new Document("$set", parsed), new UpdateOptions().upsert(false));
 
-		if (updatedData.getModifiedCount() == 0) {
-			throw new Exception("Update was not executed.");
-		}
-	}
+    if (updatedData.getModifiedCount() == 0) {
+      throw new Exception("Update was not executed.");
+    }
+  }
 
-	public String createNewLotCodeForTransportation() {
-		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionTransportation"),
-				new Document("$inc", new Document("lotConfiguration.lastInsertionTransportation", 1)),
-				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+  public String createNewLotCodeForTransportation() {
+    Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionTransportation"), new Document("$inc", new Document("lotConfiguration.lastInsertionTransportation", 1)),
+        new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
 
-		LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
+    LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
 
-		return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation().toString();
-	}
+    return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation().toString();
+  }
 
-	public String createNewLotCodeForExam() {
-		Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionExam"),
-				new Document("$inc", new Document("lotConfiguration.lastInsertionExam", 1)),
-				new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+  public String createNewLotCodeForExam() {
+    Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionExam"), new Document("$inc", new Document("lotConfiguration.lastInsertionExam", 1)),
+        new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
 
-		LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
+    LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
 
-		return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam().toString();
-	}
+    return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam().toString();
+  }
+
+  @Override
+  public Integer updateLastTubeInsertion(int quantity) {
+    Document updateLotCode = collection.findOneAndUpdate(exists("codeConfiguration.lastInsertion"), new Document("$inc", new Document("codeConfiguration.lastInsertion", quantity)),
+        new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE));
+    return ((Document) updateLotCode.get("codeConfiguration")).getInteger("lastInsertion");
+  }
 
 }

@@ -119,11 +119,11 @@ public class LaboratoryConfigurationServiceBeanTest {
 
 	@Test
 	public void method_generateCodes_should_use_correct_starting_point() {
-		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
+//		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
 
 		laboratoryConfigurationServiceBean.generateCodes(seed);
 
-		Mockito.verify(laboratoryConfiguration).allocNextCodeList(seed);
+//		Mockito.verify(laboratoryConfiguration).allocNextCodeList(seed);
 		Mockito.verify(laboratoryConfiguration).generateNewCodeList(seed, startingPoint);
 	}
 
@@ -133,7 +133,7 @@ public class LaboratoryConfigurationServiceBeanTest {
 		codes.add("33100031");
 		codes.add("33100032");
 
-		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
+//		Mockito.when(laboratoryConfiguration.allocNextCodeList(seed)).thenReturn(startingPoint);
 		Mockito.when(laboratoryConfiguration.generateNewCodeList(seed, startingPoint)).thenReturn(codes);
 
 		List<String> expectedCodes = new ArrayList<>();

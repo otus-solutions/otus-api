@@ -5,15 +5,17 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface LaboratoryConfigurationDao {
 
-	LaboratoryConfiguration find();
+  LaboratoryConfiguration find();
 
-	AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
+  AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
-	void persist(LaboratoryConfiguration laboratoryConfig);
+  void persist(LaboratoryConfiguration laboratoryConfig);
 
-	void update(LaboratoryConfiguration configuration) throws Exception;
+  void update(LaboratoryConfiguration configuration) throws Exception;
 
-	String createNewLotCodeForTransportation();
+  String createNewLotCodeForTransportation();
 
-	String createNewLotCodeForExam();
+  String createNewLotCodeForExam();
+
+  Integer updateLastTubeInsertion(int newTubesQuantities);
 }
