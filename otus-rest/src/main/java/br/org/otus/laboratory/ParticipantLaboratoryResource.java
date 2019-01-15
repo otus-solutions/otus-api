@@ -28,6 +28,7 @@ public class ParticipantLaboratoryResource {
   private ParticipantLaboratoryFacade participantLaboratoryFacade;
 
   @POST
+  @Secured
   @Path("/initialize/{rn}")
   @Consumes(MediaType.APPLICATION_JSON)
   public synchronized String initialize(@PathParam("rn") Long recruitmentNumber) throws DataNotFoundException {
