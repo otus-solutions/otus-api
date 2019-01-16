@@ -55,251 +55,6 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getQuantitativeQuery(String center) {
-        pipeline.add(parseQuery("{\n" +
-                "    $match: {\n" +
-                "      \"role\": \"EXAM\",\n" +
-                "      \"fieldCenter.acronym\":" + center +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$group\": {\n" +
-                "      \"_id\": \"$name\",\n" +
-                "      \"aliquots\": {\n" +
-                "        \"$push\": {\n" +
-                "          \"code\": \"$code\",\n" +
-                "          \"transported\": {\n" +
-                "            \"$cond\": {\n" +
-                "              \"if\": {\n" +
-                "                \"$ne\": [\n" +
-                "                  \"$transportationLotId\",\n" +
-                "                  null\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"then\": 1,\n" +
-                "              \"else\": 0\n" +
-                "            }\n" +
-                "          },\n" +
-                "          \"prepared\": {\n" +
-                "            \"$cond\": {\n" +
-                "              \"if\": {\n" +
-                "                \"$ne\": [\n" +
-                "                  \"$examLotId\",\n" +
-                "                  null\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"then\": 1,\n" +
-                "              \"else\": 0\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$unwind\": \"$aliquots\"\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$group\": {\n" +
-                "      \"_id\": \"$_id\",\n" +
-                "      \"transported\": {\n" +
-                "        \"$sum\": \"$aliquots.transported\"\n" +
-                "      },\n" +
-                "      \"prepared\": {\n" +
-                "        \"$sum\": \"$aliquots.prepared\"\n" +
-                "      },\n" +
-                "      \"aliquots\": {\n" +
-                "        \"$push\": \"$aliquots.code\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$lookup\": {\n" +
-                "      \"from\": \"exam_result\",\n" +
-                "      \"let\": {\n" +
-                "        \"aliquotCode\": \"$aliquots\"\n" +
-                "      },\n" +
-                "      \"pipeline\": [\n" +
-                "        {\n" +
-                "          \"$match\": {\n" +
-                "            \"$expr\": {\n" +
-                "              \"$and\": [\n" +
-                "                {\n" +
-                "                  \"$in\": [\n" +
-                "                    \"$aliquotCode\",\n" +
-                "                    \"$$aliquotCode\"\n" +
-                "                  ]\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"$group\": {\n" +
-                "            \"_id\": \"$examId\",\n" +
-                "            \"received\": {\n" +
-                "              \"$push\": \"$aliquotCode\"\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"$count\": \"count\"\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"as\": \"receivedCount\"\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$group\": {\n" +
-                "      \"_id\": {},\n" +
-                "      \"quantitativeByTypeOfAliquots\": {\n" +
-                "        \"$push\": {\n" +
-                "          \"title\": \"$_id\",\n" +
-                "          \"transported\": \"$transported\",\n" +
-                "          \"prepared\": \"$prepared\",\n" +
-                "          \"received\": {\n" +
-                "            \"$cond\": {\n" +
-                "              \"if\": {\n" +
-                "                \"$gte\": [\n" +
-                "                  {\n" +
-                "                    \"$size\": \"$receivedCount\"\n" +
-                "                  },\n" +
-                "                  1\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"then\": {\n" +
-                "                \"$arrayElemAt\": [\n" +
-                "                  \"$receivedCount.count\",\n" +
-                "                  0\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"else\": 0\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        return this.pipeline;
-    }
-
-    public List<Bson> getPendingResultsQuery(String center) {
-        pipeline.add(parseQuery("{\n" +
-                "    $match: {\n" +
-                "      \"fieldCenter.acronym\":"+ center +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $group: {\n" +
-                "      _id: \"$name\",\n" +
-                "      aliquotsInDb: {\n" +
-                "        $push: \"$code\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$lookup\": {\n" +
-                "      \"from\": \"exam_result\",\n" +
-                "      \"let\": {\n" +
-                "        \"aliquotCodes\": \"$aliquotsInDb\"\n" +
-                "      },\n" +
-                "      \"pipeline\": [\n" +
-                "        {\n" +
-                "          \"$match\": {\n" +
-                "            \"$expr\": {\n" +
-                "              \"$and\": [\n" +
-                "                {\n" +
-                "                  \"$in\": [\n" +
-                "                    \"$aliquotCode\",\n" +
-                "                    \"$$aliquotCodes\"\n" +
-                "                  ]\n" +
-                "                },\n" +
-                "                {\n" +
-                "                  \"$eq\": [\n" +
-                "                    \"$aliquotValid\",\n" +
-                "                    true\n" +
-                "                  ]\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"$group\": {\n" +
-                "            \"_id\": {},\n" +
-                "            \"aliquots\": {\n" +
-                "              \"$addToSet\": \"$aliquotCode\"\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"as\": \"aliquotsWithResults\"\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$group\": {\n" +
-                "      \"_id\": {},\n" +
-                "      \"pendingResultsByAliquot\": {\n" +
-                "        \"$push\": {\n" +
-                "          \"title\": \"$_id\",\n" +
-                "          \"waiting\": {\n" +
-                "            \"$cond\": {\n" +
-                "              \"if\": {\n" +
-                "                \"$gte\": [\n" +
-                "                  {\n" +
-                "                    \"$size\": \"$aliquotsWithResults\"\n" +
-                "                  },\n" +
-                "                  1\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"then\": {\n" +
-                "                \"$subtract\": [\n" +
-                "                  {\n" +
-                "                    \"$size\": \"$aliquotsInDb\"\n" +
-                "                  },\n" +
-                "                  {\n" +
-                "                    \"$size\": {\n" +
-                "                      \"$arrayElemAt\": [\n" +
-                "                        \"$aliquotsWithResults.aliquots\",\n" +
-                "                        0\n" +
-                "                      ]\n" +
-                "                    }\n" +
-                "                  }\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"else\": {\n" +
-                "                \"$size\": \"$aliquotsInDb\"\n" +
-                "              }\n" +
-                "            }\n" +
-                "          },\n" +
-                "          \"received\": {\n" +
-                "            \"$cond\": {\n" +
-                "              \"if\": {\n" +
-                "                \"$gte\": [\n" +
-                "                  {\n" +
-                "                    \"$size\": \"$aliquotsWithResults\"\n" +
-                "                  },\n" +
-                "                  1\n" +
-                "                ]\n" +
-                "              },\n" +
-                "              \"then\": {\n" +
-                "                \"$size\": {\n" +
-                "                  \"$arrayElemAt\": [\n" +
-                "                    \"$aliquotsWithResults.aliquots\",\n" +
-                "                    0\n" +
-                "                  ]\n" +
-                "                }\n" +
-                "              },\n" +
-                "              \"else\": 0\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        return this.pipeline;
-    }
-
     public List<Bson> getStorageByAliquotQuery(String center) {
         pipeline.add(parseQuery(" {\n" +
                 "    $match: {\n" +
@@ -329,162 +84,57 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getDataByExamQuery(String center) {
-        pipeline.add(parseQuery("{\n" +
-                "    $match: {\n" +
-                "      \"role\": \"EXAM\",\n" +
-                "      \"fieldCenter.acronym\":" + center +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $group: {\n" +
-                "      _id: {},\n" +
-                "      aliquotCodes: {\n" +
-                "        $push: \"$code\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $lookup: {\n" +
-                "      from: \"exam_result\",\n" +
-                "      let: {\n" +
-                "        \"aliquotCodes\": \"$aliquotCodes\"\n" +
-                "      },\n" +
-                "      pipeline: [\n" +
-                "        {\n" +
-                "          $match: {\n" +
-                "            $expr: {\n" +
-                "              $and: [\n" +
-                "                {\n" +
-                "                  $in: [\n" +
-                "                    \"$aliquotCode\",\n" +
-                "                    \"$$aliquotCodes\"\n" +
-                "                  ]\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          $group: {\n" +
-                "            _id: {\n" +
-                "              examId: \"$examId\",\n" +
-                "              examName: \"$examName\"\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          $group: {\n" +
-                "            _id: \"$_id.examName\",\n" +
-                "            received: {\n" +
-                "              $sum: 1\n" +
-                "            }\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          $group: {\n" +
-                "            _id: {},\n" +
-                "            examsQuantitative: {\n" +
-                "              $push: {\n" +
-                "                title: \"$_id\",\n" +
-                "                exams: \"$received\"\n" +
-                "              }\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      as: \"receivedCount\"\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    \"$match\": {\n" +
-                "      \"receivedCount.examsQuantitative\": {\n" +
-                "        \"$exists\": true,\n" +
-                "        \"$not\": {\n" +
-                "          \"$size\": 0.0\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $project: {\n" +
-                "      examsQuantitative: {\n" +
-                "        $arrayElemAt: [\n" +
-                "          \"$receivedCount.examsQuantitative\",\n" +
-                "          0\n" +
-                "        ]\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
+    public List<Bson> getQuantitativeByTypeOfAliquotsFirstPartialResultQuery(String center){
+        pipeline.add(parseQuery("{$match:{\"role\":\"EXAM\",\"fieldCenter.acronym\":" + center + "}}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$name\",aliquots:{$push:{code:\"$code\",transported:{$cond:{if:{$ne:[\"$transportationLotId\",null]},then:1,else:0}},prepared:{$cond:{if:{$ne:[\"$examLotId\",null]},then:1,else:0}}}}}}"));
+        pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$_id\",transported:{$sum:\"$aliquots.transported\"},prepared:{$sum: \"$aliquots.prepared\"}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},quantitativeByTypeOfAliquots:{$push:{title:\"$_id\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
         return this.pipeline;
     }
 
-    public List<Bson> getCSVOfPendingResultsQuery(String center){
-        pipeline.add(parseQuery("{\n" +
-                "    $match: {\n" +
-                "      \"role\": \"EXAM\",\n" +
-                "      \"fieldCenter.acronym\":" + center +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $project: {\n" +
-                "      code: \"$code\",\n" +
-                "      transported: {\n" +
-                "        $cond: {\n" +
-                "          if: {\n" +
-                "            $ne: [\n" +
-                "              \"$transportationLotId\",\n" +
-                "              null\n" +
-                "            ]\n" +
-                "          },\n" +
-                "          then: 1,\n" +
-                "          else: 0\n" +
-                "        }\n" +
-                "      },\n" +
-                "      prepared: {\n" +
-                "        $cond: {\n" +
-                "          if: {\n" +
-                "            $ne: [\n" +
-                "              \"$examLotId\",\n" +
-                "              null\n" +
-                "            ]\n" +
-                "          },\n" +
-                "          then: 1,\n" +
-                "          else: 0\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $lookup: {\n" +
-                "      from: \"exam_result\",\n" +
-                "      localField: \"code\",\n" +
-                "      foreignField: \"aliquotCode\",\n" +
-                "      as: \"results\"\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $match: {\n" +
-                "      results: {\n" +
-                "        $exists: true,\n" +
-                "        $size: 0\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
-        pipeline.add(parseQuery("{\n" +
-                "    $group: {\n" +
-                "      _id: {},\n" +
-                "      pendingAliquotsCsvData: {\n" +
-                "        $push: {\n" +
-                "          aliquot: \"$code\",\n" +
-                "          transported: \"$transported\",\n" +
-                "          prepared: \"$prepared\"\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  }"));
+    public List<Bson> getPendingResultsByAliquotFirstPartialResultQuery(ArrayList<String> allAliquotCodesinExams, String center){
+        pipeline.add(new Document("$match", new Document("code", new Document("$nin", allAliquotCodesinExams)).append("fieldCenter.acronym", center)));
+        pipeline.add(parseQuery("{$group:{_id:\"$name\",waiting:{$sum:1}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingResultsByAliquot:{$push:{\"title\": \"$_id\", \"waiting\":\"$waiting\"}}}}"));
         return this.pipeline;
+    }
 
+    public List<Bson> getPendingResultsByAliquotSecondPartialResultQuery(ArrayList<String> allAliquotCodesinExams, String center){
+        pipeline.add(new Document("$match", new Document("code", new Document("$in", allAliquotCodesinExams)).append("fieldCenter.acronym", center)));
+        pipeline.add(parseQuery("{$group:{_id:\"$name\",received:{$sum:1}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingResultsByAliquot:{$push:{\"title\": \"$_id\", \"received\":\"$received\"}}}}"));
+        return this.pipeline;
+    }
+
+    public List<Bson> getQuantitativeByTypeOfAliquotsSecondPartialResultQuery(ArrayList<String> aliquotCodes){
+        pipeline.add(new Document("$match", new Document("code", new Document("$in", aliquotCodes))));
+        pipeline.add(parseQuery("{$group:{_id:\"$name\",received:{$sum:1}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},quantitativeByTypeOfAliquots:{$push:{title:\"$_id\",received:\"$received\"}}}}"));
+        return this.pipeline;
+    }
+
+    public List<Bson> getAliquotCodesInExamLotQuery(ArrayList<String> aliquotCodes){
+        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes))));
+        pipeline.add(parseQuery("{$group:{_id:\"$examId\",aliquotCodes:{$addToSet:\"$aliquotCode\"}}}"));
+        pipeline.add(parseQuery("{$unwind:\"$aliquotCodes\"}"));
+        pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$aliquotCodes\"}}}"));
+        return this.pipeline;
+    }
+
+    public List<Bson> getPendingAliquotsCsvDataQuery(ArrayList<String> aliquotCodes, String center){
+        pipeline.add(new Document("$match", new Document("code", new Document("$nin", aliquotCodes)).append("fieldCenter.acronym", center).append("role", "EXAM")));
+        pipeline.add(parseQuery("{$project:{\"code\":\"$code\",\"transported\":{$cond:{if:{$ne:[\"$transportationLotId\",null]},then:1,else:0}},prepared:{$cond:{if:{$ne:[\"$examLotId\",null]},then:1,else:0}}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingAliquotsCsvData:{$push:{aliquot:\"$code\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
+        return this.pipeline;
+    }
+
+    public List<Bson> getDataByExamQuery(ArrayList<String> aliquotCodes){
+        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes))));
+        pipeline.add(parseQuery("{$group:{_id:{examId:\"$examId\",examName:\"$examName\"}}}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$_id.examName\",received:{$sum:1}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},examsQuantitative:{$push:{title:\"$_id\",exams:\"$received\"}}}}"));
+        return this.pipeline;
     }
 
     public List<Bson> getCSVOfOrphansByExamQuery() {

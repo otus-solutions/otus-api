@@ -14,11 +14,11 @@ public class LaboratoryProgressDTO {
     ArrayList<PendingAliquotCsv> pendingAliquotsCsvData;
     ArrayList<OrphanExamCsv> orphanExamsCsvData;
 
-    public void concatReceivedToPendingResults(LaboratoryProgressDTO received){
+    public void concatReceivedToPendingResults(LaboratoryProgressDTO received) {
         for (PendingResults pendingResult : this.pendingResultsByAliquot) {
             Integer examsReceived = 0;
-            for(PendingResults receivedPendingResults: received.pendingResultsByAliquot){
-                if(receivedPendingResults.title.equals(pendingResult.title)){
+            for (PendingResults receivedPendingResults : received.pendingResultsByAliquot) {
+                if (receivedPendingResults.title.equals(pendingResult.title)) {
                     examsReceived = receivedPendingResults.received;
                 }
             }
@@ -26,12 +26,14 @@ public class LaboratoryProgressDTO {
         }
     }
 
-    public void concatReceivedToAliquotStats(LaboratoryProgressDTO received){
+    public void concatReceivedToAliquotStats(LaboratoryProgressDTO received) {
         for (AliquotStats aliquotStats : this.quantitativeByTypeOfAliquots) {
             Integer examsReceived = 0;
-            for(AliquotStats receivedAliquotStats: received.quantitativeByTypeOfAliquots){
-                if(receivedAliquotStats.title.equals(aliquotStats.title)){
-                    examsReceived = receivedAliquotStats.received;
+            if (received.quantitativeByTypeOfAliquots != null) {
+                for (AliquotStats receivedAliquotStats : received.quantitativeByTypeOfAliquots) {
+                    if (receivedAliquotStats.title.equals(aliquotStats.title)) {
+                        examsReceived = receivedAliquotStats.received;
+                    }
                 }
             }
             aliquotStats.received = examsReceived;
@@ -43,21 +45,25 @@ public class LaboratoryProgressDTO {
         private Integer orphans;
 
     }
+
     private class AliquotStats {
         private String title;
         private Integer received;
         private Integer prepared;
         private Integer transported;
     }
+
     private class PendingResults {
         private String title;
         private Integer received;
         private Integer waiting;
     }
+
     private class StorageData {
         private String title;
         private Integer storage;
     }
+
     private class ExamData {
         private String title;
         private Integer exams;

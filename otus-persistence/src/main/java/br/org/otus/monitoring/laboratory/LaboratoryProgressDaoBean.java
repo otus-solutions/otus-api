@@ -9,12 +9,16 @@ import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
+import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte0.waiting;
 
 public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
@@ -26,159 +30,135 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     @Override
     public LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException {
         return examResultDaoAggregate(new LaboratoryProgressQueryBuilder().getOrphansQuery());
-    }//passou
+    }
 
     @Override
     public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
-        LaboratoryProgressDTO waiting = null;
+        LaboratoryProgressDTO fullDTO;
+        LaboratoryProgressDTO partialDTO = new LaboratoryProgressDTO();
+        Document SecondPartOfDTO = null;
 
-            CompletableFuture<Document> Future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    ArrayList<Bson> pipeline = new ArrayList<>();
-                    pipeline.add(parseQuery("{$match:{\"role\":\"EXAM\",\"fieldCenter.acronym\":" + center + "}}"));
-                    pipeline.add(parseQuery("{$group:{_id:\"$name\",aliquots:{$push:{code:\"$code\",transported:{$cond:{if:{$ne:[\"$transportationLotId\",null]},then:1,else:0}},prepared:{$cond:{if:{$ne:[\"$examLotId\",null]},then:1,else:0}}}}}}"));
-                    pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
-                    pipeline.add(parseQuery("{$group:{_id:\"$_id\",transported:{$sum:\"$aliquots.transported\"},prepared:{$sum: \"$aliquots.prepared\"}}}"));
-                    pipeline.add(parseQuery("{$group:{_id:{},quantitativeByTypeOfAliquots:{$push:{title:\"$_id\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
-                    Document first = aliquotDao.aggregate(pipeline).first();
+        fullDTO = aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsFirstPartialResultQuery(center));
 
-                    if (first == null){
-                        throw new IllegalStateException("null",new DataNotFoundException("test"));
-                    }
-                    return first;
-                } catch (Exception e) {
-                    throw new IllegalStateException();
-                }
-            });
+        Document fetchCenterAliquotCodesDocument = fetchAliquotCodes(center);
 
-            CompletableFuture<Document> Future2 = CompletableFuture.supplyAsync(() -> fetchAliquotCodes(center));
-
-            ArrayList<Bson> pipeline3 = new ArrayList<>();
-            try {
-                pipeline3.add(new Document("$match", new Document("aliquotCode", new Document("$in", Future2.get().get("aliquotCodes")))));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+        if (fetchCenterAliquotCodesDocument != null) {
+            Object aliquotCodes = fetchCenterAliquotCodesDocument.get("aliquotCodes");
+            Document fetchAliquotCodesInExamLot = examResultDao.aggregate(new LaboratoryProgressQueryBuilder().getAliquotCodesInExamLotQuery((ArrayList<String>) aliquotCodes)).first();
+            if (fetchAliquotCodesInExamLot != null) {
+                Object aliquotCodesinExam = fetchAliquotCodesInExamLot.get("aliquotCodes");
+                SecondPartOfDTO = aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsSecondPartialResultQuery((ArrayList<String>) aliquotCodesinExam)).first();
             }
-            pipeline3.add(parseQuery("{$group:{_id:\"$examId\",aliquotCodes:{$addToSet:\"$aliquotCode\"}}}"));
-            pipeline3.add(parseQuery("{$unwind:\"$aliquotCodes\"}"));
-            pipeline3.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$aliquotCodes\"}}}"));
-            Document first3 = examResultDao.aggregate(pipeline3).first();
+        }
 
-            ArrayList<Bson> pipeline4 = new ArrayList<>();
-            pipeline4.add(new Document("$match", new Document("code", new Document("$in", first3.get("aliquotCodes")))));
-            pipeline4.add(parseQuery("{$group:{_id:\"$name\",received:{$sum:1}}}"));
-            pipeline4.add(parseQuery("{$group:{_id:{},quantitativeByTypeOfAliquots:{$push:{title:\"$_id\",received:\"$received\"}}}}"));
-            Document first4 = aliquotDao.aggregate(pipeline4).first();
+        if (SecondPartOfDTO != null) {
+            partialDTO = LaboratoryProgressDTO.deserialize(SecondPartOfDTO.toJson());
+        }
 
-
-            try {
-                waiting = LaboratoryProgressDTO.deserialize(Future.get().toJson());
-            } catch (Exception e) {
-                e.getCause();
-            }
-            waiting.concatReceivedToAliquotStats(LaboratoryProgressDTO.deserialize(first4.toJson()));
-
-        return waiting;
-    }//feito
+        fullDTO.concatReceivedToAliquotStats(partialDTO);
+        return fullDTO;
+    }
 
     @Override
     public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException {
 
         CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
 
-        CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(name -> {
+        CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(allAliquotsWithExamsDocument -> {
+            LaboratoryProgressDTO laboratoryProgressDTO;
+            LaboratoryProgressDTO laboratoryProgressPartialDTO = new LaboratoryProgressDTO();
 
-            CompletableFuture<LaboratoryProgressDTO> Future1 = CompletableFuture.supplyAsync(() -> {
-                ArrayList<Bson> pipeline2 = new ArrayList<>();
-                LaboratoryProgressDTO waiting = null;
-                pipeline2.add(new Document("$match", new Document("code", new Document("$nin", name.get("aliquotCodes"))).append("fieldCenter.acronym", center)));
-                pipeline2.add(parseQuery("{$group:{_id:\"$name\",waiting:{$sum:1}}}"));
-                pipeline2.add(parseQuery("{$group:{_id:{},pendingResultsByAliquot:{$push:{\"title\": \"$_id\", \"waiting\":\"$waiting\"}}}}"));
-                Document first = aliquotDao.aggregate(pipeline2).first();
-                if (first == null) {
+            if (allAliquotsWithExamsDocument != null) {
+
+                Object allAliquotCodesinExams = allAliquotsWithExamsDocument.get("aliquotCodes");
+
+                CompletableFuture<Document> Future1 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery((ArrayList<String>) allAliquotCodesinExams,center)).first());
+
+                CompletableFuture<Document> Future2 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery((ArrayList<String>) allAliquotCodesinExams,center)).first());
+
+                Document firstPartOfDTO = null;
+                try {
+                    firstPartOfDTO = Future1.get();
+                } catch (InterruptedException ignored) {
+                } catch (ExecutionException e) {
                     throw new IllegalStateException();
                 }
-                waiting = LaboratoryProgressDTO.deserialize(first.toJson());
-                return waiting;
-            });
 
-            CompletableFuture<LaboratoryProgressDTO> Future2 = CompletableFuture.supplyAsync(() -> {
-                ArrayList<Bson> pipeline3 = new ArrayList<>();
-                LaboratoryProgressDTO received = null;
-                pipeline3.add(new Document("$match", new Document("code", new Document("$in", name.get("aliquotCodes"))).append("fieldCenter.acronym", center)));
-                pipeline3.add(parseQuery("{$group:{_id:\"$name\",received:{$sum:1}}}"));
-                pipeline3.add(parseQuery("{$group:{_id:{},pendingResultsByAliquot:{$push:{\"title\": \"$_id\", \"received\":\"$received\"}}}}"));
-                Document first = aliquotDao.aggregate(pipeline3).first();
-                if (first != null) {
-                    received = LaboratoryProgressDTO.deserialize(first.toJson());
+                if (firstPartOfDTO == null) {
+                    throw new IllegalStateException();
                 }
-                return received;
-            });
 
-            LaboratoryProgressDTO laboratoryProgressDTO;
-            try {
-                laboratoryProgressDTO = Future1.get();
-                laboratoryProgressDTO.concatReceivedToPendingResults(Future2.get());
-            } catch (InterruptedException | ExecutionException e) {
+                laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(firstPartOfDTO.toJson());
+                Document secondPartOfDTO = null;
+                try {
+                    secondPartOfDTO = Future2.get();
+                } catch (InterruptedException ignored) {
+                } catch (ExecutionException e) {
+                    throw new IllegalStateException();
+                }
+                if (secondPartOfDTO != null) {
+                    laboratoryProgressPartialDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
+                }
+                laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
+            } else {
                 throw new IllegalStateException();
             }
+
             return laboratoryProgressDTO;
+
         });
 
-        try {
-            return greetingFuture.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new DataNotFoundException(new Throwable("There are no result"));
-        }
-    }//feito
+
+        return getLaboratoryProgressDTO(greetingFuture);
+    }
 
     @Override
     public LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException {
-        Document first = fetchAliquotCodes(center);
-        validateFirst(first);
-
-        ArrayList<Bson> pipeline2 = new ArrayList<>();
-        pipeline2.add(new Document("$match", new Document("aliquotCode", new Document("$in", first.get("aliquotCodes")))));
-        pipeline2.add(parseQuery("{$group:{_id:{examId:\"$examId\",examName:\"$examName\"}}}"));
-        pipeline2.add(parseQuery("{$group:{_id:\"$_id.examName\",received:{$sum:1}}}"));
-        pipeline2.add(parseQuery("{$group:{_id:{},examsQuantitative:{$push:{title:\"$_id\",exams:\"$received\"}}}}"));
-        Document first1 = examResultDao.aggregate(pipeline2).first();
+        Document fetchAllAliquotCodes = fetchAliquotCodes(center);
+        validateFirst(fetchAllAliquotCodes);
+        Object aliquotCodes = fetchAllAliquotCodes.get("aliquotCodes");
+        Document first1 = examResultDao.aggregate(new LaboratoryProgressQueryBuilder().getDataByExamQuery((ArrayList<String>) aliquotCodes)).first();
         validateFirst(first1);
-
         return LaboratoryProgressDTO.deserialize(first1.toJson());
 
-    }//feito
+    }
 
     @Override
     public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException {
         return aliquotDaoAggregate(new LaboratoryProgressQueryBuilder().getStorageByAliquotQuery(center));
-    }//passou
+    }
 
     @Override
     public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException {
         CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
-        CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(name -> {
-            ArrayList<Bson> pipeline2 = new ArrayList<>();
-            pipeline2.add(new Document("$match", new Document("code", new Document("$nin", name.get("aliquotCodes"))).append("fieldCenter.acronym", center).append("role","EXAM")));
-            pipeline2.add(parseQuery("{$project:{\"code\":\"$code\",\"transported\":{$cond:{if:{$ne:[\"$transportationLotId\",null]},then:1,else:0}},prepared:{$cond:{if:{$ne:[\"$examLotId\",null]},then:1,else:0}}}}"));
-            pipeline2.add(parseQuery("{$group:{_id:{},pendingAliquotsCsvData:{$push:{aliquot:\"$code\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
-            Document first = aliquotDao.aggregate(pipeline2).first();
+        CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(aliquotsWithExamsDocument -> {
+            if (aliquotsWithExamsDocument == null) {
+                throw new IllegalStateException();
+            }
+
+            Object aliquotCodes = aliquotsWithExamsDocument.get("aliquotCodes");
+            Document first = aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery((ArrayList<String>) aliquotCodes,center)).first();
+
             if (first == null) {
                 throw new IllegalStateException();
             }
             return LaboratoryProgressDTO.deserialize(first.toJson());
         });
-        LaboratoryProgressDTO laboratoryProgressDTO = null;
+
+        return getLaboratoryProgressDTO(greetingFuture);
+    }
+
+    @Nullable
+    private LaboratoryProgressDTO getLaboratoryProgressDTO(CompletableFuture<LaboratoryProgressDTO> greetingFuture) throws DataNotFoundException {
         try {
-            laboratoryProgressDTO = greetingFuture.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return greetingFuture.get();
+        } catch (InterruptedException ignored) {
+        } catch (ExecutionException e) {
+            throw new DataNotFoundException(new Throwable("There are no result"));
         }
 
-        return laboratoryProgressDTO;
-    }//feito
+        return null;
+    }
 
     @Override
     public LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException {
@@ -187,7 +167,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
     private Document fetchAliquotCodes(String center) {
         ArrayList<Bson> pipeline = new ArrayList<>();
-        pipeline.add(parseQuery("{$match:{\"fieldCenter.acronym\":"+center+"}}"));
+        pipeline.add(parseQuery("{$match:{\"fieldCenter.acronym\":" + center + "}}"));
         pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$code\"}}}"));
         return aliquotDao.aggregate(pipeline).first();
     }
@@ -197,7 +177,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
         return gsonBuilder.create().fromJson(query, Document.class);
     }
 
-    private CompletableFuture<Document> fetchAliquotsWithExams(){
+    private CompletableFuture<Document> fetchAliquotsWithExams() {
         return CompletableFuture.supplyAsync(() -> {
             ArrayList<Bson> pipeline = new ArrayList<>();
             pipeline.add(parseQuery("{$match:{\"aliquotValid\":true}}"));
@@ -225,6 +205,4 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
             throw new DataNotFoundException(new Throwable("There are no result"));
         }
     }
-
-
 }
