@@ -56,16 +56,7 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   public List<String> generateCodes(TubeSeed seed) {
     Integer startingPoint = this.laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount());
     this.laboratoryConfiguration.getCodeConfiguration().setLastInsertion(startingPoint + seed.getTubeCount());
-    updateLaboratoryConfiguration();
     return this.laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint);
-  }
-
-  private void updateLaboratoryConfiguration() {
-    try {
-      this.laboratoryConfigurationDao.update(this.laboratoryConfiguration);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   public LaboratoryConfiguration getLaboratoryConfiguration() {
