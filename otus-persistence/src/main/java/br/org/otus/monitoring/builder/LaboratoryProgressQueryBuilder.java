@@ -136,6 +136,19 @@ public class LaboratoryProgressQueryBuilder {
         pipeline.add(parseQuery("{$group:{_id:{},examsQuantitative:{$push:{title:\"$_id\",exams:\"$received\"}}}}"));
         return this.pipeline;
     }
+    public List<Bson> fetchAllAliquotCodesQuery(String center){
+        pipeline.add(parseQuery("{$match:{\"fieldCenter.acronym\":" + center + "}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$code\"}}}"));
+        return this.pipeline;
+    }
+
+    public List<Bson> fetchAllAliquotCodesInExamsQuery(){
+        pipeline.add(parseQuery("{$match:{\"aliquotValid\":true}}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$examId\",aliquotCodes:{$addToSet:\"$aliquotCode\"}}}"));
+        pipeline.add(parseQuery("{$unwind:\"$aliquotCodes\"}"));
+        pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$aliquotCodes\"}}}"));
+        return this.pipeline;
+    }
 
     public List<Bson> getCSVOfOrphansByExamQuery() {
         pipeline.add(parseQuery("{\n" +

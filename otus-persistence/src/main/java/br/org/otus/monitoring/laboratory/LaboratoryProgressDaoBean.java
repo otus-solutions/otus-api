@@ -166,26 +166,11 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     }
 
     private Document fetchAliquotCodes(String center) {
-        ArrayList<Bson> pipeline = new ArrayList<>();
-        pipeline.add(parseQuery("{$match:{\"fieldCenter.acronym\":" + center + "}}"));
-        pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$code\"}}}"));
-        return aliquotDao.aggregate(pipeline).first();
-    }
-
-    private Document parseQuery(String query) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().fromJson(query, Document.class);
+        return aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesQuery(center)).first();
     }
 
     private CompletableFuture<Document> fetchAliquotsWithExams() {
-        return CompletableFuture.supplyAsync(() -> {
-            ArrayList<Bson> pipeline = new ArrayList<>();
-            pipeline.add(parseQuery("{$match:{\"aliquotValid\":true}}"));
-            pipeline.add(parseQuery("{$group:{_id:\"$examId\",aliquotCodes:{$addToSet:\"$aliquotCode\"}}}"));
-            pipeline.add(parseQuery("{$unwind:\"$aliquotCodes\"}"));
-            pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$aliquotCodes\"}}}"));
-            return examResultDao.aggregate(pipeline).first();
-        });
+        return CompletableFuture.supplyAsync(() -> examResultDao.aggregate(new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery()).first());
     }
 
     private LaboratoryProgressDTO aliquotDaoAggregate(List<Bson> query) throws DataNotFoundException {
