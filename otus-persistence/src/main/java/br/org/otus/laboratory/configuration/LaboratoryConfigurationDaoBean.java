@@ -65,7 +65,10 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
   @Override
   public Integer updateLastTubeInsertion(int quantity) {
-    Document updateLotCode = collection.findOneAndUpdate(exists("codeConfiguration.lastInsertion"), new Document("$inc", new Document("codeConfiguration.lastInsertion", quantity)),
+    Document query = new Document("objectType", "LaboratoryConfiguration")
+      .append("codeConfiguration.lastInsertion", new Document("$exists", true));
+
+    Document updateLotCode = collection.findOneAndUpdate(query, new Document("$inc", new Document("codeConfiguration.lastInsertion", quantity)),
         new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE));
     return ((Document) updateLotCode.get("codeConfiguration")).getInteger("lastInsertion");
   }
