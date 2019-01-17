@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public interface ExamUploadService {
@@ -25,4 +26,6 @@ public interface ExamUploadService {
     void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException;
 
     void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
+
+    LinkedHashSet<String> getDescriptionOfExamResultsByCenter(String center) throws DataNotFoundException;
 }

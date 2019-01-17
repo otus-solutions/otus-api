@@ -1,6 +1,7 @@
 package br.org.otus.extraction;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,7 +12,6 @@ import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.api.ExtractionService;
-import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
 import br.org.otus.survey.activity.api.ActivityFacade;
@@ -37,20 +37,23 @@ public class ExtractionFacade {
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
+      throw new DataNotFoundException(new Throwable("results to extraction {" + acronym + "} not found."));
+    }
+  }
+
+  public byte[] createLaboratoryExamsValuesExtraction(String center) throws DataNotFoundException {
+    LinkedHashSet<String> descriptionOfExamResults = new LinkedHashSet<>(); // TODO: Definir melhor o nome da variavel!
+    descriptionOfExamResults = examUploadFacade.getDescriptionOfExamResultsByCenter(center); // TODO: Implementar
+    ExamUploadExtration extractor = new ExamUploadExtration(descriptionOfExamResults);
+    try {
+      return extractionService.createExtraction(extractor);
+    } catch (DataNotFoundException e) {
+      throw new DataNotFoundException(new Throwable("results to extraction not found."));
     }
   }
 
   public List<Integer> listSurveyVersions(String acronym) {
     return surveyFacade.listVersions(acronym);
-  }
-
-  public byte[] createLaboratoryExamsValuesExtraction(String center) {
-    List<Exam> exams = new ArrayList<>();
-
-    ExamUploadExtration extractor;
-
-    return null;
   }
 
 }
