@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.survey.activity.activityReview.ActivityReviewFacade;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import br.org.otus.participant.api.ParticipantFacade;
@@ -25,6 +26,8 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 @Path("participants/{rn}/activities")
 public class ActivityResource {
 
+  @Inject
+  private ActivityReviewFacade activityReviewFacade;
   @Inject
   private ActivityFacade activityFacade;
   @Inject
@@ -76,6 +79,29 @@ public class ActivityResource {
     SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
 
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
+  }
+
+//  @GET
+//  @Secured
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public String getAll(@Context HttpServletRequest request, @PathParam("rn") long rn) {
+//    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+//    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+//    isValidRecruitmentNumber(rn);
+//
+//    return new Response().buildSuccess(activityReviewFacade.list(rn, userEmail)).toSurveyJson();
+//  }
+
+  @POST
+  @Secured
+  @Path("/review")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String createActivityReview(@PathParam("rn") long rn, String activityReview) {
+    isValidRecruitmentNumber(rn);
+    String objectID = activityReviewFacade.create(activityReviewFacade.deserialize(activityReview));
+
+    return new Response().buildSuccess(objectID).toJson();
   }
 
   private void isValidRecruitmentNumber(long rn) {
