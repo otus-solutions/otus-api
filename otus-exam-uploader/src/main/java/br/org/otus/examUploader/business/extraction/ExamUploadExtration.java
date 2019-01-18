@@ -15,8 +15,8 @@ public class ExamUploadExtration implements Extractable {
   private ExamUploadExtractionHeadersFactory headersFactory;
   private ExamUploadExtractionRecordsFactory recordsFactory;
 
-  public ExamUploadExtration(LinkedHashSet<String> headers) {
-    this.headersFactory = new ExamUploadExtractionHeadersFactory(headers);
+  public ExamUploadExtration(List<String> resultHeaders) {
+    this.headersFactory = new ExamUploadExtractionHeadersFactory(resultHeaders);
   }
 
   @Override
@@ -28,7 +28,7 @@ public class ExamUploadExtration implements Extractable {
   public List<List<Object>> getValues() throws DataNotFoundException {
     List<List<Object>> values = new ArrayList<>();
 
-    return null;
+    return values;
   }
 
 }

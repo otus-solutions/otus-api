@@ -34,8 +34,8 @@ public class SurveyActivityExtraction implements Extractable {
 		for (SurveyActivity surveyActivity : this.surveyActivities) {
 			this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());			
 			List<Object> resultInformation = new ArrayList<>();
-			this.recordsFactory.getSurveyBasicInfo(surveyActivity);
-			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
+			this.recordsFactory.buildSurveyBasicInfo(surveyActivity);
+			this.recordsFactory.buildSurveyQuestionInfo(surveyActivity);
 			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
 			values.add(resultInformation);			
 		}

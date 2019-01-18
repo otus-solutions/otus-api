@@ -52,9 +52,9 @@ public class ExtractionResource {
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/laboratory/exams-values/{center}")
-  public byte[] extractActivities(@PathParam("center") String center) {
-    return extractionFacade.createLaboratoryExamsValuesExtraction(center);
+  @Path("/laboratory/exams-values")
+  public byte[] extractExamsValues() throws DataNotFoundException {
+    return extractionFacade.createLaboratoryExamsValuesExtraction();
   }
 
   @POST
