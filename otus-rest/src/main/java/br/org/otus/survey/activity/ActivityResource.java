@@ -81,16 +81,15 @@ public class ActivityResource {
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
 
-//  @GET
-//  @Secured
-//  @Produces(MediaType.APPLICATION_JSON)
-//  public String getAll(@Context HttpServletRequest request, @PathParam("rn") long rn) {
-//    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-//    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-//    isValidRecruitmentNumber(rn);
-//
-//    return new Response().buildSuccess(activityReviewFacade.list(rn, userEmail)).toSurveyJson();
-//  }
+  @GET
+  @Secured
+  @Path("/list")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String list(@Context HttpServletRequest request, @PathParam("rn") long rn) {
+    isValidRecruitmentNumber(rn);
+
+    return new Response().buildSuccess(activityReviewFacade.list()).toSurveyJson();
+  }
 
   @POST
   @Secured
