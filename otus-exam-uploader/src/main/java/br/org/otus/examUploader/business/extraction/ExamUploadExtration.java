@@ -15,7 +15,7 @@ public class ExamUploadExtration implements Extractable {
   private ExamUploadExtractionHeadersFactory headersFactory;
   private ExamUploadExtractionRecordsFactory recordsFactory;
 
-  public ExamUploadExtration(List<String> resultHeaders) {
+  public ExamUploadExtration(LinkedHashSet<String> resultHeaders) {
     this.headersFactory = new ExamUploadExtractionHeadersFactory(resultHeaders);
   }
 

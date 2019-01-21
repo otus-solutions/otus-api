@@ -4,19 +4,25 @@ import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 
 import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
+import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
 import br.org.otus.examUploader.persistence.ExamResultDao;
+import br.org.otus.laboratory.project.builder.ExamResultQueryBuilder;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 
 public class ExamResultDaoBean extends MongoGenericDao<Document> implements ExamResultDao, ExamUploader {
@@ -69,5 +75,43 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
     } else {
       return false;
     }
+  }
+
+  @Override
+  public LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException {
+    LinkedHashSet<String> headers = new LinkedHashSet<>();
+    Document query = new Document("objectType", "ExamResults");
+    for (String header : collection.distinct("resultName", query, String.class)) {
+      headers.add(header);
+    }
+
+    if (headers.isEmpty()) {
+      throw new DataNotFoundException(new Throwable("There are no exams to describe the extraction headers."));
+    }
+
+    return headers;
+  }
+
+  @Override
+  public LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() {
+    LinkedHashSet<ExamUploadExtractionValue> values = new LinkedHashSet<>();
+    List<Bson> query = new ExamResultQueryBuilder()
+        .getExamResultsWithAliquotValid()
+        .getSortingByExamName()
+        .getExamResultsGroupByRecruitmentNumber()
+        .getProjectionOfExamResultsToExtraction()
+        .build();
+
+    MongoCursor<Document> iterator = collection.aggregate(query).allowDiskUse(true).iterator();
+
+    try {
+      while (iterator.hasNext()) {
+        values.add(ExamUploadExtractionValue.deserialize(iterator.next().toJson()));
+      }
+    } finally {
+      iterator.close();
+    }
+
+    return values;
   }
 }

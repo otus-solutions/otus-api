@@ -14,7 +14,6 @@ import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 import br.org.otus.laboratory.project.exam.examLot.businnes.ExamLotService;
 
 @Stateless
@@ -58,11 +57,6 @@ public class LaboratoryProjectServiceBean implements LaboratoryProjectService {
   @Override
   public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
     return laboratoryConfigurationService.getAliquotExamCorrelation();
-  }
-
-  @Override
-  public ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException {
-    return laboratoryConfigurationService.getDescriptionOfExamResults();
   }
 
 }

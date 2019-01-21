@@ -1,6 +1,7 @@
 package br.org.otus.extraction;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,7 +14,6 @@ import org.ccem.otus.survey.form.SurveyForm;
 import br.org.otus.api.ExtractionService;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
@@ -42,8 +42,9 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
-    ExamsDescriptors examsDescriptors = examUploadFacade.getDescriptionOfExamResults();
-    ExamUploadExtration extractor = new ExamUploadExtration(examsDescriptors.getDescriptions());
+    LinkedHashSet<String> headers = examUploadFacade.getExamResultsExtractionHeader();
+    examUploadFacade.getExamResultsExtractionValues();
+    ExamUploadExtration extractor = new ExamUploadExtration(headers);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

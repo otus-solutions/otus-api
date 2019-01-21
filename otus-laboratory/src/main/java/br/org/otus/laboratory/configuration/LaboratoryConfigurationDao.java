@@ -3,7 +3,6 @@ package br.org.otus.laboratory.configuration;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 
 public interface LaboratoryConfigurationDao {
 
@@ -19,5 +18,4 @@ public interface LaboratoryConfigurationDao {
 
   String createNewLotCodeForExam();
 
-  ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException;
 }

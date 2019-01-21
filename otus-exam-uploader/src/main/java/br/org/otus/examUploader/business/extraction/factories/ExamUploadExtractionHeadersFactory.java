@@ -1,7 +1,6 @@
 package br.org.otus.examUploader.business.extraction.factories;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 
 import br.org.otus.examUploader.business.extraction.enums.ExamUploadExtractionHeaders;
 
@@ -9,7 +8,7 @@ public class ExamUploadExtractionHeadersFactory {
 
   private LinkedHashSet<String> headers;
 
-  public ExamUploadExtractionHeadersFactory(List<String> resultHeaders) {
+  public ExamUploadExtractionHeadersFactory(LinkedHashSet<String> resultHeaders) {
     this.headers = new LinkedHashSet<>();
     this.buildHeader(resultHeaders);
   }
@@ -18,7 +17,7 @@ public class ExamUploadExtractionHeadersFactory {
     return this.headers;
   }
 
-  private void buildHeader(List<String> resultHeaders) {
+  private void buildHeader(LinkedHashSet<String> resultHeaders) {
     /* Basic info headers */
     this.headers.add(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
     /* Answers headers */

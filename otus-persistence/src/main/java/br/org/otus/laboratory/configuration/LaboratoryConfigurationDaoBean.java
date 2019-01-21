@@ -13,7 +13,6 @@ import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -77,18 +76,6 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
 
     return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam().toString();
-  }
-
-  @Override
-  public ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException {
-    Document query = new Document("objectType", "ExamsDescriptors");
-    Document first = collection.find(query).first();
-
-    if (first == null) {
-      throw new DataNotFoundException(new Throwable("Exams descriptors document not found."));
-    }
-
-    return ExamsDescriptors.deserialize(first.toJson());
   }
 
 }

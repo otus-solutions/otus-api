@@ -2,6 +2,7 @@ package br.org.otus.examUploader.business;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -15,12 +16,12 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
+import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
 import br.org.otus.examUploader.utils.ResponseAliquot;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.business.LaboratoryProjectService;
@@ -165,7 +166,12 @@ public class ExamUploadServiceBean implements ExamUploadService {
   }
 
   @Override
-  public ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException {
-    return laboratoryProjectService.getDescriptionOfExamResults();
+  public LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException {
+    return examResultDAO.getExamResultsExtractionHeader();
+  }
+
+  @Override
+  public LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() throws DataNotFoundException {
+    return examResultDAO.getExamResultsExtractionValues();
   }
 }

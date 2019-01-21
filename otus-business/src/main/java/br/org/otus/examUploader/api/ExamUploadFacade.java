@@ -1,5 +1,6 @@
 package br.org.otus.examUploader.api;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,8 +13,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
-import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 
@@ -28,11 +28,11 @@ public class ExamUploadFacade {
       ExamUploadDTO examUploadDTO = ExamUploadDTO.deserialize(examUploadJson);
       examSendingLotId = examUploadService.create(examUploadDTO, userEmail);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     } catch (Exception e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
     return examSendingLotId;
   }
@@ -45,7 +45,7 @@ public class ExamUploadFacade {
     try {
       return examUploadService.getByID(id);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -53,7 +53,7 @@ public class ExamUploadFacade {
     try {
       examUploadService.delete(id);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -62,14 +62,22 @@ public class ExamUploadFacade {
       ObjectId objectId = new ObjectId(id);
       return examUploadService.getAllByExamSendingLotId(objectId);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
 
   }
 
-  public ExamsDescriptors getDescriptionOfExamResults() {
+  public LinkedHashSet<String> getExamResultsExtractionHeader() {
     try {
-      return examUploadService.getDescriptionOfExamResults();
+      return examUploadService.getExamResultsExtractionHeader();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() {
+    try {
+      return examUploadService.getExamResultsExtractionValues();
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }

@@ -6,7 +6,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 
 public interface LaboratoryProjectService {
 
@@ -14,5 +13,4 @@ public interface LaboratoryProjectService {
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
-  ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException;
 }

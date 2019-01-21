@@ -1,5 +1,6 @@
 package br.org.otus.examUploader.business;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -10,7 +11,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
+import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
 
 public interface ExamUploadService {
 
@@ -28,5 +29,8 @@ public interface ExamUploadService {
 
   void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
 
-  ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException;
+  LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException;
+
+  LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() throws DataNotFoundException;
+
 }

@@ -18,7 +18,6 @@ import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 import br.org.otus.laboratory.configuration.label.LabelReference;
 
 @Stateless
@@ -99,11 +98,6 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   @Override
   public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
     return laboratoryConfigurationDao.getAliquotExamCorrelation();
-  }
-
-  @Override
-  public ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException {
-    return laboratoryConfigurationDao.getDescriptionOfExamResults();
   }
 
 }

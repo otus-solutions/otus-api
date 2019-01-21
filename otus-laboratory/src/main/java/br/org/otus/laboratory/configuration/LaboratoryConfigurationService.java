@@ -11,7 +11,6 @@ import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.configuration.exam.ExamsDescriptors;
 import br.org.otus.laboratory.configuration.label.LabelReference;
 
 public interface LaboratoryConfigurationService {
@@ -36,5 +35,4 @@ public interface LaboratoryConfigurationService {
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
-  ExamsDescriptors getDescriptionOfExamResults() throws DataNotFoundException;
 }
