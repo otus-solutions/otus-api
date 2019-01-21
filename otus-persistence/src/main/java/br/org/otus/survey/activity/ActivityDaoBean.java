@@ -162,11 +162,12 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         String checkerUpdateJson = ActivityStatus.serialize(checkerUpdatedDTO.getActivityStatus());
         Document parsed = Document.parse(checkerUpdateJson);
         Document checkerUpdate = (Document) parsed.get("user");
+        String dateUpdated = (String) parsed.get("date");
 
         UpdateResult updateResult = collection.updateOne(
                 and(eq("_id", new ObjectId(checkerUpdatedDTO.getId())),
                     eq("statusHistory.name", checkerUpdatedDTO.getActivityStatus().getName())),
-                new Document("$set", new Document("statusHistory.$.user", checkerUpdate)));
+                new Document("$set", new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date",dateUpdated)));
 
         if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException(new Throwable("Activity of Participant not found"));
