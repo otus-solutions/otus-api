@@ -10,7 +10,7 @@ import org.ccem.otus.utils.ObjectIdAdapter;
 public class ActivityReview {
     private ObjectId activityId;
     private String reviewDate;
-    private User userLogged;
+    private User userReviewer;
 
     public static String serialize(ActivityReview activityReview) {
         return getGsonBuilder().create().toJson(activityReview);
