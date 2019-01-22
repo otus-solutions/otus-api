@@ -1,11 +1,11 @@
-package br.org.otus.survey.activity.activityReview;
+package br.org.otus.survey.activity.activityRevision;
 
-import org.ccem.otus.model.survey.activity.activityReview.ActivityReview;
-import org.ccem.otus.service.activityReview.ActivityReviewService;
+import org.ccem.otus.service.activityRevision.ActivityRevisionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
@@ -15,25 +15,26 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-public class ActivityReviewFacadeTest {
+public class ActivityRevisionFacadeTest {
     private static final String ID = "{\"data\":\"5c41cab016da480065be5d3c}";
+    private static final String ACTIVITY_ID = "5c41cab016da480065be5d3c";
+    private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\"," + "\"reviewDate\" : \"17/01/2019\"}";
     @Mock
-    private ActivityReviewService activityReviewService;
+    private ActivityRevisionService activityRevisionService;
     @InjectMocks
-    private ActivityReviewFacade activityReviewFacade;
-    @Mock
-    private ActivityReview activityReview;
+    private ActivityRevisionFacade activityRevisionFacade;
+
     @Test
-    public void method_should_verify_create_with_activityReview() {
-        when(activityReviewService.create(activityReview)).thenReturn(ID);
-        activityReviewFacade.create(activityReview);
-        verify(activityReviewService, times(1)).create(activityReview);
+    public void method_should_verify_create_with_activityRevision() {
+        when(activityRevisionService.create(Mockito.any())).thenReturn(ID);
+        activityRevisionFacade.create(ACTIVITY_REVISION_JSON);
+        verify(activityRevisionService, times(1)).create(Mockito.any());
     }
 
     @Test
-    public void method_should_verify_list_with_rn() {
-        when(activityReviewService.list()).thenReturn(new ArrayList<>());
-        activityReviewFacade.list();
-        verify(activityReviewService, times(1)).list();
+    public void method_should_verify_list_with() {
+        when(activityRevisionService.list(Mockito.any())).thenReturn(new ArrayList<>());
+        activityRevisionFacade.list(ACTIVITY_ID);
+        verify(activityRevisionService, times(1)).list(Mockito.any());
     }
 }

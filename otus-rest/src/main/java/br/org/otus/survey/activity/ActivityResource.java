@@ -13,7 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.survey.activity.activityReview.ActivityReviewFacade;
+import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import br.org.otus.participant.api.ParticipantFacade;
@@ -27,7 +27,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 public class ActivityResource {
 
   @Inject
-  private ActivityReviewFacade activityReviewFacade;
+  private ActivityRevisionFacade activityRevisionFacade;
   @Inject
   private ActivityFacade activityFacade;
   @Inject
@@ -83,22 +83,19 @@ public class ActivityResource {
 
   @GET
   @Secured
-  @Path("/list")
+  @Path("/revision/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String list(@Context HttpServletRequest request, @PathParam("rn") long rn) {
-    isValidRecruitmentNumber(rn);
-
-    return new Response().buildSuccess(activityReviewFacade.list()).toSurveyJson();
+  public String list(@Context HttpServletRequest request, @PathParam("id") String activityId) {
+    return new Response().buildSuccess(activityRevisionFacade.list(activityId)).toSurveyJson();
   }
 
   @POST
   @Secured
-  @Path("/review")
+  @Path("/revision")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createActivityReview(@PathParam("rn") long rn, String activityReview) {
-    isValidRecruitmentNumber(rn);
-    String objectID = activityReviewFacade.create(activityReviewFacade.deserialize(activityReview));
+  public String createActivityRevision(String activityRevision) {
+    String objectID = activityRevisionFacade.create(activityRevision);
 
     return new Response().buildSuccess(objectID).toJson();
   }

@@ -1,4 +1,4 @@
-package org.ccem.otus.model.survey.activity.activityReview;
+package org.ccem.otus.model.survey.activity.activityRevision;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -7,17 +7,17 @@ import org.ccem.otus.model.survey.activity.User;
 
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-public class ActivityReview {
+public class ActivityRevision {
     private ObjectId activityId;
     private String reviewDate;
     private User userReviewer;
 
-    public static String serialize(ActivityReview activityReview) {
-        return getGsonBuilder().create().toJson(activityReview);
+    public static String serialize(ActivityRevision activityRevision) {
+        return getGsonBuilder().create().toJson(activityRevision);
     }
 
-    public static ActivityReview deserialize(String activityReview) {
-        return ActivityReview.getGsonBuilder().create().fromJson(activityReview, ActivityReview.class);
+    public static ActivityRevision deserialize(String activityReview) {
+        return ActivityRevision.getGsonBuilder().create().fromJson(activityReview, ActivityRevision.class);
     }
 
     public static GsonBuilder getGsonBuilder() {

@@ -1,25 +1,25 @@
-package org.ccem.otus.service.activityReview;
+package org.ccem.otus.service.activityRevision;
 
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.survey.activity.activityReview.ActivityReview;
-import org.ccem.otus.persistence.ActivityReviewDao;
+import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
+import org.ccem.otus.persistence.ActivityRevisionDao;
 
 import javax.inject.Inject;
 import java.util.List;
 
-public class ActivityReviewServiceBean implements ActivityReviewService{
+public class ActivityRevisionServiceBean implements ActivityRevisionService {
 
     @Inject
-    private ActivityReviewDao activityReviewDao;
+    private ActivityRevisionDao activityRevisionDao;
 
     @Override
-    public List<ActivityReview> list() {
-        return activityReviewDao.find();
+    public List<ActivityRevision> list(ObjectId activityId) {
+        return activityRevisionDao.find(activityId);
     }
 
     @Override
-    public String create(ActivityReview activityReview) {
-        ObjectId objectId = activityReviewDao.persist(activityReview);
+    public String create(ActivityRevision activityRevision) {
+        ObjectId objectId = activityRevisionDao.persist(activityRevision);
         return objectId.toString();
     }
 }

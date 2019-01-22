@@ -1,46 +1,60 @@
-package br.org.otus.survey.activity.activityReview;
+package br.org.otus.survey.activity.activityRevision;
 
-import br.org.otus.survey.activity.ActivityReviewDaoBean;
+import br.org.otus.survey.activity.ActivityRevisionDaoBean;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.survey.activity.activityReview.ActivityReview;
-import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.ArrayList;
 
 import static org.mockito.Mockito.doNothing;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(PowerMockRunner.class)
-public class ActivityReviewDaoBeanTest {
-    private static final String JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\"," + "\"reviewDate\" : \"17/01/2019\"}";
+public class ActivityRevisionDaoBeanTest {
+    private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\"," + "\"reviewDate\" : \"17/01/2019\"}";
+    private static final ObjectId ACTIVITY_ID = new ObjectId("5c41c6b316da48006573a169");
 
     @InjectMocks
-    private ActivityReviewDaoBean activityReviewDaoBean = PowerMockito.spy(new ActivityReviewDaoBean());
-    private ActivityReview activityReview = PowerMockito.spy(new ActivityReview());
+    private ActivityRevisionDaoBean activityRevisionDaoBean;
 
     @Mock
     private MongoCollection<Document> collection;
-    @Mock
-    private ArrayList<ActivityReview> activitiesReview;
 
-    private MongoCursor cursor = PowerMockito.mock(MongoCursor.class);
+    @Mock
+    private ActivityRevision activitiesRevision;
+
+    @Mock
+    private FindIterable<Document> documents;
+
+    @Mock
+    private Document document;
 
     @Test
-    public void method_get_should_persist_query_correct() throws Exception {
-        when(ActivityReview.class, "serialize", activityReview).thenReturn(JSON);
-        doNothing().when(activityReviewDaoBean, "persist", Mockito.any(ObjectId.class, new ObjectIdAdapter()));
-        activityReviewDaoBean.persist(activityReview);
+    public void method_get_should_persist_query_correct() {
+        activitiesRevision = ActivityRevision.deserialize(ACTIVITY_REVISION_JSON);
+        Document parsed = Document.parse(ActivityRevision.serialize(activitiesRevision));
+        doNothing().when(collection).insertOne(parsed);
+        activityRevisionDaoBean.persist(activitiesRevision);
+        verify(collection,times(1)).insertOne(parsed);
+    }
 
+    @Test
+    public void method_get_should_find_query_correct() {
+        Mockito.when(collection.find((Bson) Mockito.any())).thenReturn(documents);
+        Mockito.when(documents.first()).thenReturn(document);
+
+        activityRevisionDaoBean.find(ACTIVITY_ID);
+        verify(collection,times(1)).find((Bson) Mockito.any());
     }
 }

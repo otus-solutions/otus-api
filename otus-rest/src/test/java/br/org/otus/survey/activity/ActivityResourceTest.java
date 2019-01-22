@@ -12,8 +12,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
@@ -40,7 +42,10 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 public class ActivityResourceTest {
   private static final long RECRUIMENT_NUMBER = 3051442;
   private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
+  private static final String ID_ACITIVITY = "5c41c6b316da48006573a169";
   private static final String ACTIVITY_EXPECTED = "{\"data\":\"591a40807b65e4045b9011e7\"}";
+  private static final String ACTIVITY_REVISION_EXPECTED = "{\"data\":\"5c41c6b316da48006573a169\"}";
+  private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\"," + "\"reviewDate\" : \"17/01/2019\"}";
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 
@@ -54,10 +59,13 @@ public class ActivityResourceTest {
   private ActivityService activityService;
   @Mock
   private ActivityFacade activityFacade;
+  @Mock
+  private ActivityRevisionFacade activityRevisionFacade;
 
   private String jsonActivity = "activity";
   private SurveyActivity activityDeserialize;
   private List<SurveyActivity> listSurveyActivity;
+  private List<ActivityRevision> listActivityRevision;
   private Participant participant;
 
   @Mock
@@ -120,5 +128,19 @@ public class ActivityResourceTest {
     String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
     assertEquals(responseExpected, activityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
     verify(participantFacade).getByRecruitmentNumber(anyLong());
+  }
+
+  @Test
+  public void method_createActivityRevision_should_return_ObjectResponse() {
+    when(activityRevisionFacade.create(ACTIVITY_REVISION_JSON)).thenReturn(ID_ACITIVITY);
+    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(ACTIVITY_REVISION_JSON));
+    verify(activityRevisionFacade).create(anyObject());
+  }
+
+  @Test
+  public void method_list_should_return_entire_list_by_recruitment_number(){
+    when(activityRevisionFacade.list(ID_ACITIVITY)).thenReturn(listActivityRevision);
+    String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.list(request,ID_ACITIVITY));
   }
 }

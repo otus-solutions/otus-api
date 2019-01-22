@@ -1,12 +1,13 @@
-package org.ccem.otus.service.activityReview;
+package org.ccem.otus.service.activityRevision;
 
-import org.ccem.otus.model.survey.activity.activityReview.ActivityReview;
+import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 
 import java.util.List;
 
-public interface ActivityReviewService {
+public interface ActivityRevisionService {
 
-    String create(ActivityReview activityReview);
+    String create(ActivityRevision activityRevision);
 
-    List<ActivityReview> list();
+    List<ActivityRevision> list(ObjectId activityId);
 }
