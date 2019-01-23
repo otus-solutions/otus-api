@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,7 @@ public class ActivityRevisionDaoBeanTest {
     }
 
     @Test
-    public void method_get_should_find_query_correct() {
+    public void method_get_should_find_query_correct() throws DataNotFoundException {
         Mockito.when(collection.find((Bson) Mockito.any())).thenReturn(documents);
         Mockito.when(documents.first()).thenReturn(document);
 

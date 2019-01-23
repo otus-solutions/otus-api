@@ -94,10 +94,13 @@ public class ActivityResource {
   @Path("/revision")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createActivityRevision(String activityRevision) {
-    String objectID = activityRevisionFacade.create(activityRevision);
+  public String createActivityRevision(@Context HttpServletRequest request, String activityRevisionJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-    return new Response().buildSuccess(objectID).toJson();
+    activityRevisionFacade.create(activityRevisionJson, userEmail);
+
+    return new Response().buildSuccess().toJson();
   }
 
   private void isValidRecruitmentNumber(long rn) {

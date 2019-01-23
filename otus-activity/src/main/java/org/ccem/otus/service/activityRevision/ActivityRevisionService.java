@@ -1,13 +1,14 @@
 package org.ccem.otus.service.activityRevision;
 
-import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 
 import java.util.List;
 
 public interface ActivityRevisionService {
 
-    String create(ActivityRevision activityRevision);
+    void create(String activityRevisionJson, ActivityBasicUser user);
 
-    List<ActivityRevision> list(ObjectId activityId);
+    List<ActivityRevision> list(String activityId) throws DataNotFoundException;
 }

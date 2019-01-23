@@ -5,6 +5,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.persistence.ActivityRevisionDao;
 
@@ -24,7 +25,7 @@ public class ActivityRevisionDaoBean extends MongoGenericDao<Document> implement
     }
 
     @Override
-    public List<ActivityRevision> find(ObjectId activityId) {
+    public List<ActivityRevision> find(ObjectId activityId) throws DataNotFoundException {
         ArrayList<ActivityRevision> activitiesRevision = new ArrayList<ActivityRevision>();
 
         FindIterable<Document> result = collection.find(eq(ACTIVITY_ID, activityId));
@@ -33,15 +34,17 @@ public class ActivityRevisionDaoBean extends MongoGenericDao<Document> implement
             activitiesRevision.add(ActivityRevision.deserialize(document.toJson()));
         });
 
+        if (result == null) {
+			throw new DataNotFoundException(new Throwable("activityId {" + activityId + "} not found."));
+		}
+
         return activitiesRevision;
     }
 
     @Override
-    public ObjectId persist(ActivityRevision activityRevision) {
+    public void persist(ActivityRevision activityRevision) {
         Document parsed = Document.parse(ActivityRevision.serialize(activityRevision));
 
         collection.insertOne(parsed);
-
-        return parsed.getObjectId("_id");
     }
 }

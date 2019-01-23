@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class ManagementUserDtoTest {
 
-  private static final String NAME = "Teste User";
+  private static final String NAME = "Teste ActivityBasicUser";
   private static final String SURNAME = "Surname";
   private static final Boolean EXTRACTION = Boolean.FALSE;
   private static final String PHONE = "555-555-555";

@@ -1,6 +1,8 @@
 package org.ccem.otus.service.activityRevision;
 
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.persistence.ActivityRevisionDao;
 
@@ -13,13 +15,17 @@ public class ActivityRevisionServiceBean implements ActivityRevisionService {
     private ActivityRevisionDao activityRevisionDao;
 
     @Override
-    public List<ActivityRevision> list(ObjectId activityId) {
-        return activityRevisionDao.find(activityId);
+    public List<ActivityRevision> list(String activityId) throws DataNotFoundException {
+        ObjectId activityOid = new ObjectId(activityId);
+        return activityRevisionDao.find(activityOid);
     }
 
     @Override
-    public String create(ActivityRevision activityRevision) {
-        ObjectId objectId = activityRevisionDao.persist(activityRevision);
-        return objectId.toString();
+    public void create(String activityRevisionJson, ActivityBasicUser user) {
+        ActivityRevision revision = ActivityRevision.deserialize(activityRevisionJson);
+
+        revision.setUser(user);
+
+        activityRevisionDao.persist(revision);
     }
 }

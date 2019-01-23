@@ -96,7 +96,7 @@ public class SecurityServiceBean implements SecurityService {
       passwordResetContextService.registerToken(requestData);
       return token;
     }else{
-      throw new DataNotFoundException(new Throwable("User with email: {" + requestData.getEmail() + "} not found."));
+      throw new DataNotFoundException(new Throwable("ActivityBasicUser with email: {" + requestData.getEmail() + "} not found."));
     }
   }
 
