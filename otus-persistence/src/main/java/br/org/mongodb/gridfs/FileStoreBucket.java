@@ -3,10 +3,14 @@ package br.org.mongodb.gridfs;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -26,6 +30,7 @@ public class FileStoreBucket {
 
 	@Inject
 	protected MongoDatabase db;
+	protected MongoCollection<Document> collection;
 	private GridFSBucket fileStore;
 	private GridFSUploadOptions gridFSUploadOptions;
 
@@ -37,6 +42,11 @@ public class FileStoreBucket {
 	@PostConstruct
 	public void setUp() {
 		fileStore = GridFSBuckets.create(db, FILESTORE);
+		collection = db.getCollection("filestore.files", Document.class);
+	}
+
+	public Document distinctIds(){
+		return collection.aggregate(Arrays.asList(new Document("$group",new Document("_id","{}").append("ObjectIds",new Document("$push","$_id"))))).first();
 	}
 
 	public String store(FileUploaderPOJO form) {

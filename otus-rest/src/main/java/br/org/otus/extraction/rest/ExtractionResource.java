@@ -49,6 +49,13 @@ public class ExtractionResource {
 		return new Response().buildSuccess(extractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Path("/attachments-report/{acronym}/{version}")
+	public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
+		return extractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);
+	}
+
 	@POST
 	@Secured
 	@Path("/enable")

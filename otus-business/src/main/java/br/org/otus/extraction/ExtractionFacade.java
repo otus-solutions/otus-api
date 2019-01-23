@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.attachments.AttachmentsReport;
+import br.org.otus.persistence.builder.AttachmentsExtractionQueryBuilder;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
@@ -21,6 +25,7 @@ public class ExtractionFacade {
 
 	@Inject
 	private SurveyFacade surveyFacade;
+
 
 	@Inject
 	private ExtractionService extractionService;
@@ -41,4 +46,8 @@ public class ExtractionFacade {
 	public List<Integer> listSurveyVersions(String acronym){
         return surveyFacade.listVersions(acronym);
     }
+
+	public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
+		return extractionService.getAttachmentsReport(acronym,version);
+	}
 }

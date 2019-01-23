@@ -1,10 +1,13 @@
 package br.org.otus.survey.activity.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
+import com.mongodb.client.AggregateIterable;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -20,7 +23,11 @@ public class ActivityFacade {
 	@Inject
 	private ActivityService activityService;
 
-	public List<SurveyActivity> list(long rn, String userEmail) {
+    public AggregateIterable<Document> aggregate(ArrayList<Bson> fetchAttachmentsReportQury) {
+    	return activityService.aggregate(fetchAttachmentsReportQury);
+    }
+
+    public List<SurveyActivity> list(long rn, String userEmail) {
 		return activityService.list(rn, userEmail);		
 	}
 
