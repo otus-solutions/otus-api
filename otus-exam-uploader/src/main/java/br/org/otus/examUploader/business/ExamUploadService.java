@@ -11,7 +11,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
-import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 
 public interface ExamUploadService {
 
@@ -31,6 +31,6 @@ public interface ExamUploadService {
 
   LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException;
 
-  LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() throws DataNotFoundException;
+  LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 
 }

@@ -16,7 +16,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
-import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 import br.org.otus.examUploader.persistence.ExamDao;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.examUploader.persistence.ExamSendingLotDao;
@@ -171,7 +171,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
   }
 
   @Override
-  public LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() throws DataNotFoundException {
+  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
     return examResultDAO.getExamResultsExtractionValues();
   }
 }

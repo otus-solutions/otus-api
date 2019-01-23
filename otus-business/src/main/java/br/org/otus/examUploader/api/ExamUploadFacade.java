@@ -13,7 +13,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
-import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 
@@ -75,7 +75,7 @@ public class ExamUploadFacade {
     }
   }
 
-  public LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() {
+  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() {
     try {
       return examUploadService.getExamResultsExtractionValues();
     } catch (DataNotFoundException e) {

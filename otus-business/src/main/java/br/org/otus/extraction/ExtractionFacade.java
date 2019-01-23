@@ -14,6 +14,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 import br.org.otus.api.ExtractionService;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
@@ -30,7 +31,6 @@ public class ExtractionFacade {
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
     List<SurveyActivity> activities = new ArrayList<>();
-
     activities = activityFacade.get(acronym, version);
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
@@ -43,8 +43,8 @@ public class ExtractionFacade {
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
     LinkedHashSet<String> headers = examUploadFacade.getExamResultsExtractionHeader();
-    examUploadFacade.getExamResultsExtractionValues();
-    ExamUploadExtration extractor = new ExamUploadExtration(headers);
+    LinkedHashSet<ParticipantExamUploadRecordExtraction> records = examUploadFacade.getExamResultsExtractionValues();
+    ExamUploadExtration extractor = new ExamUploadExtration(headers, records);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

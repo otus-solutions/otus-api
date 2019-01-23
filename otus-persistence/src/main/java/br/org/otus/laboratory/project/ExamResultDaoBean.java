@@ -11,16 +11,14 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
-import br.org.otus.examUploader.business.extraction.ExamUploadExtractionValue;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.laboratory.project.builder.ExamResultQueryBuilder;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
@@ -92,9 +90,10 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
     return headers;
   }
 
+  // TODO: Deve jogar exceção quando não encontrar valores de extração!
   @Override
-  public LinkedHashSet<ExamUploadExtractionValue> getExamResultsExtractionValues() {
-    LinkedHashSet<ExamUploadExtractionValue> values = new LinkedHashSet<>();
+  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() {
+    LinkedHashSet<ParticipantExamUploadRecordExtraction> values = new LinkedHashSet<>();
     List<Bson> query = new ExamResultQueryBuilder()
         .getExamResultsWithAliquotValid()
         .getSortingByExamName()
@@ -102,14 +101,11 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
         .getProjectionOfExamResultsToExtraction()
         .build();
 
-    MongoCursor<Document> iterator = collection.aggregate(query).allowDiskUse(true).iterator();
-
-    try {
-      while (iterator.hasNext()) {
-        values.add(ExamUploadExtractionValue.deserialize(iterator.next().toJson()));
-      }
-    } finally {
-      iterator.close();
+   AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
+    
+    for (Object anOutput : output) {
+      Document result = (Document) anOutput;
+      values.add(ParticipantExamUploadRecordExtraction.deserialize(result.toJson()));
     }
 
     return values;

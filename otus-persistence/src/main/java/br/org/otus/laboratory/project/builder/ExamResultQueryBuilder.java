@@ -21,21 +21,19 @@ public class ExamResultQueryBuilder {
   }
 
   public ExamResultQueryBuilder getExamResultsWithAliquotValid() {
-    Document match = parseQuery("{ $match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}");
-
-    pipeline.add(match);
+    pipeline.add(this.parseQuery("{$match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}"));
+    
     return this;
   }
 
   public ExamResultQueryBuilder getSortingByExamName() {
-    Document sort = parseQuery("{$sort:{\"resultName\":1}}");
-
-    pipeline.add(sort);
+    pipeline.add(this.parseQuery("{$sort:{\"resultName\":1}}"));
+    
     return this;
   }
   
   public ExamResultQueryBuilder getExamResultsGroupByRecruitmentNumber() {
-    Document sort = parseQuery("{\n" + 
+    Document group = this.parseQuery("{\n" + 
         "        $group: {\n" + 
         "            _id: \"$recruitmentNumber\",\n" + 
         "            results:\n" + 
@@ -49,16 +47,18 @@ public class ExamResultQueryBuilder {
         "        }\n" + 
         "    }");
 
-    pipeline.add(sort);
+    pipeline.add(group);
     return this;
   }
   
-  public ExamResultQueryBuilder getProjectionOfExamResultsToExtraction() { // TODO: Melhorar o nome do método!
-    Document project = parseQuery("$project: {\n" + 
+  public ExamResultQueryBuilder getProjectionOfExamResultsToExtraction() {
+    Document project = this.parseQuery("{\n" + 
+        "        $project: {\n" + 
         "            recruitmentNumber: \"$_id\",\n" + 
         "            _id: 0,\n" + 
         "            results: \"$results\"\n" + 
-        "        }");
+        "        }\n" + 
+        "    }");
     
     pipeline.add(project);
     return this;

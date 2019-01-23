@@ -9,14 +9,16 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import br.org.otus.api.Extractable;
 import br.org.otus.examUploader.business.extraction.factories.ExamUploadExtractionHeadersFactory;
 import br.org.otus.examUploader.business.extraction.factories.ExamUploadExtractionRecordsFactory;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 
 public class ExamUploadExtration implements Extractable {
 
   private ExamUploadExtractionHeadersFactory headersFactory;
   private ExamUploadExtractionRecordsFactory recordsFactory;
 
-  public ExamUploadExtration(LinkedHashSet<String> resultHeaders) {
-    this.headersFactory = new ExamUploadExtractionHeadersFactory(resultHeaders);
+  public ExamUploadExtration(LinkedHashSet<String> headers, LinkedHashSet<ParticipantExamUploadRecordExtraction> records) {
+    this.headersFactory = new ExamUploadExtractionHeadersFactory(headers);
+    this.recordsFactory = new ExamUploadExtractionRecordsFactory(headers, records);
   }
 
   @Override
@@ -27,8 +29,9 @@ public class ExamUploadExtration implements Extractable {
   @Override
   public List<List<Object>> getValues() throws DataNotFoundException {
     List<List<Object>> values = new ArrayList<>();
-
-    return values;
+    recordsFactory.buildResultInformation();
+    
+    return recordsFactory.getRecords();
   }
 
 }
