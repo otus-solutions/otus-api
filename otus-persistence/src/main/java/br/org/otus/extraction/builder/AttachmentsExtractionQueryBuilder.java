@@ -24,7 +24,7 @@ public class AttachmentsExtractionQueryBuilder {
     }
 
     private ArrayList<Bson> getBsons(String acronym, Integer version, ArrayList<ObjectId> objectIds, String state, String statueSubtitle) {
-        pipeline.add(parseQuery("{$match:{\"surveyForm.surveyTemplate.identity.acronym\":"+acronym+",\"surveyForm.version\":"+version+"}}"));
+        pipeline.add(parseQuery("{$match:{\"surveyForm.surveyTemplate.identity.acronym\":"+acronym+",\"surveyForm.version\":"+version+",\"isDiscarded\":false}}"));
         pipeline.add(parseQuery("{$project:{\"participantData.recruitmentNumber\":1,\"fillContainer\":1,\"surveyForm.surveyTemplate.identity.acronym\":1}}"));
         pipeline.add(parseQuery("{$unwind:\"$fillContainer.fillingList\"}"));
         pipeline.add(parseQuery("{$match:{\"fillContainer.fillingList.answer.type\":\"FileUploadQuestion\"}}"));

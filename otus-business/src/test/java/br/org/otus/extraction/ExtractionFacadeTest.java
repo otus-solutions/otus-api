@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -74,6 +75,12 @@ public class ExtractionFacadeTest {
 		assertNotNull(extractionFacade);
 		extractionFacade.listSurveyVersions(acronym);
 		Mockito.verify(surveyFacade).listVersions(acronym);
+	}
+
+	@Test
+	public void createAttachmentsReportExtraction_should_call_getAttachmentsReport_from_extractionService() throws DataNotFoundException {
+		extractionFacade.createAttachmentsReportExtraction(acronym,version);
+		Mockito.verify(extractionService).getAttachmentsReport(acronym,version);
 	}
 
 }

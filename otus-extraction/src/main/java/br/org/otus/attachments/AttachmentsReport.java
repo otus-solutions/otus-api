@@ -13,13 +13,6 @@ import java.util.List;
 
 public class AttachmentsReport {
 
-    private static final char DELIMITER = ';';
-    private static final String RECORD_SEPARATOR = "\n";
-
-    private CSVFormat csvFileFormat;
-    private CSVPrinter csvFilePrinter;
-    private ByteArrayOutputStream out;
-
     private List<Attachment> attachmentsList = new ArrayList<>();
 
     public List<Attachment> getAttachmentsList() {
@@ -30,11 +23,16 @@ public class AttachmentsReport {
         this.attachmentsList.addAll(attachmentsList);
     }
 
-    public byte[] getCsv(AttachmentsReport attachmentsReport) {
+    public byte[] getCsv() {
+        char DELIMITER = ';';
+        String RECORD_SEPARATOR = "\n";
+
+        CSVFormat csvFileFormat;
+        CSVPrinter csvFilePrinter;
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+
         try {
-            out = new ByteArrayOutputStream();
             csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"').withQuoteMode(QuoteMode.MINIMAL);
             csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 
@@ -46,7 +44,7 @@ public class AttachmentsReport {
                     "status"
             );
 
-            for(AttachmentsReport.Attachment attachment : attachmentsReport.getAttachmentsList()){
+            for(AttachmentsReport.Attachment attachment : this.attachmentsList){
                 csvFilePrinter.printRecord(
                         attachment.getRecruitmentNumber(),
                         attachment.getQuestionId(),
