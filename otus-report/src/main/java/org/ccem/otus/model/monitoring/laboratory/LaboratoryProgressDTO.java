@@ -28,6 +28,12 @@ public class LaboratoryProgressDTO {
         }
     }
 
+    public void fillEmptyWaitingToPendingResults() {
+        for (PendingResults pendingResult : this.pendingResultsByAliquot) {
+            pendingResult.waiting = 0;
+        }
+    }
+
     public void concatReceivedToAliquotStats(LaboratoryProgressDTO received) {
         for (AliquotStats aliquotStats : this.quantitativeByTypeOfAliquots) {
             Integer examsReceived = 0;
@@ -41,6 +47,8 @@ public class LaboratoryProgressDTO {
             aliquotStats.received = examsReceived;
         }
     }
+
+
 
     private class OrphanExam {
         private String title;

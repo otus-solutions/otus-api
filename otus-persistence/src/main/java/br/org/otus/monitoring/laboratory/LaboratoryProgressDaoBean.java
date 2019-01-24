@@ -65,7 +65,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
         CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
 
         CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(allAliquotsWithExamsDocument -> {
-            LaboratoryProgressDTO laboratoryProgressDTO;
+            LaboratoryProgressDTO laboratoryProgressDTO = new LaboratoryProgressDTO();
             LaboratoryProgressDTO laboratoryProgressPartialDTO = new LaboratoryProgressDTO();
 
             if (allAliquotsWithExamsDocument != null) {
@@ -84,11 +84,10 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
                     throw new IllegalStateException();
                 }
 
-                if (firstPartOfDTO == null) {
-                    throw new IllegalStateException();
+                if (firstPartOfDTO != null){
+                    laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(firstPartOfDTO.toJson());
                 }
 
-                laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(firstPartOfDTO.toJson());
                 Document secondPartOfDTO = null;
                 try {
                     secondPartOfDTO = Future2.get();
@@ -96,16 +95,26 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
                 } catch (ExecutionException e) {
                     throw new IllegalStateException();
                 }
+
+                if (firstPartOfDTO == null && secondPartOfDTO == null){
+                    throw new IllegalStateException();
+                }
+
                 if (secondPartOfDTO != null) {
                     laboratoryProgressPartialDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
+                    if (firstPartOfDTO != null){
+                        laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
+                    } else {
+                        laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
+                        laboratoryProgressDTO.fillEmptyWaitingToPendingResults();
+                    }
                 }
-                laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
+
             } else {
                 throw new IllegalStateException();
             }
 
             return laboratoryProgressDTO;
-
         });
 
 
