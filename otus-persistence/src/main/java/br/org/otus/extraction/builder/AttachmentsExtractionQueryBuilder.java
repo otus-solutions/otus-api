@@ -1,15 +1,11 @@
-package br.org.otus.persistence.builder;
+package br.org.otus.extraction.builder;
 
 import com.google.gson.GsonBuilder;
-import com.mongodb.client.DistinctIterable;
-import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class AttachmentsExtractionQueryBuilder {
 

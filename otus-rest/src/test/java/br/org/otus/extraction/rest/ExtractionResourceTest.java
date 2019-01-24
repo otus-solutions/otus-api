@@ -53,4 +53,10 @@ public class ExtractionResourceTest {
 		Mockito.verify(extractionFacade).listSurveyVersions(acronym);
 	}
 
+	@Test
+	public void should_verify_method_extractAnnexesReport_have_been_called() throws DataNotFoundException {
+		extractionResource.extractAnnexesReport(acronym,version);
+		Mockito.verify(extractionFacade).createAttachmentsReportExtraction(acronym,version);
+	}
+
 }
