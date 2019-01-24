@@ -1,13 +1,15 @@
 package org.ccem.otus.service.extraction;
 
-import br.org.otus.api.Extractable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionHeadersFactory;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecordsFactory;
 import org.ccem.otus.survey.form.SurveyForm;
 
-import java.util.*;
+import br.org.otus.api.Extractable;
 
 public class SurveyActivityExtraction implements Extractable {
 
@@ -23,7 +25,7 @@ public class SurveyActivityExtraction implements Extractable {
 	}
 
 	@Override
-	public LinkedHashSet<String> getHeaders() {
+	public List<String> getHeaders() {
 		return this.headersFactory.getHeaders();
 	}
 

@@ -101,8 +101,8 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
         .getProjectionOfExamResultsToExtraction()
         .build();
 
-   AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
-    
+    AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
+
     for (Object anOutput : output) {
       Document result = (Document) anOutput;
       values.add(ParticipantExamUploadRecordExtraction.deserialize(result.toJson()));

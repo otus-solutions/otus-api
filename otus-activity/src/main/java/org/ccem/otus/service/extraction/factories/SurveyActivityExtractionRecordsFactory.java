@@ -2,7 +2,7 @@ package org.ccem.otus.service.extraction.factories;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -26,7 +26,7 @@ public class SurveyActivityExtractionRecordsFactory {
   private LinkedHashMap<String, Object> surveyInformation;
   private SurveyForm surveyForm;
 
-  public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet<String> headers) {
+  public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, List<String> headers) {
     this.surveyInformation = new LinkedHashMap<>();
     this.surveyForm = surveyForm;
     for (Object header : headers) {

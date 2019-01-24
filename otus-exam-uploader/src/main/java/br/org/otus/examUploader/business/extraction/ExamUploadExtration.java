@@ -1,6 +1,5 @@
 package br.org.otus.examUploader.business.extraction;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -18,20 +17,19 @@ public class ExamUploadExtration implements Extractable {
 
   public ExamUploadExtration(LinkedHashSet<String> headers, LinkedHashSet<ParticipantExamUploadRecordExtraction> records) {
     this.headersFactory = new ExamUploadExtractionHeadersFactory(headers);
-    this.recordsFactory = new ExamUploadExtractionRecordsFactory(headers, records);
+    this.recordsFactory = new ExamUploadExtractionRecordsFactory(this.headersFactory.getHeaders(), records);
   }
 
   @Override
-  public LinkedHashSet<String> getHeaders() {
+  public List<String> getHeaders() {
     return this.headersFactory.getHeaders();
   }
 
   @Override
   public List<List<Object>> getValues() throws DataNotFoundException {
-    List<List<Object>> values = new ArrayList<>();
-    recordsFactory.buildResultInformation();
-    
-    return recordsFactory.getRecords();
+    this.recordsFactory.buildResultInformation();
+
+    return this.recordsFactory.getValues();
   }
 
 }

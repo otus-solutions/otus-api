@@ -1,27 +1,30 @@
 package br.org.otus.examUploader.business.extraction.factories;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import br.org.otus.examUploader.business.extraction.enums.ExamUploadExtractionHeaders;
 
 public class ExamUploadExtractionHeadersFactory {
 
-  private LinkedHashSet<String> headers;
+  private List<String> headers;
 
-  public ExamUploadExtractionHeadersFactory(LinkedHashSet<String> resultHeaders) {
-    this.headers = new LinkedHashSet<>();
-    this.buildHeader(resultHeaders);
+  public ExamUploadExtractionHeadersFactory(LinkedHashSet<String> headers) {
+    this.headers = new LinkedList<String>();
+    this.buildHeader(headers);
   }
 
-  public LinkedHashSet<String> getHeaders() {
+  public List<String> getHeaders() {
     return this.headers;
   }
 
-  private void buildHeader(LinkedHashSet<String> resultHeaders) {
-    /* Basic info headers */
+  private void buildHeader(LinkedHashSet<String> headers) {
+    /* Basic information headers */
     this.headers.add(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
+
     /* Answers headers */
-    resultHeaders.forEach(value -> {
+    headers.forEach(value -> {
       this.headers.add(value);
       this.headers.add(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
     });

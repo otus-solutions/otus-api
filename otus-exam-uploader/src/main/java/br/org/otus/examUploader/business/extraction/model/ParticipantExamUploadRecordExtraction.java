@@ -25,4 +25,12 @@ public class ParticipantExamUploadRecordExtraction {
     return builder;
   }
 
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
+  }
+
+  public List<ParticipantExamUploadResultExtraction> getResults() {
+    return results;
+  }
+
 }
