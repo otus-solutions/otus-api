@@ -54,7 +54,7 @@ public class LaboratoryProgressQueryBuilderTest {
 
     @Test
     public void getPendingAliquotsCsvDataQuery() {
-        String expectedQuery = "[{\"$match\":{\"code\":{\"$nin\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\",\"role\":\"EXAM\"}},{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotId\",null]},\"then\":1.0,\"else\":0.0}}}},{\"$group\":{\"_id\":{},\"pendingAliquotsCsvData\":{\"$push\":{\"aliquot\":\"$code\",\"transported\":\"$transported\",\"prepared\":\"$prepared\"}}}}]";
+        String expectedQuery = "[{\"$match\":{\"code\":{\"$nin\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\",\"role\":\"EXAM\"}},{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotId\",null]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotData.id\",null]},\"then\":1.0,\"else\":0.0}}}}}},{\"$group\":{\"_id\":{},\"pendingAliquotsCsvData\":{\"$push\":{\"aliquot\":\"$code\",\"transported\":\"$transported\",\"prepared\":\"$prepared\"}}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery(CODELIST,CENTER)));
     }
 

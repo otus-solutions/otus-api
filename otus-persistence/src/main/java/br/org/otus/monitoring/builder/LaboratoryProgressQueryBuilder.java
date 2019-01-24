@@ -124,7 +124,7 @@ public class LaboratoryProgressQueryBuilder {
 
     public List<Bson> getPendingAliquotsCsvDataQuery(ArrayList<String> aliquotCodes, String center){
         pipeline.add(new Document("$match", new Document("code", new Document("$nin", aliquotCodes)).append("fieldCenter.acronym", center).append("role", "EXAM")));
-        pipeline.add(parseQuery("{$project:{\"code\":\"$code\",\"transported\":{$cond:{if:{$ne:[\"$transportationLotId\",null]},then:1,else:0}},prepared:{$cond:{if:{$ne:[\"$examLotId\",null]},then:1,else:0}}}}"));
+        pipeline.add(parseQuery("{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotId\",null]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotData.id\",null]},\"then\":1.0,\"else\":0.0}}}}}}"));
         pipeline.add(parseQuery("{$group:{_id:{},pendingAliquotsCsvData:{$push:{aliquot:\"$code\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
         return this.pipeline;
     }
