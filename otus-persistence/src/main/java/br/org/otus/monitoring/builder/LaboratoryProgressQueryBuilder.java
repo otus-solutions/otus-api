@@ -86,7 +86,7 @@ public class LaboratoryProgressQueryBuilder {
 
     public List<Bson> getQuantitativeByTypeOfAliquotsFirstPartialResultQuery(String center){
         pipeline.add(parseQuery("{$match:{\"role\":\"EXAM\",\"fieldCenter.acronym\":" + center + "}}"));
-        pipeline.add(parseQuery("{$group:{_id:\"$name\",aliquots:{$push:{code:\"$code\",transported:{$cond:{if:{$ne:[\"$transportationLotId\",null]},then:1,else:0}},prepared:{$cond:{if:{$ne:[\"$examLotId\",null]},then:1,else:0}}}}}}"));
+        pipeline.add(parseQuery("{\"$group\":{\"_id\":\"$name\",\"aliquots\":{\"$push\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotId\",null]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ne\":[\"$examLotData.id\",null]},\"then\":1.0,\"else\":0.0}}}}}}}}"));
         pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
         pipeline.add(parseQuery("{$group:{_id:\"$_id\",transported:{$sum:\"$aliquots.transported\"},prepared:{$sum: \"$aliquots.prepared\"}}}"));
         pipeline.add(parseQuery("{$group:{_id:{},quantitativeByTypeOfAliquots:{$push:{title:\"$_id\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
