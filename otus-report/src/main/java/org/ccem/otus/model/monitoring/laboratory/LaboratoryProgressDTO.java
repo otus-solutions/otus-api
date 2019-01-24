@@ -17,9 +17,11 @@ public class LaboratoryProgressDTO {
     public void concatReceivedToPendingResults(LaboratoryProgressDTO received) {
         for (PendingResults pendingResult : this.pendingResultsByAliquot) {
             Integer examsReceived = 0;
-            for (PendingResults receivedPendingResults : received.pendingResultsByAliquot) {
-                if (receivedPendingResults.title.equals(pendingResult.title)) {
-                    examsReceived = receivedPendingResults.received;
+            if (received.pendingResultsByAliquot != null) {
+                for (PendingResults receivedPendingResults : received.pendingResultsByAliquot) {
+                    if (receivedPendingResults.title.equals(pendingResult.title)) {
+                        examsReceived = receivedPendingResults.received;
+                    }
                 }
             }
             pendingResult.received = examsReceived;
