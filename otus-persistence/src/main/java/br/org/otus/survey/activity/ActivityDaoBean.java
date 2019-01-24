@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import com.google.gson.GsonBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -178,12 +177,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
     private void removeOids(Document parsedActivity){
         parsedActivity.remove("_id");
-        ((Document) parsedActivity.get("surveyForm")).remove("_id");; //todo: remove when this id becomes standard
-    }
-
-    private Document parseQuery(String query) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().fromJson(query, Document.class);
+        ((Document) parsedActivity.get("surveyForm")).remove("_id");
     }
 
 }
