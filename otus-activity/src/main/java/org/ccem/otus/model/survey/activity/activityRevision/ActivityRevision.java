@@ -8,13 +8,18 @@ import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class ActivityRevision {
+
     private String objectType = "ActivityRevision";
-    private ObjectId activityId;
-    private String revisionDate;
+    private ObjectId activityID;
     private ActivityBasicUser user;
+    private String revisionDate;
 
     public void setUser(ActivityBasicUser user) {
         this.user = user;
+    }
+
+    public ActivityBasicUser getUser(){
+        return user;
     }
 
     public static String serialize(ActivityRevision activityRevision) {

@@ -1,9 +1,10 @@
 package org.ccem.otus.service.activityRevision;
 
+import br.org.otus.model.User;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
+import org.ccem.otus.model.survey.activity.user.ActivityBasicUserFactory;
 import org.ccem.otus.persistence.ActivityRevisionDao;
 
 import javax.inject.Inject;
@@ -21,10 +22,11 @@ public class ActivityRevisionServiceBean implements ActivityRevisionService {
     }
 
     @Override
-    public void create(String activityRevisionJson, ActivityBasicUser user) {
+    public void create(String activityRevisionJson, User user) {
         ActivityRevision revision = ActivityRevision.deserialize(activityRevisionJson);
+        ActivityBasicUserFactory activityBasicUserFactory = new ActivityBasicUserFactory();
 
-        revision.setUser(user);
+        revision.setUser(activityBasicUserFactory.createRevisionUser(user));
 
         activityRevisionDao.persist(revision);
     }

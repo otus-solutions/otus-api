@@ -4,8 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +43,8 @@ public class ActivityResourceTest {
   private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
   private static final String ID_ACITIVITY = "5c41c6b316da48006573a169";
   private static final String ACTIVITY_EXPECTED = "{\"data\":\"591a40807b65e4045b9011e7\"}";
-  private static final String ACTIVITY_REVISION_EXPECTED = "{\"data\":\"5c41c6b316da48006573a169\"}";
-  private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\"," + "\"reviewDate\" : \"17/01/2019\"}";
+  private static final String ACTIVITY_REVISION_EXPECTED = "{\"data\":true}";
+  private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 
@@ -130,17 +129,23 @@ public class ActivityResourceTest {
     verify(participantFacade).getByRecruitmentNumber(anyLong());
   }
 
-//  @Test
-//  public void method_createActivityRevision_should_return_ObjectResponse() {
-//    when(activityRevisionFacade.create(ACTIVITY_REVISION_JSON)).thenReturn(ID_ACITIVITY);
-//    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(ACTIVITY_REVISION_JSON));
-//    verify(activityRevisionFacade).create(anyObject());
-//  }
-//
-//  @Test
-//  public void method_list_should_return_entire_list_by_recruitment_number(){
-//    when(activityRevisionFacade.list(ID_ACITIVITY)).thenReturn(listActivityRevision);
-//    String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
-//    assertEquals(listSurveyActivityExpected, activityResource.list(request,ID_ACITIVITY));
-//  }
+  @Test
+  public void method_createActivityRevision_should_return_ObjectResponse() {
+    when(request.getHeader(Mockito.anyString())).thenReturn(TOKEN);
+    PowerMockito.mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.readToken(TOKEN)).thenReturn(TOKEN);
+    when(securityContext.getSession(TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(userEmail);
+    activityRevisionFacade.create(ACTIVITY_REVISION_JSON, userEmail);
+    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(request,ACTIVITY_REVISION_JSON));
+    verify(activityRevisionFacade,times (2)).create(ACTIVITY_REVISION_JSON, userEmail);
+  }
+
+  @Test
+  public void method_list_should_return_entire_list_by_recruitment_number(){
+    when(activityRevisionFacade.list(ID_ACITIVITY)).thenReturn(listActivityRevision);
+    String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.list(request,ID_ACITIVITY));
+  }
 }

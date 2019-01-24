@@ -23,10 +23,6 @@ public class ActivityBasicUser {
 		this.email = email;
 	}
 
-	public void setNameAndSurname(String name,String surname){
-		this.name = name + " " + surname;
-	}
-
 	public String getName() {
 		return name;
 	}
