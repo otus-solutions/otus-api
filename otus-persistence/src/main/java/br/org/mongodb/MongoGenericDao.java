@@ -3,11 +3,15 @@ package br.org.mongodb;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.conversions.Bson;
+
+import java.util.List;
 
 public abstract class MongoGenericDao<T> {
 
@@ -45,6 +49,10 @@ public abstract class MongoGenericDao<T> {
 
   public T findFirst() {
     return list().first();
+  }
+
+  public AggregateIterable<T> aggregate(List<Bson> query) {
+    return collection.aggregate(query).allowDiskUse(true);
   }
 
 }
