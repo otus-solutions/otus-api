@@ -6,9 +6,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import com.mongodb.client.AggregateIterable;
-import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -112,10 +109,5 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> get(String acronym, Integer version)
       throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
-  }
-
-  @Override
-  public AggregateIterable<Document> aggregate(ArrayList<Bson> fetchAttachmentsReportQury) {
-    return activityDao.aggregate(fetchAttachmentsReportQury);
   }
 }

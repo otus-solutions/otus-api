@@ -21,6 +21,4 @@ public interface ActivityService {
     SurveyActivity getByID(String id) throws DataNotFoundException;
 
     List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
-
-    AggregateIterable<Document> aggregate(ArrayList<Bson> fetchAttachmentsReportQury);
 }

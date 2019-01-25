@@ -28,7 +28,6 @@ public class FileUploaderDaoBean extends MongoGenericDao<FileUploader> implement
 	@Override
 	public FileUploader getById(String oid) throws DataNotFoundException {
 		FileUploader result = this.collection.find(eq("_id", new ObjectId(oid))).first();
-		FileUploader result2 = this.collection.find(eq("_id", new ObjectId(oid))).first();
 		if (result == null) {
 			throw new DataNotFoundException(new Throwable("File with id " + oid + " not found"));
 		}
