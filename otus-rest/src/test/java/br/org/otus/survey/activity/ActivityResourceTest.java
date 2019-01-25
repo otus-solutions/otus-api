@@ -143,9 +143,9 @@ public class ActivityResourceTest {
   }
 
   @Test
-  public void method_list_should_return_entire_list_by_recruitment_number(){
-    when(activityRevisionFacade.list(ID_ACITIVITY)).thenReturn(listActivityRevision);
+  public void method_list_should_return_entire_getActivityRevisions_by_recruitment_number(){
+    when(activityRevisionFacade.getActivityRevisions(ID_ACITIVITY)).thenReturn(listActivityRevision);
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
-    assertEquals(listSurveyActivityExpected, activityResource.list(request,ID_ACITIVITY));
+    assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
   }
 }

@@ -51,8 +51,8 @@ public class ActivityRevisionServiceBeanTest {
         verify(activityRevisionDao, times(1)).persist(Mockito.any(ActivityRevision.class));
     }
     @Test
-    public void listMethod_should_invoke_find_of_ActivityRevisionDao_find() throws DataNotFoundException {
-        activitiesRevision = activityRevisionService.list(ACTIVITY_ID);
+    public void listMethod_should_invoke_find_of_ActivityRevisionDao_findByActivityID() throws DataNotFoundException {
+        activitiesRevision = activityRevisionService.getActivityRevisions(ACTIVITY_ID);
         assertTrue(activitiesRevision.get(0) instanceof ActivityRevision);
         verify(activityRevisionDao, times(1)).findByActivityID(objectId);
     }

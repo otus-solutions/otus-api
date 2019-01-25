@@ -38,9 +38,9 @@ public class ActivityRevisionFacadeTest {
     }
 
     @Test
-    public void method_should_verify_list_with() throws DataNotFoundException {
-        when(activityRevisionService.list(ACTIVITY_ID)).thenReturn(new ArrayList<>());
-        activityRevisionFacade.list(ACTIVITY_ID);
-        verify(activityRevisionService, times(1)).list(ACTIVITY_ID);
+    public void method_should_verify_getActivityRevisions_with() throws DataNotFoundException {
+        when(activityRevisionService.getActivityRevisions(ACTIVITY_ID)).thenReturn(new ArrayList<>());
+        activityRevisionFacade.getActivityRevisions(ACTIVITY_ID);
+        verify(activityRevisionService, times(1)).getActivityRevisions(ACTIVITY_ID);
     }
 }

@@ -24,9 +24,9 @@ public class ActivityRevisionFacade {
         activityRevisionService.create(activityRevisionJson, user);
     }
 
-    public List<ActivityRevision> list(String activityID) {
+    public List<ActivityRevision> getActivityRevisions(String activityID) {
         try {
-            return activityRevisionService.list(activityID);
+            return activityRevisionService.getActivityRevisions(activityID);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }

@@ -85,8 +85,8 @@ public class ActivityResource {
   @Secured
   @Path("/revision/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String list(@Context HttpServletRequest request, @PathParam("id") String activityID) {
-    return new Response().buildSuccess(activityRevisionFacade.list(activityID)).toSurveyJson();
+  public String getActivityRevisions(@Context HttpServletRequest request, @PathParam("id") String activityID) {
+    return new Response().buildSuccess(activityRevisionFacade.getActivityRevisions(activityID)).toSurveyJson();
   }
 
   @POST

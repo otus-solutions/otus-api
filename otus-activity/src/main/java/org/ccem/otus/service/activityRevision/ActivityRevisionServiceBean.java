@@ -16,7 +16,7 @@ public class ActivityRevisionServiceBean implements ActivityRevisionService {
     private ActivityRevisionDao activityRevisionDao;
 
     @Override
-    public List<ActivityRevision> list(String activityID) throws DataNotFoundException {
+    public List<ActivityRevision> getActivityRevisions(String activityID) throws DataNotFoundException {
         ObjectId activityOid = new ObjectId(activityID);
         return activityRevisionDao.findByActivityID(activityOid);
     }
