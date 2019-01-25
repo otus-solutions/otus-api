@@ -11,5 +11,5 @@ public interface ActivityRevisionService {
 
     void create(String activityRevisionJson, User user);
 
-    List<ActivityRevision> list(String activityId) throws DataNotFoundException;
+    List<ActivityRevision> list(String activityID) throws DataNotFoundException;
 }

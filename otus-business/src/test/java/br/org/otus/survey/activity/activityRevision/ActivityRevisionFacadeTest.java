@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.*;
 @RunWith(PowerMockRunner.class)
 public class ActivityRevisionFacadeTest {
     private static final String ACTIVITY_ID = "5c41cab016da480065be5d3c";
-    private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
+    private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
     private static final String USER_EMAIL = "otus@gmail.com";
 
     @InjectMocks
@@ -26,10 +25,8 @@ public class ActivityRevisionFacadeTest {
 
     @Mock
     private ActivityRevisionService activityRevisionService;
-
     @Mock
     private UserFacade userFacade;
-
     @Mock
     private User user;
 

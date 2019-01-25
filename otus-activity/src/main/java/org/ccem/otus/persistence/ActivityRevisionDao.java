@@ -10,5 +10,5 @@ public interface ActivityRevisionDao {
 
     void persist(ActivityRevision activityRevision);
 
-    List<ActivityRevision> find(ObjectId activityId) throws DataNotFoundException;
+    List<ActivityRevision> findByActivityID(ObjectId activityID) throws DataNotFoundException;
 }

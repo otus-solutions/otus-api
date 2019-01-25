@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 @RunWith(PowerMockRunner.class)
 public class ActivityRevisionServiceBeanTest {
     private static final String ACTIVITY_ID = "5c41c6b316da48006573a169";
-    private static final String ACTIVITY_REVISION_JSON = "{\"activityId\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
+    private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
 
     @InjectMocks
     private ActivityRevisionServiceBean activityRevisionService;
@@ -42,7 +42,7 @@ public class ActivityRevisionServiceBeanTest {
         objectId = new ObjectId(ACTIVITY_ID);
         ArrayList<ActivityRevision> activities = new ArrayList<ActivityRevision>();
         activities.add(revision);
-        when(activityRevisionDao.find(objectId)).thenReturn(activities);
+        when(activityRevisionDao.findByActivityID(objectId)).thenReturn(activities);
     }
 
     @Test
@@ -54,6 +54,6 @@ public class ActivityRevisionServiceBeanTest {
     public void listMethod_should_invoke_find_of_ActivityRevisionDao_find() throws DataNotFoundException {
         activitiesRevision = activityRevisionService.list(ACTIVITY_ID);
         assertTrue(activitiesRevision.get(0) instanceof ActivityRevision);
-        verify(activityRevisionDao, times(1)).find(objectId);
+        verify(activityRevisionDao, times(1)).findByActivityID(objectId);
     }
 }

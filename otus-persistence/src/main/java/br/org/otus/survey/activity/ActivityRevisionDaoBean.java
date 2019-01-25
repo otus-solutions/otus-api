@@ -18,25 +18,25 @@ import static com.mongodb.client.model.Filters.eq;
 public class ActivityRevisionDaoBean extends MongoGenericDao<Document> implements ActivityRevisionDao {
 
     public static final String COLLECTION_NAME = "activity_revision";
-    public static final String ACTIVITY_ID = "activityId";
+    public static final String ACTIVITY_ID = "activityID";
 
     public ActivityRevisionDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
 
     @Override
-    public List<ActivityRevision> find(ObjectId activityId) throws DataNotFoundException {
+    public List<ActivityRevision> findByActivityID(ObjectId activityID) throws DataNotFoundException {
         ArrayList<ActivityRevision> activitiesRevision = new ArrayList<ActivityRevision>();
 
-        FindIterable<Document> result = collection.find(eq(ACTIVITY_ID, activityId));
+        FindIterable<Document> result = collection.find(eq(ACTIVITY_ID, activityID));
 
         result.forEach((Block<Document>) document -> {
             activitiesRevision.add(ActivityRevision.deserialize(document.toJson()));
         });
 
-        if (result == null) {
-			throw new DataNotFoundException(new Throwable("activityId {" + activityId + "} not found."));
-		}
+        if (activitiesRevision.isEmpty()) {
+            throw new DataNotFoundException(new Throwable("activityID {" + activityID + "} not found."));
+        }
 
         return activitiesRevision;
     }
