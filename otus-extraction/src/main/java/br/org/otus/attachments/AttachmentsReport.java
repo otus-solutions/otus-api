@@ -37,11 +37,12 @@ public class AttachmentsReport {
             csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
 
             csvFilePrinter.printRecord(
-                    "recruitmentNumber",
-                    "questionId",
-                    "archiveId",
-                    "status",
-                    "status"
+                    "Numero de Recrutamento",
+                    "ID da Questão",
+                    "ID do Arquivo",
+                    "Nome do Arquivo",
+                    "Status",
+                    "Data de Upload"
             );
 
             for(AttachmentsReport.Attachment attachment : this.attachmentsList){
@@ -49,8 +50,9 @@ public class AttachmentsReport {
                         attachment.getRecruitmentNumber(),
                         attachment.getQuestionId(),
                         attachment.getArchiveId(),
-                        attachment.getStatus(),
-                        attachment.getArchiveName()
+                        attachment.getArchiveName(),
+                        attachment.getTranslatedStatus(),
+                        attachment.getUploadDate()
                 );
             }
 
@@ -68,6 +70,7 @@ public class AttachmentsReport {
         private String archiveId;
         private String status;
         private String archiveName;
+        private String uploadDate;
 
         public Integer getRecruitmentNumber() {
             return recruitmentNumber;
@@ -87,6 +90,20 @@ public class AttachmentsReport {
 
         public String getArchiveName() {
             return archiveName;
+        }
+
+        public String getUploadDate() {
+            return uploadDate;
+        }
+
+        public String getTranslatedStatus() {
+            String translatedStatus = "";
+            if(status.equals("Stored")) {
+                translatedStatus = "Armazenado";
+            } else if(status.equals("Removed")) {
+                translatedStatus = "Removido";
+            }
+            return translatedStatus;
         }
     }
 

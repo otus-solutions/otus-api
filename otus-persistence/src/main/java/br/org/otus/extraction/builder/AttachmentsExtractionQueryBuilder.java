@@ -31,7 +31,7 @@ public class AttachmentsExtractionQueryBuilder {
         pipeline.add(parseQuery("{$unwind:\"$fillContainer.fillingList.answer.value\"}"));
         pipeline.add(parseQuery("{$match:{\"fillContainer.fillingList.answer.value.oid\":{"+state+objectIds+"}}}"));
         pipeline.add(parseQuery("{$group:{_id:{recruitmentNumber:\"$participantData.recruitmentNumber\",questionId:\"$surveyForm.surveyTemplate.identity.acronym\", archiveId:\"$fillContainer.fillingList.answer.value.oid\",archiveName:\"$fillContainer.fillingList.answer.value.name\",status:\"$status\",uploadDate:\"$fillContainer.fillingList.answer.value.sentDate\"}}}"));
-        pipeline.add(parseQuery("{$group:{_id:{},attachmentsList:{$push:{recruitmentNumber:\"$_id.recruitmentNumber\",questionId:\"$_id.questionId\",archiveId:\"$_id.archiveId\",status:"+statueSubtitle+",archiveName:\"$_id.archiveName\"}}}}"));
+        pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"attachmentsList\":{\"$push\":{\"recruitmentNumber\":\"$_id.recruitmentNumber\",\"questionId\":\"$_id.questionId\",\"archiveId\":\"$_id.archiveId\",\"status\":"+statueSubtitle+",\"archiveName\":\"$_id.archiveName\",\"uploadDate\":\"$_id.uploadDate\"}}}}"));
         return pipeline;
     }
 
