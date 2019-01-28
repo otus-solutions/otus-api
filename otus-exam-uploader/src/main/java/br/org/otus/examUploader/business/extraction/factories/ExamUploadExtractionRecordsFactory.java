@@ -1,6 +1,7 @@
 package br.org.otus.examUploader.business.extraction.factories;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,6 @@ public class ExamUploadExtractionRecordsFactory {
     this.headers = headers;
     this.records = records;
     this.outputValues = new LinkedList<>();
-
   }
 
   public List<List<Object>> getValues() {
@@ -26,40 +26,36 @@ public class ExamUploadExtractionRecordsFactory {
   }
 
   public void buildResultInformation() {
-    for (ParticipantExamUploadRecordExtraction record : records) {
-      List<String> answers = new LinkedList<String>();
-      answers.add(record.getRecruitmentNumber().toString());
-      /* prepare to receive answers */
-      while (answers.size() < headers.size() - 1) {
-        answers.add("");
+    records.forEach(record -> {
+      while (!record.getResults().isEmpty()) {
+        outputValues.add(new ArrayList<>(createRecordsAnswers(record.getRecruitmentNumber().toString(), record.getResults())));
       }
-      for (ParticipantExamUploadResultExtraction result : record.getResults()) {
-        int index = this.headers.indexOf(result.getResultName());
-        if (index > 0) {
-          answers.add(index, result.getValue());
-          answers.add(index + 1, result.getReleaseDate());
-        }
-      }
-      outputValues.add(new ArrayList<>(answers)); // TODO: Esta alocando um novo espaço na memoria realizando o new?
-      answers = null;
-    }
+    });
   }
 
   private List<String> createRecordsAnswers(String rn, List<ParticipantExamUploadResultExtraction> results) {
-    List<String> answers = new ArrayList<>();
+    List<String> answers = new LinkedList<String>();
     /* prepare to receive answers */
     while (answers.size() < headers.size()) {
       answers.add("");
     }
 
-    answers.add(0, rn);
-    for (ParticipantExamUploadResultExtraction result : results) {
+    answers.set(0, rn);
+    int count = 1;
+    Iterator<ParticipantExamUploadResultExtraction> iterator = results.iterator();
+    while (iterator.hasNext()) {
+      ParticipantExamUploadResultExtraction result = iterator.next();
       int index = this.headers.indexOf(result.getResultName());
       if (index > 0) {
-        answers.add(index, result.getValue());
-        answers.add(index + 1, result.getReleaseDate());
+        if (answers.get(index).isEmpty()) {
+          answers.set(index, result.getValue());
+          answers.set(index + 1, result.getReleaseDate());
+          iterator.remove();
+          count++;
+        } else if (count > answers.size()) {
+          break;
+        }
       }
-      results.remove(result);
     }
 
     return answers;
