@@ -3,7 +3,9 @@ package br.org.otus.examUploader.business.extraction.enums;
 public enum ExamUploadExtractionHeaders {
 
   RECRUITMENT_NUMBER("recruitment_number"),
-  RELEASE_DATE("release_date"); // TODO: realization_date?
+  ALIQUOT_CODE("aliquot_code"),
+  RELEASE_DATE("release_date"), // TODO: realization_date?
+  OBSERVATIONS("observations");
 
   private final String value;
 

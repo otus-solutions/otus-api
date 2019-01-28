@@ -25,8 +25,10 @@ public class ExamUploadExtractionHeadersFactory {
 
     /* Answers headers */
     headers.forEach(value -> {
+      this.headers.add(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue());
       this.headers.add(value);
       this.headers.add(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
+      this.headers.add(ExamUploadExtractionHeaders.OBSERVATIONS.getValue());
     });
   }
 

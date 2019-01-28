@@ -39,9 +39,11 @@ public class ExamResultQueryBuilder {
         "            results:\n" + 
         "            {\n" + 
         "                $push: {\n" + 
+        "                    \"aliquotCode\": \"$aliquotCode\",\n" + 
         "                    \"resultName\": \"$resultName\",\n" + 
         "                    \"value\": \"$value\",\n" + 
-        "                    \"releaseDate\": \"$releaseDate\"\n" + 
+        "                    \"releaseDate\": \"$releaseDate\",\n" + 
+        "                    \"observations\": \"$observations\"\n" + 
         "                }\n" + 
         "            }\n" + 
         "        }\n" + 

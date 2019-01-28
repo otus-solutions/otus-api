@@ -47,9 +47,16 @@ public class ExamUploadExtractionRecordsFactory {
       ParticipantExamUploadResultExtraction result = iterator.next();
       int index = this.headers.indexOf(result.getResultName());
       if (index > 0) {
-        if (answers.get(index).isEmpty()) {
+        if (answers.get(index).isEmpty()) { // TODO: Melhorar, trabalhar com index é muito ruim desta forma!
+          answers.set(index - 1, result.getAliquotCode());
           answers.set(index, result.getValue());
           answers.set(index + 1, result.getReleaseDate());
+          if (!result.getObservations().isEmpty()) {
+            result.getObservations().forEach(observation -> {
+              String old = answers.get(index + 2);
+              answers.set(index + 2, old + "; " + observation);
+            });
+          }
           iterator.remove();
           count++;
         } else if (count > answers.size()) {
