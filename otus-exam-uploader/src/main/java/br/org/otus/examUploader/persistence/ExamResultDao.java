@@ -20,5 +20,5 @@ public interface ExamResultDao {
 
   LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException;
 
-  LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues();
+  LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 }

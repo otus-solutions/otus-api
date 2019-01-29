@@ -15,6 +15,7 @@ import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 
 public class ExamUploadFacade {
@@ -71,7 +72,7 @@ public class ExamUploadFacade {
     try {
       return examUploadService.getExamResultsExtractionHeader();
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
 
@@ -79,7 +80,7 @@ public class ExamUploadFacade {
     try {
       return examUploadService.getExamResultsExtractionValues();
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
 }

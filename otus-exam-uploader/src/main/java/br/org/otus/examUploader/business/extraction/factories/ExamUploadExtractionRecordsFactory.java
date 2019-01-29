@@ -28,7 +28,7 @@ public class ExamUploadExtractionRecordsFactory {
   public void buildResultInformation() {
     records.forEach(record -> {
       while (!record.getResults().isEmpty()) {
-        outputValues.add(new ArrayList<>(createRecordsAnswers(record.getRecruitmentNumber().toString(), record.getResults())));
+        this.outputValues.add(new ArrayList<>(this.createRecordsAnswers(record.getRecruitmentNumber().toString(), record.getResults())));
       }
     });
   }
@@ -47,14 +47,17 @@ public class ExamUploadExtractionRecordsFactory {
       ParticipantExamUploadResultExtraction result = iterator.next();
       int index = this.headers.indexOf(result.getResultName());
       if (index > 0) {
-        if (answers.get(index).isEmpty()) { // TODO: Melhorar, trabalhar com index é muito ruim desta forma!
+        if (answers.get(index).isEmpty()) {
           answers.set(index - 1, result.getAliquotCode());
           answers.set(index, result.getValue());
           answers.set(index + 1, result.getReleaseDate());
           if (!result.getObservations().isEmpty()) {
             result.getObservations().forEach(observation -> {
               String old = answers.get(index + 2);
-              answers.set(index + 2, old + "; " + observation);
+              if (old.isEmpty())
+                answers.set(index + 2, observation.getValue());
+              else
+                answers.set(index + 2, old + ", " + observation.getValue());
             });
           }
           iterator.remove();

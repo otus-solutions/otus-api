@@ -90,9 +90,8 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
     return headers;
   }
 
-  // TODO: Deve jogar exceção quando não encontrar valores de extração!
   @Override
-  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() {
+  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
     LinkedHashSet<ParticipantExamUploadRecordExtraction> values = new LinkedHashSet<>();
     List<Bson> query = new ExamResultQueryBuilder()
         .getExamResultsWithAliquotValid()
@@ -101,13 +100,15 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
         .getProjectionOfExamResultsToExtraction()
         .build();
 
-    AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
-
-    for (Object anOutput : output) {
-      Document result = (Document) anOutput;
-      values.add(ParticipantExamUploadRecordExtraction.deserialize(result.toJson()));
+    try {
+      AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
+      for (Object anOutput : output) {
+        Document result = (Document) anOutput;
+        values.add(ParticipantExamUploadRecordExtraction.deserialize(result.toJson()));
+      }
+    } catch (Exception e) {
+      throw new DataNotFoundException(new Throwable("There are no exams to extraction."));
     }
-
     return values;
   }
 }
