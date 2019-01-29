@@ -37,7 +37,7 @@ public class UserDaoBean extends MongoGenericDao<User> implements UserDao {
 	public User fetchByEmail(String email) throws DataNotFoundException {
 		User user = this.collection.find(eq(EMAIL, email)).first();
 		if (user == null) {
-			throw new DataNotFoundException(new Throwable("ActivityBasicUser with email: {" + email + "} not found."));
+			throw new DataNotFoundException(new Throwable("User with email: {" + email + "} not found."));
 		}
 		attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
 		return user;

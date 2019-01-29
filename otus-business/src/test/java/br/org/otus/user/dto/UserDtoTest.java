@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class UserDtoTest {
 
   private static final String PASSWORD_CONFIRMATION = "teste123";
-  private static final String NAME = "ActivityBasicUser";
+  private static final String NAME = "User";
   private static final String SURNAME = "Surname";
   private static final String PHONE = "5555-5555-5555";
   private static final String PASSWORD = "teste123";
