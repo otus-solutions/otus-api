@@ -23,7 +23,7 @@ public class ExamUploadExtractionHeadersFactory {
     /* Basic information headers */
     this.headers.add(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
 
-    /* Answers headers */
+    /* Additional headers */
     headers.forEach(value -> {
       this.headers.add(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue());
       this.headers.add(value);

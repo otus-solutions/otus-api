@@ -40,8 +40,9 @@ public class ExtractionResource {
   public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
     return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
   }
-  
+
   @GET
+  @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory/exams-values")
   public byte[] extractExamsValues() throws DataNotFoundException {
