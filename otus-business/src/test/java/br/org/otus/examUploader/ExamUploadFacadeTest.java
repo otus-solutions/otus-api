@@ -23,8 +23,8 @@ public class ExamUploadFacadeTest {
   @Test
   public void getExamResultsExtractionHeader_should_call_getExamResultsExtractionHeader_method()
       throws DataNotFoundException {
-    facade.getExamResultsExtractionHeader();
-    Mockito.verify(examUploadService, Mockito.times(1)).getExamResultsExtractionHeader();
+    facade.getExamResultsExtractionHeaders();
+    Mockito.verify(examUploadService, Mockito.times(1)).getExamResultsExtractionHeaders();
   }
 
   @Test

@@ -76,7 +76,7 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   }
 
   @Override
-  public LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException {
+  public LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException {
     LinkedHashSet<String> headers = new LinkedHashSet<>();
     Document query = new Document("objectType", "ExamResults");
     try {

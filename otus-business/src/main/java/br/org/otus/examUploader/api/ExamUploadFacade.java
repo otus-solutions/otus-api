@@ -68,9 +68,9 @@ public class ExamUploadFacade {
 
   }
 
-  public LinkedHashSet<String> getExamResultsExtractionHeader() {
+  public LinkedHashSet<String> getExamResultsExtractionHeaders() {
     try {
-      return examUploadService.getExamResultsExtractionHeader();
+      return examUploadService.getExamResultsExtractionHeaders();
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }

@@ -42,7 +42,7 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
-    LinkedHashSet<String> headers = examUploadFacade.getExamResultsExtractionHeader();
+    LinkedHashSet<String> headers = examUploadFacade.getExamResultsExtractionHeaders();
     LinkedHashSet<ParticipantExamUploadRecordExtraction> records = examUploadFacade.getExamResultsExtractionValues();
     ExamUploadExtration extractor = new ExamUploadExtration(headers, records);
     try {

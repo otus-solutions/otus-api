@@ -29,7 +29,7 @@ public interface ExamUploadService {
 
   void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
 
-  LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException;
+  LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException;
 
   LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 

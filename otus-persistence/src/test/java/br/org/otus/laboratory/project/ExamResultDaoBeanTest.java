@@ -34,14 +34,14 @@ public class ExamResultDaoBeanTest {
 
   @Test
   public void getExamResultsExtractionHeader_method_should_call_distinct_method() throws DataNotFoundException {
-    this.examResultDaoBean.getExamResultsExtractionHeader();
+    this.examResultDaoBean.getExamResultsExtractionHeaders();
 
     Mockito.verify(collection).distinct(Mockito.anyString(), Mockito.any());
   }
 
   @Test(expected = DataNotFoundException.class)
   public void getExamResultsExtractionValues_method_should_return_exception_DataNotFoundException_when_collection_is_empty() throws DataNotFoundException {
-    this.examResultDaoBean.getExamResultsExtractionHeader();
+    this.examResultDaoBean.getExamResultsExtractionHeaders();
   }
 
   @Test

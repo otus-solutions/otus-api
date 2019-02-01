@@ -224,8 +224,8 @@ public class ExamUploadServiceBeanTest {
 
   @Test
   public void getExamResultsExtractionHeader_should_call_getExamResultsExtractionHeader_method() throws DataNotFoundException {
-    service.getExamResultsExtractionHeader();
-    Mockito.verify(examResultDAO, Mockito.times(1)).getExamResultsExtractionHeader();
+    service.getExamResultsExtractionHeaders();
+    Mockito.verify(examResultDAO, Mockito.times(1)).getExamResultsExtractionHeaders();
   }
 
   @Test

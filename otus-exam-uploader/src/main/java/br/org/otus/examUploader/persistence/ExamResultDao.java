@@ -18,7 +18,7 @@ public interface ExamResultDao {
 
   List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException;
 
-  LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException;
+  LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException;
 
   LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 }

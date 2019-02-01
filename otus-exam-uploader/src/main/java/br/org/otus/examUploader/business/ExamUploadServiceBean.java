@@ -166,8 +166,8 @@ public class ExamUploadServiceBean implements ExamUploadService {
   }
 
   @Override
-  public LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException {
-    return examResultDAO.getExamResultsExtractionHeader();
+  public LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException {
+    return examResultDAO.getExamResultsExtractionHeaders();
   }
 
   @Override
