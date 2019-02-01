@@ -79,11 +79,11 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   public LinkedHashSet<String> getExamResultsExtractionHeader() throws DataNotFoundException {
     LinkedHashSet<String> headers = new LinkedHashSet<>();
     Document query = new Document("objectType", "ExamResults");
-    for (String header : collection.distinct("resultName", query, String.class)) {
-      headers.add(header);
-    }
-
-    if (headers.isEmpty()) {
+    try {
+      for (String header : collection.distinct("resultName", query, String.class)) {
+        headers.add(header);
+      }
+    } catch (Exception e) {
       throw new DataNotFoundException(new Throwable("There are no exams to describe the extraction headers."));
     }
 
