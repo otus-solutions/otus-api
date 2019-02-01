@@ -1,12 +1,13 @@
 package br.org.otus.examUploader.business.extraction.factories;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.reflect.Whitebox;
 
 import br.org.otus.examUploader.Observation;
@@ -17,57 +18,97 @@ public class ExamUploadExtractionRecordsFactoryTest {
 
   private static final Long RECRUITMENT_NUMBER = 1000330L;
   private static final String ALIQUOT_CODE = "1000330";
-  private static final String RESULT_NAME = "1000330";
-  private static final String VALUE = "1000330";
+  private static final String RESULT_NAME = "EXAM_EXEMPLE";
+  private static final String VALUE_1 = "10";
+  private static final String VALUE_2 = "20";
   private static final String RELEASE_DATE = "1000330";
-  private List<Observation> observations;
 
-  private ParticipantExamUploadResultExtraction participantExamUploadResultExtraction;
-
-  private ParticipantExamUploadRecordExtraction participantExamUploadRecordExtraction;
+  private List<String> headers;
   private LinkedHashSet<ParticipantExamUploadRecordExtraction> records;
+  private List<ParticipantExamUploadResultExtraction> results;
+
   private ExamUploadExtractionRecordsFactory examUploadExtractionRecordsFactory;
 
   @Before
   public void setup() {
-    LinkedHashSet<String> additionalHeaders = this.createAdditionalHeaders();
-    ExamUploadExtractionHeadersFactory factory = new ExamUploadExtractionHeadersFactory(additionalHeaders);
-    List<String> headers = factory.getHeaders();
-
-    this.participantExamUploadRecordExtraction = new ParticipantExamUploadRecordExtraction();
-    List<ParticipantExamUploadResultExtraction> results = this.createFakeParticipantExamUploadResultExtractioList();
-    Whitebox.setInternalState(this.participantExamUploadRecordExtraction, "results", results);
-
+    LinkedHashSet<String> additionalHeaders = this.createFakeAdditionalHeaders();
+    ExamUploadExtractionHeadersFactory headersFactory = new ExamUploadExtractionHeadersFactory(additionalHeaders);
+    this.headers = headersFactory.getHeaders();
     this.records = new LinkedHashSet<>();
-    this.records.add(this.participantExamUploadRecordExtraction);
 
     this.examUploadExtractionRecordsFactory = new ExamUploadExtractionRecordsFactory(headers, this.records);
   }
 
   @Test
-  public void getValues_method_must_return_value_expected() {
-    List<List<Object>> values = this.examUploadExtractionRecordsFactory.getValues();
+  public void buildResultInformation_method_should_call_createRecordsAnswers_method() throws Exception {
+    List<Observation> observations = new ArrayList<>();
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations));
+    this.examUploadExtractionRecordsFactory = PowerMockito.spy(new ExamUploadExtractionRecordsFactory(this.headers, this.records));
+    this.examUploadExtractionRecordsFactory.buildResultInformation();
 
-    Assert.assertTrue(values.contains(this.participantExamUploadRecordExtraction));
+    PowerMockito.verifyPrivate(this.examUploadExtractionRecordsFactory).invoke("createRecordsAnswers", RECRUITMENT_NUMBER.toString(), this.results);
   }
 
-  private LinkedHashSet<String> createAdditionalHeaders() {
+  @Test
+  public void getRecords_method_should_only_return_one_line_when_there_are_no_duplicate_results() {
+    List<Observation> observations = new ArrayList<>();
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations));
+    this.examUploadExtractionRecordsFactory.buildResultInformation();
+    List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
+
+    Assert.assertEquals(1, records.size());
+  }
+
+  @Test
+  public void getRecords_method_should_only_return_more_one_line_when_are_duplicate_results() {
+    List<Observation> observations = new ArrayList<>();
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations));
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_2, RELEASE_DATE, observations));
+    this.examUploadExtractionRecordsFactory.buildResultInformation();
+    List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
+
+    Assert.assertEquals(2, records.size());
+  }
+
+  @Test
+  public void getRecords_method_should_return_list_with_expected_values() {
+    List<Observation> observations = new ArrayList<>();
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations));
+    this.examUploadExtractionRecordsFactory.buildResultInformation();
+    List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
+
+    List<Object> results = records.get(0);
+    Assert.assertEquals(RECRUITMENT_NUMBER.toString(), results.get(0));
+    Assert.assertEquals(ALIQUOT_CODE, results.get(1));
+    Assert.assertEquals(VALUE_1, results.get(2));
+    Assert.assertEquals(RELEASE_DATE, results.get(3));
+    Assert.assertEquals("", results.get(4));
+  }
+
+  private LinkedHashSet<String> createFakeAdditionalHeaders() {
     LinkedHashSet<String> headers = new LinkedHashSet<>();
-    headers.add("VALUE_1");
+    headers.add(RESULT_NAME);
     return headers;
   }
 
-  private List<ParticipantExamUploadResultExtraction> createFakeParticipantExamUploadResultExtractioList() {
-    List<ParticipantExamUploadResultExtraction> results = new LinkedList<>();
-    participantExamUploadResultExtraction = new ParticipantExamUploadResultExtraction();
-    Whitebox.setInternalState(participantExamUploadResultExtraction, "aliquotCode", ALIQUOT_CODE);
-    Whitebox.setInternalState(participantExamUploadResultExtraction, "resultName", RESULT_NAME);
-    Whitebox.setInternalState(participantExamUploadResultExtraction, "value", VALUE);
-    Whitebox.setInternalState(participantExamUploadResultExtraction, "releaseDate", RELEASE_DATE);
-    Whitebox.setInternalState(participantExamUploadResultExtraction, "observations", observations);
-    results.add(participantExamUploadResultExtraction);
+  private ParticipantExamUploadRecordExtraction createFakeParticipantExamUploadRecord(Long rn, String aliquotCode, String resultName, String value, String releaseDate,
+      List<Observation> observations) {
+    this.results = new ArrayList<>();
+    ParticipantExamUploadResultExtraction participantExamUploadResultExtraction = new ParticipantExamUploadResultExtraction();
 
-    return results;
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "aliquotCode", aliquotCode);
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "resultName", resultName);
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "value", value);
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "releaseDate", releaseDate);
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "observations", observations);
+
+    this.results.add(participantExamUploadResultExtraction);
+
+    ParticipantExamUploadRecordExtraction participantExamUploadRecordExtraction = new ParticipantExamUploadRecordExtraction();
+    Whitebox.setInternalState(participantExamUploadRecordExtraction, "recruitmentNumber", rn);
+    Whitebox.setInternalState(participantExamUploadRecordExtraction, "results", this.results);
+
+    return participantExamUploadRecordExtraction;
   }
 
 }

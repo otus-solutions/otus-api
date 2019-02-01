@@ -51,7 +51,7 @@ public class ExamUploadExtrationTest {
   @Test
   public void getValues_method_should_call_getValues_method() throws DataNotFoundException {
     examUploadExtration.getValues();
-    Mockito.verify(recordsFactory, Mockito.times(1)).getValues();
+    Mockito.verify(recordsFactory, Mockito.times(1)).getRecords();
   }
 
 }

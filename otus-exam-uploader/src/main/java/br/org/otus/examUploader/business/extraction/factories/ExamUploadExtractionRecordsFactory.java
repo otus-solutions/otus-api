@@ -12,23 +12,23 @@ import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadR
 public class ExamUploadExtractionRecordsFactory {
 
   private List<String> headers;
-  private LinkedHashSet<ParticipantExamUploadRecordExtraction> records;
-  private List<List<Object>> outputValues;
+  private LinkedHashSet<ParticipantExamUploadRecordExtraction> inputRecords;
+  private List<List<Object>> outputRecords;
 
   public ExamUploadExtractionRecordsFactory(List<String> headers, LinkedHashSet<ParticipantExamUploadRecordExtraction> records) {
     this.headers = headers;
-    this.records = records;
-    this.outputValues = new LinkedList<>();
+    this.inputRecords = records;
+    this.outputRecords = new LinkedList<>();
   }
 
-  public List<List<Object>> getValues() {
-    return this.outputValues;
+  public List<List<Object>> getRecords() {
+    return this.outputRecords;
   }
 
   public void buildResultInformation() {
-    records.forEach(record -> {
+    inputRecords.forEach(record -> {
       while (!record.getResults().isEmpty()) {
-        this.outputValues.add(new ArrayList<>(this.createRecordsAnswers(record.getRecruitmentNumber().toString(), record.getResults())));
+        this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(record.getRecruitmentNumber().toString(), record.getResults())));
       }
     });
   }

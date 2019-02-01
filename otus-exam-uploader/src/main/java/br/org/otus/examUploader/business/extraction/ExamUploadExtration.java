@@ -29,7 +29,7 @@ public class ExamUploadExtration implements Extractable {
   public List<List<Object>> getValues() throws DataNotFoundException {
     this.recordsFactory.buildResultInformation();
 
-    return this.recordsFactory.getValues();
+    return this.recordsFactory.getRecords();
   }
 
 }
