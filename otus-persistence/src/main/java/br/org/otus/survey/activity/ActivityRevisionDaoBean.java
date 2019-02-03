@@ -34,10 +34,6 @@ public class ActivityRevisionDaoBean extends MongoGenericDao<Document> implement
             activitiesRevision.add(ActivityRevision.deserialize(document.toJson()));
         });
 
-        if (activitiesRevision.isEmpty()) {
-            throw new DataNotFoundException(new Throwable("activityID {" + activityID + "} not found."));
-        }
-
         return activitiesRevision;
     }
 

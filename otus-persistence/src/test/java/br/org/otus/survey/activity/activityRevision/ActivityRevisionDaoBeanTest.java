@@ -66,11 +66,4 @@ public class ActivityRevisionDaoBeanTest {
         verify(collection,times(1)).find((Bson) Mockito.any());
     }
 
-    @Test(expected = DataNotFoundException.class)
-    public void should_throw_DataNotFoundException() throws DataNotFoundException {
-        Mockito.when(collection.find((Bson) Mockito.any())).thenReturn(documents);
-        Mockito.when(documents.first()).thenReturn(null);
-
-        activityRevisionDaoBean.findByActivityID(objectId);
-    }
 }
