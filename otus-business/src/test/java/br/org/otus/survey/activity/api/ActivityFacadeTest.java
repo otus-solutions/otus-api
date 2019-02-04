@@ -31,6 +31,7 @@ public class ActivityFacadeTest {
   private static final String JSON = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
   private static final Integer VERSION = 1;
   private static final String USER_EMAIL = "otus@gmail.com";
+  private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
   @Mock
   private SurveyActivity surveyActivityInvalid;
   @Mock
@@ -96,4 +97,17 @@ public class ActivityFacadeTest {
     when(activityService.update(surveyActivity)).thenThrow(new HttpResponseException(null));
     activityFacade.updateActivity(surveyActivity);
   }
+
+  @Test
+  public void updateCheckerActivityMethod_should_invoke_updateCheckerActivity_of_ActivityService() throws DataNotFoundException {
+    activityFacade.updateCheckerActivity(checkerUpdated);
+    verify(activityService, times(1)).updateCheckerActivity(checkerUpdated);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void updateCheckerActivityMethod_should_throw_HttpResponseException_when_ObjectId_invalid() throws Exception {
+    when(activityService.updateCheckerActivity(checkerUpdated)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
+    activityFacade.updateCheckerActivity(checkerUpdated);
+  }
+
 }
