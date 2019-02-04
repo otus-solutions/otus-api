@@ -42,6 +42,7 @@ public class ExtractionResource {
   }
 
   @GET
+  @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory/exams-values")
   public byte[] extractExamsValues() throws DataNotFoundException {
