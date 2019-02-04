@@ -1,19 +1,32 @@
 package br.org.otus.laboratory.configuration;
 
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 public interface LaboratoryConfigurationDao {
 
   LaboratoryConfiguration find();
+<<<<<<< HEAD
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
   void persist(LaboratoryConfiguration laboratoryConfig);
 
+  void update(LaboratoryConfiguration configuration) throws Exception;
+=======
+
+  AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
+
+  void persist(LaboratoryConfiguration laboratoryConfig);
+>>>>>>> 170152d1cb8a5d68bd84deba74eed3da4983c68f
+
   String createNewLotCodeForTransportation();
 
   String createNewLotCodeForExam();
 
+<<<<<<< HEAD
+=======
   Integer updateLastTubeInsertion(int newTubesQuantities);
+>>>>>>> 170152d1cb8a5d68bd84deba74eed3da4983c68f
 }

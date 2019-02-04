@@ -54,9 +54,23 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
 
   @Override
   public List<String> generateCodes(TubeSeed seed) {
+<<<<<<< HEAD
+    Integer startingPoint = this.laboratoryConfiguration.allocNextCodeList(seed);
+    updateLaboratoryConfiguration();
+    return this.laboratoryConfiguration.generateNewCodeList(seed, startingPoint);
+  }
+
+  private void updateLaboratoryConfiguration() {
+    try {
+      this.laboratoryConfigurationDao.update(this.laboratoryConfiguration);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+=======
     Integer startingPoint = this.laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount());
     this.laboratoryConfiguration.getCodeConfiguration().setLastInsertion(startingPoint + seed.getTubeCount());
     return this.laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint);
+>>>>>>> 170152d1cb8a5d68bd84deba74eed3da4983c68f
   }
 
   public LaboratoryConfiguration getLaboratoryConfiguration() {
