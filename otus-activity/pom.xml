@@ -54,7 +54,6 @@
 			<artifactId>otus-datasource</artifactId>
 			<version>${project.parent.version}</version>
             <scope>provided</scope>
-			<type>ejb</type>
 		</dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

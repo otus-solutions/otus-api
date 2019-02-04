@@ -35,24 +35,21 @@ public class SurveyActivityExtraction implements Extractable {
 	@Override
 	public List<List<Object>> getValues() throws DataNotFoundException {
 		List<List<Object>> values = new ArrayList<>();
-
 		for (SurveyActivity surveyActivity : this.surveyActivities) {
 			this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());
 			List<Object> resultInformation = new ArrayList<>();
 			this.recordsFactory.getSurveyBasicInfo(surveyActivity);
 			this.recordsFactory.getSurveyQuestionInfo(surveyActivity);
-			this.processors.forEach(preprocessor -> {
+			for (ActivityPreProcessor preprocessor : this.processors) {
 				try {
 					this.recordsFactory = preprocessor.process(this.surveyForm, this.recordsFactory);
 				} catch (DataNotFoundException e) {
-					new DataNotFoundException(new Throwable(e.getMessage()));
+					throw new DataNotFoundException(new Throwable(e.getMessage()));
 				}
-			});
+			}
 			resultInformation.addAll(new ArrayList<>(this.recordsFactory.getSurveyInformation().values()));
 			values.add(resultInformation);
-
 		}
-
 		return values;
 	}
 
