@@ -37,15 +37,17 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/{acronym}/{version}")
-  public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
+  public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version)
+      throws DataNotFoundException {
     return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/laboratory/exams-values/correlation")
-  public byte[] extractionOfCorrelationBetweenExamAliquotAndTube() throws DataNotFoundException {
-    return extractionFacade.extractionOfCorrelationBetweenExamAliquotAndTube();
+  @Path("/laboratory/correlation")
+  public byte[] extractLaboratoryCorrelation() throws DataNotFoundException {
+    // TODO: Devo deixar mais claro a relação com o participante?
+    return extractionFacade.extractLaboratoryCorrelation();
   }
 
   @GET
@@ -96,7 +98,8 @@ public class ExtractionResource {
   public String getToken(@Context HttpServletRequest request) {
     Response response = new Response();
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData()
+        .getUserEmail();
     String extractionToken = userFacade.getExtractionToken(userEmail);
     return response.buildSuccess(extractionToken).toJson();
   }
