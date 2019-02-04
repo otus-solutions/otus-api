@@ -23,7 +23,7 @@ public class DataSourceServiceBean implements DataSourceService {
 	@Override
 	public void create(DataSource dataSource, JsonArray duplicatedElements) throws AlreadyExistException, ValidationException {
 		if (duplicatedElements.size() > 0){
-			throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements.getAsString() + "}"));
+			throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements + "}"));
 		}else {
 			dataSourceDao.persist(dataSource);
 		}
@@ -37,7 +37,7 @@ public class DataSourceServiceBean implements DataSourceService {
 			if (duplicatedElements.size() == 0){
 				dataSourceDao.update(dataSource);
 			} else {
-				throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements.getAsString() + "}"));
+				throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements + "}"));
 			}
 		} else {
 			throw new ValidationException(new Throwable("There are missing elements in datasource {" + dataSource.getId() + "}"));
