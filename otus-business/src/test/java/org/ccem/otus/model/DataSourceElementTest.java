@@ -3,7 +3,6 @@ package org.ccem.otus.model;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
@@ -26,7 +25,6 @@ public class DataSourceElementTest {
     public void should_method_equals_return_true() {
         DataSourceElement ds = new DataSourceElement(value, extractionValue);
         assertEquals(ds, dataSourceElement);
-        boolean TESTE = ds.equals(dataSourceElement);
         assertEquals(dataSourceElement.equals(ds), Boolean.TRUE);
     }
 

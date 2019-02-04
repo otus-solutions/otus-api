@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import com.google.gson.JsonArray;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -13,25 +14,30 @@ import java.util.List;
 
 @Stateless
 public class DataSourceServiceBean implements DataSourceService {
-	
+
 	@Inject
 	private DataSourceDao dataSourceDao;
 
 	public DataSourceServiceBean (){};
 
 	@Override
-	public void create(DataSource dataSource) throws AlreadyExistException {
-		dataSourceDao.persist(dataSource);
+	public void create(DataSource dataSource, JsonArray duplicatedElements) throws AlreadyExistException, ValidationException {
+		if (duplicatedElements.size() > 0){
+			throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements.getAsString() + "}"));
+		}else {
+			dataSourceDao.persist(dataSource);
+		}
 	}
 
 	@Override
-	public void update(DataSource dataSource) throws ValidationException, DataNotFoundException {
+	public void update(DataSource dataSource, JsonArray duplicatedElements) throws ValidationException, DataNotFoundException {
 		DataSource dataSourcePersisted = dataSourceDao.findByID(dataSource.getId());
+
 		if(dataSource.getDataAsSet().containsAll(dataSourcePersisted.getDataAsSet())){
-			if (dataSource.getDataAsSet().size() > dataSourcePersisted.getDataAsSet().size()){
+			if (duplicatedElements.size() == 0){
 				dataSourceDao.update(dataSource);
 			} else {
-				throw new ValidationException(new Throwable("There are same elements in datasource {" + dataSource.getId() + "}"));
+				throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements.getAsString() + "}"));
 			}
 		} else {
 			throw new ValidationException(new Throwable("There are missing elements in datasource {" + dataSource.getId() + "}"));

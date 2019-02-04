@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.google.gson.JsonArray;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.service.DataSourceService;
 
@@ -15,17 +16,17 @@ public class DataSourceFacade {
 	@Inject
 	private DataSourceService dataSourceService;
 
-	public void create(DataSource dataSource) {
+	public void create(DataSource dataSource, JsonArray duplicatedElements) {
 		try {
-			dataSourceService.create(dataSource);
+			dataSourceService.create(dataSource,duplicatedElements);
 		} catch (Exception e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
 
-	public void update(DataSource dataSource) {
+	public void update(DataSource dataSource, JsonArray duplicatedElements) {
 		try {
-			dataSourceService.update(dataSource);
+			dataSourceService.update(dataSource,duplicatedElements);
 		} catch (Exception e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}

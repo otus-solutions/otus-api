@@ -50,7 +50,7 @@ public class DataSourceResourceTest {
 		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
 		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
 		assertEquals(dataSourceResource.create(form), new Response().buildSuccess().toJson());
-		verify(dataSourceFacade).create(dataSource);
+		verify(dataSourceFacade).create(dataSource, csvToJson.getDuplicatedElements());
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class DataSourceResourceTest {
 		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
 		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
 		assertEquals(dataSourceResource.update(form), new Response().buildSuccess().toJson());
-		verify(dataSourceFacade).update(dataSource);
+		verify(dataSourceFacade).update(dataSource, csvToJson.getDuplicatedElements());
 	}
 
 	@Test
