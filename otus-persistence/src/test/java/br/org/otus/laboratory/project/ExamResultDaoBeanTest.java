@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import com.mongodb.client.MongoCollection;
 
 import br.org.otus.laboratory.project.builder.ExamResultQueryBuilder;
 
+@Ignore
 @RunWith(PowerMockRunner.class)
 public class ExamResultDaoBeanTest {
 
