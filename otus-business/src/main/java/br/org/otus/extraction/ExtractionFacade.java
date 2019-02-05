@@ -12,7 +12,9 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.api.ExtractionService;
 import br.org.otus.laboratory.extraction.LaboratoryExtraction;
-import br.org.otus.laboratory.extraction.api.LaboratoryExtractionFacade;
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
@@ -23,7 +25,7 @@ public class ExtractionFacade {
   @Inject
   private SurveyFacade surveyFacade;
   @Inject
-  private LaboratoryExtractionFacade laboratoryExtractionFacade;
+  private ParticipantLaboratory participantLaboratory;
   @Inject
   private ExtractionService extractionService;
 
@@ -41,6 +43,8 @@ public class ExtractionFacade {
   }
 
   public byte[] extractParticipantLaboratoryCorrelation() throws DataNotFoundException {
+    List<Tube> tubes = participantLaboratory.getTubes();
+    List<SimpleAliquot> aliquots = participantLaboratory.getAliquotsList();
     LaboratoryExtraction extractor = new LaboratoryExtraction();
     try {
       return extractionService.createExtraction(extractor);
