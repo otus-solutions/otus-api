@@ -4,7 +4,6 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import com.google.gson.JsonArray;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.utils.CsvToJson;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
