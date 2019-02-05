@@ -2,23 +2,17 @@ package br.org.otus.datasource;
 
 import static com.mongodb.client.model.Filters.eq;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.json.JsonArray;
 
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.model.UpdateOptions;
-import netscape.javascript.JSObject;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.DataSourceElement;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.persistence.DataSourceDao;
 
 import com.mongodb.Block;
@@ -83,7 +77,6 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
 		Document result = collection.find(eq("id", id)).first();
 		return (result == null) ? true : false;
 	}
-
 
 	@Override
 	public DataSourceElement getElementDataSource(String value) {

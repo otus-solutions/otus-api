@@ -10,7 +10,7 @@ import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.DataSourceElement;
 
 public interface DataSourceService {
-	
+
 	void create(DataSource dataSource, JsonArray duplicatedElements) throws AlreadyExistException, ValidationException;
 
 	void update(DataSource dataSource, JsonArray duplicatedElements) throws DataNotFoundException, ValidationException;

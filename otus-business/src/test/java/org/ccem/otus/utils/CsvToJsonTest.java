@@ -3,7 +3,6 @@ package org.ccem.otus.utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
-import com.google.gson.JsonArray;
 
 import static org.junit.Assert.*;
 @RunWith(PowerMockRunner.class)

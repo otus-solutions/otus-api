@@ -7,7 +7,6 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.DataSourceElement;
 import org.ccem.otus.persistence.DataSourceDao;
-import org.ccem.otus.utils.CsvToJson;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

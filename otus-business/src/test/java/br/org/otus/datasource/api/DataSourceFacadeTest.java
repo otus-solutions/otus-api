@@ -19,9 +19,9 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 public class DataSourceFacadeTest {
-  private final byte GET_FILE = (byte) Byte.valueOf(String.valueOf(1010101),2);
-  private final String DELIMIT = ";";
-  @InjectMocks
+	private final byte GET_FILE = (byte) Byte.valueOf(String.valueOf(1010101),2);
+	private final String DELIMIT = ";";
+	@InjectMocks
 	private DataSourceFacade facade;
 
 	@Mock

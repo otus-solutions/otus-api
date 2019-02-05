@@ -10,7 +10,7 @@ import org.ccem.otus.model.DataSourceElement;
 
 
 public interface DataSourceDao {
-	
+
 	void persist(DataSource dataSource) throws AlreadyExistException;
 
 	void update(DataSource dataSource) throws ValidationException, DataNotFoundException;
