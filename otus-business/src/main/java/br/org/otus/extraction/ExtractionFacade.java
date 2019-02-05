@@ -24,7 +24,6 @@ public class ExtractionFacade {
   private SurveyFacade surveyFacade;
   @Inject
   private LaboratoryExtractionFacade laboratoryExtractionFacade;
-
   @Inject
   private ExtractionService extractionService;
 
@@ -41,7 +40,7 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] extractLaboratoryCorrelation() throws DataNotFoundException {
+  public byte[] extractParticipantLaboratoryCorrelation() throws DataNotFoundException {
     LaboratoryExtraction extractor = new LaboratoryExtraction();
     try {
       return extractionService.createExtraction(extractor);
