@@ -1,8 +1,8 @@
 package org.ccem.otus.service;
 
+import java.util.HashSet;
 import java.util.List;
 
-import com.google.gson.JsonArray;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -11,9 +11,9 @@ import org.ccem.otus.model.DataSourceElement;
 
 public interface DataSourceService {
 	
-	void create(DataSource dataSource, JsonArray duplicatedElements) throws AlreadyExistException, ValidationException;
+	void create(DataSource dataSource, HashSet<String> duplicatedElements) throws AlreadyExistException, ValidationException;
 
-	void update(DataSource dataSource, JsonArray duplicatedElements) throws DataNotFoundException, ValidationException;
+	void update(DataSource dataSource, HashSet<String> duplicatedElements) throws DataNotFoundException, ValidationException;
 
 	List<DataSource> list();
 

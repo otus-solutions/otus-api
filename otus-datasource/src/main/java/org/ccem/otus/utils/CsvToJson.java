@@ -14,13 +14,13 @@ public class CsvToJson {
 
     private Scanner scanner;
     private JsonArray elements = new JsonArray();
-    private JsonArray duplicatedElements = new JsonArray();
+    private HashSet<String> duplicatedElements = new HashSet<>();
 
     public JsonArray getElements(){
         return elements;
     }
 
-    public JsonArray getDuplicatedElements(){
+    public HashSet<String> getDuplicatedElements(){
         return duplicatedElements;
     }
 
@@ -34,7 +34,7 @@ public class CsvToJson {
 
     public void execute(String delimiter) {
 
-        HashSet<String> valuesHashSet = new HashSet<>();
+        HashSet<String> duplicatedHashSet = new HashSet<>();
         HashSet<String> extractionValuesHashSet = new HashSet<>();
 
         while (scanner.hasNext()) {
@@ -43,9 +43,14 @@ public class CsvToJson {
             String[] fields = line.split(delimiter);
             jsonObject.addProperty("value", fields[0]);
             jsonObject.addProperty("extractionValue", fields[1]);
-            if (!(valuesHashSet.add(fields[0])) || !(extractionValuesHashSet.add(fields[1]))) {
-                duplicatedElements.add(jsonObject);
+
+            if (!duplicatedHashSet.add(fields[0])){
+                duplicatedElements.add("value: "+fields[0]);
             }
+            if(!(extractionValuesHashSet.add(fields[1]))) {
+                duplicatedElements.add("extractionValue: "+fields[1]);
+            }
+
             elements.add(jsonObject);
         }
     }
