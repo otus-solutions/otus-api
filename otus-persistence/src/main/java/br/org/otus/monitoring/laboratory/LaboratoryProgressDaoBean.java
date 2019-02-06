@@ -33,6 +33,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
         LaboratoryProgressDTO fullDTO;
         LaboratoryProgressDTO partialDTO = new LaboratoryProgressDTO();
@@ -60,6 +61,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException {
 
         CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
@@ -70,11 +72,11 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
             if (allAliquotsWithExamsDocument != null) {
 
-                Object allAliquotCodesinExams = allAliquotsWithExamsDocument.get("aliquotCodes");
+                Object allAliquotCodesInExams = allAliquotsWithExamsDocument.get("aliquotCodes");
 
-                CompletableFuture<Document> Future1 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery((ArrayList<String>) allAliquotCodesinExams,center)).first());
+                CompletableFuture<Document> Future1 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery((ArrayList<String>) allAliquotCodesInExams,center)).first());
 
-                CompletableFuture<Document> Future2 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery((ArrayList<String>) allAliquotCodesinExams,center)).first());
+                CompletableFuture<Document> Future2 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery((ArrayList<String>) allAliquotCodesInExams,center)).first());
 
                 Document firstPartOfDTO = null;
                 try {
@@ -86,6 +88,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
                 if (firstPartOfDTO != null){
                     laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(firstPartOfDTO.toJson());
+                    laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
                 }
 
                 Document secondPartOfDTO = null;
@@ -122,6 +125,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException {
         Document fetchAllAliquotCodes = fetchAliquotCodes(center);
         validateFirst(fetchAllAliquotCodes);
@@ -138,6 +142,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException {
         CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
         CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(aliquotsWithExamsDocument -> {
