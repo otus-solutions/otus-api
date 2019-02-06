@@ -1,22 +1,17 @@
 package br.org.otus.examUploader.business.extraction.factories;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
-import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public class ExamUploadExtractionRecordsFactory {
 
-  private List<String> headers;
-  private LinkedHashSet<ParticipantExamUploadRecordExtraction> inputRecords;
+  private LinkedList<ParticipantExamUploadRecordExtraction> inputRecords;
   private List<List<Object>> outputRecords;
 
-  public ExamUploadExtractionRecordsFactory(List<String> headers, LinkedHashSet<ParticipantExamUploadRecordExtraction> records) {
-    this.headers = headers;
+  public ExamUploadExtractionRecordsFactory(LinkedList<ParticipantExamUploadRecordExtraction> records) {
     this.inputRecords = records;
     this.outputRecords = new LinkedList<>();
   }
@@ -27,46 +22,27 @@ public class ExamUploadExtractionRecordsFactory {
 
   public void buildResultInformation() {
     inputRecords.forEach(record -> {
-      while (!record.getResults().isEmpty()) {
-        this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(record.getRecruitmentNumber().toString(), record.getResults())));
-      }
+      this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(record)));
     });
   }
 
-  private List<String> createRecordsAnswers(String rn, List<ParticipantExamUploadResultExtraction> results) {
+  private List<String> createRecordsAnswers(ParticipantExamUploadRecordExtraction record) {
     List<String> answers = new LinkedList<String>();
-    /* prepare to receive answers */
-    while (answers.size() < headers.size()) {
-      answers.add("");
-    }
 
-    answers.set(0, rn);
-    int count = 1;
-    Iterator<ParticipantExamUploadResultExtraction> iterator = results.iterator();
-    while (iterator.hasNext()) {
-      ParticipantExamUploadResultExtraction result = iterator.next();
-      int index = this.headers.indexOf(result.getResultName());
-      if (index > 0) {
-        if (answers.get(index).isEmpty()) {
-          answers.set(index - 1, result.getAliquotCode());
-          answers.set(index, result.getValue());
-          answers.set(index + 1, result.getReleaseDate());
-          if (!result.getObservations().isEmpty()) {
-            result.getObservations().forEach(observation -> {
-              String old = answers.get(index + 2);
-              if (old.isEmpty())
-                answers.set(index + 2, observation.getValue());
-              else
-                answers.set(index + 2, old + ", " + observation.getValue());
-            });
-          }
-          iterator.remove();
-          count++;
-        } else if (count > answers.size()) {
-          break;
-        }
+    answers.add(record.getRecruitmentNumber().toString());
+    answers.add(record.getAliquotCode());
+    answers.add(record.getResultName());
+    answers.add(record.getValue());
+    answers.add(record.getReleaseDate());
+    String observations = "";
+    record.getObservations().forEach(observation -> {
+      if (observations.isEmpty()) {
+        observations.concat(observation.getValue());
+      } else {
+        observations.concat(", " + observation.getValue());
       }
-    }
+    });
+    answers.add(observations);
 
     return answers;
   }

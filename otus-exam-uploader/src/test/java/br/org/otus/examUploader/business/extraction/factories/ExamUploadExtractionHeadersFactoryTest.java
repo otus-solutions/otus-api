@@ -24,32 +24,25 @@ public class ExamUploadExtractionHeadersFactoryTest {
 
   @Test
   public void construction_method_should_call_buildHeader_method() throws Exception {
-    ExamUploadExtractionHeadersFactory spy = PowerMockito.spy(new ExamUploadExtractionHeadersFactory(headers));
-    PowerMockito.verifyPrivate(spy, Mockito.times(1)).invoke("buildHeader", headers);
+    ExamUploadExtractionHeadersFactory spy = PowerMockito.spy(new ExamUploadExtractionHeadersFactory());
+    PowerMockito.verifyPrivate(spy, Mockito.times(1)).invoke("buildHeader");
   }
 
   @Test
-  public void getHeaders_method_should_return_list_with_basic_information_headers() {
+  public void getHeaders_method_should_return_list_with_information_headers() {
     List<String> headers = examUploadExtractionHeadersFactory.getHeaders();
-    boolean contains = headers.contains(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
-
-    Assert.assertTrue(contains);
-  }
-
-  @Test
-  public void getHeaders_method_should_return_list_with_additional_headers() {
-    LinkedHashSet<String> additionalHeaders = this.createAdditionalHeaders();
-    ExamUploadExtractionHeadersFactory factory = new ExamUploadExtractionHeadersFactory(additionalHeaders);
-    List<String> headers = factory.getHeaders();
-
     boolean contains = false;
+
     contains = headers.contains(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
     Assert.assertTrue(contains);
 
     contains = headers.contains(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue());
     Assert.assertTrue(contains);
 
-    contains = headers.contains("VALUE_1");
+    contains = headers.contains(ExamUploadExtractionHeaders.EXAM_NAME.getValue());
+    Assert.assertTrue(contains);
+
+    contains = headers.contains(ExamUploadExtractionHeaders.RESULT.getValue());
     Assert.assertTrue(contains);
 
     contains = headers.contains(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
@@ -61,8 +54,7 @@ public class ExamUploadExtractionHeadersFactoryTest {
 
   @Test
   public void getHeaders_method_should_return_list_with_expected_order() {
-    LinkedHashSet<String> additionalHeaders = this.createAdditionalHeaders();
-    ExamUploadExtractionHeadersFactory factory = new ExamUploadExtractionHeadersFactory(additionalHeaders);
+    ExamUploadExtractionHeadersFactory factory = new ExamUploadExtractionHeadersFactory();
     List<String> headers = factory.getHeaders();
 
     String header = "";
@@ -73,19 +65,16 @@ public class ExamUploadExtractionHeadersFactoryTest {
     Assert.assertEquals(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue(), header);
 
     header = headers.get(2);
-    Assert.assertEquals("VALUE_1", header);
+    Assert.assertEquals(ExamUploadExtractionHeaders.EXAM_NAME.getValue(), header);
 
     header = headers.get(3);
-    Assert.assertEquals(ExamUploadExtractionHeaders.RELEASE_DATE.getValue(), header);
+    Assert.assertEquals(ExamUploadExtractionHeaders.RESULT.getValue(), header);
 
     header = headers.get(4);
-    Assert.assertEquals(ExamUploadExtractionHeaders.OBSERVATIONS.getValue(), header);
-  }
+    Assert.assertEquals(ExamUploadExtractionHeaders.RELEASE_DATE.getValue(), header);
 
-  private LinkedHashSet<String> createAdditionalHeaders() {
-    LinkedHashSet<String> headers = new LinkedHashSet<>();
-    headers.add("VALUE_1");
-    return headers;
+    header = headers.get(5);
+    Assert.assertEquals(ExamUploadExtractionHeaders.OBSERVATIONS.getValue(), header);
   }
 
 }

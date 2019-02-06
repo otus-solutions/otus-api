@@ -81,7 +81,6 @@ public class ExtractionFacadeTest {
   public void should_return_new_extraction_of_exam() throws Exception {
     assertNotNull(extractionFacade);
     extractionFacade.createLaboratoryExamsValuesExtraction();
-    Mockito.verify(examUploadFacade).getExamResultsExtractionHeaders();
     Mockito.verify(examUploadFacade).getExamResultsExtractionValues();
     Mockito.verify(extractionService).createExtraction(examUploadExtration);
   }

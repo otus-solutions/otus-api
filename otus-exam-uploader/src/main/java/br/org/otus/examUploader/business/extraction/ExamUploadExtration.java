@@ -1,6 +1,6 @@
 package br.org.otus.examUploader.business.extraction;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -15,9 +15,9 @@ public class ExamUploadExtration implements Extractable {
   private ExamUploadExtractionHeadersFactory headersFactory;
   private ExamUploadExtractionRecordsFactory recordsFactory;
 
-  public ExamUploadExtration(LinkedHashSet<String> headers, LinkedHashSet<ParticipantExamUploadRecordExtraction> records) {
-    this.headersFactory = new ExamUploadExtractionHeadersFactory(headers);
-    this.recordsFactory = new ExamUploadExtractionRecordsFactory(this.headersFactory.getHeaders(), records);
+  public ExamUploadExtration(LinkedList<ParticipantExamUploadRecordExtraction> records) {
+    this.headersFactory = new ExamUploadExtractionHeadersFactory();
+    this.recordsFactory = new ExamUploadExtractionRecordsFactory(records);
   }
 
   @Override

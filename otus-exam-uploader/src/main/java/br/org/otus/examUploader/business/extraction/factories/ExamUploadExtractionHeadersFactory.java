@@ -1,6 +1,5 @@
 package br.org.otus.examUploader.business.extraction.factories;
 
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,26 +9,22 @@ public class ExamUploadExtractionHeadersFactory {
 
   private List<String> headers;
 
-  public ExamUploadExtractionHeadersFactory(LinkedHashSet<String> headers) {
+  public ExamUploadExtractionHeadersFactory() {
     this.headers = new LinkedList<String>();
-    this.buildHeader(headers);
+    this.buildHeader();
   }
 
   public List<String> getHeaders() {
     return this.headers;
   }
 
-  private void buildHeader(LinkedHashSet<String> headers) {
-    /* Basic information headers */
+  private void buildHeader() {
     this.headers.add(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
-
-    /* Additional headers */
-    headers.forEach(value -> {
-      this.headers.add(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue());
-      this.headers.add(value);
-      this.headers.add(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
-      this.headers.add(ExamUploadExtractionHeaders.OBSERVATIONS.getValue());
-    });
+    this.headers.add(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.EXAM_NAME.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.RESULT.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.OBSERVATIONS.getValue());
   }
 
 }

@@ -1,6 +1,6 @@
 package br.org.otus.examUploader.persistence;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -18,7 +18,5 @@ public interface ExamResultDao {
 
   List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException;
 
-  LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException;
-
-  LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
+  LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 }

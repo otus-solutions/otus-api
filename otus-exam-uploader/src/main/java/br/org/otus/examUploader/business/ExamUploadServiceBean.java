@@ -3,6 +3,7 @@ package br.org.otus.examUploader.business;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -166,12 +167,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
   }
 
   @Override
-  public LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException {
-    return examResultDAO.getExamResultsExtractionHeaders();
-  }
-
-  @Override
-  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
+  public LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
     return examResultDAO.getExamResultsExtractionValues();
   }
 }

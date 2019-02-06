@@ -31,36 +31,24 @@ public class ExamResultQueryBuilder {
     
     return this;
   }
-  
-  public ExamResultQueryBuilder getExamResultsGroupByRecruitmentNumber() {
-    Document group = this.parseQuery("{\n" + 
-        "        $group: {\n" + 
-        "            _id: \"$recruitmentNumber\",\n" + 
-        "            results:\n" + 
-        "            {\n" + 
-        "                $push: {\n" + 
-        "                    \"aliquotCode\": \"$aliquotCode\",\n" + 
-        "                    \"resultName\": \"$resultName\",\n" + 
-        "                    \"value\": \"$value\",\n" + 
-        "                    \"releaseDate\": \"$releaseDate\",\n" + 
-        "                    \"observations\": \"$observations\"\n" + 
-        "                }\n" + 
-        "            }\n" + 
-        "        }\n" + 
-        "    }");
-
-    pipeline.add(group);
+ 
+  public ExamResultQueryBuilder getSortingByRecruitmentNumber() {
+    pipeline.add(this.parseQuery("{$sort:{\"recruitmentNumber\":1}}"));
+    
     return this;
   }
   
   public ExamResultQueryBuilder getProjectionOfExamResultsToExtraction() {
-    Document project = this.parseQuery("{\n" + 
-        "        $project: {\n" + 
-        "            recruitmentNumber: \"$_id\",\n" + 
-        "            _id: 0,\n" + 
-        "            results: \"$results\"\n" + 
-        "        }\n" + 
-        "    }");
+    Document project = this.parseQuery("{\n" +
+      "  $project: {\n" +
+      "      \"recruitmentNumber\": \"$recruitmentNumber\",\n" +
+      "      \"aliquotCode\": \"$aliquotCode\",\n" +
+      "      \"resultName\": \"$resultName\",\n"+
+      "      \"value\": \"$value\",\n"+
+      "      \"releaseDate\": \"$releaseDate\",\n"+
+      "      \"observations\": \"$observations\"\n"+
+      "  }\n"+
+      "}");
     
     pipeline.add(project);
     return this;
