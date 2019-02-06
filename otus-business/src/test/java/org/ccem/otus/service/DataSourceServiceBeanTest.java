@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.HashSet;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -38,7 +40,7 @@ public class DataSourceServiceBeanTest {
   @Mock
   private DataSourceDao dataSourceDao;
   @Mock
-  private JsonArray duplicatedElements = new JsonArray();
+  private HashSet<String> duplicatedElements = new HashSet<>();
 
   private DataSource DATASOURCE;
   private DataSource DATASOURCE_PERSISTED;
@@ -72,18 +74,6 @@ public class DataSourceServiceBeanTest {
   }
 
   @Test(expected = ValidationException.class)
-  public void should_method_update_datasource_with_exception_same_elements() throws DataNotFoundException, ValidationException {
-    JsonObject object1 = new JsonObject();
-    object1.addProperty(VALUE_FIELD, VALUE_1);
-    object1.addProperty(EXTRACTION_FIELD, EXTRACTION_VALUE_1);
-    elements.add(object1);
-    DATASOURCE = new DataSource(ID,NAME,elements);
-    when(dataSourceDao.findByID(DATASOURCE.getId())).thenReturn(DATASOURCE_PERSISTED);
-    dataSourceServiceBean.update(DATASOURCE,elements);
-    Mockito.doThrow(new ValidationException()).when(dataSourceServiceBean).update(DATASOURCE,elements);
-  }
-
-  @Test(expected = ValidationException.class)
   public void should_method_update_datasource_with_exception_missing_elements() throws DataNotFoundException, ValidationException {
     JsonObject object1 = new JsonObject();
     object1.addProperty(VALUE_FIELD, VALUE_2);
@@ -91,8 +81,8 @@ public class DataSourceServiceBeanTest {
     elements.add(object1);
     DATASOURCE = new DataSource(ID,NAME,elements);
     when(dataSourceDao.findByID(DATASOURCE.getId())).thenReturn(DATASOURCE_PERSISTED);
-    dataSourceServiceBean.update(DATASOURCE,elements);
-    Mockito.doThrow(new ValidationException()).when(dataSourceServiceBean).update(DATASOURCE,elements);
+    dataSourceServiceBean.update(DATASOURCE,duplicatedElements);
+    Mockito.doThrow(new ValidationException()).when(dataSourceServiceBean).update(DATASOURCE,duplicatedElements);
   }
 
   @Test
