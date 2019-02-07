@@ -22,20 +22,20 @@ public class ExamUploadExtractionRecordsFactory {
   }
 
   public void buildResultInformation() {
-    inputRecords.forEach(result -> {
-      this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(result)));
+    inputRecords.forEach(record -> {
+      this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(record)));
     });
   }
 
-  private List<String> createRecordsAnswers(ParticipantExamUploadResultExtraction result) {
+  private List<String> createRecordsAnswers(ParticipantExamUploadResultExtraction record) {
     List<String> answers = new LinkedList<String>();
-    answers.add(result.getRecruitmentNumber().toString());
-    answers.add(result.getAliquotCode());
-    answers.add(result.getResultName());
-    answers.add(result.getValue());
-    answers.add(result.getReleaseDate());
+    answers.add(record.getRecruitmentNumber().toString());
+    answers.add(record.getAliquotCode());
+    answers.add(record.getResultName());
+    answers.add(record.getValue());
+    answers.add(record.getReleaseDate());
     String observations = "";
-    for (Observation observation : result.getObservations()) {
+    for (Observation observation : record.getObservations()) {
       if (observations.isEmpty()) {
         observations += observation.getValue();
       } else {

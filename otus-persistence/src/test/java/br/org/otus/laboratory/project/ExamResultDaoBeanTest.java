@@ -42,6 +42,7 @@ public class ExamResultDaoBeanTest {
     Mockito.verify(builder, Mockito.times(1)).getSortingByExamName();
     Mockito.verify(builder, Mockito.times(1)).getSortingByRecruitmentNumber();
     Mockito.verify(builder, Mockito.times(1)).getGroupOfExamResultsToExtraction();
+    Mockito.verify(builder, Mockito.times(1)).getProjectionOfExamResultsToExtraction();
     Mockito.verify(builder, Mockito.times(1)).build();
   }
 

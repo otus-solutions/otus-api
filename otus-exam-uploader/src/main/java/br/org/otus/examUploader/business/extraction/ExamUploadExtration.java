@@ -8,7 +8,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import br.org.otus.api.Extractable;
 import br.org.otus.examUploader.business.extraction.factories.ExamUploadExtractionHeadersFactory;
 import br.org.otus.examUploader.business.extraction.factories.ExamUploadExtractionRecordsFactory;
-import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public class ExamUploadExtration implements Extractable {

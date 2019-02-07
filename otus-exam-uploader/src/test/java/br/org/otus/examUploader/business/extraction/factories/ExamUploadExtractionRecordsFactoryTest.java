@@ -11,7 +11,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.reflect.Whitebox;
 
 import br.org.otus.examUploader.Observation;
-import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public class ExamUploadExtractionRecordsFactoryTest {
 
@@ -23,9 +23,9 @@ public class ExamUploadExtractionRecordsFactoryTest {
   private static final String RELEASE_DATE = "1000330";
 
   private List<String> headers;
-  private LinkedList<ParticipantExamUploadRecordExtraction> records;
-  private ParticipantExamUploadRecordExtraction record;
-    
+  private LinkedList<ParticipantExamUploadResultExtraction> records;
+  private ParticipantExamUploadResultExtraction record;
+
   private ExamUploadExtractionRecordsFactory examUploadExtractionRecordsFactory;
 
   @Before
@@ -34,14 +34,14 @@ public class ExamUploadExtractionRecordsFactoryTest {
     this.headers = headersFactory.getHeaders();
     this.records = new LinkedList<>();
 
-//    this.examUploadExtractionRecordsFactory = new ExamUploadExtractionRecordsFactory(this.records);
+    this.examUploadExtractionRecordsFactory = new ExamUploadExtractionRecordsFactory(this.records);
   }
 
   @Test
   public void buildResultInformation_method_should_call_createRecordsAnswers_method() throws Exception {
     List<Observation> observations = new ArrayList<>();
+    this.examUploadExtractionRecordsFactory = PowerMockito.spy(new ExamUploadExtractionRecordsFactory(this.records));
     this.record = this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations);
-//    this.examUploadExtractionRecordsFactory = PowerMockito.spy(new ExamUploadExtractionRecordsFactory(this.records));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
 
     PowerMockito.verifyPrivate(this.examUploadExtractionRecordsFactory).invoke("createRecordsAnswers", this.record);
@@ -60,7 +60,8 @@ public class ExamUploadExtractionRecordsFactoryTest {
   @Test
   public void getRecords_method_should_return_list_with_expected_values() {
     List<Observation> observations = new ArrayList<>();
-    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations));
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1,
+        RELEASE_DATE, observations));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
     List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
 
@@ -73,9 +74,8 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Assert.assertEquals("", results.get(5));
   }
 
-  private ParticipantExamUploadRecordExtraction createFakeParticipantExamUploadRecord(Long rn, String aliquotCode,
-      String resultName, String value, String releaseDate, List<Observation> observations) {
-    ParticipantExamUploadRecordExtraction participantExamUploadRecordExtraction = new ParticipantExamUploadRecordExtraction();
+  private ParticipantExamUploadResultExtraction createFakeParticipantExamUploadRecord(Long rn, String aliquotCode, String resultName, String value, String releaseDate, List<Observation> observations) {
+    ParticipantExamUploadResultExtraction participantExamUploadRecordExtraction = new ParticipantExamUploadResultExtraction();
 
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "recruitmentNumber", rn);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "aliquotCode", aliquotCode);

@@ -21,7 +21,7 @@ public class ExamResultQueryBuilder {
   }
 
   public ExamResultQueryBuilder getExamResultsWithAliquotValid() {
-    pipeline.add(this.parseQuery("{ $match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}"));
+    pipeline.add(this.parseQuery("{$match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}"));
     
     return this;
   }
@@ -39,17 +39,17 @@ public class ExamResultQueryBuilder {
   }
   
   public ExamResultQueryBuilder getGroupOfExamResultsToExtraction() {
-    Document group = this.parseQuery("  {\n" + 
+    Document group = this.parseQuery("{\n" + 
         "    $group: {\n" + 
         "      _id: \"$recruitmentNumber\",\n" + 
-        "      results: {\n" + 
-        "        $push: {\n" + 
-        "          \"recruitmentNumber\": \"$recruitmentNumber\",\n" + 
-        "          \"aliquotCode\": \"$aliquotCode\",\n" + 
-        "          \"resultName\": \"$resultName\",\n" + 
-        "          \"value\": \"$value\",\n" + 
-        "          \"releaseDate\": \"$releaseDate\",\n" + 
-        "          \"observations\": \"$observations\"\n" + 
+        "      results:{\n" + 
+        "        $push:{\n" + 
+        "          \"recruitmentNumber\":\"$recruitmentNumber\",\n" + 
+        "          \"aliquotCode\":\"$aliquotCode\",\n" + 
+        "          \"resultName\":\"$resultName\",\n" + 
+        "          \"value\":\"$value\",\n" + 
+        "          \"releaseDate\":\"$releaseDate\",\n" + 
+        "          \"observations\":\"$observations\"\n" + 
         "        }\n" + 
         "      }\n" + 
         "    }\n" + 
@@ -60,11 +60,11 @@ public class ExamResultQueryBuilder {
   }
   
   public ExamResultQueryBuilder getProjectionOfExamResultsToExtraction() {
-    Document project = this.parseQuery("  {\n" + 
+    Document project = this.parseQuery("{\n" + 
         "    $project: {\n" + 
         "      recruitmentNumber: \"$_id\",\n" + 
         "      _id: 0,\n" + 
-        "      results: \"$results\"\n" + 
+        "      results:\"$results\"\n" + 
         "    }\n" + 
         "  }");
     
