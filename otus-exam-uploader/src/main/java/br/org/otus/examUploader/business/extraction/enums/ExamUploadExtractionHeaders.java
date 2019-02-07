@@ -4,7 +4,9 @@ public enum ExamUploadExtractionHeaders {
 
   RECRUITMENT_NUMBER("recruitment_number"),
   ALIQUOT_CODE("aliquot_code"),
-  RELEASE_DATE("release_date"), // TODO: realization_date?
+  EXAM_NAME("exam_name"),
+  RESULT("result"),
+  RELEASE_DATE("release_date"),
   OBSERVATIONS("observations");
 
   private final String value;

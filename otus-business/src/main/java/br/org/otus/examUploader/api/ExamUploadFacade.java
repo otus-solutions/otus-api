@@ -1,6 +1,7 @@
 package br.org.otus.examUploader.api;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -68,15 +69,7 @@ public class ExamUploadFacade {
 
   }
 
-  public LinkedHashSet<String> getExamResultsExtractionHeaders() {
-    try {
-      return examUploadService.getExamResultsExtractionHeaders();
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
-    }
-  }
-
-  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() {
+  public LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() {
     try {
       return examUploadService.getExamResultsExtractionValues();
     } catch (DataNotFoundException e) {

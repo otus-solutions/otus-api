@@ -1,7 +1,7 @@
 package br.org.otus.extraction;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,9 +42,8 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
-    LinkedHashSet<String> headers = examUploadFacade.getExamResultsExtractionHeaders();
-    LinkedHashSet<ParticipantExamUploadRecordExtraction> records = examUploadFacade.getExamResultsExtractionValues();
-    ExamUploadExtration extractor = new ExamUploadExtration(headers, records);
+    LinkedList<ParticipantExamUploadRecordExtraction> records = examUploadFacade.getExamResultsExtractionValues();
+    ExamUploadExtration extractor = new ExamUploadExtration(records);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

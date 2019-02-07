@@ -1,6 +1,6 @@
 package br.org.otus.examUploader.business;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -29,8 +29,6 @@ public interface ExamUploadService {
 
   void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
 
-  LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException;
-
-  LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
+  LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 
 }

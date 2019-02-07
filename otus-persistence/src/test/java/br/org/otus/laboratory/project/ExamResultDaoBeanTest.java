@@ -35,24 +35,12 @@ public class ExamResultDaoBeanTest {
   }
 
   @Test
-  public void getExamResultsExtractionHeader_method_should_call_distinct_method() throws DataNotFoundException {
-    this.examResultDaoBean.getExamResultsExtractionHeaders();
-
-    Mockito.verify(collection).distinct(Mockito.anyString(), Mockito.any());
-  }
-
-  @Test(expected = DataNotFoundException.class)
-  public void getExamResultsExtractionValues_method_should_return_exception_DataNotFoundException_when_collection_is_empty() throws DataNotFoundException {
-    this.examResultDaoBean.getExamResultsExtractionHeaders();
-  }
-
-  @Test
   public void getExamResultsExtractionValues_should_build_the_query() throws DataNotFoundException {
     this.examResultDaoBean.getExamResultsExtractionValues();
 
     Mockito.verify(builder, Mockito.times(1)).getExamResultsWithAliquotValid();
     Mockito.verify(builder, Mockito.times(1)).getSortingByExamName();
-    Mockito.verify(builder, Mockito.times(1)).getExamResultsGroupByRecruitmentNumber();
+    Mockito.verify(builder, Mockito.times(1)).getSortingByRecruitmentNumber();
     Mockito.verify(builder, Mockito.times(1)).getProjectionOfExamResultsToExtraction();
     Mockito.verify(builder, Mockito.times(1)).build();
   }

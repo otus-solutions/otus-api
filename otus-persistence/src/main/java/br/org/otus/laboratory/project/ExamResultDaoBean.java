@@ -5,6 +5,7 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.Document;
@@ -76,27 +77,12 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   }
 
   @Override
-  public LinkedHashSet<String> getExamResultsExtractionHeaders() throws DataNotFoundException {
-    LinkedHashSet<String> headers = new LinkedHashSet<>();
-    Document query = new Document("objectType", "ExamResults");
-    try {
-      for (String header : collection.distinct("resultName", query, String.class)) {
-        headers.add(header);
-      }
-    } catch (Exception e) {
-      throw new DataNotFoundException(new Throwable("There are no exams to describe the extraction headers."));
-    }
-
-    return headers;
-  }
-
-  @Override
-  public LinkedHashSet<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
-    LinkedHashSet<ParticipantExamUploadRecordExtraction> values = new LinkedHashSet<>();
+  public LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
+    LinkedList<ParticipantExamUploadRecordExtraction> values = new LinkedList<>();
     List<Bson> query = new ExamResultQueryBuilder()
         .getExamResultsWithAliquotValid()
         .getSortingByExamName()
-        .getExamResultsGroupByRecruitmentNumber()
+        .getSortingByRecruitmentNumber()
         .getProjectionOfExamResultsToExtraction()
         .build();
 
