@@ -1,6 +1,5 @@
 package br.org.otus.examUploader.api;
 
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.ExamUploadService;
-import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
@@ -69,7 +68,7 @@ public class ExamUploadFacade {
 
   }
 
-  public LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() {
+  public LinkedList<ParticipantExamUploadResultExtraction> getExamResultsExtractionValues() {
     try {
       return examUploadService.getExamResultsExtractionValues();
     } catch (DataNotFoundException e) {

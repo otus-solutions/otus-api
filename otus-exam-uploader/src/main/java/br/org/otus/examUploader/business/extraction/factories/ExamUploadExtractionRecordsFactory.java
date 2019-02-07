@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public class ExamUploadExtractionRecordsFactory {
 
-  private LinkedList<ParticipantExamUploadRecordExtraction> inputRecords;
+  private LinkedList<ParticipantExamUploadResultExtraction> inputRecords;
   private List<List<Object>> outputRecords;
 
-  public ExamUploadExtractionRecordsFactory(LinkedList<ParticipantExamUploadRecordExtraction> records) {
+  public ExamUploadExtractionRecordsFactory(LinkedList<ParticipantExamUploadResultExtraction> records) {
     this.inputRecords = records;
     this.outputRecords = new LinkedList<>();
   }
@@ -21,28 +21,27 @@ public class ExamUploadExtractionRecordsFactory {
   }
 
   public void buildResultInformation() {
-    inputRecords.forEach(record -> {
-      this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(record)));
+    inputRecords.forEach(result -> {
+      this.outputRecords.add(new ArrayList<>(this.createRecordsAnswers(result)));
     });
   }
 
-  private List<String> createRecordsAnswers(ParticipantExamUploadRecordExtraction record) {
+  private List<String> createRecordsAnswers(ParticipantExamUploadResultExtraction result) {
     List<String> answers = new LinkedList<String>();
-
-    answers.add(record.getRecruitmentNumber().toString());
-    answers.add(record.getAliquotCode());
-    answers.add(record.getResultName());
-    answers.add(record.getValue());
-    answers.add(record.getReleaseDate());
+    answers.add(result.getRecruitmentNumber().toString());
+    answers.add(result.getAliquotCode());
+    answers.add(result.getResultName());
+    answers.add(result.getValue());
+    answers.add(result.getReleaseDate());
     String observations = "";
-    record.getObservations().forEach(observation -> {
+    result.getObservations().forEach(observation -> {
       if (observations.isEmpty()) {
         observations.concat(observation.getValue());
       } else {
         observations.concat(", " + observation.getValue());
       }
     });
-    answers.add(observations);
+    answers.add(observations.toString());
 
     return answers;
   }

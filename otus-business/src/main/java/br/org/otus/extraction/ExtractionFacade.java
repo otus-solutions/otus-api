@@ -15,6 +15,7 @@ import br.org.otus.api.ExtractionService;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
@@ -42,7 +43,7 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
-    LinkedList<ParticipantExamUploadRecordExtraction> records = examUploadFacade.getExamResultsExtractionValues();
+    LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
     ExamUploadExtration extractor = new ExamUploadExtration(records);
     try {
       return extractionService.createExtraction(extractor);

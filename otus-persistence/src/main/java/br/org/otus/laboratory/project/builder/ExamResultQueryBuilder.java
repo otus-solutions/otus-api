@@ -21,7 +21,7 @@ public class ExamResultQueryBuilder {
   }
 
   public ExamResultQueryBuilder getExamResultsWithAliquotValid() {
-    pipeline.add(this.parseQuery("{$match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}"));
+    pipeline.add(this.parseQuery("{ $match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}"));
     
     return this;
   }
@@ -38,17 +38,35 @@ public class ExamResultQueryBuilder {
     return this;
   }
   
+  public ExamResultQueryBuilder getGroupOfExamResultsToExtraction() {
+    Document group = this.parseQuery("  {\n" + 
+        "    $group: {\n" + 
+        "      _id: \"$recruitmentNumber\",\n" + 
+        "      results: {\n" + 
+        "        $push: {\n" + 
+        "          \"recruitmentNumber\": \"$recruitmentNumber\",\n" + 
+        "          \"aliquotCode\": \"$aliquotCode\",\n" + 
+        "          \"resultName\": \"$resultName\",\n" + 
+        "          \"value\": \"$value\",\n" + 
+        "          \"releaseDate\": \"$releaseDate\",\n" + 
+        "          \"observations\": \"$observations\"\n" + 
+        "        }\n" + 
+        "      }\n" + 
+        "    }\n" + 
+        "  }");
+    
+    pipeline.add(group);
+    return this;
+  }
+  
   public ExamResultQueryBuilder getProjectionOfExamResultsToExtraction() {
-    Document project = this.parseQuery("{\n" +
-      "  $project: {\n" +
-      "      \"recruitmentNumber\": \"$recruitmentNumber\",\n" +
-      "      \"aliquotCode\": \"$aliquotCode\",\n" +
-      "      \"resultName\": \"$resultName\",\n"+
-      "      \"value\": \"$value\",\n"+
-      "      \"releaseDate\": \"$releaseDate\",\n"+
-      "      \"observations\": \"$observations\"\n"+
-      "  }\n"+
-      "}");
+    Document project = this.parseQuery("  {\n" + 
+        "    $project: {\n" + 
+        "      recruitmentNumber: \"$_id\",\n" + 
+        "      _id: 0,\n" + 
+        "      results: \"$results\"\n" + 
+        "    }\n" + 
+        "  }");
     
     pipeline.add(project);
     return this;

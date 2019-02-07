@@ -34,14 +34,14 @@ public class ExamUploadExtractionRecordsFactoryTest {
     this.headers = headersFactory.getHeaders();
     this.records = new LinkedList<>();
 
-    this.examUploadExtractionRecordsFactory = new ExamUploadExtractionRecordsFactory(this.records);
+//    this.examUploadExtractionRecordsFactory = new ExamUploadExtractionRecordsFactory(this.records);
   }
 
   @Test
   public void buildResultInformation_method_should_call_createRecordsAnswers_method() throws Exception {
     List<Observation> observations = new ArrayList<>();
     this.record = this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1, RELEASE_DATE, observations);
-    this.examUploadExtractionRecordsFactory = PowerMockito.spy(new ExamUploadExtractionRecordsFactory(this.records));
+//    this.examUploadExtractionRecordsFactory = PowerMockito.spy(new ExamUploadExtractionRecordsFactory(this.records));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
 
     PowerMockito.verifyPrivate(this.examUploadExtractionRecordsFactory).invoke("createRecordsAnswers", this.record);

@@ -12,6 +12,7 @@ import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.ExamSendingLot;
 import br.org.otus.examUploader.ExamUploadDTO;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public interface ExamUploadService {
 
@@ -29,6 +30,6 @@ public interface ExamUploadService {
 
   void validateExamResultLot(List<ExamResult> examResults) throws ValidationException;
 
-  LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
+  LinkedList<ParticipantExamUploadResultExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 
 }

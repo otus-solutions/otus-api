@@ -9,6 +9,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public interface ExamResultDao {
 
@@ -18,5 +19,5 @@ public interface ExamResultDao {
 
   List<Exam> getByExamSendingLotId(ObjectId id) throws DataNotFoundException;
 
-  LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
+  LinkedList<ParticipantExamUploadResultExtraction> getExamResultsExtractionValues() throws DataNotFoundException;
 }

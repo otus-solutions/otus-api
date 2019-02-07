@@ -20,6 +20,7 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.examUploader.Exam;
 import br.org.otus.examUploader.ExamResult;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 import br.org.otus.examUploader.persistence.ExamResultDao;
 import br.org.otus.laboratory.project.builder.ExamResultQueryBuilder;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
@@ -77,12 +78,13 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   }
 
   @Override
-  public LinkedList<ParticipantExamUploadRecordExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
-    LinkedList<ParticipantExamUploadRecordExtraction> values = new LinkedList<>();
+  public LinkedList<ParticipantExamUploadResultExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
+    LinkedList<ParticipantExamUploadResultExtraction> values = new LinkedList<>();
     List<Bson> query = new ExamResultQueryBuilder()
         .getExamResultsWithAliquotValid()
         .getSortingByExamName()
         .getSortingByRecruitmentNumber()
+        .getGroupOfExamResultsToExtraction()
         .getProjectionOfExamResultsToExtraction()
         .build();
 
@@ -90,7 +92,7 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
       AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
       for (Object anOutput : output) {
         Document result = (Document) anOutput;
-        values.add(ParticipantExamUploadRecordExtraction.deserialize(result.toJson()));
+        values.addAll(ParticipantExamUploadRecordExtraction.deserialize(result.toJson()).getResults());
       }
     } catch (Exception e) {
       throw new DataNotFoundException(new Throwable("There are no exams to extraction."));

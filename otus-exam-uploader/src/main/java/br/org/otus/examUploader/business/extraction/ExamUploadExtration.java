@@ -9,13 +9,14 @@ import br.org.otus.api.Extractable;
 import br.org.otus.examUploader.business.extraction.factories.ExamUploadExtractionHeadersFactory;
 import br.org.otus.examUploader.business.extraction.factories.ExamUploadExtractionRecordsFactory;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
 public class ExamUploadExtration implements Extractable {
 
   private ExamUploadExtractionHeadersFactory headersFactory;
   private ExamUploadExtractionRecordsFactory recordsFactory;
 
-  public ExamUploadExtration(LinkedList<ParticipantExamUploadRecordExtraction> records) {
+  public ExamUploadExtration(LinkedList<ParticipantExamUploadResultExtraction> records) {
     this.headersFactory = new ExamUploadExtractionHeadersFactory();
     this.recordsFactory = new ExamUploadExtractionRecordsFactory(records);
   }
