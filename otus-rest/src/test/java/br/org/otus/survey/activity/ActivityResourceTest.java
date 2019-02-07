@@ -45,8 +45,11 @@ public class ActivityResourceTest {
   private static final String ACTIVITY_EXPECTED = "{\"data\":\"591a40807b65e4045b9011e7\"}";
   private static final String ACTIVITY_REVISION_EXPECTED = "{\"data\":true}";
   private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
+  private static final String ACTIVITY_EXPECTED_BOOLEAN = "{\"data\":true}";
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
+  private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+
 
   @InjectMocks
   private ActivityResource activityResource;
@@ -127,6 +130,12 @@ public class ActivityResourceTest {
     String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
     assertEquals(responseExpected, activityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
     verify(participantFacade).getByRecruitmentNumber(anyLong());
+  }
+
+  @Test
+  public void updateCheckerActivityMethod_should_return_responseBooleanData() {
+    when(activityFacade.updateCheckerActivity(checkerUpdated)).thenReturn(Boolean.TRUE);
+    assertEquals(ACTIVITY_EXPECTED_BOOLEAN, activityResource.updateCheckerActivity(RECRUIMENT_NUMBER, checkerUpdated));
   }
 
   @Test

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
@@ -21,7 +22,7 @@ public class ActivityDataSourceResultTest {
 
 	private ActivityStatus activityStatus;
 
-	private ActivityBasicUser user;
+	private User user;
 
 	private ActivityStatusOptions activityStatusOptions;
 
@@ -33,7 +34,7 @@ public class ActivityDataSourceResultTest {
 	public void setUp() {
 		activityStatusOptions = ActivityStatusOptions.CREATED;
 
-		user = new ActivityBasicUser();
+		user = new User();
 		Whitebox.setInternalState(user, "name", "Joao");
 
 		activityStatus = new ActivityStatus();

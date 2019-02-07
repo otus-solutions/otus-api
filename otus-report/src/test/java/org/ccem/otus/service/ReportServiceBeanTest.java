@@ -10,6 +10,7 @@ import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
+import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
@@ -105,7 +106,7 @@ public class ReportServiceBeanTest {
 		Whitebox.setInternalState(reportTemplate, "dataSources", new ArrayList<>());
 		reportTemplate.getDataSources().add(activityDataSource);
 		ActivityStatusOptions activityStatusOptions = ActivityStatusOptions.CREATED;
-		ActivityBasicUser user = new ActivityBasicUser();
+		User user = new User();
 		Whitebox.setInternalState(user, "name", "Joao");
 		ActivityStatus activityStatus = new ActivityStatus();
 		Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
