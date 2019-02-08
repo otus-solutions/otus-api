@@ -1,17 +1,17 @@
 package br.org.otus.user.management;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.email.user.management.DisableUserNotificationEmail;
+import br.org.otus.email.user.management.EnableUserNotificationEmail;
+import br.org.otus.email.user.management.PasswordResetEmail;
+import br.org.otus.model.User;
+import br.org.otus.security.api.SecurityFacade;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.UserDaoBean;
+import br.org.otus.user.dto.FieldCenterDTO;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.otus.user.dto.PasswordResetDto;
+import br.org.owail.sender.email.Sender;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -27,21 +27,16 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.management.DisableUserNotificationEmail;
-import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.email.user.management.PasswordResetEmail;
-import br.org.otus.model.User;
-import br.org.otus.security.api.SecurityFacade;
-import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.user.UserDaoBean;
-import br.org.otus.user.dto.FieldCenterDTO;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.otus.user.dto.PasswordResetDto;
-import br.org.owail.sender.email.Sender;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @PrepareForTest({ManagementUserServiceBean.class})
