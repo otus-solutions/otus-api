@@ -1,18 +1,10 @@
 package org.ccem.otus.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
@@ -21,17 +13,27 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import junit.framework.Assert;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(CheckerUpdatedDTO.class)
 public class ActivityServiceBeanTest {
   private static final String HASH = "58c83f502226685b94f8973a";
   private static final long RECRUIMENT_NUMBER = 12345;
   private static final String SURVEY_ID = "123456789";
   private static final Integer VERSION = 1;
   private static final String USER_EMAIL = "otus@gmail.com";
+  private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+
   @InjectMocks
   private ActivityServiceBean service;
   @Mock
@@ -43,6 +45,8 @@ public class ActivityServiceBeanTest {
   private ObjectId objectId;
   @Mock
   private SurveyActivity activity;
+  @Mock
+  private CheckerUpdatedDTO checkerUpdatedDTO;
   private ActivityAccessPermission permission;
   private List<SurveyActivity> surveyActivities;
 
@@ -72,7 +76,6 @@ public class ActivityServiceBeanTest {
     assertTrue(surveyActivities.get(0) instanceof SurveyActivity);
     verify(activityDao, times(1)).find(RECRUIMENT_NUMBER);
     verify(activityAccessPermissionService, times(1)).list();
-
   }
 
   @Test
@@ -95,5 +98,13 @@ public class ActivityServiceBeanTest {
     when(activityDao.getUndiscarded(SURVEY_ID, VERSION)).thenThrow(DataNotFoundException.class);
     service.get(SURVEY_ID, VERSION);
     verify(activityDao, times(1)).getUndiscarded(SURVEY_ID, VERSION);
+  }
+
+  @Test
+  public void updateCheckerActivityMethod_should_invoke_updateChekerActivity_of_ActivityDao() throws DataNotFoundException{
+    mockStatic(CheckerUpdatedDTO.class);
+    when(CheckerUpdatedDTO.deserialize(checkerUpdated)).thenReturn(checkerUpdatedDTO);
+    service.updateCheckerActivity(checkerUpdated);
+    verify(activityDao, times(1)).updateCheckerActivity(checkerUpdatedDTO);
   }
 }

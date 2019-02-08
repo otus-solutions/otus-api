@@ -17,6 +17,8 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.persistence.ActivityDao;
 
 import com.mongodb.Block;
@@ -72,6 +74,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
         return parsed.getObjectId("_id");
     }
+
 
     @Override
     public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
@@ -153,9 +156,28 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())), new UpdateOptions().upsert(false));
     }
 
-	private void removeOids(Document parsedActivity){
+    @Override
+    public boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException {
+        String checkerUpdateJson = ActivityStatus.serialize(checkerUpdatedDTO.getActivityStatus());
+        Document parsed = Document.parse(checkerUpdateJson);
+        Document checkerUpdate = (Document) parsed.get("user");
+        String dateUpdated = (String) parsed.get("date");
+
+        UpdateResult updateResult = collection.updateOne(
+                and(eq("_id", new ObjectId(checkerUpdatedDTO.getId())),
+                    eq("statusHistory.name", checkerUpdatedDTO.getActivityStatus().getName())),
+                new Document("$set", new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date",dateUpdated)));
+
+        if (updateResult.getMatchedCount() == 0) {
+            throw new DataNotFoundException(new Throwable("Activity of Participant not found"));
+        }
+
+        return true;
+    }
+
+    private void removeOids(Document parsedActivity){
         parsedActivity.remove("_id");
-        ((Document) parsedActivity.get("surveyForm")).remove("_id");; //todo: remove when this id becomes standard
+        ((Document) parsedActivity.get("surveyForm")).remove("_id");
     }
 
 }
