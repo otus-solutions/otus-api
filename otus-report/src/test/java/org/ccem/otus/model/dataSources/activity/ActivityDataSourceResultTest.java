@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.ccem.otus.model.survey.activity.User;
+import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;

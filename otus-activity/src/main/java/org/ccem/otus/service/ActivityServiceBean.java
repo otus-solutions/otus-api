@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
@@ -108,5 +109,11 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> get(String acronym, Integer version)
       throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
+  }
+
+  @Override
+  public boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException {
+    CheckerUpdatedDTO checkerUpdatedDTO = CheckerUpdatedDTO.deserialize(checkerUpdated);
+    return activityDao.updateCheckerActivity(checkerUpdatedDTO);
   }
 }
