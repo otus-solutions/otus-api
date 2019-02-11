@@ -10,7 +10,15 @@ public class NotFound extends ResponseInfo{
         super(Response.Status.NOT_FOUND, "Data Not Found");
     }
 
+    public NotFound(String message) {
+        super(Response.Status.NOT_FOUND, "Data Not Found - " + message);
+    }
+
     public static ResponseInfo build(){
         return new NotFound();
+    }
+
+    public static ResponseInfo build(String message){
+        return new NotFound(message);
     }
 }

@@ -8,4 +8,5 @@ public class ResponseBuild {
     public static FieldCenter FieldCenter;
     public static Http Http;
     public static Survey Survey;
+    public static Extraction Extraction;
 }

@@ -54,7 +54,7 @@ public class AttachmentsExtractionDaoBean implements AttachmentsExtractionDao {
         }
 
         if(attachmentsReport.getAttachmentsList().size() == 0){
-            throw new DataNotFoundException(new Throwable("There are no result"));
+            throw new DataNotFoundException(new Throwable("There are no result for given acronym or version"));
         }
 
         return attachmentsReport;
