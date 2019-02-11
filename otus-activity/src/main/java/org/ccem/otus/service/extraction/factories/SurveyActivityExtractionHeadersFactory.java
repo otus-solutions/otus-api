@@ -1,6 +1,7 @@
 package org.ccem.otus.service.extraction.factories;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -9,15 +10,15 @@ import org.ccem.otus.survey.template.item.questions.Question;
 public class SurveyActivityExtractionHeadersFactory {
 
 	private SurveyForm surveyForm;
-	private LinkedHashSet<String> headers;
+    private List<String> headers;
 
 	public SurveyActivityExtractionHeadersFactory(SurveyForm surveyForm) {
 		this.surveyForm = surveyForm;
-		this.headers = new LinkedHashSet<>();
+		this.headers = new LinkedList<>();
 		this.buildHeadersInfo();
 	}
 
-	public LinkedHashSet<String> getHeaders() {
+	public List<String> getHeaders() {
 		return this.headers;
 	}
 

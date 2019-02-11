@@ -1,6 +1,7 @@
 package br.org.otus.extraction;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,9 +13,8 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.api.ExtractionService;
 import br.org.otus.laboratory.extraction.LaboratoryExtraction;
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
-import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
@@ -25,7 +25,7 @@ public class ExtractionFacade {
   @Inject
   private SurveyFacade surveyFacade;
   @Inject
-  private ParticipantLaboratory participantLaboratory;
+  private ParticipantLaboratoryDao participantLaboratoryDao;
   @Inject
   private ExtractionService extractionService;
 
@@ -43,9 +43,8 @@ public class ExtractionFacade {
   }
 
   public byte[] extractParticipantLaboratoryCorrelation() throws DataNotFoundException {
-    List<Tube> tubes = participantLaboratory.getTubes();
-    List<SimpleAliquot> aliquots = participantLaboratory.getAliquotsList();
-    LaboratoryExtraction extractor = new LaboratoryExtraction();
+    LinkedList<ParticipantLaboratoryResultExtraction> tubes = participantLaboratoryDao.getLaboratoryExtractionByParticipant();
+    LaboratoryExtraction extractor = new LaboratoryExtraction(tubes);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

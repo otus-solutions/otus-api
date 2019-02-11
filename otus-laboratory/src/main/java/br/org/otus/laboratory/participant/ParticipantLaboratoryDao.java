@@ -1,9 +1,11 @@
 package br.org.otus.laboratory.participant;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 
@@ -22,5 +24,7 @@ public interface ParticipantLaboratoryDao {
   ArrayList<SimpleAliquot> getFullAliquotsList();
 
   ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
+  
+  LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant();
 
 }

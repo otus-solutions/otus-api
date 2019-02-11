@@ -20,9 +20,18 @@ public class LaboratoryExtractionHeadersFactory {
 
   private void buildHeader() {
     this.headers.add(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue());
+    /* headers information of tube */
     this.headers.add(LaboratoryExtractionHeaders.TUBE_CODE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.QUALITY_CONTROL.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.TUBE_NAME.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.COLLECTION_DATE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.RESPONSIBLE.getValue());
+    /* headers information of aliquot */
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_CODE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_NAME.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.PROCESSING_DATE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.REGISTER_DATE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.RESPONSIBLE.getValue());
   }
 
 }

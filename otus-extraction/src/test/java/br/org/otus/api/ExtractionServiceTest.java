@@ -1,7 +1,7 @@
 package br.org.otus.api;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -11,11 +11,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import br.org.otus.service.CsvWriter;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import br.org.otus.service.CsvWriter;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ExtractionServiceBean.class)
@@ -25,8 +25,8 @@ public class ExtractionServiceTest {
   class ExtractionTest implements Extractable {
 
     @Override
-    public LinkedHashSet<String> getHeaders() {
-      return new LinkedHashSet<String>();
+    public List<String> getHeaders() {
+      return new LinkedList<String>();
     }
 
     @Override
