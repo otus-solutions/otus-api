@@ -31,11 +31,11 @@ public class ConfigurationDaoBeanTest {
   @InjectMocks
   private ProjectConfigurationDaoBean ProjectConfigurationDaoBean = PowerMockito.spy(new ProjectConfigurationDaoBean());
   @Mock
-  private MongoCollection collection;
+  private MongoCollection<Document> collection;
   @Mock
   private UpdateResult updateResult;
   @Mock
-  private FindIterable findleInterable;
+  private FindIterable<Document> findleInterable;
   private Document first = PowerMockito.spy(new Document(OBJECT_TYPE, DEFAULT_OBJECT_TYPE));
 
   @Test
@@ -56,6 +56,7 @@ public class ConfigurationDaoBeanTest {
   public void GetProjectConfigurationMethod_should_return_deserialize_projectConfiguration() throws Exception {
     when(collection.find(Mockito.any(Document.class))).thenReturn(findleInterable);
     when(findleInterable.first()).thenReturn(first);
+    
     assertTrue(ProjectConfiguration.class.isInstance(ProjectConfigurationDaoBean.getProjectConfiguration()));
   }
 

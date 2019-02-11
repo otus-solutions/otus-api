@@ -1,7 +1,7 @@
 package br.org.otus.api;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -11,11 +11,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import br.org.otus.service.CsvWriter;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import br.org.otus.service.CsvWriter;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ExtractionServiceBean.class)
@@ -25,8 +25,8 @@ public class ExtractionServiceTest {
   class ExtractionTest implements Extractable {
 
     @Override
-    public LinkedHashSet<String> getHeaders() {
-      return new LinkedHashSet<String>();
+    public List<String> getHeaders() {
+      return new LinkedList<String>();
     }
 
     @Override
@@ -47,26 +47,21 @@ public class ExtractionServiceTest {
   public void setup() throws Exception {
     extractable = new ExtractionTest();
 
-    PowerMockito
-      .whenNew(CsvWriter.class)
-      .withNoArguments()
-      .thenReturn(csvWriter);
+    PowerMockito.whenNew(CsvWriter.class).withNoArguments().thenReturn(csvWriter);
   }
 
   @Test
   public void should_call_the_write_method_to_write_the_csv() throws DataNotFoundException {
     ExtractionServiceMock.createExtraction(extractable);
 
-    Mockito.verify(csvWriter, Mockito.times(1) )
-      .write(extractable.getHeaders(), extractable.getValues());
+    Mockito.verify(csvWriter, Mockito.times(1)).write(extractable.getHeaders(), extractable.getValues());
   }
 
   @Test
   public void should_call_the_method_getResult_to_find_result() throws DataNotFoundException {
     ExtractionServiceMock.createExtraction(extractable);
 
-    Mockito.verify(csvWriter, Mockito.times(1))
-      .getResult();
+    Mockito.verify(csvWriter, Mockito.times(1)).getResult();
   }
 
 }
