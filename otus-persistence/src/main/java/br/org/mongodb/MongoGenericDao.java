@@ -1,16 +1,14 @@
 package br.org.mongodb;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import com.mongodb.client.AggregateIterable;
-import org.bson.Document;
-
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.util.List;
 
 public abstract class MongoGenericDao<T> {

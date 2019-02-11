@@ -1,27 +1,23 @@
 package br.org.mongodb.gridfs;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.MongoCollection;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.FileUploaderPOJO;
-
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FileUploaderPOJO;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class FileStoreBucket {
 
