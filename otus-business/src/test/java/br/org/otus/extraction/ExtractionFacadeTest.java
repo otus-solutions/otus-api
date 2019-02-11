@@ -83,7 +83,7 @@ public class ExtractionFacadeTest {
   @Test
   public void extractParticipantLaboratoryCorrelation_should_return_new_extraction_of_exam() throws Exception {
     assertNotNull(extractionFacade);
-    extractionFacade.extractParticipantLaboratoryCorrelation();
+    extractionFacade.createParticipantLaboratoryExtraction();
 
     Mockito.verify(participantLaboratoryFacade).getLaboratoryExtractionByParticipant();
     Mockito.verify(extractionService).createExtraction(laboratoryExtraction);

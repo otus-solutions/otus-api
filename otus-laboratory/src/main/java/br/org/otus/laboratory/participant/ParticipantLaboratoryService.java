@@ -23,6 +23,6 @@ public interface ParticipantLaboratoryService {
 
   void deleteAliquot(String code) throws ValidationException, DataNotFoundException;
 
-  LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant();
+  LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException;
 
 }

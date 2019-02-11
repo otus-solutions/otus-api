@@ -42,7 +42,7 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] extractParticipantLaboratoryCorrelation() throws DataNotFoundException {
+  public byte[] createParticipantLaboratoryExtraction() throws DataNotFoundException {
     LinkedList<ParticipantLaboratoryResultExtraction> tubes = participantLaboratoryFacade.getLaboratoryExtractionByParticipant();
     LaboratoryExtraction extractor = new LaboratoryExtraction(tubes);
     try {

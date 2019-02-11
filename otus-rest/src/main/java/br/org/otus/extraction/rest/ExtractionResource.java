@@ -45,7 +45,7 @@ public class ExtractionResource {
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory/correlation")
   public byte[] extractLaboratoryCorrelation() throws DataNotFoundException {
-    return extractionFacade.extractParticipantLaboratoryCorrelation();
+    return extractionFacade.createParticipantLaboratoryExtraction();
   }
 
   @GET

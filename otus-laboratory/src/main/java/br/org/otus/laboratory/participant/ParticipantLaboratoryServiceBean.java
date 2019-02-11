@@ -3,6 +3,7 @@ package br.org.otus.laboratory.participant;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
@@ -22,6 +23,8 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -105,5 +108,10 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao,this.transportationLotDao);
     validator.validate();
     aliquotDao.delete(code);
+  }
+
+  @Override
+  public LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException {
+    return participantLaboratoryDao.getLaboratoryExtractionByParticipant();
   }
 }
