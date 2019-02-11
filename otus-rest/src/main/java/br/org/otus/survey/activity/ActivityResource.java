@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import br.org.otus.participant.api.ParticipantFacade;
@@ -25,6 +26,8 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 @Path("participants/{rn}/activities")
 public class ActivityResource {
 
+  @Inject
+  private ActivityRevisionFacade activityRevisionFacade;
   @Inject
   private ActivityFacade activityFacade;
   @Inject
@@ -87,6 +90,28 @@ public class ActivityResource {
     isValidRecruitmentNumber(rn);
     boolean updateCheckerActivity = activityFacade.updateCheckerActivity(checkerUpdated);
     return new Response().buildSuccess(updateCheckerActivity).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/revision/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getActivityRevisions(@Context HttpServletRequest request, @PathParam("id") String activityID) {
+    return new Response().buildSuccess(activityRevisionFacade.getActivityRevisions(activityID)).toSurveyJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/revision")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String createActivityRevision(@Context HttpServletRequest request, String activityRevisionJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    activityRevisionFacade.create(activityRevisionJson, userEmail);
+
+    return new Response().buildSuccess().toJson();
   }
 
   private void isValidRecruitmentNumber(long rn) {
