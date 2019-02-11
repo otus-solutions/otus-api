@@ -1,14 +1,20 @@
 package br.org.otus.survey.activity;
 
-import br.org.otus.participant.api.ParticipantFacade;
-import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.context.SecurityContext;
-import br.org.otus.security.context.SessionIdentifier;
-import br.org.otus.security.dtos.AuthenticationData;
-import br.org.otus.survey.activity.api.ActivityFacade;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
@@ -21,14 +27,13 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import br.org.otus.participant.api.ParticipantFacade;
+import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.context.SecurityContext;
+import br.org.otus.security.context.SessionIdentifier;
+import br.org.otus.security.dtos.AuthenticationData;
+import br.org.otus.survey.activity.api.ActivityFacade;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AuthorizationHeaderReader.class)
@@ -36,7 +41,10 @@ import static org.mockito.Mockito.when;
 public class ActivityResourceTest {
   private static final long RECRUIMENT_NUMBER = 3051442;
   private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
+  private static final String ID_ACITIVITY = "5c41c6b316da48006573a169";
   private static final String ACTIVITY_EXPECTED = "{\"data\":\"591a40807b65e4045b9011e7\"}";
+  private static final String ACTIVITY_REVISION_EXPECTED = "{\"data\":true}";
+  private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
   private static final String ACTIVITY_EXPECTED_BOOLEAN = "{\"data\":true}";
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
@@ -54,6 +62,15 @@ public class ActivityResourceTest {
   @Mock
   private ActivityFacade activityFacade;
   @Mock
+  private ActivityRevisionFacade activityRevisionFacade;
+
+  private String jsonActivity = "activity";
+  private SurveyActivity activityDeserialize;
+  private List<SurveyActivity> listSurveyActivity;
+  private List<ActivityRevision> listActivityRevision;
+  private Participant participant;
+
+  @Mock
   private HttpServletRequest request;
   @Mock
   private SecurityContext securityContext;
@@ -61,10 +78,6 @@ public class ActivityResourceTest {
   private SessionIdentifier sessionIdentifier;
   @Mock
   private AuthenticationData authenticationData;
-  private String jsonActivity = "activity";
-  private SurveyActivity activityDeserialize;
-  private List<SurveyActivity> listSurveyActivity;
-  private Participant participant;
 
   @Before
   public void setUp() {
@@ -123,5 +136,25 @@ public class ActivityResourceTest {
   public void updateCheckerActivityMethod_should_return_responseBooleanData() {
     when(activityFacade.updateCheckerActivity(checkerUpdated)).thenReturn(Boolean.TRUE);
     assertEquals(ACTIVITY_EXPECTED_BOOLEAN, activityResource.updateCheckerActivity(RECRUIMENT_NUMBER, checkerUpdated));
+  }
+
+  @Test
+  public void method_createActivityRevision_should_return_ObjectResponse() {
+    when(request.getHeader(Mockito.anyString())).thenReturn(TOKEN);
+    PowerMockito.mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.readToken(TOKEN)).thenReturn(TOKEN);
+    when(securityContext.getSession(TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(userEmail);
+    activityRevisionFacade.create(ACTIVITY_REVISION_JSON, userEmail);
+    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(request,ACTIVITY_REVISION_JSON));
+    verify(activityRevisionFacade,times (2)).create(ACTIVITY_REVISION_JSON, userEmail);
+  }
+
+  @Test
+  public void method_list_should_return_entire_getActivityRevisions_by_recruitment_number(){
+    when(activityRevisionFacade.getActivityRevisions(ID_ACITIVITY)).thenReturn(listActivityRevision);
+    String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
   }
 }
