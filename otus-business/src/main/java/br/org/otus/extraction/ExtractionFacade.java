@@ -48,11 +48,11 @@ public class ExtractionFacade {
     return surveyFacade.listVersions(acronym);
   }
 
-  public byte[] createAttachmentsReportExtraction(String acronym, Integer version) throws DataNotFoundException {
+  public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
     try {
       return extractionService.getAttachmentsReport(acronym,version);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Extraction.NotFound.build());
+      throw new HttpResponseException(ResponseBuild.Extraction.NotFound.build(e.getMessage()));
     }
   }
 }
