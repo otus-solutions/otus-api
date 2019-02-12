@@ -5,6 +5,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
+import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import org.bson.Document;
@@ -14,7 +15,11 @@ import org.ccem.otus.model.FileUploaderPOJO;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -84,6 +89,25 @@ public class FileStoreBucket {
 				.append("type", form.getType())
 				.append("size", form.getSize())
 				.append("interviewer", form.getInterviewer()));
+	}
+
+	public InputStream downloadMultiple(ArrayList<String> oids) throws DataNotFoundException {
+		Document query = new Document(
+				"_id", new Document(
+						"$in", oids
+		)
+		);
+		GridFSFindIterable gridFSFiles = fileStore.find(query);
+
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream("testee");
+			fileStore.downloadToStream(new ObjectId(oids.get(0)), fileOutputStream);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+
+		return null;
 	}
 
 }

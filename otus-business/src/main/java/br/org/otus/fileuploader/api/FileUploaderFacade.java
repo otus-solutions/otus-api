@@ -1,6 +1,7 @@
 package br.org.otus.fileuploader.api;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -34,6 +35,16 @@ public class FileUploaderFacade {
 
 	public String upload(FileUploaderPOJO form) {
 		return fileStoreBucket.store(form);
+	}
+
+	public InputStream list(ArrayList<String> oids) {
+		try {
+
+			return fileStoreBucket.downloadMultiple(oids);
+
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
 	}
 
 }

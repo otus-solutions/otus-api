@@ -1,6 +1,7 @@
 package br.org.otus.fileuploader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -34,7 +35,7 @@ public class FileUploaderResource {
 	}
 
 	@POST
-	@Secured
+//	@Secured todo; uncomment
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getById(String oid) {
 		ResponseBuilder builder = Response.ok(facade.getById(oid));
@@ -49,6 +50,16 @@ public class FileUploaderResource {
 	public Response delete(@PathParam("id") String oid) {
 		facade.delete(oid);
 		return Response.ok().build();
+	}
+
+	@POST
+//	@Secured todo: uncomment
+	@Path("/extraction")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response list(ArrayList<String> oids) {
+		ResponseBuilder builder = Response.ok(facade.list(oids));
+		builder.header("Content-Disposition", "attachment; filename=" + "anything");
+		return builder.build();
 	}
 
 }
