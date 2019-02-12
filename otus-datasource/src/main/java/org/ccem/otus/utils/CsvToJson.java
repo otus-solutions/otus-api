@@ -37,19 +37,34 @@ public class CsvToJson {
         HashSet<String> duplicatedHashSet = new HashSet<>();
         HashSet<String> extractionValuesHashSet = new HashSet<>();
 
+        duplicatedHashSet.clear();
+        extractionValuesHashSet.clear();
+
         while (scanner.hasNext()) {
             JsonObject jsonObject = new JsonObject();
             String line = scanner.nextLine();
             String[] fields = line.split(delimiter);
-            jsonObject.addProperty("value", fields[0]);
-            jsonObject.addProperty("extractionValue", fields[1]);
+
+            String value = fields[0].replaceAll("^\"", "");
+            value = value.replaceAll("\"$", "");
+            jsonObject.addProperty("value", value);
+
+            if(fields.length == 2){
+                String extractionValue = fields[1].replaceAll("^\"", "");
+                extractionValue = extractionValue.replaceAll("\"$", "");
+                jsonObject.addProperty("extractionValue", extractionValue);
+
+                if(!(extractionValuesHashSet.add(fields[1]))) {
+                    this.duplicatedElements.add("extractionValue: "+fields[1]);
+                }
+            } else {
+                jsonObject.addProperty("extractionValue", "");
+            }
 
             if (!duplicatedHashSet.add(fields[0])){
-                duplicatedElements.add("value: "+fields[0]);
+                this.duplicatedElements.add("value: "+fields[0]);
             }
-            if(!(extractionValuesHashSet.add(fields[1]))) {
-                duplicatedElements.add("extractionValue: "+fields[1]);
-            }
+
 
             elements.add(jsonObject);
         }
