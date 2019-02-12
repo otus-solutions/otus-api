@@ -1,23 +1,23 @@
 package br.org.mongodb.gridfs;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.io.InputStream;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.FileUploaderPOJO;
-
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FileUploaderPOJO;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class FileStoreBucket {
 
@@ -26,6 +26,7 @@ public class FileStoreBucket {
 
 	@Inject
 	protected MongoDatabase db;
+	protected MongoCollection<Document> collection;
 	private GridFSBucket fileStore;
 	private GridFSUploadOptions gridFSUploadOptions;
 
@@ -37,6 +38,11 @@ public class FileStoreBucket {
 	@PostConstruct
 	public void setUp() {
 		fileStore = GridFSBuckets.create(db, FILESTORE);
+		collection = db.getCollection("filestore.files", Document.class);
+	}
+
+	public Document distinctIds(){
+		return collection.aggregate(Arrays.asList(new Document("$group",new Document("_id","{}").append("ObjectIds",new Document("$push","$_id"))))).first();
 	}
 
 	public String store(FileUploaderPOJO form) {
