@@ -2,7 +2,7 @@ package org.ccem.otus.service.extraction.factories;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -26,7 +26,7 @@ public class SurveyActivityExtractionRecordsFactory {
   private LinkedHashMap<String, Object> surveyInformation;
   private SurveyForm surveyForm;
 
-  public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, LinkedHashSet<String> headers) {
+  public SurveyActivityExtractionRecordsFactory(SurveyForm surveyForm, List<String> headers) {
     this.surveyInformation = new LinkedHashMap<>();
     this.surveyForm = surveyForm;
     for (Object header : headers) {
@@ -38,7 +38,7 @@ public class SurveyActivityExtractionRecordsFactory {
     return this.surveyInformation;
   }
 
-  public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
+  public void buildSurveyBasicInfo(SurveyActivity surveyActivity) {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), SurveyBasicInfoRecordsFactory.getRecruitmentNumber(surveyActivity));
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), this.surveyForm.getSurveyTemplate().identity.acronym);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.MODE.getValue(), surveyActivity.getMode());
@@ -69,7 +69,7 @@ public class SurveyActivityExtractionRecordsFactory {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue(), lastFinalizationDate);
   }
 
-  public void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
+  public void buildSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
     final Map<String, String> customIDMap = this.surveyForm.getSurveyTemplate().mapTemplateAndCustomIDS();
 
     for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {
