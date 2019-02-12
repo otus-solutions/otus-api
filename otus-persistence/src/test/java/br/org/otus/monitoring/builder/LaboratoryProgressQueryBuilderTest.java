@@ -30,13 +30,13 @@ public class LaboratoryProgressQueryBuilderTest {
 
     @Test
     public void getPendingResultsByAliquotFirstPartialResultQuery() {
-        String expectedQuery = "[{\"$match\":{\"code\":{\"$nin\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\"}},{\"$group\":{\"_id\":\"$name\",\"waiting\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"pendingResultsByAliquot\":{\"$push\":{\"title\":\"$_id\",\"waiting\":\"$waiting\"}}}}]";
+        String expectedQuery = "[{\"$match\":{\"code\":{\"$nin\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\",\"role\":\"EXAM\"}},{\"$group\":{\"_id\":\"$name\",\"waiting\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"pendingResultsByAliquot\":{\"$push\":{\"title\":\"$_id\",\"waiting\":\"$waiting\"}}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(CODELIST, CENTER)));
     }
 
     @Test
     public void getPendingResultsByAliquotSecondPartialResultQuery() {
-        String expectedQuery = "[{\"$match\":{\"code\":{\"$in\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\"}},{\"$group\":{\"_id\":\"$name\",\"received\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"pendingResultsByAliquot\":{\"$push\":{\"title\":\"$_id\",\"received\":\"$received\"}}}}]";
+        String expectedQuery = "[{\"$match\":{\"code\":{\"$in\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\",\"role\":\"EXAM\"}},{\"$group\":{\"_id\":\"$name\",\"received\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"pendingResultsByAliquot\":{\"$push\":{\"title\":\"$_id\",\"received\":\"$received\"}}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery(CODELIST,CENTER)));
     }
 

@@ -47,8 +47,8 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
             Object aliquotCodes = fetchCenterAliquotCodesDocument.get("aliquotCodes");
             Document fetchAliquotCodesInExamLot = examResultDao.aggregate(new LaboratoryProgressQueryBuilder().getAliquotCodesInExamLotQuery((ArrayList<String>) aliquotCodes)).first();
             if (fetchAliquotCodesInExamLot != null) {
-                Object aliquotCodesinExam = fetchAliquotCodesInExamLot.get("aliquotCodes");
-                SecondPartOfDTO = aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsSecondPartialResultQuery((ArrayList<String>) aliquotCodesinExam)).first();
+                Object aliquotCodesInExam = fetchAliquotCodesInExamLot.get("aliquotCodes");
+                SecondPartOfDTO = aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsSecondPartialResultQuery((ArrayList<String>) aliquotCodesInExam)).first();
             }
         }
 
