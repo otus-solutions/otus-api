@@ -31,12 +31,26 @@ public class LaboratoryExtractionRecordsFactory {
         List<String> answers = new LinkedList<String>();
         answers.add(result.getRecruitmentNumber().toString());
         /* information of tube */
-        answers.add(result.getTubeCode());
-        answers.add(result.getTubeQualityControl().toString());
-        answers.add(result.getTubeType().toString());
-        answers.add(result.getTubeMoment().toString());
-        answers.add(result.getTubeCollectionDate());
-        answers.add(result.getTubeResponsible());
+        if(result.getTubeCode() != null){
+          answers.add(result.getTubeCode());
+        }else{answers.add("");}
+        if(result.getTubeQualityControl() != null){
+          answers.add(result.getTubeQualityControl().toString());
+        }else{answers.add("");}
+        if(result.getTubeType() != null){
+          answers.add(result.getTubeType().toString());
+        }else{answers.add("");}
+        if(result.getTubeMoment() != null){
+          answers.add(result.getTubeMoment().toString());
+        }else{answers.add("");}
+        if(result.getTubeCollectionDate() != null){
+          answers.add(result.getTubeCollectionDate());
+        }else{answers.add("");}
+        if(result.getTubeResponsible() != null){
+          answers.add(result.getTubeResponsible());
+        }else{
+          answers.add("");
+        }
         answers.add(result.getRecruitmentNumber().toString());
         /* information of aliquot */
         answers.add(result.getAliquotCode());

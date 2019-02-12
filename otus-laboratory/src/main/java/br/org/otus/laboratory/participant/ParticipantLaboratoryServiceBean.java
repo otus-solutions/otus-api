@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -49,6 +50,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   private TransportationLotDao transportationLotDao;
   @Inject
   private ExamUploader examUploader;
+  @Inject
+  private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
 
   @Override
   public boolean hasLaboratory(Long recruitmentNumber) {
@@ -113,6 +116,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException {
-    return participantLaboratoryDao.getLaboratoryExtractionByParticipant();
+    return participantLaboratoryExtractionDao.getLaboratoryExtractionByParticipant();
   }
 }
