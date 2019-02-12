@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.google.gson.GsonBuilder;
 
-public class ParticipantLaboratoryRecordExtraction {
+public class ParticipantLaboratoryRecordExtraction implements Comparable<ParticipantLaboratoryRecordExtraction> {
 
+  private Long recruitmentNumber;
   private List<ParticipantLaboratoryResultExtraction> results;
 
   public static String serialize(ParticipantLaboratoryRecordExtraction progressionReport) {
@@ -22,6 +23,21 @@ public class ParticipantLaboratoryRecordExtraction {
     builder.serializeNulls();
 
     return builder;
+  }
+
+  @Override
+  public int compareTo(ParticipantLaboratoryRecordExtraction record) {
+    if (this.getRecruitmentNumber() < record.getRecruitmentNumber()) {
+      return -1;
+    }
+    if (this.getRecruitmentNumber() > record.getRecruitmentNumber()) {
+      return 1;
+    }
+    return 0;
+  }
+
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
   }
 
   public List<ParticipantLaboratoryResultExtraction> getResults() {

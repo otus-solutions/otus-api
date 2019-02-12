@@ -3,9 +3,14 @@ package br.org.otus.laboratory.participant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.MongoIterable;
+
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 
@@ -25,6 +30,8 @@ public interface ParticipantLaboratoryDao {
 
   ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
   
-  LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant();
+  LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
+  
+  AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
 
 }

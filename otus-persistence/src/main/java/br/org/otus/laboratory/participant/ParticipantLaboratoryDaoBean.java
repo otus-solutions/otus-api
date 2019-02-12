@@ -9,16 +9,18 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
@@ -102,9 +104,16 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant() {
-    // TODO:
+  public LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
+    
     return null;
   }
+
+  @Override
+  public AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline) {
+    return collection.aggregate(pipeline).allowDiskUse(true);
+  }
+  
+  
 
 }

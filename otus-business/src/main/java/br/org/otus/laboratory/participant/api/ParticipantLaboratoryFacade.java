@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
@@ -75,7 +75,7 @@ public class ParticipantLaboratoryFacade {
     }
   }
 
-  public LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant() {
+  public LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
     try {
       return service.getLaboratoryExtractionByParticipant();
     } catch (DataNotFoundException e) {

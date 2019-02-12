@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryResultExtraction;
+import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
 
@@ -23,6 +23,6 @@ public interface ParticipantLaboratoryService {
 
   void deleteAliquot(String code) throws ValidationException, DataNotFoundException;
 
-  LinkedList<ParticipantLaboratoryResultExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException;
+  LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException;
 
 }
