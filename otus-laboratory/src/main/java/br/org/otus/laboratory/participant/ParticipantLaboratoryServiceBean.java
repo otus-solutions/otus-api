@@ -15,7 +15,7 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
@@ -115,7 +115,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException {
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException {
     return participantLaboratoryExtractionDao.getLaboratoryExtractionByParticipant();
   }
 }

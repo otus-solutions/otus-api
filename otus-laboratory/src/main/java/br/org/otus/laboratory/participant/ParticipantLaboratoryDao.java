@@ -10,7 +10,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoIterable;
 
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 
@@ -30,7 +30,7 @@ public interface ParticipantLaboratoryDao {
 
   ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
   
-  LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
+  LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
   
   AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
 

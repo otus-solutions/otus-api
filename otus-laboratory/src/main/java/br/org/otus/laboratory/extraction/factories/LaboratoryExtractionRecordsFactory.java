@@ -5,16 +5,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 
 public class LaboratoryExtractionRecordsFactory {
 
-  private List<String> headers;
-  private LinkedList<ParticipantLaboratoryRecordExtraction> inputRecords;
+  private LinkedList<LaboratoryRecordExtraction> inputRecords;
   private List<List<Object>> outputRecords;
 
-  public LaboratoryExtractionRecordsFactory(List<String> headers, LinkedList<ParticipantLaboratoryRecordExtraction> records) {
-    this.headers = headers;
+  public LaboratoryExtractionRecordsFactory(LinkedList<LaboratoryRecordExtraction> records) {
     this.inputRecords = records;
     this.outputRecords = new LinkedList<>();
   }

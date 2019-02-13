@@ -20,7 +20,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
@@ -104,7 +104,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
     
     return null;
   }

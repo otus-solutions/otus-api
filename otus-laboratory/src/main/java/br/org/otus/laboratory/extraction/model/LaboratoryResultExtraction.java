@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.extraction.model;
 
-public class ParticipantLaboratoryResultExtraction {
+public class LaboratoryResultExtraction {
 
   private Long recruitmentNumber;
   /* information of tube */

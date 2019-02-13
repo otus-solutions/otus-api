@@ -12,7 +12,7 @@ import org.bson.Document;
 import com.mongodb.client.AggregateIterable;
 
 import br.org.otus.laboratory.extraction.builder.ParticipantLaboratoryExtractionQueryBuilder;
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
@@ -25,8 +25,8 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
   private ParticipantLaboratoryDao participantLaboratoryDao;
 
   @SuppressWarnings("unchecked")
-  public LinkedList<ParticipantLaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
-    LinkedList<ParticipantLaboratoryRecordExtraction> participantLaboratoryRecordExtractions = new LinkedList<ParticipantLaboratoryRecordExtraction>();
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
+    LinkedList<LaboratoryRecordExtraction> participantLaboratoryRecordExtractions = new LinkedList<LaboratoryRecordExtraction>();
 
     CompletableFuture<AggregateIterable<Document>> future1 = CompletableFuture.supplyAsync(() -> {
       AggregateIterable<Document> notAliquotedTubesDocument = null;
@@ -45,7 +45,7 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
       AggregateIterable<Document> future1Result = future1.get();
       if (future1Result != null) {
         for (Document notAliquotedTube : future1Result) {
-          participantLaboratoryRecordExtractions.add(ParticipantLaboratoryRecordExtraction.deserialize(notAliquotedTube.toJson()));
+          participantLaboratoryRecordExtractions.add(LaboratoryRecordExtraction.deserialize(notAliquotedTube.toJson()));
         }
       }
     } catch (InterruptedException | ExecutionException e) {
@@ -56,7 +56,7 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
       AggregateIterable<Document> future2Result = future2.get();
       if (future2Result != null) {
         for (Document aliquotedTubes : future2Result) {
-          participantLaboratoryRecordExtractions.add(ParticipantLaboratoryRecordExtraction.deserialize(aliquotedTubes.toJson()));
+          participantLaboratoryRecordExtractions.add(LaboratoryRecordExtraction.deserialize(aliquotedTubes.toJson()));
         }
       }
     } catch (InterruptedException | ExecutionException e) {

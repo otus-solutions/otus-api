@@ -13,7 +13,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.api.ExtractionService;
 import br.org.otus.laboratory.extraction.LaboratoryExtraction;
-import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.api.ParticipantLaboratoryFacade;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
@@ -42,9 +42,9 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createParticipantLaboratoryExtraction() throws DataNotFoundException {
-    LinkedList<ParticipantLaboratoryRecordExtraction> tubes = participantLaboratoryFacade.getLaboratoryExtractionByParticipant();
-    LaboratoryExtraction extractor = new LaboratoryExtraction(tubes);
+  public byte[] createLaboratoryExtraction() throws DataNotFoundException {
+    LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtractionByParticipant();
+    LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
