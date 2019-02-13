@@ -11,6 +11,7 @@ import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
 import org.ccem.otus.model.survey.activity.User;
+import org.ccem.otus.model.survey.activity.user.ActivityBasicUser;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;

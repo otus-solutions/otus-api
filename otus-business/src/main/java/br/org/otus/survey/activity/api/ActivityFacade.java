@@ -2,7 +2,6 @@ package br.org.otus.survey.activity.api;
 
 import java.util.List;
 
-import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -51,6 +50,15 @@ public class ActivityFacade {
 			return activityService.update(surveyActivity);
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+	}
+
+	public boolean updateCheckerActivity(String checkerUpdated) {
+		try {
+			return activityService.updateCheckerActivity(checkerUpdated);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(
+					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
 	}
 

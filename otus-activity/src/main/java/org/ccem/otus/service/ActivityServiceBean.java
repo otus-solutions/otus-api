@@ -6,16 +6,14 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
-
-import com.mongodb.Block;
 
 @Stateless
 public class ActivityServiceBean implements ActivityService {
@@ -113,4 +111,10 @@ public class ActivityServiceBean implements ActivityService {
       throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
   }
+
+  @Override
+  public boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException {
+    CheckerUpdatedDTO checkerUpdatedDTO = CheckerUpdatedDTO.deserialize(checkerUpdated);
+    return activityDao.updateCheckerActivity(checkerUpdatedDTO);
+      }
 }

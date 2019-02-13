@@ -5,6 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface ActivityDao {
 	List<SurveyActivity> findByCategory(String categoryName);
 
 	void updateCategory(ActivityCategory activityCategory);
+
+	boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException;
 }
