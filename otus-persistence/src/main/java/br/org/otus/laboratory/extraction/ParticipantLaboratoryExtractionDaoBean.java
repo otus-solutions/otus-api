@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
-import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
 import org.bson.Document;
 
 import com.mongodb.client.AggregateIterable;
@@ -16,6 +15,7 @@ import br.org.otus.laboratory.extraction.builder.ParticipantLaboratoryExtraction
 import br.org.otus.laboratory.extraction.model.ParticipantLaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
 
 public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLaboratoryExtractionDao {
 
@@ -29,22 +29,21 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
     LinkedList<ParticipantLaboratoryRecordExtraction> participantLaboratoryRecordExtractions = new LinkedList<ParticipantLaboratoryRecordExtraction>();
 
     CompletableFuture<AggregateIterable<Document>> future1 = CompletableFuture.supplyAsync(() -> {
-
       AggregateIterable<Document> notAliquotedTubesDocument = null;
       Document tubeCodeDocument = aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getTubeCodesInAliquotQuery()).first();
-
       if (tubeCodeDocument != null) {
         notAliquotedTubesDocument = participantLaboratoryDao
-                .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery((ArrayList<String>) tubeCodeDocument.get("tubeCodes")));
-
+            .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery((ArrayList<String>) tubeCodeDocument.get("tubeCodes")));
       }
 
       return notAliquotedTubesDocument;
     });
 
+    CompletableFuture<AggregateIterable<Document>> future2 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getAliquotedTubesQuery()));
+
     try {
       AggregateIterable<Document> future1Result = future1.get();
-      if (future1Result != null){
+      if (future1Result != null) {
         for (Document notAliquotedTube : future1Result) {
           participantLaboratoryRecordExtractions.add(ParticipantLaboratoryRecordExtraction.deserialize(notAliquotedTube.toJson()));
         }
@@ -52,9 +51,6 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
     } catch (InterruptedException | ExecutionException e) {
       e.printStackTrace();
     }
-
-    CompletableFuture<AggregateIterable<Document>> future2 = CompletableFuture.supplyAsync(() -> aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getAliquotedTubesQuery()));
-
 
     try {
       AggregateIterable<Document> future2Result = future2.get();

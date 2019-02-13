@@ -6,13 +6,14 @@ public class ParticipantLaboratoryResultExtraction {
   /* information of tube */
   private String tubeCode;
   private Integer tubeQualityControl;
-  private Integer tubeType;
-  private Integer tubeMoment;
+  private String tubeType;
+  private String tubeMoment;
   private String tubeCollectionDate;
   private String tubeResponsible;
   /* information of aliquot */
   private String aliquotCode;
   private String aliquotName;
+  private String aliquotContainer;
   private String aliquotProcessingDate;
   private String aliquotRegisterDate;
   private String aliquotResponsible;
@@ -29,11 +30,11 @@ public class ParticipantLaboratoryResultExtraction {
     return tubeQualityControl;
   }
 
-  public Integer getTubeType() {
+  public String getTubeType() {
     return tubeType;
   }
 
-  public Integer getTubeMoment() {
+  public String getTubeMoment() {
     return tubeMoment;
   }
 
@@ -51,6 +52,10 @@ public class ParticipantLaboratoryResultExtraction {
 
   public String getAliquotName() {
     return aliquotName;
+  }
+  
+  public String getAliquotContainer() {
+    return aliquotContainer;
   }
 
   public String getAliquotProcessingDate() {

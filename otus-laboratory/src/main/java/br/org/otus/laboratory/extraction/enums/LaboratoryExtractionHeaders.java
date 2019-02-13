@@ -4,15 +4,18 @@ public enum LaboratoryExtractionHeaders {
 
   RECRUITMENT_NUMBER("recruitment_number"),
   TUBE_CODE("tube_code"),
-  QUALITY_CONTROL("quality_control"),
-  TUBE_NAME("tube_name"),
-  COLLECTION_DATE("collection_date"),
-  RESPONSIBLE("responsible"),
+  TUBE_QUALITY_CONTROL("tube_quality_control"),
+  TUBE_TYPE("tube_type"),
+  TUBE_MOMENT("tube_moment"),
+  TUBE_COLLECTION_DATE("tube_collection_date"),
+  TUBE_RESPONSIBLE("tube_responsible"),
   ALIQUOT_CODE("aliquot_code"),
   ALIQUOT_NAME("aliquot_name"),
-  PROCESSING_DATE("processing_date"),
-  REGISTER_DATE("register_date");
-
+  ALIQUOT_CONTAINER("aliquot_container"),
+  ALIQUOT_PROCESSING_DATE("aliquot_processing_date"),
+  ALIQUOT_REGISTER_DATE("aliquot_register_date"),
+  ALIQUOT_RESPONSIBLE("aliquot_responsible");
+  
   private final String value;
 
   public String getValue() {

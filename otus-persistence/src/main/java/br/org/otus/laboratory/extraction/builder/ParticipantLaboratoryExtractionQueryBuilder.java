@@ -25,19 +25,24 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     this.pipeline.add(parseQuery("{ $project: { _id: 0, recruitmentNumber: 1, tubes: 1 } }"));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
     this.pipeline.add(new Document("$match",new Document("tubes.code",new Document("$nin",tubeCodes))));
-    this.pipeline.add(parseQuery("{ $lookup: { from: \"aliquot\", localField: \"tubes.code\", foreignField: \"tubeCode\", as: \"aliquot\" } }"));
     this.pipeline.add(parseQuery("{\n" + 
         "    $group: {\n" + 
-        "      _id: \"$recruitmentNumber\", result: {\n" + 
+        "      _id: \"$recruitmentNumber\",\n" + 
+        "      result: {\n" + 
         "        $push: {\n" + 
-        "          recruitmentNumber: \"$recruitmentNumber\", tubeCode: \"$tubes.code\", qualityControl: { $cond: [{ $eq: [\"$tubes.groupName\", \"DEFAULT\"] }, 0, 1] },\n" + 
-        "          collectionDate: \"$tubes.tubeCollectionData.time\",\n" + 
+        "          recruitmentNumber: \"$recruitmentNumber\",\n" + 
+        "          tubeCode: \"$tubes.code\",\n" + 
+        "          tubeQualityControl: { $cond: [{ $eq: [\"$tubes.groupName\", \"DEFAULT\"] }, 0, 1] },\n" + 
+        "          tubeType: '$tubes.type',\n" + 
+        "          tubeMoment: '$tubes.moment',\n" + 
+        "          tubeCollectionDate: \"$tubes.tubeCollectionData.time\",\n" + 
         "          tubeResponsible: \"$tubes.tubeCollectionData.operator\",\n" + 
         "          aliquotCode: null,\n" + 
         "          aliquotName: null,\n" + 
-        "          processingDate: null,\n" + 
-        "          aliquotResponsible: null,\n" + 
-        "          registerDate: null\n" + 
+        "          aliquotContainer: null,\n" + 
+        "          aliquotProcessingDate: null,\n" + 
+        "          aliquotRegisterDate: null,\n" + 
+        "          aliquotResponsible: null\n" + 
         "        }\n" + 
         "      }\n" + 
         "    }\n" + 
@@ -99,6 +104,8 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
             "                1\n" +
             "              ]\n" +
             "            },\n" +
+            "            type: '$tubes.type',\n" + 
+            "            moment: '$tubes.moment',\n" + 
             "            collectionDate: \"$tubes.tubeCollectionData.time\",\n" +
             "            tubeResponsible: \"$tubes.tubeCollectionData.operator\"\n" +
             "          }\n" +
@@ -125,10 +132,13 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
             "          recruitmentNumber: \"$recruitmentNumber\",\n" +
             "          tubeCode: \"$tubeData.tubeCode\",\n" +
             "          tubeQualityControl: \"$tubeData.qualityControl\",\n" +
+            "          tubeType: '$tubeData.type',\n" + 
+            "          tubeMoment: '$tubeData.moment',\n" + 
             "          tubeCollectionDate: \"$tubeData.collectionDate\",\n" +
             "          tubeResponsible: \"$tubeData.tubeResponsible\",\n" +
             "          aliquotCode: \"$code\",\n" +
             "          aliquotName: \"$name\",\n" +
+            "          aliquotContainer: \"$container\",\n" +
             "          aliquotProcessingDate: \"$aliquotCollectionData.processing\",\n" +
             "          aliquotResponsible: \"$aliquotCollectionData.operator\",\n" +
             "          aliquotRegisterDate: \"$aliquotCollectionData.time\"\n" +

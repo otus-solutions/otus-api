@@ -22,16 +22,18 @@ public class LaboratoryExtractionHeadersFactory {
     this.headers.add(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue());
     /* headers information of tube */
     this.headers.add(LaboratoryExtractionHeaders.TUBE_CODE.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.QUALITY_CONTROL.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.TUBE_NAME.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.COLLECTION_DATE.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.RESPONSIBLE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.TUBE_QUALITY_CONTROL.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.TUBE_TYPE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.TUBE_MOMENT.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.TUBE_COLLECTION_DATE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.TUBE_RESPONSIBLE.getValue());
     /* headers information of aliquot */
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_CODE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_NAME.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.PROCESSING_DATE.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.REGISTER_DATE.getValue());
-    this.headers.add(LaboratoryExtractionHeaders.RESPONSIBLE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_CONTAINER.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue());
   }
 
 }
