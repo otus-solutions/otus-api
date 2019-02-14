@@ -50,8 +50,8 @@ public class ExtractionResourceTest {
   }
   
   @Test
-  public void extractLaboratoryCorrelation_method_should_call_createLaboratoryExtraction_method() throws DataNotFoundException {
-    extractionResource.extractLaboratoryCorrelation();
+  public void extractLaboratory_method_should_call_createLaboratoryExtraction_method() throws DataNotFoundException {
+    extractionResource.extractLaboratory();
     
     Mockito.verify(extractionFacade).createLaboratoryExtraction();
   }
