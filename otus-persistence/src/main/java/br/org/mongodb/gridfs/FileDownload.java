@@ -1,16 +1,18 @@
 package br.org.mongodb.gridfs;
 
+import java.io.InputStream;
 import java.util.Objects;
 
 public class FileDownload {
 
   private String oid;
   private String name;
-  private byte[] file;
+  private InputStream fileStream;
 
-  public FileDownload(String oid, String name) {
+  public FileDownload(String oid, String name, InputStream fileStream) {
     this.oid = oid;
     this.name = name;
+    this.fileStream = fileStream;
   }
 
   public String getOid() {
@@ -21,13 +23,10 @@ public class FileDownload {
     return name;
   }
 
-  public byte[] getFile() {
-    return file;
+  public InputStream getFileStream() {
+    return fileStream;
   }
 
-  public void setFile(byte[] file) {
-    this.file = file;
-  }
 
   @Override
   public boolean equals(Object o) {

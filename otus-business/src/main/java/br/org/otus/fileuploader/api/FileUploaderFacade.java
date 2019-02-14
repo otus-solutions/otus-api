@@ -1,22 +1,25 @@
 package br.org.otus.fileuploader.api;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
+import br.org.mongodb.gridfs.FileDownload;
+import br.org.mongodb.gridfs.FileStoreBucket;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.exception.ResponseInfo;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FileUploaderPOJO;
 
-import br.org.mongodb.gridfs.FileStoreBucket;
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileUploaderFacade {
 
@@ -44,54 +47,61 @@ public class FileUploaderFacade {
   }
 
   public Response list(ArrayList<String> oids) {
-    List<ObjectId> objectIds = oids.stream().map(ObjectId::new).collect(Collectors.toList());
+
+    List<ObjectId> objectIds = oids.stream().map(s -> {
+      try {
+        return new ObjectId(s);
+      } catch (IllegalArgumentException e) {
+        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage() + " - " + s));
+      }
+    }).collect(Collectors.toList());
+
     try {
 
-      List<InputStream> files = fileStoreBucket.downloadMultiple(objectIds);
-      InputStream inputStream = files.get(0);
+      List<FileDownload> files = fileStoreBucket.downloadMultiple(objectIds);
 
 
-
-//      Enumeration inputStreams = Collections.enumeration(files);
-//      SequenceInputStream sis = new SequenceInputStream(inputStreams);
-
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ZipOutputStream out = new ZipOutputStream(baos);
-
-      //
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream);
 
 
-      byte[] bytes = IOUtils.toByteArray(inputStream);
+      files.stream().forEach(fileInfo -> {
+        InputStream inputStream = fileInfo.getFileStream();
 
-      out.putNextEntry(new ZipEntry("download"));
-      out.write(bytes, 0, bytes.length);
-      out.closeEntry();
+        byte[] bytes;
 
-      //
+        try {
+          bytes = IOUtils.toByteArray(inputStream);
+          zipOut.putNextEntry(new ZipEntry(fileInfo.getName()));
+          zipOut.write(bytes, 0, bytes.length);
+          zipOut.closeEntry();
+        } catch (IOException e) {
+          //file uploader exception
+          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
 
-      out.close();
 
-      Response.ResponseBuilder builder = Response.ok(baos.toByteArray());
+      });
+
+
+      zipOut.close();
+
+      Response.ResponseBuilder builder = Response.ok(byteArrayOutputStream.toByteArray());
       builder.header("Content-Disposition", "attachment; filename=" + "anything");
       Response response = builder.build();
 
-      baos.close();
+      byteArrayOutputStream.close();
 
       return response;
 
 
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     } catch (IOException e) {
-      e.printStackTrace();
+      //file uploader exception
+      throw new HttpResponseException(ResponseBuild.Commons.RuntimeError.build("Error while generating files"));
     }
-
-    return null;
   }
-
 
 
 }
