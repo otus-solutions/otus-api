@@ -115,7 +115,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() throws DataNotFoundException {
-    return participantLaboratoryExtractionDao.getLaboratoryExtractionByParticipant();
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException {
+    return participantLaboratoryExtractionDao.getLaboratoryExtraction();
   }
 }

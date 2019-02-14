@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -28,7 +29,6 @@ import br.org.otus.survey.api.SurveyFacade;
 public class ExtractionFacadeTest {
 
   private static final SurveyTemplate surveyTemplate = new SurveyTemplate();
-
   private static final String userEmail = "otus@otus.com";
 
   @InjectMocks
@@ -79,13 +79,21 @@ public class ExtractionFacadeTest {
 
     Mockito.verify(surveyFacade).listVersions(acronym);
   }
-
+  
   @Test
-  public void createLaboratoryExtraction_method_should_return_new_extraction() throws Exception {
+  public void createLaboratoryExtraction_method_should_call_getLaboratoryExtraction_method() throws Exception {
     assertNotNull(extractionFacade);
     extractionFacade.createLaboratoryExtraction();
 
-    Mockito.verify(participantLaboratoryFacade).getLaboratoryExtractionByParticipant();
+    Mockito.verify(participantLaboratoryFacade).getLaboratoryExtraction();
+  }
+
+  @Test
+  public void createLaboratoryExtraction_method_should_call_createExtraction_method_with_new_extraction() throws DataNotFoundException {
+    assertNotNull(extractionFacade);
+    extractionFacade.createLaboratoryExtraction();
+
+    Mockito.verify(participantLaboratoryFacade).getLaboratoryExtraction();
     Mockito.verify(extractionService).createExtraction(laboratoryExtraction);
   }
 

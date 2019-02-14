@@ -75,9 +75,9 @@ public class ParticipantLaboratoryFacade {
     }
   }
 
-  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() {
     try {
-      return service.getLaboratoryExtractionByParticipant();
+      return service.getLaboratoryExtraction();
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }

@@ -25,7 +25,7 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
   private ParticipantLaboratoryDao participantLaboratoryDao;
 
   @SuppressWarnings("unchecked")
-  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() {
     LinkedList<LaboratoryRecordExtraction> participantLaboratoryRecordExtractions = new LinkedList<LaboratoryRecordExtraction>();
 
     CompletableFuture<AggregateIterable<Document>> future1 = CompletableFuture.supplyAsync(() -> {

@@ -43,7 +43,7 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExtraction() throws DataNotFoundException {
-    LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtractionByParticipant();
+    LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
     LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
     try {
       return extractionService.createExtraction(extractor);

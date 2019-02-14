@@ -20,10 +20,10 @@ public class ParticipantLaboratoryFacadeTest {
   private ParticipantLaboratoryService participantLaboratoryService;
 
   @Test
-  public void getLaboratoryExtractionByParticipant_should_call_getLaboratoryExtractionByParticipant_method() throws DataNotFoundException {
-    facade.getLaboratoryExtractionByParticipant();
+  public void getLaboratoryExtractionByParticipant_should_call_getLaboratoryExtraction_method() throws DataNotFoundException {
+    facade.getLaboratoryExtraction();
     
-    Mockito.verify(participantLaboratoryService, Mockito.times(1)).getLaboratoryExtractionByParticipant();
+    Mockito.verify(participantLaboratoryService, Mockito.times(1)).getLaboratoryExtraction();
   }
 
 }
