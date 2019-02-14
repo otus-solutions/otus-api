@@ -3,12 +3,11 @@ package br.org.otus.laboratory.configuration;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
 
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
@@ -16,46 +15,46 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 import java.util.Arrays;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
-    private static final String COLLECTION_NAME = "laboratory_configuration";
-    private static final String TRANSPORTATION = "transportation_lot";
-    private static final String EXAM = "exam_lot";
-    private static final Integer DEFAULT_CODE = 300000000;
+  private static final String COLLECTION_NAME = "laboratory_configuration";
+  private static final String TRANSPORTATION = "transportation_lot";
+  private static final String EXAM = "exam_lot";
+  private static final Integer DEFAULT_CODE = 300000000;
 
-    public LaboratoryConfigurationDaoBean() {
-        super(COLLECTION_NAME, Document.class);
+  public LaboratoryConfigurationDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
+
+  @Override
+  public LaboratoryConfiguration find() {
+    Document query = new Document("objectType", "LaboratoryConfiguration");
+
+    Document first = collection.find(query).first();
+
+    return LaboratoryConfiguration.deserialize(first.toJson());
+  }
+
+  @Override
+  public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
+    Document query = new Document("objectType", "AliquotExamCorrelation");
+
+    Document first = collection.find(query).first();
+
+    if (first == null) {
+      throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
     }
 
-    @Override
-    public LaboratoryConfiguration find() {
-        Document query = new Document("objectType", "LaboratoryConfiguration");
+    return AliquotExamCorrelation.deserialize(first.toJson());
+  }
 
-        Document first = collection.find(query).first();
-
-        return LaboratoryConfiguration.deserialize(first.toJson());
-    }
-
-    @Override
-    public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
-        Document query = new Document("objectType", "AliquotExamCorrelation");
-
-        Document first = collection.find(query).first();
-
-        if (first == null) {
-            throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
-        }
-
-        return AliquotExamCorrelation.deserialize(first.toJson());
-    }
-
-    public void persist(LaboratoryConfiguration laboratoryConfiguration) {
-        super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));
-    }
+  public void persist(LaboratoryConfiguration laboratoryConfiguration) {
+    super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));
+  }
 
     @Override
     public void update(LaboratoryConfiguration configuration) throws Exception {
@@ -69,6 +68,35 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
             throw new Exception("Update was not executed.");
         }
     }
+  @Override
+  public String createNewLotCodeForTransportation(Integer code) {
+    if (getLastInsertion(TRANSPORTATION) < code) {
+        restoreLotConfiguration(TRANSPORTATION, code);
+    }
+
+    Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionTransportation"),
+            new Document("$inc", new Document("lotConfiguration.lastInsertionTransportation", 1)),
+            new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+
+    LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
+
+    return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation().toString();
+  }
+
+  @Override
+  public String createNewLotCodeForExam(Integer code) {
+    if (getLastInsertion(EXAM) < code) {
+        restoreLotConfiguration(EXAM, code);
+    }
+
+    Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionExam"),
+            new Document("$inc", new Document("lotConfiguration.lastInsertionExam", 1)),
+            new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+
+    LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
+
+    return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam().toString();
+  }
 
     @Override
     public Integer getLastInsertion(String lot) {
@@ -103,33 +131,4 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
                 break;
         }
     }
-
-    public String createNewLotCodeForTransportation(Integer code) {
-        if (getLastInsertion(TRANSPORTATION) < code) {
-            restoreLotConfiguration(TRANSPORTATION, code);
-        }
-
-        Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionTransportation"),
-                new Document("$inc", new Document("lotConfiguration.lastInsertionTransportation", 1)),
-                new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
-
-        LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
-
-        return laboratoryConfiguration.getLotConfiguration().getLastInsertionTransportation().toString();
-    }
-
-    public String createNewLotCodeForExam(Integer code) {
-        if (getLastInsertion(EXAM) < code) {
-            restoreLotConfiguration(EXAM, code);
-        }
-
-        Document updateLotCode = collection.findOneAndUpdate(exists("lotConfiguration.lastInsertionExam"),
-                new Document("$inc", new Document("lotConfiguration.lastInsertionExam", 1)),
-                new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
-
-        LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(updateLotCode.toJson());
-
-        return laboratoryConfiguration.getLotConfiguration().getLastInsertionExam().toString();
-    }
-
 }
