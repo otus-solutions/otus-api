@@ -100,7 +100,7 @@ public class FileStoreBucket {
 				.append("interviewer", form.getInterviewer()));
 	}
 
-	public List<InputStream> downloadMultiple(List<ObjectId> objectIds) throws DataNotFoundException, InterruptedException, IOException {
+	public List<FileDownload> downloadMultiple(List<ObjectId> objectIds) throws DataNotFoundException, InterruptedException, IOException {
 		Document query = new Document(
 				"_id", new Document(
 						"$in", objectIds
@@ -110,20 +110,25 @@ public class FileStoreBucket {
 
 
 
-    List<GridFSFile> fileList = new ArrayList<>();
+    List<FileDownload> fileList = new ArrayList<>();
 
 
     while (iterator.hasNext()) {
-      fileList.add(iterator.next());
+      GridFSFile fileMetadata = iterator.next();
+      FileDownload fileDownload = new FileDownload(fileMetadata.getObjectId().toString(), fileMetadata.getFilename());
+      fileList.add(fileDownload);
     }
 
-    new Map<GridFSFile, InputStream>()
+
 
     List<InputStream> lits = new ArrayList<>();
 
     objectIds.forEach(objectId -> {
       try {
-         lits.add(download(objectId.toString()));
+
+        InputStream download = download(objectId.toString());
+//        fileList
+        
       } catch (DataNotFoundException e) {
         e.printStackTrace();
       }
