@@ -57,9 +57,7 @@ public class FileUploaderResource {
 	@Path("/extraction")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response list(ArrayList<String> oids) {
-		ResponseBuilder builder = Response.ok(facade.list(oids));
-		builder.header("Content-Disposition", "attachment; filename=" + "anything");
-		return builder.build();
+      return facade.list(oids);
 	}
 
 }
