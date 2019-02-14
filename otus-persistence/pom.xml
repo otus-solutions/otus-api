@@ -147,6 +147,12 @@
       <version>${project.parent.version}</version>
       <scope>provided</scope>
     </dependency>
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-csv</artifactId>
+          <version>1.5</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
 
   <build>

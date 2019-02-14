@@ -1,15 +1,11 @@
 package br.org.otus.survey.activity;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Projections.exclude;
-import static com.mongodb.client.model.Projections.fields;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-
+import br.org.mongodb.MongoGenericDao;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -21,13 +17,14 @@ import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.persistence.ActivityDao;
 
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.org.mongodb.MongoGenericDao;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Projections.exclude;
+import static com.mongodb.client.model.Projections.fields;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
@@ -74,7 +71,6 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
         return parsed.getObjectId("_id");
     }
-
 
     @Override
     public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
@@ -175,9 +171,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         return true;
     }
 
-    private void removeOids(Document parsedActivity){
+	private void removeOids(Document parsedActivity){
         parsedActivity.remove("_id");
-        ((Document) parsedActivity.get("surveyForm")).remove("_id");
+        ((Document) parsedActivity.get("surveyForm")).remove("_id");; //todo: remove when this id becomes standard
     }
 
 }

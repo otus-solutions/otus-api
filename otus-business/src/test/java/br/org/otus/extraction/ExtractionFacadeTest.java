@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -19,6 +20,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.api.ExtractionServiceBean;
+import br.org.otus.examUploader.api.ExamUploadFacade;
+import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
@@ -41,13 +44,18 @@ public class ExtractionFacadeTest {
 
 	@Mock
 	private ExtractionServiceBean extractionService;
-	
+
 	@Mock
-	SurveyActivityExtraction extractor;
+	private ExamUploadFacade examUploadFacade;
 
 	@Mock
 	private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
 	
+	@Mock
+  	private SurveyActivityExtraction surveyActivityExtraction;
+
+  	@Mock
+  	private ExamUploadExtration examUploadExtration;
 	
 	SurveyForm surveyForm = new SurveyForm(surveyTemplate, userEmail);
 	
@@ -61,24 +69,39 @@ public class ExtractionFacadeTest {
 		surveys.add(surveyForm);
 		PowerMockito.when(surveyFacade.get(acronym, version)).thenReturn(surveys.get(0));
 		PowerMockito.when(activityFacade.get(acronym, version)).thenReturn(new ArrayList<>());
-		PowerMockito.whenNew(SurveyActivityExtraction.class).withAnyArguments().thenReturn(extractor);
+		PowerMockito.whenNew(SurveyActivityExtraction.class).withAnyArguments().thenReturn(surveyActivityExtraction);
+		PowerMockito.whenNew(ExamUploadExtration.class).withAnyArguments().thenReturn(examUploadExtration);
 	}
 
 	@Test
-	public void should_return_newExtraction() throws Exception {
+	public void should_return_new_extraction_of_activities() throws Exception {
 		assertNotNull(extractionFacade);
 		extractionFacade.createActivityExtraction(acronym, version);
 		Mockito.verify(activityFacade).get(acronym, version);
 		Mockito.verify(surveyFacade).get(acronym, version);
-		Mockito.verify(extractor, Mockito.times(1 )).addPreProcessor(autocompleteQuestionPreProcessor);
-		Mockito.verify(extractionService).createExtraction(extractor);
+		Mockito.verify(surveyActivityExtraction, Mockito.times(1 )).addPreProcessor(autocompleteQuestionPreProcessor);
+		Mockito.verify(extractionService).createExtraction(surveyActivityExtraction);
 	}
+
+	@Test
+  	public void should_return_new_extraction_of_exam() throws Exception {
+    		assertNotNull(extractionFacade);
+    		extractionFacade.createLaboratoryExamsValuesExtraction();
+    		Mockito.verify(examUploadFacade).getExamResultsExtractionValues();
+    		Mockito.verify(extractionService).createExtraction(examUploadExtration);
+  	}
 
 	@Test
 	public void should_call_listVersions_from_surveyFacade() throws Exception {
 		assertNotNull(extractionFacade);
 		extractionFacade.listSurveyVersions(acronym);
 		Mockito.verify(surveyFacade).listVersions(acronym);
+	}
+
+	@Test
+	public void createAttachmentsReportExtraction_should_call_getAttachmentsReport_from_extractionService() throws DataNotFoundException {
+		extractionFacade.createAttachmentsReportExtraction(acronym,version);
+		Mockito.verify(extractionService).getAttachmentsReport(acronym,version);
 	}
 
 }

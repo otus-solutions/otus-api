@@ -67,10 +67,10 @@
 			<version>${project.parent.version}</version>
             		<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-        </dependency>
+		<dependency>
+		    <groupId>org.jetbrains</groupId>
+		    <artifactId>annotations</artifactId>
+		    <version>RELEASE</version>
+		</dependency>
     </dependencies>
 </project>
