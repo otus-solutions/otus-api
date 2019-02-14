@@ -1,5 +1,6 @@
 package br.org.mongodb.gridfs;
 
+import com.mongodb.async.SingleResultCallback;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.gridfs.GridFSBucket;
@@ -12,6 +13,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FileUploaderPOJO;
+import static com.mongodb.async.client.gridfs.helpers.AsynchronousChannelHelper.channelToOutputStream;
+
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -19,6 +22,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.AsynchronousChannel;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -97,14 +105,30 @@ public class FileStoreBucket {
 						"$in", oids
 		)
 		);
-		GridFSFindIterable gridFSFiles = fileStore.find(query);
+//		GridFSFindIterable gridFSFiles = fileStore.find(query);
+//
+//		try {
+//			FileOutputStream fileOutputStream = new FileOutputStream("testee");
+//			fileStore.downloadToStream(new ObjectId(oids.get(0)), fileOutputStream);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}
 
-		try {
-			FileOutputStream fileOutputStream = new FileOutputStream("testee");
-			fileStore.downloadToStream(new ObjectId(oids.get(0)), fileOutputStream);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		Path outputPath = Paths.get("/tmp/mongodb-tutorial-out.pdf");
+		AsynchronousFileChannel streamToDownloadTo = AsynchronousFileChannel.open(outputPath,
+				StandardOpenOption.CREATE_NEW,
+				StandardOpenOption.WRITE,
+				StandardOpenOption.DELETE_ON_CLOSE);
+
+		fileStore.downloadToStream(new ObjectId(oids.get(0)), channelToOutputStream(streamToDownloadTo),
+				new SingleResultCallback<Long>() {
+					@Override
+					public void onResult(final Long result, final Throwable t) {
+						System.out.println("downloaded file sized: " + result);
+					}
+				});
+// Note: AsynchronousFileChannel was opened with option delete on close
+		streamToDownloadTo.close();
 
 
 		return null;

@@ -34,6 +34,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-async</artifactId>
+        <version>3.6.4</version>
+      </dependency>
+    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>${google.gson.version}</version>
