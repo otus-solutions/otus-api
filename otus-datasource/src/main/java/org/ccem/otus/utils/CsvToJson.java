@@ -53,9 +53,10 @@ public class CsvToJson {
                 String extractionValue = fields[1].replaceAll("^\"", "");
                 extractionValue = extractionValue.replaceAll("\"$", "");
                 jsonObject.addProperty("extractionValue", extractionValue);
-
-                if(!(extractionValuesHashSet.add(fields[1]))) {
+                if (!((String) fields[1]).equals(" ")){
+                  if(!(extractionValuesHashSet.add(fields[1]))) {
                     this.duplicatedElements.add("extractionValue: "+fields[1]);
+                  }
                 }
             } else {
                 jsonObject.addProperty("extractionValue", "");
