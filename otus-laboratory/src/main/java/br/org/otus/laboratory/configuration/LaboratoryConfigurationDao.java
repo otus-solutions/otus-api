@@ -11,9 +11,13 @@ public interface LaboratoryConfigurationDao {
 
   void persist(LaboratoryConfiguration laboratoryConfig);
 
-  String createNewLotCodeForTransportation();
+  String createNewLotCodeForTransportation(Integer code);
 
-  String createNewLotCodeForExam();
+  String createNewLotCodeForExam(Integer code);
+
+  Integer getLastInsertion(String lot);
+
+  void restoreLotConfiguration(String config, Integer code);
 
   Integer updateLastTubeInsertion(int newTubesQuantities);
 }
