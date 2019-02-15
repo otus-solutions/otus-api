@@ -2,14 +2,15 @@ package br.org.otus.monitoring;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.service.MonitoringService;
 
@@ -83,6 +84,62 @@ public class MonitoringFacade {
       monitoringService.deleteActivityApplicability(rn, acronym);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public LaboratoryProgressDTO getDataOrphanByExams() {
+      try {
+        return monitoringService.getDataOrphanByExams();
+      } catch (DataNotFoundException e) {
+        throw new HttpResponseException(NotFound.build());
+      }
+  }
+
+  public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) {
+    try {
+      return monitoringService.getDataQuantitativeByTypeOfAliquots(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
+    }
+  }
+
+  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) {
+    try {
+      return monitoringService.getDataOfPendingResultsByAliquot(center);
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build());
+    }
+  }
+
+  public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) {
+    try {
+      return monitoringService.getDataOfStorageByAliquot(center);
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build());
+    }
+  }
+
+  public LaboratoryProgressDTO getDataByExam(String center) {
+    try {
+      return monitoringService.getDataByExam(center);
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build());
+    }
+  }
+
+  public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) {
+    try {
+      return monitoringService.getDataToCSVOfPendingResultsByAliquots(center);
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build());
+    }
+  }
+
+  public Object getDataToCSVOfOrphansByExam() {
+    try {
+      return monitoringService.getDataToCSVOfOrphansByExam();
+    } catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build());
     }
   }
 }

@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.project.transportation.business;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
@@ -16,8 +17,11 @@ import java.util.List;
 @Stateless
 public class TransportationLotServiceBean implements TransportationLotService {
 
+  private static final String TRANSPORTATION = "transportation_lot";
   @Inject
   private TransportationLotDao transportationLotDao;
+  @Inject
+  private LaboratoryConfigurationDao laboratoryConfigurationDao;
   @Inject
   private AliquotDao aliquotDao;
 
@@ -25,6 +29,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
   public TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException {
     _validateLot(transportationLot);
     transportationLot.setOperator(email);
+    transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation(transportationLotDao.getLastTransportationLotCode()));
+
     ArrayList<String> aliquotCodeList = transportationLot.getAliquotCodeList();
 
     ObjectId transportationLotId = transportationLotDao.persist(transportationLot);
@@ -51,6 +57,12 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
   @Override
   public void delete(String code) throws DataNotFoundException {
+    Integer lastLotCode = transportationLotDao.getLastTransportationLotCode();
+
+    if (laboratoryConfigurationDao.getLastInsertion(TRANSPORTATION) < lastLotCode) {
+      laboratoryConfigurationDao.restoreLotConfiguration(TRANSPORTATION, lastLotCode);
+    }
+
     TransportationLot transportationLot = transportationLotDao.findByCode(code);
     aliquotDao.updateTransportationLotId(new ArrayList<>(), (ObjectId) transportationLot.getLotId());
 

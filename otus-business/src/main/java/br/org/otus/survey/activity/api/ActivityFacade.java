@@ -2,6 +2,7 @@ package br.org.otus.survey.activity.api;
 
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;

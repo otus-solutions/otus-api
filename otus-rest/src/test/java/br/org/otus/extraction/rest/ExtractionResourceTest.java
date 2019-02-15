@@ -42,13 +42,25 @@ public class ExtractionResourceTest {
     extractionResource.extractActivities(acronym, version);
     Mockito.verify(extractionFacade).createActivityExtraction(acronym, version);
   }
-  
+
   @Test
   public void should_verify_method_listSurveyVersions_have_been_called() {
     extractionResource.listSurveyVersions(acronym);
     Mockito.verify(extractionFacade).listSurveyVersions(acronym);
   }
   
+  @Test
+  public void should_verify_method_extractExamsValues_have_been_called() throws DataNotFoundException {
+    extractionResource.extractExamsValues();
+    Mockito.verify(extractionFacade).createLaboratoryExamsValuesExtraction();
+  }
+
+	@Test
+	public void should_verify_method_extractAnnexesReport_have_been_called() throws DataNotFoundException {
+		extractionResource.extractAnnexesReport(acronym,version);
+		Mockito.verify(extractionFacade).createAttachmentsReportExtraction(acronym,version);
+	}
+
   @Test
   public void extractLaboratory_method_should_call_createLaboratoryExtraction_method() throws DataNotFoundException {
     extractionResource.extractLaboratory();

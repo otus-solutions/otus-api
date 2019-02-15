@@ -10,11 +10,11 @@ import org.ccem.otus.survey.template.item.questions.Question;
 public class SurveyActivityExtractionHeadersFactory {
 
 	private SurveyForm surveyForm;
-    private List<String> headers;
+	private List<String> headers;
 
 	public SurveyActivityExtractionHeadersFactory(SurveyForm surveyForm) {
 		this.surveyForm = surveyForm;
-		this.headers = new LinkedList<>();
+		this.headers = new LinkedList<String>();
 		this.buildHeadersInfo();
 	}
 
@@ -23,7 +23,7 @@ public class SurveyActivityExtractionHeadersFactory {
 	}
 
 	private void buildHeadersInfo() {
-		/* Basic info headers */
+		/* Basic information headers */
 		this.headers.add(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.ACRONYM.getValue());
 		this.headers.add(SurveyActivityExtractionHeaders.MODE.getValue());

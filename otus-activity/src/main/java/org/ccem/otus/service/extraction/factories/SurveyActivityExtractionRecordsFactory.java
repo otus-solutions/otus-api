@@ -38,7 +38,7 @@ public class SurveyActivityExtractionRecordsFactory {
     return this.surveyInformation;
   }
 
-  public void getSurveyBasicInfo(SurveyActivity surveyActivity) {
+  public void buildSurveyBasicInfo(SurveyActivity surveyActivity) {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), SurveyBasicInfoRecordsFactory.getRecruitmentNumber(surveyActivity));
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), this.surveyForm.getSurveyTemplate().identity.acronym);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.MODE.getValue(), surveyActivity.getMode());
@@ -69,7 +69,7 @@ public class SurveyActivityExtractionRecordsFactory {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue(), lastFinalizationDate);
   }
 
-  public void getSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
+  public void buildSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
     final Map<String, String> customIDMap = this.surveyForm.getSurveyTemplate().mapTemplateAndCustomIDS();
 
     for (NavigationTrackingItem trackingItem : surveyActivity.getNavigationTracker().items) {

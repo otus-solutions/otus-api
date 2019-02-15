@@ -1,6 +1,5 @@
 package br.org.mongodb;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -51,9 +50,13 @@ public abstract class MongoGenericDao<T> {
   public T findFirst() {
     return list().first();
   }
-  
-  public AggregateIterable<T> aggregate(List<Bson> pipeline){
-    return collection.aggregate(pipeline).allowDiskUse(true);
+
+  public FindIterable<T> findLast() {
+    return collection.find().sort(new Document("_id", -1)).limit(1);
+  }
+
+  public AggregateIterable<T> aggregate(List<Bson> query) {
+    return collection.aggregate(query).allowDiskUse(true);
   }
 
 }
