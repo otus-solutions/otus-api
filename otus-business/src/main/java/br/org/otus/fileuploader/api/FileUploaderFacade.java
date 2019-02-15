@@ -70,13 +70,19 @@ public class FileUploaderFacade {
 
         byte[] bytes;
 
+        String fileName = fileInfo.getName();
+        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+
+
         try {
           bytes = IOUtils.toByteArray(inputStream);
-          zipOut.putNextEntry(new ZipEntry(fileInfo.getName()));
+          zipOut.putNextEntry(new ZipEntry(fileInfo.getOid() + fileExtension));
           zipOut.write(bytes, 0, bytes.length);
           zipOut.closeEntry();
         } catch (IOException e) {
           //file uploader exception
+          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }catch (Exception e) {
           throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
 
