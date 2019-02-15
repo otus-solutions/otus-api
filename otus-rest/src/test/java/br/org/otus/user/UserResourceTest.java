@@ -6,25 +6,22 @@ import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
 import br.org.otus.user.dto.SignupDataDto;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.doThrow;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ManagementUserDto.class })

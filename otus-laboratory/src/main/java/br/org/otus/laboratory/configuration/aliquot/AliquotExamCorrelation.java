@@ -12,34 +12,32 @@ import java.util.Map;
 
 public class AliquotExamCorrelation {
 
-    @SerializedName("_id")
-    private ObjectId id;
+  @SerializedName("_id")
+  private ObjectId id;
+  private String objectType;
+  private ArrayList<AliquotPossibleExams> aliquots;
 
-    private String objectType;
-    private ArrayList<AliquotPossibleExams> aliquots;
+  public Map getHashMap() {
+    Map<String, ArrayList<String>> map = new HashMap<>();
 
+    this.aliquots.forEach(aliquotPossibleExams -> map.put(aliquotPossibleExams.getName(), aliquotPossibleExams.getExams()));
 
-    public Map getHashMap() {
-        Map<String,ArrayList<String>> map = new HashMap<>();
+    return map;
+  }
 
-        this.aliquots.forEach(aliquotPossibleExams -> map.put(aliquotPossibleExams.getName(),aliquotPossibleExams.getExams()));
+  public static String serialize(AliquotExamCorrelation laboratory) {
+    Gson builder = AliquotExamCorrelation.getGsonBuilder();
+    return builder.toJson(laboratory);
+  }
 
-        return map;
-    }
+  public static AliquotExamCorrelation deserialize(String laboratoryJson) {
+    Gson builder = AliquotExamCorrelation.getGsonBuilder();
+    return builder.fromJson(laboratoryJson, AliquotExamCorrelation.class);
+  }
 
-    public static String serialize(AliquotExamCorrelation laboratory) {
-        Gson builder = AliquotExamCorrelation.getGsonBuilder();
-        return builder.toJson(laboratory);
-    }
-
-    public static AliquotExamCorrelation deserialize(String laboratoryJson) {
-        Gson builder = AliquotExamCorrelation.getGsonBuilder();
-        return builder.fromJson(laboratoryJson, AliquotExamCorrelation.class);
-    }
-
-    public static Gson getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
-        return builder.create();
-    }
+  public static Gson getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+    return builder.create();
+  }
 }

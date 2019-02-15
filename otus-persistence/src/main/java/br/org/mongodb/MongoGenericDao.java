@@ -8,6 +8,12 @@ import org.bson.Document;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.List;
 
 public abstract class MongoGenericDao<T> {
 
@@ -49,6 +55,10 @@ public abstract class MongoGenericDao<T> {
 
   public FindIterable<T> findLast(){
     return collection.find().sort(new Document("_id", -1)).limit(1);
+  }
+
+  public AggregateIterable<T> aggregate(List<Bson> query) {
+    return collection.aggregate(query).allowDiskUse(true);
   }
 
 }

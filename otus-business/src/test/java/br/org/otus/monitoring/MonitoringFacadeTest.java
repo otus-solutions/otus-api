@@ -4,6 +4,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.service.MonitoringService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.xml.crypto.Data;
@@ -32,6 +34,9 @@ public class MonitoringFacadeTest {
 
   @Mock
   private MonitoringService monitoringService;
+
+  @Mock
+  private LaboratoryProgressDTO laboratoryProgressDTO;
 
   @Test(expected = HttpResponseException.class)
   public void get_should_call_method_get() throws ValidationException {
@@ -65,5 +70,131 @@ public class MonitoringFacadeTest {
   public void getActivitiesProgress_should_call_method_getActivitiesProgress_with_center() {
     monitoringFacade.getActivitiesProgress(CENTER);
     Mockito.verify(monitoringService).getActivitiesProgress(CENTER);
+  }
+
+  @Test
+  public void getDataOrphanByExams_should_call_monitoringService_getDataOrphanByExams() throws DataNotFoundException {
+    monitoringFacade.getDataOrphanByExams();
+    Mockito.verify(monitoringService).getDataOrphanByExams();
+  }
+
+  @Test
+  public void getDataOrphanByExams_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataOrphanByExams()).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataOrphanByExams());
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataOrphanByExams_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataOrphanByExams()).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataOrphanByExams();
+  }
+
+  @Test
+  public void getDataQuantitativeByTypeOfAliquots_should_call_monitoringService_getDataQuantitativeByTypeOfAliquots_with_center() throws DataNotFoundException {
+    monitoringFacade.getDataQuantitativeByTypeOfAliquots(CENTER);
+    Mockito.verify(monitoringService).getDataQuantitativeByTypeOfAliquots(CENTER);
+  }
+
+  @Test
+  public void getDataQuantitativeByTypeOfAliquots_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataQuantitativeByTypeOfAliquots(CENTER)).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataQuantitativeByTypeOfAliquots(CENTER));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataQuantitativeByTypeOfAliquots_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataQuantitativeByTypeOfAliquots(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataQuantitativeByTypeOfAliquots(CENTER);
+  }
+
+  @Test
+  public void getDataOfPendingResultsByAliquot_should_call_monitoringService_getDataOfPendingResultsByAliquot_with_center() throws DataNotFoundException {
+    monitoringFacade.getDataOfPendingResultsByAliquot(CENTER);
+    Mockito.verify(monitoringService).getDataOfPendingResultsByAliquot(CENTER);
+  }
+
+  @Test
+  public void getDataOfPendingResultsByAliquot_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataOfPendingResultsByAliquot(CENTER)).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataOfPendingResultsByAliquot(CENTER));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataOfPendingResultsByAliquot_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataOfPendingResultsByAliquot(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataOfPendingResultsByAliquot(CENTER);
+  }
+
+  @Test
+  public void getDataOfStorageByAliquot_should_call_monitoringService_getDataOfStorageByAliquot_with_center() throws DataNotFoundException {
+    monitoringFacade.getDataOfStorageByAliquot(CENTER);
+    Mockito.verify(monitoringService).getDataOfStorageByAliquot(CENTER);
+  }
+
+  @Test
+  public void getDataOfStorageByAliquot_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataOfStorageByAliquot(CENTER)).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataOfStorageByAliquot(CENTER));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataOfStorageByAliquot_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataOfStorageByAliquot(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataOfStorageByAliquot(CENTER);
+  }
+
+  @Test
+  public void getDataByExam_should_call_monitoringService_getDataByExam_with_center() throws DataNotFoundException {
+    monitoringFacade.getDataByExam(CENTER);
+    Mockito.verify(monitoringService).getDataByExam(CENTER);
+  }
+
+  @Test
+  public void getDataByExam_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataByExam(CENTER)).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataByExam(CENTER));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataByExam_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataByExam(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataByExam(CENTER);
+  }
+
+  @Test
+  public void getDataToCSVOfPendingResultsByAliquots_should_call_monitoringService_getDataToCSVOfPendingResultsByAliquots_with_center() throws DataNotFoundException {
+    monitoringFacade.getDataToCSVOfPendingResultsByAliquots(CENTER);
+    Mockito.verify(monitoringService).getDataToCSVOfPendingResultsByAliquots(CENTER);
+  }
+
+  @Test
+  public void getDataToCSVOfPendingResultsByAliquots_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataToCSVOfPendingResultsByAliquots(CENTER)).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataToCSVOfPendingResultsByAliquots(CENTER));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataToCSVOfPendingResultsByAliquots_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataToCSVOfPendingResultsByAliquots(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataToCSVOfPendingResultsByAliquots(CENTER);
+  }
+
+  @Test
+  public void getDataToCSVOfOrphansByExam_should_call_monitoringService_getDataToCSVOfOrphansByExam() throws DataNotFoundException {
+    monitoringFacade.getDataToCSVOfOrphansByExam();
+    Mockito.verify(monitoringService).getDataToCSVOfOrphansByExam();
+  }
+
+  @Test
+  public void getDataToCSVOfOrphansByExam_should_return_LaboratoryProgressDTO() throws DataNotFoundException {
+    PowerMockito.when(monitoringService.getDataToCSVOfOrphansByExam()).thenReturn(laboratoryProgressDTO);
+    assertEquals(laboratoryProgressDTO,monitoringFacade.getDataToCSVOfOrphansByExam());
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getDataToCSVOfOrphansByExam_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(monitoringService.getDataToCSVOfOrphansByExam()).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getDataToCSVOfOrphansByExam();
   }
 }

@@ -40,7 +40,24 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
 
   @Override
   public ExamLot findByCode(String code) throws DataNotFoundException {
-    Document document = collection.aggregate(Arrays.asList(Aggregates.match(new Document("code", code)),Aggregates.lookup("aliquot","_id","examLotId","aliquotList"))).first();
+    Document document = collection.aggregate(Arrays.asList(
+            new Document("$match",new Document("code", code)),
+            new Document("$lookup",
+                    new Document("from","aliquot")
+                            .append("let",new Document("lotId","$_id"))
+                            .append("pipeline",Arrays.asList(
+                                    new Document("$match",
+                                            new Document("$expr",
+                                                    new Document("$or",Arrays.asList(
+                                                            new Document("$eq",Arrays.asList("$examLotId",  "$$lotId"))
+                                                            ,new Document("$eq",Arrays.asList("$examLotData.id", "$$lotId"))
+                                                    )
+                                                    )
+                                            )
+                                    ),new Document("$sort",
+                                            new Document("examLotData.position",1))
+                                    )
+                            ).append("as","aliquotList")))).first();
     if (document != null) {
       return ExamLot.deserialize(document.toJson());
     } else {

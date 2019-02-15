@@ -1,15 +1,11 @@
 package br.org.otus.survey.activity;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Projections.exclude;
-import static com.mongodb.client.model.Projections.fields;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-
+import br.org.mongodb.MongoGenericDao;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -17,15 +13,18 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.persistence.ActivityDao;
 
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.org.mongodb.MongoGenericDao;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Projections.exclude;
+import static com.mongodb.client.model.Projections.fields;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
@@ -151,6 +150,25 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         query.put("category.name", activityCategory.getName());
 
         UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())), new UpdateOptions().upsert(false));
+    }
+
+    @Override
+    public boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException {
+        String checkerUpdateJson = ActivityStatus.serialize(checkerUpdatedDTO.getActivityStatus());
+        Document parsed = Document.parse(checkerUpdateJson);
+        Document checkerUpdate = (Document) parsed.get("user");
+        String dateUpdated = (String) parsed.get("date");
+
+        UpdateResult updateResult = collection.updateOne(
+                and(eq("_id", new ObjectId(checkerUpdatedDTO.getId())),
+                    eq("statusHistory.name", checkerUpdatedDTO.getActivityStatus().getName())),
+                new Document("$set", new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date",dateUpdated)));
+
+        if (updateResult.getMatchedCount() == 0) {
+            throw new DataNotFoundException(new Throwable("Activity of Participant not found"));
+        }
+
+        return true;
     }
 
 	private void removeOids(Document parsedActivity){

@@ -49,6 +49,22 @@ public class ExtractionResource {
 		return new Response().buildSuccess(extractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
 	}
 
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/laboratory/exams-values")
+  public byte[] extractExamsValues() throws DataNotFoundException {
+    return extractionFacade.createLaboratoryExamsValuesExtraction();
+  }
+
+	@GET
+	@SecuredExtraction
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Path("/activity/{acronym}/{version}/attachments")
+	public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
+		return extractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);
+	}
+
 	@POST
 	@Secured
 	@Path("/enable")

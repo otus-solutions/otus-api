@@ -56,18 +56,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));
   }
 
-    @Override
-    public void update(LaboratoryConfiguration configuration) throws Exception {
-        Document parsed = Document.parse(LaboratoryConfiguration.serialize(configuration));
-        parsed.remove("_id");
 
-        UpdateResult updatedData = collection.updateOne(eq("_id", configuration.getId()), new Document("$set", parsed),
-                new UpdateOptions().upsert(false));
-
-        if (updatedData.getModifiedCount() == 0) {
-            throw new Exception("Update was not executed.");
-        }
-    }
   @Override
   public String createNewLotCodeForTransportation(Integer code) {
     if (getLastInsertion(TRANSPORTATION) < code) {
@@ -131,4 +120,14 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
                 break;
         }
     }
+
+  @Override
+  public Integer updateLastTubeInsertion(int quantity) {
+    Document query = new Document("objectType", "LaboratoryConfiguration")
+      .append("codeConfiguration.lastInsertion", new Document("$exists", true));
+
+    Document updateLotCode = collection.findOneAndUpdate(query, new Document("$inc", new Document("codeConfiguration.lastInsertion", quantity)),
+        new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE));
+    return ((Document) updateLotCode.get("codeConfiguration")).getInteger("lastInsertion");
+  }
 }

@@ -54,6 +54,15 @@ public class ActivityFacade {
 		}
 	}
 
+	public boolean updateCheckerActivity(String checkerUpdated) {
+		try {
+			return activityService.updateCheckerActivity(checkerUpdated);
+		} catch (DataNotFoundException e) {
+			throw new HttpResponseException(
+					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+		}
+	}
+
 	@SuppressWarnings("static-access")
 	public SurveyActivity deserialize(String surveyActivity) {
 		try {
