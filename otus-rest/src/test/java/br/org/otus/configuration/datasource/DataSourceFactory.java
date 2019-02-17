@@ -1,3 +1,4 @@
+
 package br.org.otus.configuration.datasource;
 
 import com.google.gson.JsonArray;
