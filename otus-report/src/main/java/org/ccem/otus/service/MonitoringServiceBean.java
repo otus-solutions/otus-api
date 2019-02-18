@@ -84,10 +84,9 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public ActivityProgressReportDto getActivitiesProgress(String center) {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-
-    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport(center);
-
-    return new ActivityProgressReportDto(report, surveyAcronyms);
+    ActivityProgressReportDto activityProgressReportDto = ActivityProgressReportDto.deserialize(flagReportDao.getActivitiesProgressReport(center,surveyAcronyms));
+    activityProgressReportDto.setColumns(surveyAcronyms);
+    return activityProgressReportDto;
   }
 
   @Override

@@ -8,6 +8,7 @@ import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ActivityStatusQueryBuilder {
@@ -126,6 +127,161 @@ public class ActivityStatusQueryBuilder {
     return this;
   }
 
+  public List<Bson> getTheMegaPowerUltraQuery(String center, LinkedList<String> surveyAcronyms) {
+    pipeline.add(parseQuery("{\n" +
+            "    $match: {\n" +
+            "      \"participantData.fieldCenter.acronym\": \"RJ\"\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $project: {\n" +
+            "      _id: 0,\n" +
+            "      rn: \"$participantData.recruitmentNumber\",\n" +
+            "      acronym: \"$surveyForm.surveyTemplate.identity.acronym\",\n" +
+            "      lastStatusDate: {\n" +
+            "        $arrayElemAt: [\n" +
+            "          {\n" +
+            "            $slice: [\n" +
+            "              \"$statusHistory.date\",\n" +
+            "              -1\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          0\n" +
+            "        ]\n" +
+            "      },\n" +
+            "      lastStatusName: {\n" +
+            "        $arrayElemAt: [\n" +
+            "          {\n" +
+            "            $slice: [\n" +
+            "              \"$statusHistory.name\",\n" +
+            "              -1\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          0\n" +
+            "        ]\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $sort: {\n" +
+            "      lastStatusDate: -1\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $group: {\n" +
+            "      _id: {\n" +
+            "        \"rn\": \"$rn\"\n" +
+            "      },\n" +
+            "      activities: {\n" +
+            "        $addToSet: {\n" +
+            "          status: {\n" +
+            "            $cond: [\n" +
+            "              {\n" +
+            "                $eq: [\n" +
+            "                  \"$lastStatusName\",\n" +
+            "                  \"CREATED\"\n" +
+            "                ]\n" +
+            "              },\n" +
+            "              -1,\n" +
+            "              {\n" +
+            "                $cond: [\n" +
+            "                  {\n" +
+            "                    $eq: [\n" +
+            "                      \"$lastStatusName\",\n" +
+            "                      \"SAVED\"\n" +
+            "                    ]\n" +
+            "                  },\n" +
+            "                  1,\n" +
+            "                  {\n" +
+            "                    $cond: [\n" +
+            "                      {\n" +
+            "                        $eq: [\n" +
+            "                          \"$lastStatusName\",\n" +
+            "                          \"FINALIZED\"\n" +
+            "                        ]\n" +
+            "                      },\n" +
+            "                      2,\n" +
+            "                      -1\n" +
+            "                    ]\n" +
+            "                  }\n" +
+            "                ]\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          rn: \"$rn\",\n" +
+            "          acronym: \"$acronym\"\n" +
+            "        }\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $addFields: {\n" +
+            "      \"headers\": headers\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $unwind: \"$headers\"\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $addFields: {\n" +
+            "      \"activityFound\": {\n" +
+            "        $filter: {\n" +
+            "          input: \"$activities\",\n" +
+            "          as: \"item\",\n" +
+            "          cond: {\n" +
+            "            $eq: [\n" +
+            "              \"$$item.acronym\",\n" +
+            "              \"$headers\"\n" +
+            "            ]\n" +
+            "          }\n" +
+            "        }\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $group: {\n" +
+            "      _id: \"$_id.rn\",\n" +
+            "      \"fullActivitiesList\": {\n" +
+            "        $push: {\n" +
+            "          $cond: [\n" +
+            "            {\n" +
+            "              $gt: [\n" +
+            "                {\n" +
+            "                  $size: \"$activityFound\"\n" +
+            "                },\n" +
+            "                0\n" +
+            "              ]\n" +
+            "            },\n" +
+            "            {\n" +
+            "              $arrayElemAt: [\n" +
+            "                \"$activityFound\",\n" +
+            "                0\n" +
+            "              ]\n" +
+            "            },\n" +
+            "            {\n" +
+            "              status: null,\n" +
+            "              rn: \"$_id.rn\",\n" +
+            "              acronym: \"$headers\"\n" +
+            "            }\n" +
+            "          ]\n" +
+            "        }\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $group: {\n" +
+            "      _id: {\n" +
+            "      },\n" +
+            "      index: {\n" +
+            "        $push: \"$_id\"\n" +
+            "      },\n" +
+            "      data: {\n" +
+            "        $push: \"fullActivitiesList.status\"\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
+    return pipeline;
+  }
 
 //  ===================
 

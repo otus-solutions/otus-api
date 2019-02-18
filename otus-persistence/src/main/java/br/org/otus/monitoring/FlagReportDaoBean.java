@@ -9,6 +9,7 @@ import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.persistence.FlagReportDao;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FlagReportDaoBean extends MongoGenericDao<Document> implements FlagReportDao {
@@ -51,6 +52,16 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
     MongoCursor<Document> iterator = collection.aggregate(query).iterator();
 
     return deserializeReport(iterator);
+  }
+
+  @Override
+  public String getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms) {
+    List<Bson> query = new ActivityStatusQueryBuilder()
+            .getTheMegaPowerUltraQuery(center,surveyAcronyms);
+
+    Document result = collection.aggregate(query).first();
+
+    return result.toJson();
   }
 
   private ArrayList<ActivitiesProgressReport> deserializeReport(MongoCursor<Document> iterator) {

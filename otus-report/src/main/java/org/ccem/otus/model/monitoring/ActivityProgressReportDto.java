@@ -1,5 +1,7 @@
 package org.ccem.otus.model.monitoring;
 
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -15,30 +17,24 @@ public class ActivityProgressReportDto {
     this.columns = new LinkedList<>();
     this.index = new LinkedList<>();
     this.data = new LinkedList<>();
-
-    setColumns(surveys);
-
-    progressReport.stream().forEach(report -> {
-      report.normalize(surveys);
-      index.add(report.getRn());
-      addToData(report.getActivities());
-    });
   }
 
-  private void setColumns(LinkedList<String> acronyms) {
+  public void setColumns(LinkedList<String> acronyms) {
+    this.columns = new LinkedList<>();
     acronyms.stream().forEach(acronym -> {
       columns.add(Arrays.asList("C", acronym));
     });
   }
 
-  private void addToData(LinkedList<ActivitiesProgressReport.ActivityFlagReport> flagReports){
-    LinkedList<Integer> temp = new LinkedList<>();
+  public static ActivityProgressReportDto deserialize(String activityProgressReportString) {
+    ActivityProgressReportDto activityProgressReportDto = ActivityProgressReportDto.getGsonBuilder().create().fromJson(activityProgressReportString, ActivityProgressReportDto.class);
+    return activityProgressReportDto;
+  }
 
-    flagReports.stream().forEach(activityFlagReport -> {
-      temp.add(activityFlagReport.getStatus());
-    });
-
-    data.add(temp);
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.serializeNulls();
+    return builder;
   }
 
 }
