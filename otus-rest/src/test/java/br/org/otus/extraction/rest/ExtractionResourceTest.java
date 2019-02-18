@@ -61,4 +61,11 @@ public class ExtractionResourceTest {
 		Mockito.verify(extractionFacade).createAttachmentsReportExtraction(acronym,version);
 	}
 
+  @Test
+  public void extractLaboratory_method_should_call_createLaboratoryExtraction_method() throws DataNotFoundException {
+    extractionResource.extractLaboratory();
+    
+    Mockito.verify(extractionFacade).createLaboratoryExtraction();
+  }
+
 }

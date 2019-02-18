@@ -1,19 +1,19 @@
 package br.org.otus.laboratory.participant;
 
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
-import br.org.otus.laboratory.participant.exam.Exam;
-import br.org.otus.laboratory.participant.tube.Tube;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.utils.LongAdapter;
 
-import javax.xml.crypto.Data;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.GsonBuilder;
+
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
+import br.org.otus.laboratory.participant.exam.Exam;
+import br.org.otus.laboratory.participant.tube.Tube;
 
 public class ParticipantLaboratory {
 

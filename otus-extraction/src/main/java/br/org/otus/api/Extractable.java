@@ -9,5 +9,4 @@ public interface Extractable {
   List<String> getHeaders();
 
   List<List<Object>> getValues() throws DataNotFoundException;
-
 }

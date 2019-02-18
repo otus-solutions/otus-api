@@ -1,8 +1,20 @@
 package br.org.otus.laboratory.participant;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
+
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
@@ -11,18 +23,11 @@ import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeService;
 import br.org.otus.laboratory.participant.validators.AliquotDeletionValidator;
 import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
 import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.participant.persistence.ParticipantDao;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import java.util.List;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
@@ -45,6 +50,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   private TransportationLotDao transportationLotDao;
   @Inject
   private ExamUploader examUploader;
+  @Inject
+  private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
 
   @Override
   public boolean hasLaboratory(Long recruitmentNumber) {
@@ -75,7 +82,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     return laboratory;
   }
 
-
   @Override
   public Tube updateTubeCollectionData(long rn, Tube tube) throws DataNotFoundException {
     return participantLaboratoryDao.updateTubeCollectionData(rn, tube);
@@ -102,8 +108,13 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public void deleteAliquot(String code) throws ValidationException, DataNotFoundException {
-    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao,this.transportationLotDao);
+    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao, this.transportationLotDao);
     validator.validate();
     aliquotDao.delete(code);
+  }
+
+  @Override
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException {
+    return participantLaboratoryExtractionDao.getLaboratoryExtraction();
   }
 }

@@ -1,22 +1,19 @@
 package br.org.otus.laboratory.participant;
 
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
-import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
-import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
-import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
-import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
-import br.org.otus.laboratory.participant.tube.TubeService;
-import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
-import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
-import br.org.otus.laboratory.participant.validators.AliquotDeletionValidator;
-import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
-import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
-import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
-import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -31,18 +28,24 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.*;
-import static org.powermock.api.mockito.PowerMockito.doReturn;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.*;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
+import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
+import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
+import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
+import br.org.otus.laboratory.participant.tube.TubeService;
+import br.org.otus.laboratory.participant.util.JsonObjecParticipantLaboratoryFactory;
+import br.org.otus.laboratory.participant.util.JsonObjectUpdateAliquotsDTOFactory;
+import br.org.otus.laboratory.participant.validators.AliquotDeletionValidator;
+import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
+import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
+import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
+import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ParticipantLaboratoryServiceBean.class)
@@ -80,6 +83,8 @@ public class ParticipantLaboratoryServiceBeanTest {
   private ExamUploader examUploader;
   @Mock
   private ParticipantLaboratory participantLaboratory;
+  @Mock
+  private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
 
   private static final long RECRUIMENT_NUMBER = 12345;
   private static final String ALIQUOT_CODE = "354005002";
@@ -170,6 +175,13 @@ public class ParticipantLaboratoryServiceBeanTest {
     aliquotDeletionValidator.validate();
 
     verify(aliquotDeletionValidator, Mockito.times(1)).validate();
+  }
+  
+  @Test
+  public void getLaboratoryExtraction_method_should_call_getLaboratoryExtraction_method() throws DataNotFoundException {
+    participantLaboratoryServiceBean.getLaboratoryExtraction();
+    
+    Mockito.verify(participantLaboratoryExtractionDao).getLaboratoryExtraction();
   }
 
 }
