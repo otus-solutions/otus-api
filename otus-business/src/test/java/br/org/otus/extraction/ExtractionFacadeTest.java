@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
+import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 import org.junit.Before;
@@ -31,7 +32,6 @@ import br.org.otus.survey.api.SurveyFacade;
 public class ExtractionFacadeTest {
 
   private static final SurveyTemplate surveyTemplate = new SurveyTemplate();
-
   private static final String userEmail = "otus@otus.com";
 
   @InjectMocks
@@ -45,13 +45,15 @@ public class ExtractionFacadeTest {
   @Mock
   private ParticipantLaboratoryFacade participantLaboratoryFacade;
   @Mock
-  private ExtractionServiceBean extractionService;
+  private LaboratoryExtraction laboratoryExtraction;
+  @Mock
+  private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
   @Mock
   private SurveyActivityExtraction surveyActivityExtraction;
   @Mock
   private ExamUploadExtration examUploadExtration;
   @Mock
-  private LaboratoryExtraction laboratoryExtraction;
+  private ExtractionServiceBean extractionService;
 
   SurveyForm surveyForm = new SurveyForm(surveyTemplate, userEmail);
 
@@ -76,6 +78,7 @@ public class ExtractionFacadeTest {
     extractionFacade.createActivityExtraction(acronym, version);
     Mockito.verify(activityFacade).get(acronym, version);
     Mockito.verify(surveyFacade).get(acronym, version);
+    Mockito.verify(surveyActivityExtraction, Mockito.times(1)).addPreProcessor(autocompleteQuestionPreProcessor);
     Mockito.verify(extractionService).createExtraction(surveyActivityExtraction);
   }
 

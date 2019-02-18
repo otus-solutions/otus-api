@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
+import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.api.ExtractionService;
@@ -29,9 +30,11 @@ public class ExtractionFacade {
   @Inject
   private SurveyFacade surveyFacade;
   @Inject
-  private ParticipantLaboratoryFacade participantLaboratoryFacade;
-  @Inject
   private ExamUploadFacade examUploadFacade;
+  @Inject
+  private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
+  @Inject
+  private ParticipantLaboratoryFacade participantLaboratoryFacade;
   @Inject
   private ExtractionService extractionService;
 
@@ -40,6 +43,8 @@ public class ExtractionFacade {
 
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
+    extractor.addPreProcessor(autocompleteQuestionPreProcessor);
+
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

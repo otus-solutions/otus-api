@@ -28,6 +28,7 @@
     <commons.io.version>2.4</commons.io.version>
     <commons.csv.version>1.5</commons.csv.version>
     <jaxrs.api.version>3.0.12.Final</jaxrs.api.version>
+    <cdi.api.version>1.1</cdi.api.version>
     <resteasy.multipart.version>3.1.1.Final</resteasy.multipart.version>
     <org.restlet.version>2.3.4</org.restlet.version>
     <restlet.json.version>1.0.11</restlet.json.version>
