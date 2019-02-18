@@ -4,30 +4,30 @@ import br.org.otus.response.exception.ResponseInfo;
 
 import javax.ws.rs.core.Response;
 
-public class RuntimeError extends ResponseInfo {
+public class UnexpectedError extends ResponseInfo {
 
-  public RuntimeError() {
+  public UnexpectedError() {
     super(Response.Status.INTERNAL_SERVER_ERROR, "Error");
   }
 
-  public RuntimeError(String message) {
+  public UnexpectedError(String message) {
     super(Response.Status.INTERNAL_SERVER_ERROR, "Error:  " + message);
   }
 
-  public RuntimeError(String message, Object object) {
+  public UnexpectedError(String message, Object object) {
     super(Response.Status.INTERNAL_SERVER_ERROR, "Error: " + message, object);
   }
 
   public static ResponseInfo build(){
-    return new RuntimeError();
+    return new UnexpectedError();
   }
 
   public static ResponseInfo build(String message){
-    return new RuntimeError(message);
+    return new UnexpectedError(message);
   }
 
   public static ResponseInfo build(String message, Object object){
-    return new RuntimeError(message, object);
+    return new UnexpectedError(message, object);
   }
 
 }

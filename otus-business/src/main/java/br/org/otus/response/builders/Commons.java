@@ -1,8 +1,8 @@
 package br.org.otus.response.builders;
 
-import br.org.otus.response.info.RuntimeError;
+import br.org.otus.response.info.UnexpectedError;
 
 public class Commons {
 
-  public static RuntimeError RuntimeError;
+  public static UnexpectedError UnexpectedError;
 }

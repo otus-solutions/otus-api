@@ -26,6 +26,9 @@ public class FileUploaderFacade {
   @Inject
   private FileStoreBucket fileStoreBucket;
 
+  @Inject
+  private FileDownloadService fileDownloadService;
+
   public InputStream getById(String oid) {
     try {
       return fileStoreBucket.download(oid);
@@ -47,66 +50,7 @@ public class FileUploaderFacade {
   }
 
   public Response list(ArrayList<String> oids) {
-
-    List<ObjectId> objectIds = oids.stream().map(s -> {
-      try {
-        return new ObjectId(s);
-      } catch (IllegalArgumentException e) {
-        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage() + " - " + s));
-      }
-    }).collect(Collectors.toList());
-
-    try {
-
-      List<FileDownload> files = fileStoreBucket.downloadMultiple(objectIds);
-
-
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream);
-
-
-      files.stream().forEach(fileInfo -> {
-        InputStream inputStream = fileInfo.getFileStream();
-
-        byte[] bytes;
-
-        String fileName = fileInfo.getName();
-        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
-
-
-        try {
-          bytes = IOUtils.toByteArray(inputStream);
-          zipOut.putNextEntry(new ZipEntry(fileInfo.getOid() + fileExtension));
-          zipOut.write(bytes, 0, bytes.length);
-          zipOut.closeEntry();
-        } catch (IOException e) {
-          //file uploader exception
-          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }catch (Exception e) {
-          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
-
-
-      });
-
-
-      zipOut.close();
-
-      Response.ResponseBuilder builder = Response.ok(byteArrayOutputStream.toByteArray());
-      builder.header("Content-Disposition", "attachment; filename=" + "anything");
-      Response response = builder.build();
-
-      byteArrayOutputStream.close();
-
-      return response;
-
-
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    } catch (IOException e) {
-      //file uploader exception
-      throw new HttpResponseException(ResponseBuild.Commons.RuntimeError.build("Error while generating files"));
-    }
+    return fileDownloadService.list(oids);
   }
 
 
