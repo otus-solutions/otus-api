@@ -35,21 +35,21 @@ public class ExtractionFacade {
   @Inject
   private ExtractionService extractionService;
 
-	public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
-		List<SurveyActivity> activities  = activityFacade.get(acronym, version);
+  public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
+    List<SurveyActivity> activities = activityFacade.get(acronym, version);
 
-		SurveyForm surveyForm = surveyFacade.get(acronym, version);
-		SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
-		try {
-			return extractionService.createExtraction(extractor);
-		} catch (DataNotFoundException e) {
-			throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
-		}
-	}
-
-    public List<Integer> listSurveyVersions(String acronym){
-        return surveyFacade.listVersions(acronym);
+    SurveyForm surveyForm = surveyFacade.get(acronym, version);
+    SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
+    try {
+      return extractionService.createExtraction(extractor);
+    } catch (DataNotFoundException e) {
+      throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
     }
+  }
+
+  public List<Integer> listSurveyVersions(String acronym) {
+    return surveyFacade.listVersions(acronym);
+  }
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
@@ -61,7 +61,7 @@ public class ExtractionFacade {
     }
   }
 
-    public byte[] createLaboratoryExtraction() throws DataNotFoundException {
+  public byte[] createLaboratoryExtraction() throws DataNotFoundException {
     LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
     LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
     try {
@@ -73,7 +73,7 @@ public class ExtractionFacade {
 
   public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
     try {
-      return extractionService.getAttachmentsReport(acronym,version);
+      return extractionService.getAttachmentsReport(acronym, version);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Extraction.NotFound.build(e.getMessage()));
     }

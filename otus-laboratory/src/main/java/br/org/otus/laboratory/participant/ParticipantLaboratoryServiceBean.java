@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -24,6 +23,7 @@ import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeService;
 import br.org.otus.laboratory.participant.validators.AliquotDeletionValidator;
 import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
+import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtractionDao;
 import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
@@ -82,7 +82,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     return laboratory;
   }
 
-
   @Override
   public Tube updateTubeCollectionData(long rn, Tube tube) throws DataNotFoundException {
     return participantLaboratoryDao.updateTubeCollectionData(rn, tube);
@@ -109,7 +108,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public void deleteAliquot(String code) throws ValidationException, DataNotFoundException {
-    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao,this.transportationLotDao);
+    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao, this.transportationLotDao);
     validator.validate();
     aliquotDao.delete(code);
   }
