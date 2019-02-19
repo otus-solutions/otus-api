@@ -1,4 +1,4 @@
-package br.org.mongodb.gridfs;
+package org.ccem.otus.service.download;
 
 import java.io.InputStream;
 import java.util.Objects;

@@ -1,16 +1,18 @@
 package br.org.otus.fileuploader.api;
 
-import br.org.mongodb.gridfs.FileDownload;
+import org.ccem.otus.service.download.FileDownload;
 import br.org.mongodb.gridfs.FileStoreBucket;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.service.download.ZipBuilder;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,8 @@ public class FileDownloadService {
       return zip.buildResponse();
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    } catch (IOException e) {
+      throw new HttpResponseException(ResponseBuild.Commons.UnexpectedError.build("Error while generating files"));
     }
   }
 
@@ -52,7 +56,7 @@ public class FileDownloadService {
       }
     }).collect(Collectors.toList());
 
-    if(errors.size() > 0) {
+    if (errors.size() > 0) {
       throw new ValidationException(new Throwable("Invalid Id"), errors);
     }
 

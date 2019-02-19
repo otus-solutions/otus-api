@@ -12,6 +12,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FileUploaderPOJO;
+import org.ccem.otus.service.download.FileDownload;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
