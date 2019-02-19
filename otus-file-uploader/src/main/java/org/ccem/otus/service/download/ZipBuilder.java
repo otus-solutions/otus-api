@@ -2,7 +2,6 @@ package org.ccem.otus.service.download;
 
 import org.apache.commons.io.IOUtils;
 
-import javax.ws.rs.core.Response;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +24,14 @@ public class ZipBuilder {
       byte[] bytes;
 
       String fileName = fileInfo.getName();
-      String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+
+      String fileExtension;
+
+      try {
+        fileExtension = fileName.substring(fileName.lastIndexOf("."));
+      } catch (StringIndexOutOfBoundsException e) {
+        fileExtension = "";
+      }
 
       String outputName = fileInfo.getOid() + fileExtension;
 
@@ -33,7 +39,6 @@ public class ZipBuilder {
       zipOut.putNextEntry(new ZipEntry(outputName));
       zipOut.write(bytes, 0, bytes.length);
       zipOut.closeEntry();
-
 
 
     }
@@ -49,14 +54,12 @@ public class ZipBuilder {
     Zip() {
     }
 
-    public Response buildResponse() throws IOException {
-      Response.ResponseBuilder builder = Response.ok(this.toByteArray());
-      builder.header("Content-Disposition", "attachment; filename=" + "file-extraction");
-      Response response = builder.build();
-
+    public byte[] getByteArray() throws IOException {
+      byte[] byteArray = this.toByteArray();
       this.close();
 
-      return response;
+      return byteArray;
     }
+
   }
 }

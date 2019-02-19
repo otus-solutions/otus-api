@@ -65,7 +65,10 @@ public class ExtractionResource {
 	@Path("/activity/attachments")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
-		return extractionFacade.downloadFiles(oids);
+    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
+    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction");
+    javax.ws.rs.core.Response response = builder.build();
+    return response;
 	}
 
 	@POST

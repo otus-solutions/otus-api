@@ -1,17 +1,14 @@
 package br.org.otus.fileuploader.api;
 
-import org.ccem.otus.service.download.FileDownload;
 import br.org.mongodb.gridfs.FileStoreBucket;
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.service.download.FileDownload;
 import org.ccem.otus.service.download.ZipBuilder;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +20,14 @@ public class FileDownloadService {
   @Inject
   private FileStoreBucket fileStoreBucket;
 
-  public Response downloadFiles(ArrayList<String> oids) {
+  public ZipBuilder.Zip downloadFiles(ArrayList<String> oids) throws DataNotFoundException, IOException, ValidationException {
 
-    List<ObjectId> objectIds;
-    try {
-      objectIds = objectIdConverter(oids);
-    } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-    }
+    List<ObjectId> objectIds = objectIdConverter(oids);
 
-    try {
-      List<FileDownload> files = fileStoreBucket.fetchFiles(objectIds);
-      ZipBuilder.Zip zip = ZipBuilder.create(files);
-      return zip.buildResponse();
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-    } catch (IOException e) {
-      throw new HttpResponseException(ResponseBuild.Commons.UnexpectedError.build("Error while generating files"));
-    }
+
+    List<FileDownload> files = fileStoreBucket.fetchFiles(objectIds);
+    return ZipBuilder.create(files);
+
   }
 
   private List<ObjectId> objectIdConverter(List<String> oids) throws ValidationException {

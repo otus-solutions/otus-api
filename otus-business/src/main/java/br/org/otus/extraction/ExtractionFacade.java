@@ -11,6 +11,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.service.download.ZipBuilder;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -72,7 +73,7 @@ public class ExtractionFacade {
     }
   }
 
-  public Response downloadFiles(ArrayList<String> oids) {
+  public byte[] downloadFiles(ArrayList<String> oids) {
     return fileUploaderFacade.downloadFiles(oids);
   }
 }

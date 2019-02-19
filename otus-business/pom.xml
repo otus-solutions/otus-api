@@ -13,12 +13,18 @@
 
 	<dependencies>
 		<!-- - - External Dependencies - ! -->
-	    	<dependency>
-	    	  	<groupId>javax.enterprise</groupId>
-	    	  	<artifactId>cdi-api</artifactId>
-	    	  	<version>1.1</version>
-	    	  	<scope>provided</scope>
-	    	</dependency>
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <version>1.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>jaxrs-api</artifactId>
+      <version>${jaxrs.api.version}</version>
+      <scope>test</scope>
+    </dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver</artifactId>
