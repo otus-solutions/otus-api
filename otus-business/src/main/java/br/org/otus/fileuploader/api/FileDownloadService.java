@@ -8,18 +8,20 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Stateless
 public class FileDownloadService {
 
   @Inject
   private FileStoreBucket fileStoreBucket;
 
-  public Response list(ArrayList<String> oids) {
+  public Response downloadFiles(ArrayList<String> oids) {
 
     List<ObjectId> objectIds;
     try {
@@ -29,7 +31,7 @@ public class FileDownloadService {
     }
 
     try {
-      List<FileDownload> files = fileStoreBucket.downloadMultiple(objectIds);
+      List<FileDownload> files = fileStoreBucket.fetchFiles(objectIds);
       ZipBuilder.Zip zip = ZipBuilder.create(files);
       return zip.buildResponse();
     } catch (DataNotFoundException e) {

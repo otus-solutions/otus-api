@@ -90,8 +90,32 @@ public class FileStoreBucket {
         .append("interviewer", form.getInterviewer()));
   }
 
-  public List<FileDownload> downloadMultiple(List<ObjectId> objectIds) throws DataNotFoundException {
+  public List<FileDownload> fetchFiles(List<ObjectId> objectIds) throws DataNotFoundException {
     List<FileDownload> fileList = new ArrayList<>();
+
+    HashMap<String, GridFSFile> metadataMap = fetchMetadataMap(objectIds);
+    ArrayList<String> notFound = new ArrayList<>();
+
+
+    objectIds.forEach(objectId -> {
+      GridFSFile gridFSFile = metadataMap.get(objectId.toString());
+      InputStream download = fileStore.openDownloadStream(objectId);
+
+      if(download == null) {
+        notFound.add(objectId.toString());
+      }
+
+      fileList.add(new FileDownload(objectId.toString(), gridFSFile.getFilename(), download));
+    });
+
+    if(notFound.size() > 0) {
+      throw new DataNotFoundException(new Throwable("File not found"), notFound);
+    }
+
+    return fileList;
+  }
+
+  private HashMap<String, GridFSFile> fetchMetadataMap(List<ObjectId> objectIds) throws DataNotFoundException {
     HashMap<String, GridFSFile> metadataMap = new HashMap<>();
 
     Document query = new Document("_id", new Document(
@@ -120,22 +144,8 @@ public class FileStoreBucket {
       throw new DataNotFoundException(new Throwable("File not found"), notFound);
     }
 
-    objectIds.forEach(objectId -> {
-      GridFSFile gridFSFile = metadataMap.get(objectId.toString());
-      InputStream download = fileStore.openDownloadStream(objectId);
-
-      if(download == null) {
-        notFound.add(objectId.toString());
-      }
-
-      fileList.add(new FileDownload(objectId.toString(), gridFSFile.getFilename(), download));
-    });
-
-    if(notFound.size() > 0) {
-      throw new DataNotFoundException(new Throwable("File not found"), notFound);
-    }
-
-    return fileList;
+    return metadataMap;
   }
+
 
 }

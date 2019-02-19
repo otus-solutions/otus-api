@@ -17,7 +17,6 @@ import java.util.zip.ZipOutputStream;
 public class ZipBuilder {
 
 
-
   public static Zip create(List<FileDownload> files) {
 
     Zip zip = new Zip();
@@ -41,10 +40,7 @@ public class ZipBuilder {
           zipOut.write(bytes, 0, bytes.length);
           zipOut.closeEntry();
         } catch (IOException e) {
-          //file uploader exception
-          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }catch (Exception e) {
-          throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+          throw new HttpResponseException(ResponseBuild.Commons.UnexpectedError.build("Error while generating files"));
         }
       });
 
@@ -57,15 +53,16 @@ public class ZipBuilder {
       //file uploader exception
       throw new HttpResponseException(ResponseBuild.Commons.UnexpectedError.build("Error while generating files"));
     }
-    
+
   }
 
 
-  public static class Zip extends ByteArrayOutputStream{
+  static class Zip extends ByteArrayOutputStream {
 
-    Zip() {}
+    Zip() {
+    }
 
-    public Response buildResponse() {
+    Response buildResponse() {
       Response.ResponseBuilder builder = Response.ok(this.toByteArray());
       builder.header("Content-Disposition", "attachment; filename=" + "file-extraction");
       Response response = builder.build();

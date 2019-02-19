@@ -35,7 +35,7 @@ public class FileUploaderResource {
 	}
 
 	@POST
-//	@Secured todo; uncomment
+	@Secured
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getById(String oid) {
 		ResponseBuilder builder = Response.ok(facade.getById(oid));
@@ -50,14 +50,6 @@ public class FileUploaderResource {
 	public Response delete(@PathParam("id") String oid) {
 		facade.delete(oid);
 		return Response.ok().build();
-	}
-
-	@POST
-//	@Secured todo: uncomment
-	@Path("/extraction")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response list(ArrayList<String> oids) {
-      return facade.list(oids);
 	}
 
 }
