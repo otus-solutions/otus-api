@@ -17,6 +17,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FileUploaderPOJO;
+import org.ccem.otus.service.download.ZipFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -84,6 +85,8 @@ public class FileUploaderFacadeTest {
   @Test
   public void method_download_files_should_call_proper_service() throws DataNotFoundException, IOException, ValidationException {
     ArrayList<String> objectIds = new ArrayList<>();
+    ZipFactory.Zip zip = ZipFactory.create(Arrays.asList());
+    Mockito.when(fileDownloadService.downloadFiles(Mockito.any())).thenReturn(zip);
 
     fileUploaderFacade.downloadFiles(objectIds);
     Mockito.verify(fileDownloadService).downloadFiles(objectIds);
