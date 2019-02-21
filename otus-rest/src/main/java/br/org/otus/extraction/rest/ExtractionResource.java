@@ -61,7 +61,7 @@ public class ExtractionResource {
 	}
 
 	@POST
-//	@SecuredExtraction
+	@SecuredExtraction
 	@Path("/activity/attachments")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
