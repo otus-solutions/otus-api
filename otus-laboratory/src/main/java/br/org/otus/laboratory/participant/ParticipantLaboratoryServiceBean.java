@@ -103,6 +103,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       aliquotDao.persist(aliquot);
     }));
 
+    aliquotDao.executeFunction("syncResults");
     return getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
   }
 
