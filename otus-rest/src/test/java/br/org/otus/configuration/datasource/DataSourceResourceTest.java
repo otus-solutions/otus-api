@@ -46,11 +46,19 @@ public class DataSourceResourceTest {
 	}
 
 	@Test
-	public void method_post_should_return_reponse_buildSucess() throws Exception {
+	public void method_create_should_return_reponse_buildSucess() throws Exception {
 		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
 		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
-		assertEquals(dataSourceResource.post(form), new Response().buildSuccess().toJson());
-		verify(dataSourceFacade).create(dataSource);
+		assertEquals(dataSourceResource.create(form), new Response().buildSuccess().toJson());
+		verify(dataSourceFacade).create(dataSource, csvToJson.getDuplicatedElements());
+	}
+
+	@Test
+	public void method_update_should_return_reponse_buildSucess() throws Exception {
+		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
+		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
+		assertEquals(dataSourceResource.update(form), new Response().buildSuccess().toJson());
+		verify(dataSourceFacade).update(dataSource, csvToJson.getDuplicatedElements());
 	}
 
 	@Test

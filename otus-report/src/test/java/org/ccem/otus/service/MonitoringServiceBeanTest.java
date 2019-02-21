@@ -7,10 +7,12 @@ import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
+import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.FlagReportDao;
 import org.ccem.otus.persistence.SurveyDao;
+import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,12 +24,13 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 public class MonitoringServiceBeanTest {
 
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
+  private static final String CENTER = "RS";
   private static ArrayList<String> SURVEY_ACRONYM_LIST = new ArrayList<>();
   private ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
   private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";;
@@ -84,6 +87,9 @@ public class MonitoringServiceBeanTest {
   @Mock
   private FlagReportDao flagReportDao;
 
+  @Mock
+  private LaboratoryProgressDao laboratoryProgressDao;
+
   @Before
   public void setUp() throws DataNotFoundException {
 
@@ -126,6 +132,48 @@ public class MonitoringServiceBeanTest {
     ActivityProgressReportDto activityProgressReportDto = monitoringServiceBean.getActivitiesProgress("BA");
     GsonBuilder builder = new GsonBuilder();
     assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(activityProgressReportDto));
+  }
+
+  @Test
+  public void method_getDataOrphanByExams_should_call_laboratoryProgressDao_getDataOrphanByExams() throws DataNotFoundException {
+    monitoringServiceBean.getDataOrphanByExams();
+    verify(laboratoryProgressDao,times(1)).getDataOrphanByExams();
+  }
+
+  @Test
+  public void method_getDataQuantitativeByTypeOfAliquots_should_call_laboratoryProgressDao_getDataQuantitativeByTypeOfAliquots() throws DataNotFoundException {
+    monitoringServiceBean.getDataQuantitativeByTypeOfAliquots(CENTER);
+    verify(laboratoryProgressDao,times(1)).getDataQuantitativeByTypeOfAliquots(CENTER);
+  }
+
+  @Test
+  public void method_getDataOfPendingResultsByAliquot_should_call_laboratoryProgressDao_getDataOfPendingResultsByAliquot() throws DataNotFoundException {
+    monitoringServiceBean.getDataOfPendingResultsByAliquot(CENTER);
+    verify(laboratoryProgressDao,times(1)).getDataOfPendingResultsByAliquot(CENTER);
+  }
+
+  @Test
+  public void method_getDataOfStorageByAliquot_should_call_laboratoryProgressDao_getDataOfStorageByAliquot() throws DataNotFoundException {
+    monitoringServiceBean.getDataOfStorageByAliquot(CENTER);
+    verify(laboratoryProgressDao,times(1)).getDataOfStorageByAliquot(CENTER);
+  }
+
+  @Test
+  public void method_getDataByExam_should_call_laboratoryProgressDao_getDataByExam() throws DataNotFoundException {
+    monitoringServiceBean.getDataByExam(CENTER);
+    verify(laboratoryProgressDao,times(1)).getDataByExam(CENTER);
+  }
+
+  @Test
+  public void method_getDataToCSVOfPendingResultsByAliquots_should_call_laboratoryProgressDao_getDataToCSVOfPendingResultsByAliquots() throws DataNotFoundException {
+    monitoringServiceBean.getDataToCSVOfPendingResultsByAliquots(CENTER);
+    verify(laboratoryProgressDao,times(1)).getDataToCSVOfPendingResultsByAliquots(CENTER);
+  }
+
+  @Test
+  public void method_getDataToCSVOfOrphansByExam_should_call_laboratoryProgressDao_getDataToCSVOfOrphansByExam() throws DataNotFoundException {
+    monitoringServiceBean.getDataToCSVOfOrphansByExam();
+    verify(laboratoryProgressDao,times(1)).getDataToCSVOfOrphansByExam();
   }
 
 }

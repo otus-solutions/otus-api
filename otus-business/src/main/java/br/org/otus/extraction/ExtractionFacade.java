@@ -4,7 +4,6 @@ import br.org.otus.api.ExtractionService;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
-import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.activity.api.ActivityFacade;
@@ -15,32 +14,39 @@ import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ExtractionFacade {
 
-  @Inject
-  private ActivityFacade activityFacade;
+	@Inject
+	private ActivityFacade activityFacade;
 
-  @Inject
-  private SurveyFacade surveyFacade;
+	@Inject
+	private SurveyFacade surveyFacade;
 
-  @Inject
-  private ExtractionService extractionService;
+	@Inject
+  	private ExamUploadFacade examUploadFacade;
 
-  @Inject
-  private ExamUploadFacade examUploadFacade;
+	@Inject
+	private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
 
-  @Inject
-  private FileUploaderFacade fileUploaderFacade;
+	@Inject
+	private ParticipantLaboratoryFacade participantLaboratoryFacade;
+
+	@Inject
+	private FileUploaderFacade fileUploaderFacade;
+
+	@Inject
+	private ExtractionService extractionService;
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
     List<SurveyActivity> activities = activityFacade.get(acronym, version);
 
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
+    extractor.addPreProcessor(autocompleteQuestionPreProcessor);
+
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
@@ -48,9 +54,10 @@ public class ExtractionFacade {
     }
   }
 
-  public List<Integer> listSurveyVersions(String acronym) {
-    return surveyFacade.listVersions(acronym);
-  }
+	public List<Integer> listSurveyVersions(String acronym){
+        return surveyFacade.listVersions(acronym);
+    }
+
 
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
@@ -63,9 +70,19 @@ public class ExtractionFacade {
     }
   }
 
+  public byte[] createLaboratoryExtraction() throws DataNotFoundException {
+    LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
+    LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
+    try {
+      return extractionService.createExtraction(extractor);
+    } catch (DataNotFoundException e) {
+      throw new DataNotFoundException(new Throwable("results to extraction not found."));
+    }
+  }
+
   public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
     try {
-      return extractionService.getAttachmentsReport(acronym, version);
+      return extractionService.getAttachmentsReport(acronym,version);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Extraction.NotFound.build(e.getMessage()));
     }
