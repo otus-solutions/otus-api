@@ -5,7 +5,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.service.download.FileDownload;
-import org.ccem.otus.service.download.ZipBuilder;
+import org.ccem.otus.service.download.ZipFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,13 +20,13 @@ public class FileDownloadService {
   @Inject
   private FileStoreBucket fileStoreBucket;
 
-  public ZipBuilder.Zip downloadFiles(ArrayList<String> oids) throws DataNotFoundException, IOException, ValidationException {
+  public ZipFactory.Zip downloadFiles(ArrayList<String> oids) throws DataNotFoundException, IOException, ValidationException {
 
     List<ObjectId> objectIds = objectIdConverter(oids);
 
 
     List<FileDownload> files = fileStoreBucket.fetchFiles(objectIds);
-    return ZipBuilder.create(files);
+    return ZipFactory.create(files);
 
   }
 

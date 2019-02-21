@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipBuilder {
+public class ZipFactory {
 
 
   public static Zip create(List<FileDownload> files) throws IOException {
