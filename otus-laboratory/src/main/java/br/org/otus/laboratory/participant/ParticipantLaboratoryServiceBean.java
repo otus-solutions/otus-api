@@ -103,7 +103,12 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       aliquotDao.persist(aliquot);
     }));
 
-    aliquotDao.executeFunction("syncResults");
+    try{
+      aliquotDao.executeFunction("syncResults()");
+    } catch (Exception e) {
+      new Exception("Erro ao realizar sinc", e).printStackTrace();
+    }
+
     return getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
   }
 

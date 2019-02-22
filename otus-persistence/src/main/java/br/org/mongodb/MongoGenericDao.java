@@ -60,7 +60,7 @@ public abstract class MongoGenericDao<T> {
   }
 
   public void executeFunction(String function){
-    db.runCommand(new Document("$eval", function))
+    db.runCommand(new Document("$eval", function));
   }
 
 }
