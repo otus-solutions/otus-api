@@ -21,13 +21,10 @@ public class FileDownloadService {
   private FileStoreBucket fileStoreBucket;
 
   public ZipFactory.Zip downloadFiles(ArrayList<String> oids) throws DataNotFoundException, IOException, ValidationException {
-
     List<ObjectId> objectIds = objectIdConverter(oids);
-
-
     List<FileDownload> files = fileStoreBucket.fetchFiles(objectIds);
+    
     return ZipFactory.create(files);
-
   }
 
   private List<ObjectId> objectIdConverter(List<String> oids) throws ValidationException {

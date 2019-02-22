@@ -27,11 +27,12 @@ public class FileDownload {
     return fileStream;
   }
 
-
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
     FileDownload that = (FileDownload) o;
     return oid.equals(that.oid);
   }

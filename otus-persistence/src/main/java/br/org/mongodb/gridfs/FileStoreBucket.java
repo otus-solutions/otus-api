@@ -93,23 +93,21 @@ public class FileStoreBucket {
 
   public List<FileDownload> fetchFiles(List<ObjectId> objectIds) throws DataNotFoundException {
     List<FileDownload> fileList = new ArrayList<>();
-
     HashMap<String, GridFSFile> metadataMap = fetchMetadataMap(objectIds);
     ArrayList<String> notFound = new ArrayList<>();
-
 
     objectIds.forEach(objectId -> {
       GridFSFile gridFSFile = metadataMap.get(objectId.toString());
       InputStream download = fileStore.openDownloadStream(objectId);
 
-      if(download == null) {
+      if (download == null) {
         notFound.add(objectId.toString());
       }
 
       fileList.add(new FileDownload(objectId.toString(), gridFSFile.getFilename(), download));
     });
 
-    if(notFound.size() > 0) {
+    if (notFound.size() > 0) {
       throw new DataNotFoundException(new Throwable("File not found"), notFound);
     }
 
@@ -119,10 +117,7 @@ public class FileStoreBucket {
   private HashMap<String, GridFSFile> fetchMetadataMap(List<ObjectId> objectIds) throws DataNotFoundException {
     HashMap<String, GridFSFile> metadataMap = new HashMap<>();
 
-    Document query = new Document("_id", new Document(
-        "$in", objectIds
-    )
-    );
+    Document query = new Document("_id", new Document("$in", objectIds));
 
     try (MongoCursor<GridFSFile> iterator = fileStore.find(query).iterator()) {
       while (iterator.hasNext()) {
@@ -133,20 +128,18 @@ public class FileStoreBucket {
 
     ArrayList<String> notFound = new ArrayList<>();
 
-    if(metadataMap.size() < objectIds.size()) {
+    if (metadataMap.size() < objectIds.size()) {
       objectIds.stream().forEach(objectId -> {
         String oidString = objectId.toString();
 
-        if(metadataMap.get(oidString) == null) {
+        if (metadataMap.get(oidString) == null) {
           notFound.add(oidString);
         }
       });
-
       throw new DataNotFoundException(new Throwable("File not found"), notFound);
     }
 
     return metadataMap;
   }
-
 
 }
