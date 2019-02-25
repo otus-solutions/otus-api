@@ -2,9 +2,11 @@ package br.org.otus.laboratory.participant;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.swing.text.Document;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -103,11 +105,15 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       aliquotDao.persist(aliquot);
     }));
 
-    try{
-      aliquotDao.executeFunction("syncResults()");
-    } catch (Exception e) {
-      new Exception("Erro ao realizar sinc", e).printStackTrace();
-    }
+    CompletableFuture.supplyAsync(() -> {
+      try{
+        aliquotDao.executeFunction("syncResults()");
+      } catch (Exception e) {
+        new Exception("Error while syncing results", e).printStackTrace();
+      }
+      return null;
+    });
+
 
     return getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
   }

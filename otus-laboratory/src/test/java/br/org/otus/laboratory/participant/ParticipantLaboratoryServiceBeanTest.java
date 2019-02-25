@@ -151,6 +151,15 @@ public class ParticipantLaboratoryServiceBeanTest {
   }
 
   @Test
+  public void updateAliquots_method_should_call_aliquotDao_executeFunction() throws Exception {
+    doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
+    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
+    when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
+    participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
+    verify(aliquotDao,times(1)).executeFunction("syncResults()");
+  }
+
+  @Test
   public void UpdateAliquots_method_when_executed_with_success_should_call_method_aliquotDao_persist() throws Exception {
     doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
     whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
