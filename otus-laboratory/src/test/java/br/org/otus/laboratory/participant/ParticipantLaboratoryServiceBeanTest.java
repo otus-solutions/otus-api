@@ -156,6 +156,7 @@ public class ParticipantLaboratoryServiceBeanTest {
     whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
+    Thread.sleep(100);
     verify(aliquotDao,times(1)).executeFunction("syncResults()");
   }
 
@@ -170,7 +171,6 @@ public class ParticipantLaboratoryServiceBeanTest {
 
   @Test(expected = Exception.class)
   public void UpdateAliquots_method_should_throw_an_exception_when_aliquots_is_invalid() throws ValidationException, DataNotFoundException {
-
     doThrow(new Exception()).when(aliquotUpdateValidator).validate();
     participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
   }
