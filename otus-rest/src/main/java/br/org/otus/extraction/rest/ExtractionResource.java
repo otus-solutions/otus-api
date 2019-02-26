@@ -69,17 +69,6 @@ public class ExtractionResource {
   }
 
   @POST
-  @SecuredExtraction
-  @Path("/activity/attachments")
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
-    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
-    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
-    javax.ws.rs.core.Response response = builder.build();
-    return response;
-  }
-
-  @POST
   @Secured
   @Path("/enable")
   @Produces(MediaType.APPLICATION_JSON)
@@ -88,6 +77,18 @@ public class ExtractionResource {
     Response response = new Response();
     userFacade.enableExtraction(managementUserDto);
     return response.buildSuccess().toJson();
+  }
+
+  @POST
+  @SecuredExtraction
+  @Path("/activity/attachments")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
+    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
+    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
+    javax.ws.rs.core.Response response = builder.build();
+    return response;
   }
 
   @POST
