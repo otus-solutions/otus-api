@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -9,6 +10,7 @@ import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.*;
 import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
+import org.jetbrains.annotations.NotNull;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -75,16 +77,28 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public ActivityProgressReportDto getActivitiesProgress() {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
+    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(surveyAcronyms);
 
-    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport();
-
-    return new ActivityProgressReportDto(report, surveyAcronyms);
+    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
   }
 
   @Override
   public ActivityProgressReportDto getActivitiesProgress(String center) {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    ActivityProgressReportDto activityProgressReportDto = ActivityProgressReportDto.deserialize(flagReportDao.getActivitiesProgressReport(center,surveyAcronyms));
+    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
+
+    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
+  }
+
+  @NotNull
+  private ActivityProgressReportDto getActivityProgressReportDto(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
+    ActivityProgressReportDto activityProgressReportDto;
+    if(activitiesProgressReportDocument != null){
+      activityProgressReportDto = ActivityProgressReportDto.deserialize(activitiesProgressReportDocument.toJson());
+    } else {
+      activityProgressReportDto = new ActivityProgressReportDto();
+    }
+
     activityProgressReportDto.setColumns(surveyAcronyms);
     return activityProgressReportDto;
   }

@@ -13,7 +13,7 @@ public class ActivityProgressReportDto {
   private LinkedList<Long> index;
   private LinkedList<LinkedList<Integer>> data;
 
-  public ActivityProgressReportDto(ArrayList<ActivitiesProgressReport> progressReport,LinkedList<String> surveys) {
+  public ActivityProgressReportDto() {
     this.columns = new LinkedList<>();
     this.index = new LinkedList<>();
     this.data = new LinkedList<>();

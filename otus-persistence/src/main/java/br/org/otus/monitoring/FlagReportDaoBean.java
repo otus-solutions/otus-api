@@ -20,65 +20,25 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
     super(COLLECTION_NAME, Document.class);
   }
 
-
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgressReport() {
+  public Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms) {
     List<Bson> query = new ActivityStatusQueryBuilder()
-        .projectLastStatus()
-        .getStatusValue()
-        .sortByDate()
-        .removeStatusDate()
-        .groupByParticipant()
-        .projectId()
-        .build();
-
-    MongoCursor<Document> iterator = collection.aggregate(query).iterator();
-
-    return deserializeReport(iterator);
-  }
-
-  @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgressReport(String center) {
-    List<Bson> query = new ActivityStatusQueryBuilder()
-        .matchFieldCenter(center)
-        .projectLastStatus()
-        .getStatusValue()
-        .sortByDate()
-        .removeStatusDate()
-        .groupByParticipant()
-        .projectId()
-        .build();
-
-    MongoCursor<Document> iterator = collection.aggregate(query).iterator();
-
-    return deserializeReport(iterator);
-  }
-
-  @Override
-  public String getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms) {
-    List<Bson> query = new ActivityStatusQueryBuilder()
-            .getTheMegaPowerUltraQuery(center,surveyAcronyms);
+        .getActivityStatusQuery(surveyAcronyms);
 
     Document result = collection.aggregate(query).first();
 
-    return result.toJson();
+    return result;
   }
 
-  private ArrayList<ActivitiesProgressReport> deserializeReport(MongoCursor<Document> iterator) {
+  @Override
+  public Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms) {
+    List<Bson> query = new ActivityStatusQueryBuilder()
+            .getActivityStatusQuery(center,surveyAcronyms);
 
-    ArrayList<ActivitiesProgressReport> reports = new ArrayList<>();
+    Document result = collection.aggregate(query).first();
 
-    try {
-      while (iterator.hasNext()) {
-        reports.add(
-            ActivitiesProgressReport.deserialize(iterator.next().toJson())
-        );
-      }
-    } finally {
-      iterator.close();
-    }
-
-    return reports;
+    return result;
   }
+
 
 }

@@ -17,10 +17,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.LinkedList;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ActivityStatusQueryBuilder.class, FlagReportDaoBean.class})
 public class FlagReportDaoBeanTest {
   private static final String CENTER = "MG";
+  private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
 
   @InjectMocks
   private FlagReportDaoBean flagReportDaoBean;
@@ -43,7 +46,11 @@ public class FlagReportDaoBeanTest {
     Mockito.when(this.collection.aggregate(Matchers.anyList())).thenReturn(result);
     Mockito.when(result.iterator()).thenReturn(iterator);
 
-
+    SURVEY_ACRONYM_LIST = new LinkedList<>();
+    SURVEY_ACRONYM_LIST.add("HVSD");
+    SURVEY_ACRONYM_LIST.add("PSEC");
+    SURVEY_ACRONYM_LIST.add("ABC");
+    SURVEY_ACRONYM_LIST.add("DEF");
     builder = PowerMockito.spy(new ActivityStatusQueryBuilder());
     PowerMockito
       .whenNew(ActivityStatusQueryBuilder.class)
@@ -53,32 +60,14 @@ public class FlagReportDaoBeanTest {
 
   @Test
   public void getActivitiesProgressReport_should_build_the_query_accordingly_with_center() {
-    flagReportDaoBean.getActivitiesProgressReport(CENTER);
-
-
-    Mockito.verify(builder, Mockito.times(1)).matchFieldCenter(CENTER);
-    Mockito.verify(builder, Mockito.times(1)).projectLastStatus();
-    Mockito.verify(builder, Mockito.times(1)).getStatusValue();
-    Mockito.verify(builder, Mockito.times(1)).sortByDate();
-    Mockito.verify(builder, Mockito.times(1)).removeStatusDate();
-    Mockito.verify(builder, Mockito.times(1)).groupByParticipant();
-    Mockito.verify(builder, Mockito.times(1)).projectId();
-    Mockito.verify(builder, Mockito.times(1)).build();
-
-
+    flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
+    Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(SURVEY_ACRONYM_LIST);
   }
 
   @Test
   public void getActivitiesProgressReport_should_build_the_query_accordingly() {
-    flagReportDaoBean.getActivitiesProgressReport();
+    flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
 
-    Mockito.verify(builder, Mockito.times(0)).matchFieldCenter(CENTER);
-    Mockito.verify(builder, Mockito.times(1)).projectLastStatus();
-    Mockito.verify(builder, Mockito.times(1)).getStatusValue();
-    Mockito.verify(builder, Mockito.times(1)).sortByDate();
-    Mockito.verify(builder, Mockito.times(1)).removeStatusDate();
-    Mockito.verify(builder, Mockito.times(1)).groupByParticipant();
-    Mockito.verify(builder, Mockito.times(1)).projectId();
-    Mockito.verify(builder, Mockito.times(1)).build();
+    Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(CENTER,SURVEY_ACRONYM_LIST);
   }
 }

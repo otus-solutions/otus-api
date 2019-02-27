@@ -1,5 +1,6 @@
 package org.ccem.otus.persistence;
 
+import org.bson.Document;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 
 import java.util.ArrayList;
@@ -7,9 +8,7 @@ import java.util.LinkedList;
 
 public interface FlagReportDao {
 
-  ArrayList<ActivitiesProgressReport> getActivitiesProgressReport();
+  Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms);
 
-  ArrayList<ActivitiesProgressReport> getActivitiesProgressReport(String center);
-
-  String getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms);
+  Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms);
 }

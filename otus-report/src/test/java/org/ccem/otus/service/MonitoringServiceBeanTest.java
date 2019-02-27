@@ -1,6 +1,7 @@
 package org.ccem.otus.service;
 
 import com.google.gson.GsonBuilder;
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -21,6 +22,8 @@ import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -31,9 +34,9 @@ public class MonitoringServiceBeanTest {
 
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
   private static final String CENTER = "RS";
-  private static ArrayList<String> SURVEY_ACRONYM_LIST = new ArrayList<>();
+  private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
   private ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
-  private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";;
+  private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";
   private static final String reportJson1 = "{\n" +
     "    \"activities\": [\n" +
     "    {\n" +
@@ -103,17 +106,12 @@ public class MonitoringServiceBeanTest {
     when(fieldCenterDao.fetchByAcronym(fieldCenter.getAcronym())).thenReturn(fieldCenter);
     when(participantDao.countParticipantActivities(fieldCenter.getAcronym())).thenReturn(GOAL);
 
-    SURVEY_ACRONYM_LIST = new ArrayList<>();
+    SURVEY_ACRONYM_LIST = new LinkedList<>();
     SURVEY_ACRONYM_LIST.add("HVSD");
     SURVEY_ACRONYM_LIST.add("PSEC");
     SURVEY_ACRONYM_LIST.add("ABC");
     SURVEY_ACRONYM_LIST.add("DEF");
     when(surveyDao.listAcronyms()).thenReturn(SURVEY_ACRONYM_LIST);
-
-    PROGRESS_REPORT_LIST.add(ActivitiesProgressReport.deserialize(reportJson1));
-    PROGRESS_REPORT_LIST.add(ActivitiesProgressReport.deserialize(reportJson2));
-    when(flagReportDao.getActivitiesProgressReport("BA")).thenReturn(PROGRESS_REPORT_LIST);
-    when(flagReportDao.getActivitiesProgressReport()).thenReturn(PROGRESS_REPORT_LIST);
 
   }
 
@@ -129,7 +127,8 @@ public class MonitoringServiceBeanTest {
 
   @Test
   public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() {
-    ActivityProgressReportDto activityProgressReportDto = monitoringServiceBean.getActivitiesProgress("BA");
+    when(flagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
+    ActivityProgressReportDto activityProgressReportDto = monitoringServiceBean.getActivitiesProgress(CENTER);
     GsonBuilder builder = new GsonBuilder();
     assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(activityProgressReportDto));
   }

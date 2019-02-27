@@ -19,126 +19,32 @@ public class ActivityStatusQueryBuilder {
     this.pipeline = new ArrayList<>();
   }
 
-  public List<Bson> build() {
-    return this.pipeline;
+  public ArrayList<Bson> getActivityStatusQuery(String center,LinkedList<String> surveyAcronyms) {
+    addMatchFieldCenterStage(center);
+    addBuildDataStages(surveyAcronyms);
+    return pipeline;
   }
 
-  public ActivityStatusQueryBuilder matchFieldCenter(String center) {
-    pipeline.add(Aggregates.match(new Document("participantData.fieldCenter.acronym", center)));
-    return this;
+  public ArrayList<Bson> getActivityStatusQuery(LinkedList<String> surveyAcronyms) {
+    addBuildDataStages(surveyAcronyms);
+    return pipeline;
   }
 
-  public ActivityStatusQueryBuilder limit(Integer quantity) {
-    pipeline.add(Aggregates.limit(quantity));
-    return this;
-  }
-
-  public ActivityStatusQueryBuilder projectLastStatus() {
-    Document projection = new Document();
-
-    projection.put("_id", 0);
-    projection.put("rn", "$participantData.recruitmentNumber");
-    projection.put("acronym", "$surveyForm.surveyTemplate.identity.acronym");
-    projection.put("lastStatus",
-      new Document("$arrayElemAt",
-        Arrays.asList(
-          new Document(
-            "$slice",
-            Arrays.asList("$statusHistory", -1)
-          ),
-          0)
-      )
-    );
-    pipeline.add(Aggregates.project(projection));
-    return this;
-  }
-
-  public ActivityStatusQueryBuilder getStatusValue() {
-    Document projection = parseQuery("{\n" +
-        "        $project: {\n" +
-        "            status:\n" +
-        "                {\n" +
-        "                    $switch: {\n" +
-        "                        branches: [\n" +
-        "                            {case: {$eq: [\"$lastStatus.name\", \"CREATED\"]}, then: -1},\n" +
-//      "                            {case: {$eq: [\"$lastStatus.name\", \"NOT MANDATORY\"]}, then: 0},\n" + // Not required - not implemented yet
-        "                            {case: {$eq: [\"$lastStatus.name\", \"SAVED\"]}, then: 1},\n" +
-        "                            {case: {$eq: [\"$lastStatus.name\", \"FINALIZED\"]}, then: 2}\n" +
-        "                        ],\n" +
-        "                        default: -1\n" +
-        "                    }\n" +
-        "                },\n" +
-        "            statusDate:\"$lastStatus.name\",\n" +
-        "            rn:1,\n" +
-        "            center:1,\n" +
-        "            acronym:1\n" +
-        "        }\n" +
-        "    }");
-
-    pipeline.add(projection);
-    return this;
-  }
-
-  public ActivityStatusQueryBuilder projectId() {
-    pipeline.add(parseQuery("     {\n" +
-        "         $project:{\n" +
-        "             \"rn\": \"$_id.rn\",\n" +
-        "             \"activities\": 1,\n" +
-        "             \"_id\": 0\n" +
-        "         }\n" +
-        "     }"));
-
-    return this;
-  }
-
-  public ActivityStatusQueryBuilder sortByDate() {
-    // descending order. When passed to hashmap, the oldest for each acronym will be kept
-    pipeline.add(parseQuery("  {\n" +
-        "    $sort: {\n" +
-        "      \"statusDate\": -1\n" +
-        "    }\n" +
-        "  }"));
-
-    return this;
-  }
-
-  public ActivityStatusQueryBuilder removeStatusDate() {
-    pipeline.add(parseQuery("{\n" +
-        "    $project: {\n" +
-        "      \"statusDate\": 0\n" +
-        "    }\n" +
-        "  }"));
-
-    return this;
-  }
-
-  public ActivityStatusQueryBuilder groupByParticipant() {
-    pipeline.add(parseQuery("{\n" +
-        "        $group: {\n" +
-        "            _id: {\n" +
-        "                rn: \"$rn\"\n" +
-        "\n" +
-        "            },\n" +
-        "            activities: {\n" +
-        "                $addToSet: \"$$ROOT\"\n" +
-        "            }\n" +
-        "        }\n" +
-        "    }"));
-    return this;
-  }
-
-  public List<Bson> getTheMegaPowerUltraQuery(String center, LinkedList<String> surveyAcronyms) {
+  private void addMatchFieldCenterStage(String center) {
     pipeline.add(parseQuery("{\n" +
             "    $match: {\n" +
-            "      \"participantData.fieldCenter.acronym\": \"RJ\"\n" +
+            "      \"participantData.fieldCenter.acronym\": "+ center +"\n" +
             "    }\n" +
             "  }"));
+  }
+
+  private void addBuildDataStages(LinkedList<String> surveyAcronyms) {
     pipeline.add(parseQuery("{\n" +
             "    $project: {\n" +
             "      _id: 0,\n" +
             "      rn: \"$participantData.recruitmentNumber\",\n" +
             "      acronym: \"$surveyForm.surveyTemplate.identity.acronym\",\n" +
-            "      lastStatusDate: {\n" +
+            "      lastStatus_Date: {\n" +
             "        $arrayElemAt: [\n" +
             "          {\n" +
             "            $slice: [\n" +
@@ -149,7 +55,7 @@ public class ActivityStatusQueryBuilder {
             "          0\n" +
             "        ]\n" +
             "      },\n" +
-            "      lastStatusName: {\n" +
+            "      lastStatus_Name: {\n" +
             "        $arrayElemAt: [\n" +
             "          {\n" +
             "            $slice: [\n" +
@@ -164,21 +70,19 @@ public class ActivityStatusQueryBuilder {
             "  }"));
     pipeline.add(parseQuery("{\n" +
             "    $sort: {\n" +
-            "      lastStatusDate: -1\n" +
+            "      lastStatus_Date: 1\n" +
             "    }\n" +
             "  }"));
     pipeline.add(parseQuery("{\n" +
             "    $group: {\n" +
-            "      _id: {\n" +
-            "        \"rn\": \"$rn\"\n" +
-            "      },\n" +
+            "      _id:\"$rn\",\n" +
             "      activities: {\n" +
-            "        $addToSet: {\n" +
+            "        $push: {\n" +
             "          status: {\n" +
             "            $cond: [\n" +
             "              {\n" +
             "                $eq: [\n" +
-            "                  \"$lastStatusName\",\n" +
+            "                  \"$lastStatus_Name\",\n" +
             "                  \"CREATED\"\n" +
             "                ]\n" +
             "              },\n" +
@@ -187,7 +91,7 @@ public class ActivityStatusQueryBuilder {
             "                $cond: [\n" +
             "                  {\n" +
             "                    $eq: [\n" +
-            "                      \"$lastStatusName\",\n" +
+            "                      \"$lastStatus_Name\",\n" +
             "                      \"SAVED\"\n" +
             "                    ]\n" +
             "                  },\n" +
@@ -196,7 +100,7 @@ public class ActivityStatusQueryBuilder {
             "                    $cond: [\n" +
             "                      {\n" +
             "                        $eq: [\n" +
-            "                          \"$lastStatusName\",\n" +
+            "                          \"$lastStatus_Name\",\n" +
             "                          \"FINALIZED\"\n" +
             "                        ]\n" +
             "                      },\n" +
@@ -209,14 +113,15 @@ public class ActivityStatusQueryBuilder {
             "            ]\n" +
             "          },\n" +
             "          rn: \"$rn\",\n" +
-            "          acronym: \"$acronym\"\n" +
+            "          acronym: \"$acronym\",\n" +
+            "          lastStatus_Date:\"$lastStatus_Date\"\n" +
             "        }\n" +
             "      }\n" +
             "    }\n" +
             "  }"));
     pipeline.add(parseQuery("{\n" +
             "    $addFields: {\n" +
-            "      \"headers\": headers\n" +
+            "      \"headers\": "+ surveyAcronyms +"\n" +
             "    }\n" +
             "  }"));
     pipeline.add(parseQuery("{\n" +
@@ -240,8 +145,8 @@ public class ActivityStatusQueryBuilder {
             "  }"));
     pipeline.add(parseQuery("{\n" +
             "    $group: {\n" +
-            "      _id: \"$_id.rn\",\n" +
-            "      \"fullActivitiesList\": {\n" +
+            "      _id: \"$_id\",\n" +
+            "      filteredActivities: {\n" +
             "        $push: {\n" +
             "          $cond: [\n" +
             "            {\n" +
@@ -255,12 +160,12 @@ public class ActivityStatusQueryBuilder {
             "            {\n" +
             "              $arrayElemAt: [\n" +
             "                \"$activityFound\",\n" +
-            "                0\n" +
+            "                -1\n" +
             "              ]\n" +
             "            },\n" +
             "            {\n" +
             "              status: null,\n" +
-            "              rn: \"$_id.rn\",\n" +
+            "              rn: \"$_id\",\n" +
             "              acronym: \"$headers\"\n" +
             "            }\n" +
             "          ]\n" +
@@ -276,11 +181,10 @@ public class ActivityStatusQueryBuilder {
             "        $push: \"$_id\"\n" +
             "      },\n" +
             "      data: {\n" +
-            "        $push: \"fullActivitiesList.status\"\n" +
+            "        $push: \"$filteredActivities.status\"\n" +
             "      }\n" +
             "    }\n" +
             "  }"));
-    return pipeline;
   }
 
 //  ===================
