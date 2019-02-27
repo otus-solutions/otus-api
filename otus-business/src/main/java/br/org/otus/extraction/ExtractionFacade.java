@@ -1,20 +1,10 @@
 package br.org.otus.extraction;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.service.extraction.SurveyActivityExtraction;
-import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
-import org.ccem.otus.survey.form.SurveyForm;
-
 import br.org.otus.api.ExtractionService;
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
+import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.laboratory.extraction.LaboratoryExtraction;
 import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.api.ParticipantLaboratoryFacade;
@@ -22,21 +12,39 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.service.extraction.SurveyActivityExtraction;
+import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
+import org.ccem.otus.survey.form.SurveyForm;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ExtractionFacade {
 
-  @Inject
-  private ActivityFacade activityFacade;
-  @Inject
-  private SurveyFacade surveyFacade;
-  @Inject
-  private ExamUploadFacade examUploadFacade;
-  @Inject
-  private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
-  @Inject
-  private ParticipantLaboratoryFacade participantLaboratoryFacade;
-  @Inject
-  private ExtractionService extractionService;
+	@Inject
+	private ActivityFacade activityFacade;
+
+	@Inject
+	private SurveyFacade surveyFacade;
+
+	@Inject
+  	private ExamUploadFacade examUploadFacade;
+
+	@Inject
+	private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
+
+	@Inject
+	private ParticipantLaboratoryFacade participantLaboratoryFacade;
+
+	@Inject
+	private FileUploaderFacade fileUploaderFacade;
+
+	@Inject
+	private ExtractionService extractionService;
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
     List<SurveyActivity> activities = activityFacade.get(acronym, version);
@@ -52,9 +60,11 @@ public class ExtractionFacade {
     }
   }
 
-  public List<Integer> listSurveyVersions(String acronym) {
-    return surveyFacade.listVersions(acronym);
-  }
+	public List<Integer> listSurveyVersions(String acronym){
+        return surveyFacade.listVersions(acronym);
+    }
+
+
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
@@ -78,9 +88,13 @@ public class ExtractionFacade {
 
   public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
     try {
-      return extractionService.getAttachmentsReport(acronym, version);
+      return extractionService.getAttachmentsReport(acronym,version);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Extraction.NotFound.build(e.getMessage()));
     }
+  }
+
+  public byte[] downloadFiles(ArrayList<String> oids) {
+    return fileUploaderFacade.downloadFiles(oids);
   }
 }

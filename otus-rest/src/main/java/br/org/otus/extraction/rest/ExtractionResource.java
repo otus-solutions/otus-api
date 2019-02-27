@@ -1,19 +1,5 @@
 package br.org.otus.extraction.rest;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.extraction.ExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
@@ -22,6 +8,15 @@ import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 
 @Path("data-extraction")
 public class ExtractionResource {
@@ -82,6 +77,18 @@ public class ExtractionResource {
     Response response = new Response();
     userFacade.enableExtraction(managementUserDto);
     return response.buildSuccess().toJson();
+  }
+
+  @POST
+  @SecuredExtraction
+  @Path("/activity/attachments")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
+    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
+    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
+    javax.ws.rs.core.Response response = builder.build();
+    return response;
   }
 
   @POST
