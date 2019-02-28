@@ -62,6 +62,7 @@ public class FlagReportDaoBeanTest {
   @Test
   public void getActivitiesProgressReport_should_build_the_query_accordingly_with_center() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
     when(result.first()).thenReturn(new Document());
     flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
     Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(SURVEY_ACRONYM_LIST);
@@ -70,6 +71,7 @@ public class FlagReportDaoBeanTest {
   @Test
   public void getActivitiesProgressReport_should_build_the_query_accordingly() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
     when(result.first()).thenReturn(new Document());
     flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
     Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(CENTER,SURVEY_ACRONYM_LIST);
@@ -78,12 +80,14 @@ public class FlagReportDaoBeanTest {
   @Test(expected = DataNotFoundException.class)
   public void getActivitiesProgressReport_should_should_throws_DataNotFoundException() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
     flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
   }
 
   @Test(expected = DataNotFoundException.class)
   public void getActivitiesProgressReport_by_center_should_throws_DataNotFoundException() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
     flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
   }
 }

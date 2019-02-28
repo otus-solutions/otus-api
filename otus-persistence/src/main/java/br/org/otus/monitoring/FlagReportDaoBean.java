@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.persistence.FlagReportDao;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,13 +24,7 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
     List<Bson> query = new ActivityStatusQueryBuilder()
         .getActivityStatusQuery(surveyAcronyms);
 
-    Document result = collection.aggregate(query).first();
-
-    if(result == null){
-      throw new DataNotFoundException("There are no results");
-    }
-
-    return result;
+      return getDocument(query);
   }
 
   @Override
@@ -37,14 +32,19 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
     List<Bson> query = new ActivityStatusQueryBuilder()
             .getActivityStatusQuery(center,surveyAcronyms);
 
-    Document result = collection.aggregate(query).first();
+      return getDocument(query);
+  }
+
+ @NotNull
+ private Document getDocument(List<Bson> query) throws DataNotFoundException {
+    Document result = collection.aggregate(query).allowDiskUse(true).first();
 
     if(result == null){
       throw new DataNotFoundException("There are no results");
     }
 
     return result;
-  }
+ }
 
 
 }
