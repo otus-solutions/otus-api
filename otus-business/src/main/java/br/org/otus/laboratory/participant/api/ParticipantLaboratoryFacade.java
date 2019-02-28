@@ -1,16 +1,20 @@
 package br.org.otus.laboratory.participant.api;
 
+import java.util.LinkedList;
+
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
+import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 
 public class ParticipantLaboratoryFacade {
@@ -68,6 +72,14 @@ public class ParticipantLaboratoryFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     } catch (ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
+    }
+  }
+
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() {
+    try {
+      return service.getLaboratoryExtraction();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
 

@@ -84,5 +84,59 @@ public class MonitoringResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @GET
+  @Secured
+  @Path("laboratory/orphan")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataOrphanByExam() {
+    return new Response().buildSuccess(monitoringFacade.getDataOrphanByExams()).toJson();
+  }
 
+  @GET
+  @Secured
+  @Path("laboratory/quantitative/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataQuantitativeByTypeOfAliquot(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataQuantitativeByTypeOfAliquots(center)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/pending/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataOfPendingResultsByAliquot(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataOfPendingResultsByAliquot(center)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/storage/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataOfStorageByAliquot(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataOfStorageByAliquot(center)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/exam/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataByExam(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataByExam(center)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/pending/csv/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataToCSVOfPendingResultsByAliquots(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getDataToCSVOfPendingResultsByAliquots(center)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("laboratory/orphan/csv")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getDataToCSVOfOrphansByExam() {
+    return new Response().buildSuccess(monitoringFacade.getDataToCSVOfOrphansByExam()).toJson();
+  }
 }

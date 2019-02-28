@@ -1,12 +1,7 @@
 package br.org.otus.configuration.datasource;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.model.DataSource;
@@ -26,9 +21,22 @@ public class DataSourceResource {
 	@POST
 	@Secured
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public String post(@MultipartForm DataSourceFormPOJO form){
-		DataSource dataSource = new DataSource(form.getId(), form.getName(), new CsvToJson(form.getDelimiter(), form.getFile()).execute());
-		dataSourceFacade.create(dataSource);
+	public String create(@MultipartForm DataSourceFormPOJO form){
+		CsvToJson csvToJson = new CsvToJson(form.getDelimiter(), form.getFile());
+		csvToJson.execute(form.getDelimiter());
+		DataSource dataSource = new DataSource(form.getId(), form.getName(), csvToJson.getElements());
+		dataSourceFacade.create(dataSource,csvToJson.getDuplicatedElements());
+		return new Response().buildSuccess().toJson();
+	}
+
+	@PUT
+	@Secured
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String update(@MultipartForm DataSourceFormPOJO form){
+		CsvToJson csvToJson = new CsvToJson(form.getDelimiter(), form.getFile());
+		csvToJson.execute(form.getDelimiter());
+		DataSource dataSource = new DataSource(form.getId(), form.getName(), csvToJson.getElements());
+		dataSourceFacade.update(dataSource, csvToJson.getDuplicatedElements());
 		return new Response().buildSuccess().toJson();
 	}
 	
@@ -38,7 +46,7 @@ public class DataSourceResource {
 	public String getAll() {
 		return new Response().buildSuccess(dataSourceFacade.getAll()).toJson();
 	}
-	
+
 	@GET
 	@Secured
 	@Path("/{id}")

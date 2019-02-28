@@ -30,7 +30,6 @@ public class FileUploaderDaoBean extends MongoGenericDao<FileUploader> implement
 		FileUploader result = this.collection.find(eq("_id", new ObjectId(oid))).first();
 		if (result == null) {
 			throw new DataNotFoundException(new Throwable("File with id " + oid + " not found"));
-
 		}
 		return result;
 	}
