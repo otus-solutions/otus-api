@@ -6,7 +6,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.service.MonitoringService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import javax.xml.crypto.Data;
 
 import static org.junit.Assert.*;
 
@@ -61,13 +58,13 @@ public class MonitoringFacadeTest {
   }
 
   @Test
-  public void getActivitiesProgress_should_call_method_getActivitiesProgress() {
+  public void getActivitiesProgress_should_call_method_getActivitiesProgress() throws DataNotFoundException {
     monitoringFacade.getActivitiesProgress();
     Mockito.verify(monitoringService).getActivitiesProgress();
   }
 
   @Test
-  public void getActivitiesProgress_should_call_method_getActivitiesProgress_with_center() {
+  public void getActivitiesProgress_should_call_method_getActivitiesProgress_with_center() throws DataNotFoundException {
     monitoringFacade.getActivitiesProgress(CENTER);
     Mockito.verify(monitoringService).getActivitiesProgress(CENTER);
   }

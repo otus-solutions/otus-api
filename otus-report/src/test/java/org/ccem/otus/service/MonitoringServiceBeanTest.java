@@ -8,7 +8,6 @@ import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
-import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.FlagReportDao;
@@ -126,7 +125,7 @@ public class MonitoringServiceBeanTest {
   }
 
   @Test
-  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() {
+  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
     when(flagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
     ActivityProgressReportDto activityProgressReportDto = monitoringServiceBean.getActivitiesProgress(CENTER);
     GsonBuilder builder = new GsonBuilder();

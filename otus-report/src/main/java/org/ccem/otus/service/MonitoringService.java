@@ -15,9 +15,9 @@ public interface MonitoringService {
 
     List<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException;
 
-    ActivityProgressReportDto getActivitiesProgress();
+    ActivityProgressReportDto getActivitiesProgress() throws DataNotFoundException;
 
-    ActivityProgressReportDto getActivitiesProgress(String center);
+    ActivityProgressReportDto getActivitiesProgress(String center) throws DataNotFoundException;
 
     ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
