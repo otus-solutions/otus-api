@@ -113,8 +113,7 @@ public class ActivityStatusQueryBuilder {
             "            ]\n" +
             "          },\n" +
             "          rn: \"$rn\",\n" +
-            "          acronym: \"$acronym\",\n" +
-            "          lastStatus_Date:\"$lastStatus_Date\"\n" +
+            "          acronym: \"$acronym\"\n" +
             "        }\n" +
             "      }\n" +
             "    }\n" +
