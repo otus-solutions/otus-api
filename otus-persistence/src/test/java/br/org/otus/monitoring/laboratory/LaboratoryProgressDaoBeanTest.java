@@ -109,7 +109,7 @@ public class LaboratoryProgressDaoBeanTest {
         query2 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesQuery(CENTER);
         ArrayList<String> aliquotCodes = new ArrayList<>();
         aliquotCodes.add("121212121");
-        query3 = new LaboratoryProgressQueryBuilder().getAliquotCodesInExamLotQuery(aliquotCodes);
+        query3 = new LaboratoryProgressQueryBuilder().getAliquotCodesInExamsQuery(aliquotCodes);
         query4 = new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsSecondPartialResultQuery(aliquotCodes);
         whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
         when(aliquotDao.aggregate(query1)).thenReturn(result);

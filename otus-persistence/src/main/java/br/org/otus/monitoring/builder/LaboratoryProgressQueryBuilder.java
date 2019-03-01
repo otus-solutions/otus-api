@@ -93,6 +93,13 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getPendingResultsByAliquotQuery(String center){
+        pipeline.add(new Document("$match",new Document("fieldCenter.acronym", center).append("role", "EXAM")));
+        pipeline.add(parseQuery("{$group:{_id:\"$name\",waiting:{$sum:1}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingResultsByAliquot:{$push:{\"title\": \"$_id\", \"waiting\":\"$waiting\"}}}}"));
+        return this.pipeline;
+    }
+
     public List<Bson> getPendingResultsByAliquotFirstPartialResultQuery(ArrayList<String> allAliquotCodesInExams, String center){
         pipeline.add(new Document("$match", new Document("code", new Document("$nin", allAliquotCodesInExams)).append("fieldCenter.acronym", center).append("role", "EXAM")));
         pipeline.add(parseQuery("{$group:{_id:\"$name\",waiting:{$sum:1}}}"));
@@ -121,8 +128,8 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getAliquotCodesInExamLotQuery(ArrayList<String> aliquotCodes){
-        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes))));
+    public List<Bson> getAliquotCodesInExamsQuery(ArrayList<String> aliquotCodes){
+        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes)).append("aliquotValid", true)));
         pipeline.add(parseQuery("{$group:{_id:\"$examId\",aliquotCodes:{$addToSet:\"$aliquotCode\"}}}"));
         pipeline.add(parseQuery("{$unwind:\"$aliquotCodes\"}"));
         pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$aliquotCodes\"}}}"));
@@ -130,7 +137,7 @@ public class LaboratoryProgressQueryBuilder {
     }
 
     public List<Bson> getDataByExamQuery(ArrayList<String> aliquotCodes){
-        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes))));
+        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes)).append("aliquotValid", true)));
         pipeline.add(parseQuery("{$group:{_id:{examId:\"$examId\",examName:\"$examName\"}}}"));
         pipeline.add(parseQuery("{$group:{_id:\"$_id.examName\",received:{$sum:1}}}"));
         pipeline.add(parseQuery("{$group:{_id:{},examsQuantitative:{$push:{title:\"$_id\",exams:\"$received\"}}}}"));

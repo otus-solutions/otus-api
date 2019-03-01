@@ -44,12 +44,12 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
     if (fetchCenterAliquotCodesDocument != null) {
       Object aliquotCodes = fetchCenterAliquotCodesDocument.get("aliquotCodes");
-      Document fetchAliquotCodesInExamLot = examResultDao
+      Document fetchAliquotCodesInExams = examResultDao
           .aggregate(
-              new LaboratoryProgressQueryBuilder().getAliquotCodesInExamLotQuery((ArrayList<String>) aliquotCodes))
+              new LaboratoryProgressQueryBuilder().getAliquotCodesInExamsQuery((ArrayList<String>) aliquotCodes))
           .first();
-      if (fetchAliquotCodesInExamLot != null) {
-        Object aliquotCodesInExam = fetchAliquotCodesInExamLot.get("aliquotCodes");
+      if (fetchAliquotCodesInExams != null) {
+        Object aliquotCodesInExam = fetchAliquotCodesInExams.get("aliquotCodes");
         SecondPartOfDTO = aliquotDao
             .aggregate(new LaboratoryProgressQueryBuilder()
                 .getQuantitativeByTypeOfAliquotsSecondPartialResultQuery((ArrayList<String>) aliquotCodesInExam))
@@ -126,7 +126,15 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
             }
 
           } else {
-            throw new IllegalStateException();
+            Document pendingAliquots = aliquotDao
+                    .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotQuery(center)).first();
+
+            if (pendingAliquots == null){
+              throw new IllegalStateException();
+            }
+
+            laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(pendingAliquots.toJson());
+            laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
           }
 
           return laboratoryProgressDTO;
