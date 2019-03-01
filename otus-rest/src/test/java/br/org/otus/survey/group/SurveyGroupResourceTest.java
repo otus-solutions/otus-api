@@ -11,16 +11,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -32,7 +30,6 @@ public class SurveyGroupResourceTest {
     private static final String EXPECTED_RESPONSE_ID = "{\"data\":\"5c7400d2d767afded0d84dcf)\"}";
     private static final String EXPECTED_RESPONSE_UPDATE = "{\"data\":\" modifiedCount: 1\"}";
     private static final String EXPECTED_RESPONSE_DELETE = "{\"data\":true}";
-
 
     private static final String ID = "5c7400d2d767afded0d84dcf)";
     private static final String MODIFIELD_COUNT = "1";
@@ -56,11 +53,9 @@ public class SurveyGroupResourceTest {
     private SurveyGroup surveyGroup;
     private List<SurveyGroup> surveyGroups;
     private String surveyGroupJson;
-    private String result;
-    private String token = "123456";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         surveyGroup = new SurveyGroup();
         surveyGroup.setName("CI");
         surveyGroups = asList(surveyGroup);
@@ -68,31 +63,31 @@ public class SurveyGroupResourceTest {
     }
 
     @Test
-    public void getListOfSurveyGroups() {
+    public void getListOfSurveyGroupsMethod_should_return_list_of_SurveyGroups() {
         when(surveyGroupFacade.getListOfSurveyGroups()).thenReturn(surveyGroups);
         assertEquals(EXPECTED_RESPONSE_LIST, surveyGroupResource.getListOfSurveyGroups());
     }
 
     @Test
-    public void addNewGroup() {
+    public void addNewGroupMethod_should_return_ID_of_surveyGroup_created() {
         when(surveyGroupFacade.addNewGroup(surveyGroupJson)).thenReturn(ID);
         assertEquals(EXPECTED_RESPONSE_ID, surveyGroupResource.addNewGroup(surveyGroupJson));
     }
 
     @Test
-    public void updateGroup() {
+    public void updateGroupMethod_should_return_signaling_with_change_value() {
         when(surveyGroupFacade.updateGroup(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
         assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateGroup(surveyGroupJson));
     }
 
     @Test
-    public void deleteGroup() {
+    public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {
         assertEquals(EXPECTED_RESPONSE_DELETE, surveyGroupResource.deleteGroup(SURVEY_GROUP_NAME));
         Mockito.verify(surveyGroupFacade, Mockito.times(1)).deleteGroup(SURVEY_GROUP_NAME);
     }
 
     @Test
-    public void getSurveyGroupsByUser() {
+    public void getSurveyGroupsByUserMethod_should_return_list_of_SurverGroups() {
         mockStatic(AuthorizationHeaderReader.class);
         when(request.getHeader(Mockito.any())).thenReturn(TOKEN);
         when(AuthorizationHeaderReader.readToken(Mockito.any())).thenReturn(TOKEN);
@@ -103,5 +98,4 @@ public class SurveyGroupResourceTest {
 
         assertEquals(EXPECTED_RESPONSE_LIST,surveyGroupResource.getSurveyGroupsByUser(request));
     }
-
 }
