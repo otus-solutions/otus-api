@@ -27,7 +27,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class SurveyGroupFacadeTest {
-
     private static final String EXPECTED_ID = "5c7400d2d767afded0d84dcf";
     private static final String SURVEY_GROUP_NAME = "CI";
     private static final String USER_EMAIL = "otus@otus.com";

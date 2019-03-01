@@ -1,5 +1,6 @@
 package org.ccem.otus.service.surveyGroup;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -39,8 +40,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
 
     @Override
     public void deleteGroup(String surveyGroupName) throws DataNotFoundException {
-        surveyGroupNameExists(surveyGroupName);
-        surveyGroupDao.deleteGroup(surveyGroupName);
+        DeleteResult result = surveyGroupDao.deleteGroup(surveyGroupName);
+        if (result.getDeletedCount() == 0) throw new DataNotFoundException(new Throwable("SurveyGroup not found"));
     }
 
     @Override

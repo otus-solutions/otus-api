@@ -2,6 +2,7 @@ package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
 import com.mongodb.Block;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -71,9 +72,10 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     }
 
     @Override
-    public void deleteGroup(String surveyGroupName) {
+    public DeleteResult deleteGroup(String surveyGroupName) {
         Bson filter = new Document("name", surveyGroupName);
-        collection.deleteOne(filter);
+        return collection.deleteOne(filter);
+
     }
 
     //TODO: userEmail parameter waiting for user validation implementation in Otus.

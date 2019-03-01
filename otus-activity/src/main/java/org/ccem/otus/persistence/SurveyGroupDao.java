@@ -1,5 +1,6 @@
 package org.ccem.otus.persistence;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -21,7 +22,7 @@ public interface SurveyGroupDao {
 
     String updateGroup(SurveyGroup surveyGroup);
 
-    void deleteGroup(String surveyGroupName) throws DataNotFoundException;
+    DeleteResult deleteGroup(String surveyGroupName) throws DataNotFoundException;
 
     List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
 }
