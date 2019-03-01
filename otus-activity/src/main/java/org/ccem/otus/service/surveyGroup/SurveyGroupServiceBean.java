@@ -1,0 +1,75 @@
+package org.ccem.otus.service.surveyGroup;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.survey.group.SurveyGroup;
+import org.ccem.otus.persistence.SurveyGroupDao;
+
+import javax.inject.Inject;
+import java.util.List;
+
+
+public class SurveyGroupServiceBean implements SurveyGroupService {
+
+    @Inject
+    private SurveyGroupDao surveyGroupDao;
+
+    @Override
+    public List<SurveyGroup> getListOfSurveyGroups() {
+        return surveyGroupDao.getListOfSurveyGroups();
+    }
+
+    @Override
+    public ObjectId addNewGroup(String surveyGroupJson) throws ValidationException {
+        SurveyGroup surveyGroup = SurveyGroup.deserialize(surveyGroupJson);
+        surveyGroupNameInvalid(surveyGroup);
+        surveyGroupNameConflits(surveyGroup.getName());
+        return surveyGroupDao.persist(surveyGroup);
+    }
+
+    @Override
+    public String updateGroup(String surveyGroupJson) throws DataNotFoundException, ValidationException {
+        SurveyGroup surveyGroupAltered = SurveyGroup.deserialize(surveyGroupJson);
+        surveyGroupIDvalid(surveyGroupAltered.getSurveyGroupID());
+        surveyGroupNameConflits(surveyGroupAltered.getName());
+        return surveyGroupDao.updateGroup(surveyGroupAltered);
+    }
+
+    @Override
+    public void deleteGroup(String surveyGroupName) throws DataNotFoundException {
+        surveyGroupNameExists(surveyGroupName);
+        surveyGroupDao.deleteGroup(surveyGroupName);
+    }
+
+    @Override
+    public List<SurveyGroup> getSurveyGroupsByUser(String userEmail) {
+        return surveyGroupDao.getSurveyGroupsByUser(userEmail);
+    }
+
+    private void surveyGroupExists(SurveyGroup surveyGroup) throws ValidationException, DataNotFoundException {
+        Document surveyGroupFound = surveyGroupDao.findSurveyGroupByName(surveyGroup.getName());
+        if (surveyGroupFound != null) {
+            throw new ValidationException(new Throwable("Already in a SurveyGroup."), surveyGroup.getName());
+        }
+    }
+
+    private void surveyGroupNameInvalid(SurveyGroup surveyGroup) throws ValidationException {
+        if (surveyGroup.getName() == null) {
+            throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
+        }
+    }
+
+    private void surveyGroupIDvalid(ObjectId surveyGroupID) throws DataNotFoundException {
+        surveyGroupDao.findSurveyGroupById(surveyGroupID);
+    }
+
+    private void surveyGroupNameExists(String surveyGroupName) throws DataNotFoundException {
+        surveyGroupDao.findSurveyGroupByName(surveyGroupName);
+    }
+
+    private void surveyGroupNameConflits(String surveyGroupName) throws ValidationException {
+        surveyGroupDao.findSurveyGroupNameConflits(surveyGroupName);
+    }
+}
