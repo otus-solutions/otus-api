@@ -13,7 +13,9 @@ public interface SurveyGroupService {
 
     ObjectId addNewGroup(String surveyGroup) throws ValidationException;
 
-    String updateGroup(String surveyGroupJson) throws DataNotFoundException, ValidationException;
+    String updateGroupName(String groupNameOrigin, String groupNameAltered) throws DataNotFoundException, ValidationException;
+
+    String updateGroupSurveyAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
 
     void deleteGroup(String surveyGroupName) throws DataNotFoundException;
 

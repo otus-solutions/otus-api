@@ -62,6 +62,24 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
         return SurveyGroup.deserialize(document.toJson());
     }
 
+    @Override
+    public String updateGroupSurveyAcronyms(SurveyGroup surveyGroup) {
+        Bson filter = new Document("name", surveyGroup.getName());
+        Bson updates = new Document("surveyAcronyms", surveyGroup.getSurveyAcronyms());
+        Bson updateOperationDocument = new Document("$set", updates);
+        UpdateResult result = collection.updateOne(filter, updateOperationDocument);
+        return String.valueOf(result.getModifiedCount());
+    }
+
+    @Override
+    public String updateGroupName(String originalName, String updateName) {
+        Bson filter = new Document("name", originalName);
+        Bson updates = new Document("name", updateName);
+        Bson updateOperationDocument = new Document("$set", updates);
+        UpdateResult result = collection.updateOne(filter, updateOperationDocument);
+        return String.valueOf(result.getModifiedCount());
+    }
+
 //    @Override
 //    public String updateGroup(SurveyGroup surveyGroup) {
 //        Bson filter = new Document("_id", surveyGroup.getSurveyGroupID());
@@ -72,14 +90,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
 //    }
 
 
-    @Override
-    public String updateGroupName(String originalName, String updateName) {
-        Bson filter = new Document("name", originalName);
-        Bson updates = new Document("name", updateName);
-        Bson updateOperationDocument = new Document("$set", updates);
-        UpdateResult result = collection.updateMany(filter, updateOperationDocument);
-        return String.valueOf(result.getModifiedCount());
-    }
+
 
 
 

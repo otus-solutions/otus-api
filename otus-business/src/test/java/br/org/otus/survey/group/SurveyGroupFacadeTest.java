@@ -71,24 +71,24 @@ public class SurveyGroupFacadeTest {
         when(surveyGroupService.addNewGroup(surveyGroupJson)).thenThrow(validationException);
         surveyGroupFacade.addNewGroup(surveyGroupJson);
     }
+//
+//    @Test
+//    public void updateGroup_should_invoke_updateGroup_of_SurveyGroupService() throws ValidationException, DataNotFoundException {
+//        surveyGroupFacade.updateGroup(surveyGroupJson);
+//        verify(surveyGroupService, times(1)).updateGroup(surveyGroupJson);
+//    }
+//
+//    @Test(expected = HttpResponseException.class)
+//    public void updateGroup_should_handle_ValidationException_for_json_invalid() throws ValidationException, DataNotFoundException {
+//        when(surveyGroupService.updateGroup(surveyGroupJson)).thenThrow(validationException);
+//        surveyGroupFacade.updateGroup(surveyGroupJson);
+//    }
 
-    @Test
-    public void updateGroup_should_invoke_updateGroup_of_SurveyGroupService() throws ValidationException, DataNotFoundException {
-        surveyGroupFacade.updateGroup(surveyGroupJson);
-        verify(surveyGroupService, times(1)).updateGroup(surveyGroupJson);
-    }
-
-    @Test(expected = HttpResponseException.class)
-    public void updateGroup_should_handle_ValidationException_for_json_invalid() throws ValidationException, DataNotFoundException {
-        when(surveyGroupService.updateGroup(surveyGroupJson)).thenThrow(validationException);
-        surveyGroupFacade.updateGroup(surveyGroupJson);
-    }
-
-    @Test(expected = HttpResponseException.class)
-    public void updateGroup_should_handle_DataNotFoundException_for_json_invalid() throws ValidationException, DataNotFoundException {
-        when(surveyGroupService.updateGroup(surveyGroupJson)).thenThrow(dataNotFoundException);
-        surveyGroupFacade.updateGroup(surveyGroupJson);
-    }
+//    @Test(expected = HttpResponseException.class)
+//    public void updateGroup_should_handle_DataNotFoundException_for_json_invalid() throws ValidationException, DataNotFoundException {
+//        when(surveyGroupService.updateGroup(surveyGroupJson)).thenThrow(dataNotFoundException);
+//        surveyGroupFacade.updateGroup(surveyGroupJson);
+//    }
 
     @Test
     public void deleteGroup_should_invoke_deleteGroup_of_SurveyGroupService() throws DataNotFoundException {

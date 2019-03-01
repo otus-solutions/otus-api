@@ -74,11 +74,11 @@ public class SurveyGroupResourceTest {
         assertEquals(EXPECTED_RESPONSE_ID, surveyGroupResource.addNewGroup(surveyGroupJson));
     }
 
-    @Test
-    public void updateGroupMethod_should_return_signaling_with_change_value() {
-        when(surveyGroupFacade.updateGroup(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
-        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateGroup(surveyGroupJson));
-    }
+//    @Test
+//    public void updateGroupMethod_should_return_signaling_with_change_value() {
+//        when(acade.updateGroup(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
+//        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateGroup(surveyGroupJson));
+//    }
 
     @Test
     public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {

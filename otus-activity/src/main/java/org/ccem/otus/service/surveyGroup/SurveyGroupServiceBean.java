@@ -30,13 +30,19 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         return surveyGroupDao.persist(surveyGroup);
     }
 
+
     @Override
-    public String updateGroup(String surveyGroupJson) throws DataNotFoundException, ValidationException {
+    public String updateGroupSurveyAcronyms(String surveyGroupJson) throws DataNotFoundException {
         SurveyGroup surveyGroupAltered = SurveyGroup.deserialize(surveyGroupJson);
-        surveyGroupIDvalid(surveyGroupAltered.getSurveyGroupID());
-        surveyGroupNameUpdateConflits(surveyGroupAltered);
-        //return surveyGroupDao.updateGroup(surveyGroupAltered);
-        return surveyGroupDao.updateGroupName("C3", "D4");
+        surveyGroupNameExists(surveyGroupAltered.getName());
+        return surveyGroupDao.updateGroupSurveyAcronyms(surveyGroupAltered);
+    }
+
+    @Override
+    public String updateGroupName(String oldGroupName, String alteredGroupName) throws DataNotFoundException, ValidationException {
+        surveyGroupNameExists(oldGroupName);
+        surveyGroupNameConflits(alteredGroupName);
+        return surveyGroupDao.updateGroupName(oldGroupName, alteredGroupName);
     }
 
     @Override
@@ -59,21 +65,25 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
             throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
         }
     }
+//
+//    private void surveyGroupIDvalid(ObjectId surveyGroupID) throws DataNotFoundException {
+//        surveyGroupDao.findSurveyGroupById(surveyGroupID);
+//    }
 
-    private void surveyGroupIDvalid(ObjectId surveyGroupID) throws DataNotFoundException {
-        surveyGroupDao.findSurveyGroupById(surveyGroupID);
-    }
+//    private void surveyGroupIDvalid(ObjectId surveyGroupID) throws DataNotFoundException {
+//        surveyGroupDao.findSurveyGroupById(surveyGroupID);
+//    }
 
     private void surveyGroupNameExists(String surveyGroupName) throws DataNotFoundException {
         surveyGroupDao.findSurveyGroupByName(surveyGroupName);
     }
 
-    private void surveyGroupNameUpdateConflits(SurveyGroup surveyGroup) throws ValidationException, DataNotFoundException {
-        SurveyGroup surveyGroupOrigin = surveyGroupDao.findSurveyGroupById(surveyGroup.getSurveyGroupID());
-        if (!surveyGroupOrigin.getName().equals(surveyGroup.getName())) {
-            surveyGroupExists(surveyGroup);
-        }
-    }
+//    private void surveyGroupNameUpdateConflits(SurveyGroup surveyGroup) throws ValidationException, DataNotFoundException {
+//        SurveyGroup surveyGroupOrigin = surveyGroupDao.findSurveyGroupById(surveyGroup.getSurveyGroupID());
+//        if (!surveyGroupOrigin.getName().equals(surveyGroup.getName())) {
+//            surveyGroupExists(surveyGroup);
+//        }
+//    }
 
     private void surveyGroupNameConflits(String surveyGroupName) throws ValidationException {
         surveyGroupDao.findSurveyGroupNameConflits(surveyGroupName);

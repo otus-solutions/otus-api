@@ -29,9 +29,9 @@ public class SurveyGroupFacade {
         }
     }
 
-    public String updateGroup(String surveyGroupJson) {
+    public String updateGroupSurveyAcronyms(String surveyGroupJson) {
         try {
-            return surveyGroupService.updateGroup(surveyGroupJson);
+            return surveyGroupService.updateGroupSurveyAcronyms(surveyGroupJson);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 
@@ -41,7 +41,20 @@ public class SurveyGroupFacade {
         }
     }
 
-    public void deleteGroup(String surveyGroupName){
+        public String updateGroupName(String oldName, String newName) {
+        try {
+            return surveyGroupService.updateGroupName(oldName, newName);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
+        } catch (ValidationException e) {
+            throw new HttpResponseException(
+                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        }
+    }
+
+
+    public void deleteGroup(String surveyGroupName) {
         try {
             surveyGroupService.deleteGroup(surveyGroupName);
         } catch (DataNotFoundException e) {
