@@ -33,7 +33,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     public String updateGroup(String surveyGroupJson) throws DataNotFoundException, ValidationException {
         SurveyGroup surveyGroupAltered = SurveyGroup.deserialize(surveyGroupJson);
         surveyGroupIDvalid(surveyGroupAltered.getSurveyGroupID());
-        surveyGroupNameConflits(surveyGroupAltered.getName());
+        surveyGroupNameUpdateConflits(surveyGroupAltered);
         return surveyGroupDao.updateGroup(surveyGroupAltered);
     }
 
@@ -48,11 +48,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         return surveyGroupDao.getSurveyGroupsByUser(userEmail);
     }
 
-    private void surveyGroupExists(SurveyGroup surveyGroup) throws ValidationException, DataNotFoundException {
-        Document surveyGroupFound = surveyGroupDao.findSurveyGroupByName(surveyGroup.getName());
-        if (surveyGroupFound != null) {
-            throw new ValidationException(new Throwable("Already in a SurveyGroup."), surveyGroup.getName());
-        }
+    private void surveyGroupExists(SurveyGroup surveyGroup) throws ValidationException {
+        surveyGroupDao.findSurveyGroupNameConflits(surveyGroup.getName());
     }
 
     private void surveyGroupNameInvalid(SurveyGroup surveyGroup) throws ValidationException {
@@ -67,6 +64,13 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
 
     private void surveyGroupNameExists(String surveyGroupName) throws DataNotFoundException {
         surveyGroupDao.findSurveyGroupByName(surveyGroupName);
+    }
+
+    private void surveyGroupNameUpdateConflits(SurveyGroup surveyGroup) throws ValidationException, DataNotFoundException {
+        SurveyGroup surveyGroupOrigin = surveyGroupDao.findSurveyGroupById(surveyGroup.getSurveyGroupID());
+        if (!surveyGroupOrigin.getName().equals(surveyGroup.getName())) {
+            surveyGroupExists(surveyGroup);
+        }
     }
 
     private void surveyGroupNameConflits(String surveyGroupName) throws ValidationException {
