@@ -20,9 +20,12 @@ public interface SurveyGroupDao {
 
     SurveyGroup findSurveyGroupById(ObjectId surveyGroupID) throws DataNotFoundException;
 
-    String updateGroup(SurveyGroup surveyGroup);
+    //String updateGroup(SurveyGroup surveyGroup);
+
+    String updateGroupName(String originalName, String updateName);
 
     DeleteResult deleteGroup(String surveyGroupName) throws DataNotFoundException;
+
 
     List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
 }

@@ -62,14 +62,26 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
         return SurveyGroup.deserialize(document.toJson());
     }
 
+//    @Override
+//    public String updateGroup(SurveyGroup surveyGroup) {
+//        Bson filter = new Document("_id", surveyGroup.getSurveyGroupID());
+//        Bson updates = new Document("name", surveyGroup.getName()).append("surveyAcronyms", surveyGroup.getSurveyAcronyms());
+//        Bson updateOperationDocument = new Document("$set", updates);
+//        UpdateResult result = collection.updateMany(filter, updateOperationDocument);
+//        return String.valueOf(result.getModifiedCount());
+//    }
+
+
     @Override
-    public String updateGroup(SurveyGroup surveyGroup) {
-        Bson filter = new Document("_id", surveyGroup.getSurveyGroupID());
-        Bson updates = new Document("name", surveyGroup.getName()).append("surveyAcronyms", surveyGroup.getSurveyAcronyms());
+    public String updateGroupName(String originalName, String updateName) {
+        Bson filter = new Document("name", originalName);
+        Bson updates = new Document("name", updateName);
         Bson updateOperationDocument = new Document("$set", updates);
         UpdateResult result = collection.updateMany(filter, updateOperationDocument);
         return String.valueOf(result.getModifiedCount());
     }
+
+
 
     @Override
     public DeleteResult deleteGroup(String surveyGroupName) {

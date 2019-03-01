@@ -35,7 +35,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         SurveyGroup surveyGroupAltered = SurveyGroup.deserialize(surveyGroupJson);
         surveyGroupIDvalid(surveyGroupAltered.getSurveyGroupID());
         surveyGroupNameUpdateConflits(surveyGroupAltered);
-        return surveyGroupDao.updateGroup(surveyGroupAltered);
+        //return surveyGroupDao.updateGroup(surveyGroupAltered);
+        return surveyGroupDao.updateGroupName("C3", "D4");
     }
 
     @Override
