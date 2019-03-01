@@ -80,20 +80,22 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
             Object allAliquotCodesInExams = allAliquotsWithExamsDocument.get("aliquotCodes");
 
-            CompletableFuture<Document> Future1 = CompletableFuture.supplyAsync(() -> aliquotDao
+            CompletableFuture<Document> firstPartialDTOFuture = CompletableFuture.supplyAsync(() -> aliquotDao
                 .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(
                     (ArrayList<String>) allAliquotCodesInExams, center))
                 .first());
 
-            CompletableFuture<Document> Future2 = CompletableFuture.supplyAsync(() -> aliquotDao
+            CompletableFuture<Document> secondPartialDTOFuture = CompletableFuture.supplyAsync(() -> aliquotDao
                 .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery(
                     (ArrayList<String>) allAliquotCodesInExams, center))
                 .first());
 
             Document firstPartOfDTO = null;
             try {
-              firstPartOfDTO = Future1.get();
-            } catch (InterruptedException ignored) {
+              firstPartOfDTO = firstPartialDTOFuture.get();
+            } catch (InterruptedException e) {
+              new Exception("Get data of pending results thread(firstPartialDTOFuture) was interrupted", e).printStackTrace();
+              Thread.currentThread().interrupt();
             } catch (ExecutionException e) {
               throw new IllegalStateException();
             }
@@ -105,8 +107,10 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
             Document secondPartOfDTO = null;
             try {
-              secondPartOfDTO = Future2.get();
-            } catch (InterruptedException ignored) {
+              secondPartOfDTO = secondPartialDTOFuture.get();
+            } catch (InterruptedException e) {
+              new Exception("Get data of pending results thread(secondPartialDTOFuture) was interrupted", e).printStackTrace();
+              Thread.currentThread().interrupt();
             } catch (ExecutionException e) {
               throw new IllegalStateException();
             }
@@ -181,7 +185,9 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
       throws DataNotFoundException {
     try {
       return greetingFuture.get();
-    } catch (InterruptedException ignored) {
+    } catch (InterruptedException e) {
+      new Exception("Get laboratory progress DTO thread was interrupted", e).printStackTrace();
+      Thread.currentThread().interrupt();
     } catch (ExecutionException e) {
       throw new DataNotFoundException(new Throwable("There are no result"));
     }

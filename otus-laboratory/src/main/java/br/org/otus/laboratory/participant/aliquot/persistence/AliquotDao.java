@@ -38,4 +38,6 @@ public interface AliquotDao {
   AggregateIterable<Document> aggregate(List<Bson> query);
 
   List<Aliquot> getExamLotAliquots(ObjectId lotOId);
+
+  void executeFunction(String function);
 }
