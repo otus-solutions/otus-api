@@ -21,7 +21,6 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     private static final String COLLECTION_NAME = "survey_group";
 
     public SurveyGroupDaoBean() {
-
         super(COLLECTION_NAME, Document.class);
     }
 
@@ -56,13 +55,6 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     }
 
     @Override
-    public SurveyGroup findSurveyGroupById(ObjectId surveyGroupID) throws DataNotFoundException {
-        Document document = collection.find(eq("_id", surveyGroupID)).first();
-        if (document == null) throw new DataNotFoundException(new Throwable("SurveyGroupID not found"));
-        return SurveyGroup.deserialize(document.toJson());
-    }
-
-    @Override
     public String updateGroupSurveyAcronyms(SurveyGroup surveyGroup) {
         Bson filter = new Document("name", surveyGroup.getName());
         Bson updates = new Document("surveyAcronyms", surveyGroup.getSurveyAcronyms());
@@ -79,20 +71,6 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
         UpdateResult result = collection.updateOne(filter, updateOperationDocument);
         return String.valueOf(result.getModifiedCount());
     }
-
-//    @Override
-//    public String updateGroup(SurveyGroup surveyGroup) {
-//        Bson filter = new Document("_id", surveyGroup.getSurveyGroupID());
-//        Bson updates = new Document("name", surveyGroup.getName()).append("surveyAcronyms", surveyGroup.getSurveyAcronyms());
-//        Bson updateOperationDocument = new Document("$set", updates);
-//        UpdateResult result = collection.updateMany(filter, updateOperationDocument);
-//        return String.valueOf(result.getModifiedCount());
-//    }
-
-
-
-
-
 
     @Override
     public DeleteResult deleteGroup(String surveyGroupName) {

@@ -40,13 +40,6 @@ public class SurveyGroupResource {
         return new Response().buildSuccess(objectID).toJson();
     }
 
-//    @PUT
-//    @Secured
-//    @Path("/update-group")
-//    public String updateGroup(String surveyGroupJson) {
-//        return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateGroup(surveyGroupJson)).toJson();
-//    }
-
     @PUT
     @Secured
     @Path("/update-group")
@@ -60,7 +53,6 @@ public class SurveyGroupResource {
     public String updateGroupSurveyName(@PathParam("old") String oldName, @PathParam("new") String newName) {
         return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateGroupName(oldName, newName)).toJson();
     }
-
 
     @DELETE
     @Secured

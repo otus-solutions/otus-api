@@ -1,7 +1,6 @@
 package org.ccem.otus.service.surveyGroup;
 
 import com.mongodb.client.result.DeleteResult;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -25,23 +24,22 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     @Override
     public ObjectId addNewGroup(String surveyGroupJson) throws ValidationException {
         SurveyGroup surveyGroup = SurveyGroup.deserialize(surveyGroupJson);
-        surveyGroupNameInvalid(surveyGroup);
-        surveyGroupNameConflits(surveyGroup.getName());
+        verifySurveyGroupNameValid(surveyGroup);
+        verifySurveyGroupNameConflits(surveyGroup.getName());
         return surveyGroupDao.persist(surveyGroup);
     }
-
 
     @Override
     public String updateGroupSurveyAcronyms(String surveyGroupJson) throws DataNotFoundException {
         SurveyGroup surveyGroupAltered = SurveyGroup.deserialize(surveyGroupJson);
-        surveyGroupNameExists(surveyGroupAltered.getName());
+        verifySurveyGroupNameExists(surveyGroupAltered.getName());
         return surveyGroupDao.updateGroupSurveyAcronyms(surveyGroupAltered);
     }
 
     @Override
     public String updateGroupName(String oldGroupName, String alteredGroupName) throws DataNotFoundException, ValidationException {
-        surveyGroupNameExists(oldGroupName);
-        surveyGroupNameConflits(alteredGroupName);
+        verifySurveyGroupNameExists(oldGroupName);
+        verifySurveyGroupNameConflits(alteredGroupName);
         return surveyGroupDao.updateGroupName(oldGroupName, alteredGroupName);
     }
 
@@ -56,36 +54,17 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         return surveyGroupDao.getSurveyGroupsByUser(userEmail);
     }
 
-    private void surveyGroupExists(SurveyGroup surveyGroup) throws ValidationException {
-        surveyGroupDao.findSurveyGroupNameConflits(surveyGroup.getName());
-    }
-
-    private void surveyGroupNameInvalid(SurveyGroup surveyGroup) throws ValidationException {
-        if (surveyGroup.getName() == null) {
+    private void verifySurveyGroupNameValid(SurveyGroup surveyGroup) throws ValidationException {
+        if (surveyGroup.getName() == null || surveyGroup.getName().equals("")) {
             throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
         }
     }
-//
-//    private void surveyGroupIDvalid(ObjectId surveyGroupID) throws DataNotFoundException {
-//        surveyGroupDao.findSurveyGroupById(surveyGroupID);
-//    }
 
-//    private void surveyGroupIDvalid(ObjectId surveyGroupID) throws DataNotFoundException {
-//        surveyGroupDao.findSurveyGroupById(surveyGroupID);
-//    }
-
-    private void surveyGroupNameExists(String surveyGroupName) throws DataNotFoundException {
+    private void verifySurveyGroupNameExists(String surveyGroupName) throws DataNotFoundException {
         surveyGroupDao.findSurveyGroupByName(surveyGroupName);
     }
 
-//    private void surveyGroupNameUpdateConflits(SurveyGroup surveyGroup) throws ValidationException, DataNotFoundException {
-//        SurveyGroup surveyGroupOrigin = surveyGroupDao.findSurveyGroupById(surveyGroup.getSurveyGroupID());
-//        if (!surveyGroupOrigin.getName().equals(surveyGroup.getName())) {
-//            surveyGroupExists(surveyGroup);
-//        }
-//    }
-
-    private void surveyGroupNameConflits(String surveyGroupName) throws ValidationException {
+    private void verifySurveyGroupNameConflits(String surveyGroupName) throws ValidationException {
         surveyGroupDao.findSurveyGroupNameConflits(surveyGroupName);
     }
 }
