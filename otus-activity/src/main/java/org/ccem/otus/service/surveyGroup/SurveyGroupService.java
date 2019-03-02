@@ -13,7 +13,7 @@ public interface SurveyGroupService {
 
     ObjectId addNewGroup(String surveyGroup) throws ValidationException;
 
-    String updateGroupName(String groupNameOrigin, String groupNameAltered) throws DataNotFoundException, ValidationException;
+    String updateSurveyGroupName(String oldGroupName, String newGroupName) throws DataNotFoundException, ValidationException;
 
     String updateGroupSurveyAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
 

@@ -43,15 +43,15 @@ public class SurveyGroupResource {
     @PUT
     @Secured
     @Path("/update-group")
-    public String updateGroupSurveyAcronyms(String surveyGroupJson) {
+    public String updateSurveyGroupAcronyms(String surveyGroupJson) {
         return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson)).toJson();
     }
 
     @PUT
     @Secured
     @Path("/update-group-name/{old}/{new}")
-    public String updateGroupSurveyName(@PathParam("old") String oldName, @PathParam("new") String newName) {
-        return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateGroupName(oldName, newName)).toJson();
+    public String updateSurveyGroupName(@PathParam("old") String oldName, @PathParam("new") String newName) {
+        return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateSurveyGroupName(oldName, newName)).toJson();
     }
 
     @DELETE

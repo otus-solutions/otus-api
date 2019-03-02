@@ -41,9 +41,9 @@ public class SurveyGroupFacade {
         }
     }
 
-        public String updateGroupName(String oldName, String newName) {
+        public String updateSurveyGroupName(String oldName, String newName) {
         try {
-            return surveyGroupService.updateGroupName(oldName, newName);
+            return surveyGroupService.updateSurveyGroupName(oldName, newName);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 

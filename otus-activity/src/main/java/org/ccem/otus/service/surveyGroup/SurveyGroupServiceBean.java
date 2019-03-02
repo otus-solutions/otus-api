@@ -23,6 +23,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
 
     @Override
     public ObjectId addNewGroup(String surveyGroupJson) throws ValidationException {
+        verifySurveyGroupJsonValid(surveyGroupJson);
         SurveyGroup surveyGroup = SurveyGroup.deserialize(surveyGroupJson);
         verifySurveyGroupNameValid(surveyGroup);
         verifySurveyGroupNameConflits(surveyGroup.getName());
@@ -37,10 +38,11 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     @Override
-    public String updateGroupName(String oldGroupName, String alteredGroupName) throws DataNotFoundException, ValidationException {
-        verifySurveyGroupNameExists(oldGroupName);
-        verifySurveyGroupNameConflits(alteredGroupName);
-        return surveyGroupDao.updateGroupName(oldGroupName, alteredGroupName);
+    public String updateSurveyGroupName(String oldSurveyGroupName, String newSurveyGroupName) throws DataNotFoundException, ValidationException {
+        verifySurveyGroupNameExists(oldSurveyGroupName);
+        verifyNewSurveyGroupName(newSurveyGroupName);
+        verifySurveyGroupNameConflits(newSurveyGroupName);
+        return surveyGroupDao.updateGroupName(oldSurveyGroupName, newSurveyGroupName);
     }
 
     @Override
@@ -54,14 +56,27 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         return surveyGroupDao.getSurveyGroupsByUser(userEmail);
     }
 
+    private void verifySurveyGroupJsonValid(String surveyGroupJson) throws ValidationException {
+        if (surveyGroupJson.isEmpty()) {
+            throw new ValidationException(new Throwable("invalid surveyGroupJson"));
+        }
+    }
+
+
     private void verifySurveyGroupNameValid(SurveyGroup surveyGroup) throws ValidationException {
-        if (surveyGroup.getName() == null || surveyGroup.getName().equals("")) {
+        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty()) {
             throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
         }
     }
 
     private void verifySurveyGroupNameExists(String surveyGroupName) throws DataNotFoundException {
         surveyGroupDao.findSurveyGroupByName(surveyGroupName);
+    }
+
+    private void verifyNewSurveyGroupName(String newSurveyGroupName) throws ValidationException {
+        if (newSurveyGroupName.equals("")) {
+            throw new ValidationException(new Throwable("invalid newSurveyGroupName"));
+        }
     }
 
     private void verifySurveyGroupNameConflits(String surveyGroupName) throws ValidationException {

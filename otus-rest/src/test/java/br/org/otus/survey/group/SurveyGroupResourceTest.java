@@ -36,6 +36,8 @@ public class SurveyGroupResourceTest {
     private static final String SURVEY_GROUP_NAME = "CI";
     private static final String USER_MAIL = "otus@otus.com";
     private static final String TOKEN = "123456";
+    private static final String OLD_NAME = "CI";
+    private static final String NEW_NAME = "BA";
 
     @InjectMocks
     private SurveyGroupResource surveyGroupResource;
@@ -74,7 +76,20 @@ public class SurveyGroupResourceTest {
         assertEquals(EXPECTED_RESPONSE_ID, surveyGroupResource.addNewGroup(surveyGroupJson));
     }
 
-//    @Test
+    @Test
+    public void updateSurveyGroupAcronymsMethod_should_return_signaling_with_change_value() {
+        when(surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
+        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateSurveyGroupAcronyms(surveyGroupJson));
+    }
+
+
+        @Test
+    public void updateSurveyGroupNameMethod_should_return_signaling_with_change_value() {
+        when(surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME)).thenReturn(MODIFIELD_COUNT);
+        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateSurveyGroupName(OLD_NAME, NEW_NAME));
+    }
+
+    //    @Test
 //    public void updateGroupMethod_should_return_signaling_with_change_value() {
 //        when(acade.updateGroup(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
 //        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateGroup(surveyGroupJson));
