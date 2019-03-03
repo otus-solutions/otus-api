@@ -62,9 +62,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         }
     }
 
-
     private void verifySurveyGroupNameValid(SurveyGroup surveyGroup) throws ValidationException {
-        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty()) {
+        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty() || !(surveyGroup.getName().matches("^[A-Z0-9]*$"))) {
             throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
         }
     }
@@ -74,7 +73,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     private void verifyNewSurveyGroupName(String newSurveyGroupName) throws ValidationException {
-        if (newSurveyGroupName.equals("")) {
+        if (!newSurveyGroupName.matches("^[A-Z0-9]*$")) {
             throw new ValidationException(new Throwable("invalid newSurveyGroupName"));
         }
     }

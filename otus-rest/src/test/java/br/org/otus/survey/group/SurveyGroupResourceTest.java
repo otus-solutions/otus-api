@@ -51,7 +51,6 @@ public class SurveyGroupResourceTest {
     private SessionIdentifier session;
     @Mock
     private AuthenticationData authenticationData;
-
     private SurveyGroup surveyGroup;
     private List<SurveyGroup> surveyGroups;
     private String surveyGroupJson;
@@ -79,21 +78,14 @@ public class SurveyGroupResourceTest {
     @Test
     public void updateSurveyGroupAcronymsMethod_should_return_signaling_with_change_value() {
         when(surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
-        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateSurveyGroupAcronyms(surveyGroupJson));
+        assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupAcronyms(surveyGroupJson));
     }
 
-
-        @Test
+    @Test
     public void updateSurveyGroupNameMethod_should_return_signaling_with_change_value() {
         when(surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME)).thenReturn(MODIFIELD_COUNT);
-        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateSurveyGroupName(OLD_NAME, NEW_NAME));
+        assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupName(OLD_NAME, NEW_NAME));
     }
-
-    //    @Test
-//    public void updateGroupMethod_should_return_signaling_with_change_value() {
-//        when(acade.updateGroup(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
-//        assertEquals(EXPECTED_RESPONSE_UPDATE,surveyGroupResource.updateGroup(surveyGroupJson));
-//    }
 
     @Test
     public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {
@@ -111,6 +103,6 @@ public class SurveyGroupResourceTest {
         when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
         when(surveyGroupFacade.getSurveyGroupsByUser(USER_MAIL)).thenReturn(surveyGroups);
 
-        assertEquals(EXPECTED_RESPONSE_LIST,surveyGroupResource.getSurveyGroupsByUser(request));
+        assertEquals(EXPECTED_RESPONSE_LIST, surveyGroupResource.getSurveyGroupsByUser(request));
     }
 }

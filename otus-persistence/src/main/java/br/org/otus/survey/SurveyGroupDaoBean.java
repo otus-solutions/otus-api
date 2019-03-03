@@ -43,7 +43,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     @Override
     public void findSurveyGroupNameConflits(String surveyGroupName) throws ValidationException {
         Document document = collection.find(eq("name", surveyGroupName)).first();
-        if(document != null)throw new ValidationException(new Throwable("SurveyGroupName already in use"));
+        if (document != null) throw new ValidationException(new Throwable("SurveyGroupName already in use"));
     }
 
     @Override
@@ -76,7 +76,6 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     public DeleteResult deleteGroup(String surveyGroupName) {
         Bson filter = new Document("name", surveyGroupName);
         return collection.deleteOne(filter);
-
     }
 
     //TODO: userEmail parameter waiting for user validation implementation in Otus.

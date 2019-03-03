@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 public class SurveyGroup {
@@ -35,9 +37,9 @@ public class SurveyGroup {
         this.name = name;
     }
 
-    public void setSurveyAcronyms(List<String> surveyAcronyms) {
-        this.surveyAcronyms = surveyAcronyms;
-    }
+//    public void setSurveyAcronyms(List<String> surveyAcronyms) {
+//        this.surveyAcronyms = surveyAcronyms;
+//    }
 
     public static String serialize(SurveyGroup surveyGroup) {
         return getGsonBuilder().create().toJson(surveyGroup);
