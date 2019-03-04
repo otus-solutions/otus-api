@@ -37,10 +37,6 @@ public class SurveyGroup {
         this.name = name;
     }
 
-//    public void setSurveyAcronyms(List<String> surveyAcronyms) {
-//        this.surveyAcronyms = surveyAcronyms;
-//    }
-
     public static String serialize(SurveyGroup surveyGroup) {
         return getGsonBuilder().create().toJson(surveyGroup);
     }
