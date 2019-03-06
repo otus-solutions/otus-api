@@ -54,7 +54,7 @@ public class LaboratoryProgressQueryBuilderTest {
 
     @Test
     public void getAliquotCodesInExamLotQuery() {
-        String expectedQuery = "[{\"$match\":{\"aliquotCode\":{\"$in\":[\"12345678\"]}},\"fieldCenter.acronym\":true},{\"$group\":{\"_id\":\"$examId\",\"aliquotCodes\":{\"$addToSet\":\"$aliquotCode\"}}},{\"$unwind\":\"$aliquotCodes\"},{\"$group\":{\"_id\":{},\"aliquotCodes\":{\"$addToSet\":\"$aliquotCodes\"}}}]";
+        String expectedQuery = "[{\"$match\":{\"aliquotCode\":{\"$in\":[\"12345678\"]},\"aliquotValid\":true}},{\"$group\":{\"_id\":\"$examId\",\"aliquotCodes\":{\"$addToSet\":\"$aliquotCode\"}}},{\"$unwind\":\"$aliquotCodes\"},{\"$group\":{\"_id\":{},\"aliquotCodes\":{\"$addToSet\":\"$aliquotCodes\"}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getAliquotCodesInExamsQuery(CODELIST)));
     }
 
@@ -66,7 +66,7 @@ public class LaboratoryProgressQueryBuilderTest {
 
     @Test
     public void getDataByExamQuery() {
-        String expectedQuery = "[{\"$match\":{\"aliquotCode\":{\"$in\":[\"12345678\"]}},\"aliquotValid\":true},{\"$group\":{\"_id\":{\"examId\":\"$examId\",\"examName\":\"$examName\"}}},{\"$group\":{\"_id\":\"$_id.examName\",\"received\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"examsQuantitative\":{\"$push\":{\"title\":\"$_id\",\"exams\":\"$received\"}}}}]";
+        String expectedQuery = "[{\"$match\":{\"aliquotCode\":{\"$in\":[\"12345678\"]},\"aliquotValid\":true}},{\"$group\":{\"_id\":{\"examId\":\"$examId\",\"examName\":\"$examName\"}}},{\"$group\":{\"_id\":\"$_id.examName\",\"received\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"examsQuantitative\":{\"$push\":{\"title\":\"$_id\",\"exams\":\"$received\"}}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getDataByExamQuery(CODELIST)));
     }
 
