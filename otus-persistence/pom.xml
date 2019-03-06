@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.ccem.otus</groupId>
     <artifactId>otus-root</artifactId>
-    <version>1.18-SNAPSHOT</version>
+    <version>1.19-SNAPSHOT</version>
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
 
@@ -33,6 +33,11 @@
       <version>${mongodb.driver.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-async</artifactId>
+        <version>3.6.4</version>
+      </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>

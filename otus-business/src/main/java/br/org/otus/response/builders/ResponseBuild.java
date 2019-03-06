@@ -9,4 +9,5 @@ public class ResponseBuild {
     public static Http Http;
     public static Survey Survey;
     public static Extraction Extraction;
+    public static Commons Commons;
 }
