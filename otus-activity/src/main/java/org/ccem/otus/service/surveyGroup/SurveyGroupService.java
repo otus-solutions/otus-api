@@ -16,7 +16,7 @@ public interface SurveyGroupService {
 
     //String updateSurveyGroupName(String oldGroupName, String newGroupName) throws DataNotFoundException, ValidationException;
 
-    String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException;
+    String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException, DataNotFoundException, ValidationException;
 
     String updateSurveyGroupAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
 

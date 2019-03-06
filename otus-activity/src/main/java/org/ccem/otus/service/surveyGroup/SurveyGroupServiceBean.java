@@ -49,15 +49,13 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
 //    }
 
     @Override
-    public String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException {
+    public String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException, DataNotFoundException, ValidationException {
         JSONObject surveyGroupNames = new JSONObject(surveyGroupNamesUpdate);
         String oldSurveyGroupName = surveyGroupNames.getString("old");
         String newSurveyGroupName = surveyGroupNames.getString("new");
-
-        //verifySurveyGroupNameExists(oldSurveyGroupName);
-        //verifyNewSurveyGroupName(newSurveyGroupName);
-        //verifySurveyGroupNameConflits(newSurveyGroupName);
-
+        verifySurveyGroupNameExists(oldSurveyGroupName);
+        verifyNewSurveyGroupName(newSurveyGroupName);
+        verifySurveyGroupNameConflits(newSurveyGroupName);
         return surveyGroupDao.updateGroupName(oldSurveyGroupName, newSurveyGroupName);
     }
 

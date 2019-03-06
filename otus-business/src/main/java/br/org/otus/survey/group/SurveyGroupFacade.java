@@ -61,12 +61,12 @@ public class SurveyGroupFacade {
         } catch (JSONException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 
-//        } catch (DataNotFoundException e) {
-//            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-//
-//        } catch (ValidationException e) {
-//            throw new HttpResponseException(
-//                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
+        } catch (ValidationException e) {
+            throw new HttpResponseException(
+                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
         }
     }
 
