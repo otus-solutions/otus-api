@@ -1,6 +1,8 @@
 package org.ccem.otus.service.surveyGroup;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.persistence.SurveyGroupDao;
@@ -22,6 +24,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.reflect.Whitebox.invokeMethod;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SurveyGroupServiceBean.class, SurveyGroup.class})
@@ -33,11 +36,16 @@ public class SurveyGroupServiceBeanTest {
     private static final ObjectId EXPECTED_ID = new ObjectId(SURVEY_GROUP_ID);
     private static final String EMPTY_JSON = "";
     private static final String SURVEY_GROUP_NAME = "CI";
+    private static final String EXPECTED_CHANGE = "1";
+    private static final String NEW_SURVEY_GROUP_NAME = "CB";
+    private static final String NEW_SURVEY_GROUP_NAME_INVALID = "c*" ;
 
     @InjectMocks
     private SurveyGroupServiceBean surveyGroupServiceBean = PowerMockito.spy(new SurveyGroupServiceBean());
     @Mock
     private SurveyGroupDao surveyGroupDao;
+    @Mock
+    private DeleteResult result;
     private SurveyGroup surveyGroup;
     private List<SurveyGroup> surveyGroups;
     private String surveyGroupJson;
@@ -57,7 +65,7 @@ public class SurveyGroupServiceBeanTest {
     }
 
     @Test
-    public void addNewGroup_should_return_id_in_case_sucess_persist() throws Exception {
+    public void addNewGroup_should_return_ID_in_case_sucess_persist() throws Exception {
         mockStatic(SurveyGroup.class);
         when(SurveyGroup.deserialize(surveyGroupJson)).thenReturn(surveyGroup);
         when(surveyGroupDao.persist(surveyGroup)).thenReturn(new ObjectId(SURVEY_GROUP_ID));
@@ -81,17 +89,66 @@ public class SurveyGroupServiceBeanTest {
 
     @Test(expected = ValidationException.class)
     public void addNewGroupMethod_with_surveyGroupName_existence_should_throws_ValidationException() throws Exception {
-        Whitebox.invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameConflits", SURVEY_GROUP_NAME);
-        PowerMockito.doThrow(new ValidationException()).when(surveyGroupDao, "findSurveyGroupNameConflits", SURVEY_GROUP_NAME);
+        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameConflits", SURVEY_GROUP_NAME);
+        doThrow(new ValidationException()).when(surveyGroupDao, "findSurveyGroupNameConflits", SURVEY_GROUP_NAME);
         surveyGroupServiceBean.addNewGroup(surveyGroupJson);
     }
 
     @Test
-    public void updateGroup() {
+    public void updateGroupSurveyAcronymsMethod_should_returns_value_in_case_sucess_update_of_acronyms() throws DataNotFoundException {
+        mockStatic(SurveyGroup.class);
+        when(SurveyGroup.deserialize(surveyGroupJson)).thenReturn(surveyGroup);
+        when(surveyGroupDao.updateGroupSurveyAcronyms(surveyGroup)).thenReturn(EXPECTED_CHANGE);
+        assertEquals(EXPECTED_CHANGE, surveyGroupServiceBean.updateGroupSurveyAcronyms(surveyGroupJson));
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void updateGroupSurveyAcronymsMethod_should_trows_exception_in_case_surveyGroup_inexistence() throws Exception {
+        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameExists", surveyGroupJson);
+        doThrow(new DataNotFoundException()).when(surveyGroupDao, "findSurveyGroupByName", SURVEY_GROUP_NAME);
+        surveyGroupServiceBean.updateGroupSurveyAcronyms(surveyGroupJson);
     }
 
     @Test
-    public void deleteGroup() {
+    public void updateSurveyGroupNameMethod_should_returns_value_in_case_sucess_update_of_surveyGroupName() throws Exception {
+        when(surveyGroupDao.updateGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME)).thenReturn(EXPECTED_CHANGE);
+        assertEquals(EXPECTED_CHANGE, surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME));
+        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameExists", SURVEY_GROUP_NAME);
+        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifyNewSurveyGroupName", NEW_SURVEY_GROUP_NAME);
+        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_surveyGroup_inexistence() throws Exception {
+        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameExists", SURVEY_GROUP_NAME);
+        doThrow(new DataNotFoundException()).when(surveyGroupDao, "findSurveyGroupByName", SURVEY_GROUP_NAME);
+        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_surveyGroupName_invalid() throws Exception {
+        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_existing_surveyGroupName() throws Exception {
+        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
+        doThrow(new ValidationException()).when(surveyGroupDao, "findSurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
+        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void deleteGroupMethod_should_simulate_fail_delete_of_survey_group() throws DataNotFoundException {
+        when(surveyGroupDao.deleteGroup(SURVEY_GROUP_NAME)).thenReturn(result);
+        when(result.getDeletedCount()).thenReturn(0L);
+        surveyGroupServiceBean.deleteGroup(SURVEY_GROUP_NAME);
+    }
+
+    @Test
+    public void deleteGroupMethod_should_simulate_success_delete_of_survey_group() throws DataNotFoundException {
+        when(surveyGroupDao.deleteGroup(SURVEY_GROUP_NAME)).thenReturn(result);
+        when(result.getDeletedCount()).thenReturn(1L);
+        surveyGroupServiceBean.deleteGroup(SURVEY_GROUP_NAME);
     }
 
     @Test
