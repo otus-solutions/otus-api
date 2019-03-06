@@ -18,11 +18,11 @@ public interface SurveyGroupDao {
 
     ObjectId persist(SurveyGroup surveyGroup);
 
-    String updateGroupSurveyAcronyms(SurveyGroup surveyGroup);
+    String updateSurveyGroupAcronyms(SurveyGroup surveyGroup);
 
     String updateGroupName(String originalName, String updateName);
 
-    DeleteResult deleteGroup(String surveyGroupName) throws DataNotFoundException;
+    DeleteResult deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException;
 
     List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
 }

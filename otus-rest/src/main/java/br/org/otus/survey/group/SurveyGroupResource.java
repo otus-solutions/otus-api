@@ -3,7 +3,7 @@ package br.org.otus.survey.group;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
-
+import br.org.otus.security.context.SecurityContext;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +11,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import br.org.otus.security.context.SecurityContext;
 
 @Path("survey")
 public class SurveyGroupResource {
@@ -35,8 +34,8 @@ public class SurveyGroupResource {
     @Path("/new-group")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String addNewGroup(String surveyGroupJson) {
-        String objectID = surveyGroupFacade.addNewGroup(surveyGroupJson);
+    public String addNewSurveyGroup(String surveyGroupJson) {
+        String objectID = surveyGroupFacade.addNewSurveyGroup(surveyGroupJson);
         return new Response().buildSuccess(objectID).toJson();
     }
 
@@ -44,21 +43,21 @@ public class SurveyGroupResource {
     @Secured
     @Path("/update-group")
     public String updateSurveyGroupAcronyms(String surveyGroupJson) {
-        return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson)).toJson();
+        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson)).toJson();
     }
 
     @PUT
     @Secured
     @Path("/update-group-name/{old}/{new}")
     public String updateSurveyGroupName(@PathParam("old") String oldName, @PathParam("new") String newName) {
-        return new Response().buildSuccess(" modifiedCount: "+ surveyGroupFacade.updateSurveyGroupName(oldName, newName)).toJson();
+        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(oldName, newName)).toJson();
     }
 
     @DELETE
     @Secured
     @Path("delete-group/{name}")
-    public String deleteGroup(@PathParam("name") String surveyGroupName){
-        surveyGroupFacade.deleteGroup(surveyGroupName);
+    public String deleteSurveyGroup(@PathParam("name") String surveyGroupName) {
+        surveyGroupFacade.deleteSurveyGroup(surveyGroupName);
         return new Response().buildSuccess().toJson();
     }
 
@@ -66,7 +65,7 @@ public class SurveyGroupResource {
     @Secured
     @Path("groups-by-user")
     @Produces(MediaType.APPLICATION_JSON)
-    public  String getSurveyGroupsByUser(@Context HttpServletRequest request){
+    public String getSurveyGroupsByUser(@Context HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
         return new Response().buildSuccess(surveyGroupFacade.getSurveyGroupsByUser(userEmail)).toSurveyJson();

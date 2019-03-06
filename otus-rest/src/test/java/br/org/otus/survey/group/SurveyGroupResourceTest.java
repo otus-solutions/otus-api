@@ -71,13 +71,13 @@ public class SurveyGroupResourceTest {
 
     @Test
     public void addNewGroupMethod_should_return_ID_of_surveyGroup_created() {
-        when(surveyGroupFacade.addNewGroup(surveyGroupJson)).thenReturn(ID);
-        assertEquals(EXPECTED_RESPONSE_ID, surveyGroupResource.addNewGroup(surveyGroupJson));
+        when(surveyGroupFacade.addNewSurveyGroup(surveyGroupJson)).thenReturn(ID);
+        assertEquals(EXPECTED_RESPONSE_ID, surveyGroupResource.addNewSurveyGroup(surveyGroupJson));
     }
 
     @Test
     public void updateSurveyGroupAcronymsMethod_should_return_signaling_with_change_value() {
-        when(surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
+        when(surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson)).thenReturn(MODIFIELD_COUNT);
         assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupAcronyms(surveyGroupJson));
     }
 
@@ -89,8 +89,8 @@ public class SurveyGroupResourceTest {
 
     @Test
     public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {
-        assertEquals(EXPECTED_RESPONSE_DELETE, surveyGroupResource.deleteGroup(SURVEY_GROUP_NAME));
-        Mockito.verify(surveyGroupFacade, Mockito.times(1)).deleteGroup(SURVEY_GROUP_NAME);
+        assertEquals(EXPECTED_RESPONSE_DELETE, surveyGroupResource.deleteSurveyGroup(SURVEY_GROUP_NAME));
+        Mockito.verify(surveyGroupFacade, Mockito.times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
     }
 
     @Test

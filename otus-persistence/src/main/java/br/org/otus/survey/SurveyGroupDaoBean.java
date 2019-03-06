@@ -55,7 +55,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     }
 
     @Override
-    public String updateGroupSurveyAcronyms(SurveyGroup surveyGroup) {
+    public String updateSurveyGroupAcronyms(SurveyGroup surveyGroup) {
         Bson filter = new Document("name", surveyGroup.getName());
         Bson updates = new Document("surveyAcronyms", surveyGroup.getSurveyAcronyms());
         Bson updateOperationDocument = new Document("$set", updates);
@@ -73,7 +73,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     }
 
     @Override
-    public DeleteResult deleteGroup(String surveyGroupName) {
+    public DeleteResult deleteSurveyGroup(String surveyGroupName) {
         Bson filter = new Document("name", surveyGroupName);
         return collection.deleteOne(filter);
     }

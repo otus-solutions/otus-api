@@ -22,7 +22,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     @Override
-    public ObjectId addNewGroup(String surveyGroupJson) throws ValidationException {
+    public ObjectId addNewSurveyGroup(String surveyGroupJson) throws ValidationException {
         verifySurveyGroupJsonValid(surveyGroupJson);
         SurveyGroup surveyGroup = SurveyGroup.deserialize(surveyGroupJson);
         verifySurveyGroupNameValid(surveyGroup);
@@ -31,10 +31,10 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     @Override
-    public String updateGroupSurveyAcronyms(String surveyGroupJson) throws DataNotFoundException {
+    public String updateSurveyGroupAcronyms(String surveyGroupJson) throws DataNotFoundException {
         SurveyGroup surveyGroupAltered = SurveyGroup.deserialize(surveyGroupJson);
         verifySurveyGroupNameExists(surveyGroupAltered.getName());
-        return surveyGroupDao.updateGroupSurveyAcronyms(surveyGroupAltered);
+        return surveyGroupDao.updateSurveyGroupAcronyms(surveyGroupAltered);
     }
 
     @Override
@@ -46,8 +46,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     @Override
-    public void deleteGroup(String surveyGroupName) throws DataNotFoundException {
-        DeleteResult result = surveyGroupDao.deleteGroup(surveyGroupName);
+    public void deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException {
+        DeleteResult result = surveyGroupDao.deleteSurveyGroup(surveyGroupName);
         if (result.getDeletedCount() == 0) throw new DataNotFoundException(new Throwable("SurveyGroup not found"));
     }
 
@@ -63,7 +63,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     private void verifySurveyGroupNameValid(SurveyGroup surveyGroup) throws ValidationException {
-        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty() || !(surveyGroup.getName().matches("^[A-Z0-9]*$"))) {
+        //if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty() || !(surveyGroup.getName().matches("^[A-Za-z0-9]*$"))) {
+        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty()){
             throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
         }
     }
@@ -73,7 +74,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     private void verifyNewSurveyGroupName(String newSurveyGroupName) throws ValidationException {
-        if (!newSurveyGroupName.matches("^[A-Z0-9]*$")) {
+        if (!newSurveyGroupName.matches("^[A-Za-z0-9]*$")) {
             throw new ValidationException(new Throwable("invalid newSurveyGroupName"));
         }
     }

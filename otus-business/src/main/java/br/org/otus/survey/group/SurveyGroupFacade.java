@@ -20,18 +20,18 @@ public class SurveyGroupFacade {
         return surveyGroupService.getListOfSurveyGroups();
     }
 
-    public String addNewGroup(String surveyGroupJson) {
+    public String addNewSurveyGroup(String surveyGroupJson) {
         try {
-            return surveyGroupService.addNewGroup(surveyGroupJson).toString();
+            return surveyGroupService.addNewSurveyGroup(surveyGroupJson).toString();
         } catch (ValidationException e) {
             throw new HttpResponseException(
                     Security.Validation.build(e.getCause().getMessage(), e.getData()));
         }
     }
 
-    public String updateGroupSurveyAcronyms(String surveyGroupJson) {
+    public String updateSurveyGroupAcronyms(String surveyGroupJson) {
         try {
-            return surveyGroupService.updateGroupSurveyAcronyms(surveyGroupJson);
+            return surveyGroupService.updateSurveyGroupAcronyms(surveyGroupJson);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 
@@ -54,9 +54,9 @@ public class SurveyGroupFacade {
     }
 
 
-    public void deleteGroup(String surveyGroupName) {
+    public void deleteSurveyGroup(String surveyGroupName) {
         try {
-            surveyGroupService.deleteGroup(surveyGroupName);
+            surveyGroupService.deleteSurveyGroup(surveyGroupName);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 

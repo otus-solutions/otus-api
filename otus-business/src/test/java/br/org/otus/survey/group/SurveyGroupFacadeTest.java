@@ -64,32 +64,32 @@ public class SurveyGroupFacadeTest {
 
     @Test
     public void addNewGroupMethod_should_ID_in_case_of_persistence() throws ValidationException {
-        when(surveyGroupService.addNewGroup(surveyGroupJson)).thenReturn(surveyGroupID);
-        assertEquals(EXPECTED_ID, surveyGroupFacade.addNewGroup(surveyGroupJson));
+        when(surveyGroupService.addNewSurveyGroup(surveyGroupJson)).thenReturn(surveyGroupID);
+        assertEquals(EXPECTED_ID, surveyGroupFacade.addNewSurveyGroup(surveyGroupJson));
     }
 
     @Test(expected = HttpResponseException.class)
     public void addNewGroupMethod_should_handle_ValidationException_for_json_invalid() throws ValidationException {
-        when(surveyGroupService.addNewGroup(surveyGroupJson)).thenThrow(validationException);
-        surveyGroupFacade.addNewGroup(surveyGroupJson);
+        when(surveyGroupService.addNewSurveyGroup(surveyGroupJson)).thenThrow(validationException);
+        surveyGroupFacade.addNewSurveyGroup(surveyGroupJson);
     }
 
     @Test
     public void updateGroupSurveyAcronyms_should_invoke_updateGroupSurveyAcronyms_of_SurveyGroupService() throws ValidationException, DataNotFoundException {
-        surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson);
-        verify(surveyGroupService, times(1)).updateGroupSurveyAcronyms(surveyGroupJson);
+        surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson);
+        verify(surveyGroupService, times(1)).updateSurveyGroupAcronyms(surveyGroupJson);
     }
 
     @Test(expected = HttpResponseException.class)
     public void updateGroupSurveyAcronyms_should_handle_ValidationException_for_json_invalid() throws ValidationException, DataNotFoundException {
-        when(surveyGroupService.updateGroupSurveyAcronyms(surveyGroupJson)).thenThrow(validationException);
-        surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson);
+        when(surveyGroupService.updateSurveyGroupAcronyms(surveyGroupJson)).thenThrow(validationException);
+        surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson);
     }
 
     @Test(expected = HttpResponseException.class)
     public void updateGroupSurveyAcronyms_should_handle_DataNotFoundException_for_json_invalid() throws ValidationException, DataNotFoundException {
-        when(surveyGroupService.updateGroupSurveyAcronyms(surveyGroupJson)).thenThrow(dataNotFoundException);
-        surveyGroupFacade.updateGroupSurveyAcronyms(surveyGroupJson);
+        when(surveyGroupService.updateSurveyGroupAcronyms(surveyGroupJson)).thenThrow(dataNotFoundException);
+        surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson);
     }
 
     @Test
@@ -112,14 +112,14 @@ public class SurveyGroupFacadeTest {
 
     @Test
     public void deleteGroup_should_invoke_deleteGroup_of_SurveyGroupService() throws DataNotFoundException {
-        surveyGroupFacade.deleteGroup(SURVEY_GROUP_NAME);
-        verify(surveyGroupService, times(1)).deleteGroup(SURVEY_GROUP_NAME);
+        surveyGroupFacade.deleteSurveyGroup(SURVEY_GROUP_NAME);
+        verify(surveyGroupService, times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
     }
 
     @Test(expected = HttpResponseException.class)
     public void deleteGroup_should_handle_DataNotFoundException_for_json_invalid() throws Exception {
         doThrow(dataNotFoundException).when(surveyGroupService,"deleteGroup", SURVEY_GROUP_NAME);
-        surveyGroupFacade.deleteGroup(SURVEY_GROUP_NAME);
+        surveyGroupFacade.deleteSurveyGroup(SURVEY_GROUP_NAME);
     }
 
     @Test
