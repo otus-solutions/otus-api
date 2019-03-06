@@ -81,11 +81,11 @@ public class SurveyGroupResourceTest {
         assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupAcronyms(surveyGroupJson));
     }
 
-    @Test
-    public void updateSurveyGroupNameMethod_should_return_signaling_with_change_value() {
-        when(surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME)).thenReturn(MODIFIELD_COUNT);
-        assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupName(OLD_NAME, NEW_NAME));
-    }
+//    @Test
+//    public void updateSurveyGroupNameMethod_should_return_signaling_with_change_value() {
+//        when(surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME)).thenReturn(MODIFIELD_COUNT);
+//        assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupName(OLD_NAME, NEW_NAME));
+//    }
 
     @Test
     public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {

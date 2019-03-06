@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -13,7 +14,9 @@ public interface SurveyGroupService {
 
     ObjectId addNewSurveyGroup(String surveyGroup) throws ValidationException;
 
-    String updateSurveyGroupName(String oldGroupName, String newGroupName) throws DataNotFoundException, ValidationException;
+    //String updateSurveyGroupName(String oldGroupName, String newGroupName) throws DataNotFoundException, ValidationException;
+
+    String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException;
 
     String updateSurveyGroupAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
 

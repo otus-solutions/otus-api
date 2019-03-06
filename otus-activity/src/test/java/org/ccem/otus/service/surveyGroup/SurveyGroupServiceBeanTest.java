@@ -76,13 +76,13 @@ public class SurveyGroupServiceBeanTest {
         surveyGroupServiceBean.addNewSurveyGroup(EMPTY_JSON);
     }
 
-    @Test(expected = ValidationException.class)
-    public void addNewGroupMethod_with_surveyGroupName_invalid_should_throws_ValidationException() throws Exception {
-        mockStatic(SurveyGroup.class);
-        when(SurveyGroup.deserialize(surveyGroupJson)).thenReturn(surveyGroup);
-        surveyGroup.setName("ci");
-        surveyGroupServiceBean.addNewSurveyGroup(surveyGroupJson);
-    }
+//    @Test(expected = ValidationException.class)
+//    public void addNewGroupMethod_with_surveyGroupName_invalid_should_throws_ValidationException() throws Exception {
+//        mockStatic(SurveyGroup.class);
+//        when(SurveyGroup.deserialize(surveyGroupJson)).thenReturn(surveyGroup);
+//        surveyGroup.setName("ci");
+//        surveyGroupServiceBean.addNewSurveyGroup(surveyGroupJson);
+//    }
 
     @Test(expected = ValidationException.class)
     public void addNewGroupMethod_with_surveyGroupName_existence_should_throws_ValidationException() throws Exception {
@@ -106,33 +106,33 @@ public class SurveyGroupServiceBeanTest {
         surveyGroupServiceBean.updateSurveyGroupAcronyms(surveyGroupJson);
     }
 
-    @Test
-    public void updateSurveyGroupNameMethod_should_returns_value_in_case_sucess_update_of_surveyGroupName() throws Exception {
-        when(surveyGroupDao.updateGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME)).thenReturn(EXPECTED_CHANGE);
-        assertEquals(EXPECTED_CHANGE, surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME));
-        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameExists", SURVEY_GROUP_NAME);
-        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifyNewSurveyGroupName", NEW_SURVEY_GROUP_NAME);
-        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
-    }
+//    @Test
+//    public void updateSurveyGroupNameMethod_should_returns_value_in_case_sucess_update_of_surveyGroupName() throws Exception {
+//        when(surveyGroupDao.updateGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME)).thenReturn(EXPECTED_CHANGE);
+//        assertEquals(EXPECTED_CHANGE, surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME));
+//        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameExists", SURVEY_GROUP_NAME);
+//        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifyNewSurveyGroupName", NEW_SURVEY_GROUP_NAME);
+//        verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
+//    }
 
-    @Test(expected = DataNotFoundException.class)
-    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_surveyGroup_inexistence() throws Exception {
-        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameExists", SURVEY_GROUP_NAME);
-        doThrow(new DataNotFoundException()).when(surveyGroupDao, "findSurveyGroupByName", SURVEY_GROUP_NAME);
-        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_surveyGroupName_invalid() throws Exception {
-        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_existing_surveyGroupName() throws Exception {
-        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
-        doThrow(new ValidationException()).when(surveyGroupDao, "findSurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
-        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
-    }
+//    @Test(expected = DataNotFoundException.class)
+//    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_surveyGroup_inexistence() throws Exception {
+//        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameExists", SURVEY_GROUP_NAME);
+//        doThrow(new DataNotFoundException()).when(surveyGroupDao, "findSurveyGroupByName", SURVEY_GROUP_NAME);
+//        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME);
+//    }
+//
+//    @Test(expected = ValidationException.class)
+//    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_surveyGroupName_invalid() throws Exception {
+//        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
+//    }
+//
+//    @Test(expected = ValidationException.class)
+//    public void updateSurveyGroupNameMethod_should_trows_exception_in_case_existing_surveyGroupName() throws Exception {
+//        invokeMethod(surveyGroupServiceBean, "verifySurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
+//        doThrow(new ValidationException()).when(surveyGroupDao, "findSurveyGroupNameConflits", NEW_SURVEY_GROUP_NAME);
+//        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
+//    }
 
     @Test(expected = DataNotFoundException.class)
     public void deleteGroupMethod_should_simulate_fail_delete_of_survey_group() throws DataNotFoundException {

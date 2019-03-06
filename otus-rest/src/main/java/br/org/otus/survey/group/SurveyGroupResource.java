@@ -46,11 +46,18 @@ public class SurveyGroupResource {
         return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson)).toJson();
     }
 
+//    @PUT
+//    @Secured
+//    @Path("/update-group-name/{old}/{new}")
+//    public String updateSurveyGroupName(@PathParam("old") String oldName, @PathParam("new") String newName) {
+//        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(oldName, newName)).toJson();
+//    }
+
     @PUT
     @Secured
-    @Path("/update-group-name/{old}/{new}")
-    public String updateSurveyGroupName(@PathParam("old") String oldName, @PathParam("new") String newName) {
-        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(oldName, newName)).toJson();
+    @Path("/update-group-name")
+    public String updateSurveyGroupName(String surveyGroupNamesUpdate) {
+        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(surveyGroupNamesUpdate)).toJson();
     }
 
     @DELETE

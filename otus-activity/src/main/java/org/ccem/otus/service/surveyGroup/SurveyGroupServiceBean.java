@@ -6,8 +6,11 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.persistence.SurveyGroupDao;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import java.util.List;
 
 
@@ -37,11 +40,24 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         return surveyGroupDao.updateSurveyGroupAcronyms(surveyGroupAltered);
     }
 
+//    @Override
+//    public String updateSurveyGroupName(String oldSurveyGroupName, String newSurveyGroupName) throws DataNotFoundException, ValidationException {
+//        verifySurveyGroupNameExists(oldSurveyGroupName);
+//        verifyNewSurveyGroupName(newSurveyGroupName);
+//        verifySurveyGroupNameConflits(newSurveyGroupName);
+//        return surveyGroupDao.updateGroupName(oldSurveyGroupName, newSurveyGroupName);
+//    }
+
     @Override
-    public String updateSurveyGroupName(String oldSurveyGroupName, String newSurveyGroupName) throws DataNotFoundException, ValidationException {
-        verifySurveyGroupNameExists(oldSurveyGroupName);
-        verifyNewSurveyGroupName(newSurveyGroupName);
-        verifySurveyGroupNameConflits(newSurveyGroupName);
+    public String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException {
+        JSONObject surveyGroupNames = new JSONObject(surveyGroupNamesUpdate);
+        String oldSurveyGroupName = surveyGroupNames.getString("old");
+        String newSurveyGroupName = surveyGroupNames.getString("new");
+
+        //verifySurveyGroupNameExists(oldSurveyGroupName);
+        //verifyNewSurveyGroupName(newSurveyGroupName);
+        //verifySurveyGroupNameConflits(newSurveyGroupName);
+
         return surveyGroupDao.updateGroupName(oldSurveyGroupName, newSurveyGroupName);
     }
 
@@ -74,7 +90,8 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     private void verifyNewSurveyGroupName(String newSurveyGroupName) throws ValidationException {
-        if (!newSurveyGroupName.matches("^[A-Za-z0-9]*$")) {
+        //if (!newSurveyGroupName.matches("^[A-Za-z0-9]*$")) {
+        if (newSurveyGroupName == null || newSurveyGroupName.isEmpty()) {
             throw new ValidationException(new Throwable("invalid newSurveyGroupName"));
         }
     }
