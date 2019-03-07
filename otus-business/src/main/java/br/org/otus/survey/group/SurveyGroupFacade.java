@@ -6,8 +6,8 @@ import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
+import org.ccem.otus.model.survey.group.dto.UpdateSurveyGroupNameDto;
 import org.ccem.otus.service.surveyGroup.SurveyGroupService;
-import org.json.JSONException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -42,47 +42,17 @@ public class SurveyGroupFacade {
         }
     }
 
-//    public String updateSurveyGroupName(String surveyGroupNamesUpdate) {
-//        try {
-//            return surveyGroupService.updateSurveyGroupName(surveyGroupNamesUpdate);
-//        } catch (DataNotFoundException e) {
-//            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-//
-//        } catch (ValidationException e) {
-//            throw new HttpResponseException(
-//                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
-//        }
-//    }
-
-
-    public String updateSurveyGroupName(String surveyGroupNamesUpdate) {
+    public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
         try {
-            return surveyGroupService.updateSurveyGroupName(surveyGroupNamesUpdate);
-        } catch (JSONException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-
+            return surveyGroupService.updateSurveyGroupName(updateSurveyGroupNameDto);
         } catch (ValidationException e) {
             throw new HttpResponseException(
                     Security.Validation.build(e.getCause().getMessage(), e.getData()));
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
         }
     }
-
-
-//    public String updateSurveyGroupName(String oldName, String newName) {
-//        try {
-//            return surveyGroupService.updateSurveyGroupName(oldName, newName);
-//        } catch (DataNotFoundException e) {
-//            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-//
-//        } catch (ValidationException e) {
-//            throw new HttpResponseException(
-//                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
-//        }
-//    }
-
 
     public void deleteSurveyGroup(String surveyGroupName) {
         try {

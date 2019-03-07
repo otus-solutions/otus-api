@@ -4,6 +4,7 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
+import org.ccem.otus.model.survey.group.dto.UpdateSurveyGroupNameDto;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -46,19 +47,22 @@ public class SurveyGroupResource {
         return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson)).toJson();
     }
 
-//    @PUT
-//    @Secured
-//    @Path("/update-group-name/{old}/{new}")
-//    public String updateSurveyGroupName(@PathParam("old") String oldName, @PathParam("new") String newName) {
-//        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(oldName, newName)).toJson();
-//    }
-
     @PUT
     @Secured
     @Path("/update-group-name")
-    public String updateSurveyGroupName(String surveyGroupNamesUpdate) {
-        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(surveyGroupNamesUpdate)).toJson();
+    public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
+        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(updateSurveyGroupNameDto)).toJson();
     }
+
+
+//    @PUT
+//    @Secured
+//    @Path("/update-group-name-teste")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public String updateSurveyGroupNameDto(UpdateSurveyGroupNameDto dto) {
+//        System.out.println(dto);
+//        return String.valueOf(new Response().buildSuccess(" modifiedCount: " + "teste"));
+//    }
 
     @DELETE
     @Secured

@@ -5,12 +5,10 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
+import org.ccem.otus.model.survey.group.dto.UpdateSurveyGroupNameDto;
 import org.ccem.otus.persistence.SurveyGroupDao;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
-import javax.json.JsonObject;
 import java.util.List;
 
 
@@ -40,23 +38,13 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         return surveyGroupDao.updateSurveyGroupAcronyms(surveyGroupAltered);
     }
 
-//    @Override
-//    public String updateSurveyGroupName(String oldSurveyGroupName, String newSurveyGroupName) throws DataNotFoundException, ValidationException {
-//        verifySurveyGroupNameExists(oldSurveyGroupName);
-//        verifyNewSurveyGroupName(newSurveyGroupName);
-//        verifySurveyGroupNameConflits(newSurveyGroupName);
-//        return surveyGroupDao.updateGroupName(oldSurveyGroupName, newSurveyGroupName);
-//    }
-
     @Override
-    public String updateSurveyGroupName(String surveyGroupNamesUpdate) throws JSONException, DataNotFoundException, ValidationException {
-        JSONObject surveyGroupNames = new JSONObject(surveyGroupNamesUpdate);
-        String oldSurveyGroupName = surveyGroupNames.getString("old");
-        String newSurveyGroupName = surveyGroupNames.getString("new");
-        verifySurveyGroupNameExists(oldSurveyGroupName);
-        verifyNewSurveyGroupName(newSurveyGroupName);
-        verifySurveyGroupNameConflits(newSurveyGroupName);
-        return surveyGroupDao.updateGroupName(oldSurveyGroupName, newSurveyGroupName);
+    public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) throws ValidationException, DataNotFoundException {
+        if (!updateSurveyGroupNameDto.isValid()) throw new ValidationException(new Throwable("UpdateSurveyGroupNameJson Invalid"));
+        verifySurveyGroupNameExists(updateSurveyGroupNameDto.getOldSurveyGroupName());
+        verifyNewSurveyGroupName(updateSurveyGroupNameDto.getNewSurveyGroupName());
+        verifySurveyGroupNameConflits(updateSurveyGroupNameDto.getNewSurveyGroupName());
+        return surveyGroupDao.updateGroupName(updateSurveyGroupNameDto.getOldSurveyGroupName(), updateSurveyGroupNameDto.getNewSurveyGroupName());
     }
 
     @Override
@@ -77,8 +65,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     private void verifySurveyGroupNameValid(SurveyGroup surveyGroup) throws ValidationException {
-        //if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty() || !(surveyGroup.getName().matches("^[A-Za-z0-9]*$"))) {
-        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty()){
+        if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty()) {
             throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
         }
     }
@@ -88,7 +75,6 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     private void verifyNewSurveyGroupName(String newSurveyGroupName) throws ValidationException {
-        //if (!newSurveyGroupName.matches("^[A-Za-z0-9]*$")) {
         if (newSurveyGroupName == null || newSurveyGroupName.isEmpty()) {
             throw new ValidationException(new Throwable("invalid newSurveyGroupName"));
         }
