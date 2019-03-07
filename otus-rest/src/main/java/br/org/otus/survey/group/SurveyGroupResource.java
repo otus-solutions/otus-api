@@ -55,7 +55,7 @@ public class SurveyGroupResource {
         return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(surveyGroupNameDto)).toJson();
     }
 
-    @DELETE
+    @POST
     @Secured
     @Path("/delete-group")
     public String deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) {
