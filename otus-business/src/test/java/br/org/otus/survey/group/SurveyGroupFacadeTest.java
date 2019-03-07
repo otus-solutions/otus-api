@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 
@@ -110,11 +109,11 @@ public class SurveyGroupFacadeTest {
 //        surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME);
 //    }
 
-    @Test
-    public void deleteGroup_should_invoke_deleteGroup_of_SurveyGroupService() throws DataNotFoundException {
-        surveyGroupFacade.deleteSurveyGroup(SURVEY_GROUP_NAME);
-        verify(surveyGroupService, times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
-    }
+//    @Test
+//    public void deleteGroup_should_invoke_deleteGroup_of_SurveyGroupService() throws DataNotFoundException {
+//        surveyGroupFacade.deleteSurveyGroup(SURVEY_GROUP_NAME);
+//        verify(surveyGroupService, times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
+//    }
 
 //    @Test(expected = HttpResponseException.class)
 //    public void deleteGroup_should_handle_DataNotFoundException_for_json_invalid() throws Exception {

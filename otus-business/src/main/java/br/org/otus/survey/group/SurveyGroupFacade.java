@@ -54,9 +54,9 @@ public class SurveyGroupFacade {
         }
     }
 
-    public void deleteSurveyGroup(String surveyGroupName) {
+    public void deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
         try {
-            surveyGroupService.deleteSurveyGroup(surveyGroupName);
+            surveyGroupService.deleteSurveyGroup(updateSurveyGroupNameDto);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 

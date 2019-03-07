@@ -4,15 +4,16 @@ import org.ccem.otus.exceptions.Dto;
 
 public class UpdateSurveyGroupNameDto implements Dto {
 
-    private String oldSurveyGroupName;
+    private String surveyGroupName;
+
     private String newSurveyGroupName;
 
-    public String getOldSurveyGroupName() {
-        return oldSurveyGroupName;
+    public String getSurveyGroupName() {
+        return surveyGroupName;
     }
 
-    public void setOldSurveyGroupName(String oldSurveyGroupName) {
-        this.oldSurveyGroupName = oldSurveyGroupName;
+    public void setSurveyGroupName(String oldSurveyGroupName) {
+        this.surveyGroupName = oldSurveyGroupName;
     }
 
     public String getNewSurveyGroupName() {
@@ -25,7 +26,7 @@ public class UpdateSurveyGroupNameDto implements Dto {
 
     @Override
     public Boolean isValid() {
-        return (oldSurveyGroupName != null && !oldSurveyGroupName.isEmpty()
+        return (surveyGroupName != null && !surveyGroupName.isEmpty()
                 && newSurveyGroupName != null && !newSurveyGroupName.isEmpty());
     }
 }

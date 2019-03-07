@@ -54,21 +54,11 @@ public class SurveyGroupResource {
         return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(updateSurveyGroupNameDto)).toJson();
     }
 
-
-//    @PUT
-//    @Secured
-//    @Path("/update-group-name-teste")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public String updateSurveyGroupNameDto(UpdateSurveyGroupNameDto dto) {
-//        System.out.println(dto);
-//        return String.valueOf(new Response().buildSuccess(" modifiedCount: " + "teste"));
-//    }
-
     @DELETE
     @Secured
-    @Path("delete-group/{name}")
-    public String deleteSurveyGroup(@PathParam("name") String surveyGroupName) {
-        surveyGroupFacade.deleteSurveyGroup(surveyGroupName);
+    @Path("delete-group")
+    public String deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
+        surveyGroupFacade.deleteSurveyGroup(updateSurveyGroupNameDto);
         return new Response().buildSuccess().toJson();
     }
 

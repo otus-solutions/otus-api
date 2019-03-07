@@ -19,7 +19,7 @@ public interface SurveyGroupService {
 
     String updateSurveyGroupAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
 
-    void deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException;
+    void deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) throws DataNotFoundException;
 
     List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
 }

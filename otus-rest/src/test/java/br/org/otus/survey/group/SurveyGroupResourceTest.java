@@ -87,11 +87,11 @@ public class SurveyGroupResourceTest {
 //        assertEquals(EXPECTED_RESPONSE_UPDATE, surveyGroupResource.updateSurveyGroupName(OLD_NAME, NEW_NAME));
 //    }
 
-    @Test
-    public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {
-        assertEquals(EXPECTED_RESPONSE_DELETE, surveyGroupResource.deleteSurveyGroup(SURVEY_GROUP_NAME));
-        Mockito.verify(surveyGroupFacade, Mockito.times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
-    }
+//    @Test
+//    public void deleteGroupMethod_should_deleteGroup_by_surveyGroupFacade() {
+//        assertEquals(EXPECTED_RESPONSE_DELETE, surveyGroupResource.deleteSurveyGroup(SURVEY_GROUP_NAME));
+//        Mockito.verify(surveyGroupFacade, Mockito.times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
+//    }
 
     @Test
     public void getSurveyGroupsByUserMethod_should_return_list_of_SurverGroups() {

@@ -41,15 +41,15 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     @Override
     public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) throws ValidationException, DataNotFoundException {
         if (!updateSurveyGroupNameDto.isValid()) throw new ValidationException(new Throwable("UpdateSurveyGroupNameJson Invalid"));
-        verifySurveyGroupNameExists(updateSurveyGroupNameDto.getOldSurveyGroupName());
+        verifySurveyGroupNameExists(updateSurveyGroupNameDto.getSurveyGroupName());
         verifyNewSurveyGroupName(updateSurveyGroupNameDto.getNewSurveyGroupName());
         verifySurveyGroupNameConflits(updateSurveyGroupNameDto.getNewSurveyGroupName());
-        return surveyGroupDao.updateGroupName(updateSurveyGroupNameDto.getOldSurveyGroupName(), updateSurveyGroupNameDto.getNewSurveyGroupName());
+        return surveyGroupDao.updateGroupName(updateSurveyGroupNameDto.getSurveyGroupName(), updateSurveyGroupNameDto.getNewSurveyGroupName());
     }
 
     @Override
-    public void deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException {
-        DeleteResult result = surveyGroupDao.deleteSurveyGroup(surveyGroupName);
+    public void deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) throws DataNotFoundException {
+        DeleteResult result = surveyGroupDao.deleteSurveyGroup(updateSurveyGroupNameDto.getSurveyGroupName());
         if (result.getDeletedCount() == 0) throw new DataNotFoundException(new Throwable("SurveyGroup not found"));
     }
 

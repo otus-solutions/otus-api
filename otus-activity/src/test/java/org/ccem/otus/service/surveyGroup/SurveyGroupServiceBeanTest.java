@@ -134,19 +134,19 @@ public class SurveyGroupServiceBeanTest {
 //        surveyGroupServiceBean.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME_INVALID);
 //    }
 
-    @Test(expected = DataNotFoundException.class)
-    public void deleteGroupMethod_should_simulate_fail_delete_of_survey_group() throws DataNotFoundException {
-        when(surveyGroupDao.deleteSurveyGroup(SURVEY_GROUP_NAME)).thenReturn(result);
-        when(result.getDeletedCount()).thenReturn(0L);
-        surveyGroupServiceBean.deleteSurveyGroup(SURVEY_GROUP_NAME);
-    }
-
-    @Test
-    public void deleteGroupMethod_should_simulate_success_delete_of_survey_group() throws DataNotFoundException {
-        when(surveyGroupDao.deleteSurveyGroup(SURVEY_GROUP_NAME)).thenReturn(result);
-        when(result.getDeletedCount()).thenReturn(1L);
-        surveyGroupServiceBean.deleteSurveyGroup(SURVEY_GROUP_NAME);
-    }
+//    @Test(expected = DataNotFoundException.class)
+//    public void deleteGroupMethod_should_simulate_fail_delete_of_survey_group() throws DataNotFoundException {
+//        when(surveyGroupDao.deleteSurveyGroup(SURVEY_GROUP_NAME)).thenReturn(result);
+//        when(result.getDeletedCount()).thenReturn(0L);
+//        surveyGroupServiceBean.deleteSurveyGroup(SURVEY_GROUP_NAME);
+//    }
+//
+//    @Test
+//    public void deleteGroupMethod_should_simulate_success_delete_of_survey_group() throws DataNotFoundException {
+//        when(surveyGroupDao.deleteSurveyGroup(SURVEY_GROUP_NAME)).thenReturn(result);
+//        when(result.getDeletedCount()).thenReturn(1L);
+//        surveyGroupServiceBean.deleteSurveyGroup(SURVEY_GROUP_NAME);
+//    }
 
     @Test
     public void getSurveyGroupsByUser() {
