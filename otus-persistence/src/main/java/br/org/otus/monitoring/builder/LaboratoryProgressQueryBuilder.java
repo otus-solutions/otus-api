@@ -121,6 +121,13 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getPendingAliquotsCsvDataQuery(String center) {
+        pipeline.add(new Document("$match", new Document("fieldCenter.acronym", center).append("role", "EXAM")));
+        pipeline.add(parseQuery("{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotId\",false]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotData.id\",false]},\"then\":1.0,\"else\":0.0}}}}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingAliquotsCsvData:{$push:{aliquot:\"$code\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
+        return this.pipeline;
+    }
+
     public List<Bson> getQuantitativeByTypeOfAliquotsSecondPartialResultQuery(ArrayList<String> aliquotCodes){
         pipeline.add(new Document("$match", new Document("code", new Document("$in", aliquotCodes))));
         pipeline.add(parseQuery("{$group:{_id:\"$name\",received:{$sum:1}}}"));
@@ -143,6 +150,7 @@ public class LaboratoryProgressQueryBuilder {
         pipeline.add(parseQuery("{$group:{_id:{},examsQuantitative:{$push:{title:\"$_id\",exams:\"$received\"}}}}"));
         return this.pipeline;
     }
+
     public List<Bson> fetchAllAliquotCodesQuery(String center){
         pipeline.add(parseQuery("{$match:{\"fieldCenter.acronym\":" + center + "}}"));
         pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$code\"}}}"));

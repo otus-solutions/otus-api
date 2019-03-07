@@ -166,17 +166,16 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
   public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException {
     CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
     CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams.thenApply(aliquotsWithExamsDocument -> {
-      if (aliquotsWithExamsDocument == null) {
-        throw new IllegalStateException();
+      Document first;
+      if (aliquotsWithExamsDocument != null) {
+        Object aliquotCodes = aliquotsWithExamsDocument.get("aliquotCodes");
+        first = aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery((ArrayList<String>) aliquotCodes, center)).first();
+      } else {
+        first = aliquotDao.aggregate(new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery(center)).first();
       }
 
-      Object aliquotCodes = aliquotsWithExamsDocument.get("aliquotCodes");
-      Document first = aliquotDao.aggregate(
-          new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery((ArrayList<String>) aliquotCodes, center))
-          .first();
-
       if (first == null) {
-        throw new IllegalStateException();
+          throw new IllegalStateException();
       }
       return LaboratoryProgressDTO.deserialize(first.toJson());
     });
@@ -187,14 +186,16 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
   @Nullable
   private LaboratoryProgressDTO getLaboratoryProgressDTO(CompletableFuture<LaboratoryProgressDTO> greetingFuture)
       throws DataNotFoundException {
+    LaboratoryProgressDTO laboratoryProgressDTO = null;
+
     try {
-      return greetingFuture.get();
+      laboratoryProgressDTO = greetingFuture.get();
     } catch (InterruptedException ignored) {
     } catch (ExecutionException e) {
       throw new DataNotFoundException(new Throwable("There are no result"));
     }
 
-    return null;
+    return laboratoryProgressDTO;
   }
 
   @Override

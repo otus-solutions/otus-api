@@ -23,6 +23,18 @@ public class LaboratoryProgressQueryBuilderTest {
     }
 
     @Test
+    public void getOrphansQuery() {
+        String expectedQuery = "[{\"$match\":{\"aliquotValid\":false}},{\"$group\":{\"_id\":{\"examId\":\"$examId\",\"examName\":\"$examName\"}}},{\"$group\":{\"_id\":\"$_id.examName\",\"count\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"orphanExamsProgress\":{\"$push\":{\"title\":\"$_id\",\"orphans\":\"$count\"}}}},{\"$match\":{\"orphanExamsProgress\":{\"$exists\":true}}}]";
+        assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getOrphansQuery()));
+    }
+
+    @Test
+    public void getStorageByAliquotQuery() {
+        String expectedQuery = "[{\"$match\":{\"role\":\"STORAGE\",\"fieldCenter.acronym\":\"RS\"}},{\"$group\":{\"_id\":\"$name\",\"count\":{\"$sum\":1.0}}},{\"$group\":{\"_id\":{},\"storageByAliquot\":{\"$push\":{\"title\":\"$_id\",\"storage\":\"$count\"}}}}]";
+        assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getStorageByAliquotQuery(CENTER)));
+    }
+
+    @Test
     public void getQuantitativeByTypeOfAliquotsFirstPartialResultQuery() {
         String expectedQuery = "[{\"$match\":{\"role\":\"EXAM\",\"fieldCenter.acronym\":\"RS\"}},{\"$group\":{\"_id\":\"$name\",\"aliquots\":{\"$push\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotId\",false]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotData.id\",false]},\"then\":1.0,\"else\":0.0}}}}}}}},{\"$unwind\":\"$aliquots\"},{\"$group\":{\"_id\":\"$_id\",\"transported\":{\"$sum\":\"$aliquots.transported\"},\"prepared\":{\"$sum\":\"$aliquots.prepared\"}}},{\"$group\":{\"_id\":{},\"quantitativeByTypeOfAliquots\":{\"$push\":{\"title\":\"$_id\",\"transported\":\"$transported\",\"prepared\":\"$prepared\"}}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsFirstPartialResultQuery(CENTER)));
@@ -62,6 +74,12 @@ public class LaboratoryProgressQueryBuilderTest {
     public void getPendingAliquotsCsvDataQuery() {
         String expectedQuery = "[{\"$match\":{\"code\":{\"$nin\":[\"12345678\"]},\"fieldCenter.acronym\":\"RS\",\"role\":\"EXAM\"}},{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotId\",false]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotData.id\",false]},\"then\":1.0,\"else\":0.0}}}}}},{\"$group\":{\"_id\":{},\"pendingAliquotsCsvData\":{\"$push\":{\"aliquot\":\"$code\",\"transported\":\"$transported\",\"prepared\":\"$prepared\"}}}}]";
         assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery(CODELIST,CENTER)));
+    }
+
+    @Test
+    public void getPendingAliquotsCsvDataQueryWithoutAliquotInExams() {
+        String expectedQuery = "[{\"$match\":{\"fieldCenter.acronym\":\"RS\",\"role\":\"EXAM\"}},{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotId\",false]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotData.id\",false]},\"then\":1.0,\"else\":0.0}}}}}},{\"$group\":{\"_id\":{},\"pendingAliquotsCsvData\":{\"$push\":{\"aliquot\":\"$code\",\"transported\":\"$transported\",\"prepared\":\"$prepared\"}}}}]";
+        assertEquals(expectedQuery, builder.toJson(new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery(CENTER)));
     }
 
     @Test
