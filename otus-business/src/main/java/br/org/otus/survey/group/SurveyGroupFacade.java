@@ -6,7 +6,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
-import org.ccem.otus.model.survey.group.dto.UpdateSurveyGroupNameDto;
+import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
 import org.ccem.otus.service.surveyGroup.SurveyGroupService;
 
 import javax.inject.Inject;
@@ -42,9 +42,9 @@ public class SurveyGroupFacade {
         }
     }
 
-    public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
+    public String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) {
         try {
-            return surveyGroupService.updateSurveyGroupName(updateSurveyGroupNameDto);
+            return surveyGroupService.updateSurveyGroupName(surveyGroupNameDto);
         } catch (ValidationException e) {
             throw new HttpResponseException(
                     Security.Validation.build(e.getCause().getMessage(), e.getData()));
@@ -54,9 +54,9 @@ public class SurveyGroupFacade {
         }
     }
 
-    public void deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
+    public void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) {
         try {
-            surveyGroupService.deleteSurveyGroup(updateSurveyGroupNameDto);
+            surveyGroupService.deleteSurveyGroup(surveyGroupNameDto);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 

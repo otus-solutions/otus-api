@@ -5,7 +5,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
-import org.ccem.otus.model.survey.group.dto.UpdateSurveyGroupNameDto;
+import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
 import org.ccem.otus.persistence.SurveyGroupDao;
 
 import javax.inject.Inject;
@@ -39,17 +39,17 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     }
 
     @Override
-    public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) throws ValidationException, DataNotFoundException {
-        if (!updateSurveyGroupNameDto.isValid()) throw new ValidationException(new Throwable("UpdateSurveyGroupNameJson Invalid"));
-        verifySurveyGroupNameExists(updateSurveyGroupNameDto.getSurveyGroupName());
-        verifyNewSurveyGroupName(updateSurveyGroupNameDto.getNewSurveyGroupName());
-        verifySurveyGroupNameConflits(updateSurveyGroupNameDto.getNewSurveyGroupName());
-        return surveyGroupDao.updateGroupName(updateSurveyGroupNameDto.getSurveyGroupName(), updateSurveyGroupNameDto.getNewSurveyGroupName());
+    public String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) throws ValidationException, DataNotFoundException {
+        if (!surveyGroupNameDto.isValid()) throw new ValidationException(new Throwable("UpdateSurveyGroupNameJson Invalid"));
+        verifySurveyGroupNameExists(surveyGroupNameDto.getSurveyGroupName());
+        verifyNewSurveyGroupName(surveyGroupNameDto.getNewSurveyGroupName());
+        verifySurveyGroupNameConflits(surveyGroupNameDto.getNewSurveyGroupName());
+        return surveyGroupDao.updateGroupName(surveyGroupNameDto.getSurveyGroupName(), surveyGroupNameDto.getNewSurveyGroupName());
     }
 
     @Override
-    public void deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) throws DataNotFoundException {
-        DeleteResult result = surveyGroupDao.deleteSurveyGroup(updateSurveyGroupNameDto.getSurveyGroupName());
+    public void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) throws DataNotFoundException {
+        DeleteResult result = surveyGroupDao.deleteSurveyGroup(surveyGroupNameDto.getSurveyGroupName());
         if (result.getDeletedCount() == 0) throw new DataNotFoundException(new Throwable("SurveyGroup not found"));
     }
 

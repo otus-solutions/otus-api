@@ -2,7 +2,7 @@ package org.ccem.otus.model.survey.group.dto;
 
 import org.ccem.otus.exceptions.Dto;
 
-public class UpdateSurveyGroupNameDto implements Dto {
+public class SurveyGroupNameDto implements Dto {
 
     private String surveyGroupName;
 

@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
+import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
 import org.ccem.otus.service.surveyGroup.SurveyGroupService;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,15 +28,14 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 public class SurveyGroupFacadeTest {
     private static final String EXPECTED_ID = "5c7400d2d767afded0d84dcf";
-    private static final String SURVEY_GROUP_NAME = "CI";
     private static final String USER_EMAIL = "otus@otus.com";
-    private static final String OLD_NAME = "CI";
-    private static final String NEW_NAME = "BA";
 
     @InjectMocks
     private SurveyGroupFacade surveyGroupFacade;
     @Mock
     private SurveyGroupService surveyGroupService;
+    @Mock
+    private SurveyGroupNameDto surveyGroupNameDto;
 
     private SurveyGroup surveyGroup;
     private List<SurveyGroup> surveyGroups;
@@ -91,35 +91,35 @@ public class SurveyGroupFacadeTest {
         surveyGroupFacade.updateSurveyGroupAcronyms(surveyGroupJson);
     }
 
-//    @Test
-//    public void updateSurveyGroupName_should_invoke_updateSurveyGroupName_of_SurveyGroupService() throws ValidationException, DataNotFoundException {
-//        surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME);
-//        verify(surveyGroupService, times(1)).updateSurveyGroupName(OLD_NAME, NEW_NAME);
-//    }
-//
-//    @Test(expected = HttpResponseException.class)
-//    public void updateSurveyGroupName_should_handle_ValidationException_for_json_invalid() throws ValidationException, DataNotFoundException {
-//        when(surveyGroupService.updateSurveyGroupName(OLD_NAME, NEW_NAME)).thenThrow(validationException);
-//        surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME);
-//    }
-//
-//    @Test(expected = HttpResponseException.class)
-//    public void updateGroup_should_handle_DataNotFoundException_for_json_invalid() throws ValidationException, DataNotFoundException {
-//        when(surveyGroupService.updateSurveyGroupName(OLD_NAME, NEW_NAME)).thenThrow(dataNotFoundException);
-//        surveyGroupFacade.updateSurveyGroupName(OLD_NAME, NEW_NAME);
-//    }
+    @Test
+    public void updateSurveyGroupName_should_invoke_updateSurveyGroupName_of_SurveyGroupService() throws ValidationException, DataNotFoundException {
+        surveyGroupFacade.updateSurveyGroupName(surveyGroupNameDto);
+        verify(surveyGroupService, times(1)).updateSurveyGroupName(surveyGroupNameDto);
+    }
 
-//    @Test
-//    public void deleteGroup_should_invoke_deleteGroup_of_SurveyGroupService() throws DataNotFoundException {
-//        surveyGroupFacade.deleteSurveyGroup(SURVEY_GROUP_NAME);
-//        verify(surveyGroupService, times(1)).deleteSurveyGroup(SURVEY_GROUP_NAME);
-//    }
+    @Test(expected = HttpResponseException.class)
+    public void updateSurveyGroupName_should_handle_ValidationException_for_json_invalid() throws ValidationException, DataNotFoundException {
+        when(surveyGroupService.updateSurveyGroupName(surveyGroupNameDto)).thenThrow(validationException);
+        surveyGroupFacade.updateSurveyGroupName(surveyGroupNameDto);
+    }
 
-//    @Test(expected = HttpResponseException.class)
-//    public void deleteGroup_should_handle_DataNotFoundException_for_json_invalid() throws Exception {
-//        doThrow(dataNotFoundException).when(surveyGroupService,"deleteGroup", SURVEY_GROUP_NAME);
-//        surveyGroupFacade.deleteSurveyGroup(SURVEY_GROUP_NAME);
-//    }
+    @Test(expected = HttpResponseException.class)
+    public void updateGroup_should_handle_DataNotFoundException_for_json_invalid() throws ValidationException, DataNotFoundException {
+        when(surveyGroupService.updateSurveyGroupName(surveyGroupNameDto)).thenThrow(dataNotFoundException);
+        surveyGroupFacade.updateSurveyGroupName(surveyGroupNameDto);
+    }
+
+    @Test
+    public void deleteGroup_should_invoke_deleteGroup_of_SurveyGroupService() throws DataNotFoundException {
+        surveyGroupFacade.deleteSurveyGroup(surveyGroupNameDto);
+        verify(surveyGroupService, times(1)).deleteSurveyGroup(surveyGroupNameDto);
+    }
+
+    @Test(expected = HttpResponseException.class)
+    public void deleteGroup_should_handle_DataNotFoundException_for_json_invalid() throws Exception {
+        PowerMockito.doThrow(dataNotFoundException).when(surveyGroupService,"deleteSurveyGroup", surveyGroupNameDto);
+        surveyGroupFacade.deleteSurveyGroup(surveyGroupNameDto);
+    }
 
     @Test
     public void getSurveyGroupsByUser_shold_return_list_of_SurveyGroups() {

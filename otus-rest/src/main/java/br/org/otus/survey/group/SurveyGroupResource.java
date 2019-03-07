@@ -4,7 +4,8 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
-import org.ccem.otus.model.survey.group.dto.UpdateSurveyGroupNameDto;
+import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
+
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -50,21 +51,21 @@ public class SurveyGroupResource {
     @PUT
     @Secured
     @Path("/update-group-name")
-    public String updateSurveyGroupName(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
-        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(updateSurveyGroupNameDto)).toJson();
+    public String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) {
+        return new Response().buildSuccess(" modifiedCount: " + surveyGroupFacade.updateSurveyGroupName(surveyGroupNameDto)).toJson();
     }
 
     @DELETE
     @Secured
-    @Path("delete-group")
-    public String deleteSurveyGroup(UpdateSurveyGroupNameDto updateSurveyGroupNameDto) {
-        surveyGroupFacade.deleteSurveyGroup(updateSurveyGroupNameDto);
+    @Path("/delete-group")
+    public String deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) {
+        surveyGroupFacade.deleteSurveyGroup(surveyGroupNameDto);
         return new Response().buildSuccess().toJson();
     }
 
     @GET
     @Secured
-    @Path("groups-by-user")
+    @Path("/groups-by-user")
     @Produces(MediaType.APPLICATION_JSON)
     public String getSurveyGroupsByUser(@Context HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
