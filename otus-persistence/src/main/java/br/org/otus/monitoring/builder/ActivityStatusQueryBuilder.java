@@ -15,6 +15,11 @@ public class ActivityStatusQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
+  private Document parseQuery(String query) {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    return gsonBuilder.create().fromJson(query, Document.class);
+  }
+
   public ActivityStatusQueryBuilder() {
     this.pipeline = new ArrayList<>();
   }
@@ -184,12 +189,5 @@ public class ActivityStatusQueryBuilder {
             "      }\n" +
             "    }\n" +
             "  }"));
-  }
-
-//  ===================
-
-  private Document parseQuery(String query) {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    return gsonBuilder.create().fromJson(query, Document.class);
   }
 }
