@@ -109,7 +109,7 @@ public class LaboratoryProgressDaoBeanTest {
         query2 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesQuery(CENTER);
         ArrayList<String> aliquotCodes = new ArrayList<>();
         aliquotCodes.add("121212121");
-        query3 = new LaboratoryProgressQueryBuilder().getAliquotCodesInExamLotQuery(aliquotCodes);
+        query3 = new LaboratoryProgressQueryBuilder().getAliquotCodesInExamsQuery(aliquotCodes);
         query4 = new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsSecondPartialResultQuery(aliquotCodes);
         whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
         when(aliquotDao.aggregate(query1)).thenReturn(result);
@@ -147,6 +147,52 @@ public class LaboratoryProgressDaoBeanTest {
         Mockito.verify(aliquotDao, Mockito.times(1)).aggregate(query3);
     }
 
+    @Test
+    public void getDataOfPendingResultsByAliquot_should_build_laboratoryProgressDTO_whem_first_query_return_null() throws Exception {
+        query1 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
+        ArrayList<String> aliquotCodes = new ArrayList<>();
+        aliquotCodes.add("121212121");
+        query2 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(aliquotCodes,CENTER);
+        query3 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery(aliquotCodes,CENTER);
+        whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
+        when(examResultDao.aggregate(query1)).thenReturn(result);
+        when(result.first()).thenReturn(new Document("aliquotCodes", aliquotCodes));
+        when(aliquotDao.aggregate(query2)).thenReturn(result2);
+        when(result2.first()).thenReturn(null);
+        when(aliquotDao.aggregate(query3)).thenReturn(result3);
+        when(result3.first()).thenReturn(new Document("pendingResultsByAliquot",  Arrays.asList()));
+        laboratoryProgressDaoBean.getDataOfPendingResultsByAliquot(CENTER);
+        Mockito.verify(examResultDao, Mockito.times(1)).aggregate(query1);
+        Mockito.verify(aliquotDao, Mockito.times(1)).aggregate(query2);
+        Mockito.verify(aliquotDao, Mockito.times(1)).aggregate(query3);
+    }
+
+    @Test
+    public void getDataOfPendingResultsByAliquot_should_execute_queries_without_examResults() throws Exception {
+        query1 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
+        query2 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotQuery(CENTER);
+        whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
+        when(examResultDao.aggregate(query1)).thenReturn(result);
+        when(result.first()).thenReturn(null);
+        when(aliquotDao.aggregate(query2)).thenReturn(result2);
+        when(result2.first()).thenReturn(new Document("pendingResultsByAliquot",  Arrays.asList()));
+        laboratoryProgressDaoBean.getDataOfPendingResultsByAliquot(CENTER);
+        Mockito.verify(examResultDao, Mockito.times(1)).aggregate(query1);
+        Mockito.verify(aliquotDao, Mockito.times(1)).aggregate(query2);
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void getDataOfPendingResultsByAliquot_should_throw_DataNotFoundException_when_first_query_without_examResults_return_null() throws Exception {
+        query1 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
+        query2 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotQuery(CENTER);
+        whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
+        when(examResultDao.aggregate(query1)).thenReturn(result);
+        when(result.first()).thenReturn(null);
+        when(aliquotDao.aggregate(query2)).thenReturn(result2);
+        when(result2.first()).thenReturn(null);
+        laboratoryProgressDaoBean.getDataOfPendingResultsByAliquot(CENTER);
+    }
+
     @Test(expected = DataNotFoundException.class)
     public void getDataOfPendingResultsByAliquot_should_throw_DataNotFoundException_on_first_query_fail() throws Exception {
         query1 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
@@ -161,9 +207,15 @@ public class LaboratoryProgressDaoBeanTest {
         query1 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
         ArrayList<String> aliquotCodes = new ArrayList<>();
         aliquotCodes.add("121212121");
+        query2 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(aliquotCodes, CENTER);
+        query3 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery(aliquotCodes, CENTER);
         whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
         when(examResultDao.aggregate(query1)).thenReturn(result);
-        when(result.first()).thenReturn(null);
+        when(result.first()).thenReturn(new Document("aliquotCodes", aliquotCodes));
+        when(aliquotDao.aggregate(query2)).thenReturn(result2);
+        when(result2.first()).thenReturn(null);
+        when(aliquotDao.aggregate(query3)).thenReturn(result3);
+        when(result3.first()).thenReturn(null);
         laboratoryProgressDaoBean.getDataOfPendingResultsByAliquot(CENTER);
     }
 
@@ -176,20 +228,6 @@ public class LaboratoryProgressDaoBeanTest {
         whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
         when(examResultDao.aggregate(query1)).thenReturn(result);
         when(result.first()).thenReturn(new Document("aliquotCodes", aliquotCodes));
-        laboratoryProgressDaoBean.getDataOfPendingResultsByAliquot(CENTER);
-    }
-
-    @Test(expected = DataNotFoundException.class)
-    public void getDataOfPendingResultsByAliquot_should_throw_DataNotFoundException_when_second_query_return_null() throws Exception {
-        query1 = new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
-        ArrayList<String> aliquotCodes = new ArrayList<>();
-        aliquotCodes.add("121212121");
-        query2 = new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(aliquotCodes,CENTER);
-        whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
-        when(examResultDao.aggregate(query1)).thenReturn(result);
-        when(result.first()).thenReturn(new Document("aliquotCodes", aliquotCodes));
-        when(aliquotDao.aggregate(query2)).thenReturn(result2);
-        when(result2.first()).thenReturn(null);
         laboratoryProgressDaoBean.getDataOfPendingResultsByAliquot(CENTER);
     }
 
@@ -240,6 +278,20 @@ public class LaboratoryProgressDaoBeanTest {
         Mockito.verify(aliquotDao, Mockito.times(1)).aggregate(query2);
     }
 
+    @Test
+    public void getDataToCSVOfPendingResultsByAliquots_should_execute_query_without_aliquots_in_examResults() throws Exception {
+        query1 =new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
+        query2 =new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery(CENTER);
+        whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
+        when(examResultDao.aggregate(query1)).thenReturn(result);
+        when(result.first()).thenReturn(null);
+        when(aliquotDao.aggregate(query2)).thenReturn(result2);
+        when(result2.first()).thenReturn(new Document("pendingAliquotsCsvData",  Arrays.asList()));
+        laboratoryProgressDaoBean.getDataToCSVOfPendingResultsByAliquots(CENTER);
+        Mockito.verify(examResultDao, Mockito.times(1)).aggregate(query1);
+        Mockito.verify(aliquotDao, Mockito.times(1)).aggregate(query2);
+    }
+
     @Test(expected = DataNotFoundException.class)
     public void getDataToCSVOfPendingResultsByAliquots_should_throw_DataNotFoundException_on_first_query_fail() throws Exception {
         whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
@@ -271,6 +323,18 @@ public class LaboratoryProgressDaoBeanTest {
         when(aliquotDao.aggregate(query2)).thenReturn(result2);
         when(result2.first()).thenReturn(null);
         whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
+        laboratoryProgressDaoBean.getDataToCSVOfPendingResultsByAliquots(CENTER);
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void getDataToCSVOfPendingResultsByAliquots_should_throw_DataNotFoundException_when_third_query_return_null() throws Exception {
+        query1 =new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery();
+        query2 =new LaboratoryProgressQueryBuilder().getPendingAliquotsCsvDataQuery(CENTER);
+        whenNew(LaboratoryProgressQueryBuilder.class).withNoArguments().thenReturn(laboratoryProgressQueryBuilder);
+        when(examResultDao.aggregate(query1)).thenReturn(result);
+        when(result.first()).thenReturn(null);
+        when(aliquotDao.aggregate(query2)).thenReturn(result2);
+        when(result2.first()).thenReturn(null);
         laboratoryProgressDaoBean.getDataToCSVOfPendingResultsByAliquots(CENTER);
     }
 

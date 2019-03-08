@@ -3,6 +3,7 @@ package org.ccem.otus.model.monitoring.laboratory;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class LaboratoryProgressDTO {
 
@@ -15,10 +16,15 @@ public class LaboratoryProgressDTO {
     ArrayList<OrphanExamCsv> orphanExamsCsvData;
 
     public void concatReceivedToPendingResults(LaboratoryProgressDTO received) {
+        HashSet<PendingResults> receivedResultsTitleNotInPendingResultsByAliquot = new HashSet<>();
         for (PendingResults pendingResult : this.pendingResultsByAliquot) {
             Integer examsReceived = 0;
             if (received.pendingResultsByAliquot != null) {
                 for (PendingResults receivedPendingResults : received.pendingResultsByAliquot) {
+                    if(!titleExistInPendingResultsByAliquot(receivedPendingResults.title)){
+                        receivedPendingResults.waiting = 0;
+                        receivedResultsTitleNotInPendingResultsByAliquot.add(receivedPendingResults);
+                    }
                     if (receivedPendingResults.title.equals(pendingResult.title)) {
                         examsReceived = receivedPendingResults.received;
                     }
@@ -26,6 +32,18 @@ public class LaboratoryProgressDTO {
             }
             pendingResult.received = examsReceived;
         }
+        this.pendingResultsByAliquot.addAll(receivedResultsTitleNotInPendingResultsByAliquot);
+    }
+
+    private Boolean titleExistInPendingResultsByAliquot(String title){
+        Boolean found = false;
+        for (PendingResults pendingResult : this.pendingResultsByAliquot) {
+            if (pendingResult.title.equals(title)){
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
     public void fillEmptyWaitingToPendingResults() {

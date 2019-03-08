@@ -93,6 +93,13 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getPendingResultsByAliquotQuery(String center){
+        pipeline.add(new Document("$match",new Document("fieldCenter.acronym", center).append("role", "EXAM")));
+        pipeline.add(parseQuery("{$group:{_id:\"$name\",waiting:{$sum:1}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingResultsByAliquot:{$push:{\"title\": \"$_id\", \"waiting\":\"$waiting\"}}}}"));
+        return this.pipeline;
+    }
+
     public List<Bson> getPendingResultsByAliquotFirstPartialResultQuery(ArrayList<String> allAliquotCodesInExams, String center){
         pipeline.add(new Document("$match", new Document("code", new Document("$nin", allAliquotCodesInExams)).append("fieldCenter.acronym", center).append("role", "EXAM")));
         pipeline.add(parseQuery("{$group:{_id:\"$name\",waiting:{$sum:1}}}"));
@@ -114,6 +121,13 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
+    public List<Bson> getPendingAliquotsCsvDataQuery(String center) {
+        pipeline.add(new Document("$match", new Document("fieldCenter.acronym", center).append("role", "EXAM")));
+        pipeline.add(parseQuery("{\"$project\":{\"code\":\"$code\",\"transported\":{\"$cond\":{\"if\":{\"$ne\":[\"$transportationLotId\",null]},\"then\":1.0,\"else\":0.0}},\"prepared\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotId\",false]},\"then\":1.0,\"else\":{\"$cond\":{\"if\":{\"$ifNull\":[\"$examLotData.id\",false]},\"then\":1.0,\"else\":0.0}}}}}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},pendingAliquotsCsvData:{$push:{aliquot:\"$code\",transported:\"$transported\",prepared:\"$prepared\"}}}}"));
+        return this.pipeline;
+    }
+
     public List<Bson> getQuantitativeByTypeOfAliquotsSecondPartialResultQuery(ArrayList<String> aliquotCodes){
         pipeline.add(new Document("$match", new Document("code", new Document("$in", aliquotCodes))));
         pipeline.add(parseQuery("{$group:{_id:\"$name\",received:{$sum:1}}}"));
@@ -121,8 +135,8 @@ public class LaboratoryProgressQueryBuilder {
         return this.pipeline;
     }
 
-    public List<Bson> getAliquotCodesInExamLotQuery(ArrayList<String> aliquotCodes){
-        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes))));
+    public List<Bson> getAliquotCodesInExamsQuery(ArrayList<String> aliquotCodes){
+        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes)).append("aliquotValid", true)));
         pipeline.add(parseQuery("{$group:{_id:\"$examId\",aliquotCodes:{$addToSet:\"$aliquotCode\"}}}"));
         pipeline.add(parseQuery("{$unwind:\"$aliquotCodes\"}"));
         pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$aliquotCodes\"}}}"));
@@ -130,12 +144,13 @@ public class LaboratoryProgressQueryBuilder {
     }
 
     public List<Bson> getDataByExamQuery(ArrayList<String> aliquotCodes){
-        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes))));
+        pipeline.add(new Document("$match", new Document("aliquotCode", new Document("$in", aliquotCodes)).append("aliquotValid", true)));
         pipeline.add(parseQuery("{$group:{_id:{examId:\"$examId\",examName:\"$examName\"}}}"));
         pipeline.add(parseQuery("{$group:{_id:\"$_id.examName\",received:{$sum:1}}}"));
         pipeline.add(parseQuery("{$group:{_id:{},examsQuantitative:{$push:{title:\"$_id\",exams:\"$received\"}}}}"));
         return this.pipeline;
     }
+
     public List<Bson> fetchAllAliquotCodesQuery(String center){
         pipeline.add(parseQuery("{$match:{\"fieldCenter.acronym\":" + center + "}}"));
         pipeline.add(parseQuery("{$group:{_id:{},aliquotCodes:{$addToSet:\"$code\"}}}"));
