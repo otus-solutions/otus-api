@@ -20,7 +20,7 @@ public interface SurveyGroupDao {
 
     String updateSurveyGroupAcronyms(SurveyGroup surveyGroup);
 
-    String updateGroupName(String originalName, String updateName);
+    String updateSurveyGroupName(String originalName, String updateName);
 
     DeleteResult deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException;
 

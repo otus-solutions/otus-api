@@ -113,7 +113,7 @@ public class SurveyGroupServiceBeanTest {
     public void updateSurveyGroupNameMethod_should_returns_value_in_case_sucess_update_of_surveyGroupName() throws Exception {
         surveyGroupNameDto.setSurveyGroupName(SURVEY_GROUP_NAME);
         surveyGroupNameDto.setNewSurveyGroupName(NEW_SURVEY_GROUP_NAME);
-        when(surveyGroupDao.updateGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME)).thenReturn(EXPECTED_CHANGE);
+        when(surveyGroupDao.updateSurveyGroupName(SURVEY_GROUP_NAME, NEW_SURVEY_GROUP_NAME)).thenReturn(EXPECTED_CHANGE);
         assertEquals(EXPECTED_CHANGE, surveyGroupServiceBean.updateSurveyGroupName(surveyGroupNameDto));
         verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifySurveyGroupNameExists", surveyGroupNameDto.getSurveyGroupName());
         verifyPrivate(surveyGroupServiceBean, times(1)).invoke("verifyNewSurveyGroupName", surveyGroupNameDto.getNewSurveyGroupName());

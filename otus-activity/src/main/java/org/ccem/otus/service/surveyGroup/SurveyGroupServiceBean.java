@@ -44,7 +44,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
         verifySurveyGroupNameExists(surveyGroupNameDto.getSurveyGroupName());
         verifyNewSurveyGroupName(surveyGroupNameDto.getNewSurveyGroupName());
         verifySurveyGroupNameConflits(surveyGroupNameDto.getNewSurveyGroupName());
-        return surveyGroupDao.updateGroupName(surveyGroupNameDto.getSurveyGroupName(), surveyGroupNameDto.getNewSurveyGroupName());
+        return surveyGroupDao.updateSurveyGroupName(surveyGroupNameDto.getSurveyGroupName(), surveyGroupNameDto.getNewSurveyGroupName());
     }
 
     @Override

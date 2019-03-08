@@ -64,7 +64,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     }
 
     @Override
-    public String updateGroupName(String originalName, String updateName) {
+    public String updateSurveyGroupName(String originalName, String updateName) {
         Bson filter = new Document("name", originalName);
         Bson updates = new Document("name", updateName);
         Bson updateOperationDocument = new Document("$set", updates);
