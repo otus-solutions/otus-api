@@ -26,6 +26,7 @@ public class ActivityStatusQueryBuilder {
   }
 
   public ArrayList<Bson> getActivityStatusQuery(LinkedList<String> surveyAcronyms) {
+    addMatchIsDiscardedStage();
     addBuildDataStages(surveyAcronyms);
     return pipeline;
   }
@@ -33,7 +34,16 @@ public class ActivityStatusQueryBuilder {
   private void addMatchFieldCenterStage(String center) {
     pipeline.add(parseQuery("{\n" +
             "    $match: {\n" +
-            "      \"participantData.fieldCenter.acronym\": "+ center +"\n" +
+            "      \"participantData.fieldCenter.acronym\": "+ center +",\n" +
+            "      \"isDiscarded\":false" +
+            "    }\n" +
+            "  }"));
+  }
+
+  private void addMatchIsDiscardedStage() {
+    pipeline.add(parseQuery("{\n" +
+            "    $match: {\n" +
+            "      \"isDiscarded\":false" +
             "    }\n" +
             "  }"));
   }
