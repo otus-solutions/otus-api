@@ -50,7 +50,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getActivitiesProgress();
     } catch (Exception e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
 
@@ -59,7 +59,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getActivitiesProgress(center);
     } catch (Exception e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
 
