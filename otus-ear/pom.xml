@@ -43,6 +43,10 @@
 						</ejbModule>
 						<ejbModule>
 							<groupId>org.ccem.otus</groupId>
+							<artifactId>otus-permissions</artifactId>
+						</ejbModule>
+						<ejbModule>
+							<groupId>org.ccem.otus</groupId>
 							<artifactId>otus-user</artifactId>
 						</ejbModule>
 						<ejbModule>
@@ -126,6 +130,12 @@
 		<dependency>
 			<groupId>org.ccem.otus</groupId>
 			<artifactId>otus-participant</artifactId>
+			<version>${project.parent.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-persistence</artifactId>
 			<version>${project.parent.version}</version>
 			<type>ejb</type>
 		</dependency>
