@@ -1,23 +1,33 @@
 package br.org.otus.permission;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import org.ccem.otus.permissions.service.PermissionService;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
+import org.ccem.otus.permissions.model.user.Permission;
+import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
+import org.ccem.otus.permissions.service.user.UserPermissionService;
 
 public class PermissionFacade {
 
   @Inject
-  private PermissionService permissionService;
+  private UserPermissionService userPermissionService;
 
-  public List<String> getAll(String email) {
-    // permissionService.getAll(email);
-    return null;
+  public UserPermissionDTO getAll(String email) {
+    try {
+      return userPermissionService.getAll(email);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
   }
 
-  public String savePermission(String permissionJson) {
-    return null;
+  public String savePermission(UserPermissionDTO userPermissionDTO) {
+    try {
+      Permission permission = userPermissionDTO.getPermissions().get(0);
+      return userPermissionService.savePermission(permission);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
   }
 
 }

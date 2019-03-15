@@ -17,6 +17,7 @@ import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.monitoring.MonitoringResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.permission.ActivityPermissionResource;
+import br.org.otus.permission.UserPermissionResource;
 import br.org.otus.report.ReportResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
@@ -104,6 +105,9 @@ public class EndPointsLoader extends Application {
     private ActivityPermissionResource activityAccessPermissionResource;
 
     @Inject
+    private UserPermissionResource userPermissionResource;
+
+    @Inject
     private SurveyGroupResource surveyGroupResource;
 
     @Override
@@ -132,6 +136,7 @@ public class EndPointsLoader extends Application {
         resources.add(ExamUploadResource.class);
         resources.add(ProjectConfigurationResource.class);
         resources.add(ActivityPermissionResource.class);
+        resources.add(UserPermissionResource.class);
         resources.add(SurveyGroupResource.class);
 
         return resources;
@@ -163,6 +168,7 @@ public class EndPointsLoader extends Application {
         resources.add(examUploadResource);
         resources.add(projectConfigurationResource);
         resources.add(activityAccessPermissionResource);
+        resources.add(userPermissionResource);
         resources.add(surveyGroupResource);
 
         return resources;

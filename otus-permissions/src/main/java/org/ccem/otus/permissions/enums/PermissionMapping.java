@@ -1,10 +1,10 @@
 package org.ccem.otus.permissions.enums;
 
-import org.ccem.otus.permissions.model.GroupPermission;
-import org.ccem.otus.permissions.model.Permission;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
+import org.ccem.otus.permissions.model.user.Permission;
 
 public enum PermissionMapping {
-	GROUP_PERMISSION(GroupPermission.class, "GroupPermission");
+	SURVEY_GROUP_PERMISSION(SurveyGroupPermission.class, "SurveyGroupPermission");
 
 	private Class<? extends Permission> permission;
 	private String Key;

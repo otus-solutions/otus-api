@@ -4,14 +4,14 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializer;
 import org.ccem.otus.permissions.enums.PermissionMapping;
-import org.ccem.otus.permissions.model.Permission;
+import org.ccem.otus.permissions.model.user.Permission;
 
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
 public class PermissionAdapter implements JsonDeserializer<Permission>, JsonSerializer<Permission> {
-        private static final String OBJECT_TYPE = "dataSource";
+        private static final String OBJECT_TYPE = "objectType";
 
         public PermissionAdapter() {
         }
@@ -21,7 +21,7 @@ public class PermissionAdapter implements JsonDeserializer<Permission>, JsonSeri
         }
 
         public Permission deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonPrimitive prim = (JsonPrimitive)json.getAsJsonObject().get("dataSource");
+            JsonPrimitive prim = (JsonPrimitive)json.getAsJsonObject().get(OBJECT_TYPE);
             String objectType = prim.getAsString();
             return (Permission) context.deserialize(json, PermissionMapping.getEnumByObjectType(objectType).getItemClass());
         }

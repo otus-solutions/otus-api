@@ -2,6 +2,7 @@ package br.org.otus.permission;
 
 import javax.inject.Inject;
 
+import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
@@ -21,10 +22,15 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
   public UserPermissionDTO getUserPermissions(String email) throws Exception {
     UserPermissionDTO userCustomPermission = userPermissionDao.getAll(email);
     UserPermissionDTO permissionProfile = userPermissionProfileDao.getProfile(DEFAULT_PROFILE);
+
+    permissionProfile.concatenatePermissions(userCustomPermission);
     
-    userCustomPermission.concatenatePermissions(permissionProfile);
-    
-    return null;
+    return permissionProfile;
+  }
+
+  @Override
+  public String savePermission(Permission permission) {
+    userPermissionDao.savePermission(permission);
   }
 
 }

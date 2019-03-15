@@ -1,4 +1,4 @@
-package org.ccem.otus.permissions.model;
+package org.ccem.otus.permissions.model.user;
 
 public class Permission {
 

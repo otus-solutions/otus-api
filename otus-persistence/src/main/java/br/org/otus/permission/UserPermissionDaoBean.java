@@ -3,6 +3,8 @@ package br.org.otus.permission;
 import java.util.Arrays;
 
 import org.bson.Document;
+import org.ccem.otus.permissions.model.user.Permission;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 
@@ -21,18 +23,23 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
 
     Document result = collection.aggregate(Arrays.asList(
         new Document("$match",
-            new Document("email","boese.work@gmail.com")
+            new Document("email",email)
             ),
         new Document("$group",
             new Document("_id",new Document())
             .append("permissions", 
                 new Document("$push",new Document("objectType","$objectType")
-                    .append("values", "$values")))))
+                    .append("groups", "$groups")))))
         ).first();
-    if (result == null) {
+    if (result != null) {
       userPermissionDTO = UserPermissionDTO.deserialize(result.toJson());
     }
     return userPermissionDTO;
+  }
+
+  @Override
+  public void savePermission(Permission permission) {
+    super.persist(SurveyGroupPermission.serialize(permission));
   }
 
 }
