@@ -1,11 +1,17 @@
 package org.ccem.otus.permissions.service;
 
-import org.ccem.otus.permissions.persistence.user.UserPermissionsDao;
-
 import javax.inject.Inject;
+
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
 
 public class PermissionServiceBean implements PermissionService {
 
-    @Inject
-    private UserPermissionsDao userPermissionsDao;
+  @Inject
+  private UserPermissionGenericDao userPermissionGenericDao;
+
+  @Override
+  public void getAll(String email) throws DataNotFoundException {
+    userPermissionGenericDao.getUserPermissions(email);
+  }
 }
