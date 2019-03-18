@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
 
-  private static final String DEFAULT_PROFILE = "DEFAUT";
+  private static final String DEFAULT_PROFILE = "DEFAULT";
 
   @Inject
   private UserPermissionDao userPermissionDao;

@@ -8,12 +8,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.bson.Document;
 
 import br.org.otus.rest.Response;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 
-import java.util.Arrays;
 
 @Path("/permission")
 public class UserPermissionResource {
