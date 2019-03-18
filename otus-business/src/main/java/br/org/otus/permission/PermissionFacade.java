@@ -21,7 +21,7 @@ public class PermissionFacade {
     }
   }
 
-  public String savePermission(UserPermissionDTO userPermissionDTO) {
+  public Permission savePermission(UserPermissionDTO userPermissionDTO) {
     try {
       Permission permission = userPermissionDTO.getPermissions().get(0);
       return userPermissionService.savePermission(permission);

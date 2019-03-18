@@ -3,6 +3,7 @@ package org.ccem.otus.permissions.service.user;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
@@ -19,7 +20,7 @@ public class UserPermissionServiceBean implements UserPermissionService {
   }
 
   @Override
-  public String savePermission(Permission permission) {
+  public Permission savePermission(Permission permission) throws DataNotFoundException {
     return userPermissionGenericDao.savePermission(permission);
   }
 }

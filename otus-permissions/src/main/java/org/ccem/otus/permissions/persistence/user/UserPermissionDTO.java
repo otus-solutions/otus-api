@@ -22,6 +22,7 @@ public class UserPermissionDTO {
     if(userPermissionDTO.getPermissions() != null) {
       for (int i = 0; i < this.permissions.size(); i++) {
         int finalI = i;
+
         List<Permission> filtered = userPermissionDTO.getPermissions().stream().filter(userPermission -> this.permissions.get(finalI).getObjectType().equals(userPermission.getObjectType())).collect(Collectors.toList());
 
         if (!filtered.isEmpty()) {

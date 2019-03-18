@@ -2,6 +2,7 @@ package br.org.otus.permission;
 
 import java.util.Arrays;
 
+import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
@@ -9,6 +10,8 @@ import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 
 import br.org.mongodb.MongoGenericDao;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserPermissionDaoBean extends MongoGenericDao<Document> implements UserPermissionDao {
 
@@ -39,7 +42,13 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
 
   @Override
   public void savePermission(Permission permission) {
-    super.persist(SurveyGroupPermission.serialize(permission));
+    Document parsed = Document.parse(SurveyGroupPermission.serialize(permission));
+    collection.updateOne(eq(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail())),new Document("$set", parsed),new UpdateOptions().upsert(true));
+  }
+
+  @Override
+  public void deletePermission(Permission permission) {
+    collection.deleteOne(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail()));
   }
 
 }

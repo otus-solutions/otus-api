@@ -15,14 +15,13 @@ public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public UserPermissionDTO getProfile(String profileName) throws DataNotFoundException{
+  public UserPermissionDTO getProfile(String profileName) throws DataNotFoundException {
     Document result = collection.find(new Document("name",profileName)).first();
-    UserPermissionDTO userPermissionDTO = new UserPermissionDTO();
     
-    if(result != null) {
-      userPermissionDTO =UserPermissionDTO.deserialize(result.toJson());
+    if(result == null) {
+      throw new DataNotFoundException(new Throwable("Permission profile: {" + profileName + "} not found."));
     }
     
-    return userPermissionDTO;
+    return UserPermissionDTO.deserialize(result.toJson());
   }
 }
