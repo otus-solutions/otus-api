@@ -9,6 +9,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.permissions.service.user.UserPermission;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -28,7 +29,8 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   }
 
   @Override
-  public List<SurveyForm> findUndiscarded() {
+  @UserPermission
+  public List<SurveyForm> findUndiscarded(Object[] permitedAcronyms, String userEmail) {
     ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
     Document query = new Document("isDiscarded", false);
     collection.find(query).forEach((Block<Document>) document -> {

@@ -5,11 +5,13 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.permissions.service.user.UserPermission;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,8 +47,10 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    public List<SurveyForm> listUndiscarded() {
-        return surveyDao.findUndiscarded();
+    @UserPermission
+    public List<SurveyForm> listUndiscarded(String userEmail) {
+        Object[] objects = new Object[0];
+        return surveyDao.findUndiscarded(objects, userEmail);
     }
 
     @Override

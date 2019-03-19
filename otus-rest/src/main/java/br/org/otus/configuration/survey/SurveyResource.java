@@ -25,7 +25,7 @@ public class SurveyResource {
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllUndiscarded() {
-		return new Response().buildSuccess(surveyFacade.listUndiscarded()).toSurveyJson();
+		return new Response().buildSuccess(surveyFacade.listUndiscarded("")).toSurveyJson();
 	}
 
 	@GET

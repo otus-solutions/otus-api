@@ -44,6 +44,12 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
     return permission;
   }
 
+  @Override
+  public Object[] getUserPermittedActivities(String email) {
+    Object[] objects = new Object[1];
+    objects[0] = "test";
+    return objects;
+  }
 
 
 }

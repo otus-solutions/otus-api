@@ -12,7 +12,7 @@ public interface SurveyService {
 
   SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException, AlreadyExistException;
 
-  List<SurveyForm> listUndiscarded();
+  List<SurveyForm> listUndiscarded(String userEmail);
 
   List<SurveyForm> findByAcronym(String acronym);
 

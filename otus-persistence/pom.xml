@@ -164,7 +164,6 @@
       <artifactId>otus-permissions</artifactId>
       <version>${project.parent.version}</version>
       <scope>provided</scope>
-      <type>ejb</type>
     </dependency>
   </dependencies>
   <build>

@@ -20,6 +20,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertTrue;
 
 @PrepareForTest(SurveyForm.class)
@@ -124,8 +126,9 @@ public class SurveyServiceBeanTest {
     //list method unit tests
     @Test
     public void listUndiscarded_should_call_surveyDao_find() {
-        service.listUndiscarded();
-        Mockito.verify(surveyDaoBean).findUndiscarded();
+        service.listUndiscarded("");
+        Object[] objects = new Object[0];
+        Mockito.verify(surveyDaoBean).findUndiscarded(objects,"");
     }
 
     @Test

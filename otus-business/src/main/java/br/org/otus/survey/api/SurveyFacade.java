@@ -18,8 +18,8 @@ public class SurveyFacade {
     @Inject
     private SurveyService surveyService;
 
-    public List<SurveyForm> listUndiscarded() {
-        return surveyService.listUndiscarded();
+    public List<SurveyForm> listUndiscarded(String userEmail) {
+        return surveyService.listUndiscarded(userEmail);
     }
 
 	public List<SurveyForm> findByAcronym(String acronym) {

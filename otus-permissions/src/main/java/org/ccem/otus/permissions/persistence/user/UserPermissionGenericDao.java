@@ -8,4 +8,6 @@ public interface UserPermissionGenericDao {
   UserPermissionDTO getUserPermissions(String email) throws Exception;
 
   Permission savePermission(Permission permission) throws DataNotFoundException;
+
+  Object[] getUserPermittedActivities(String userEmail);
 }

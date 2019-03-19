@@ -61,8 +61,8 @@ public class SurveyFacadeTest {
 	public void method_list_should_return_surveys() {
 		surveys.add(survey);
 		surveys.add(surveyAcronym);
-		when(surveyService.listUndiscarded()).thenReturn(surveys);
-		assertEquals(surveys.size(), surveyFacade.listUndiscarded().size());
+		when(surveyService.listUndiscarded("")).thenReturn(surveys);
+		assertEquals(surveys.size(), surveyFacade.listUndiscarded("").size());
 	}
 
 	@Test
