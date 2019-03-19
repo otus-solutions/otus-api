@@ -1,6 +1,7 @@
 package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
+import com.google.gson.GsonBuilder;
 import com.mongodb.Block;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -87,4 +88,64 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
         });
         return surveyGroups;
     }
+
+    @Override
+    public List<String> getOrphanSurveys() {
+        List<String> acronyms = new ArrayList<>();
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(parseQuery("{$unwind:\"$surveyAcronyms\"}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$surveyAcronyms\"}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},surveyAcronyms:{$push:\"$_id\"}}}"));
+        pipeline.add(parseQuery("{\n" +
+                "        $lookup:{\n" +
+                "            from:\"survey\",\n" +
+                "            let:{inGroupAcronyms:\"$surveyAcronyms\"},\n" +
+                "            pipeline:[\n" +
+                "                {\n" +
+                "                    $match:{\n" +
+                "                        $expr:{\n" +
+                "                            $not:{$in:[\"$surveyTemplate.identity.acronym\",\"$$inGroupAcronyms\"]}\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    $group:{\n" +
+                "                        _id:\"$surveyTemplate.identity.acronym\"\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    $group:{_id:{},orphans:{$push:\"$_id\"}}\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            as:\"orphan\"\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{$replaceRoot:{newRoot:{orphanSurveys:{$arrayElemAt:[\"$orphan.orphans\",0]}}}}"));
+
+        Document first = collection.aggregate(pipeline).first();
+        if(first != null)
+            acronyms = (List<String>) first.get("orphanSurveys");
+        return acronyms;
+    }
+
+    @Override
+    public List<String> getUserPermittedSurveys(List<String> surveyGroups) {
+        List<String> acronyms = new ArrayList<>();
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(parseQuery("{$match:{\"name\":{$in:"+surveyGroups+"}}}"));
+        pipeline.add(parseQuery("{$unwind:\"$surveyAcronyms\"}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$surveyAcronyms\"}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},userPermittedSurveys:{$push:\"$_id\"}}}"));
+
+        Document first = collection.aggregate(pipeline).first();
+        if(first != null)
+            acronyms = (List<String>) first.get("userPermittedSurveys");
+        return acronyms;
+    }
+
+    private Document parseQuery(String query) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        return gsonBuilder.create().fromJson(query, Document.class);
+    }
+
 }

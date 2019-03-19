@@ -7,6 +7,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface SurveyGroupDao {
@@ -25,4 +26,8 @@ public interface SurveyGroupDao {
     DeleteResult deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException;
 
     List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
+
+    List<String> getOrphanSurveys();
+
+    List<String> getUserPermittedSurveys(List<String> surveyGroups);
 }

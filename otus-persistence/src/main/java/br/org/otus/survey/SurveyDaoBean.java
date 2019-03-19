@@ -14,6 +14,7 @@ import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -30,10 +31,10 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
 
   @Override
   @UserPermission
-  public List<SurveyForm> findUndiscarded(Object[] permitedAcronyms, String userEmail) {
+  public List<SurveyForm> findUndiscarded(List<String> permittedAcronyms, String userEmail) {
     ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
-    Document query = new Document("isDiscarded", false);
-    collection.find(query).forEach((Block<Document>) document -> {
+    Document query = new Document("isDiscarded", false).append("surveyTemplate.identity.acronym",new Document("$in",permittedAcronyms));
+    collection.aggregate(Arrays.asList(new Document("$match",query))).forEach((Block<Document>) document -> {
       surveys.add(SurveyForm.deserialize(document.toJson()));
     });
 

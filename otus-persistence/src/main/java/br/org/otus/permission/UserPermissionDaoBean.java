@@ -21,6 +21,7 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
     super(COLLECTION_NAME, Document.class);
   }
 
+  @Override
   public UserPermissionDTO getAll(String email) {
     UserPermissionDTO userPermissionDTO = new UserPermissionDTO();
 
@@ -49,6 +50,16 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
   @Override
   public void deletePermission(Permission permission) {
     collection.deleteOne(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail()));
+  }
+
+  @Override
+  public SurveyGroupPermission getGroupPermission(String email) {
+    Document first = collection.find(new Document("objectType", "SurveyGroupPermission").append("email", email)).first();
+    if (first != null){
+      return SurveyGroupPermission.deserialize(first.toJson());
+    } else {
+      return null;
+    }
   }
 
 }

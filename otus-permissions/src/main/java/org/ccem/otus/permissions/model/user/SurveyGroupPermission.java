@@ -6,29 +6,37 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SurveyGroupPermission extends Permission {
-    private ArrayList<String> groups;
+  private ArrayList<String> groups;
 
-    public static String serialize(Permission permission) {
-        return SurveyGroupPermission.getGsonBuilder().create().toJson(permission);
+  public static String serialize(Permission permission) {
+    return SurveyGroupPermission.getGsonBuilder().create().toJson(permission);
+  }
+
+  public static SurveyGroupPermission deserialize(String UserPermissionDTOJson) {
+    return SurveyGroupPermission.getGsonBuilder().create().fromJson(UserPermissionDTOJson, SurveyGroupPermission.class);
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    return builder;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
     }
 
-    public static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        return builder;
+    if (!(o instanceof SurveyGroupPermission)) {
+      return false;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
+    SurveyGroupPermission c = (SurveyGroupPermission) o;
 
-        if (!(o instanceof SurveyGroupPermission)) {
-            return false;
-        }
+    return Arrays.equals(groups.toArray(), c.groups.toArray());
+  }
 
-        SurveyGroupPermission c = (SurveyGroupPermission) o;
-
-        return Arrays.equals(groups.toArray(), c.groups.toArray());
-    }
+  public ArrayList<String> getGroups() {
+    return this.groups;
+  }
 }

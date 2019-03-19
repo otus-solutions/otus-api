@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface SurveyDao {
-    List<SurveyForm> findUndiscarded(Object[] permitedAcronyms, String userEmail);
+    List<SurveyForm> findUndiscarded(List<String> permitedAcronyms, String userEmail);
 
     List<SurveyForm> findByAcronym(String acronym);
 

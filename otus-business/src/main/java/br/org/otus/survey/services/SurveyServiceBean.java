@@ -47,10 +47,8 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
-    @UserPermission
     public List<SurveyForm> listUndiscarded(String userEmail) {
-        Object[] objects = new Object[0];
-        return surveyDao.findUndiscarded(objects, userEmail);
+        return surveyDao.findUndiscarded(new ArrayList<>(), userEmail);
     }
 
     @Override

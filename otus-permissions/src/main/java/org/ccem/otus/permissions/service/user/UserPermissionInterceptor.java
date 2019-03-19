@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import java.util.List;
 
 @Interceptor
 @UserPermission
@@ -17,7 +18,7 @@ public class UserPermissionInterceptor {
   @AroundInvoke
   public Object logMethodEntry(InvocationContext ctx) throws Exception {
     Object[] parameters = ctx.getParameters();
-    Object[] permittedActivities = userPermissionGenericDao.getUserPermittedActivities("");
+    List<String> permittedActivities = userPermissionGenericDao.getUserPermittedActivities((String) parameters[1]);
     parameters[0] = permittedActivities;
     ctx.setParameters(parameters);
     return ctx.proceed();

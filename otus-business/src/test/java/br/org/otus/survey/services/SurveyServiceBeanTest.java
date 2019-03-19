@@ -127,8 +127,7 @@ public class SurveyServiceBeanTest {
     @Test
     public void listUndiscarded_should_call_surveyDao_find() {
         service.listUndiscarded("");
-        Object[] objects = new Object[0];
-        Mockito.verify(surveyDaoBean).findUndiscarded(objects,"");
+        Mockito.verify(surveyDaoBean).findUndiscarded(new ArrayList<>(),"");
     }
 
     @Test
