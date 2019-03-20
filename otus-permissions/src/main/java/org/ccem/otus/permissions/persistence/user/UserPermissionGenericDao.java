@@ -12,5 +12,5 @@ public interface UserPermissionGenericDao {
 
   Permission savePermission(Permission permission) throws DataNotFoundException;
 
-  List<String> getUserPermittedActivities(String userEmail);
+  List<String> getUserPermittedSurveys(String userEmail);
 }

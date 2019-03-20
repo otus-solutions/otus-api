@@ -52,7 +52,7 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
   }
 
   @Override
-  public List<String> getUserPermittedActivities(String email) {
+  public List<String> getUserPermittedSurveys(String email) {
     SurveyGroupPermission groupPermission;
     groupPermission = userPermissionDao.getGroupPermission(email);
     if (groupPermission == null){

@@ -11,11 +11,12 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ActivityDao {
 
-	List<SurveyActivity> find(long rn);
+	List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn);
 
 	ObjectId persist(SurveyActivity surveyActivity);
 

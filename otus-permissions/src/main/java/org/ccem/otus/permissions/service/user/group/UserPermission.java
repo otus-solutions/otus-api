@@ -1,4 +1,4 @@
-package org.ccem.otus.permissions.service.user;
+package org.ccem.otus.permissions.service.user.group;
 
 import javax.inject.Qualifier;
 import javax.interceptor.InterceptorBinding;

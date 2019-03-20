@@ -45,7 +45,7 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> list(long rn, String userEmail) {
 
     List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionService.list();
-    List<SurveyActivity> activities = (ArrayList<SurveyActivity>) activityDao.find(rn);
+    List<SurveyActivity> activities = getPermittedSurveys(userEmail, rn);
     List<SurveyActivity> filteredActivities = new ArrayList<SurveyActivity>();
 
     activities.forEach(activity -> {
@@ -68,6 +68,10 @@ public class ActivityServiceBean implements ActivityService {
       }
     });    
     return filteredActivities;
+  }
+
+  private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn){
+    return activityDao.find(new ArrayList<>(), userEmail, rn);
   }
 
   private boolean isSameVersion(ActivityAccessPermission permission, SurveyActivity activity) {

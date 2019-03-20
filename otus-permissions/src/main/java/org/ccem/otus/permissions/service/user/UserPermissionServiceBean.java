@@ -8,6 +8,8 @@ import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
 
+import java.util.List;
+
 @Stateless
 public class UserPermissionServiceBean implements UserPermissionService {
 
@@ -22,5 +24,10 @@ public class UserPermissionServiceBean implements UserPermissionService {
   @Override
   public Permission savePermission(Permission permission) throws DataNotFoundException {
     return userPermissionGenericDao.savePermission(permission);
+  }
+
+  @Override
+  public List<String> getUserPermittedSurveys(String userEmail){
+    return userPermissionGenericDao.getUserPermittedSurveys(userEmail);
   }
 }
