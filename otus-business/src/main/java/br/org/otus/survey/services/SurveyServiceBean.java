@@ -48,7 +48,11 @@ public class SurveyServiceBean implements SurveyService {
 
     @Override
     public List<SurveyForm> listUndiscarded(String userEmail) {
-        return surveyDao.findUndiscarded(new ArrayList<>(), userEmail);
+        return this.listUndiscarded(new ArrayList<>(), userEmail);
+    }
+
+    private List<SurveyForm> listUndiscarded(ArrayList permittedSurveys, String userEmail) {
+        return surveyDao.findUndiscarded(permittedSurveys, userEmail);
     }
 
     @Override
