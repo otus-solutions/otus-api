@@ -130,6 +130,13 @@ public class SurveyServiceBeanTest {
         Mockito.verify(surveyDaoBean).findUndiscarded(new ArrayList<>(),"");
     }
 
+    //list method unit tests
+    @Test
+    public void listAllUndiscarded_should_call_surveyDao_find() {
+        service.listAllUndiscarded();
+        Mockito.verify(surveyDaoBean).findAllUndiscarded();
+    }
+
     @Test
     public void findByAcronym_should_call_method_findByAcronym_by_surveyDao() {
         service.findByAcronym(ACRONYM);
