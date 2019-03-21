@@ -33,4 +33,6 @@ public interface SurveyDao {
     List<String> listAcronyms();
 
     List<String> aggregate(ArrayList<Document> query);
+
+    List<SurveyForm> findAllUndiscarded();
 }

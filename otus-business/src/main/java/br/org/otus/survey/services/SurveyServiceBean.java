@@ -55,6 +55,11 @@ public class SurveyServiceBean implements SurveyService {
     }
 
     @Override
+    public List<SurveyForm> listAllUndiscarded() {
+        return surveyDao.findAllUndiscarded();
+    }
+
+    @Override
     public List<SurveyForm> findByAcronym(String acronym) {
         return surveyDao.findByAcronym(acronym);
     }

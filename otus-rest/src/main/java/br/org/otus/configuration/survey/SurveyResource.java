@@ -31,6 +31,16 @@ public class SurveyResource {
 
 	@GET
 	@Secured
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getAllPermittedUndiscarded(@Context HttpServletRequest request) {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+		return new Response().buildSuccess(surveyFacade.listAllUndiscarded(userEmail)).toSurveyJson();
+	}
+
+	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllUndiscarded(@Context HttpServletRequest request) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);

@@ -22,6 +22,10 @@ public class SurveyFacade {
         return surveyService.listUndiscarded(userEmail);
     }
 
+    public Object listAllUndiscarded(String userEmail) {
+        return surveyService.listAllUndiscarded();
+    }
+
 	public List<SurveyForm> findByAcronym(String acronym) {
 		return surveyService.findByAcronym(acronym);
 	}

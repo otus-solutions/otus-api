@@ -42,6 +42,17 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   }
 
   @Override
+  public List<SurveyForm> findAllUndiscarded() {
+    ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
+    Document query = new Document("isDiscarded", false);
+    collection.aggregate(Arrays.asList(new Document("$match",query))).forEach((Block<Document>) document -> {
+      surveys.add(SurveyForm.deserialize(document.toJson()));
+    });
+
+    return surveys;
+  }
+
+  @Override
   public List<SurveyForm> findByAcronym(String acronym) {
     ArrayList<SurveyForm> surveys = new ArrayList<>();
     collection.find(eq("surveyTemplate.identity.acronym", acronym)).forEach((Block<Document>) document -> {

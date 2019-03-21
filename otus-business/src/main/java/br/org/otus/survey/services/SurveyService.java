@@ -14,6 +14,8 @@ public interface SurveyService {
 
   List<SurveyForm> listUndiscarded(String userEmail);
 
+  List<SurveyForm> listAllUndiscarded();
+
   List<SurveyForm> findByAcronym(String acronym);
 
   SurveyForm get(String acronym, Integer version) throws DataNotFoundException;
@@ -26,5 +28,4 @@ public interface SurveyService {
   List<Integer> listSurveyVersions(String acronym);
 
   List<String> listAcronyms();
-
 }
