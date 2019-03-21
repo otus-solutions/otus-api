@@ -3,9 +3,7 @@ package br.org.otus.survey.activity;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import javax.swing.text.StyledEditorKit.ItalicAction;
+import java.util.List;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -13,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +36,9 @@ import br.org.mongodb.MongoGenericDao;
 public class ActivityDaoBeanTest {
 	private static final String ACRONYM = "FORM";
 	private static final Integer VERSION = 1;
+	private static final String USER_EMAIL = "otus@tus.com";
+	private static final Integer RECRUITMENT_NUMBER = 50000501;
+	private static final List<String> LIST_SURVEYS = new ArrayList();
 
 	@InjectMocks
 	private ActivityDaoBean activityDaoBean = PowerMockito.spy(new ActivityDaoBean());
@@ -70,6 +72,12 @@ public class ActivityDaoBeanTest {
 		PowerMockito.doReturn(1).when(this.activities).size();
 		
 		System.out.println();
+	}
+
+	@Test
+	public void method_find_should_called_method_find() {
+		activityDaoBean.find(LIST_SURVEYS, USER_EMAIL, RECRUITMENT_NUMBER);
+		Mockito.verify(this.collection, Mockito.times(1)).find(Matchers.<Bson>any());
 	}
 
 	@Test
