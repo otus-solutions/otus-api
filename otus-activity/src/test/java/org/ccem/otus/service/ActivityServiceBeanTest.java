@@ -56,7 +56,7 @@ public class ActivityServiceBeanTest {
     when(activityDao.persist(Dieta)).thenReturn(objectId);
     ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
     activities.add(Dieta);
-    when(activityDao.find(new ArrayList<>(), "", RECRUIMENT_NUMBER)).thenReturn(activities);
+    when(activityDao.find(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER)).thenReturn(activities);
   }
 
   @Test
@@ -74,7 +74,7 @@ public class ActivityServiceBeanTest {
   public void listMethod_should_invoke_find_of_ActivityDao_find() throws Exception {
     surveyActivities = service.list(RECRUIMENT_NUMBER, USER_EMAIL);
     assertTrue(surveyActivities.get(0) instanceof SurveyActivity);
-    verify(activityDao, times(1)).find(new ArrayList<>(), "", RECRUIMENT_NUMBER);
+    verify(activityDao, times(1)).find(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER);
     verify(activityAccessPermissionService, times(1)).list();
   }
 
