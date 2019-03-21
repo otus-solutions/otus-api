@@ -43,10 +43,10 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
   public Permission savePermission(Permission permission) throws DataNotFoundException {
     UserPermissionDTO permissionProfile = userPermissionProfileDao.getProfile(DEFAULT_PROFILE);
     List<Permission> permissionFound = permissionProfile.getPermissions().stream().filter(profilePermission -> profilePermission.equals(permission)).collect(Collectors.toList());
-    if(!permissionFound.isEmpty()){
-      userPermissionDao.deletePermission(permission);
-    } else {
+    if(permissionFound.isEmpty()){
       userPermissionDao.savePermission(permission);
+    } else {
+      userPermissionDao.deletePermission(permission);
     }
     return permission;
   }
