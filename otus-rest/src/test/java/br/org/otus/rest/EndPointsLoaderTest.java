@@ -28,6 +28,7 @@ import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.monitoring.MonitoringResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.permission.ActivityPermissionResource;
+import br.org.otus.permission.UserPermissionResource;
 import br.org.otus.report.ReportResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
@@ -85,6 +86,8 @@ public class EndPointsLoaderTest {
   private ProjectConfigurationResource projectConfigurationResource;
   @Mock
   private ActivityPermissionResource activityAccessPermissionResource;
+  @Mock
+  private UserPermissionResource userPermissionResource;
 
   @Test
   public void getClassesMetods_should_check_the_presence_of_classes_within_the_list() {
@@ -113,6 +116,7 @@ public class EndPointsLoaderTest {
     assertTrue(resourcesClasses.contains(ExamUploadResource.class));
     assertTrue(resourcesClasses.contains(ProjectConfigurationResource.class));
     assertTrue(resourcesClasses.contains(ActivityPermissionResource.class));
+    assertTrue(resourcesClasses.contains(UserPermissionResource.class));
   }
 
   @Test
@@ -141,5 +145,6 @@ public class EndPointsLoaderTest {
     assertTrue(resourcesSingletons.contains(examUploadResource));
     assertTrue(resourcesSingletons.contains(projectConfigurationResource));
     assertTrue(resourcesSingletons.contains(activityAccessPermissionResource));
+    assertTrue(resourcesSingletons.contains(userPermissionResource));
   }
 }
