@@ -1,5 +1,11 @@
 package org.ccem.otus.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -8,11 +14,6 @@ import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 @Stateless
 public class ActivityServiceBean implements ActivityService {
@@ -24,7 +25,6 @@ public class ActivityServiceBean implements ActivityService {
 
   private boolean permissionStatus;
   private boolean userStatusHistory;
-  private boolean usersPermissionStatusHistory;
   private boolean isPresent;
   private boolean userInRestrictionList;
   private boolean acronymConfirmation;
@@ -54,7 +54,6 @@ public class ActivityServiceBean implements ActivityService {
 
       activityAccessPermissions.forEach(permission -> {
         userInRestrictionList = permission.getExclusiveDisjunction().contains(userEmail);
-        usersPermissionStatusHistory = isUsersPermissionInStatusHistory(permission, activity);
         acronymConfirmation = isSameAcronym(permission, activity);
         versionConfirmation = isSameVersion(permission, activity);
 
@@ -66,11 +65,11 @@ public class ActivityServiceBean implements ActivityService {
       if (permissionStatus) {
         filteredActivities.add(activity);
       }
-    });    
+    });
     return filteredActivities;
   }
 
-  private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn){
+  private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn) {
     return activityDao.find(new ArrayList<>(), userEmail, rn);
   }
 
@@ -110,8 +109,7 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public List<SurveyActivity> get(String acronym, Integer version)
-      throws DataNotFoundException, MemoryExcededException {
+  public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
   }
 

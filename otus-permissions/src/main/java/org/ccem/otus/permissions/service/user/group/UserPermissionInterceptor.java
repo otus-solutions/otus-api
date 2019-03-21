@@ -1,12 +1,13 @@
 package org.ccem.otus.permissions.service.user.group;
 
-import org.ccem.otus.permissions.service.user.UserPermissionService;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import java.util.List;
+
+import org.ccem.otus.permissions.service.user.UserPermissionService;
 
 @Interceptor
 @UserPermission
@@ -23,7 +24,5 @@ public class UserPermissionInterceptor {
     ctx.setParameters(parameters);
     return ctx.proceed();
   }
-
-
 
 }

@@ -12,7 +12,6 @@ import static java.lang.annotation.ElementType.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({TYPE, METHOD})
 @Qualifier
-
 public @interface UserPermission {
 
 }
