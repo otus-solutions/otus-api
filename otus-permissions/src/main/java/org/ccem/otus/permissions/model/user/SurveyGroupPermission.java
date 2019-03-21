@@ -25,9 +25,7 @@ public class SurveyGroupPermission extends Permission {
   public boolean equals(Object o) {
     if (o == this) {
       return true;
-    }
-
-    if (!(o instanceof SurveyGroupPermission)) {
+    } else if (!(o instanceof SurveyGroupPermission)) {
       return false;
     }
 
@@ -39,4 +37,5 @@ public class SurveyGroupPermission extends Permission {
   public ArrayList<String> getGroups() {
     return this.groups;
   }
+  
 }

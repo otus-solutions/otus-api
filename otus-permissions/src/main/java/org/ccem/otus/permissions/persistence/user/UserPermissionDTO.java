@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.utils.PermissionAdapter;
-
-import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.GsonBuilder;
 
 public class UserPermissionDTO {
 
@@ -34,8 +32,7 @@ public class UserPermissionDTO {
   }
 
   public static UserPermissionDTO deserialize(String UserPermissionDTOJson) {
-    UserPermissionDTO userPermissionsDTO = UserPermissionDTO.getGsonBuilder().create().fromJson(UserPermissionDTOJson, UserPermissionDTO.class);
-    return userPermissionsDTO;
+    return UserPermissionDTO.getGsonBuilder().create().fromJson(UserPermissionDTOJson, UserPermissionDTO.class);
   }
 
   public static UserPermissionDTO deserializeSinglePermission(String userPermissionJson) {
