@@ -22,7 +22,7 @@ public class SurveyFacade {
         return surveyService.listUndiscarded(userEmail);
     }
 
-    public Object listAllUndiscarded(String userEmail) {
+    public List<SurveyForm> listAllUndiscarded() {
         return surveyService.listAllUndiscarded();
     }
 
