@@ -27,6 +27,7 @@ public class PermissionAdapterTest {
   private static final String EMAIL = "otus@gmail.com";
   private static final String OBJECT_TYPE = "SurveyGroupPermission";
   private static final String JSON = "{\"groups\":[\"A\",\"A\",\"C\"],\"_id\":{\"email\":\"teste@gmail.com\",\"objectType\":\"SurveyGroupPermission\"},\"email\":\"teste@gmail.com\",\"objectType\":\"SurveyGroupPermission\"}";
+  private static final String SURVEY_GROUP_PERMISSION_JSON = "{objectType:SurveyGroupPermission,email:test1@test}";
 
   @InjectMocks
   private PermissionAdapter permissionAdapter = PowerMockito.spy(new PermissionAdapter());
@@ -39,7 +40,9 @@ public class PermissionAdapterTest {
   private JsonElement jsonElement;
   @Mock
   private PermissionMapping permissionMapping;
+  @Mock
   private JsonDeserializationContext contextDeserialize;
+  @Mock
   private Permission src = new Permission();
   @Mock
   private JsonObject jsonObject;
@@ -57,20 +60,16 @@ public class PermissionAdapterTest {
     assertTrue(permissionAdapter.serialize(src, typeOfSrc, context) instanceof JsonElement);
   }
 
-//  @Test
-//  public void deserialize() {
-//    Class<? extends Permission> permission = null;
-//    String objectType = OBJECT_TYPE;
-//    JsonElement prim = PowerMockito.mock(JsonPrimitive.class);
-//    PermissionMapping permissionMapping1 = PowerMockito.mock(PermissionMapping.class);
-//    when(jsonElement.getAsJsonObject()).thenReturn(jsonObject);
-//    when(jsonObject.get(OBJECT_TYPE)).thenReturn(prim);
-//    when(prim.getAsString()).thenReturn(OBJECT_TYPE);
-//    when(permissionMapping1.getEnumByObjectType(OBJECT_TYPE)).thenReturn(permissionMapping);
-//    when(permissionMapping.getItemClass()).thenReturn();
-//
-//    permissionAdapter.deserialize(jsonElement,typeOfSrc,contextDeserialize);
-//
-////     assertTrue(permissionAdapter.deserialize(jsonElement,typeOfSrc,contextDeserialize) instanceof Permission);
-//  }
+  @Test
+  public void deserialize() {
+    JsonElement jsonElement = new JsonObject();
+    ((JsonObject) jsonElement).addProperty("objectType","SurveyGroupPermission");
+
+     assertTrue(permissionAdapter.deserialize(jsonElement,typeOfSrc, new JsonDeserializationContext() {
+       @Override
+       public SurveyGroupPermission deserialize(JsonElement json, Type typeOfT) throws JsonParseException {
+         return SurveyGroupPermission.getGsonBuilder().create().fromJson(json, SurveyGroupPermission.class);
+       }
+     }) instanceof Permission);
+  }
 }
