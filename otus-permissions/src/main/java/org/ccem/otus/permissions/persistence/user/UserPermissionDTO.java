@@ -1,6 +1,5 @@
 package org.ccem.otus.permissions.persistence.user;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ import com.google.gson.GsonBuilder;
 
 public class UserPermissionDTO {
 
-  private ArrayList<Permission> permissions;
+  private List<Permission> permissions;
 
   public void concatenatePermissions(UserPermissionDTO userPermissionDTO) {
     if(userPermissionDTO.getPermissions() != null) {
@@ -33,6 +32,10 @@ public class UserPermissionDTO {
 
   public static UserPermissionDTO deserialize(String UserPermissionDTOJson) {
     return UserPermissionDTO.getGsonBuilder().create().fromJson(UserPermissionDTOJson, UserPermissionDTO.class);
+  }
+  
+  public static String serialize(UserPermissionDTO userPermissionDTO) {
+	return UserPermissionDTO.getGsonBuilder().create().toJson(userPermissionDTO);
   }
 
   public static UserPermissionDTO deserializeSinglePermission(String userPermissionJson) {
@@ -59,7 +62,7 @@ public class UserPermissionDTO {
     return builder;
   }
 
-  public ArrayList<Permission> getPermissions() {
+  public List<Permission> getPermissions() {
     return permissions;
   }
 
