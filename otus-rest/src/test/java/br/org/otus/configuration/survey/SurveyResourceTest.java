@@ -69,13 +69,13 @@ public class SurveyResourceTest {
 
 	@Test
 	public void method_getAllPermitted_should_return_response_in_surveyJson() {
-		when(surveyFacade.listAllUndiscarded(USER_EMAIL)).thenReturn(surveys);
+		when(surveyFacade.listUndiscarded(USER_EMAIL)).thenReturn(surveys);
 		assertTrue(surveyResource.getAllPermittedUndiscarded(request).contains(USER_EMAIL));
 	}
 
 	@Test
 	public void method_getAll_should_return_response_in_surveyJson() {
-		when(surveyFacade.listUndiscarded(USER_EMAIL)).thenReturn(surveys);
+		when(surveyFacade.listAllUndiscarded()).thenReturn(surveys);
 		assertTrue(surveyResource.getAllUndiscarded(request).contains(USER_EMAIL));
 	}
 
