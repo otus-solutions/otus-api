@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 public class UserPermissionDTOTest {
+  private static final String USER_PERMISSION_DTO_JSON = "{permissions:[{objectType:SurveyGroupPermission,email:test1@test}]}";
+  private static final String SURVEY_GROUP_PERMISSION_JSON = "{objectType:SurveyGroupPermission,email:test1@test}";
 
   private UserPermissionDTO userPermissionDTO;
   private ArrayList<Permission> permissions;
@@ -23,7 +25,7 @@ public class UserPermissionDTOTest {
     this.permissions = new ArrayList<Permission>();
 
     this.permission = new Permission();
-    Whitebox.setInternalState(this.permission, "objectType", "Permission");
+    Whitebox.setInternalState(this.permission, "objectType", "SurveyGroupPermission");
     Whitebox.setInternalState(this.permission, "email", "test1@test");
     this.permissions.add(this.permission);
 
@@ -61,21 +63,17 @@ public class UserPermissionDTOTest {
     Assert.assertEquals("test1@test", this.userPermissionDTO.getPermissions().get(0).getEmail());
   }
 
-  @Ignore
   @Test
   public void deserialize_method_should_return_expected_UserPermissionDTO_with_elements() {
-    String serialized = UserPermissionDTO.serialize(this.userPermissionDTO);
-    UserPermissionDTO deserialized = UserPermissionDTO.deserialize(serialized);
+    UserPermissionDTO deserialized = UserPermissionDTO.deserialize(USER_PERMISSION_DTO_JSON);
 
     Assert.assertThat(deserialized, CoreMatchers.instanceOf(UserPermissionDTO.class));
     Assert.assertEquals("test1@test", deserialized.getPermissions().get(0).getEmail());
   }
 
-  @Ignore
   @Test
   public void deserializeSinglePermission_method_should_return_expected_UserPermissionDTO_with_elements() {
-    String serialized = UserPermissionDTO.serialize(this.userPermissionDTO);
-    UserPermissionDTO deserialized = UserPermissionDTO.deserializeSinglePermission(serialized);
+    UserPermissionDTO deserialized = UserPermissionDTO.deserializeSinglePermission(SURVEY_GROUP_PERMISSION_JSON);
 
     Assert.assertThat(deserialized, CoreMatchers.instanceOf(UserPermissionDTO.class));
     Assert.assertEquals("test1@test", deserialized.getPermissions().get(0).getEmail());
@@ -85,7 +83,7 @@ public class UserPermissionDTOTest {
   public void getPermissions_method_should_return_expected_permissions() {
     List<Permission> permissions = this.userPermissionDTO.getPermissions();
 
-    Assert.assertEquals("Permission", permissions.get(0).getObjectType());
+    Assert.assertEquals("SurveyGroupPermission", permissions.get(0).getObjectType());
     Assert.assertEquals("test1@test", permissions.get(0).getEmail());
   }
 
