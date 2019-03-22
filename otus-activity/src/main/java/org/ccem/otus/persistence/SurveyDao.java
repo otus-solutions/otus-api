@@ -12,6 +12,8 @@ import java.util.Set;
 public interface SurveyDao {
     List<SurveyForm> findUndiscarded(List<String> permitedAcronyms, String userEmail);
 
+    List<SurveyForm> findAllUndiscarded();
+
     List<SurveyForm> findByAcronym(String acronym);
 
     List<SurveyForm> findByCustomId(Set<String> ids, String surveyAcronym);
@@ -33,6 +35,4 @@ public interface SurveyDao {
     List<String> listAcronyms();
 
     List<String> aggregate(ArrayList<Document> query);
-
-    List<SurveyForm> findAllUndiscarded();
 }

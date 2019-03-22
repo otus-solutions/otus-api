@@ -1,8 +1,7 @@
 
 package org.ccem.otus.persistence;
 
-import java.util.List;
-
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -12,7 +11,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 
-import com.mongodb.client.AggregateIterable;
+import java.util.List;
 
 public interface ActivityDao {
 

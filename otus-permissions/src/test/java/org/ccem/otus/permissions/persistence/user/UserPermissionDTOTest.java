@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ccem.otus.permissions.model.user.Permission;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,16 +18,21 @@ public class UserPermissionDTOTest {
 
   private UserPermissionDTO userPermissionDTO;
   private ArrayList<Permission> permissions;
-  private Permission permission;
+  private ArrayList<String> groups;
+  private SurveyGroupPermission permission;
 
   @Before
   public void setup() {
     this.userPermissionDTO = new UserPermissionDTO();
     this.permissions = new ArrayList<Permission>();
+    this.groups = new ArrayList<String>();
+    this.groups.add("Group");
 
-    this.permission = new Permission();
+
+    this.permission = new SurveyGroupPermission();
     Whitebox.setInternalState(this.permission, "objectType", "SurveyGroupPermission");
     Whitebox.setInternalState(this.permission, "email", "test1@test");
+    Whitebox.setInternalState(this.permission, "groups", this.groups);
     this.permissions.add(this.permission);
 
     Whitebox.setInternalState(this.userPermissionDTO, "permissions", permissions);
@@ -36,16 +42,18 @@ public class UserPermissionDTOTest {
   public void concatenatePermissions_method_should_return_concatenated_permissions() {
     UserPermissionDTO other = new UserPermissionDTO();
     ArrayList<Permission> otherPermissions = new ArrayList<Permission>();
-    Permission otherPermission = new Permission();
-    Whitebox.setInternalState(otherPermission, "objectType", "Permission");
+    ArrayList<String> groups = new ArrayList<String>();
+    groups.add("Group1");
+    Permission otherPermission = new SurveyGroupPermission();
+    Whitebox.setInternalState(otherPermission, "objectType", "SurveyGroupPermission");
     Whitebox.setInternalState(otherPermission, "email", "test2@test");
+    Whitebox.setInternalState(otherPermission, "groups", groups);
     otherPermissions.add(otherPermission);
     Whitebox.setInternalState(other, "permissions", otherPermissions);
 
+    Assert.assertTrue(this.userPermissionDTO.getPermissions().get(0).equals(this.permission));
     this.userPermissionDTO.concatenatePermissions(other);
-    Assert.assertEquals(2, this.userPermissionDTO.getPermissions().size());
-    Assert.assertEquals("test1@test", this.userPermissionDTO.getPermissions().get(0).getEmail());
-    Assert.assertEquals("test2@test", this.userPermissionDTO.getPermissions().get(1).getEmail());
+    Assert.assertTrue(this.userPermissionDTO.getPermissions().get(0).equals(otherPermission));
   }
 
   @Test

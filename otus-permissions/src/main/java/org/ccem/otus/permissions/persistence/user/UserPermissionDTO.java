@@ -20,10 +20,8 @@ public class UserPermissionDTO {
       Iterator<Permission> iterator = userPermissionDTO.getPermissions().iterator();
       while (iterator.hasNext()) {
         Permission permission = iterator.next();
-        if (this.permissions.get(i).getEmail().equals(permission.getEmail()))
-          iterator.remove();
-        else
-          permissions.add(permission);
+        if (this.permissions.get(i).getObjectType().equals(permission.getObjectType()))
+          this.permissions.set(i,permission);
       }
     }
   }

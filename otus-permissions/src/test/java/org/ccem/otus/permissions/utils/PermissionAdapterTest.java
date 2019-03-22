@@ -26,8 +26,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class PermissionAdapterTest {
   private static final String EMAIL = "otus@gmail.com";
   private static final String OBJECT_TYPE = "SurveyGroupPermission";
-  private static final String JSON = "{\"groups\":[\"A\",\"A\",\"C\"],\"_id\":{\"email\":\"teste@gmail.com\",\"objectType\":\"SurveyGroupPermission\"},\"email\":\"teste@gmail.com\",\"objectType\":\"SurveyGroupPermission\"}";
-  private static final String SURVEY_GROUP_PERMISSION_JSON = "{objectType:SurveyGroupPermission,email:test1@test}";
 
   @InjectMocks
   private PermissionAdapter permissionAdapter = PowerMockito.spy(new PermissionAdapter());
@@ -65,11 +63,13 @@ public class PermissionAdapterTest {
     JsonElement jsonElement = new JsonObject();
     ((JsonObject) jsonElement).addProperty("objectType","SurveyGroupPermission");
 
-     assertTrue(permissionAdapter.deserialize(jsonElement,typeOfSrc, new JsonDeserializationContext() {
-       @Override
-       public SurveyGroupPermission deserialize(JsonElement json, Type typeOfT) throws JsonParseException {
-         return SurveyGroupPermission.getGsonBuilder().create().fromJson(json, SurveyGroupPermission.class);
-       }
-     }) instanceof Permission);
+    assertTrue(permissionAdapter.deserialize(jsonElement,typeOfSrc, new JsonDeserializationContextForTest()) instanceof Permission);
+  }
+}
+
+class JsonDeserializationContextForTest implements  JsonDeserializationContext{
+  @Override
+  public SurveyGroupPermission deserialize(JsonElement json, Type typeOfT) throws JsonParseException {
+    return SurveyGroupPermission.getGsonBuilder().create().fromJson(json, SurveyGroupPermission.class);
   }
 }
