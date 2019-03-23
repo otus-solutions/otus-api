@@ -6,6 +6,10 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
+import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
+import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
+import org.ccem.otus.permissions.persistence.user.UserPermissionProfileDao;
 import org.ccem.otus.persistence.SurveyGroupDao;
 
 import javax.inject.Inject;
@@ -13,9 +17,16 @@ import java.util.List;
 
 
 public class SurveyGroupServiceBean implements SurveyGroupService {
+    private static final String DEFAULT_PROFILE = "DEFAULT";
 
     @Inject
     private SurveyGroupDao surveyGroupDao;
+
+    @Inject
+    private UserPermissionDao userPermissionDao;
+
+    @Inject
+    private UserPermissionProfileDao userPermissionProfileDao;
 
     @Override
     public List<SurveyGroup> getListOfSurveyGroups() {
@@ -55,7 +66,12 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
 
     @Override
     public List<SurveyGroup> getSurveyGroupsByUser(String userEmail) {
-        return surveyGroupDao.getSurveyGroupsByUser(userEmail);
+        SurveyGroupPermission groupPermission;
+        groupPermission = userPermissionDao.getGroupPermission(userEmail);
+        if (groupPermission == null){
+            groupPermission = userPermissionProfileDao.getGroupPermission(DEFAULT_PROFILE);
+        }
+        return surveyGroupDao.getSurveyGroupsByUser(groupPermission.getGroups());
     }
 
     private void verifySurveyGroupJsonValid(String surveyGroupJson) throws ValidationException {
@@ -66,7 +82,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
 
     private void verifySurveyGroupNameValid(SurveyGroup surveyGroup) throws ValidationException {
         if (surveyGroup.getName() == null || surveyGroup.getName().isEmpty()) {
-            throw new ValidationException(new Throwable("surveyGroupName with invalid value"));
+            throw new ValidationException(new Throwable("surveyG'roupName with invalid value"));
         }
     }
 

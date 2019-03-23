@@ -40,14 +40,14 @@ public class UserPermissionInterceptorTest {
   private List<String> permittedActivities;
 
   @Test
-  public void logMethodEntry() throws Exception {
+  public void applyPermission() throws Exception {
     parameters = new Object[]{PERMITTED_ACTIVITIES_EMPTY, EMAIL};
     assertEquals(parameters[0], PERMITTED_ACTIVITIES_EMPTY);
     when(ctx.getParameters()).thenReturn(parameters);
     permittedActivities = Arrays.asList("AB", "BC", "CD");
     when(userPermissionService.getUserPermittedSurveys((String) parameters[1])).thenReturn(permittedActivities);
 
-    userPermissionInterceptor.logMethodEntry(ctx);
+    userPermissionInterceptor.applyPermission(ctx);
     assertEquals(parameters[0], permittedActivities);
     verify(ctx, times(1)).setParameters(parameters);
     verify(ctx, times(1)).proceed();

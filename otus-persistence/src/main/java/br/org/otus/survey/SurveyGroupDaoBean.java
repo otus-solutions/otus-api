@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
 
 public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements SurveyGroupDao {
     private static final String COLLECTION_NAME = "survey_group";
@@ -81,9 +82,9 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
 
     //TODO: userEmail parameter waiting for user validation implementation in Otus.
     @Override
-    public List<SurveyGroup> getSurveyGroupsByUser(String userEmail) {
+    public List<SurveyGroup> getSurveyGroupsByUser(List<String> userGroups) {
         List<SurveyGroup> surveyGroups = new ArrayList<>();
-        collection.find().forEach((Block<Document>) document -> {
+        collection.find(in("name",userGroups)).forEach((Block<Document>) document -> {
             surveyGroups.add(SurveyGroup.deserialize(document.toJson()));
         });
         return surveyGroups;

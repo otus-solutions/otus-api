@@ -6,6 +6,8 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
+import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 import org.ccem.otus.persistence.SurveyGroupDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -41,6 +44,10 @@ public class SurveyGroupServiceBeanTest {
     private SurveyGroupServiceBean surveyGroupServiceBean = PowerMockito.spy(new SurveyGroupServiceBean());
     @Mock
     private SurveyGroupDao surveyGroupDao;
+    @Mock
+    private UserPermissionDao userPermissionDao;
+    @Mock
+    private SurveyGroupPermission surveyGroupPermission;
 
     private SurveyGroupNameDto surveyGroupNameDto;
     @Mock
@@ -161,7 +168,10 @@ public class SurveyGroupServiceBeanTest {
 
     @Test
     public void getSurveyGroupsByUser() {
-        when(surveyGroupDao.getSurveyGroupsByUser(USER_EMAIL)).thenReturn(surveyGroups);
+        List<String> groupsList = new ArrayList<>();
+        when(surveyGroupDao.getSurveyGroupsByUser(groupsList)).thenReturn(surveyGroups);
+        when(userPermissionDao.getGroupPermission(USER_EMAIL)).thenReturn(surveyGroupPermission);
+        when(surveyGroupPermission.getGroups()).thenReturn(groupsList);
         assertEquals(EXPECTED_SIZE, surveyGroupServiceBean.getSurveyGroupsByUser(USER_EMAIL).size());
     }
 }

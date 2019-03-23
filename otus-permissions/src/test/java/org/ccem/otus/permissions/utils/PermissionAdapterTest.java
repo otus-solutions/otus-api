@@ -37,13 +37,7 @@ public class PermissionAdapterTest {
   @Mock
   private JsonElement jsonElement;
   @Mock
-  private PermissionMapping permissionMapping;
-  @Mock
-  private JsonDeserializationContext contextDeserialize;
-  @Mock
   private Permission src = new Permission();
-  @Mock
-  private JsonObject jsonObject;
 
 
   @Before

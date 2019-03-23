@@ -17,7 +17,7 @@ public class UserPermissionInterceptor {
   private UserPermissionService userPermissionService;
 
   @AroundInvoke
-  public Object logMethodEntry(InvocationContext ctx) throws Exception {
+  public Object applyPermission(InvocationContext ctx) throws Exception {
     Object[] parameters = ctx.getParameters();
     List<String> permittedActivities = userPermissionService.getUserPermittedSurveys((String) parameters[1]);
     parameters[0] = permittedActivities;
