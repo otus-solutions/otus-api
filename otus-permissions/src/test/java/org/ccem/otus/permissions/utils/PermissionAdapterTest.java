@@ -47,13 +47,13 @@ public class PermissionAdapterTest {
   }
 
   @Test
-  public void serialize() {
+  public void method_serialize_should_return_json_of_JsonElement() {
     when(context.serialize(src)).thenReturn(jsonElement);
     assertTrue(permissionAdapter.serialize(src, typeOfSrc, context) instanceof JsonElement);
   }
 
   @Test
-  public void deserialize() {
+  public void method_deserialize_should_return_expected_values() {
     JsonElement jsonElement = new JsonObject();
     ((JsonObject) jsonElement).addProperty("objectType","SurveyGroupPermission");
 
