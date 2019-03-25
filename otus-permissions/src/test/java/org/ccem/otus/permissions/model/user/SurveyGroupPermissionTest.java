@@ -41,8 +41,8 @@ public class SurveyGroupPermissionTest {
     SurveyGroupPermission deserialized = SurveyGroupPermission.deserialize(OBJECT_DESERIALIZED);
 
     Assert.assertThat(deserialized, CoreMatchers.instanceOf(SurveyGroupPermission.class));
-    Assert.assertEquals("CSJ", deserialized.getGroups().get(0));
-    Assert.assertEquals("MED", deserialized.getGroups().get(1));
+    Assert.assertTrue(deserialized.getGroups().contains("CSJ"));
+    Assert.assertTrue(deserialized.getGroups().contains("MED"));
   }
 
   @Test

@@ -1,12 +1,12 @@
 package org.ccem.otus.permissions.model.user;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import com.google.gson.GsonBuilder;
 
 public class SurveyGroupPermission extends Permission {
-  private List<String> groups;
+  private Set<String> groups;
 
   public static String serialize(Permission permission) {
     return SurveyGroupPermission.getGsonBuilder().create().toJson(permission);
@@ -34,7 +34,7 @@ public class SurveyGroupPermission extends Permission {
     return Arrays.equals(groups.toArray(), c.groups.toArray());
   }
 
-  public List<String> getGroups() {
+  public Set<String> getGroups() {
     return this.groups;
   }
 

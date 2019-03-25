@@ -1,33 +1,34 @@
 package org.ccem.otus.persistence;
 
-import com.mongodb.client.result.DeleteResult;
+import java.util.List;
+import java.util.Set;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.client.result.DeleteResult;
 
 public interface SurveyGroupDao {
-    List<SurveyGroup> getListOfSurveyGroups();
+  List<SurveyGroup> getListOfSurveyGroups();
 
-    Document findSurveyGroupByName(String name) throws DataNotFoundException;
+  Document findSurveyGroupByName(String name) throws DataNotFoundException;
 
-    void findSurveyGroupNameConflits(String name) throws ValidationException;
+  void findSurveyGroupNameConflits(String name) throws ValidationException;
 
-    ObjectId persist(SurveyGroup surveyGroup);
+  ObjectId persist(SurveyGroup surveyGroup);
 
-    String updateSurveyGroupAcronyms(SurveyGroup surveyGroup);
+  String updateSurveyGroupAcronyms(SurveyGroup surveyGroup);
 
-    String updateSurveyGroupName(String originalName, String updateName);
+  String updateSurveyGroupName(String originalName, String updateName);
 
-    DeleteResult deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException;
+  DeleteResult deleteSurveyGroup(String surveyGroupName) throws DataNotFoundException;
 
-    List<SurveyGroup> getSurveyGroupsByUser(List<String> userGroups);
+  List<SurveyGroup> getSurveyGroupsByUser(Set<String> userGroups);
 
-    List<String> getOrphanSurveys();
+  List<String> getOrphanSurveys();
 
-    List<String> getUserPermittedSurveys(List<String> surveyGroups);
+  List<String> getUserPermittedSurveys(Set<String> surveyGroups);
 }

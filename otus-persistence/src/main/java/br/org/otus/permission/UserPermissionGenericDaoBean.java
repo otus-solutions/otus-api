@@ -1,5 +1,9 @@
 package br.org.otus.permission;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -9,12 +13,7 @@ import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
 import org.ccem.otus.permissions.persistence.user.UserPermissionProfileDao;
-import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.persistence.SurveyGroupDao;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
 
@@ -58,7 +57,7 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
     if (groupPermission == null){
       groupPermission = userPermissionProfileDao.getGroupPermission(DEFAULT_PROFILE);
     }
-    List<String> surveyGroups = groupPermission.getGroups();
+    Set<String> surveyGroups = groupPermission.getGroups();
     List<String> userPermittedSurveys = surveyGroupDao.getUserPermittedSurveys(surveyGroups);
     userPermittedSurveys.addAll(surveyGroupDao.getOrphanSurveys());
 

@@ -1,10 +1,12 @@
 package br.org.otus.survey;
 
-import br.org.mongodb.MongoGenericDao;
-import com.google.gson.GsonBuilder;
-import com.mongodb.Block;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -13,11 +15,12 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.persistence.SurveyGroupDao;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import com.mongodb.Block;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
+import br.org.mongodb.MongoGenericDao;
 
 public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements SurveyGroupDao {
     private static final String COLLECTION_NAME = "survey_group";
@@ -130,7 +133,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     }
 
     @Override
-    public List<String> getUserPermittedSurveys(List<String> surveyGroups) {
+    public List<String> getUserPermittedSurveys(Set<String> surveyGroups) {
         List<String> acronyms = new ArrayList<>();
         List<Bson> pipeline = new ArrayList<>();
         pipeline.add(parseQuery("{$match:{\"name\":{$in:"+surveyGroups+"}}}"));

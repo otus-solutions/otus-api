@@ -1,6 +1,18 @@
 package org.ccem.otus.service.surveyGroup;
 
-import com.mongodb.client.result.DeleteResult;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.reflect.Whitebox.invokeMethod;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -18,14 +30,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.powermock.api.mockito.PowerMockito.*;
-import static org.powermock.reflect.Whitebox.invokeMethod;
+import com.mongodb.client.result.DeleteResult;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SurveyGroupServiceBean.class, SurveyGroup.class})
@@ -168,7 +173,7 @@ public class SurveyGroupServiceBeanTest {
 
     @Test
     public void getSurveyGroupsByUser() {
-        List<String> groupsList = new ArrayList<>();
+        Set<String> groupsList = new HashSet<String>();
         when(surveyGroupDao.getSurveyGroupsByUser(groupsList)).thenReturn(surveyGroups);
         when(userPermissionDao.getGroupPermission(USER_EMAIL)).thenReturn(surveyGroupPermission);
         when(surveyGroupPermission.getGroups()).thenReturn(groupsList);
