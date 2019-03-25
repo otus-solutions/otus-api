@@ -71,4 +71,10 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
     return userPermittedSurveys;
   }
 
+  @Override
+  public void removeFromPermissions(String surveyGroupName) throws DataNotFoundException {
+      userPermissionDao.removeFromPermissions(surveyGroupName);
+      userPermissionProfileDao.removeFromPermissions(surveyGroupName);
+  }
+
 }

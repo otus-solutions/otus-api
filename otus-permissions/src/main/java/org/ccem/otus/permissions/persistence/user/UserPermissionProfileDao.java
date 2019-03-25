@@ -8,4 +8,6 @@ public interface UserPermissionProfileDao {
   UserPermissionDTO getProfile(String defaultProfile) throws DataNotFoundException;
 
   SurveyGroupPermission getGroupPermission(String defaultProfile);
+
+  void removeFromPermissions(String surveyGroupName) throws DataNotFoundException;
 }

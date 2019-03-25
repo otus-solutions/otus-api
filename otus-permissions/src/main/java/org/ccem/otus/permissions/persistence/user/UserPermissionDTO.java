@@ -1,9 +1,11 @@
 package org.ccem.otus.permissions.persistence.user;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.ccem.otus.permissions.model.user.Permission;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.utils.PermissionAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +16,10 @@ import com.google.gson.GsonBuilder;
 public class UserPermissionDTO {
 
   private List<Permission> permissions;
+
+  public UserPermissionDTO() {
+    this.permissions = new ArrayList<>();
+  }
 
   public void concatenatePermissions(UserPermissionDTO userPermissionDTO) {
     if (userPermissionDTO.getPermissions() != null) {
@@ -65,4 +71,7 @@ public class UserPermissionDTO {
     return permissions;
   }
 
+  public void addPermission(Permission permission) {
+    this.permissions.add(permission);
+  }
 }

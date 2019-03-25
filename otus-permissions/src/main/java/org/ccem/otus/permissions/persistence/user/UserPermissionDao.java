@@ -11,4 +11,6 @@ public interface UserPermissionDao {
   void deletePermission(Permission permission);
 
   SurveyGroupPermission getGroupPermission(String email);
+
+  void removeFromPermissions(String surveyGroupName);
 }

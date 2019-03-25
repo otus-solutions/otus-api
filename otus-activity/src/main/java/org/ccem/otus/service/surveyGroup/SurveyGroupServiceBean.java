@@ -28,6 +28,9 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     @Inject
     private UserPermissionProfileDao userPermissionProfileDao;
 
+    @Inject
+    private UserPermissionGenericDao userPermissionGenericDao;
+
     @Override
     public List<SurveyGroup> getListOfSurveyGroups() {
         return surveyGroupDao.getListOfSurveyGroups();
@@ -62,6 +65,7 @@ public class SurveyGroupServiceBean implements SurveyGroupService {
     public void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) throws DataNotFoundException {
         DeleteResult result = surveyGroupDao.deleteSurveyGroup(surveyGroupNameDto.getSurveyGroupName());
         if (result.getDeletedCount() == 0) throw new DataNotFoundException(new Throwable("surveyGroup not found"));
+        userPermissionGenericDao.removeFromPermissions(surveyGroupNameDto.getSurveyGroupName());
     }
 
     @Override

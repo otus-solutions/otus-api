@@ -62,4 +62,9 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
     }
   }
 
+  @Override
+  public void removeFromPermissions(String surveyGroupName) {
+    collection.updateMany(new Document("groups",surveyGroupName),new Document("$pull",new Document("groups", surveyGroupName)));
+  }
+
 }
