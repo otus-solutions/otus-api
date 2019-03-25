@@ -82,7 +82,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
         Bson filter = new Document("name", surveyGroupName);
         return collection.deleteOne(filter);
     }
-    
+
     @Override
     public List<SurveyGroup> getSurveyGroupsByUser(Set<String> userGroups) {
         List<SurveyGroup> surveyGroups = new ArrayList<>();

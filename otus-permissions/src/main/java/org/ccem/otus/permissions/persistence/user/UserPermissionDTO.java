@@ -16,12 +16,14 @@ public class UserPermissionDTO {
   private List<Permission> permissions;
 
   public void concatenatePermissions(UserPermissionDTO userPermissionDTO) {
-    for (int i = 0; i < this.permissions.size(); i++) {
-      Iterator<Permission> iterator = userPermissionDTO.getPermissions().iterator();
-      while (iterator.hasNext()) {
-        Permission permission = iterator.next();
-        if (this.permissions.get(i).getObjectType().equals(permission.getObjectType()))
-          this.permissions.set(i,permission);
+    if (userPermissionDTO.getPermissions() != null) {
+      for (int i = 0; i < this.permissions.size(); i++) {
+        Iterator<Permission> iterator = userPermissionDTO.getPermissions().iterator();
+        while (iterator.hasNext()) {
+          Permission permission = iterator.next();
+          if (this.permissions.get(i).getObjectType().equals(permission.getObjectType()))
+            this.permissions.set(i, permission);
+        }
       }
     }
   }
@@ -48,7 +50,7 @@ public class UserPermissionDTO {
       e.printStackTrace();
     }
     UserPermissionDTO userPermissionsDTO = UserPermissionDTO.getGsonBuilder().create()
-        .fromJson(String.valueOf(jsonObject), UserPermissionDTO.class);
+      .fromJson(String.valueOf(jsonObject), UserPermissionDTO.class);
     return userPermissionsDTO;
   }
 
