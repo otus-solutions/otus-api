@@ -85,7 +85,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
 
     //TODO: userEmail parameter waiting for user validation implementation in Otus.
     @Override
-    public List<SurveyGroup> getSurveyGroupsByUser(List<String> userGroups) {
+    public List<SurveyGroup> getSurveyGroupsByUser(Set<String> userGroups) {
         List<SurveyGroup> surveyGroups = new ArrayList<>();
         collection.find(in("name",userGroups)).forEach((Block<Document>) document -> {
             surveyGroups.add(SurveyGroup.deserialize(document.toJson()));

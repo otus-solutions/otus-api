@@ -1,14 +1,15 @@
 package org.ccem.otus.permissions.persistence.user;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -18,14 +19,14 @@ public class UserPermissionDTOTest {
 
   private UserPermissionDTO userPermissionDTO;
   private ArrayList<Permission> permissions;
-  private ArrayList<String> groups;
+  private Set<String> groups;
   private SurveyGroupPermission permission;
 
   @Before
   public void setup() {
     this.userPermissionDTO = new UserPermissionDTO();
     this.permissions = new ArrayList<Permission>();
-    this.groups = new ArrayList<String>();
+    this.groups = new HashSet<String>();
     this.groups.add("Group");
 
 
@@ -42,7 +43,7 @@ public class UserPermissionDTOTest {
   public void concatenatePermissions_method_should_return_concatenated_permissions() {
     UserPermissionDTO other = new UserPermissionDTO();
     ArrayList<Permission> otherPermissions = new ArrayList<Permission>();
-    ArrayList<String> groups = new ArrayList<String>();
+    Set<String> groups = new HashSet<>();
     groups.add("Group1");
     Permission otherPermission = new SurveyGroupPermission();
     Whitebox.setInternalState(otherPermission, "objectType", "SurveyGroupPermission");

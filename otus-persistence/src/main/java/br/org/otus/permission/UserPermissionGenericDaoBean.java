@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import br.org.otus.user.UserDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
@@ -28,6 +29,9 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
   @Inject
   private SurveyGroupDao surveyGroupDao;
 
+  @Inject
+  private UserDao userDao;
+
   @Override
   public UserPermissionDTO getUserPermissions(String email) throws DataNotFoundException {
     UserPermissionDTO permissionProfile = userPermissionProfileDao.getProfile(DEFAULT_PROFILE);
@@ -40,6 +44,9 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
 
   @Override
   public Permission savePermission(Permission permission) throws DataNotFoundException {
+    if(!userDao.emailExists(permission.getEmail())){
+      throw new DataNotFoundException(new Throwable("User with email: {" + permission.getEmail() + "} not found."));
+    }
     UserPermissionDTO permissionProfile = userPermissionProfileDao.getProfile(DEFAULT_PROFILE);
     List<Permission> permissionFound = permissionProfile.getPermissions().stream().filter(profilePermission -> profilePermission.equals(permission)).collect(Collectors.toList());
     if(permissionFound.isEmpty()){

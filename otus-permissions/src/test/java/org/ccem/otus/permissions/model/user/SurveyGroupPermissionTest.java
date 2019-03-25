@@ -1,6 +1,7 @@
 package org.ccem.otus.permissions.model.user;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -14,11 +15,11 @@ public class SurveyGroupPermissionTest {
   private static final String OBJECT_DESERIALIZED = "{\"groups\":[\"CSJ\",\"MED\"]}";
   private SurveyGroupPermission surveyGroupPermission;
   private Permission permission;
-  private ArrayList<String> groups;
+  private Set<String> groups;
 
   @Before
   public void setup() {
-    this.groups = new ArrayList<String>();
+    this.groups = new HashSet<String>();
     this.groups.add("CSJ");
     this.groups.add("MED");
     this.surveyGroupPermission = new SurveyGroupPermission();
@@ -54,7 +55,7 @@ public class SurveyGroupPermissionTest {
   @Test
   public void equals_method_should_return_false_when_is_not_same_instance() {
     SurveyGroupPermission other = new SurveyGroupPermission();
-    ArrayList<String> otherGroups = new ArrayList<String>();
+    Set<String> otherGroups = new HashSet<String>();
     Whitebox.setInternalState(other, "groups", otherGroups);
 
     Assert.assertFalse(this.surveyGroupPermission.equals(other));

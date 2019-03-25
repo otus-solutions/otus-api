@@ -44,7 +44,7 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
   @Override
   public void savePermission(Permission permission) {
     Document parsed = Document.parse(SurveyGroupPermission.serialize(permission));
-    collection.updateOne(eq(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail())),new Document("$set", parsed),new UpdateOptions().upsert(true));
+    collection.updateOne(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail()),new Document("$set", parsed),new UpdateOptions().upsert(true));
   }
 
   @Override
