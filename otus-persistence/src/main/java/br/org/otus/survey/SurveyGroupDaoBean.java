@@ -135,7 +135,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     public List<String> getUserPermittedSurveys(Set<String> surveyGroups) {
         List<String> acronyms = new ArrayList<>();
         List<Bson> pipeline = new ArrayList<>();
-        pipeline.add(parseQuery("{$match:{\"name\":{$in:"+surveyGroups+"}}}"));
+        pipeline.add(new Document("$match",new Document("name",new Document("$in",surveyGroups))));
         pipeline.add(parseQuery("{$unwind:\"$surveyAcronyms\"}"));
         pipeline.add(parseQuery("{$group:{_id:\"$surveyAcronyms\"}}"));
         pipeline.add(parseQuery("{$group:{_id:{},userPermittedSurveys:{$push:\"$_id\"}}}"));
