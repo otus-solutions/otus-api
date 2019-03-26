@@ -25,26 +25,26 @@ import java.util.List;
 
 public class ExtractionFacade {
 
-	@Inject
-	private ActivityFacade activityFacade;
+  @Inject
+  private ActivityFacade activityFacade;
 
-	@Inject
-	private SurveyFacade surveyFacade;
+  @Inject
+  private SurveyFacade surveyFacade;
 
-	@Inject
-  	private ExamUploadFacade examUploadFacade;
+  @Inject
+  private ExamUploadFacade examUploadFacade;
 
-	@Inject
-	private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
+  @Inject
+  private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
 
-	@Inject
-	private ParticipantLaboratoryFacade participantLaboratoryFacade;
+  @Inject
+  private ParticipantLaboratoryFacade participantLaboratoryFacade;
 
-	@Inject
-	private FileUploaderFacade fileUploaderFacade;
+  @Inject
+  private FileUploaderFacade fileUploaderFacade;
 
-	@Inject
-	private ExtractionService extractionService;
+  @Inject
+  private ExtractionService extractionService;
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
     List<SurveyActivity> activities = activityFacade.get(acronym, version);
@@ -60,11 +60,9 @@ public class ExtractionFacade {
     }
   }
 
-	public List<Integer> listSurveyVersions(String acronym){
-        return surveyFacade.listVersions(acronym);
-    }
-
-
+  public List<Integer> listSurveyVersions(String acronym) {
+    return surveyFacade.listVersions(acronym);
+  }
 
   public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
@@ -88,7 +86,7 @@ public class ExtractionFacade {
 
   public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
     try {
-      return extractionService.getAttachmentsReport(acronym,version);
+      return extractionService.getAttachmentsReport(acronym, version);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Extraction.NotFound.build(e.getMessage()));
     }
