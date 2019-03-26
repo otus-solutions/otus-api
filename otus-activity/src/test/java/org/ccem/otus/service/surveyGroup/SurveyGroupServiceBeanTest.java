@@ -3,6 +3,7 @@ package org.ccem.otus.service.surveyGroup;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
@@ -20,6 +21,7 @@ import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
+import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
 import org.ccem.otus.persistence.SurveyGroupDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +53,8 @@ public class SurveyGroupServiceBeanTest {
     private SurveyGroupDao surveyGroupDao;
     @Mock
     private UserPermissionDao userPermissionDao;
+    @Mock
+    private UserPermissionGenericDao userPermissionGenericDao;
     @Mock
     private SurveyGroupPermission surveyGroupPermission;
 
@@ -169,6 +173,7 @@ public class SurveyGroupServiceBeanTest {
         when(surveyGroupDao.deleteSurveyGroup(SURVEY_GROUP_NAME)).thenReturn(result);
         when(result.getDeletedCount()).thenReturn(1L);
         surveyGroupServiceBean.deleteSurveyGroup(surveyGroupNameDto);
+        verify(userPermissionGenericDao,times(1)).removeFromPermissions(surveyGroupNameDto.getSurveyGroupName());
     }
 
     @Test

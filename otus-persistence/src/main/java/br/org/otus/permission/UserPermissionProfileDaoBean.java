@@ -57,7 +57,7 @@ public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public void removeFromPermissions(String surveyGroupName) throws DataNotFoundException {
+  public void removeFromPermissionsProfile(String surveyGroupName) throws DataNotFoundException {
     UserPermissionDTO fullDTO = this.getProfile("DEFAULT");
     List<Permission> surveyGroupPermissionList = fullDTO.getPermissions()
             .stream()

@@ -25,6 +25,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class UserPermissionGenericDaoBeanTest {
     private static String USER_EMAIL = "teste@gmail.com";
     private static final String DEFAULT_PROFILE = "DEFAULT";
+    private static final String SURVEY_GROUP_NAME = "GROUP";
 
     @InjectMocks
     private UserPermissionGenericDaoBean userPermissionGenericDaoBean;
@@ -109,5 +110,12 @@ public class UserPermissionGenericDaoBeanTest {
         Mockito.verify(userPermissionProfileDao, Mockito.times(1)).getGroupPermission(DEFAULT_PROFILE);
         Mockito.verify(surveyGroupDao, Mockito.times(1)).getUserPermittedSurveys(surveyGroupPermission.getGroups());
         Mockito.verify(surveyGroupDao, Mockito.times(1)).getOrphanSurveys();
+    }
+
+    @Test
+    public void removeFromPermissions_should_call_userPermissionDao_removeFromPermissions_and_userPermissionProfileDao_removeFromPermissionsProfile() throws Exception {
+        userPermissionGenericDaoBean.removeFromPermissions(SURVEY_GROUP_NAME);
+        Mockito.verify(userPermissionDao, Mockito.times(1)).removeFromPermissions(SURVEY_GROUP_NAME);
+        Mockito.verify(userPermissionProfileDao, Mockito.times(1)).removeFromPermissionsProfile(SURVEY_GROUP_NAME);
     }
 }
