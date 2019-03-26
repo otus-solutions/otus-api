@@ -20,10 +20,13 @@ public class AutocompleteQuestionPreProcessor implements ActivityPreProcessor {
         SurveyActivityExtractionRecordsFactory result = recordsFactory;
         for(SurveyItem iterator : surveyForm.getSurveyTemplate().itemContainer){
             if(iterator.objectType.equals(QUESTION)){
-                String value = result.getSurveyInformation().get(iterator.customID).toString();
-                if (!value.equals(null) || !value.equals("")){
-                    String extractionValue = dataSourceService.getElementDataSource(value).getExtractionValue();
-                    result.getSurveyInformation().replace(iterator.customID, extractionValue);
+                Object questionResponse = result.getSurveyInformation().get(iterator.customID);
+                if(questionResponse != null){
+                    String value = questionResponse.toString();
+                    if (!value.equals(null) || !value.equals("")){
+                        String extractionValue = dataSourceService.getElementDataSource(value).getExtractionValue();
+                        result.getSurveyInformation().replace(iterator.customID, extractionValue);
+                    }
                 }
             }
         }
