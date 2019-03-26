@@ -96,7 +96,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     public List<String> getOrphanSurveys() {
         List<String> acronyms = new ArrayList<>();
         List<Bson> pipeline = new ArrayList<>();
-        pipeline.add(parseQuery("{$unwind:\"$surveyAcronyms\"}"));
+        pipeline.add(parseQuery("{\"$unwind\":{\"path\":\"$surveyAcronyms\",\"preserveNullAndEmptyArrays\":true}}"));
         pipeline.add(parseQuery("{$group:{_id:\"$surveyAcronyms\"}}"));
         pipeline.add(parseQuery("{$group:{_id:{},surveyAcronyms:{$push:\"$_id\"}}}"));
         pipeline.add(parseQuery("{\n" +
