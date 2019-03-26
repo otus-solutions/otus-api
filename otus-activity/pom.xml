@@ -72,5 +72,11 @@
 		    <artifactId>annotations</artifactId>
 		    <version>RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.ccem.otus</groupId>
+			<artifactId>otus-permissions</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>provided</scope>
+		</dependency>
     </dependencies>
 </project>

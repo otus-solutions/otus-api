@@ -15,21 +15,21 @@ import java.util.List;
 
 public interface ActivityDao {
 
-	List<SurveyActivity> find(long rn);
+  List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn);
 
-	ObjectId persist(SurveyActivity surveyActivity);
+  ObjectId persist(SurveyActivity surveyActivity);
 
-	SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException;
+  SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException;
 
-	SurveyActivity findByID(String id) throws DataNotFoundException;
+  SurveyActivity findByID(String id) throws DataNotFoundException;
 
-	List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
+  List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
 
-	List<SurveyActivity> findByCategory(String categoryName);
+  List<SurveyActivity> findByCategory(String categoryName);
 
-	void updateCategory(ActivityCategory activityCategory);
+  void updateCategory(ActivityCategory activityCategory);
 
-	AggregateIterable<Document> aggregate(List<Bson> query);
-	
-	boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException;
+  AggregateIterable<Document> aggregate(List<Bson> query);
+
+  boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException;
 }

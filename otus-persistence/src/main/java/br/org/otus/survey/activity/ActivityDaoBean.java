@@ -15,14 +15,14 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.ActivityDao;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.exclude;
 import static com.mongodb.client.model.Projections.fields;
 
@@ -49,11 +49,13 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
      * @return
      */
     @Override
-    public List<SurveyActivity> find(long rn) {
+    @UserPermission
+    public List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn) {
         ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
 
         FindIterable<Document> result = collection.find(and(eq(RECRUITMENT_NUMBER_PATH, rn),
-            eq(DISCARDED_PATH, false)            
+            eq(DISCARDED_PATH, false),
+            in("surveyForm.surveyTemplate.identity.acronym",permittedSurveys)
          ));        
         
         result.forEach((Block<Document>) document -> {

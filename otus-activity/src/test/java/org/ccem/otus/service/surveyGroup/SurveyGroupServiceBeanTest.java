@@ -1,11 +1,27 @@
 package org.ccem.otus.service.surveyGroup;
 
-import com.mongodb.client.result.DeleteResult;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.reflect.Whitebox.invokeMethod;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.group.SurveyGroup;
 import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;
+import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
+import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
+import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
 import org.ccem.otus.persistence.SurveyGroupDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,13 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.powermock.api.mockito.PowerMockito.*;
-import static org.powermock.reflect.Whitebox.invokeMethod;
+import com.mongodb.client.result.DeleteResult;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SurveyGroupServiceBean.class, SurveyGroup.class})
@@ -41,6 +51,12 @@ public class SurveyGroupServiceBeanTest {
     private SurveyGroupServiceBean surveyGroupServiceBean = PowerMockito.spy(new SurveyGroupServiceBean());
     @Mock
     private SurveyGroupDao surveyGroupDao;
+    @Mock
+    private UserPermissionDao userPermissionDao;
+    @Mock
+    private UserPermissionGenericDao userPermissionGenericDao;
+    @Mock
+    private SurveyGroupPermission surveyGroupPermission;
 
     private SurveyGroupNameDto surveyGroupNameDto;
     @Mock
@@ -157,11 +173,15 @@ public class SurveyGroupServiceBeanTest {
         when(surveyGroupDao.deleteSurveyGroup(SURVEY_GROUP_NAME)).thenReturn(result);
         when(result.getDeletedCount()).thenReturn(1L);
         surveyGroupServiceBean.deleteSurveyGroup(surveyGroupNameDto);
+        verify(userPermissionGenericDao,times(1)).removeFromPermissions(surveyGroupNameDto.getSurveyGroupName());
     }
 
     @Test
     public void getSurveyGroupsByUser() {
-        when(surveyGroupDao.getSurveyGroupsByUser(USER_EMAIL)).thenReturn(surveyGroups);
+        Set<String> groupsList = new HashSet<String>();
+        when(surveyGroupDao.getSurveyGroupsByUser(groupsList)).thenReturn(surveyGroups);
+        when(userPermissionDao.getGroupPermission(USER_EMAIL)).thenReturn(surveyGroupPermission);
+        when(surveyGroupPermission.getGroups()).thenReturn(groupsList);
         assertEquals(EXPECTED_SIZE, surveyGroupServiceBean.getSurveyGroupsByUser(USER_EMAIL).size());
     }
 }

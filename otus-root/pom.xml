@@ -48,6 +48,7 @@
 
   <modules>
     <module>../otus-persistence</module>
+    <module>../otus-permissions</module>
     <module>../otus-business</module>
     <module>../otus-rest</module>
     <module>../otus-ear</module>

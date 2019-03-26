@@ -21,12 +21,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.gson.GsonBuilder;
 
+import br.org.otus.permission.ActivityPermissionResource;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ActivityAccessPermission.class})
 public class ActivityAccessPermissionResourceTest {
   private static final String EXPECTED_RESPONSE = "{\"data\":true}";
   @InjectMocks
-  ActivityAccessPermissionResource resource;
+  ActivityPermissionResource resource;
   @Mock
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
   @Mock

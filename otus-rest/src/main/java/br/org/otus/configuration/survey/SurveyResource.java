@@ -1,6 +1,7 @@
 package br.org.otus.configuration.survey;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -8,10 +9,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
+import br.org.otus.security.context.SecurityContext;
 import br.org.otus.survey.api.SurveyFacade;
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
 
@@ -21,11 +26,24 @@ public class SurveyResource {
 	@Inject
 	private SurveyFacade surveyFacade;
 
+	@Inject
+	private SecurityContext securityContext;
+
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAllUndiscarded() {
-		return new Response().buildSuccess(surveyFacade.listUndiscarded()).toSurveyJson();
+	public String getAllPermittedUndiscarded(@Context HttpServletRequest request) {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+		return new Response().buildSuccess(surveyFacade.listUndiscarded(userEmail)).toSurveyJson();
+	}
+
+	@GET
+	@Secured
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getAllUndiscarded(@Context HttpServletRequest request) {
+		return new Response().buildSuccess(surveyFacade.listAllUndiscarded()).toSurveyJson();
 	}
 
 	@GET
