@@ -9,10 +9,12 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -28,10 +30,22 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   }
 
   @Override
-  public List<SurveyForm> findUndiscarded() {
+  @UserPermission
+  public List<SurveyForm> findUndiscarded(List<String> permittedAcronyms, String userEmail) {
+    ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
+    Document query = new Document("isDiscarded", false).append("surveyTemplate.identity.acronym",new Document("$in",permittedAcronyms));
+    collection.aggregate(Arrays.asList(new Document("$match",query))).forEach((Block<Document>) document -> {
+      surveys.add(SurveyForm.deserialize(document.toJson()));
+    });
+
+    return surveys;
+  }
+
+  @Override
+  public List<SurveyForm> findAllUndiscarded() {
     ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
     Document query = new Document("isDiscarded", false);
-    collection.find(query).forEach((Block<Document>) document -> {
+    collection.aggregate(Arrays.asList(new Document("$match",query))).forEach((Block<Document>) document -> {
       surveys.add(SurveyForm.deserialize(document.toJson()));
     });
 

@@ -2,13 +2,13 @@ package br.org.otus.monitoring;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.monitoring.builder.ActivityStatusQueryBuilder;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.persistence.FlagReportDao;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FlagReportDaoBean extends MongoGenericDao<Document> implements FlagReportDao {
@@ -19,55 +19,32 @@ public class FlagReportDaoBean extends MongoGenericDao<Document> implements Flag
     super(COLLECTION_NAME, Document.class);
   }
 
-
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgressReport() {
+  public Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms) throws DataNotFoundException {
     List<Bson> query = new ActivityStatusQueryBuilder()
-        .projectLastStatus()
-        .getStatusValue()
-        .sortByDate()
-        .removeStatusDate()
-        .groupByParticipant()
-        .projectId()
-        .build();
+        .getActivityStatusQuery(surveyAcronyms);
 
-    MongoCursor<Document> iterator = collection.aggregate(query).iterator();
-
-    return deserializeReport(iterator);
+      return getDocument(query);
   }
 
   @Override
-  public ArrayList<ActivitiesProgressReport> getActivitiesProgressReport(String center) {
+  public Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms) throws DataNotFoundException {
     List<Bson> query = new ActivityStatusQueryBuilder()
-        .matchFieldCenter(center)
-        .projectLastStatus()
-        .getStatusValue()
-        .sortByDate()
-        .removeStatusDate()
-        .groupByParticipant()
-        .projectId()
-        .build();
+            .getActivityStatusQuery(center,surveyAcronyms);
 
-    MongoCursor<Document> iterator = collection.aggregate(query).iterator();
-
-    return deserializeReport(iterator);
+      return getDocument(query);
   }
 
-  private ArrayList<ActivitiesProgressReport> deserializeReport(MongoCursor<Document> iterator) {
+ @NotNull
+ private Document getDocument(List<Bson> query) throws DataNotFoundException {
+    Document result = collection.aggregate(query).allowDiskUse(true).first();
 
-    ArrayList<ActivitiesProgressReport> reports = new ArrayList<>();
-
-    try {
-      while (iterator.hasNext()) {
-        reports.add(
-            ActivitiesProgressReport.deserialize(iterator.next().toJson())
-        );
-      }
-    } finally {
-      iterator.close();
+    if(result == null){
+      throw new DataNotFoundException("There are no results");
     }
 
-    return reports;
-  }
+    return result;
+ }
+
 
 }

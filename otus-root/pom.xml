@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ccem.otus</groupId>
   <artifactId>otus-root</artifactId>
-  <version>1.18.3-SNAPSHOT</version>
+  <version>1.19</version>
   <packaging>pom</packaging>
   <name>otus-api</name>
 
@@ -48,6 +48,7 @@
 
   <modules>
     <module>../otus-persistence</module>
+    <module>../otus-permissions</module>
     <module>../otus-business</module>
     <module>../otus-rest</module>
     <module>../otus-ear</module>

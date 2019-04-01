@@ -1,4 +1,4 @@
-package br.org.otus.survey.activity.permission;
+package br.org.otus.permission;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -13,15 +13,15 @@ import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
+import br.org.otus.survey.activity.permission.ActivityAccessPermissionFacade;
 
 @Path("/permission")
-public class ActivityAccessPermissionResource {
+public class ActivityPermissionResource {
 
   @Inject
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
   @Inject
   private ActivityAccessPermission activityAccessPermission;
-
 
   @POST
   @Secured
@@ -35,8 +35,7 @@ public class ActivityAccessPermissionResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   public String getAll() {
-    return new Response().buildSuccess(activityAccessPermissionFacade.getAll())
-        .toJson(ActivityAccessPermission.getGsonBuilder());
+    return new Response().buildSuccess(activityAccessPermissionFacade.getAll()).toJson(ActivityAccessPermission.getGsonBuilder());
   }
 
   @PUT

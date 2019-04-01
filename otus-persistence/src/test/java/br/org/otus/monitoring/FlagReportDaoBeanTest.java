@@ -5,6 +5,7 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +18,15 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.LinkedList;
+
+import static org.mockito.Mockito.when;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ActivityStatusQueryBuilder.class, FlagReportDaoBean.class})
 public class FlagReportDaoBeanTest {
   private static final String CENTER = "MG";
+  private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
 
   @InjectMocks
   private FlagReportDaoBean flagReportDaoBean;
@@ -40,10 +46,12 @@ public class FlagReportDaoBeanTest {
   @Before
   public void setUp() throws Exception {
     Whitebox.setInternalState(flagReportDaoBean, "collection", collection);
-    Mockito.when(this.collection.aggregate(Matchers.anyList())).thenReturn(result);
-    Mockito.when(result.iterator()).thenReturn(iterator);
 
-
+    SURVEY_ACRONYM_LIST = new LinkedList<>();
+    SURVEY_ACRONYM_LIST.add("HVSD");
+    SURVEY_ACRONYM_LIST.add("PSEC");
+    SURVEY_ACRONYM_LIST.add("ABC");
+    SURVEY_ACRONYM_LIST.add("DEF");
     builder = PowerMockito.spy(new ActivityStatusQueryBuilder());
     PowerMockito
       .whenNew(ActivityStatusQueryBuilder.class)
@@ -52,33 +60,34 @@ public class FlagReportDaoBeanTest {
   }
 
   @Test
-  public void getActivitiesProgressReport_should_build_the_query_accordingly_with_center() {
-    flagReportDaoBean.getActivitiesProgressReport(CENTER);
-
-
-    Mockito.verify(builder, Mockito.times(1)).matchFieldCenter(CENTER);
-    Mockito.verify(builder, Mockito.times(1)).projectLastStatus();
-    Mockito.verify(builder, Mockito.times(1)).getStatusValue();
-    Mockito.verify(builder, Mockito.times(1)).sortByDate();
-    Mockito.verify(builder, Mockito.times(1)).removeStatusDate();
-    Mockito.verify(builder, Mockito.times(1)).groupByParticipant();
-    Mockito.verify(builder, Mockito.times(1)).projectId();
-    Mockito.verify(builder, Mockito.times(1)).build();
-
-
+  public void getActivitiesProgressReport_should_build_the_query_accordingly_with_center() throws DataNotFoundException {
+    when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
+    when(result.first()).thenReturn(new Document());
+    flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
+    Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(SURVEY_ACRONYM_LIST);
   }
 
   @Test
-  public void getActivitiesProgressReport_should_build_the_query_accordingly() {
-    flagReportDaoBean.getActivitiesProgressReport();
+  public void getActivitiesProgressReport_should_build_the_query_accordingly() throws DataNotFoundException {
+    when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
+    when(result.first()).thenReturn(new Document());
+    flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
+    Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(CENTER,SURVEY_ACRONYM_LIST);
+  }
 
-    Mockito.verify(builder, Mockito.times(0)).matchFieldCenter(CENTER);
-    Mockito.verify(builder, Mockito.times(1)).projectLastStatus();
-    Mockito.verify(builder, Mockito.times(1)).getStatusValue();
-    Mockito.verify(builder, Mockito.times(1)).sortByDate();
-    Mockito.verify(builder, Mockito.times(1)).removeStatusDate();
-    Mockito.verify(builder, Mockito.times(1)).groupByParticipant();
-    Mockito.verify(builder, Mockito.times(1)).projectId();
-    Mockito.verify(builder, Mockito.times(1)).build();
+  @Test(expected = DataNotFoundException.class)
+  public void getActivitiesProgressReport_should_should_throws_DataNotFoundException() throws DataNotFoundException {
+    when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
+    flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
+  }
+
+  @Test(expected = DataNotFoundException.class)
+  public void getActivitiesProgressReport_by_center_should_throws_DataNotFoundException() throws DataNotFoundException {
+    when(collection.aggregate(Matchers.anyList())).thenReturn(result);
+    when(result.allowDiskUse(true)).thenReturn(result);
+    flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
   }
 }

@@ -18,8 +18,7 @@ import br.org.mongodb.MongoGenericDao;
 
 @Stateless
 class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> implements ActivityAccessPermissionDao {
-
-  private static final String COLLECTION_NAME = "permission";
+  private static final String COLLECTION_NAME = "activity_permission";
 
   public ActivityAccessPermissionDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -48,7 +47,6 @@ class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> implemen
   @Override
   public void update(ActivityAccessPermission activityAccessPermission) {
     Document parsed = Document.parse(ActivityAccessPermission.serialize(activityAccessPermission));
-    super.collection.updateOne(eq("_id", activityAccessPermission.getId()),
-        new Document("$set", new Document("exclusiveDisjunction", activityAccessPermission.getExclusiveDisjunction())));
+    super.collection.updateOne(eq("_id", activityAccessPermission.getId()), new Document("$set", new Document("exclusiveDisjunction", activityAccessPermission.getExclusiveDisjunction())));
   }
 }

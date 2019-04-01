@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -73,21 +74,25 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ActivityProgressReportDto getActivitiesProgress() {
+  public ActivityProgressReportDto getActivitiesProgress() throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
+    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(surveyAcronyms);
 
-    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport();
-
-    return new ActivityProgressReportDto(report, surveyAcronyms);
+    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
   }
 
   @Override
-  public ActivityProgressReportDto getActivitiesProgress(String center) {
+  public ActivityProgressReportDto getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
+    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
 
-    ArrayList<ActivitiesProgressReport> report = flagReportDao.getActivitiesProgressReport(center);
+    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
+  }
 
-    return new ActivityProgressReportDto(report, surveyAcronyms);
+  private ActivityProgressReportDto getActivityProgressReportDto(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
+    ActivityProgressReportDto activityProgressReportDto = ActivityProgressReportDto.deserialize(activitiesProgressReportDocument.toJson());
+    activityProgressReportDto.setColumns(surveyAcronyms);
+    return activityProgressReportDto;
   }
 
   @Override
