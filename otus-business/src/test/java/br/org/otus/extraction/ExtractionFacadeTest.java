@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -54,6 +55,8 @@ public class ExtractionFacadeTest {
   private ExamUploadExtration examUploadExtration;
   @Mock
   private ExtractionServiceBean extractionService;
+  @Mock
+  private DataSourceService dataSourceService;
 
   SurveyForm surveyForm = new SurveyForm(surveyTemplate, userEmail);
 
