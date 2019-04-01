@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface DataSourceService {
 
 	DataSourceElement getElementDataSource(String value) throws DataNotFoundException;
 
+	String getElementExtractionValue(List<String> dataSources, String value);
+
+	void populateDataSourceMapping();
 }

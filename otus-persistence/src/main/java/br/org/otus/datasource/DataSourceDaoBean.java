@@ -7,7 +7,9 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import com.google.gson.GsonBuilder;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -19,6 +21,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
 import br.org.mongodb.MongoGenericDao;
+import org.ccem.otus.utils.DataSourceValuesMapping;
 import org.json.JSONObject;
 
 @Stateless
@@ -78,6 +81,7 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
 		return (result == null) ? true : false;
 	}
 
+	//TODO rever regra de negocio para o caso de dois datasources terem o mesmo elemento
 	@Override
 	public DataSourceElement getElementDataSource(String value) {
 		ArrayList<Document> query = new ArrayList<>();
@@ -95,5 +99,27 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
 
 		return result;
 	}
+
+  @Override
+  public DataSourceValuesMapping getDataSourceMapping() {
+	  ArrayList<Bson> pipeline = new ArrayList<Bson>();
+    DataSourceValuesMapping dataSourceValuesMapping = null;
+	  pipeline.add(parseQuery("{$unwind:\"$data\"}"));
+	  pipeline.add(parseQuery("{$group:{_id:{},valuesArray:{$push:{id:\"$id\",values:[\"$data.value\",\"$data.extractionValue\"]}}}}"));
+	  pipeline.add(parseQuery("{$unwind:\"$valuesArray\"}"));
+	  pipeline.add(parseQuery("{$group:{_id:\"$valuesArray.id\",hashMap:{$push:\"$valuesArray.values\"}}}"));
+	  pipeline.add(parseQuery("{$group:{_id:{},mappingList:{$push:{newRoot:[\"$_id\",{hashMap:\"$hashMap\"}]}}}}"));
+	  pipeline.add(parseQuery("{$unwind:\"$mappingList\"}"));
+	  pipeline.add(parseQuery("{$group:{_id:{},mappingList:{$push:\"$mappingList.newRoot\"}}}"));
+    Document output = collection.aggregate(pipeline).first();
+    if (output != null){
+      dataSourceValuesMapping = DataSourceValuesMapping.deserialize(output.toJson());
+    }
+	  return dataSourceValuesMapping;
+  }
+
+  private Bson parseQuery(String stage){
+	  return new GsonBuilder().create().fromJson(stage,Document.class);
+  }
 
 }

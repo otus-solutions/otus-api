@@ -7,6 +7,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.DataSourceElement;
+import org.ccem.otus.utils.DataSourceValuesMapping;
 
 
 public interface DataSourceDao {
@@ -19,6 +20,7 @@ public interface DataSourceDao {
 
 	DataSource findByID(String id) throws DataNotFoundException;
 
-	public DataSourceElement getElementDataSource(String value);
+	DataSourceElement getElementDataSource(String value);
 
+    DataSourceValuesMapping getDataSourceMapping();
 }

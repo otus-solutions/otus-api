@@ -6,17 +6,22 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.DataSourceElement;
 import org.ccem.otus.persistence.DataSourceDao;
+import org.ccem.otus.utils.DataSourceValuesMapping;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 @Stateless
 public class DataSourceServiceBean implements DataSourceService {
 
-	@Inject
+  private DataSourceValuesMapping dataSourceValuesMapping;
+
+  @Inject
 	private DataSourceDao dataSourceDao;
+
 
 	public DataSourceServiceBean (){};
 
@@ -59,4 +64,25 @@ public class DataSourceServiceBean implements DataSourceService {
 		return dataSourceDao.getElementDataSource(value);
 	}
 
+	@Override
+	public String getElementExtractionValue(List<String> dataSources, String value) {
+		String valueFound = "";
+		for(String dataSource : dataSources){
+			String extractionValue = this.dataSourceValuesMapping.getExtractionValue(dataSource, value);
+			if(extractionValue != null){
+				valueFound = extractionValue;
+			}
+		}
+		if(valueFound.equals("")){
+			valueFound = "NOT IDENTIFIED";
+		}
+		return valueFound;
+	}
+
+	@Override
+    public void populateDataSourceMapping() {
+	  this.dataSourceValuesMapping = dataSourceDao.getDataSourceMapping();
+    }
+
 }
+
