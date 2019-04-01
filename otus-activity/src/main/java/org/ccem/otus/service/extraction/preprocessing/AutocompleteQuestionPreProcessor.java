@@ -9,7 +9,6 @@ import org.ccem.otus.survey.template.item.questions.AutocompleteQuestion;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class AutocompleteQuestionPreProcessor implements ActivityPreProcessor {
@@ -21,15 +20,13 @@ public class AutocompleteQuestionPreProcessor implements ActivityPreProcessor {
 
     public SurveyActivityExtractionRecordsFactory process(SurveyForm surveyForm, SurveyActivityExtractionRecordsFactory recordsFactory) throws DataNotFoundException {
         SurveyActivityExtractionRecordsFactory result = recordsFactory;
-        for(SurveyItem interator : surveyForm.getSurveyTemplate().itemContainer){
-            if(interator.objectType.equals(QUESTION)){
-                AutocompleteQuestion autocompleteQuestion = (AutocompleteQuestion) interator;
+        for(SurveyItem iterator : surveyForm.getSurveyTemplate().itemContainer){
+            if(iterator.objectType.equals(QUESTION)){
+                AutocompleteQuestion autocompleteQuestion = (AutocompleteQuestion) iterator;
                 Object questionResponse = result.getSurveyInformation().get(autocompleteQuestion.customID);
                 if(questionResponse != null){
                     String value = questionResponse.toString();
                     if (!value.equals(null) && !value.equals("")){
-                        ArrayList<String> strings = new ArrayList<>();
-                        strings.add("medicamentos");
                         String extractionValue = dataSourceService.getElementExtractionValue(autocompleteQuestion.getDataSources(),value);
                         result.getSurveyInformation().replace(autocompleteQuestion.customID, extractionValue);
                     }

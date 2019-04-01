@@ -4,13 +4,11 @@ import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
-import org.ccem.otus.model.DataSourceElement;
 import org.ccem.otus.persistence.DataSourceDao;
 import org.ccem.otus.utils.DataSourceValuesMapping;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -57,11 +55,6 @@ public class DataSourceServiceBean implements DataSourceService {
 	@Override
 	public DataSource getByID(String id) throws DataNotFoundException {
 		return dataSourceDao.findByID(id);
-	}
-
-	@Override
-	public DataSourceElement getElementDataSource(String value) {
-		return dataSourceDao.getElementDataSource(value);
 	}
 
 	@Override

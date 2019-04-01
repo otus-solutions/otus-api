@@ -11,14 +11,6 @@ public class DataSourceValuesMapping {
     public class ValuesMapping {
         private String dataSource;
         private HashMap<String, String> hashMap;
-
-        public void setDataSource(String dataSource) {
-            this.dataSource = dataSource;
-        }
-
-        public void setHashMap(HashMap<String, String> hashMap) {
-            this.hashMap = hashMap;
-        }
     }
 
     public String getExtractionValue(String dataSource,String value){

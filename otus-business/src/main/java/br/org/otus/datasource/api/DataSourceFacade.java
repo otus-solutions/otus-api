@@ -48,7 +48,4 @@ public class DataSourceFacade {
 		}
 	}
 
-    public void populateDataSourceMapping() {
-		dataSourceService.populateDataSourceMapping();
-    }
 }
