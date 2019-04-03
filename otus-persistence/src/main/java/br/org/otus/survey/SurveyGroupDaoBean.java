@@ -22,8 +22,13 @@ import com.mongodb.client.result.UpdateResult;
 
 import br.org.mongodb.MongoGenericDao;
 
+import javax.inject.Inject;
+
 public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements SurveyGroupDao {
     private static final String COLLECTION_NAME = "survey_group";
+
+    @Inject
+    private SurveyDaoBean surveyDaoBean;
 
     public SurveyGroupDaoBean() {
         super(COLLECTION_NAME, Document.class);
@@ -95,40 +100,56 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
     @Override
     public List<String> getOrphanSurveys() {
         List<String> acronyms = new ArrayList<>();
+        List<String> acronymsInGroups = getAcronymsInGroups();
+        if(acronymsInGroups != null) {
+            List<Bson> pipeline = new ArrayList<>();
+            pipeline.add(parseQuery("{\n" +
+                    "        $lookup:{\n" +
+                    "            from:\"survey\",\n" +
+                    "            let:{inGroupAcronyms:" + acronymsInGroups + "},\n" +
+                    "            pipeline:[\n" +
+                    "                {\n" +
+                    "                    $match:{\n" +
+                    "                        $expr:{\n" +
+                    "                            $not:{$in:[\"$surveyTemplate.identity.acronym\",\"$$inGroupAcronyms\"]}\n" +
+                    "                        }\n" +
+                    "                    }\n" +
+                    "                },\n" +
+                    "                {\n" +
+                    "                    $group:{\n" +
+                    "                        _id:\"$surveyTemplate.identity.acronym\"\n" +
+                    "                    }\n" +
+                    "                },\n" +
+                    "                {\n" +
+                    "                    $group:{_id:{},orphans:{$push:\"$_id\"}}\n" +
+                    "                }\n" +
+                    "            ],\n" +
+                    "            as:\"orphan\"\n" +
+                    "        }\n" +
+                    "    }"));
+            pipeline.add(parseQuery("{$replaceRoot:{newRoot:{orphanSurveys:{$arrayElemAt:[\"$orphan.orphans\",0]}}}}"));
+
+            Document first = collection.aggregate(pipeline).first();
+            if (first != null)
+                acronyms = (List<String>) first.get("orphanSurveys");
+        } else {
+            acronyms = surveyDaoBean.listAcronyms();
+        }
+        return acronyms;
+    }
+
+    private List<String> getAcronymsInGroups(){
+        List<String> acronymsInGroups = null;
         List<Bson> pipeline = new ArrayList<>();
         pipeline.add(parseQuery("{\"$unwind\":{\"path\":\"$surveyAcronyms\",\"preserveNullAndEmptyArrays\":true}}"));
         pipeline.add(parseQuery("{$group:{_id:\"$surveyAcronyms\"}}"));
         pipeline.add(parseQuery("{$group:{_id:{},surveyAcronyms:{$push:\"$_id\"}}}"));
-        pipeline.add(parseQuery("{\n" +
-                "        $lookup:{\n" +
-                "            from:\"survey\",\n" +
-                "            let:{inGroupAcronyms:\"$surveyAcronyms\"},\n" +
-                "            pipeline:[\n" +
-                "                {\n" +
-                "                    $match:{\n" +
-                "                        $expr:{\n" +
-                "                            $not:{$in:[\"$surveyTemplate.identity.acronym\",\"$$inGroupAcronyms\"]}\n" +
-                "                        }\n" +
-                "                    }\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    $group:{\n" +
-                "                        _id:\"$surveyTemplate.identity.acronym\"\n" +
-                "                    }\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    $group:{_id:{},orphans:{$push:\"$_id\"}}\n" +
-                "                }\n" +
-                "            ],\n" +
-                "            as:\"orphan\"\n" +
-                "        }\n" +
-                "    }"));
-        pipeline.add(parseQuery("{$replaceRoot:{newRoot:{orphanSurveys:{$arrayElemAt:[\"$orphan.orphans\",0]}}}}"));
 
         Document first = collection.aggregate(pipeline).first();
-        if(first != null)
-            acronyms = (List<String>) first.get("orphanSurveys");
-        return acronyms;
+        if(first != null) {
+            acronymsInGroups = (List<String>) first.get("surveyAcronyms");
+        }
+        return acronymsInGroups;
     }
 
     @Override
