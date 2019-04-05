@@ -14,6 +14,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -46,10 +47,14 @@ public class ExtractionFacade {
   @Inject
   private ExtractionService extractionService;
 
+  @Inject
+  private DataSourceService dataSourceService;
+
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
     List<SurveyActivity> activities = activityFacade.get(acronym, version);
 
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
+    dataSourceService.populateDataSourceMapping();
     SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
     extractor.addPreProcessor(autocompleteQuestionPreProcessor);
 
