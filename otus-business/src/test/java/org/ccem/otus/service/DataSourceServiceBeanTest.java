@@ -5,9 +5,8 @@ import com.google.gson.JsonObject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
-import org.ccem.otus.model.DataSourceElement;
 import org.ccem.otus.persistence.DataSourceDao;
-import org.junit.Assert;
+import org.ccem.otus.utils.DataSourceValuesMapping;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +15,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -31,6 +31,8 @@ public class DataSourceServiceBeanTest {
   private static final String EXTRACTION_VALUE_2 = "2";
   private static final String VALUE_FIELD = "value";
   private static final String EXTRACTION_FIELD = "extractionValue";
+  private static final String NOT_IDENTIFIED_EXTRACTION_FIELD = "NOT IDENTIFIED";
+  private static final String DATASOURCE_NAME = "medicamentos";
   private static final String ID = "test";
   private static final String NAME = "TESTE";
 
@@ -41,6 +43,9 @@ public class DataSourceServiceBeanTest {
   private DataSourceDao dataSourceDao;
   @Mock
   private HashSet<String> duplicatedElements = new HashSet<>();
+  @Mock
+  private DataSourceValuesMapping dataSourceValuesMapping;
+
 
   private DataSource DATASOURCE;
   private DataSource DATASOURCE_PERSISTED;
@@ -86,18 +91,22 @@ public class DataSourceServiceBeanTest {
   }
 
   @Test
-  public void should_method_getElementDataSource_return_a_DataSourceElement() throws DataNotFoundException {
-    DataSourceElement dataSourceElement = new DataSourceElement(VALUE_1,EXTRACTION_VALUE_1);
-    when(dataSourceDao.getElementDataSource(VALUE_1)).thenReturn(dataSourceElement);
-    Assert.assertEquals(dataSourceServiceBean.getElementDataSource(VALUE_1), dataSourceElement);
-    verify(dataSourceDao, times(1)).getElementDataSource(VALUE_1);
+  public void should_method_getElementExtractionValue_return_a_extractionValue() {
+    when(dataSourceDao.getDataSourceMapping()).thenReturn(dataSourceValuesMapping);
+    dataSourceServiceBean.populateDataSourceMapping();
+    ArrayList<String> dataSources = new ArrayList<>();
+    dataSources.add(DATASOURCE_NAME);
+    when(dataSourceValuesMapping.getExtractionValue(DATASOURCE_NAME,VALUE_1)).thenReturn(EXTRACTION_FIELD);
+    assertEquals(EXTRACTION_FIELD,dataSourceServiceBean.getElementExtractionValue(dataSources,VALUE_1));
   }
 
-  @Test(expected = DataNotFoundException.class)
-  public void should_method_getElementDataSource_return_a_DataNotFoundException() throws DataNotFoundException {
-    when(dataSourceDao.getElementDataSource(VALUE_1)).thenThrow(DataNotFoundException.class);
-    dataSourceServiceBean.getElementDataSource(VALUE_1);
-    verify(dataSourceDao, times(1)).getElementDataSource(VALUE_1);
-    Mockito.doThrow(new DataNotFoundException()).when(dataSourceServiceBean).getElementDataSource(VALUE_1);
+  @Test
+  public void should_method_getElementExtractionValue_return_NOT_IDENTIFIED_extractionValue() {
+    when(dataSourceDao.getDataSourceMapping()).thenReturn(dataSourceValuesMapping);
+    dataSourceServiceBean.populateDataSourceMapping();
+    ArrayList<String> dataSources = new ArrayList<>();
+    dataSources.add(DATASOURCE_NAME);
+    assertEquals(NOT_IDENTIFIED_EXTRACTION_FIELD,dataSourceServiceBean.getElementExtractionValue(dataSources,VALUE_1));
   }
+
 }
