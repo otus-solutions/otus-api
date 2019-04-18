@@ -92,4 +92,9 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
     return laboratoryConfigurationDao.getAliquotExamCorrelation();
   }
 
+  @Override
+  public List<String> getResultOfExams() {
+    return laboratoryConfigurationDao.getAggregateExams();
+  }
+
 }
