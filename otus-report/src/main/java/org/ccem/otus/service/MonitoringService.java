@@ -21,6 +21,8 @@ public interface MonitoringService {
 
     ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
+    ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn);
+
     void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
 
     void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;

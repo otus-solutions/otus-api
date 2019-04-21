@@ -4,6 +4,7 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
 import javax.inject.Inject;
@@ -62,6 +63,15 @@ public class MonitoringResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getParticipantActivitiesProgress(@PathParam("rn") Long rn) {
     return new Response().buildSuccess(monitoringFacade.getParticipantActivitiesProgress(rn)).toJson(ParticipantActivityReportDto.getGsonBuilder());
+  }
+
+
+  @GET
+  @Secured
+  @Path("/exams/progress/participant/{rn}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getParticipantExamsProgress(@PathParam("rn") Long rn) {
+    return new Response().buildSuccess(monitoringFacade.getParticipantExamsProgress(rn)).toJson(ParticipantExamReportDto.getGsonBuilder());
   }
 
   @PUT

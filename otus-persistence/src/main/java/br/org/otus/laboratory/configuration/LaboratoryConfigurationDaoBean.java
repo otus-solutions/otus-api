@@ -1,10 +1,8 @@
 package br.org.otus.laboratory.configuration;
 
-import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
 
 import com.google.gson.GsonBuilder;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;

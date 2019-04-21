@@ -39,6 +39,9 @@ public class MonitoringServiceBean implements MonitoringService {
   private SurveyMonitoringDao surveyMonitoringDao;
 
   @Inject
+  private ExamMonitoringDao examMonitoringDao;
+
+  @Inject
   private LaboratoryProgressDao laboratoryProgressDao;
 
   @Inject
@@ -98,6 +101,11 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn) {
     return surveyMonitoringDao.getParticipantActivities(rn);
+  }
+
+  @Override
+  public ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn) {
+    return examMonitoringDao.getParticipantExams(rn);
   }
 
   @Override

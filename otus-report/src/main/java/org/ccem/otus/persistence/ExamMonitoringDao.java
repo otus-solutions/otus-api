@@ -1,4 +1,9 @@
 package org.ccem.otus.persistence;
 
-public class ExamMonitoringDao {
+import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
+
+import java.util.ArrayList;
+
+public interface ExamMonitoringDao {
+  ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn);
 }
