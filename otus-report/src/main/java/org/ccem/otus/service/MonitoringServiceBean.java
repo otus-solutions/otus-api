@@ -1,5 +1,7 @@
 package org.ccem.otus.service;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
+import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -46,6 +48,9 @@ public class MonitoringServiceBean implements MonitoringService {
 
   @Inject
   private ActivityInapplicabilityDao activityInapplicabilityDao;
+
+  @Inject
+  private ExamInapplicabilityDao examInapplicabilityDao;
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
@@ -116,6 +121,11 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException {
     activityInapplicabilityDao.delete(rn, acronym);
+  }
+
+  @Override
+  public void setExamApplicability(ExamInapplicability applicability) throws DataNotFoundException {
+    examInapplicabilityDao.update(applicability);
   }
 
   @Override

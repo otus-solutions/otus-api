@@ -1,5 +1,6 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
 import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
@@ -65,13 +66,23 @@ public class MonitoringResource {
     return new Response().buildSuccess(monitoringFacade.getParticipantActivitiesProgress(rn)).toJson(ParticipantActivityReportDto.getGsonBuilder());
   }
 
-
   @GET
   @Secured
   @Path("/exams/progress/participant/{rn}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getParticipantExamsProgress(@PathParam("rn") Long rn) {
     return new Response().buildSuccess(monitoringFacade.getParticipantExamsProgress(rn)).toJson(ParticipantExamReportDto.getGsonBuilder());
+  }
+
+  @PUT
+  @Secured
+  @Path("/exams/progress/not-apply")
+  @Consumes (MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String defineExamInapplicability(String examApplicability) {
+    ExamInapplicability examInapplicability = ExamInapplicability.deserialize(examApplicability);
+    monitoringFacade.setExamApplicability(examInapplicability);
+    return new Response().buildSuccess().toJson();
   }
 
   @PUT

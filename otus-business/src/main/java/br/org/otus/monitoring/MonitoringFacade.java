@@ -1,5 +1,6 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
@@ -87,6 +88,14 @@ public class MonitoringFacade {
   public void deleteActivityApplicability(Long rn, String acronym) {
     try {
       monitoringService.deleteActivityApplicability(rn, acronym);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+   public void setExamApplicability(ExamInapplicability examInapplicability) {
+    try {
+      monitoringService.setExamApplicability(examInapplicability);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

@@ -3,6 +3,7 @@ package br.org.otus.laboratory.configuration;
 import static com.mongodb.client.model.Filters.exists;
 
 import com.google.gson.GsonBuilder;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
@@ -53,27 +54,27 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   public List<String> getAggregateExams() {
-      ArrayList<String> documents = new ArrayList<>();
+      ArrayList<String> exams = null;
 
       ArrayList<Bson> pipeline = new ArrayList<Bson>();
       pipeline.add(parseQuery("{$match:\"AliquotExamCorrelation\"}"));
       pipeline.add(parseQuery("{$unwind:\"$aliquot\"}"));
       pipeline.add(parseQuery("{$unwind:\"$aliquot.exams\"}"));
       pipeline.add(parseQuery("{$group:{_id:\"$aliquots.exams\"}}"));
+      pipeline.add(parseQuery("{$group:{_id:{},exams:{$push:\"$_id\"}}"));
 
-      MongoCursor<Document> iterator = collection.aggregate(pipeline).iterator();
+      Document resultsDocument = super.aggregate(pipeline).first();
 
-       while (iterator.hasNext()) {
-      documents.add(iterator.next().toJson());
-    }
+      if(resultsDocument != null) {
+          exams = (ArrayList<String>) resultsDocument.get("exams");
+      }
 
-      return documents;
+      return exams;
   }
 
    private Bson parseQuery(String stage) {
     return new GsonBuilder().create().fromJson(stage, Document.class);
   }
-
 
   public void persist(LaboratoryConfiguration laboratoryConfiguration) {
     super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));

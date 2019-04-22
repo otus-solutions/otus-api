@@ -93,7 +93,7 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
-  public List<String> getResultOfExams() {
+  public List<String> getExams() {
     return laboratoryConfigurationDao.getAggregateExams();
   }
 

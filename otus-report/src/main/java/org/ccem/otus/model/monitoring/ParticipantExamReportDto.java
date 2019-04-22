@@ -1,12 +1,13 @@
 package org.ccem.otus.model.monitoring;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import com.google.gson.GsonBuilder;
 
 public class ParticipantExamReportDto {
 
   private String name;
   //private ArrayList<ParticipantActivityRelationship> activities;
-  //private ActivityInapplicability doesNotApply;
+  private ExamInapplicability doesNotApply;
 
   public static String serialize(ParticipantExamReportDto reportTemplate) {
     return ParticipantExamReportDto.getGsonBuilder().create().toJson(reportTemplate);
