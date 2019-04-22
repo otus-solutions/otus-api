@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MonitoringDataSourceTest {
-    public static String BUILD_ACRONYM_MATCH_STAGE_RESULT = "{\"$match\":{\"isDiscarded\":false,\"surveyForm.surveyTemplate.identity.acronym\":\"CSJ\"}}";
-    public static String BUILD_STATUS_HISTORY_DATA_PROJECTION_STAGES_RESULT_1 = "{\"$project\":{\"acronym\":\"$surveyForm.surveyTemplate.identity.acronym\",\"statusHistory\":{\"$slice\":[\"$statusHistory\",-1]},\"rn\":\"$participantData.recruitmentNumber\"}}";
+    public static String BUILD_ACRONYM_MATCH_STAGE_RESULT = "{\"$match\":{\"isDiscarded\":false,\"surveyForm.acronym\":\"CSJ\"}}";
+    public static String BUILD_STATUS_HISTORY_DATA_PROJECTION_STAGES_RESULT_1 = "{\"$project\":{\"acronym\":\"$surveyForm.acronym\",\"statusHistory\":{\"$slice\":[\"$statusHistory\",-1]},\"rn\":\"$participantData.recruitmentNumber\"}}";
     public static String BUILD_STATUS_HISTORY_DATA_PROJECTION_STAGES_RESULT_2 = "{\"$project\":{\"acronym\":1,\"status.date\":\"$statusHistory.date\",\"status.name\":\"$statusHistory.name\",\"rn\":1}}";
     public static String BUILD_STATUS_DATA_UNWIND_STAGE_RESULT_1 = "{\"$unwind\":\"$status.date\"}";
     public static String BUILD_STATUS_DATA_UNWIND_STAGE_RESULT_2 = "{\"$unwind\":\"$status.name\"}";

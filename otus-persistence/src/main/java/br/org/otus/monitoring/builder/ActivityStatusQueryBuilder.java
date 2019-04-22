@@ -58,7 +58,7 @@ public class ActivityStatusQueryBuilder {
             "    $project: {\n" +
             "      _id: 0,\n" +
             "      rn: \"$participantData.recruitmentNumber\",\n" +
-            "      acronym: \"$surveyForm.surveyTemplate.identity.acronym\",\n" +
+            "      acronym: \"$surveyForm.acronym\",\n" +
             "      lastStatus_Date: {\n" +
             "        $arrayElemAt: [\n" +
             "          {\n" +

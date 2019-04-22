@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -50,6 +51,8 @@ public class ActivityDaoBeanTest {
 	@Mock
 	private FindIterable<Document> result;
 	@Mock
+	private AggregateIterable<Document> aggregateIterable;
+	@Mock
 	private SurveyActivity surveyActivity;
 	@Mock
 	private ArrayList<SurveyActivity> activities;
@@ -59,10 +62,11 @@ public class ActivityDaoBeanTest {
 
 	@Before
 	public void setup() throws Exception {
-		Document document = new Document("_id", new ObjectId("579397d20c2dd41b9a8a09eb")).append("surveyForm.surveyTemplate.identity.acronym", "CISE")
+		Document document = new Document("_id", new ObjectId("579397d20c2dd41b9a8a09eb")).append("surveyForm.acronym", "CISE")
 				.append("surveyForm.version", 1).append("isDiscarded", false);
 		Whitebox.setInternalState(activityDaoBean, "collection", collection);
 		Mockito.when(this.collection.find(Matchers.<Bson>any())).thenReturn(result);
+		Mockito.when(this.collection.aggregate(Matchers.anyList())).thenReturn((AggregateIterable) aggregateIterable);
 		Mockito.when(result.projection(Matchers.<Bson>any())).thenReturn(result);
 		Mockito.when(result.iterator()).thenReturn(cursor);
 		Mockito.when(cursor.hasNext()).thenReturn(true).thenReturn(false);
@@ -77,7 +81,7 @@ public class ActivityDaoBeanTest {
 	@Test
 	public void method_find_should_called_method_find() {
 		activityDaoBean.find(LIST_SURVEYS, USER_EMAIL, RECRUITMENT_NUMBER);
-		Mockito.verify(this.collection, Mockito.times(1)).find(Matchers.<Bson>any());
+		Mockito.verify(this.collection, Mockito.times(1)).aggregate(Matchers.anyList());
 	}
 
 	@Test
