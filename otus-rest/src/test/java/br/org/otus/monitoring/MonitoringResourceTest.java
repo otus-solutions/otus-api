@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -28,6 +29,7 @@ public class MonitoringResourceTest {
   private static final Long GOAL = (long) 3025L;
   private static final String ACRONYM = "ACTA";
   private static final String CENTER = "RS";
+  private static final Long RN = Long.valueOf(7016098);
 
   @InjectMocks
   private MonitoringResource monitoringResource;
@@ -64,6 +66,24 @@ public class MonitoringResourceTest {
     when(monitoringFacade.getMonitoringCenters()).thenReturn(monitoringCenters);
     when(monitoringFacade.listActivities()).thenReturn(acronymsList);
     when(monitoringFacade.get(ACRONYM)).thenReturn(monitoringDataSourceResults);
+  }
+
+  @Test
+  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() {
+    monitoringResource.getParticipantExamsProgress(RN);
+    verify(monitoringFacade,times(1)).getParticipantExamsProgress(RN);
+  }
+
+  @Test
+  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() {
+    monitoringResource.defineExamInapplicability(anyObject());
+    verify(monitoringFacade,times(1)).setExamApplicability(anyObject());
+  }
+
+  @Test
+  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() {
+    monitoringResource.deleteExamInapplicability(anyObject());
+    verify(monitoringFacade,times(1)).deleteExamInapplicability(anyObject());
   }
 
   @Test
