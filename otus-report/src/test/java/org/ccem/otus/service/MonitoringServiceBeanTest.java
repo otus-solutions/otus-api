@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -9,6 +10,7 @@ import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
 import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.participant.persistence.ParticipantDao;
+import org.ccem.otus.persistence.ExamMonitoringDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 import org.ccem.otus.persistence.FlagReportDao;
 import org.ccem.otus.persistence.SurveyDao;
@@ -33,6 +35,7 @@ public class MonitoringServiceBeanTest {
 
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
   private static final String CENTER = "RS";
+  private static final Long RN = Long.valueOf(7016098);
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
   private ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
   private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";
@@ -92,6 +95,12 @@ public class MonitoringServiceBeanTest {
   @Mock
   private LaboratoryProgressDao laboratoryProgressDao;
 
+  @Mock
+  private ExamInapplicabilityDao examInapplicabilityDao;
+
+   @Mock
+  private ExamMonitoringDao examMonitoringDao;
+
   @Before
   public void setUp() throws DataNotFoundException {
 
@@ -112,6 +121,24 @@ public class MonitoringServiceBeanTest {
     SURVEY_ACRONYM_LIST.add("DEF");
     when(surveyDao.listAcronyms()).thenReturn(SURVEY_ACRONYM_LIST);
 
+  }
+
+  @Test
+  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() throws DataNotFoundException {
+    monitoringServiceBean.getParticipantExams(RN);
+    verify(examMonitoringDao,times(1)).getParticipantExams(RN);
+  }
+
+  @Test
+  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() throws DataNotFoundException {
+    monitoringServiceBean.setExamInapplicability(anyObject());
+    verify(examInapplicabilityDao,times(1)).update(anyObject());
+  }
+
+  @Test
+  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() throws DataNotFoundException {
+    monitoringServiceBean.deleteExamInapplicability(anyObject());
+    verify(examInapplicabilityDao,times(1)).delete(anyObject());
   }
 
   @Test
