@@ -4,8 +4,6 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Field;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
@@ -14,8 +12,6 @@ import org.ccem.otus.persistence.ExamMonitoringDao;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Stateless
 public class ExamMonitoringDaoBean extends MongoGenericDao<Document> implements ExamMonitoringDao {
@@ -30,28 +26,86 @@ public class ExamMonitoringDaoBean extends MongoGenericDao<Document> implements 
 
     @Override
     public ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn) {
-        List<String> exams = laboratoryConfigurationDao.getAggregateExams();
 
         ArrayList<Bson> pipeline = new ArrayList<Bson>();
         pipeline.add(parseQuery("{$match:{\"recruitmentNumber\":"+rn+"}}"));
-        pipeline.add(parseQuery("{$group:{_id:{\"examName\":\"$examName\"}}}"));
-        pipeline.add(parseQuery("{$group:{_id:{\"examId\":\"$examId\"}}}"));
-        pipeline.add(parseQuery("{$group:{_id:{\"examName\":\"$_id.examName\"}}}"));
-        pipeline.add(parseQuery("{$addFields:{\"allExams\":"+exams+"}}"));
+        pipeline.add(parseQuery("{\n" +
+                "      $group:{\n" +
+                "          _id:{examName:\"$examName\",examId:\"$examId\"}\n" +
+                "      }  \n" +
+                "    }"));
+        pipeline.add(parseQuery(" {\n" +
+                "        $group:{\n" +
+                "            _id:{examName:\"$_id.examName\"},\n" +
+                "            quantity:{$sum:1}\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("  {\n" +
+                "        $group:{\n" +
+                "            _id:{},\n" +
+                "            exams:{$push:{name:\"$_id.examName\",quantity:\"$quantity\"}}\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(new Document("$addFields", new Document("allExams", laboratoryConfigurationDao.getExamName())));
         pipeline.add(parseQuery("{$unwind:\"$allExams\"}"));
-        pipeline.add(parseQuery("{$addFields:{examFound:{$arrayElemAt:[$filter:{" +
-                "input:\"$exams\",as:\"exam\"," +
-                "cond:{" +
-                "$eq:[\"$$exam.name\",\"$allExams\"]" +
-                "}},0]}}}"));
-        pipeline.add(parseQuery("{$project:{name:\"$allExams\"," +
-                "quantity:{$cond:[{$ifNull:[\"$examFound\",false]},\"$examFound.quantity\",0]}" +
-                "}}"));
-        pipeline.add(parseQuery("{$lookup:{from:\"exam_inapplicability\"," +
-                "let:{name:\"$name\",rn:\"$recruitmentNumber\"}," +
-                "pipeline:[{$match:{$expr:{ $and:[{$eq:[\"$name\",\"$$name\"]}," +
-                "{$eq:[\"$recruitmentNumber\","+rn+"]}]}}}," +
-                "{$project:{\"_id\":0,\"name\":0,\"recruitmentNumber\":0}}],as:\"examInapplicability\"}}"));
+        pipeline.add(parseQuery("{\n" +
+                "        $addFields:{\n" +
+                "            \n" +
+                "            examFound:{\n" +
+                "                $arrayElemAt:[\n" +
+                "                    {$filter:{\n" +
+                "                        input:\"$exams\",\n" +
+                "                        as:\"exam\",\n" +
+                "                        cond:{\n" +
+                "                            $eq: [\n" +
+                "                                    \"$$exam.name\",\n" +
+                "                                    \"$allExams\"\n" +
+                "                                ]\n" +
+                "                        }\n" +
+                "                    }},0\n" +
+                "                ]\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{\n" +
+                "        $project:{\n" +
+                "            name: \"$allExams\",\n" +
+                "            quantity:{$cond:[{$ifNull:[\"$examFound\",false]},\"$examFound.quantity\",0]}\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{\n" +
+                "        $lookup:{\n" +
+                "            from:\"exam_inapplicability\",\n" +
+                "            let:{name:\"$name\",rn:\"$recruitmentNumber\"},\n" +
+                "            pipeline:[\n" +
+                "                {\n" +
+                "                    $match:{\n" +
+                "                        $expr:{\n" +
+                "                            $and:[\n" +
+                "                                {$eq:[\"$name\",\"$$name\"]},\n" +
+                "                                {$eq:[\"$recruitmentNumber\","+rn+"]}\n" +
+                "                            ]\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    $project:{\n" +
+                "                            \"_id\":0,\n" +
+                "                            \"name\":0,\n"+
+                "                            \"recruitmentNumber\":0\n"+
+                "                        }  \n" +
+                "                }\n" +
+                "                ],\n" +
+                "            as:\"examInapplicability\"\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{\n" +
+                "        $project:{\n" +
+                "            \"name\":1,\n" +
+                "            \"quantity\":1,\n" +
+                "            \"doesNotApply\":{$arrayElemAt: [\"$examInapplicability\",0]}\n" +
+                "        }\n" +
+                "    }"));
 
         MongoCursor<Document> resultsDocument = super.aggregate(pipeline).iterator();
 

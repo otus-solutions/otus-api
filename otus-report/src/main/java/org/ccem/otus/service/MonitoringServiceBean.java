@@ -124,7 +124,12 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public void setExamApplicability(ExamInapplicability applicability) throws DataNotFoundException {
+  public void deleteExamInapplicability(ExamInapplicability applicability) throws DataNotFoundException {
+    examInapplicabilityDao.delete(applicability);
+  }
+
+  @Override
+  public void setExamInapplicability(ExamInapplicability applicability) throws DataNotFoundException {
     examInapplicabilityDao.update(applicability);
   }
 

@@ -28,7 +28,9 @@ public interface MonitoringService {
 
     void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;
 
-    void setExamApplicability(ExamInapplicability applicability) throws DataNotFoundException;
+    void deleteExamInapplicability(ExamInapplicability applicability) throws DataNotFoundException;
+
+    void setExamInapplicability(ExamInapplicability applicability) throws DataNotFoundException;
 
     LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException;
 

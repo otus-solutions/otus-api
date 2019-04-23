@@ -23,6 +23,6 @@ public interface LaboratoryConfigurationDao {
 
   Integer updateLastTubeInsertion(int newTubesQuantities);
 
-  List<String> getAggregateExams();
+  List<String> getExamName();
 
 }

@@ -69,7 +69,7 @@ public class MonitoringFacade {
     }
   }
 
-    public ArrayList<ParticipantExamReportDto> getParticipantExamsProgress(Long rn) {
+  public ArrayList<ParticipantExamReportDto> getParticipantExamsProgress(Long rn) {
     try {
       return monitoringService.getParticipantExams(rn);
     } catch (Exception e) {
@@ -95,7 +95,15 @@ public class MonitoringFacade {
 
    public void setExamApplicability(ExamInapplicability examInapplicability) {
     try {
-      monitoringService.setExamApplicability(examInapplicability);
+      monitoringService.setExamInapplicability(examInapplicability);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void deleteExamInapplicability(ExamInapplicability examInapplicability) {
+     try {
+      monitoringService.deleteExamInapplicability(examInapplicability);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

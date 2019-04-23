@@ -3,6 +3,7 @@ package br.org.otus.monitoring;
 import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import br.org.mongodb.MongoGenericDao;
@@ -25,12 +26,22 @@ public class ExamInapplicabilityDaoBean extends MongoGenericDao<Document> implem
     public void update(ExamInapplicability applicability) throws DataNotFoundException {
         Document parsed = Document.parse(ExamInapplicability.serialize(applicability));
 
-    UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())),
-      new Document("$set", parsed), new UpdateOptions().upsert(true));
+        UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())),
+                new Document("$set", parsed), new UpdateOptions().upsert(true));
 
 
-    if ((updateLabData.getModifiedCount() == 0) && (updateLabData.getUpsertedId() == null)) {
-      throw new DataNotFoundException(new Throwable("Update Fail"));
+        if ((updateLabData.getModifiedCount() == 0) && (updateLabData.getUpsertedId() == null)) {
+            throw new DataNotFoundException(new Throwable("Update Fail"));
+        }
     }
+
+    @Override
+    public void delete(ExamInapplicability applicability) throws DataNotFoundException {
+        DeleteResult deleteResult = collection.deleteOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())));
+
+        if(deleteResult.getDeletedCount() == 0) {
+            throw new DataNotFoundException(new Throwable("Delete fail"));
+        }
+
     }
 }

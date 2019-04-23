@@ -12,8 +12,8 @@ public class ExamInapplicability {
     }
 
     public static ExamInapplicability deserialize(String reportTemplateJson) {
-        ExamInapplicability activityInapplicability = ExamInapplicability.getGsonBuilder().create().fromJson(reportTemplateJson, ExamInapplicability.class);
-        return activityInapplicability;
+        ExamInapplicability examInapplicability = ExamInapplicability.getGsonBuilder().create().fromJson(reportTemplateJson, ExamInapplicability.class);
+        return examInapplicability;
     }
 
     public static GsonBuilder getGsonBuilder() {

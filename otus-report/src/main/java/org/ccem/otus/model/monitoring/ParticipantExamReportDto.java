@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 public class ParticipantExamReportDto {
 
   private String name;
-  //private ArrayList<ParticipantActivityRelationship> activities;
+  private Integer quantity;
   private ExamInapplicability doesNotApply;
 
   public static String serialize(ParticipantExamReportDto reportTemplate) {
@@ -20,7 +20,6 @@ public class ParticipantExamReportDto {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    //builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 
     builder.serializeNulls();
     return builder;

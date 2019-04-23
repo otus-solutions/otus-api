@@ -85,6 +85,16 @@ public class MonitoringResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @DELETE
+  @Secured
+  @Path("/exams/progress/not-apply/delete")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String deleteExamInapplicability( String examApplicability) {
+    ExamInapplicability examInapplicability = ExamInapplicability.deserialize(examApplicability);
+    monitoringFacade.deleteExamInapplicability(examInapplicability);
+    return new Response().buildSuccess().toJson();
+  }
+
   @PUT
   @Secured
   @Path("/activities/progress/not-apply")
