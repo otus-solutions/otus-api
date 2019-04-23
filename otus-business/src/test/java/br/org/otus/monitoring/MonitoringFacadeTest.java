@@ -15,11 +15,14 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.times;
 
 @RunWith(PowerMockRunner.class)
 public class MonitoringFacadeTest {
   private static final String ACRONYM = "DIEC";
   private static final String CENTER = "MG";
+  private static final Long RN = Long.valueOf(7016098);
   private static final ValidationException VALIDATION_EXCEPTION = new ValidationException(new Throwable("Message"));
   private static final DataNotFoundException DATA_NOT_FOUND_EXCEPTION= new DataNotFoundException(new Throwable("Message"));
 
@@ -41,6 +44,24 @@ public class MonitoringFacadeTest {
 
     monitoringFacade.get(ACRONYM);
     Mockito.verify(monitoringService).get(ACRONYM);
+  }
+
+  @Test
+  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() {
+    monitoringFacade.getParticipantExamsProgress(RN);
+    Mockito.verify(monitoringService,times(1)).getParticipantExams(RN);
+  }
+
+  @Test
+  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() throws DataNotFoundException {
+    monitoringFacade.setExamApplicability(anyObject());
+    Mockito.verify(monitoringService,times(1)).setExamInapplicability(anyObject());
+  }
+
+  @Test
+  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() throws DataNotFoundException {
+    monitoringFacade.deleteExamInapplicability(anyObject());
+    Mockito.verify(monitoringService,times(1)).deleteExamInapplicability(anyObject());
   }
 
   @Test
