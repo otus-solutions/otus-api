@@ -28,10 +28,7 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
 
   private static final String COLLECTION_NAME = "survey";
 
-  private Document parseQuery(String query) {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    return gsonBuilder.create().fromJson(query, Document.class);
-  }
+
 
   public SurveyDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -223,90 +220,8 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   @Override
   public SurveyJumpMap createPartialMap(String acronym, Integer version) {
     SurveyJumpMap surveyJumpMap = null;
-    ArrayList<Bson> pipeline = new ArrayList<>();
-    pipeline.add(parseQuery("{\n" +
-            "            $match: {\"surveyTemplate.identity.acronym\":\"CPX\",\"isDiscarded\":false}\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $project: {\n" +
-            "                navigationList:\"$surveyTemplate.navigationList\",\n" +
-            "                navigationListCopy:\"$surveyTemplate.navigationList\"\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $unwind: \"$navigationList\"\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $unwind: \"$navigationList.routes\"\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $addFields: {\n" +
-            "                firstSkippedIndex:{$sum: [{ $indexOfArray: [ \"$navigationListCopy.origin\", \"$navigationList.origin\" ] }, 1]}\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $addFields: {\n" +
-            "                destinationIndex:{$indexOfArray: [ \"$navigationListCopy.origin\", \"$navigationList.routes.destination\" ] }\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $addFields: {\n" +
-            "                shouldBeSkipped:{ $slice: [ \"$navigationListCopy\", \"$firstSkippedIndex\", {$subtract: [\"$destinationIndex\",\"$firstSkippedIndex\" ] }]}\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $match: {\n" +
-            "                \"navigationList.routes.isDefault\":false\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $unwind: \"$shouldBeSkipped\"\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $addFields: {\n" +
-            "                skippedQuestionIndex:{$indexOfArray: [ \"$navigationListCopy.origin\", \"$shouldBeSkipped.origin\" ] }\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $group: { \n" +
-            "                _id: \"$navigationList\",\n" +
-            "                shouldBeSkipped:{\n" +
-            "                    $push:{\n" +
-            "                        skippedQuestionId:\"$shouldBeSkipped.origin\",\n" +
-            "                        skippedQuestionIndex:\"$skippedQuestionIndex\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $group: { \n" +
-            "                _id: \"$_id.origin\",\n" +
-            "                possibleDestinations:{\n" +
-            "                    $push: {\n" +
-            "                        when: \"$_id.routes.conditions\",\n" +
-            "                        shouldBeSkipped: \"$shouldBeSkipped\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $sort: {\n" +
-            "                \"_id\":1\n" +
-            "            }\n" +
-            "        }"));
-    pipeline.add(parseQuery("{\n" +
-            "            $group: { \n" +
-            "                _id: {},\n" +
-            "                variantQuestions:{\n" +
-            "                    $push: {\n" +
-            "                        questionId: \"$_id\",\n" +
-            "                        possibleDestinations: \"$possibleDestinations\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            }\n" +
-            "        }"));
 
-    Document first = super.aggregate(pipeline).first();
+    Document first = super.aggregate(new SurveyJumpMapQueryBuilder().buildQuery(acronym,version)).first();
 
     if(first != null){
       surveyJumpMap = SurveyJumpMap.deserialize(first.toJson());

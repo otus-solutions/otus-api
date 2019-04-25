@@ -1,46 +1,45 @@
 package org.ccem.otus.model.survey.JumpMap;
 
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.navigation.route.RouteCondition;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SurveyJumpMap {
-    private List<VariantQuestion> variantQuestions;
+    private ObjectId surveyOid;
+    private HashMap<String,QuestionJumps> jumpMap;
 
-    public List<VariantQuestion> getVariantQuestions() {
-        return this.variantQuestions;
+    public HashMap<String, QuestionJumps> getJumpMap() {
+        return jumpMap;
     }
 
-    public class VariantQuestion {
-        private String questionId;
-        private List<PossibleDestination> possibleDestinations;
-
-        public String getQuestionId() {
-            return questionId;
-        }
-
-        public List<PossibleDestination> getPossibleDestinations() {
-            return possibleDestinations;
+    public void setValidJump(String validOrigin, String destination){
+        if(this.jumpMap.get(destination).possibleOrigins.get(validOrigin) != null){
+            this.jumpMap.get(destination).possibleOrigins.put(validOrigin,true);
         }
     }
 
-    public class PossibleDestination {
-        private List<RouteCondition> when;
-        private List<SkippedQuestion> shouldBeSkipped;
+    public ArrayList<AlternativeDestination> getQuestionAlternativeRoutes(String questionId){
+        return this.jumpMap.get(questionId).alternativeDestinations;
+    }
 
-        public List<RouteCondition> getWhen() {
-            return when;
-        }
-
-        public List<SkippedQuestion> getShouldBeSkiped() {
-            return shouldBeSkipped;
+    public void validateDefaultJump(String questionId){
+        if(this.jumpMap.get(this.jumpMap.get(questionId).defaultDestination).possibleOrigins.get(questionId) != null){
+            this.jumpMap.get(questionId).possibleOrigins.put(questionId,true);
         }
     }
 
-    private class SkippedQuestion {
-        private String skippedQuestionId;
-        private Integer skippedQuestionIndex;
+    public class QuestionJumps {
+        private HashMap<String,Boolean> possibleOrigins;
+        private String defaultDestination;
+        private ArrayList<AlternativeDestination> alternativeDestinations;
+    }
+
+    public class AlternativeDestination {
+        private ArrayList<RouteCondition> routeConditions;
+        private String destnation;
     }
 
     public static String serialize(SurveyJumpMap surveyGroup) {
@@ -56,6 +55,4 @@ public class SurveyJumpMap {
         builder.serializeNulls();
         return builder;
     }
-
-
 }
