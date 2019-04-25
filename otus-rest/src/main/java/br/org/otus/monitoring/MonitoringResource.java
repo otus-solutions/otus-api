@@ -2,7 +2,7 @@ package br.org.otus.monitoring;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
@@ -53,7 +53,7 @@ public class MonitoringResource {
   @Path("/activities/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getActivitiesProgress(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ProgressReport.getGsonBuilder());
   }
 
   @GET
@@ -82,6 +82,16 @@ public class MonitoringResource {
   public String deleteActivityInapplicability(@PathParam("rn") Long rn,@PathParam("acronym") String acronym) {
     monitoringFacade.deleteActivityApplicability(rn, acronym);
     return new Response().buildSuccess().toJson();
+  }
+
+
+  /* Laboratory Monitoring */
+  @GET
+  @Secured
+  @Path("/laboratory/progress/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getLaboratoryProgress(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ProgressReport.getGsonBuilder());
   }
 
   @GET

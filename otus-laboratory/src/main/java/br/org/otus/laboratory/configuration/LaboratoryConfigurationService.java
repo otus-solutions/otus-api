@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,5 +35,7 @@ public interface LaboratoryConfigurationService {
   AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException;
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
+
+  ArrayList<String> getAllPossibleExams();
 
 }

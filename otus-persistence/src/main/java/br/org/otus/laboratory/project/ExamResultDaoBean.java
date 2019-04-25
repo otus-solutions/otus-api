@@ -98,4 +98,5 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
     }
     return values;
   }
+
 }

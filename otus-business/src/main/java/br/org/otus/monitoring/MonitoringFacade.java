@@ -1,12 +1,14 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
@@ -25,6 +27,12 @@ public class MonitoringFacade {
 
   @Inject
   private SurveyFacade surveyFacade;
+
+  @Inject
+  private ParticipantFacade participantFacade;
+
+  @Inject
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
   public List<MonitoringDataSourceResult> get(String acronym) {
     try {
@@ -46,7 +54,7 @@ public class MonitoringFacade {
     }
   }
 
-  public ActivityProgressReportDto getActivitiesProgress() {
+  public ProgressReport getActivitiesProgress() {
     try {
       return monitoringService.getActivitiesProgress();
     } catch (Exception e) {
@@ -55,7 +63,7 @@ public class MonitoringFacade {
   }
 
 
-  public ActivityProgressReportDto getActivitiesProgress(String center) {
+  public ProgressReport getActivitiesProgress(String center) {
     try {
       return monitoringService.getActivitiesProgress(center);
     } catch (Exception e) {
@@ -85,6 +93,15 @@ public class MonitoringFacade {
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
+
+  /* Laboratory Methods */
+
+  public void getExamsFlagReport(String center) {
+    ArrayList<String> allPossibleExams = laboratoryConfigurationService.getAllPossibleExams();
+    ArrayList<Long> centerRecruitmentNumbers = participantFacade.getCenterRecruitmentNumbers(center);
+
+
   }
 
   public LaboratoryProgressDTO getDataOrphanByExams() {

@@ -9,6 +9,7 @@ import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParticipantFacade {
@@ -47,6 +48,10 @@ public class ParticipantFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
 
+  }
+
+  public ArrayList<Long> getCenterRecruitmentNumbers(String center) {
+    return new ArrayList<>(); //todo: implement
   }
 
 }

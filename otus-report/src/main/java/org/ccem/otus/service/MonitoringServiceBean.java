@@ -74,7 +74,7 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ActivityProgressReportDto getActivitiesProgress() throws DataNotFoundException {
+  public ProgressReport getActivitiesProgress() throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
     Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(surveyAcronyms);
 
@@ -82,17 +82,17 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ActivityProgressReportDto getActivitiesProgress(String center) throws DataNotFoundException {
+  public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
     Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
 
     return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
   }
 
-  private ActivityProgressReportDto getActivityProgressReportDto(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
-    ActivityProgressReportDto activityProgressReportDto = ActivityProgressReportDto.deserialize(activitiesProgressReportDocument.toJson());
-    activityProgressReportDto.setColumns(surveyAcronyms);
-    return activityProgressReportDto;
+  private ProgressReport getActivityProgressReportDto(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
+    ProgressReport progressReport = ProgressReport.deserialize(activitiesProgressReportDocument.toJson());
+    progressReport.setColumns(surveyAcronyms);
+    return progressReport;
   }
 
   @Override
