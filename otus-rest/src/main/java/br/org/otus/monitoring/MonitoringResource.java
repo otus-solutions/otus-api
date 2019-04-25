@@ -85,7 +85,7 @@ public class MonitoringResource {
     return new Response().buildSuccess().toJson();
   }
 
-  @DELETE
+  @POST
   @Secured
   @Path("/exams/progress/not-apply/delete")
   @Produces(MediaType.APPLICATION_JSON)
