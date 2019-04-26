@@ -28,8 +28,6 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
 
   private static final String COLLECTION_NAME = "survey";
 
-
-
   public SurveyDaoBean() {
     super(COLLECTION_NAME, Document.class);
   }
@@ -218,8 +216,8 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   }
 
   @Override
-  public SurveyJumpMap createPartialMap(String acronym, Integer version) {
-    SurveyJumpMap surveyJumpMap = null;
+  public SurveyJumpMap createJumpMap(String acronym, Integer version) {
+    SurveyJumpMap surveyJumpMap = new SurveyJumpMap();
 
     Document first = super.aggregate(new SurveyJumpMapQueryBuilder().buildQuery(acronym,version)).first();
 

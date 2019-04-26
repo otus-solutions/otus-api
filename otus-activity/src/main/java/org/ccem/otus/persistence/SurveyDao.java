@@ -37,5 +37,5 @@ public interface SurveyDao {
 
     List<String> aggregate(ArrayList<Document> query);
 
-    SurveyJumpMap createPartialMap(String acronym, Integer version);
+    SurveyJumpMap createJumpMap(String acronym, Integer version);
 }

@@ -3,13 +3,28 @@ package org.ccem.otus.model.survey.JumpMap;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.navigation.route.RouteCondition;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SurveyJumpMap {
     private ObjectId surveyOid;
+    private String surveyAcronym;
+    private Integer surveyVersion;
+
     private HashMap<String,QuestionJumps> jumpMap;
+
+    public class QuestionJumps {
+        private HashMap<String,Boolean> possibleOrigins;
+        private String defaultDestination;
+        private ArrayList<AlternativeDestination> alternativeDestinations;
+    }
+
+    public class AlternativeDestination {
+        private ArrayList<RouteCondition> routeConditions;
+        private String destination;
+    }
 
     public HashMap<String, QuestionJumps> getJumpMap() {
         return jumpMap;
@@ -31,15 +46,16 @@ public class SurveyJumpMap {
         }
     }
 
-    public class QuestionJumps {
-        private HashMap<String,Boolean> possibleOrigins;
-        private String defaultDestination;
-        private ArrayList<AlternativeDestination> alternativeDestinations;
+    public void setSurveyOid(ObjectId surveyOid) {
+        this.surveyOid = surveyOid;
     }
 
-    public class AlternativeDestination {
-        private ArrayList<RouteCondition> routeConditions;
-        private String destnation;
+    public void setSurveyAcronym(String acronym) {
+        this.surveyAcronym = acronym;
+    }
+
+    public void setSurveyVersion(Integer version) {
+        this.surveyVersion = version;
     }
 
     public static String serialize(SurveyJumpMap surveyGroup) {
@@ -52,6 +68,7 @@ public class SurveyJumpMap {
 
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
         builder.serializeNulls();
         return builder;
     }

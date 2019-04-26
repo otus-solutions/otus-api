@@ -22,9 +22,84 @@ public class SurveyJumpMapQueryBuilder {
         .addProjectEssentialFieldsStages()
         .addUnwindOnNavigationListCopyStage()
         .addUnwindOnInNavigationsStage()
-        .addNotNullFilterOnInNavigationsStage();
+        .addNotNullFilterOnInNavigationsStage()
+        .addProjectInNavigationAsHashMapElementStage()
+        .addGroupPossibleOriginsByQuestionIdStage()
+        .addGroupAllQuestionsPossibleOriginsInOneArrayStage()
+        .addProjectOfFormattedDocumentStage()
+        .addUnwindOnNavigationListStage()
+        .addUnwindOnRoutesStage()
+        .addGroupOfPossibleDestinationsByQuestionIdStage()
+        .addProjectThatBuildTheQuestionFieldsStage()
+        .addProjectThatBuildTheQuestionHashMapElement()
+        .addGroupThatCreateTheJumpMap();
 
+        return pipeline;
+    }
 
+    /**
+     * Filter by acronym and version of the inserted survey
+     * @param acronym
+     * @param version
+     */
+    private SurveyJumpMapQueryBuilder addMatchStage(String acronym, Integer version) {
+        pipeline.add(new Document("$match",new Document("surveyTemplate.identity.acronym",acronym).append("version",version)));
+        return this;
+    }
+
+    /**
+     * Project only the field required for the jumpMap Build and make a copy of this field to make possibleOrigins hashMaps Array
+     */
+    private SurveyJumpMapQueryBuilder addProjectEssentialFieldsStages() {
+        pipeline.add(parseQuery("{\n" +
+                "            $project: {\n" +
+                "                navigationList:\"$surveyTemplate.navigationList\", \n" +
+                "                navigationListCopy:\"$surveyTemplate.navigationList\" \n" +
+                "            }\n" +
+                "        }"));
+        return this;
+    }
+
+    /**
+     * Break the navigations array into documents
+     */
+    private SurveyJumpMapQueryBuilder addUnwindOnNavigationListCopyStage() {
+        pipeline.add(parseQuery(" {\n" +
+                "            $unwind: \"$navigationListCopy\" \n" +
+                "        }"));
+        return this;
+    }
+
+    /**
+     * break the array inNavigations into documents
+     */
+    private SurveyJumpMapQueryBuilder addUnwindOnInNavigationsStage() {
+        pipeline.add(parseQuery("{\n" +
+                "            $unwind: \"$navigationListCopy.inNavigations\" \n" +
+                "        }"));
+        return this;
+    }
+
+    /**
+     * Exclude the null values on inNavigations
+     */
+    private SurveyJumpMapQueryBuilder addNotNullFilterOnInNavigationsStage() {
+        pipeline.add(parseQuery("{\n" +
+                "            $match: {\n" +
+                "                \"navigationListCopy.inNavigations\":{\n" +
+                "                    $not: {\n" +
+                "                        $eq: null\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }"));
+        return this;
+    }
+
+    /**
+     * Transform the inNavigation object into a hashMap element where the origin questionId is the key
+     */
+    private SurveyJumpMapQueryBuilder addProjectInNavigationAsHashMapElementStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $project: {\n" +
                 "                navigationList:\"$navigationList\",\n" +
@@ -35,6 +110,13 @@ public class SurveyJumpMapQueryBuilder {
                 "                ]\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Build the possibleOrigins array by questionId
+     */
+    private SurveyJumpMapQueryBuilder addGroupPossibleOriginsByQuestionIdStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $group: { \n" +
                 "                _id: {\n" +
@@ -46,6 +128,13 @@ public class SurveyJumpMapQueryBuilder {
                 "                }\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Creates all questions possible origins array
+     */
+    private SurveyJumpMapQueryBuilder addGroupAllQuestionsPossibleOriginsInOneArrayStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $group: { \n" +
                 "                _id: {\n" +
@@ -59,6 +148,13 @@ public class SurveyJumpMapQueryBuilder {
                 "                }\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Restructure the document for best manipulation of the data
+     */
+    private SurveyJumpMapQueryBuilder addProjectOfFormattedDocumentStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $project: {\n" +
                 "                _id:0,\n" +
@@ -66,12 +162,33 @@ public class SurveyJumpMapQueryBuilder {
                 "                possibleOriginsList:1\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Break the navigations array into single navigation documents
+     */
+    private SurveyJumpMapQueryBuilder addUnwindOnNavigationListStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $unwind: \"$navigationList\"\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Break the routes array in every navigation into documents
+     */
+    private SurveyJumpMapQueryBuilder addUnwindOnRoutesStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $unwind: \"$navigationList.routes\"\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Creates an array with all the question possible destinations
+     */
+    private SurveyJumpMapQueryBuilder addGroupOfPossibleDestinationsByQuestionIdStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $group: { \n" +
                 "                _id: {\n" +
@@ -81,12 +198,21 @@ public class SurveyJumpMapQueryBuilder {
                 "                possibleDestinations:{ \n" +
                 "                    $push:{\n" +
                 "                        default:\"$navigationList.routes.isDefault\", \n" +
-                "                        when:\"$navigationList.routes.conditions\", \n" +
-                "                        destnation:\"$navigationList.routes.destination\"\n" +
+                "                        routeConditions:\"$navigationList.routes.conditions\", \n" +
+                "                        destination:\"$navigationList.routes.destination\"\n" +
                 "                    }\n" +
                 "                }\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     *  Creates possible origin array by filtering possibleOriginsList array
+     *  Creates the alternativeDestination array by filtering the possibleDestinations array by looking for non default routes
+     *  Creates the defaultDestination field by filtering the possibleDestinations array by looking for the default route
+     */
+    private SurveyJumpMapQueryBuilder addProjectThatBuildTheQuestionFieldsStage() {
         pipeline.add(parseQuery("{\n" +
                 "            $project: {\n" +
                 "                _id:0,\n" +
@@ -128,6 +254,13 @@ public class SurveyJumpMapQueryBuilder {
                 "                }\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Transform the questions into hashMap elements where the questionId id the key
+     */
+    private SurveyJumpMapQueryBuilder addProjectThatBuildTheQuestionHashMapElement() {
         pipeline.add(parseQuery("{\n" +
                 "            $project: { \n" +
                 "                _id: 0,\n" +
@@ -135,12 +268,19 @@ public class SurveyJumpMapQueryBuilder {
                 "                    \"$questionId\",\n" +
                 "                    {\n" +
                 "                        possibleOrigins:\"$possibleOrigins.possibleOrigins\",\n" +
-                "                        defaultDestination:\"$defaultDestination.destnation\",\n" +
+                "                        defaultDestination:\"$defaultDestination.destination\",\n" +
                 "                        alternativeDestinations:\"$alternativeDestination\"\n" +
                 "                    }\n" +
                 "                ]\n" +
                 "            }\n" +
                 "        }"));
+        return this;
+    }
+
+    /**
+     * Creates the jumpMap(HashMap)
+     */
+    private SurveyJumpMapQueryBuilder addGroupThatCreateTheJumpMap() {
         pipeline.add(parseQuery("{\n" +
                 "            $group: { \n" +
                 "                _id: {},\n" +
@@ -149,48 +289,6 @@ public class SurveyJumpMapQueryBuilder {
                 "                }\n" +
                 "            }\n" +
                 "        }"));
-        return pipeline;
-    }
-
-    private SurveyJumpMapQueryBuilder addNotNullFilterOnInNavigationsStage() {
-        pipeline.add(parseQuery("{\n" +
-                "            $match: {\n" +
-                "                \"navigationListCopy.inNavigations\":{\n" +
-                "                    $not: {\n" +
-                "                        $eq: null\n" +
-                "                    }\n" +
-                "                }\n" +
-                "            }\n" +
-                "        }"));
-        return this;
-    }
-
-    private SurveyJumpMapQueryBuilder addUnwindOnInNavigationsStage() {
-        pipeline.add(parseQuery("{\n" +
-                "            $unwind: \"$navigationListCopy.inNavigations\" \n" +
-                "        }"));
-        return this;
-    }
-
-    private SurveyJumpMapQueryBuilder addUnwindOnNavigationListCopyStage() {
-        pipeline.add(parseQuery(" {\n" +
-                "            $unwind: \"$navigationListCopy\" \n" +
-                "        }"));
-        return this;
-    }
-
-    private SurveyJumpMapQueryBuilder addProjectEssentialFieldsStages() {
-        pipeline.add(parseQuery("{\n" +
-                "            $project: {\n" +
-                "                navigationList:\"$surveyTemplate.navigationList\", \n" +
-                "                navigationListCopy:\"$surveyTemplate.navigationList\" \n" +
-                "            }\n" +
-                "        }"));
-        return this;
-    }
-
-    private SurveyJumpMapQueryBuilder addMatchStage(String acronym, Integer version) {
-        pipeline.add(new Document("$match",new Document("surveyTemplate.identity.acronym",acronym).append("version",version)));
         return this;
     }
 }
