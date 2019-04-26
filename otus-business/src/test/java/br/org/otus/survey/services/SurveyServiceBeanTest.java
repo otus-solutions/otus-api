@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
+import org.ccem.otus.persistence.SurveyJumpMapDao;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.form.SurveyFormType;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -50,6 +52,10 @@ public class SurveyServiceBeanTest {
     @Mock
     private UpdateSurveyFormTypeDto updateSurveyFormTypeDtoValid;
     @Mock
+    private SurveyJumpMap surveyJumpMap;
+    @Mock
+    private SurveyJumpMapDao surveyJumpMapDao;
+    @Mock
     private SurveyTemplate surveyTemplate;
 
 
@@ -92,6 +98,13 @@ public class SurveyServiceBeanTest {
         service.saveSurvey(survey);
 
         Mockito.verify(surveyDaoBean).persist(survey);
+    }
+
+    @Test
+    public void createSurveyJumpMap_should_persist_surveyJumpMap() throws AlreadyExistException, DataNotFoundException {
+        PowerMockito.when(surveyDaoBean.createJumpMap(survey.getSurveyTemplate().identity.acronym,survey.getVersion())).thenReturn(surveyJumpMap);
+        service.createSurveyJumpMap(survey);
+        Mockito.verify(surveyJumpMapDao).persist(surveyJumpMap);
     }
 
     @Test
