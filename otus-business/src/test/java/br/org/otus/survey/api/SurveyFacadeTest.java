@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -92,6 +93,14 @@ public class SurveyFacadeTest {
 		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
 		when(surveyService.saveSurvey(survey)).thenReturn(survey);
 		assertTrue(surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL) instanceof SurveyForm);
+	}
+
+	@Test
+	public void method_publishSurveyTemplate_should_call_createSurveyJumpMap() throws Exception {
+		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
+		when(surveyService.saveSurvey(survey)).thenReturn(survey);
+		surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL);
+		Mockito.verify(surveyService,Mockito.times(1)).createSurveyJumpMap(survey);
 	}
 
 	@Test(expected = HttpResponseException.class)
