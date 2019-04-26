@@ -1,4 +1,4 @@
-package org.ccem.otus.model.survey.JumpMap;
+package org.ccem.otus.model.survey.jumpMap;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -7,6 +7,7 @@ import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class SurveyJumpMap {
     private ObjectId surveyOid;
@@ -19,15 +20,40 @@ public class SurveyJumpMap {
         private HashMap<String,Boolean> possibleOrigins;
         private String defaultDestination;
         private ArrayList<AlternativeDestination> alternativeDestinations;
+
+        public String getValidOrigin() {
+            String validOrigin = null;
+            Iterator it = possibleOrigins.entrySet().iterator();
+            while (it.hasNext()) {
+                HashMap.Entry pair = (HashMap.Entry)it.next();
+                if((Boolean) pair.getValue() == true) {
+                    validOrigin = (String) pair.getKey();
+                }
+            }
+            return validOrigin;
+        }
+    }
+
+    public String getValidOrigin(String questionId){
+        return jumpMap.get(questionId).getValidOrigin();
+    }
+
+    public String getDefaultDestination(String questionId){
+        return jumpMap.get(questionId).defaultDestination;
     }
 
     public class AlternativeDestination {
         private ArrayList<RouteCondition> routeConditions;
         private String destination;
-    }
 
-    public HashMap<String, QuestionJumps> getJumpMap() {
-        return jumpMap;
+        public ArrayList<RouteCondition> getRouteConditions() {
+            return routeConditions;
+        }
+
+
+        public String getDestination() {
+            return destination;
+        }
     }
 
     public void setValidJump(String validOrigin, String destination){
@@ -42,7 +68,7 @@ public class SurveyJumpMap {
 
     public void validateDefaultJump(String questionId){
         if(this.jumpMap.get(this.jumpMap.get(questionId).defaultDestination).possibleOrigins.get(questionId) != null){
-            this.jumpMap.get(questionId).possibleOrigins.put(questionId,true);
+            this.jumpMap.get(this.jumpMap.get(questionId).defaultDestination).possibleOrigins.put(questionId,true);
         }
     }
 

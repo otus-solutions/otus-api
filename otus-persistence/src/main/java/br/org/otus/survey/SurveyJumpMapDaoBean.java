@@ -3,7 +3,7 @@ package br.org.otus.survey;
 import br.org.mongodb.MongoGenericDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.JumpMap.SurveyJumpMap;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.persistence.SurveyJumpMapDao;
 
 public class SurveyJumpMapDaoBean extends MongoGenericDao<Document> implements SurveyJumpMapDao {

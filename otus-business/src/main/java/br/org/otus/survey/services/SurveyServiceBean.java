@@ -11,7 +11,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.survey.JumpMap.SurveyJumpMap;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.persistence.SurveyJumpMapDao;
 import org.ccem.otus.survey.form.SurveyForm;

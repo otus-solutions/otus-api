@@ -1,7 +1,7 @@
 package org.ccem.otus.persistence;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.JumpMap.SurveyJumpMap;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 
 public interface SurveyJumpMapDao {
 

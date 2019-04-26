@@ -1,17 +1,15 @@
 package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
-import com.google.gson.GsonBuilder;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.survey.JumpMap.SurveyJumpMap;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
