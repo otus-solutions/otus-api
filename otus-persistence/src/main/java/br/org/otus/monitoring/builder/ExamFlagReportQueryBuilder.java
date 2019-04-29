@@ -23,7 +23,7 @@ public class ExamFlagReportQueryBuilder {
 
   public ArrayList<Bson> getExamResultsStatusQuery(LinkedList<String> allPossibleExams, ArrayList<Long> centerRns) {
     matchRnList(centerRns);
-    collectParticipantExams();
+    collectParticipantExams(centerRns);
     buildFlagReport(allPossibleExams);
     return pipeline;
   }
@@ -32,9 +32,14 @@ public class ExamFlagReportQueryBuilder {
     pipeline.add(parseQuery("{\"$match\":{\"recruitmentNumber\":{\"$in\":" + centerRns + "}}}"));
   }
 
-  private void collectParticipantExams() {
+  private void collectParticipantExams(ArrayList<Long> centerRns) {
     pipeline.add(parseQuery("{\"$project\":{\"recruitmentNumber\":1,\"examName\":1}}"));
     pipeline.add(parseQuery("{\"$group\":{\"_id\":\"$recruitmentNumber\",\"exams\":{\"$addToSet\":\"$examName\"}}}"));
+    pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"participantList\":{\"$push\":{\"recruitmentNumber\":\"$_id\",\"exams\":\"$exams\"}}}}"));
+    pipeline.add(parseQuery("{\"$addFields\":{\"allRns\":"+ centerRns + "}}"));
+    pipeline.add(parseQuery("{\"$unwind\":\"$allRns\"}"));
+    pipeline.add(parseQuery("{\"$addFields\":{\"participantFound\":{\"$arrayElemAt\":[{\"$filter\":{\"input\":\"$participantList\",\"as\":\"participant\",\"cond\":{\"$eq\":[\"$$participant.recruitmentNumber\",\"$allRns\"]}}},0]}}}"));
+    pipeline.add(parseQuery("{\"$project\":{\"_id\":\"$allRns\",\"exams\":{\"$ifNull\":[\"$participantFound.exams\",[]]}}}"));
   }
 
   private void buildFlagReport(LinkedList<String> headers) {
@@ -50,6 +55,4 @@ public class ExamFlagReportQueryBuilder {
     pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"index\":{\"$push\":\"$_id\"},\"data\":{\"$push\":\"$filtered\"}}}"));
 
   }
-
-
 }
