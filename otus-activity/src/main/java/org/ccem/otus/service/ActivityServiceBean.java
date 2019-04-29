@@ -2,16 +2,21 @@ package org.ccem.otus.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 
@@ -20,6 +25,10 @@ public class ActivityServiceBean implements ActivityService {
 
   @Inject
   private ActivityDao activityDao;
+  @Inject
+  private ParticipantDao participantDao;
+  @Inject
+  private UserDao userDao;
   @Inject
   private ActivityAccessPermissionService activityAccessPermissionService;
 
@@ -117,5 +126,36 @@ public class ActivityServiceBean implements ActivityService {
   public boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException {
     CheckerUpdatedDTO checkerUpdatedDTO = CheckerUpdatedDTO.deserialize(checkerUpdated);
     return activityDao.updateCheckerActivity(checkerUpdatedDTO);
+  }
+
+  @Override
+  public List<String> importActivities(List<String> surveyActivities) {
+    List<String> failImports = new ArrayList<>();
+    for (String surveyActivityString : surveyActivities){
+      boolean failImport = false;
+
+      SurveyActivity importActivity = SurveyActivity.deserialize(surveyActivityString);
+      if (!participantDao.exists(importActivity.getParticipantData().getRecruitmentNumber())){
+        failImport = true;
+      }
+
+      if (importActivity.getMode().toString().equals("PAPER")){
+        Optional<ActivityStatus> created = importActivity.getLastStatusByName("INITIALIZED_OFFLINE");
+        if (created.isPresent()) {
+          if (!userDao.exists(created.get().getUser().getEmail())) {
+            failImport = true;
+          }
+        }
+      } else if (importActivity.getMode().toString().equals("ONLINE")){
+        Optional<ActivityStatus> initializedOffline = importActivity.getLastStatusByName("CREATED");
+        if(initializedOffline.isPresent()) {
+          if (!userDao.exists(initializedOffline.get().getUser().getEmail())) {
+            failImport = true;
+          }
+        }
+      }
+    }
+
+    return null;
   }
 }

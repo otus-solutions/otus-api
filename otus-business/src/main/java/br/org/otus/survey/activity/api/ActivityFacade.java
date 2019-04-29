@@ -72,4 +72,7 @@ public class ActivityFacade {
 		}
 	}
 
+	public List<String> importActivities(List<String> surveyActivities) {
+		return activityService.importActivities(surveyActivities);
+	}
 }
