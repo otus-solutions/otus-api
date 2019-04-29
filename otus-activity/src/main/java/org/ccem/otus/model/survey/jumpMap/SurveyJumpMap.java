@@ -50,7 +50,6 @@ public class SurveyJumpMap {
             return routeConditions;
         }
 
-
         public String getDestination() {
             return destination;
         }

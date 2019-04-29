@@ -30,5 +30,4 @@ public class SurveyJumpMapDaoBean extends MongoGenericDao<Document> implements S
         }
     }
 
-
 }
