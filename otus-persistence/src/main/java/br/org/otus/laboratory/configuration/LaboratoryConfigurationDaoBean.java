@@ -3,10 +3,12 @@ package br.org.otus.laboratory.configuration;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
 
+import com.google.gson.GsonBuilder;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.model.FindOneAndUpdateOptions;
@@ -17,7 +19,9 @@ import com.mongodb.client.result.UpdateResult;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -52,7 +56,32 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     return AliquotExamCorrelation.deserialize(first.toJson());
   }
 
-  public void persist(LaboratoryConfiguration laboratoryConfiguration) {
+  @Override
+    public List<String> getExamName() {
+        List<String> exams = null;
+
+        ArrayList<Bson> pipeline = new ArrayList<Bson>();
+        pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
+        pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
+        pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
+        pipeline.add(parseQuery("{$group:{_id:\"$aliquots.exams\"}}"));
+        pipeline.add(parseQuery("{$group:{_id:{},exams:{$push:\"$_id\"}}}"));
+
+        Document resultsDocument = collection.aggregate(pipeline).first();
+
+        if (resultsDocument != null) {
+            exams = (ArrayList<String>) resultsDocument.get("exams");
+        }
+
+        return exams;
+    }
+
+    private Bson parseQuery(String stage) {
+        return new GsonBuilder().create().fromJson(stage, Document.class);
+    }
+
+
+    public void persist(LaboratoryConfiguration laboratoryConfiguration) {
     super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));
   }
 

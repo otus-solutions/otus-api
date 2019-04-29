@@ -10,7 +10,7 @@ import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
-import org.ccem.otus.persistence.FlagReportDao;
+import org.ccem.otus.persistence.ActivityFlagReportDao;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
 import org.junit.Before;
@@ -87,7 +87,7 @@ public class MonitoringServiceBeanTest {
   private SurveyDao surveyDao;
 
   @Mock
-  private FlagReportDao flagReportDao;
+  private ActivityFlagReportDao activityFlagReportDao;
 
   @Mock
   private LaboratoryProgressDao laboratoryProgressDao;
@@ -126,7 +126,7 @@ public class MonitoringServiceBeanTest {
 
   @Test
   public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
-    when(flagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
+    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
     ProgressReport progressReport = monitoringServiceBean.getActivitiesProgress(CENTER);
     GsonBuilder builder = new GsonBuilder();
     assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(progressReport));

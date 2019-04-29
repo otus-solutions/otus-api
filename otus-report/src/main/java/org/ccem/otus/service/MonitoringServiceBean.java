@@ -30,7 +30,7 @@ public class MonitoringServiceBean implements MonitoringService {
   private ParticipantDao participantDao;
 
   @Inject
-  private FlagReportDao flagReportDao;
+  private ActivityFlagReportDao activityFlagReportDao;
 
   @Inject
   private SurveyDao surveyDao;
@@ -76,20 +76,20 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public ProgressReport getActivitiesProgress() throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(surveyAcronyms);
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(surveyAcronyms);
 
-    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
+    return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }
 
   @Override
   public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
 
-    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
+    return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }
 
-  private ProgressReport getActivityProgressReportDto(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
+  private ProgressReport getProgressReport(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
     ProgressReport progressReport = ProgressReport.deserialize(activitiesProgressReportDocument.toJson());
     progressReport.setColumns(surveyAcronyms);
     return progressReport;

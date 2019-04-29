@@ -88,8 +88,9 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
     }
 
     @Override
+    //todo
     public ArrayList<String> getAllPossibleExams() {
-        return new ArrayList<>();
+        return (ArrayList<String>) laboratoryConfigurationDao.getExamName();
     }
 
 }

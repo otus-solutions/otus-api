@@ -90,8 +90,8 @@ public class MonitoringResource {
   @Secured
   @Path("/laboratory/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getLaboratoryProgress(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ProgressReport.getGsonBuilder());
+  public String getExamsProgress(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getExamsProgress(center)).toJson(ProgressReport.getGsonBuilder());
   }
 
   @GET

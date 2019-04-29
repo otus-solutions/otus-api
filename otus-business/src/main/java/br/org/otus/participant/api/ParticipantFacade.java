@@ -2,6 +2,7 @@ package br.org.otus.participant.api;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -51,7 +52,11 @@ public class ParticipantFacade {
   }
 
   public ArrayList<Long> getCenterRecruitmentNumbers(String center) {
-    return new ArrayList<>(); //todo: implement
+    try {
+      return participantService.getCenterRns(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
   }
 
 }

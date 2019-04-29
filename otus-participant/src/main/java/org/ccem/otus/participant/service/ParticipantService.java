@@ -1,5 +1,6 @@
 package org.ccem.otus.participant.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,5 +20,7 @@ public interface ParticipantService {
   Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
 
   void create(Set<Participant> participants);
+
+  ArrayList<Long> getCenterRns(String center) throws DataNotFoundException;
 
 }

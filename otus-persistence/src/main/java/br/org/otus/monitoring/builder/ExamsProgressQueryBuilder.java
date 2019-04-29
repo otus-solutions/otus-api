@@ -8,7 +8,7 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class LaboratoryStatusQueryBuilder {
+public class ExamsProgressQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
@@ -17,12 +17,11 @@ public class LaboratoryStatusQueryBuilder {
     return gsonBuilder.create().fromJson(query, Document.class);
   }
 
-  public LaboratoryStatusQueryBuilder() {
+  public ExamsProgressQueryBuilder() {
     this.pipeline = new ArrayList<>();
   }
 
-  public ArrayList<Bson> getExamResultsStatusQuery(String center, LinkedList<String> allPossibleExams) {
-
+  public ArrayList<Bson> getExamResultsStatusQuery(String center, LinkedList<String> allPossibleExams, ArrayList<Long> centerRns) {
     return pipeline;
   }
 

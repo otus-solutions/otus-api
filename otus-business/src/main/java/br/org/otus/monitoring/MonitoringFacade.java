@@ -14,6 +14,7 @@ import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
+import org.ccem.otus.service.LaboratoryMonitoringService;
 import org.ccem.otus.service.MonitoringService;
 
 import javax.inject.Inject;
@@ -33,6 +34,9 @@ public class MonitoringFacade {
 
   @Inject
   private LaboratoryConfigurationService laboratoryConfigurationService;
+
+  @Inject
+  private LaboratoryMonitoringService laboratoryMonitoringService;
 
   public List<MonitoringDataSourceResult> get(String acronym) {
     try {
@@ -97,11 +101,15 @@ public class MonitoringFacade {
 
   /* Laboratory Methods */
 
-  public void getExamsFlagReport(String center) {
+  public ProgressReport getExamsProgress(String center) {
     ArrayList<String> allPossibleExams = laboratoryConfigurationService.getAllPossibleExams();
     ArrayList<Long> centerRecruitmentNumbers = participantFacade.getCenterRecruitmentNumbers(center);
 
-
+    try {
+      return laboratoryMonitoringService.getExamsProgress(center, allPossibleExams, centerRecruitmentNumbers);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
   }
 
   public LaboratoryProgressDTO getDataOrphanByExams() {
@@ -124,7 +132,7 @@ public class MonitoringFacade {
     try {
       return monitoringService.getDataOfPendingResultsByAliquot(center);
     } catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build());
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 

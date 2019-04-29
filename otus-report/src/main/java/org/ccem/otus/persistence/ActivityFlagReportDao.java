@@ -5,7 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.LinkedList;
 
-public interface FlagReportDao {
+public interface ActivityFlagReportDao {
 
   Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms) throws DataNotFoundException;
 

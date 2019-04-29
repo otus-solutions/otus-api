@@ -5,17 +5,17 @@ import br.org.otus.monitoring.builder.ActivityStatusQueryBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.persistence.FlagReportDao;
+import org.ccem.otus.persistence.ActivityFlagReportDao;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class FlagReportDaoBean extends MongoGenericDao<Document> implements FlagReportDao {
+public class ActivityFlagReportDaoBean extends MongoGenericDao<Document> implements ActivityFlagReportDao {
 
   public static final String COLLECTION_NAME = "activity";
 
-  public FlagReportDaoBean() {
+  public ActivityFlagReportDaoBean() {
     super(COLLECTION_NAME, Document.class);
   }
 
