@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +36,6 @@ public interface LaboratoryConfigurationService {
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
-  LinkedList<String> getPossibleExams();
+  ArrayList<String> getPossibleExams();
 
 }

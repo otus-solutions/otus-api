@@ -103,7 +103,7 @@ public class MonitoringFacade {
   /* Laboratory Methods */
 
   public ProgressReport getExamFlagReport(String center) {
-    LinkedList<String> possibleExams = laboratoryConfigurationService.getPossibleExams();
+    LinkedList<String> possibleExams = new LinkedList<>(laboratoryConfigurationService.getPossibleExams());
     ArrayList<Long> centerRecruitmentNumbers = participantFacade.getCenterRecruitmentNumbers(center);
 
     try {
@@ -114,7 +114,7 @@ public class MonitoringFacade {
   }
 
   public LinkedList<String> getExamFlagReportLabels() {
-    return laboratoryConfigurationService.getPossibleExams();
+    return new LinkedList<> (laboratoryConfigurationService.getPossibleExams());
   }
 
   public LaboratoryProgressDTO getDataOrphanByExams() {

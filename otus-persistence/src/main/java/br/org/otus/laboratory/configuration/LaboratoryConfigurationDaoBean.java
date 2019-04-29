@@ -17,7 +17,6 @@ import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
@@ -54,8 +53,8 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-    public LinkedList<String> getExamName() {
-        LinkedList<String> exams = null;
+    public ArrayList<String> getExamName() {
+        ArrayList<String> exams = null;
 
         ArrayList<Bson> pipeline = new ArrayList<Bson>();
         pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
@@ -67,7 +66,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         Document resultsDocument = collection.aggregate(pipeline).first();
 
         if (resultsDocument != null) {
-            exams = new LinkedList<>((ArrayList<String>) resultsDocument.get("exams"));
+            exams = (ArrayList<String>) resultsDocument.get("exams");
         }
 
         return exams;

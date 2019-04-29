@@ -3,7 +3,7 @@ package br.org.otus.laboratory.configuration;
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public interface LaboratoryConfigurationDao {
 
@@ -11,7 +11,7 @@ public interface LaboratoryConfigurationDao {
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
-    LinkedList<String> getExamName();
+    ArrayList<String> getExamName();
 
     void persist(LaboratoryConfiguration laboratoryConfig);
 
