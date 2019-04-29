@@ -106,7 +106,7 @@ public class MonitoringFacade {
     ArrayList<Long> centerRecruitmentNumbers = participantFacade.getCenterRecruitmentNumbers(center);
 
     try {
-      return laboratoryMonitoringService.getExamsProgress(center, allPossibleExams, centerRecruitmentNumbers);
+      return laboratoryMonitoringService.getExamsProgress(allPossibleExams, centerRecruitmentNumbers);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

@@ -7,5 +7,5 @@ import java.util.ArrayList;
 
 public interface LaboratoryMonitoringService {
 
-    ProgressReport getExamsProgress(String center, ArrayList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
+    ProgressReport getExamsProgress(ArrayList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
 }

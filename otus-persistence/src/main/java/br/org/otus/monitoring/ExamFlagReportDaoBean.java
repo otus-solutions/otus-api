@@ -1,7 +1,7 @@
 package br.org.otus.monitoring;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.monitoring.builder.ExamsProgressQueryBuilder;
+import br.org.otus.monitoring.builder.ExamsFlagReportQueryBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -14,15 +14,15 @@ import java.util.List;
 
 public class ExamFlagReportDaoBean extends MongoGenericDao<Document> implements ExamFlagReportDao {
 
-    public static final String COLLECTION_NAME = "exam_results";
+    public static final String COLLECTION_NAME = "exam_result";
 
     public ExamFlagReportDaoBean() {
         super(COLLECTION_NAME, Document.class);
     }
 
     @Override
-    public Document getExamProgressReport(String center, LinkedList<String> surveyAcronyms, ArrayList<Long> centerRns) throws DataNotFoundException {
-        List<Bson> query = new ExamsProgressQueryBuilder().getExamResultsStatusQuery(center, surveyAcronyms, centerRns);
+    public Document getExamProgressReport(LinkedList<String> surveyAcronyms, ArrayList<Long> centerRns) throws DataNotFoundException {
+        List<Bson> query = new ExamsFlagReportQueryBuilder().getExamResultsStatusQuery(surveyAcronyms, centerRns);
 
         return getDocument(query);
     }

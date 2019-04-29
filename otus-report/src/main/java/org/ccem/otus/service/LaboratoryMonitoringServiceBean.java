@@ -18,10 +18,10 @@ public class LaboratoryMonitoringServiceBean implements LaboratoryMonitoringServ
     private ExamFlagReportDao examFlagReportDao;
 
     @Override
-    public ProgressReport getExamsProgress(String center, ArrayList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException {
+    public ProgressReport getExamsProgress(ArrayList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException {
         LinkedList<String> linkedPossibleExams = new LinkedList<>(possibleExams);
 
-        Document flagReportDocument = examFlagReportDao.getExamProgressReport(center, linkedPossibleExams, centerRns);
+        Document flagReportDocument = examFlagReportDao.getExamProgressReport(linkedPossibleExams, centerRns);
 
         return getProgressReport(linkedPossibleExams, flagReportDocument);
     }

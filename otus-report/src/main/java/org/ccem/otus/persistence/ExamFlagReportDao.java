@@ -8,5 +8,5 @@ import java.util.LinkedList;
 
 public interface ExamFlagReportDao {
 
-  Document getExamProgressReport(String center, LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
+  Document getExamProgressReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
 }
