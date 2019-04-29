@@ -23,9 +23,6 @@ import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.survey.activity.api.ActivityFacade;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Path("participants/{rn}/activities")
 public class ActivityResource {
 
@@ -59,15 +56,6 @@ public class ActivityResource {
     String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity));
 
     return new Response().buildSuccess(objectID).toJson();
-  }
-
-  @POST
-  @Secured
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String importActivities(@PathParam("rn") long rn, List<String> surveyActivities) {
-    List<String> failImports = activityFacade.importActivities(surveyActivities);
-    return new Response().buildSuccess(failImports).toJson();
   }
 
   @GET

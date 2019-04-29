@@ -2,12 +2,13 @@ package br.org.otus.survey.activity.api;
 
 import java.util.List;
 
-import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.activityImport.ActivityImportDTO;
+import org.ccem.otus.model.survey.activity.activityImport.ActivityImportResultDTO;
 import org.ccem.otus.service.ActivityService;
 
 import com.google.gson.JsonSyntaxException;
@@ -72,7 +73,7 @@ public class ActivityFacade {
 		}
 	}
 
-	public List<String> importActivities(List<String> surveyActivities) {
+	public List<ActivityImportResultDTO> importActivities(ActivityImportDTO surveyActivities) {
 		return activityService.importActivities(surveyActivities);
 	}
 }
