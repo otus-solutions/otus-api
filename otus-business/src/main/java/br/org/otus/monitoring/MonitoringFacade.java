@@ -19,6 +19,7 @@ import org.ccem.otus.service.MonitoringService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MonitoringFacade {
@@ -101,15 +102,19 @@ public class MonitoringFacade {
 
   /* Laboratory Methods */
 
-  public ProgressReport getExamsProgress(String center) {
-    ArrayList<String> allPossibleExams = laboratoryConfigurationService.getAllPossibleExams();
+  public ProgressReport getExamFlagReport(String center) {
+    LinkedList<String> possibleExams = laboratoryConfigurationService.getPossibleExams();
     ArrayList<Long> centerRecruitmentNumbers = participantFacade.getCenterRecruitmentNumbers(center);
 
     try {
-      return laboratoryMonitoringService.getExamsProgress(allPossibleExams, centerRecruitmentNumbers);
+      return laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRecruitmentNumbers);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
+  }
+
+  public LinkedList<String> getExamFlagReportLabels() {
+    return laboratoryConfigurationService.getPossibleExams();
   }
 
   public LaboratoryProgressDTO getDataOrphanByExams() {

@@ -4,8 +4,9 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.monitoring.ProgressReport;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public interface LaboratoryMonitoringService {
 
-    ProgressReport getExamsProgress(ArrayList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
+    ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
 }

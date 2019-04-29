@@ -90,8 +90,16 @@ public class MonitoringResource {
   @Secured
   @Path("/laboratory/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getExamsProgress(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getExamsProgress(center)).toJson(ProgressReport.getGsonBuilder());
+  public String getExamFlagReport(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getExamFlagReport(center)).toJson(ProgressReport.getGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/laboratory/progress/labels")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getExamFlagReportLabels() {
+    return new Response().buildSuccess(monitoringFacade.getExamFlagReportLabels()).toJson(ProgressReport.getGsonBuilder());
   }
 
   @GET
