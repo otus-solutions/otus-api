@@ -104,10 +104,19 @@ public class SurveyJumpMapQueryBuilder {
                 "            $project: {\n" +
                 "                navigationList:\"$navigationList\",\n" +
                 "                questionId:\"$navigationListCopy.origin\",\n" +
-                "                inNavigation:[\n" +
-                "                    \"$navigationListCopy.inNavigations.origin\",\n" +
-                "                    false\n" +
-                "                ]\n" +
+                "                inNavigation:{\n" +
+                "                    $cond:[\n" +
+                "                            {$eq: [\"$navigationListCopy.inNavigations.origin\",\"BEGIN NODE\"]},\n" +
+                "                            [\n" +
+                "                                \"$navigationListCopy.inNavigations.origin\",\n" +
+                "                                true\n" +
+                "                            ],\n" +
+                "                            [\n" +
+                "                                \"$navigationListCopy.inNavigations.origin\",\n" +
+                "                                false    \n" +
+                "                            ]\n" +
+                "                        ]\n" +
+                "                }\n" +
                 "            }\n" +
                 "        }"));
         return this;
