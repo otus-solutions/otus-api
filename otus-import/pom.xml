@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>otus-root</artifactId>
+    <groupId>org.ccem.otus</groupId>
+    <version>1.21-SNAPSHOT</version>
+    <relativePath>../otus-root/pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>otus-import</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-activity</artifactId>
+      <version>1.21-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-commons</artifactId>
+      <version>1.21-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-participant</artifactId>
+      <version>1.21-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-user</artifactId>
+      <version>1.21-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>survey-model</artifactId>
+      <version>1.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.5</version>
+        <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+
+</project>

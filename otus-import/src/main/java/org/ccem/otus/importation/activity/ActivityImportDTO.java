@@ -1,4 +1,4 @@
-package org.ccem.otus.model.survey.activity.activityImport;
+package org.ccem.otus.importation.activity;
 
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.model.survey.activity.SurveyActivity;

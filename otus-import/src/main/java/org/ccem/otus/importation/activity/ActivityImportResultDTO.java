@@ -1,12 +1,21 @@
-package org.ccem.otus.model.survey.activity.activityImport;
+package org.ccem.otus.importation.activity;
 
 public class ActivityImportResultDTO {
 
+    private boolean failImport = false;
     private RecruitmentNumberValidationResult recruitmentNumberValidationResult;
     private CategoryValidationResult categoryValidationResult;
     private InterviewerValidationResult interviewerValidationResult;
     private PaperInterviewerValidationResult paperInterviewerValidationResult;
     private QuestionFillValidationResult questionFillValidationResult;
+
+    public void setFailImport() {
+        this.failImport = true;
+    }
+
+    public boolean getFailImport() {
+        return this.failImport;
+    }
 
     private class RecruitmentNumberValidationResult {
         private Long recruitmentNumber;
