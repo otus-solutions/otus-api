@@ -51,12 +51,13 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         return AliquotExamCorrelation.deserialize(first.toJson());
     }
 
-    public List<String> getExamName() {
+    public List<String> getExamName(List<String> centerAliquots) {
         List<String> exams = null;
 
         ArrayList<Bson> pipeline = new ArrayList<Bson>();
         pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
         pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
+        pipeline.add(new Document("$match",new Document("aliquots.name",new Document("$in",centerAliquots))));
         pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
         pipeline.add(parseQuery("{$group:{_id:\"$aliquots.exams\"}}"));
         pipeline.add(parseQuery("{$group:{_id:{},exams:{$push:\"$_id\"}}}"));

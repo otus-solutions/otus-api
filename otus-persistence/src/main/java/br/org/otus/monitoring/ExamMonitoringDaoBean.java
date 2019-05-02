@@ -2,10 +2,17 @@ package br.org.otus.monitoring;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
+import br.org.otus.laboratory.configuration.aliquot.AliquotConfigurationQueryBuilder;
+import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
+import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
 import br.org.otus.monitoring.builder.ExamStatusQueryBuilder;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.ExamMonitoringDao;
 
 import javax.ejb.Stateless;
@@ -19,28 +26,46 @@ public class ExamMonitoringDaoBean extends MongoGenericDao<Document> implements 
     @Inject
     private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
+    @Inject
+    private ParticipantLaboratoryDao participantLaboratoryDao;
+
+    @Inject
+    private ParticipantDao participantDao;
+
+    @Inject
+    private ExamInapplicabilityDao examInapplicabilityDao;
+
     private static final String COLLECTION_NAME = "exam_result";
 
     public ExamMonitoringDaoBean() {
         super(COLLECTION_NAME, Document.class);}
 
     @Override
-    public ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn) {
-        List<String> examName = laboratoryConfigurationDao.getExamName();
+    public ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException {
+        ParticipantExamReportDto participantExamReportDto  = null;
 
-        MongoCursor<Document> resultsDocument = super.aggregate(new ExamStatusQueryBuilder().getExamQuery(rn, examName)).iterator();
+        ParticipantLaboratory participantLaboratory =  participantLaboratoryDao.findByRecruitmentNumber(rn);
 
-        ArrayList<ParticipantExamReportDto> dtos = new ArrayList<>();
+        Participant participant = participantDao.findByRecruitmentNumber(rn);
 
-        try {
-            while (resultsDocument.hasNext()) {
-                dtos.add(ParticipantExamReportDto.deserialize(resultsDocument.next().toJson()));
+        Document first = laboratoryConfigurationDao.aggregate(new AliquotConfigurationQueryBuilder().getCenterAliquotsByCQQuery(participant.getFieldCenter().getAcronym(), participantLaboratory.getCollectGroupName())).first();
+
+        List<String> examNames = laboratoryConfigurationDao.getExamName((List<String>) first.get("centerAliquots"));
+
+        Document resultsDocument = super.aggregate(new ExamStatusQueryBuilder().getExamQuery(rn, examNames)).first();
+
+        if(resultsDocument != null){
+            participantExamReportDto = ParticipantExamReportDto.deserialize(resultsDocument.toJson());
+        } else {
+            resultsDocument = examInapplicabilityDao.aggregate(new ExamStatusQueryBuilder().getExamInapplicabilityQuery(rn,examNames)).first();
+            if(resultsDocument != null){
+                participantExamReportDto = ParticipantExamReportDto.deserialize(resultsDocument.toJson());
+            } else {
+                participantExamReportDto = new ParticipantExamReportDto(examNames);
             }
-        } finally {
-            resultsDocument.close();
         }
 
-        return dtos;
+        return participantExamReportDto;
     }
 
 }

@@ -22,7 +22,7 @@ public interface MonitoringService {
 
     ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
-    ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn);
+    ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException;
 
     void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
 

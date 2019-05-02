@@ -47,7 +47,7 @@ public class MonitoringFacadeTest {
   }
 
   @Test
-  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() {
+  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() throws DataNotFoundException{
     monitoringFacade.getParticipantExamsProgress(RN);
     Mockito.verify(monitoringService,times(1)).getParticipantExams(RN);
   }

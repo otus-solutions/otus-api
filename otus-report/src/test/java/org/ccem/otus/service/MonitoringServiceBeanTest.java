@@ -124,7 +124,7 @@ public class MonitoringServiceBeanTest {
   }
 
   @Test
-  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() {
+  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() throws DataNotFoundException{
     monitoringServiceBean.getParticipantExams(RN);
     verify(examMonitoringDao,times(1)).getParticipantExams(RN);
   }

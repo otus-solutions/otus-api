@@ -1,9 +1,10 @@
 package org.ccem.otus.persistence;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
 
 import java.util.ArrayList;
 
 public interface ExamMonitoringDao {
-  ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn);
+  ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException;
 }

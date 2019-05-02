@@ -109,7 +109,7 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ArrayList<ParticipantExamReportDto> getParticipantExams(Long rn) {
+  public ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException{
     return examMonitoringDao.getParticipantExams(rn);
   }
 

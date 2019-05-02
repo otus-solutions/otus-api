@@ -29,8 +29,7 @@ public class ExamInapplicabilityDaoBean extends MongoGenericDao<Document> implem
         UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())),
                 new Document("$set", parsed), new UpdateOptions().upsert(true));
 
-
-        if ((updateLabData.getModifiedCount() == 0) && (updateLabData.getUpsertedId() == null)) {
+        if ((updateLabData.getMatchedCount() == 0) && (updateLabData.getUpsertedId() == null)) {
             throw new DataNotFoundException(new Throwable("Update Fail"));
         }
     }

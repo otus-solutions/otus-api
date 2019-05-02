@@ -69,7 +69,7 @@ public class MonitoringFacade {
     }
   }
 
-  public ArrayList<ParticipantExamReportDto> getParticipantExamsProgress(Long rn) {
+  public ParticipantExamReportDto getParticipantExamsProgress(Long rn) {
     try {
       return monitoringService.getParticipantExams(rn);
     } catch (Exception e) {

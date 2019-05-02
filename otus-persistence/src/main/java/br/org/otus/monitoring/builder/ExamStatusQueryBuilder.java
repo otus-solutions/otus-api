@@ -16,26 +16,84 @@ public class ExamStatusQueryBuilder {
     }
 
     public List<Bson> getExamQuery(Long rn, List<String> examName) {
+        addMatchRecruitmentNumber(rn);
+        addGroupDescriptorsNameAndId();
+        addGroupDescriptorsNameAndQuantity();
+        addGroupDescriptorsExams();
+        addAddFieldsAllExams(examName);
+        addUnwindAllExams();
+        addAddFieldsFilter();
+        addProjectAllExams();
+        addLookupExamInapplicability(rn);
+        addGroupExamInapplicability();
+
+        return this.pipeline;
+    }
+
+    public List<Bson> getExamInapplicabilityQuery(Long rn, List<String> examName){
+        addMatchRecruitmentNumber(rn);
+        addAddFieldsAllExams(examName);
+        addUnwindAllExams();
+        addProjectObservation();
+        addGroupExamInapplicability();
+
+        return this.pipeline;
+    }
+
+    private void addMatchRecruitmentNumber(Long rn){
         pipeline.add(parseQuery("{$match:{\"recruitmentNumber\":"+rn+"}}"));
+    }
+
+    private void addGroupDescriptorsNameAndId(){
         pipeline.add(parseQuery("{\n" +
                 "      $group:{\n" +
                 "          _id:{examName:\"$examName\",examId:\"$examId\"}\n" +
                 "      }  \n" +
                 "    }"));
+    }
+
+    private void addGroupDescriptorsNameAndQuantity(){
         pipeline.add(parseQuery(" {\n" +
                 "        $group:{\n" +
                 "            _id:{examName:\"$_id.examName\"},\n" +
                 "            quantity:{$sum:1}\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addGroupDescriptorsExams(){
         pipeline.add(parseQuery("  {\n" +
                 "        $group:{\n" +
                 "            _id:{},\n" +
                 "            exams:{$push:{name:\"$_id.examName\",quantity:\"$quantity\"}}\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addGroupExamInapplicability(){
+        pipeline.add(parseQuery(" {\n" +
+                "        $group:{\n" +
+                "            _id:{},\n" +
+                "            participantExams:{\n" +
+                "                $push:{\n" +
+                "                    \"name\":\"$name\",\n" +
+                "                    \"quantity\":\"$quantity\",\n" +
+                "                    \"doesNotApply\":{$arrayElemAt: [\"$examInapplicability\",0]}\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }"));
+    }
+
+    private void addAddFieldsAllExams(List<String> examName){
         pipeline.add(new Document("$addFields", new Document("allExams", examName)));
+    }
+
+    private void addUnwindAllExams(){
         pipeline.add(parseQuery("{$unwind:\"$allExams\"}"));
+    }
+
+    private void addAddFieldsFilter(){
         pipeline.add(parseQuery("{\n" +
                 "        $addFields:{\n" +
                 "            \n" +
@@ -55,12 +113,18 @@ public class ExamStatusQueryBuilder {
                 "            }\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addProjectAllExams(){
         pipeline.add(parseQuery("{\n" +
                 "        $project:{\n" +
                 "            name: \"$allExams\",\n" +
                 "            quantity:{$cond:[{$ifNull:[\"$examFound\",false]},\"$examFound.quantity\",0]}\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addLookupExamInapplicability(Long rn){
         pipeline.add(parseQuery("{\n" +
                 "        $lookup:{\n" +
                 "            from:\"exam_inapplicability\",\n" +
@@ -87,14 +151,16 @@ public class ExamStatusQueryBuilder {
                 "            as:\"examInapplicability\"\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addProjectObservation(){
         pipeline.add(parseQuery("{\n" +
                 "        $project:{\n" +
-                "            \"name\":1,\n" +
-                "            \"quantity\":1,\n" +
-                "            \"doesNotApply\":{$arrayElemAt: [\"$examInapplicability\",0]}\n" +
+                "            name: \"$allExams\",\n" +
+                "            quantity:{$toInt:\"0\"},\n" +
+                "            examInapplicability:[{$cond:[{$eq:[\"$name\",\"$allExams\"]},{observation:\"$observation\"},null]}]\n" +
                 "        }\n" +
                 "    }"));
-        return this.pipeline;
     }
 
     private Document parseQuery(String query) {
