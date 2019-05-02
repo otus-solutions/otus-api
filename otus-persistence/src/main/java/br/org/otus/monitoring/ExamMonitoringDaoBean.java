@@ -42,7 +42,7 @@ public class ExamMonitoringDaoBean extends MongoGenericDao<Document> implements 
 
     @Override
     public ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException {
-        ParticipantExamReportDto participantExamReportDto  = null;
+        ParticipantExamReportDto participantExamReportDto;
 
         ParticipantLaboratory participantLaboratory =  participantLaboratoryDao.findByRecruitmentNumber(rn);
 

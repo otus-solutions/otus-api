@@ -27,7 +27,7 @@ public class ExamStatusQueryBuilder {
         addLookupExamInapplicability(rn);
         addGroupExamInapplicability();
 
-        return this.pipeline;
+        return pipeline;
     }
 
     public List<Bson> getExamInapplicabilityQuery(Long rn, List<String> examName){
@@ -37,7 +37,7 @@ public class ExamStatusQueryBuilder {
         addProjectObservation();
         addGroupExamInapplicability();
 
-        return this.pipeline;
+        return pipeline;
     }
 
     private void addMatchRecruitmentNumber(Long rn){
