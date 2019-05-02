@@ -53,13 +53,13 @@ public class MonitoringFacadeTest {
   }
 
   @Test
-  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() throws DataNotFoundException {
+  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() {
     monitoringFacade.setExamApplicability(anyObject());
     Mockito.verify(monitoringService,times(1)).setExamInapplicability(anyObject());
   }
 
   @Test
-  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() throws DataNotFoundException {
+  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() {
     monitoringFacade.deleteExamInapplicability(anyObject());
     Mockito.verify(monitoringService,times(1)).deleteExamInapplicability(anyObject());
   }

@@ -23,24 +23,16 @@ public class ExamInapplicabilityDaoBean extends MongoGenericDao<Document> implem
     }
 
     @Override
-    public void update(ExamInapplicability applicability) throws DataNotFoundException {
+    public void update(ExamInapplicability applicability) {
         Document parsed = Document.parse(ExamInapplicability.serialize(applicability));
 
         UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())),
                 new Document("$set", parsed), new UpdateOptions().upsert(true));
-
-        if ((updateLabData.getMatchedCount() == 0) && (updateLabData.getUpsertedId() == null)) {
-            throw new DataNotFoundException(new Throwable("Update Fail"));
-        }
     }
 
     @Override
-    public void delete(ExamInapplicability applicability) throws DataNotFoundException {
+    public void delete(ExamInapplicability applicability) {
         DeleteResult deleteResult = collection.deleteOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())));
-
-        if(deleteResult.getDeletedCount() == 0) {
-            throw new DataNotFoundException(new Throwable("Delete fail"));
-        }
 
     }
 }

@@ -130,13 +130,13 @@ public class MonitoringServiceBeanTest {
   }
 
   @Test
-  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() throws DataNotFoundException {
+  public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() {
     monitoringServiceBean.setExamInapplicability(anyObject());
     verify(examInapplicabilityDao,times(1)).update(anyObject());
   }
 
   @Test
-  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() throws DataNotFoundException {
+  public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() {
     monitoringServiceBean.deleteExamInapplicability(anyObject());
     verify(examInapplicabilityDao,times(1)).delete(anyObject());
   }

@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface ExamInapplicabilityDao {
 
-    void update(ExamInapplicability applicability) throws DataNotFoundException;
+    void update(ExamInapplicability applicability);
 
-    void delete(ExamInapplicability applicability) throws DataNotFoundException;
+    void delete(ExamInapplicability applicability);
 
     AggregateIterable<Document> aggregate(List<Bson> query);
 }
