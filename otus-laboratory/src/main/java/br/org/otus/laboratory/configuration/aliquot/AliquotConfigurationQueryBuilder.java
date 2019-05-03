@@ -10,73 +10,104 @@ public class AliquotConfigurationQueryBuilder {
 
     private ArrayList<Bson> pipeline;
 
-    public ArrayList<Bson> getCenterAliquotsByCQQuery(String Center, String CQ){
-        getCenterFilter(Center);
-        pipeline.add(parseQuery("{\n" +
-                "        $match:{\n" +
-                "            \"aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.name\":"+CQ+"\n" +
-                "        }\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors\"\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors\"\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors.aliquots\"\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $group:{\n" +
-                "            _id:{},\n" +
-                "            centerAliquots:{$addToSet:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors.aliquots.name\"}\n" +
-                "        }\n" +
-                "    }"));
-        return null;
-    }
-
-    public ArrayList<Bson> getCenterAliquotsQuery(String Center){
-        getCenterFilter(Center);
-        pipeline.add(parseQuery("{\n" +
-                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors\"\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors\"\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors.aliquots\"\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\n" +
-                "        $group:{\n" +
-                "            _id:{},\n" +
-                "            centerAliquots:{$addToSet:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors.aliquots.name\"}\n" +
-                "        }\n" +
-                "    }"));
+    public ArrayList<Bson> getCenterAliquotsByCQQuery(String center, String CQ){
+        pipeline = new ArrayList<>();
+        buildMatchCenterStages(center);
+        addUnwindOnAliquotGroupDescriptorsStage();
+        addMatchOnCQStage(CQ);
+        addUnwindOnAliquotMomentDescriptorsStage();
+        addUnwindOnAliquotTypesDescriptorsStage();
+        addUnwindOnAliquotsStage();
+        addBuildCenterAliquotsStage();
         return pipeline;
     }
 
-    private void getCenterFilter(String Center) {
-        ArrayList<Bson> pipeline = new ArrayList<>();
+    public ArrayList<Bson> getCenterAliquotsQuery(String center){
+        pipeline = new ArrayList<>();
+        buildMatchCenterStages(center);
+        addUnwindOnAliquotGroupDescriptorsStage();
+        addUnwindOnAliquotMomentDescriptorsStage();
+        addUnwindOnAliquotTypesDescriptorsStage();
+        addUnwindOnAliquotsStage();
+        addBuildCenterAliquotsStage();
+        return pipeline;
+    }
+
+    private void buildMatchCenterStages(String center){
+        addMatchLaboratoryConfigurationStage();
+        addAliquotCenterDescriptorsProjectStage();
+        addUnwindOnAliquotCenterDescriptorsProjectStage();
+        addMatchOnCenterStage(center);
+    }
+
+    private void addMatchLaboratoryConfigurationStage() {
         pipeline.add(parseQuery("{\n" +
                 "        $match:{\n" +
                 "            \"objectType\" : \"LaboratoryConfiguration\"\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addAliquotCenterDescriptorsProjectStage() {
         pipeline.add(parseQuery("{\n" +
                 "        $project:{\n" +
                 "            \"aliquotConfiguration.aliquotCenterDescriptors\":1\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addUnwindOnAliquotCenterDescriptorsProjectStage() {
         pipeline.add(parseQuery("{\n" +
                 "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors\"\n" +
                 "    }"));
+    }
+
+    private void addMatchOnCenterStage(String center) {
         pipeline.add(parseQuery("{\n" +
                 "        $match:{\n" +
-                "            \"aliquotConfiguration.aliquotCenterDescriptors.name\":"+Center+"\n" +
+                "            \"aliquotConfiguration.aliquotCenterDescriptors.name\":"+center+"\n" +
                 "        }\n" +
                 "    }"));
+    }
+
+    private void addUnwindOnAliquotGroupDescriptorsStage() {
         pipeline.add(parseQuery("{\n" +
                 "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors\"\n" +
+                "    }"));
+    }
+
+    private void addMatchOnCQStage(String CQ) {
+        pipeline.add(parseQuery("{\n" +
+                "        $match:{\n" +
+                "            \"aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.name\":"+CQ+"\n" +
+                "        }\n" +
+                "    }"));
+    }
+
+    private void addUnwindOnAliquotMomentDescriptorsStage() {
+        pipeline.add(parseQuery("{\n" +
+                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors\"\n" +
+                "    }"));
+    }
+
+    private void addUnwindOnAliquotTypesDescriptorsStage() {
+        pipeline.add(parseQuery("{\n" +
+                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors\"\n" +
+                "    }"));
+    }
+
+    private void addUnwindOnAliquotsStage() {
+        pipeline.add(parseQuery("{\n" +
+                "        $unwind:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors.aliquots\"\n" +
+                "    }"));
+    }
+
+    private void addBuildCenterAliquotsStage() {
+        pipeline.add(parseQuery("{\n" +
+                "        $group:{\n" +
+                "            _id:{},\n" +
+                "            centerAliquots:{$addToSet:\"$aliquotConfiguration.aliquotCenterDescriptors.aliquotGroupDescriptors.aliquotMomentDescriptors.aliquotTypesDescriptors.aliquots.name\"}\n" +
+                "        }\n" +
                 "    }"));
     }
 
