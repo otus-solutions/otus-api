@@ -60,6 +60,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         pipeline.add(new Document("$match",new Document("aliquots.name",new Document("$in",centerAliquots))));
         pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
         pipeline.add(parseQuery("{$group:{_id:\"$aliquots.exams\"}}"));
+        pipeline.add(parseQuery("{$sort:{\"_id\":1}}"));
         pipeline.add(parseQuery("{$group:{_id:{},exams:{$push:\"$_id\"}}}"));
 
         Document resultsDocument = collection.aggregate(pipeline).first();
