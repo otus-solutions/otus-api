@@ -88,8 +88,9 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
     }
 
     @Override
-    public ArrayList<String> getPossibleExams() {
-        return laboratoryConfigurationDao.getExamName();
+    public List<String> listPossibleExams(String center) throws DataNotFoundException {
+        ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(center);
+        return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
     }
 
 }

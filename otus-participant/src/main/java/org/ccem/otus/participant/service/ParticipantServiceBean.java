@@ -39,7 +39,7 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
-  public ArrayList<Long> getCenterRns(String center) throws DataNotFoundException {
+  public ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException {
     return participantDao.getCenterRns(center);
   }
 

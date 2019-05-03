@@ -103,18 +103,22 @@ public class MonitoringFacade {
   /* Laboratory Methods */
 
   public ProgressReport getExamFlagReport(String center) {
-    LinkedList<String> possibleExams = new LinkedList<>(laboratoryConfigurationService.getPossibleExams());
-    ArrayList<Long> centerRecruitmentNumbers = participantFacade.getCenterRecruitmentNumbers(center);
+    ArrayList<Long> centerRecruitmentNumbers = participantFacade.listCenterRecruitmentNumbers(center);
 
     try {
+      LinkedList<String> possibleExams = new LinkedList<>(laboratoryConfigurationService.listPossibleExams(center));
       return laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRecruitmentNumbers);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public LinkedList<String> getExamFlagReportLabels() {
-    return new LinkedList<> (laboratoryConfigurationService.getPossibleExams());
+  public LinkedList<String> getExamFlagReportLabels(String center) {
+    try {
+      return new LinkedList<> (laboratoryConfigurationService.listPossibleExams(center));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
   }
 
   public LaboratoryProgressDTO getDataOrphanByExams() {

@@ -3,6 +3,7 @@ package br.org.otus.laboratory.configuration;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
 
+import br.org.otus.laboratory.configuration.aliquot.AliquotConfigurationQueryBuilder;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
@@ -17,7 +18,7 @@ import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -53,24 +54,24 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-    public ArrayList<String> getExamName() {
-        ArrayList<String> exams = null;
+  public List<String> getAliquotsExams(List<String> aliquots) {
+      List<String> exams = null;
 
-        ArrayList<Bson> pipeline = new ArrayList<Bson>();
-        pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
-        pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
-        pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
-        pipeline.add(parseQuery("{$group:{_id:\"$aliquots.exams\"}}"));
-        pipeline.add(parseQuery("{$group:{_id:{},exams:{$push:\"$_id\"}}}"));
+      ArrayList<Bson> pipeline = new ArrayList<Bson>();
+      pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
+      pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
+      pipeline.add(new Document("$match",new Document("aliquots.name",new Document("$in",aliquots))));
+      pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
+      pipeline.add(parseQuery("{$group:{_id:{},exams:{$addToSet:\"$aliquots.exams\"}}}"));
 
-        Document resultsDocument = collection.aggregate(pipeline).first();
+      Document resultsDocument = collection.aggregate(pipeline).first();
 
-        if (resultsDocument != null) {
-            exams = (ArrayList<String>) resultsDocument.get("exams");
-        }
+      if(resultsDocument != null) {
+          exams = (ArrayList<String>) resultsDocument.get("exams");
+      }
 
-        return exams;
-    }
+      return exams;
+  }
 
     private Bson parseQuery(String stage) {
         return new GsonBuilder().create().fromJson(stage, Document.class);
@@ -155,4 +156,16 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE));
     return ((Document) updateLotCode.get("codeConfiguration")).getInteger("lastInsertion");
   }
+
+    @Override
+    public ArrayList listCenterAliquots(String center) throws DataNotFoundException {
+        ArrayList<Bson> pipeline = new AliquotConfigurationQueryBuilder().getCenterAliquotsQuery(center);
+        Document first = collection.aggregate(pipeline).first();
+        ArrayList centerAliquots = first.get("centerAliquots", ArrayList.class);
+
+        if(centerAliquots == null || centerAliquots.size() == 0) {
+            throw new DataNotFoundException("Any exams available found for the given center: \"" + center + "\"");
+        }
+        return centerAliquots;
+    }
 }

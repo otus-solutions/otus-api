@@ -51,9 +51,9 @@ public class ParticipantFacade {
 
   }
 
-  public ArrayList<Long> getCenterRecruitmentNumbers(String center) {
+  public ArrayList<Long> listCenterRecruitmentNumbers(String center) {
     try {
-      return participantService.getCenterRns(center);
+      return participantService.listCenterRecruitmentNumbers(center);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

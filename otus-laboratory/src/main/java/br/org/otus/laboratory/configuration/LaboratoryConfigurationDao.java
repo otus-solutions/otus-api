@@ -4,16 +4,17 @@ import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface LaboratoryConfigurationDao {
 
   LaboratoryConfiguration find();
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
+  
+  List<String> getAliquotsExams(List<String> aliquots);
 
-    ArrayList<String> getExamName();
-
-    void persist(LaboratoryConfiguration laboratoryConfig);
+  void persist(LaboratoryConfiguration laboratoryConfig);
 
   String createNewLotCodeForTransportation(Integer code);
 
@@ -24,4 +25,6 @@ public interface LaboratoryConfigurationDao {
   void restoreLotConfiguration(String config, Integer code);
 
   Integer updateLastTubeInsertion(int newTubesQuantities);
+
+  ArrayList listCenterAliquots(String center) throws DataNotFoundException;
 }

@@ -21,6 +21,6 @@ public interface ParticipantService {
 
   void create(Set<Participant> participants);
 
-  ArrayList<Long> getCenterRns(String center) throws DataNotFoundException;
+  ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException;
 
 }

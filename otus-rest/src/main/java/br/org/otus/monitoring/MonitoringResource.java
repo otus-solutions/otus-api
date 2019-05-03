@@ -96,10 +96,10 @@ public class MonitoringResource {
 
   @GET
   @Secured
-  @Path("/laboratory/progress/labels")
+  @Path("/laboratory/progress/{center}/labels")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getExamFlagReportLabels() {
-    return new Response().buildSuccess(monitoringFacade.getExamFlagReportLabels()).toJson(ProgressReport.getGsonBuilder());
+  public String getExamFlagReportLabels(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getExamFlagReportLabels(center)).toJson(ProgressReport.getGsonBuilder());
   }
 
   @GET
