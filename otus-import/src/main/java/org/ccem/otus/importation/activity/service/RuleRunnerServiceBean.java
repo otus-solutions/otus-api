@@ -6,32 +6,34 @@ import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 
 import javax.inject.Inject;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class RuleRunnerServiceBean implements RuleRunnerService {
 
     @Inject
-    private NumericRuleValidatorService numericRuleValidatorService;
+    private IntegerRuleValidatorService integerRuleValidatorService;
+    @Inject
+    private DecimalRuleValidatorService decimalRuleValidatorService;
     @Inject
     private TextRuleValidatorService textRuleValidatorService;
     @Inject
     private TimeRuleValidatorService timeRuleValidatorService;
     @Inject
     private CheckboxRuleValidatorService checkboxRuleValidatorService;
-    @Inject
-    private CalendarRuleValidatorService calendarRuleValidatorService;
 
     @Override
     public boolean run(Rule rule, Optional<QuestionFill> ruleQuestionFill) {
         AnswerFill answer = ruleQuestionFill.get().getAnswer();
         switch (answer.getType()){
             case "IntegerQuestion" :
-            case "DecimalQuestion" :
             case "SingleSelectionQuestion" :
-            case "FileUploadQuestion" :
-            case "GridTextQuestion" :
-            case "GridIntegerQuestion" :
-                if(!numericRuleValidatorService.run(rule,answer)){
+                if(!integerRuleValidatorService.run(rule,answer)){
+                    return false;
+                }
+                break;
+            case "DecimalQuestion" :
+                if(!decimalRuleValidatorService.run(rule,answer)){
                     return false;
                 }
                 break;
@@ -43,6 +45,7 @@ public class RuleRunnerServiceBean implements RuleRunnerService {
                 }
                 break;
             case "TimeQuestion":
+            case "CalendarQuestion":
                 if(!timeRuleValidatorService.run(rule,answer)){
                     return false;
                 }
@@ -52,11 +55,7 @@ public class RuleRunnerServiceBean implements RuleRunnerService {
                     return false;
                 }
                 break;
-            case "CalendarQuestion":
-                if(!calendarRuleValidatorService.run(rule,answer)){
-                    return false;
-                }
-                break;
+
             default:
                 return false;
         }

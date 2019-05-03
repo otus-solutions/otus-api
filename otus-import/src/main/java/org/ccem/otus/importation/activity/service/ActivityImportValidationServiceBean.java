@@ -37,23 +37,27 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
         validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName("CREATED"));
         validateCategory(activityImportResultDTO, importActivity.getCategory().getName());
-
         if (importActivity.getMode().name().equals("PAPER")) {
             validatePaperInterviewer(activityImportResultDTO, importActivity.getLastStatusByName("INITIALIZED_OFFLINE"));
         }
 
         List<SurveyItem> itemContainer = importActivity.getSurveyForm().getSurveyTemplate().itemContainer;
+
         for (int i=0; i < itemContainer.size(); i++){
+
             String templateID = itemContainer.get(i).getTemplateID();
             String validOrigin = surveyJumpMap.getValidOrigin(templateID);
+
             Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
             if (validOrigin != null){
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
                 if(questionFill.isPresent()){
-                    AnswerFill answer = questionFill.get().getAnswer();
                     ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
                     for (SurveyJumpMap.AlternativeDestination alternativeDestination :questionAlternativeRoutes){
-                        routeIsValid(alternativeDestination,importActivity);
+                        if(routeIsValid(alternativeDestination,importActivity)){
+                            surveyJumpMap.setValidJump(templateID,alternativeDestination.getDestination());
+                            break;
+                        }
                     }
                 } else {
                     item.state = "IGNORED";
@@ -74,18 +78,25 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
     }
 
     private boolean routeIsValid(SurveyJumpMap.AlternativeDestination alternativeDestination, SurveyActivity importActivity){
+        boolean routeIsValid = false;
         for(RouteCondition routeCondition :alternativeDestination.getRouteConditions()){
-            List<Rule> rules = routeCondition.rules;
-            for(Rule rule : rules){
+            boolean rulesHaveBeenMet = true;
+            for(Rule rule : routeCondition.rules){
                 Optional<QuestionFill> ruleQuestionFill = importActivity.getFillContainer().getQuestionFill(rule.when);
                 if (ruleQuestionFill.isPresent()){
-                    ruleRunnerService.run(rule,ruleQuestionFill);
-
+                    boolean ruleWasMet = ruleRunnerService.run(rule,ruleQuestionFill);
+                    if(!ruleWasMet){
+                        rulesHaveBeenMet = false;
+                        break;
+                    }
                 }
             }
+            if (rulesHaveBeenMet){
+                routeIsValid = true;
+                break;
+            }
         }
-
-        return true;
+        return routeIsValid;
     }
 
 
