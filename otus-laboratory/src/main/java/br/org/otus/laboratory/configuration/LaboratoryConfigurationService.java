@@ -34,5 +34,4 @@ public interface LaboratoryConfigurationService {
   AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException;
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
-
 }

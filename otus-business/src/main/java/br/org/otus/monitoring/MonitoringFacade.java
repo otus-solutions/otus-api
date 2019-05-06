@@ -1,15 +1,13 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
-import org.ccem.otus.model.monitoring.MonitoringCenter;
-import org.ccem.otus.model.monitoring.MonitoringDataSourceResult;
-import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.monitoring.*;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.service.MonitoringService;
@@ -71,6 +69,14 @@ public class MonitoringFacade {
     }
   }
 
+  public ParticipantExamReportDto getParticipantExamsProgress(Long rn) {
+    try {
+      return monitoringService.getParticipantExams(rn);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
   public void setActivityApplicability(ActivityInapplicability activityInapplicability) {
     try {
       monitoringService.setActivityApplicability(activityInapplicability);
@@ -82,6 +88,22 @@ public class MonitoringFacade {
   public void deleteActivityApplicability(Long rn, String acronym) {
     try {
       monitoringService.deleteActivityApplicability(rn, acronym);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+   public void setExamApplicability(ExamInapplicability examInapplicability) {
+    try {
+      monitoringService.setExamInapplicability(examInapplicability);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void deleteExamInapplicability(ExamInapplicability examInapplicability) {
+     try {
+      monitoringService.deleteExamInapplicability(examInapplicability);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
