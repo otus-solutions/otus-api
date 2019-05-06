@@ -29,7 +29,7 @@ public class ExamStatusQueryBuilderTest {
 
     @Test
     public void getExamInapplicabilityQueryMethod_should_check_in() {
-        String expectedQuery = "[{\"$match\":{\"recruitmentNumber\":7016098.0}},{\"$addFields\":{\"allExams\":[\"CÁLCIO - URINA AMOSTRA ISOLADA\",\"CREATININA - URINA AMOSTRA ISOLADA\"]}},{\"$unwind\":\"$allExams\"},{\"$project\":{\"name\":\"$allExams\",\"quantity\":{\"$toInt\":\"0\"},\"examInapplicability\":[{\"$cond\":[{\"$eq\":[\"$name\",\"$allExams\"]},{\"observation\":\"$observation\"},null]}]}},{\"$group\":{\"_id\":{},\"participantExams\":{\"$push\":{\"name\":\"$name\",\"quantity\":\"$quantity\",\"doesNotApply\":{\"$arrayElemAt\":[\"$examInapplicability\",0.0]}}}}}]";
+        String expectedQuery = "[{\"$match\":{\"recruitmentNumber\":7016098.0}},{\"$group\":{\"_id\":\"\",\"inapplicabilityList\":{\"$push\":{\"name\":\"$name\",\"observation\":\"$observation\"}}}},{\"$addFields\":{\"allExams\":[\"CÁLCIO - URINA AMOSTRA ISOLADA\",\"CREATININA - URINA AMOSTRA ISOLADA\"]}},{\"$unwind\":\"$allExams\"},{\"$project\":{\"name\":\"$allExams\",\"quantity\":{\"$toInt\":\"0\"},\"examInapplicability\":{\"$filter\":{\"input\":\"$inapplicabilityList\",\"as\":\"inapplicability\",\"cond\":{\"$eq\":[\"$$inapplicability.name\",\"$allExams\"]}}}}},{\"$group\":{\"_id\":{},\"participantExams\":{\"$push\":{\"name\":\"$name\",\"quantity\":\"$quantity\",\"doesNotApply\":{\"$arrayElemAt\":[\"$examInapplicability\",0.0]}}}}}]";
         assertEquals(expectedQuery, new GsonBuilder().create().toJson(builder.getExamInapplicabilityQuery(RN,EXAM_NAME_LIST)));
      }
 }

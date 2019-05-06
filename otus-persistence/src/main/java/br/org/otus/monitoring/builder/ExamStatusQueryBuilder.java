@@ -32,6 +32,7 @@ public class ExamStatusQueryBuilder {
 
     public List<Bson> getExamInapplicabilityQuery(Long rn, List<String> examName){
         addMatchRecruitmentNumber(rn);
+        addGroupOfInapplicability();
         addAddFieldsAllExams(examName);
         addUnwindAllExams();
         addProjectObservation();
@@ -42,6 +43,20 @@ public class ExamStatusQueryBuilder {
 
     private void addMatchRecruitmentNumber(Long rn){
         pipeline.add(parseQuery("{$match:{\"recruitmentNumber\":"+rn+"}}"));
+    }
+
+    private void addGroupOfInapplicability() {
+        pipeline.add(parseQuery("{\n" +
+                "        \"$group\":{\n" +
+                "            \"_id\":\"\",\n" +
+                "            \"inapplicabilityList\":{\n" +
+                "                \"$push\":{\n" +
+                "                    \"name\":\"$name\",\n" +
+                "                    \"observation\":\"$observation\"\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }"));
     }
 
     private void addGroupDescriptorsNameAndId(){
@@ -155,10 +170,22 @@ public class ExamStatusQueryBuilder {
 
     private void addProjectObservation(){
         pipeline.add(parseQuery("{\n" +
-                "        $project:{\n" +
-                "            name: \"$allExams\",\n" +
-                "            quantity:{$toInt:\"0\"},\n" +
-                "            examInapplicability:[{$cond:[{$eq:[\"$name\",\"$allExams\"]},{observation:\"$observation\"},null]}]\n" +
+                "        \"$project\":{\n" +
+                "            \"name\":\"$allExams\",\n" +
+                "            \"quantity\":{\n" +
+                "                \"$toInt\":\"0\"\n" +
+                "            },\n" +
+                "            \"examInapplicability\": {\n" +
+                "                \"$filter\":{\n" +
+                "                    \"input\":\"$inapplicabilityList\",\n" +
+                "                    \"as\":\"inapplicability\",\n" +
+                "                    \"cond\":{\n" +
+                "                        \"$eq\":[\n" +
+                "                            \"$$inapplicability.name\",\n" +
+                "                            \"$allExams\"]\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            }\n" +
                 "        }\n" +
                 "    }"));
     }
