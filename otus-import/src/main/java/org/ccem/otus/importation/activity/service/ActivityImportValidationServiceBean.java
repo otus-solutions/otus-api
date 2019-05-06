@@ -51,7 +51,10 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
             Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
             if (validOrigin != null){
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
+                item.previous = validOrigin;
                 if(questionFill.isPresent()){
+                    item.state = "ANSWERED";
+                    importActivity.getNavigationTracker().items.set(i,item);
                     ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
                     for (SurveyJumpMap.AlternativeDestination alternativeDestination :questionAlternativeRoutes){
                         if(routeIsValid(alternativeDestination,importActivity)){
@@ -73,7 +76,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                 }
             }
         }
-
+        activityImportResultDTO.setSurveyActivity(importActivity);
         return activityImportResultDTO;
     }
 
