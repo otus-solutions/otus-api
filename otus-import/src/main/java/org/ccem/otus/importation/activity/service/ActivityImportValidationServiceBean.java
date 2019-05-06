@@ -46,25 +46,32 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         for (int i=0; i < itemContainer.size(); i++){
 
             String templateID = itemContainer.get(i).getTemplateID();
+            String questionType = itemContainer.get(i).objectType;
             String validOrigin = surveyJumpMap.getValidOrigin(templateID);
 
             Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
             if (validOrigin != null){
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
                 item.previous = validOrigin;
-                if(questionFill.isPresent()){
-                    item.state = "ANSWERED";
+                if(questionType.equals("TextItem")){
+                    item.state = "VISITED";
                     importActivity.getNavigationTracker().items.set(i,item);
-                    ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
-                    for (SurveyJumpMap.AlternativeDestination alternativeDestination :questionAlternativeRoutes){
-                        if(routeIsValid(alternativeDestination,importActivity)){
-                            surveyJumpMap.setValidJump(templateID,alternativeDestination.getDestination());
-                            break;
-                        }
-                    }
+                    surveyJumpMap.validateDefaultJump(templateID);
                 } else {
-                    item.state = "IGNORED";
-                    importActivity.getNavigationTracker().items.set(i,item);
+                    if (questionFill.isPresent()) {
+                        item.state = "ANSWERED";
+                        importActivity.getNavigationTracker().items.set(i, item);
+                        ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
+                        for (SurveyJumpMap.AlternativeDestination alternativeDestination : questionAlternativeRoutes) {
+                            if (routeIsValid(alternativeDestination, importActivity)) {
+                                surveyJumpMap.setValidJump(templateID, alternativeDestination.getDestination());
+                                break;
+                            }
+                        }
+                    } else {
+                        item.state = "IGNORED";
+                        importActivity.getNavigationTracker().items.set(i, item);
+                    }
                 }
             } else {
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
