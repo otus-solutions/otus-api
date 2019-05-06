@@ -1,24 +1,21 @@
 package br.org.otus.laboratory.configuration;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.exists;
-
+import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.configuration.aliquot.AliquotConfigurationQueryBuilder;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.exists;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 

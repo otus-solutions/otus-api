@@ -130,4 +130,16 @@ public class MonitoringResourceTest {
     monitoringResource.getDataToCSVOfOrphansByExam();
     verify(monitoringFacade, times(1)).getDataToCSVOfOrphansByExam();
   }
+
+  @Test
+  public void getExamFlagReport_should_invoke_getExamFlagReport_from_facade() {
+    monitoringResource.getExamFlagReport(CENTER);
+    verify(monitoringFacade, times(1)).getExamFlagReport(CENTER);
+  }
+
+  @Test
+  public void getExamFlagReportLabels_should_invoke_getExamFlagReportLabels_from_facade() {
+    monitoringResource.getExamFlagReportLabels(CENTER);
+    verify(monitoringFacade, times(1)).getExamFlagReportLabels(CENTER);
+  }
 }

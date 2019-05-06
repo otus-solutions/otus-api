@@ -11,7 +11,7 @@ public interface LaboratoryConfigurationDao {
   LaboratoryConfiguration find();
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
-  
+
   List<String> getAliquotsExams(List<String> aliquots);
 
   void persist(LaboratoryConfiguration laboratoryConfig);

@@ -1,10 +1,14 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.api.SurveyFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
+import org.ccem.otus.service.LaboratoryMonitoringService;
 import org.ccem.otus.service.MonitoringService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +18,14 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 public class MonitoringFacadeTest {
@@ -33,7 +44,19 @@ public class MonitoringFacadeTest {
   private MonitoringService monitoringService;
 
   @Mock
+  private LaboratoryMonitoringService laboratoryMonitoringService;
+
+  @Mock
+  private LaboratoryConfigurationService laboratoryConfigurationService;
+
+  @Mock
+  private ParticipantFacade participantFacade;
+
+  @Mock
   private LaboratoryProgressDTO laboratoryProgressDTO;
+
+  @Mock
+  private ProgressReport progressReport;
 
   @Test(expected = HttpResponseException.class)
   public void get_should_call_method_get() throws ValidationException {
@@ -193,5 +216,34 @@ public class MonitoringFacadeTest {
   public void getDataToCSVOfOrphansByExam_should_throw_HttpResponseException() throws DataNotFoundException {
     Mockito.when(monitoringService.getDataToCSVOfOrphansByExam()).thenThrow(DATA_NOT_FOUND_EXCEPTION);
     monitoringFacade.getDataToCSVOfOrphansByExam();
+  }
+
+  @Test
+  public void getExamFlagReport_should_call_laboratoryMonitoringService_with_possibleExams_and_centerRecruitmentNumbers() throws DataNotFoundException {
+    monitoringFacade.getExamFlagReport(CENTER);
+
+    Mockito.when(laboratoryConfigurationService.listPossibleExams(CENTER)).thenReturn(Arrays.asList());
+    Mockito.when(participantFacade.listCenterRecruitmentNumbers(CENTER)).thenReturn(new ArrayList<>());
+
+    verify(laboratoryMonitoringService, times(1)).getExamFlagReport(new LinkedList<>(), new ArrayList<>());
+  }
+
+
+  @Test(expected = HttpResponseException.class)
+  public void getExamFlagReport_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(laboratoryConfigurationService.listPossibleExams(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getExamFlagReport(CENTER);
+  }
+
+  @Test
+  public void getExamFlagReportLabels_should_call_laboratoryConfigurationService_with_center() throws DataNotFoundException {
+    monitoringFacade.getExamFlagReportLabels(CENTER);
+    verify(laboratoryConfigurationService, times(1)).listPossibleExams(CENTER);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getExamFlagReportLabels_should_throw_HttpResponseException() throws DataNotFoundException {
+    Mockito.when(laboratoryConfigurationService.listPossibleExams(CENTER)).thenThrow(DATA_NOT_FOUND_EXCEPTION);
+    monitoringFacade.getExamFlagReportLabels(CENTER);
   }
 }

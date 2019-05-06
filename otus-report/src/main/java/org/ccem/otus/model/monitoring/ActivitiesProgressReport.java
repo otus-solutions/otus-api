@@ -6,6 +6,7 @@ import org.ccem.otus.utils.LongAdapter;
 import java.util.*;
 
 public class ActivitiesProgressReport {
+  //todo: remove?
 
   private Long rn;
   private LinkedList<ActivityFlagReport> activities;

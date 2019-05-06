@@ -142,4 +142,11 @@ public class ParticipantServiceBeanTest {
 
   }
 
+  @Test
+  public void should() throws DataNotFoundException, ValidationException {
+    participantServiceBean.listCenterRecruitmentNumbers(ACRONYM);
+    Mockito.verify(participantDao, Mockito.times(1)).getCenterRns(ACRONYM);
+
+  }
+
 }
