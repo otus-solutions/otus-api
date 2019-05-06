@@ -66,8 +66,9 @@ public class SurveyJumpMap {
     }
 
     public void validateDefaultJump(String questionId){
-        if(this.jumpMap.get(this.jumpMap.get(questionId).defaultDestination).possibleOrigins.get(questionId) != null){
-            this.jumpMap.get(this.jumpMap.get(questionId).defaultDestination).possibleOrigins.put(questionId,true);
+        QuestionJumps questionJumps = this.jumpMap.get(this.jumpMap.get(questionId).defaultDestination);
+        if(questionJumps != null && questionJumps.possibleOrigins.get(questionId) != null){
+            questionJumps.possibleOrigins.put(questionId,true);
         }
     }
 
