@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.monitoring.*;
@@ -21,9 +22,15 @@ public interface MonitoringService {
 
     ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
+    ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException;
+
     void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
 
     void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;
+
+    void deleteExamInapplicability(ExamInapplicability applicability);
+
+    void setExamInapplicability(ExamInapplicability applicability);
 
     LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException;
 

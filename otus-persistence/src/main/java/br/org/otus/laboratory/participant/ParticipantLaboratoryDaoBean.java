@@ -105,7 +105,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
   @Override
   public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
-    
     return null;
   }
 
@@ -113,7 +112,5 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   public AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline) {
     return collection.aggregate(pipeline).allowDiskUse(true);
   }
-  
-  
 
 }

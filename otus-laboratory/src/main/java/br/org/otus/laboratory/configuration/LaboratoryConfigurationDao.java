@@ -1,6 +1,9 @@
 package br.org.otus.laboratory.configuration;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
+import com.mongodb.client.AggregateIterable;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
@@ -27,4 +30,9 @@ public interface LaboratoryConfigurationDao {
   Integer updateLastTubeInsertion(int newTubesQuantities);
 
   ArrayList listCenterAliquots(String center) throws DataNotFoundException;
+
+  List<String> getExamName(List<String> centerAliquots);
+
+  AggregateIterable<Document> aggregate(List<Bson> query);
+
 }
