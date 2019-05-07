@@ -22,183 +22,183 @@ import java.util.List;
 
 public class MonitoringFacade {
 
-    @Inject
-    private MonitoringService monitoringService;
+  @Inject
+  private MonitoringService monitoringService;
 
-    @Inject
-    private SurveyFacade surveyFacade;
+  @Inject
+  private SurveyFacade surveyFacade;
 
-    @Inject
-    private ParticipantFacade participantFacade;
+  @Inject
+  private ParticipantFacade participantFacade;
 
-    @Inject
-    private LaboratoryMonitoringService laboratoryMonitoringService;
+  @Inject
+  private LaboratoryMonitoringService laboratoryMonitoringService;
 
-    @Inject
-    private LaboratoryConfigurationService laboratoryConfigurationService;
+  @Inject
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
 
-    public List<MonitoringDataSourceResult> get(String acronym) {
-        try {
-            return monitoringService.get(acronym);
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public List<MonitoringDataSourceResult> get(String acronym) {
+    try {
+      return monitoringService.get(acronym);
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public List<String> listActivities() {
-        return surveyFacade.listAcronyms();
+  public List<String> listActivities() {
+    return surveyFacade.listAcronyms();
+  }
+
+  public List<MonitoringCenter> getMonitoringCenters() {
+    try {
+      return monitoringService.getMonitoringCenter();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public List<MonitoringCenter> getMonitoringCenters() {
-        try {
-            return monitoringService.getMonitoringCenter();
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public ProgressReport getActivitiesProgress() {
+    try {
+      return monitoringService.getActivitiesProgress();
+    } catch (Exception e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
+  }
 
-    public ProgressReport getActivitiesProgress() {
-        try {
-            return monitoringService.getActivitiesProgress();
-        } catch (Exception e) {
-            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
-        }
+
+  public ProgressReport getActivitiesProgress(String center) {
+    try {
+      return monitoringService.getActivitiesProgress(center);
+    } catch (Exception e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
+  }
 
-
-    public ProgressReport getActivitiesProgress(String center) {
-        try {
-            return monitoringService.getActivitiesProgress(center);
-        } catch (Exception e) {
-            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
-        }
+  public ArrayList<ParticipantActivityReportDto> getParticipantActivitiesProgress(Long rn) {
+    try {
+      return monitoringService.getParticipantActivities(rn);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public ArrayList<ParticipantActivityReportDto> getParticipantActivitiesProgress(Long rn) {
-        try {
-            return monitoringService.getParticipantActivities(rn);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void setActivityApplicability(ActivityInapplicability activityInapplicability) {
+    try {
+      monitoringService.setActivityApplicability(activityInapplicability);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public void setActivityApplicability(ActivityInapplicability activityInapplicability) {
-        try {
-            monitoringService.setActivityApplicability(activityInapplicability);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void deleteActivityApplicability(Long rn, String acronym) {
+    try {
+      monitoringService.deleteActivityApplicability(rn, acronym);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public void deleteActivityApplicability(Long rn, String acronym) {
-        try {
-            monitoringService.deleteActivityApplicability(rn, acronym);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  /* Laboratory Methods */
+
+  public ProgressReport getExamFlagReport(String center) {
+    ArrayList<Long> centerRecruitmentNumbers = participantFacade.listCenterRecruitmentNumbers(center);
+
+    try {
+      LinkedList<String> possibleExams = new LinkedList<String>(laboratoryConfigurationService.listPossibleExams(center));
+      return laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRecruitmentNumbers);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
+  }
 
-    /* Laboratory Methods */
-
-    public ProgressReport getExamFlagReport(String center) {
-        ArrayList<Long> centerRecruitmentNumbers = participantFacade.listCenterRecruitmentNumbers(center);
-
-        try {
-            LinkedList<String> possibleExams = new LinkedList<String>(laboratoryConfigurationService.listPossibleExams(center));
-            return laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRecruitmentNumbers);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build(e.getMessage()));
-        }
+  public LinkedList<String> getExamFlagReportLabels(String center) {
+    try {
+      return new LinkedList<>(laboratoryConfigurationService.listPossibleExams(center));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
+  }
 
-    public LinkedList<String> getExamFlagReportLabels(String center) {
-        try {
-            return new LinkedList<>(laboratoryConfigurationService.listPossibleExams(center));
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build(e.getMessage()));
-        }
+
+  public ParticipantExamReportDto getParticipantExamsProgress(Long rn) {
+    try {
+      return monitoringService.getParticipantExams(rn);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
 
-    public ParticipantExamReportDto getParticipantExamsProgress(Long rn) {
-        try {
-            return monitoringService.getParticipantExams(rn);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void setExamApplicability(ExamInapplicability examInapplicability) {
+    try {
+      monitoringService.setExamInapplicability(examInapplicability);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-
-    public void setExamApplicability(ExamInapplicability examInapplicability) {
-        try {
-            monitoringService.setExamInapplicability(examInapplicability);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void deleteExamInapplicability(ExamInapplicability examInapplicability) {
+    try {
+      monitoringService.deleteExamInapplicability(examInapplicability);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public void deleteExamInapplicability(ExamInapplicability examInapplicability) {
-        try {
-            monitoringService.deleteExamInapplicability(examInapplicability);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public LaboratoryProgressDTO getDataOrphanByExams() {
+    try {
+      return monitoringService.getDataOrphanByExams();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
+  }
 
-    public LaboratoryProgressDTO getDataOrphanByExams() {
-        try {
-            return monitoringService.getDataOrphanByExams();
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
+  public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) {
+    try {
+      return monitoringService.getDataQuantitativeByTypeOfAliquots(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
+  }
 
-    public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) {
-        try {
-            return monitoringService.getDataQuantitativeByTypeOfAliquots(center);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
+  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) {
+    try {
+      return monitoringService.getDataOfPendingResultsByAliquot(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
+  }
 
-    public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) {
-        try {
-            return monitoringService.getDataOfPendingResultsByAliquot(center);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
+  public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) {
+    try {
+      return monitoringService.getDataOfStorageByAliquot(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
+  }
 
-    public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) {
-        try {
-            return monitoringService.getDataOfStorageByAliquot(center);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
+  public LaboratoryProgressDTO getDataByExam(String center) {
+    try {
+      return monitoringService.getDataByExam(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
+  }
 
-    public LaboratoryProgressDTO getDataByExam(String center) {
-        try {
-            return monitoringService.getDataByExam(center);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
+  public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) {
+    try {
+      return monitoringService.getDataToCSVOfPendingResultsByAliquots(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
+  }
 
-    public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) {
-        try {
-            return monitoringService.getDataToCSVOfPendingResultsByAliquots(center);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
+  public Object getDataToCSVOfOrphansByExam() {
+    try {
+      return monitoringService.getDataToCSVOfOrphansByExam();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
     }
-
-    public Object getDataToCSVOfOrphansByExam() {
-        try {
-            return monitoringService.getDataToCSVOfOrphansByExam();
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build());
-        }
-    }
+  }
 }

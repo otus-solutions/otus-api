@@ -18,79 +18,79 @@ import java.util.*;
 @Stateless
 public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurationService {
 
-    @Inject
-    private LaboratoryConfigurationDao laboratoryConfigurationDao;
+  @Inject
+  private LaboratoryConfigurationDao laboratoryConfigurationDao;
 
-    private LaboratoryConfiguration laboratoryConfiguration;
+  private LaboratoryConfiguration laboratoryConfiguration;
 
-    @PostConstruct
-    public void loadLaboratoryConfiguration() {
-        this.laboratoryConfiguration = this.laboratoryConfigurationDao.find();
+  @PostConstruct
+  public void loadLaboratoryConfiguration() {
+    this.laboratoryConfiguration = this.laboratoryConfigurationDao.find();
+  }
+
+  @Override
+  public Set<TubeDefinition> getDefaultTubeSet() {
+    return this.laboratoryConfiguration.getCollectGroupConfiguration().getDefaultCollectGroupDescriptor().getTubes();
+  }
+
+  @Override
+  public Set<TubeDefinition> getTubeSetByGroupName(String groupName) {
+    try {
+      return this.laboratoryConfiguration.getCollectGroupConfiguration().getCollectGroupByName(groupName).getTubes();
+    } catch (NoSuchElementException e) {
+      return new HashSet<>();
     }
+  }
 
-    @Override
-    public Set<TubeDefinition> getDefaultTubeSet() {
-        return this.laboratoryConfiguration.getCollectGroupConfiguration().getDefaultCollectGroupDescriptor().getTubes();
-    }
+  @Override
+  public List<LabelReference> getLabelOrderByName(String orderName) {
+    return laboratoryConfiguration.getLabelPrintConfiguration().getOrders().get(orderName);
+  }
 
-    @Override
-    public Set<TubeDefinition> getTubeSetByGroupName(String groupName) {
-        try {
-            return this.laboratoryConfiguration.getCollectGroupConfiguration().getCollectGroupByName(groupName).getTubes();
-        } catch (NoSuchElementException e) {
-            return new HashSet<>();
-        }
-    }
+  @Override
+  public List<String> generateCodes(TubeSeed seed) {
+    Integer startingPoint = this.laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount());
+    this.laboratoryConfiguration.getCodeConfiguration().setLastInsertion(startingPoint + seed.getTubeCount());
+    return this.laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint);
+  }
 
-    @Override
-    public List<LabelReference> getLabelOrderByName(String orderName) {
-        return laboratoryConfiguration.getLabelPrintConfiguration().getOrders().get(orderName);
-    }
+  public LaboratoryConfiguration getLaboratoryConfiguration() {
+    return laboratoryConfiguration;
+  }
 
-    @Override
-    public List<String> generateCodes(TubeSeed seed) {
-        Integer startingPoint = this.laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount());
-        this.laboratoryConfiguration.getCodeConfiguration().setLastInsertion(startingPoint + seed.getTubeCount());
-        return this.laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint);
-    }
+  @Override
+  public AliquotConfiguration getAliquotConfiguration() {
+    return laboratoryConfiguration.getAliquotConfiguration();
+  }
 
-    public LaboratoryConfiguration getLaboratoryConfiguration() {
-        return laboratoryConfiguration;
-    }
+  @Override
+  public List<AliquoteDescriptor> getAliquotDescriptors() {
+    return laboratoryConfiguration.getAliquotConfiguration().getAliquotDescriptors();
+  }
 
-    @Override
-    public AliquotConfiguration getAliquotConfiguration() {
-        return laboratoryConfiguration.getAliquotConfiguration();
-    }
+  @Override
+  public List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException {
+    AliquotCenterDescriptors first = laboratoryConfiguration.getAliquotConfiguration().getAliquotCenterDescriptors().stream()
+        .filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center)).findFirst().orElseThrow(() -> new DataNotFoundException("FieldCenter not found"));
+    return first.getAllCenterAliquots();
+  }
 
-    @Override
-    public List<AliquoteDescriptor> getAliquotDescriptors() {
-        return laboratoryConfiguration.getAliquotConfiguration().getAliquotDescriptors();
-    }
+  @Override
+  public AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException {
+    AliquoteDescriptor aliquotByName = getAliquotDescriptors().stream().filter(aliquoteDescriptor -> aliquoteDescriptor.getName().equals(name)).findFirst()
+        .orElseThrow(() -> new DataNotFoundException("Any descriptor found for \"" + name + "\""));
+    return aliquotByName;
+  }
 
-    @Override
-    public List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException {
-        AliquotCenterDescriptors first = laboratoryConfiguration.getAliquotConfiguration().getAliquotCenterDescriptors().stream()
-                .filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center)).findFirst().orElseThrow(() -> new DataNotFoundException("FieldCenter not found"));
-        return first.getAllCenterAliquots();
-    }
+  @Override
+  public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
+    return laboratoryConfigurationDao.getAliquotExamCorrelation();
+  }
 
-    @Override
-    public AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException {
-        AliquoteDescriptor aliquotByName = getAliquotDescriptors().stream().filter(aliquoteDescriptor -> aliquoteDescriptor.getName().equals(name)).findFirst()
-                .orElseThrow(() -> new DataNotFoundException("Any descriptor found for \"" + name + "\""));
-        return aliquotByName;
-    }
-
-    @Override
-    public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
-        return laboratoryConfigurationDao.getAliquotExamCorrelation();
-    }
-
-    @Override
-    public List<String> listPossibleExams(String center) throws DataNotFoundException {
-        ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(center);
-        return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
-    }
+  @Override
+  public List<String> listPossibleExams(String center) throws DataNotFoundException {
+    ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(center);
+    return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
+  }
 
 }
