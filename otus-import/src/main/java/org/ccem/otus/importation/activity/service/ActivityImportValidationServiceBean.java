@@ -53,7 +53,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
             if (validOrigin != null){
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
                 item.previous = validOrigin;
-                if(questionType.equals("TextItem")){
+                if(questionType.equals("TextItem") || questionType.equals("ImageItem")){
                     item.state = "VISITED";
                     importActivity.getNavigationTracker().items.set(i,item);
                     surveyJumpMap.validateDefaultJump(templateID);
