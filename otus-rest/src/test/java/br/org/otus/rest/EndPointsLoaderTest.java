@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import br.org.otus.importation.ActivityImportationResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -40,6 +41,8 @@ import br.org.otus.user.UserResource;
 public class EndPointsLoaderTest {
   @InjectMocks
   private EndPointsLoader endPointerLoader;
+  @Mock
+  private ActivityImportationResource activityImportationResource;
   @Mock
   private MonitoringResource monitoringResource;
   @Mock
@@ -93,6 +96,7 @@ public class EndPointsLoaderTest {
   public void getClassesMetods_should_check_the_presence_of_classes_within_the_list() {
     Set<Class<?>> resourcesClasses = endPointerLoader.getClasses();
     assertTrue(endPointerLoader.getClasses() instanceof HashSet);
+    assertTrue(resourcesClasses.contains(ActivityImportationResource.class));
     assertTrue(resourcesClasses.contains(MonitoringResource.class));
     assertTrue(resourcesClasses.contains(InstallerResource.class));
     assertTrue(resourcesClasses.contains(AuthenticationResource.class));
@@ -122,6 +126,7 @@ public class EndPointsLoaderTest {
   @Test
   public void getSingletons() {
     Set<Object> resourcesSingletons = endPointerLoader.getSingletons();
+    assertTrue(resourcesSingletons.contains(activityImportationResource));
     assertTrue(resourcesSingletons.contains(monitoringResource));
     assertTrue(resourcesSingletons.contains(installerResource));
     assertTrue(resourcesSingletons.contains(authenticationResource));
