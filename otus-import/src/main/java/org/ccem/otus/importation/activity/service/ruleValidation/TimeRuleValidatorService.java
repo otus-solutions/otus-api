@@ -4,5 +4,5 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 
 public interface TimeRuleValidatorService {
-    boolean run(Rule rule, AnswerFill answer);
+    boolean run(String type, Rule rule, AnswerFill answer);
 }

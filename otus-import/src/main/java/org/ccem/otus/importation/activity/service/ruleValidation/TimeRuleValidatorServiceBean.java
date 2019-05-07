@@ -5,13 +5,29 @@ import org.ccem.otus.model.survey.activity.filling.answer.ImmutableDateAnswer;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
     @Override
-    public boolean run(Rule rule, AnswerFill answer) {
-        ImmutableDate immutableDateRuleAnswer = new ImmutableDate(rule.answer);
-        ImmutableDateAnswer immutableDateAnswer = (ImmutableDateAnswer) answer;
+    public boolean run(String type, Rule rule, AnswerFill answer) {
+        ImmutableDate immutableDateRuleAnswer;
+        ImmutableDateAnswer immutableDateAnswer;
+
+        try {
+            if (type.equals("CalendarQuestion")){
+                String[] split = rule.answer.split("/");
+                immutableDateRuleAnswer = new ImmutableDate(LocalDate.of(Integer.parseInt(split[2]),Integer.parseInt(split[1]),Integer.parseInt(split[0])));
+                immutableDateAnswer = (ImmutableDateAnswer) answer;
+            } else {
+                String[] split = rule.answer.split(":");
+                immutableDateRuleAnswer = new ImmutableDate("0001-01-01 ".concat(split[0]).concat(":").concat(split[1]).concat(":00.000"));
+                immutableDateAnswer = (ImmutableDateAnswer) answer;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
         switch (rule.operator){
             case "equal":
                 if(!isEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){

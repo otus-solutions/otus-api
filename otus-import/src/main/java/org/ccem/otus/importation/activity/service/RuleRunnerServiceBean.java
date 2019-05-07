@@ -46,7 +46,7 @@ public class RuleRunnerServiceBean implements RuleRunnerService {
                 break;
             case "TimeQuestion":
             case "CalendarQuestion":
-                if(!timeRuleValidatorService.run(rule,answer)){
+                if(!timeRuleValidatorService.run(answer.getType(),rule,answer)){
                     return false;
                 }
                 break;
