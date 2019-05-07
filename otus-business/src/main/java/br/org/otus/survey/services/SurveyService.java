@@ -28,4 +28,6 @@ public interface SurveyService {
   List<Integer> listSurveyVersions(String acronym);
 
   List<String> listAcronyms();
+
+  void createSurveyJumpMap(SurveyForm surveyForm);
 }

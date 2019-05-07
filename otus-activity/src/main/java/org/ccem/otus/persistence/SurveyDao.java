@@ -3,6 +3,7 @@ package org.ccem.otus.persistence;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.ArrayList;
@@ -35,4 +36,6 @@ public interface SurveyDao {
     List<String> listAcronyms();
 
     List<String> aggregate(ArrayList<Document> query);
+
+    SurveyJumpMap createJumpMap(String acronym, Integer version);
 }

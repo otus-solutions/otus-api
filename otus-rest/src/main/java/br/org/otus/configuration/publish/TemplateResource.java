@@ -33,9 +33,7 @@ public class TemplateResource {
 	public String post(@Context HttpServletRequest request, String template) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-
 		SurveyForm publishedSurveyTemplate = surveyFacade.publishSurveyTemplate(SurveyTemplate.deserialize(template), userEmail);
 		return new Response().setData(publishedSurveyTemplate).toJson();
 	}
-
 }

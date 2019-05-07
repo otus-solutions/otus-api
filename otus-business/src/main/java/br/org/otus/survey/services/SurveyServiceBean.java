@@ -11,7 +11,9 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.persistence.SurveyDao;
+import org.ccem.otus.persistence.SurveyJumpMapDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
@@ -21,6 +23,8 @@ public class SurveyServiceBean implements SurveyService {
 
   @Inject
   private SurveyDao surveyDao;
+  @Inject
+  private SurveyJumpMapDao surveyJumpMapDao;
   @Inject
   private SurveyValidatorService surveyValidatorService;
 
@@ -108,6 +112,15 @@ public class SurveyServiceBean implements SurveyService {
   public List<String> listAcronyms() {
     List<String> surveys = surveyDao.listAcronyms();
     return surveys;
+  }
+
+  @Override
+  public void createSurveyJumpMap(SurveyForm surveyForm) {
+    SurveyJumpMap surveyJumpMap = surveyDao.createJumpMap(surveyForm.getSurveyTemplate().identity.acronym,surveyForm.getVersion());
+    surveyJumpMap.setSurveyOid(surveyForm.getSurveyID());
+    surveyJumpMap.setSurveyAcronym(surveyForm.getSurveyTemplate().identity.acronym);
+    surveyJumpMap.setSurveyVersion(surveyForm.getVersion());
+    surveyJumpMapDao.persist(surveyJumpMap);
   }
 
   private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
