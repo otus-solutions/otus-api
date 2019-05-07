@@ -78,7 +78,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                 if(questionFill.isPresent()){
                     activityImportResultDTO.setQuestionFillError(templateID,false);
                 } else {
-                    item.state = "SKIPED";
+                    item.state = "SKIPPED";
                     importActivity.getNavigationTracker().items.set(i,item);
                 }
             }
