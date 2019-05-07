@@ -25,39 +25,43 @@ public class RuleRunnerServiceBean implements RuleRunnerService {
     @Override
     public boolean run(Rule rule, Optional<QuestionFill> ruleQuestionFill) {
         AnswerFill answer = ruleQuestionFill.get().getAnswer();
-        switch (answer.getType()){
-            case "IntegerQuestion" :
-            case "SingleSelectionQuestion" :
-                if(!integerRuleValidatorService.run(rule,answer)){
-                    return false;
-                }
-                break;
-            case "DecimalQuestion" :
-                if(!decimalRuleValidatorService.run(rule,answer)){
-                    return false;
-                }
-                break;
-            case "TextQuestion":
-            case "EmailQuestion":
-            case "AutocompleteQuestion":
-                if(!textRuleValidatorService.run(rule,answer)){
-                    return false;
-                }
-                break;
-            case "TimeQuestion":
-            case "CalendarQuestion":
-                if(!timeRuleValidatorService.run(answer.getType(),rule,answer)){
-                    return false;
-                }
-                break;
-            case "CheckboxQuestion":
-                if(!checkboxRuleValidatorService.run(rule,answer)){
-                    return false;
-                }
-                break;
+        if(rule.isMetadata && !integerRuleValidatorService.run(rule,answer)){
+            return false;
+        } else {
+            switch (answer.getType()){
+                case "IntegerQuestion" :
+                case "SingleSelectionQuestion" :
+                    if(!integerRuleValidatorService.run(rule,answer)){
+                        return false;
+                    }
+                    break;
+                case "DecimalQuestion" :
+                    if(!decimalRuleValidatorService.run(rule,answer)){
+                        return false;
+                    }
+                    break;
+                case "TextQuestion":
+                case "EmailQuestion":
+                case "AutocompleteQuestion":
+                    if(!textRuleValidatorService.run(rule,answer)){
+                        return false;
+                    }
+                    break;
+                case "TimeQuestion":
+                case "CalendarQuestion":
+                    if(!timeRuleValidatorService.run(answer.getType(),rule,answer)){
+                        return false;
+                    }
+                    break;
+                case "CheckboxQuestion":
+                    if(!checkboxRuleValidatorService.run(rule,answer)){
+                        return false;
+                    }
+                    break;
 
-            default:
-                return false;
+                default:
+                    return false;
+            }
         }
         return true;
     }
