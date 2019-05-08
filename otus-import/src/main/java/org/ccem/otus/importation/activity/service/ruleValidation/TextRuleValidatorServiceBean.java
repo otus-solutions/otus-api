@@ -26,7 +26,7 @@ public class TextRuleValidatorServiceBean implements TextRuleValidatorService {
                 }
                 break;
         }
-        return false;
+        return true;
     }
 
     private boolean contains(String textRuleAnswer, String answer) {
