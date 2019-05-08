@@ -2,6 +2,7 @@ package org.ccem.otus.importation.activity.service.ruleValidation;
 
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
+import org.ccem.otus.model.survey.activity.filling.answer.TextAnswer;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 
 public class IntegerRuleValidatorServiceBean implements IntegerRuleValidatorService {
@@ -9,35 +10,40 @@ public class IntegerRuleValidatorServiceBean implements IntegerRuleValidatorServ
     @Override
     public boolean run(Rule rule, AnswerFill answer) {
         Long integerRuleAnswer = Long.parseLong(rule.answer);
-        IntegerAnswer integerAnswer = (IntegerAnswer) answer;
+        Long longAnswer;
+        if (answer.getType().equals("SingleSelectionQuestion")){
+            longAnswer = Long.parseLong(((TextAnswer) answer).getValue());
+        } else {
+            longAnswer = ((IntegerAnswer) answer).getValue();
+        }
         switch (rule.operator){
             case "equal":
-                if(!isEqual(integerRuleAnswer, integerAnswer.getValue())){
+                if(!isEqual(integerRuleAnswer, longAnswer)){
                     return false;
                 }
                 break;
             case "notEqual":
-                if(isEqual(integerRuleAnswer, integerAnswer.getValue())){
+                if(isEqual(integerRuleAnswer, longAnswer)){
                     return false;
                 }
                 break;
             case "greater":
-                if(!isGreater(integerRuleAnswer, integerAnswer.getValue())){
+                if(!isGreater(integerRuleAnswer, longAnswer)){
                     return false;
                 }
                 break;
             case "greaterEqual":
-                if(!isGreaterEqual(integerRuleAnswer, integerAnswer.getValue())){
+                if(!isGreaterEqual(integerRuleAnswer, longAnswer)){
                     return false;
                 }
                 break;
             case "lower":
-                if(!isLower(integerRuleAnswer, integerAnswer.getValue())){
+                if(!isLower(integerRuleAnswer, longAnswer)){
                     return false;
                 }
                 break;
             case "lowerEqual":
-                if(!isLowerEqual(integerRuleAnswer, integerAnswer.getValue())){
+                if(!isLowerEqual(integerRuleAnswer, longAnswer)){
                     return false;
                 }
                 break;

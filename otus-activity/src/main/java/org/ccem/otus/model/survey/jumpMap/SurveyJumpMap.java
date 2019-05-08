@@ -5,9 +5,8 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.navigation.route.RouteCondition;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class SurveyJumpMap {
     private ObjectId surveyOid;
@@ -23,13 +22,18 @@ public class SurveyJumpMap {
 
         public String getValidOrigin() {
             String validOrigin = null;
-            Iterator it = possibleOrigins.entrySet().iterator();
-            while (it.hasNext()) {
-                HashMap.Entry pair = (HashMap.Entry)it.next();
-                if((Boolean) pair.getValue() == true) {
-                    validOrigin = (String) pair.getKey();
-                }
+
+            Map.Entry<String, Boolean> it = possibleOrigins
+                    .entrySet()
+                    .stream()
+                    .filter((map)-> map.getValue().equals(true))
+                    .findFirst()
+                    .orElse(null);
+
+            if(it != null){
+                validOrigin = it.getKey();
             }
+
             return validOrigin;
         }
     }
