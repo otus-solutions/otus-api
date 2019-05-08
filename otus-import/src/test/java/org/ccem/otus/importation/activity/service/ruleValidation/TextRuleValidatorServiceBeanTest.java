@@ -61,15 +61,15 @@ public class TextRuleValidatorServiceBeanTest {
     }
 
     @Test
-    public void run_method_with_greaterCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "greater";
+    public void run_method_with_containsCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+        rule.operator = "contains";
         rule.answer = "Otu";
         assertTrue(textRuleValidatorServiceBean.run(rule, answer));
     }
 
     @Test
-    public void run_method_with_greaterCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "greater";
+    public void run_method_with_containsCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+        rule.operator = "contains";
         rule.answer = "otu";
         assertFalse(textRuleValidatorServiceBean.run(rule, answer));
     }
