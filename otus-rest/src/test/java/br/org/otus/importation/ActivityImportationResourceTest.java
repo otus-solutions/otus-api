@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 public class ActivityImportationResourceTest {
     private static final String ACRONYM = "ACTA";
     private static final int VERSION = 1;
-    private String surveyActivities = "{\"objectType\" : \"Activity\",\"surveyForm\" : {\"sender\" : \"\"," +
+    private static final String IMPORT_ACTIVITY_JSON = "{\"objectType\" : \"Activity\",\"surveyForm\" : {\"sender\" : \"\"," +
             "\"sendingDate\" :\"\",\"objectType\" : \"SurveyForm\",\"surveyFormType\" : \"FORM_INTERVIEW\"}}";
 
     @InjectMocks
@@ -26,7 +26,7 @@ public class ActivityImportationResourceTest {
 
     @Test
     public void importActivities_method_should_invoke_importActivities_of_activityImportationFacade() {
-        activityImportationResource.importActivities(surveyActivities,ACRONYM,VERSION);
+        activityImportationResource.importActivities(IMPORT_ACTIVITY_JSON,ACRONYM,VERSION);
         verify(activityImportationFacade, times(1)).importActivities(Mockito.anyString(),Mockito.anyInt(),Mockito.anyObject());
     }
 }
