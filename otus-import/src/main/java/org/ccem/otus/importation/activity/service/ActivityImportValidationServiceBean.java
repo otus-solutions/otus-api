@@ -1,6 +1,7 @@
 package org.ccem.otus.importation.activity.service;
 
 import br.org.otus.persistence.UserDao;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.ActivityImportResultDTO;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
@@ -32,7 +33,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
     private RuleRunnerService ruleRunnerService;
 
     @Override
-    public ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap,SurveyActivity importActivity) {
+    public ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap,SurveyActivity importActivity) throws DataNotFoundException {
         ActivityImportResultDTO activityImportResultDTO = new ActivityImportResultDTO();
         validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
         validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName("CREATED"));
@@ -87,7 +88,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         return activityImportResultDTO;
     }
 
-    private boolean routeIsValid(SurveyJumpMap.AlternativeDestination alternativeDestination, SurveyActivity importActivity){
+    private boolean routeIsValid(SurveyJumpMap.AlternativeDestination alternativeDestination, SurveyActivity importActivity) throws DataNotFoundException {
         boolean routeIsValid = false;
         for(RouteCondition routeCondition :alternativeDestination.getRouteConditions()){
             boolean rulesHaveBeenMet = true;

@@ -1,5 +1,6 @@
 package org.ccem.otus.importation.activity.service;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.service.ruleValidation.*;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
@@ -23,7 +24,7 @@ public class RuleRunnerServiceBean implements RuleRunnerService {
     private CheckboxRuleValidatorService checkboxRuleValidatorService;
 
     @Override
-    public boolean run(Rule rule, Optional<QuestionFill> ruleQuestionFill) {
+    public boolean run(Rule rule, Optional<QuestionFill> ruleQuestionFill) throws DataNotFoundException {
         AnswerFill answer = ruleQuestionFill.get().getAnswer();
         if(rule.isMetadata && !integerRuleValidatorService.run(rule,answer)){
             return false;
