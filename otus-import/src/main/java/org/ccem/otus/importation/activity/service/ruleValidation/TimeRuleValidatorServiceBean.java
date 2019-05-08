@@ -1,5 +1,6 @@
 package org.ccem.otus.importation.activity.service.ruleValidation;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.ImmutableDateAnswer;
 import org.ccem.otus.survey.template.navigation.route.Rule;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
     @Override
-    public boolean run(String type, Rule rule, AnswerFill answer) {
+    public boolean run(String type, Rule rule, AnswerFill answer) throws DataNotFoundException {
         ImmutableDate immutableDateRuleAnswer;
         ImmutableDateAnswer immutableDateAnswer;
 
@@ -59,6 +60,8 @@ public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
                     return false;
                 }
                 break;
+            default:
+                throw new DataNotFoundException(new Throwable("Rule operator {" + rule.operator + "} for "+ answer.getType() +" not found."));
         }
         return true;
     }

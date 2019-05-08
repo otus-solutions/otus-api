@@ -1,5 +1,6 @@
 package org.ccem.otus.importation.activity.service.ruleValidation;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswerOption;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class CheckboxRuleValidatorServiceBean implements CheckboxRuleValidatorService {
     @Override
-    public boolean run(Rule rule, AnswerFill answer) {
+    public boolean run(Rule rule, AnswerFill answer) throws DataNotFoundException {
         String checkboxRuleAnswer = rule.answer;
         CheckboxAnswer checkboxAnswer = (CheckboxAnswer) answer;
         switch (rule.operator){
@@ -40,6 +41,8 @@ public class CheckboxRuleValidatorServiceBean implements CheckboxRuleValidatorSe
                     return false;
                 }
                 break;
+            default:
+                throw new DataNotFoundException(new Throwable("Rule operator {" + rule.operator + "} for "+ answer.getType() +" not found."));
         }
         return true;
     }
