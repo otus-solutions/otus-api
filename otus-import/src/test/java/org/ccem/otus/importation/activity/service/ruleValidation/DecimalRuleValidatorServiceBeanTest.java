@@ -19,8 +19,6 @@ import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 @RunWith(PowerMockRunner.class)
 public class DecimalRuleValidatorServiceBeanTest {
-
-
     private DecimalRuleValidatorServiceBean decimalRuleValidatorServiceBean = new DecimalRuleValidatorServiceBean();
 
     @Spy
@@ -39,7 +37,6 @@ public class DecimalRuleValidatorServiceBeanTest {
         decimalAnswerValues.add(answer);
         setInternalState(answer, "objectType", "AnswerFill");
         setInternalState(answer, "type", "DecimalQuestion");
-
     }
 
     @Test
@@ -75,5 +72,54 @@ public class DecimalRuleValidatorServiceBeanTest {
         rule.operator = "greater";
         rule.answer = String.valueOf(0.9);
         assertTrue(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_greaterCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "greater";
+        rule.answer = String.valueOf(1.1);
+        assertFalse(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_greaterEqualCase_should_validate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "greaterEqual";
+        rule.answer = String.valueOf(1.0);
+        assertTrue(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_greaterEqualCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "greaterEqual";
+        rule.answer = String.valueOf(1.1);
+        assertFalse(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_lowerCase_should_validate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "lower";
+        rule.answer = String.valueOf(1.1);
+        assertTrue(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_lowerCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "lower";
+        rule.answer = String.valueOf(0.9);
+        assertFalse(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_lowerEqualCase_should_validate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "lowerEqual";
+        rule.answer = String.valueOf(1.0);
+        assertTrue(decimalRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_lowerEqualCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() {
+        rule.operator = "lowerEqual";
+        rule.answer = String.valueOf(0.9);
+        assertFalse(decimalRuleValidatorServiceBean.run(rule, answer));
     }
 }
