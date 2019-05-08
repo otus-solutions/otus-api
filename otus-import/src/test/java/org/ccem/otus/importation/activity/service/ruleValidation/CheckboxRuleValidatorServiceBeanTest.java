@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.reflect.Whitebox.setInternalState;
 
 @RunWith(PowerMockRunner.class)
@@ -88,7 +89,7 @@ public class CheckboxRuleValidatorServiceBeanTest {
         assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
     }
 
-    @Test
+        @Test
     public void run_method_should_deliver_positive_results_in_the_event_that_minSelected_has_any_items_on_the_list() throws DataNotFoundException {
         rule.operator = "minSelected";
         rule.answer = "1";
@@ -114,5 +115,11 @@ public class CheckboxRuleValidatorServiceBeanTest {
         rule.operator = "maxSelected";
         rule.answer = String.valueOf(0);
         assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test(expected = DataNotFoundException.class)
+    public void run_method_with_invalidCase_should_throws_DataNotFoundException() throws DataNotFoundException {
+        rule.operator = "anything";
+        checkboxRuleValidatorServiceBean.run(rule, answer);
     }
 }

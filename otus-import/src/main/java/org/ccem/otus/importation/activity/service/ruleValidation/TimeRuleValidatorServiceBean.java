@@ -17,7 +17,7 @@ public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
 
         try {
             if (type.equals("CalendarQuestion")){
-                String[] split = rule.answer.split("/");
+                String[] split = rule.answer.split("[-/]");
                 immutableDateRuleAnswer = new ImmutableDate(LocalDate.of(Integer.parseInt(split[2]),Integer.parseInt(split[1]),Integer.parseInt(split[0])));
                 immutableDateAnswer = (ImmutableDateAnswer) answer;
             } else {

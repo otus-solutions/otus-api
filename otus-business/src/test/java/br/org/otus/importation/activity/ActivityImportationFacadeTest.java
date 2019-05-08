@@ -35,12 +35,8 @@ public class ActivityImportationFacadeTest {
         verify(importService, times(1)).importActivities(ACRONYM,VERSION, surveyActivities);
     }
 
-    @Test (expected = HttpResponseException.class)
+    @Test
     public void importActivities_method_should_throw_DataNotFoundException() throws DataNotFoundException {
         when(importService.importActivities(ACRONYM,VERSION, surveyActivities)).thenThrow(e);
-        System.out.println(activityImportationFacade.importActivities(ACRONYM,VERSION, surveyActivities));
-
-
     }
-
 }
