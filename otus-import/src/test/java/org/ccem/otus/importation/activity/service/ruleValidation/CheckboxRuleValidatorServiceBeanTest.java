@@ -1,21 +1,14 @@
 package org.ccem.otus.importation.activity.service.ruleValidation;
 
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswerOption;
 import org.ccem.otus.survey.template.navigation.route.Rule;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.omg.CORBA.PolicyError;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +26,7 @@ public class CheckboxRuleValidatorServiceBeanTest {
     private CheckboxAnswer answer = new CheckboxAnswer();
     @Spy
     private CheckboxAnswerOption checkboxAnswerOption = new CheckboxAnswerOption();
-    private List<CheckboxAnswerOption> checkboxAnswerOptions = new ArrayList();
+    private List<CheckboxAnswerOption> checkboxAnswerValues = new ArrayList();
     private Rule rule;
 
     @Before
@@ -45,10 +38,10 @@ public class CheckboxRuleValidatorServiceBeanTest {
         rule.isMetadata = false;
         setInternalState(checkboxAnswerOption, "option", "B");
         setInternalState(checkboxAnswerOption, "state", true);
-        checkboxAnswerOptions.add(checkboxAnswerOption);
+        checkboxAnswerValues.add(checkboxAnswerOption);
         setInternalState(answer, "objectType", "AnswerFill");
         setInternalState(answer, "type", "CheckboxQuestion");
-        setInternalState(answer, "value", checkboxAnswerOptions);
+        setInternalState(answer, "value", checkboxAnswerValues);
     }
 
     @Test
