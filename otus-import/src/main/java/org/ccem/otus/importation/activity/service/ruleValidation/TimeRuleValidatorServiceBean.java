@@ -22,7 +22,7 @@ public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
                 immutableDateAnswer = (ImmutableDateAnswer) answer;
             } else {
                 String[] split = rule.answer.split(":");
-                immutableDateRuleAnswer = new ImmutableDate("0001-01-01 ".concat(split[0]).concat(":").concat(split[1]).concat(":00.000"));
+                immutableDateRuleAnswer = new ImmutableDate("1970-01-01 ".concat(split[0]).concat(":").concat(split[1]).concat(":00.000"));
                 immutableDateAnswer = (ImmutableDateAnswer) answer;
             }
         } catch (Exception e) {

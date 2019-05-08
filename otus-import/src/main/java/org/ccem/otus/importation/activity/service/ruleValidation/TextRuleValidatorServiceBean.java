@@ -21,7 +21,7 @@ public class TextRuleValidatorServiceBean implements TextRuleValidatorService {
                     return false;
                 }
                 break;
-            case "greater":
+            case "contains":
                 if(!contains(textRuleAnswer, textAnswer.getValue())){
                     return false;
                 }

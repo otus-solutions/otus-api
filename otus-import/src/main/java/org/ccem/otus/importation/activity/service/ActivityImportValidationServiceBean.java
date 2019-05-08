@@ -4,7 +4,6 @@ import br.org.otus.persistence.UserDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.ActivityImportResultDTO;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
@@ -12,6 +11,9 @@ import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.ActivityConfigurationDao;
 import org.ccem.otus.survey.template.item.SurveyItem;
+import org.ccem.otus.survey.template.item.questions.Question;
+import org.ccem.otus.survey.template.item.questions.fillingRules.validators.Mandatory;
+import org.ccem.otus.survey.template.item.questions.fillingRules.validators.generic.GenericValidator;
 import org.ccem.otus.survey.template.navigation.route.RouteCondition;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ActivityImportValidationServiceBean implements ActivityImportValidationService {
@@ -45,9 +48,9 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         List<SurveyItem> itemContainer = importActivity.getSurveyForm().getSurveyTemplate().itemContainer;
 
         for (int i=0; i < itemContainer.size(); i++){
-
-            String templateID = itemContainer.get(i).getTemplateID();
-            String questionType = itemContainer.get(i).objectType;
+            SurveyItem surveyItem = itemContainer.get(i);
+            String templateID = surveyItem.getTemplateID();
+            String questionType = surveyItem.objectType;
             String validOrigin = surveyJumpMap.getValidOrigin(templateID);
 
             Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
@@ -70,14 +73,24 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                             }
                         }
                     } else {
-                        item.state = "IGNORED";
-                        importActivity.getNavigationTracker().items.set(i, item);
+                        Map<String, GenericValidator> validators = ((Question) surveyItem).fillingRules.options.getValidators();
+                        Mandatory mandatory = (Mandatory) (validators.get("mandatory"));
+                        if(mandatory != null && !mandatory.data.reference) {
+                            item.state = "IGNORED";
+                            importActivity.getNavigationTracker().items.set(i, item);
+                        } else {
+                            activityImportResultDTO.setFailImport();
+                            activityImportResultDTO.setQuestionFillError(templateID,true);
+                            break;
+                        }
                     }
                 }
             } else {
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
                 if(questionFill.isPresent()){
+                    activityImportResultDTO.setFailImport();
                     activityImportResultDTO.setQuestionFillError(templateID,false);
+                    break;
                 } else {
                     item.state = "SKIPPED";
                     importActivity.getNavigationTracker().items.set(i,item);
