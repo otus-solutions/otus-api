@@ -1,5 +1,6 @@
 package org.ccem.otus.importation.activity.service.ruleValidation;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.IntegerAnswer;
 import org.ccem.otus.model.survey.activity.filling.answer.TextAnswer;
@@ -8,7 +9,7 @@ import org.ccem.otus.survey.template.navigation.route.Rule;
 public class IntegerRuleValidatorServiceBean implements IntegerRuleValidatorService {
 
     @Override
-    public boolean run(Rule rule, AnswerFill answer) {
+    public boolean run(Rule rule, AnswerFill answer) throws DataNotFoundException {
         Long integerRuleAnswer = Long.parseLong(rule.answer);
         Long longAnswer;
         if (answer.getType().equals("SingleSelectionQuestion")){
@@ -47,6 +48,8 @@ public class IntegerRuleValidatorServiceBean implements IntegerRuleValidatorServ
                     return false;
                 }
                 break;
+            default:
+                throw new DataNotFoundException(new Throwable("Rule operator {" + rule.operator + "} for "+ answer.getType() +" not found."));
         }
         return true;
     }

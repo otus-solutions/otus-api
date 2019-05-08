@@ -1,12 +1,13 @@
 package org.ccem.otus.importation.activity.service.ruleValidation;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.model.survey.activity.filling.answer.DecimalAnswer;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 
 public class DecimalRuleValidatorServiceBean implements DecimalRuleValidatorService {
     @Override
-    public boolean run(Rule rule, AnswerFill answer) {
+    public boolean run(Rule rule, AnswerFill answer) throws DataNotFoundException {
         Double decimalRuleAnswer = Double.parseDouble(rule.answer);
         DecimalAnswer decimalAnswer = (DecimalAnswer) answer;
         switch (rule.operator){
@@ -40,6 +41,8 @@ public class DecimalRuleValidatorServiceBean implements DecimalRuleValidatorServ
                     return false;
                 }
                 break;
+            default:
+                throw new DataNotFoundException(new Throwable("Rule operator {" + rule.operator + "} for "+ answer.getType() +" not found."));
         }
         return true;
     }
