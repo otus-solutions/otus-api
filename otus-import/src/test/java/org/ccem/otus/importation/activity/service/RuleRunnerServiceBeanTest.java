@@ -1,5 +1,6 @@
 package org.ccem.otus.importation.activity.service;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.service.ruleValidation.*;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.filling.answer.CheckboxAnswer;
@@ -75,83 +76,83 @@ public class RuleRunnerServiceBeanTest {
     }
 
     @Test
-    public void run_method_should_not_access_the_answerTypes_caseSwitch() {
+    public void run_method_should_not_access_the_answerTypes_caseSwitch() throws DataNotFoundException {
         rule.isMetadata = true;
         when(integerRuleValidatorService.run(rule, answer)).thenReturn(false);
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
     }
 
     @Test
-    public void run_method_should_access_default_by_answerTypes_caseSwitch() {
+    public void run_method_should_access_default_by_answerTypes_caseSwitch() throws DataNotFoundException {
         when(answer.getType()).thenReturn("anyThing");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_integerRuleValidator_in_case_IntegerQuestion() {
+    public void run_method_should_evoke_run_by_service_of_integerRuleValidator_in_case_IntegerQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("IntegerQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(integerRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_integerRuleValidator_in_case_SingleSelectionQuestion() {
+    public void run_method_should_evoke_run_by_service_of_integerRuleValidator_in_case_SingleSelectionQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("SingleSelectionQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(integerRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_decimalRuleValidator() {
+    public void run_method_should_evoke_run_by_service_of_decimalRuleValidator() throws DataNotFoundException {
         when(answer.getType()).thenReturn("DecimalQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(decimalRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_textRuleValidator_in_case_TextQuestion() {
+    public void run_method_should_evoke_run_by_service_of_textRuleValidator_in_case_TextQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("TextQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(textRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_textRuleValidator_in_case_EmailQuestion() {
+    public void run_method_should_evoke_run_by_service_of_textRuleValidator_in_case_EmailQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("EmailQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(textRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_textRuleValidator_in_case_AutocompleteQuestion() {
+    public void run_method_should_evoke_run_by_service_of_textRuleValidator_in_case_AutocompleteQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("AutocompleteQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(textRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_timeRuleValidator_in_case_TimeQuestion() {
+    public void run_method_should_evoke_run_by_service_of_timeRuleValidator_in_case_TimeQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("TimeQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(timeRuleValidatorService, times(1)).run(answer.getType(), rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_timeRuleValidator_in_case_CalendarQuestion() {
+    public void run_method_should_evoke_run_by_service_of_timeRuleValidator_in_case_CalendarQuestion() throws DataNotFoundException {
         when(answer.getType()).thenReturn("CalendarQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(timeRuleValidatorService, times(1)).run(answer.getType(), rule, answer);
     }
 
     @Test
-    public void run_method_should_evoke_run_by_service_of_checkboxRuleValidator() {
+    public void run_method_should_evoke_run_by_service_of_checkboxRuleValidator() throws DataNotFoundException {
         when(answer.getType()).thenReturn("CheckboxQuestion");
         assertFalse(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
         verify(checkboxRuleValidatorService, times(1)).run(rule, answer);
     }
 
     @Test
-    public void run_method_should_simulate_return_positive_by_run_of_checkboxRuleValidatorService() {
+    public void run_method_should_simulate_return_positive_by_run_of_checkboxRuleValidatorService() throws DataNotFoundException {
         when(answer.getType()).thenReturn("CheckboxQuestion");
         when(checkboxRuleValidatorService.run(rule, answer)).thenReturn(true);
         assertTrue(ruleRunnerServiceBean.run(rule, Optional.of(ruleQuestionFill)));
