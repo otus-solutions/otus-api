@@ -116,4 +116,10 @@ public class CheckboxRuleValidatorServiceBeanTest {
         rule.answer = String.valueOf(0);
         assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
     }
+
+    @Test(expected = DataNotFoundException.class)
+    public void run_method_with_invalidCase_should_throws_DataNotFoundException() throws DataNotFoundException {
+        rule.operator = "anything";
+        checkboxRuleValidatorServiceBean.run(rule, answer);
+    }
 }
