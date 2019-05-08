@@ -59,7 +59,6 @@ public class RuleRunnerServiceBean implements RuleRunnerService {
                         return false;
                     }
                     break;
-
                 default:
                     return false;
             }
