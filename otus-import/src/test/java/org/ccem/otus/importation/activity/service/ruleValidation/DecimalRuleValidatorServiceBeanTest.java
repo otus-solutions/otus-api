@@ -23,7 +23,6 @@ public class DecimalRuleValidatorServiceBeanTest {
 
     @Spy
     private DecimalAnswer answer = new DecimalAnswer();
-    private List<DecimalAnswer> decimalAnswerValues = new ArrayList();
     private Rule rule;
 
     @Before
@@ -34,7 +33,6 @@ public class DecimalRuleValidatorServiceBeanTest {
         rule.when = "TST1";
         rule.isMetadata = false;
         setInternalState(answer, "value", 1.0);
-        decimalAnswerValues.add(answer);
         setInternalState(answer, "objectType", "AnswerFill");
         setInternalState(answer, "type", "DecimalQuestion");
     }
