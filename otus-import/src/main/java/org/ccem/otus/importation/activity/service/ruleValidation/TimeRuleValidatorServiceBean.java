@@ -13,17 +13,17 @@ public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
     @Override
     public boolean run(String type, Rule rule, AnswerFill answer) throws DataNotFoundException {
         ImmutableDate immutableDateRuleAnswer;
-        ImmutableDateAnswer immutableDateAnswer;
+        LocalDateTime immutableDateAnswer;
 
         try {
             if (type.equals("CalendarQuestion")){
                 String[] split = rule.answer.split("[-/]");
                 immutableDateRuleAnswer = new ImmutableDate(LocalDate.of(Integer.parseInt(split[2]),Integer.parseInt(split[1]),Integer.parseInt(split[0])));
-                immutableDateAnswer = (ImmutableDateAnswer) answer;
+                immutableDateAnswer = ((ImmutableDateAnswer) answer).getValue().getValue();
             } else {
                 String[] split = rule.answer.split(":");
                 immutableDateRuleAnswer = new ImmutableDate("1970-01-01 ".concat(split[0]).concat(":").concat(split[1]).concat(":00.000"));
-                immutableDateAnswer = (ImmutableDateAnswer) answer;
+                immutableDateAnswer = ((ImmutableDateAnswer) answer).getValue().getValue();
             }
         } catch (Exception e) {
             return false;
@@ -31,32 +31,32 @@ public class TimeRuleValidatorServiceBean implements TimeRuleValidatorService {
 
         switch (rule.operator){
             case "equal":
-                if(!isEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){
+                if(!isEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer)){
                     return false;
                 }
                 break;
             case "notEqual":
-                if(isEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){
+                if(isEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer)){
                     return false;
                 }
                 break;
             case "greater":
-                if(!isGreater(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){
+                if(!isGreater(immutableDateRuleAnswer.getValue(), immutableDateAnswer)){
                     return false;
                 }
                 break;
             case "greaterEqual":
-                if(!isGreaterEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){
+                if(!isGreaterEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer)){
                     return false;
                 }
                 break;
             case "lower":
-                if(!isLower(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){
+                if(!isLower(immutableDateRuleAnswer.getValue(), immutableDateAnswer)){
                     return false;
                 }
                 break;
             case "lowerEqual":
-                if(!isLowerEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer.getValue().getValue())){
+                if(!isLowerEqual(immutableDateRuleAnswer.getValue(), immutableDateAnswer)){
                     return false;
                 }
                 break;

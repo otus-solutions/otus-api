@@ -12,7 +12,6 @@ public class ActivityImportResultDTO {
     private PaperInterviewerValidationResult paperInterviewerValidationResult;
     private QuestionFillValidationResult questionFillValidationResult;
 
-
     public void setFailImport() {
         this.failImport = true;
     }

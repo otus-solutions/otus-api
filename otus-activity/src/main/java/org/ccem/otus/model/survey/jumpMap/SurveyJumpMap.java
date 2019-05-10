@@ -6,7 +6,6 @@ import org.ccem.otus.survey.template.navigation.route.RouteCondition;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class SurveyJumpMap {
     private ObjectId surveyOid;
@@ -23,15 +22,15 @@ public class SurveyJumpMap {
         public String getValidOrigin() {
             String validOrigin = null;
 
-            Map.Entry<String, Boolean> it = possibleOrigins
+            Map.Entry<String, Boolean> validOriginFound = possibleOrigins
                     .entrySet()
                     .stream()
                     .filter((map)-> map.getValue().equals(true))
                     .findFirst()
                     .orElse(null);
 
-            if(it != null){
-                validOrigin = it.getKey();
+            if(validOriginFound != null){
+                validOrigin = validOriginFound.getKey();
             }
 
             return validOrigin;

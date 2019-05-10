@@ -57,7 +57,6 @@ public class CheckboxRuleValidatorServiceBean implements CheckboxRuleValidatorSe
         return checkboxAnswerOptions.size() == Long.parseLong(ruleAnswer);
     }
 
-
     private boolean minSelected(String ruleAnswer, List<CheckboxAnswerOption> answer) {
         List<CheckboxAnswerOption> checkboxAnswerOptions = answer.stream().filter(checkboxAnswerOption -> checkboxAnswerOption.getState().equals(true)).collect(Collectors.toList());
         return checkboxAnswerOptions.size() >= Long.parseLong(ruleAnswer);

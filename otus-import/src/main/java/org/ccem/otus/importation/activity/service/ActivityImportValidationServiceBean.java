@@ -131,7 +131,6 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         return routeIsValid;
     }
 
-
     private void validateCategory(ActivityImportResultDTO activityImportResultDTO, String categoryName) {
         if(!activityConfigurationDao.categoryExists(categoryName)){
             activityImportResultDTO.setCategoryValidationResult(categoryName,false);
@@ -169,6 +168,4 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
             activityImportResultDTO.setFailImport();
         }
     }
-
-
 }

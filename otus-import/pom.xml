@@ -54,7 +54,6 @@
       <version>3.8.1</version>
       <scope>provided</scope>
     </dependency>
-
     <!-- - - Test scope - ! -->
     <dependency>
       <groupId>org.ccem.otus</groupId>
@@ -62,7 +61,6 @@
       <version>1.21-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
 
