@@ -55,7 +55,7 @@ public class IntegerRuleValidatorServiceBeanTest {
         setInternalState(integerAnswer, "value",Long.parseLong(VALUE));
         integerAnswersValues.add(integerAnswer);
         setInternalState(integerAnswer, "objectType", "AnswerFill");
-        setInternalState(integerAnswer, "type", "DecimalQuestion");
+        setInternalState(integerAnswer, "type", "IntegerQuestion");
         rule.operator = "equal";
         rule.answer = String.valueOf(3);
         assertTrue(integerRuleValidatorServiceBean.run(rule, integerAnswer));
@@ -73,6 +73,14 @@ public class IntegerRuleValidatorServiceBeanTest {
         rule.operator = "equal";
         rule.answer = String.valueOf(3);
         assertTrue(integerRuleValidatorServiceBean.run(rule, answer));
+    }
+
+    @Test
+    public void run_method_with_not_Number_answer_should_return_false() throws DataNotFoundException {
+        rule.operator = "equal";
+        rule.answer = String.valueOf(3);
+        setInternalState(answer, "value","teste");
+        assertFalse(integerRuleValidatorServiceBean.run(rule, answer));
     }
 
     @Test

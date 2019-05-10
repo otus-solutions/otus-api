@@ -66,11 +66,16 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                         item.state = "ANSWERED";
                         importActivity.getNavigationTracker().items.set(i, item);
                         ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
+                        boolean validAlternativeRoute = false;
                         for (SurveyJumpMap.AlternativeDestination alternativeDestination : questionAlternativeRoutes) {
                             if (routeIsValid(alternativeDestination, importActivity)) {
                                 surveyJumpMap.setValidJump(templateID, alternativeDestination.getDestination());
+                                validAlternativeRoute = true;
                                 break;
                             }
+                        }
+                        if(!validAlternativeRoute){
+                            surveyJumpMap.validateDefaultJump(templateID);
                         }
                     } else {
                         Map<String, GenericValidator> validators = ((Question) surveyItem).fillingRules.options.getValidators();
@@ -113,6 +118,9 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                         rulesHaveBeenMet = false;
                         break;
                     }
+                } else {
+                    rulesHaveBeenMet = false;
+                    break;
                 }
             }
             if (rulesHaveBeenMet){

@@ -12,11 +12,16 @@ public class IntegerRuleValidatorServiceBean implements IntegerRuleValidatorServ
     public boolean run(Rule rule, AnswerFill answer) throws DataNotFoundException {
         Long integerRuleAnswer = Long.parseLong(rule.answer);
         Long longAnswer;
-        if (answer.getType().equals("SingleSelectionQuestion")){
-            longAnswer = Long.parseLong(((TextAnswer) answer).getValue());
-        } else {
+        if (answer.getType().equals("IntegerQuestion")){
             longAnswer = ((IntegerAnswer) answer).getValue();
+        } else {
+            try {
+                longAnswer = Long.parseLong(((TextAnswer) answer).getValue());
+            } catch (NumberFormatException e) {
+                return false;
+            }
         }
+
         switch (rule.operator){
             case "equal":
                 if(!isEqual(integerRuleAnswer, longAnswer)){

@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import br.org.otus.importation.activity.ActivityImportationFacade;
 
 import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
 import org.ccem.otus.importation.activity.ActivityImportDTO;
 import org.ccem.otus.importation.activity.ActivityImportResultDTO;
 
@@ -23,7 +24,7 @@ public class ActivityImportationResource {
     private ActivityImportationFacade activityImportationFacade;
 
     @PUT
-//  @Secured
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{acronym}/{version}")
