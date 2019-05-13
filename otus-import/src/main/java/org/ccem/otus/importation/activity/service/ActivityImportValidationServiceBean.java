@@ -5,8 +5,11 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.ActivityImportResultDTO;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
+import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
+import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.ActivityConfigurationDao;
@@ -39,15 +42,16 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
     public ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap,SurveyActivity importActivity) throws DataNotFoundException {
         ActivityImportResultDTO activityImportResultDTO = new ActivityImportResultDTO();
         validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
-        validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName("CREATED"));
+        validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.CREATED)));
         validateCategory(activityImportResultDTO, importActivity.getCategory().getName());
-        if (importActivity.getMode().name().equals("PAPER")) {
-            validatePaperInterviewer(activityImportResultDTO, importActivity.getLastStatusByName("INITIALIZED_OFFLINE"));
+        if (importActivity.getMode().name().equals(String.valueOf(ActivityMode.PAPER))) {
+            validatePaperInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.INITIALIZED_OFFLINE)));
         }
 
         List<SurveyItem> itemContainer = importActivity.getSurveyForm().getSurveyTemplate().itemContainer;
 
-        for (int i=0; i < itemContainer.size(); i++){
+        int itemContainerSize = itemContainer.size();
+        for (int i = 0; i < itemContainerSize; i++){
             SurveyItem surveyItem = itemContainer.get(i);
             String templateID = surveyItem.getTemplateID();
             String questionType = surveyItem.objectType;
@@ -58,12 +62,12 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
                 item.previous = validOrigin;
                 if(questionType.equals("TextItem") || questionType.equals("ImageItem")){
-                    item.state = "VISITED";
+                    item.state = String.valueOf(NavigationTrackingItemStatuses.VISITED);
                     importActivity.getNavigationTracker().items.set(i,item);
                     surveyJumpMap.validateDefaultJump(templateID);
                 } else {
                     if (questionFill.isPresent()) {
-                        item.state = "ANSWERED";
+                        item.state = String.valueOf(NavigationTrackingItemStatuses.ANSWERED);
                         importActivity.getNavigationTracker().items.set(i, item);
                         ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
                         boolean validAlternativeRoute = false;
@@ -81,7 +85,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                         Map<String, GenericValidator> validators = ((Question) surveyItem).fillingRules.options.getValidators();
                         Mandatory mandatory = (Mandatory) (validators.get("mandatory"));
                         if(mandatory != null && !mandatory.data.reference) {
-                            item.state = "IGNORED";
+                            item.state = String.valueOf(NavigationTrackingItemStatuses.IGNORED);
                             importActivity.getNavigationTracker().items.set(i, item);
                         } else {
                             activityImportResultDTO.setFailImport();
@@ -97,7 +101,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
                     activityImportResultDTO.setQuestionFillError(templateID,false);
                     break;
                 } else {
-                    item.state = "SKIPPED";
+                    item.state = String.valueOf(NavigationTrackingItemStatuses.SKIPPED);
                     importActivity.getNavigationTracker().items.set(i,item);
                 }
             }
