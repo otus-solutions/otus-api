@@ -87,8 +87,6 @@ public class ParticipantLaboratoryResource {
         return new Response().buildSuccess().toJson();
     }
 
-
-<<<<<<< HEAD
     @PUT
     @Secured
     @Path("/convert-aliquot-role")
@@ -99,20 +97,5 @@ public class ParticipantLaboratoryResource {
         participantLaboratoryFacade.convertAliquotRole(convertAliquotRoleDTO);
         return javax.ws.rs.core.Response.ok( participantLaboratoryFacade.convertAliquotRole(convertAliquotRoleDTO)).build();
     }
-=======
 
-  @PUT
-  @Secured
-  @Path("/convert-aliquot-role")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public javax.ws.rs.core.Response convertAliquotRole( String convertAliquotRoleJson) {
-    ConvertAliquotRoleDTO convertAliquotRoleDTO = ConvertAliquotRoleDTO.deserialize(convertAliquotRoleJson);
-   
-    //UpdateAliquotsDTO updateAliquots = UpdateAliquotsDTO.deserialize(updateAliquotsDTO);
-    //updateAliquots.setRecruitmentNumber(rn);
-    //participantLaboratoryFacade.updateAliquotList(updateAliquots);
-    return javax.ws.rs.core.Response.ok().build();
-  }
->>>>>>> e64b3e2992058f7780c802b5875867cd030f61fa
 }
