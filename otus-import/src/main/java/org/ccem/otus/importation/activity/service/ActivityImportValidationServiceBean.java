@@ -53,6 +53,7 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         int itemContainerSize = itemContainer.size();
         for (int i = 0; i < itemContainerSize; i++){
             SurveyItem surveyItem = itemContainer.get(i);
+            importActivity.getNavigationTracker().lastVisitedIndex = i;
             String templateID = surveyItem.getTemplateID();
             String questionType = surveyItem.objectType;
             String validOrigin = surveyJumpMap.getValidOrigin(templateID);
@@ -60,7 +61,9 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
             Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
             if (validOrigin != null){
                 NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
-                item.previous = validOrigin;
+                if (!validOrigin.equals("BEGIN NODE")){
+                    item.previous = validOrigin;
+                }
                 if(questionType.equals("TextItem") || questionType.equals("ImageItem")){
                     item.state = String.valueOf(NavigationTrackingItemStatuses.VISITED);
                     importActivity.getNavigationTracker().items.set(i,item);
