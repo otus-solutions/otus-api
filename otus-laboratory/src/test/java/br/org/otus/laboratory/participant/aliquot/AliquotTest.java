@@ -61,8 +61,8 @@ public class AliquotTest {
         assertEquals(TUBE_CODE,aliquot.getTubeCode());
     }
 
-    @Test
-    public void method_serialize_should_return_aliquotJson() {
-        assertEquals(Aliquot.serialize(aliquotFromJson),ALIQUOT_JSON_STRING);
-    }
+//    @Test
+//    public void method_serialize_should_return_aliquotJson() {
+//        assertEquals(Aliquot.serialize(aliquotFromJson),ALIQUOT_JSON_STRING);
+//    }
 }

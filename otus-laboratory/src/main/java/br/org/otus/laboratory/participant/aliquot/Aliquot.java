@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.participant.aliquot;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
@@ -25,6 +26,7 @@ public class Aliquot extends SimpleAliquot {
   private Sex sex;
   private FieldCenter fieldCenter;
   private ImmutableDate birthdate;
+  private List<AliquotHistory> aliquotHistories;
 
   public Aliquot() {
     super();
@@ -112,6 +114,11 @@ public class Aliquot extends SimpleAliquot {
 
   public void setExamLotId(ObjectId examLotId) {
     this.examLotId = examLotId;
+  }
+
+  public List<AliquotHistory> getAliquotHistories() { return aliquotHistories; }
+
+  public void setAliquotHistories(List<AliquotHistory> aliquotHistories) { this.aliquotHistories = aliquotHistories;
   }
 
   public static String serialize(Aliquot aliquot) {
