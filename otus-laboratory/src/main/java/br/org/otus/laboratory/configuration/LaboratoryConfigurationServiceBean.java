@@ -1,16 +1,5 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotCenterDescriptors;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
@@ -19,6 +8,12 @@ import br.org.otus.laboratory.configuration.collect.aliquot.CenterAliquot;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelReference;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.*;
 
 @Stateless
 public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurationService {
@@ -90,6 +85,12 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   @Override
   public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
     return laboratoryConfigurationDao.getAliquotExamCorrelation();
+  }
+
+  @Override
+  public List<String> listPossibleExams(String center) throws DataNotFoundException {
+    ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(center);
+    return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
   }
 
 }

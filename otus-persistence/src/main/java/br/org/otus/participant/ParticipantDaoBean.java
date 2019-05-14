@@ -1,6 +1,9 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MongoCursor;
+import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -71,6 +74,28 @@ public class ParticipantDaoBean extends MongoGenericDao<Participant> implements 
     }
 
     return participant;
+  }
+
+  @Override
+  public ArrayList<Long> getCenterRns(String center) throws DataNotFoundException {
+    Document query = new Document("fieldCenter.acronym", center);
+    MongoCursor<Long> cursor = collection.distinct("recruitmentNumber", query, Long.class).iterator();
+
+    ArrayList<Long> rns = new ArrayList<Long>();
+
+    try {
+      while (cursor.hasNext()) {
+        rns.add(cursor.next());
+      }
+    } finally {
+      cursor.close();
+    }
+
+    if (rns.isEmpty()) {
+      throw new DataNotFoundException("Any participant found for given center: " + center);
+    }
+
+    return rns;
   }
 
   @Override

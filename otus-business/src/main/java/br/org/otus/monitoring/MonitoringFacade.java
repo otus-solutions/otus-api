@@ -1,6 +1,8 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
+import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
@@ -10,10 +12,12 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.monitoring.*;
 import org.ccem.otus.model.monitoring.laboratory.LaboratoryProgressDTO;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
+import org.ccem.otus.service.LaboratoryMonitoringService;
 import org.ccem.otus.service.MonitoringService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MonitoringFacade {
@@ -23,6 +27,16 @@ public class MonitoringFacade {
 
   @Inject
   private SurveyFacade surveyFacade;
+
+  @Inject
+  private ParticipantFacade participantFacade;
+
+  @Inject
+  private LaboratoryMonitoringService laboratoryMonitoringService;
+
+  @Inject
+  private LaboratoryConfigurationService laboratoryConfigurationService;
+
 
   public List<MonitoringDataSourceResult> get(String acronym) {
     try {
@@ -44,7 +58,7 @@ public class MonitoringFacade {
     }
   }
 
-  public ActivityProgressReportDto getActivitiesProgress() {
+  public ProgressReport getActivitiesProgress() {
     try {
       return monitoringService.getActivitiesProgress();
     } catch (Exception e) {
@@ -53,7 +67,7 @@ public class MonitoringFacade {
   }
 
 
-  public ActivityProgressReportDto getActivitiesProgress(String center) {
+  public ProgressReport getActivitiesProgress(String center) {
     try {
       return monitoringService.getActivitiesProgress(center);
     } catch (Exception e) {
@@ -64,14 +78,6 @@ public class MonitoringFacade {
   public ArrayList<ParticipantActivityReportDto> getParticipantActivitiesProgress(Long rn) {
     try {
       return monitoringService.getParticipantActivities(rn);
-    } catch (Exception e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    }
-  }
-
-  public ParticipantExamReportDto getParticipantExamsProgress(Long rn) {
-    try {
-      return monitoringService.getParticipantExams(rn);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
@@ -93,7 +99,38 @@ public class MonitoringFacade {
     }
   }
 
-   public void setExamApplicability(ExamInapplicability examInapplicability) {
+  /* Laboratory Methods */
+
+  public ProgressReport getExamFlagReport(String center) {
+    ArrayList<Long> centerRecruitmentNumbers = participantFacade.listCenterRecruitmentNumbers(center);
+
+    try {
+      LinkedList<String> possibleExams = new LinkedList<String>(laboratoryConfigurationService.listPossibleExams(center));
+      return laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRecruitmentNumbers);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public LinkedList<String> getExamFlagReportLabels(String center) {
+    try {
+      return new LinkedList<>(laboratoryConfigurationService.listPossibleExams(center));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+
+  public ParticipantExamReportDto getParticipantExamsProgress(Long rn) {
+    try {
+      return monitoringService.getParticipantExams(rn);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+
+  public void setExamApplicability(ExamInapplicability examInapplicability) {
     try {
       monitoringService.setExamInapplicability(examInapplicability);
     } catch (Exception e) {
@@ -102,7 +139,7 @@ public class MonitoringFacade {
   }
 
   public void deleteExamInapplicability(ExamInapplicability examInapplicability) {
-     try {
+    try {
       monitoringService.deleteExamInapplicability(examInapplicability);
     } catch (Exception e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
@@ -110,11 +147,11 @@ public class MonitoringFacade {
   }
 
   public LaboratoryProgressDTO getDataOrphanByExams() {
-      try {
-        return monitoringService.getDataOrphanByExams();
-      } catch (DataNotFoundException e) {
-        throw new HttpResponseException(NotFound.build());
-      }
+    try {
+      return monitoringService.getDataOrphanByExams();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build());
+    }
   }
 
   public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) {
@@ -128,7 +165,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) {
     try {
       return monitoringService.getDataOfPendingResultsByAliquot(center);
-    } catch (DataNotFoundException e){
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build());
     }
   }
@@ -136,7 +173,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) {
     try {
       return monitoringService.getDataOfStorageByAliquot(center);
-    } catch (DataNotFoundException e){
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build());
     }
   }
@@ -144,7 +181,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataByExam(String center) {
     try {
       return monitoringService.getDataByExam(center);
-    } catch (DataNotFoundException e){
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build());
     }
   }
@@ -152,7 +189,7 @@ public class MonitoringFacade {
   public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) {
     try {
       return monitoringService.getDataToCSVOfPendingResultsByAliquots(center);
-    } catch (DataNotFoundException e){
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build());
     }
   }
@@ -160,7 +197,7 @@ public class MonitoringFacade {
   public Object getDataToCSVOfOrphansByExam() {
     try {
       return monitoringService.getDataToCSVOfOrphansByExam();
-    } catch (DataNotFoundException e){
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build());
     }
   }

@@ -38,6 +38,11 @@ public class ParticipantServiceBean implements ParticipantService {
     });
   }
 
+  @Override
+  public ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException {
+    return participantDao.getCenterRns(center);
+  }
+
 
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {

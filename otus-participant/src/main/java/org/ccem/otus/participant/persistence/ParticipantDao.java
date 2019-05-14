@@ -21,4 +21,6 @@ public interface ParticipantDao {
   boolean exists(Long rn);
 
   Participant getLastInsertion (FieldCenter fieldCenter) throws DataNotFoundException;
+
+  ArrayList<Long> getCenterRns (String center) throws DataNotFoundException;
 }

@@ -6,13 +6,12 @@ import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
-import org.ccem.otus.model.monitoring.ActivityProgressReportDto;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
 import org.ccem.otus.participant.persistence.ParticipantDao;
+import org.ccem.otus.persistence.ActivityFlagReportDao;
 import org.ccem.otus.persistence.ExamMonitoringDao;
 import org.ccem.otus.persistence.FieldCenterDao;
-import org.ccem.otus.persistence.FlagReportDao;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
 import org.junit.Before;
@@ -37,39 +36,7 @@ public class MonitoringServiceBeanTest {
   private static final String CENTER = "RS";
   private static final Long RN = Long.valueOf(7016098);
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
-  private ArrayList<ActivitiesProgressReport> PROGRESS_REPORT_LIST = new ArrayList<>();
   private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";
-  private static final String reportJson1 = "{\n" +
-    "    \"activities\": [\n" +
-    "    {\n" +
-    "      \"rn\": 5113372,\n" +
-    "      \"acronym\": \"ABC\",\n" +
-    "      \"status\": 2\n" +
-    "    },\n" +
-    "    {\n" +
-    "      \"rn\": 5113372,\n" +
-    "      \"acronym\": \"DEF\",\n" +
-    "      \"status\": 2\n" +
-    "    }\n" +
-    "    ],\n" +
-    "    \"rn\": 5113372\n" +
-    "  }";
-  private static final String reportJson2 = "{\n" +
-    "    \"activities\": [\n" +
-    "    {\n" +
-    "      \"rn\": 5113371,\n" +
-    "      \"acronym\": \"HVSD\",\n" +
-    "      \"status\": 2\n" +
-    "    },\n" +
-    "    {\n" +
-    "      \"rn\": 5113371,\n" +
-    "      \"acronym\": \"PSEC\",\n" +
-    "      \"status\": 2\n" +
-    "    }\n" +
-    "    ],\n" +
-    "    \"rn\": 5113371\n" +
-    "  }";
-
 
   private static final FieldCenter fieldCenter = new FieldCenter();
   private static final Long GOAL = (long) 3025L;
@@ -90,7 +57,7 @@ public class MonitoringServiceBeanTest {
   private SurveyDao surveyDao;
 
   @Mock
-  private FlagReportDao flagReportDao;
+  private ActivityFlagReportDao activityFlagReportDao;
 
   @Mock
   private LaboratoryProgressDao laboratoryProgressDao;
@@ -153,10 +120,10 @@ public class MonitoringServiceBeanTest {
 
   @Test
   public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
-    when(flagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
-    ActivityProgressReportDto activityProgressReportDto = monitoringServiceBean.getActivitiesProgress(CENTER);
+    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
+    ProgressReport progressReport = monitoringServiceBean.getActivitiesProgress(CENTER);
     GsonBuilder builder = new GsonBuilder();
-    assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(activityProgressReportDto));
+    assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(progressReport));
   }
 
   @Test
