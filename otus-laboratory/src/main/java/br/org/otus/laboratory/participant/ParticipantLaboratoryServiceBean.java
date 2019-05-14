@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.swing.text.Document;
 
+import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -128,5 +129,10 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   @Override
   public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException {
     return participantLaboratoryExtractionDao.getLaboratoryExtraction();
+  }
+
+  @Override
+  public boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
+    return participantLaboratoryDao.convertAliquotRole(convertAliquotRoleDTO);
   }
 }

@@ -2,6 +2,7 @@ package br.org.otus.laboratory.participant;
 
 import java.util.LinkedList;
 
+import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -25,4 +26,5 @@ public interface ParticipantLaboratoryService {
 
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException;
 
+  boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) throws DataNotFoundException;
 }
