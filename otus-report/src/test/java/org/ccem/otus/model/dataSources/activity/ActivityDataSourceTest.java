@@ -17,7 +17,7 @@ import org.powermock.reflect.Whitebox;
 @RunWith(PowerMockRunner.class)
 public class ActivityDataSourceTest {
   private static final Long RECRUITMENT_NUMBER = 343545345L;
-  private static final String EXPECTED_RESULT = "{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.surveyTemplate.identity.acronym\" : \"TF\", \"category.name\" : \"C0\", \"isDiscarded\" : false } }";
+  private static final String EXPECTED_RESULT = "{ \"$match\" : { \"participantData.recruitmentNumber\" : { \"$numberLong\" : \"343545345\" }, \"surveyForm.acronym\" : \"TF\", \"category.name\" : \"C0\", \"isDiscarded\" : false } }";
   private static final String EXPECTED_RESULT_PROJECTION = "{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : 1, \"mode\" : 1 } }";
 
   private static final String EXPECTED_RESULT_PROJECTION_WHIT_STATUS_HISTORY = "{ \"$project\" : { \"_id\" : -1, \"statusHistory\" : 1, \"statusHistoryPosition\" : { \"$slice\" : [\"$statusHistory\", -1, 1] }, \"mode\" : 1 } }";
