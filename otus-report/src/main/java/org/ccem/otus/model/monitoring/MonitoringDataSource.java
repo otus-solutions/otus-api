@@ -50,7 +50,7 @@ public class MonitoringDataSource extends ReportDataSource<MonitoringDataSourceR
 
     private void buildAcronymMatchStage(ArrayList<Document> query,String acronym){
         Document match = new Document(MATCH,
-                new Document(DISCARDED_PATH, false).append("acronym", acronym));
+                new Document(DISCARDED_PATH, false).append("surveyForm.acronym", acronym));
         query.add(match);
     }
 
