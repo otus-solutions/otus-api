@@ -24,4 +24,15 @@ public class ConvertAliquotRoleDTO {
 	}
 
 
+    public String getAliquotCode() {
+        return aliquotCode;
+    }
+
+    public List<AliquotHistory> getAliquotHistories() {
+        return aliquotHistories;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }

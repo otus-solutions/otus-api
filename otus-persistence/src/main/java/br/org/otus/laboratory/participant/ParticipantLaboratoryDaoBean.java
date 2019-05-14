@@ -114,9 +114,4 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     return collection.aggregate(pipeline).allowDiskUse(true);
   }
 
-  @Override
-  public boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
-    return false;
-  }
-
 }

@@ -84,7 +84,7 @@ public class ParticipantLaboratoryFacade {
         }
     }
 
-    public boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
+    public String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
         try {
             return service.convertAliquotRole(convertAliquotRoleDTO);
         } catch (DataNotFoundException e) {

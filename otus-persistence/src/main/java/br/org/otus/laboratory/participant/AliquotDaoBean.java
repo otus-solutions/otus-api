@@ -3,6 +3,7 @@ package br.org.otus.laboratory.participant;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.mongodb.Block;
 import com.mongodb.client.ClientSession;
@@ -11,6 +12,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -167,5 +169,17 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
         throw new DataNotFoundException(new Throwable("aliquots not found"));
       }
     }
+  }
+
+  @Override
+  public String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
+    Bson filter = new Document("code", convertAliquotRoleDTO.getAliquotCode());
+    Bson convert = new Document("role", convertAliquotRoleDTO.getRole());
+    Bson aliquotHistory = new Document("aliquotHistory", convertAliquotRoleDTO.getAliquotHistories());
+    //Bson updateOperation= new Document("$set", convert).append("$set", aliquotHistory);
+    Bson updateOperation= new Document("$set", convert);
+
+    UpdateResult result = collection.updateOne(filter, updateOperation);
+    return String.valueOf(result.getModifiedCount());
   }
 }

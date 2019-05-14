@@ -34,6 +34,4 @@ public interface ParticipantLaboratoryDao {
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
   
   AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
-
-    boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO);
 }

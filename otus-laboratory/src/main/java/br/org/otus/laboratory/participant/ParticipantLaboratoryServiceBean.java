@@ -132,7 +132,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
-    return participantLaboratoryDao.convertAliquotRole(convertAliquotRoleDTO);
+  public String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
+    return aliquotDao.convertAliquotRole(convertAliquotRoleDTO);
   }
 }

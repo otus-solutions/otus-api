@@ -90,12 +90,10 @@ public class ParticipantLaboratoryResource {
     @PUT
     @Secured
     @Path("/convert-aliquot-role")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)
+    //@Produces(MediaType.APPLICATION_JSON)
     public javax.ws.rs.core.Response convertAliquotRole(String convertAliquotRoleJson) {
         ConvertAliquotRoleDTO convertAliquotRoleDTO = ConvertAliquotRoleDTO.deserialize(convertAliquotRoleJson);
-        participantLaboratoryFacade.convertAliquotRole(convertAliquotRoleDTO);
         return javax.ws.rs.core.Response.ok( participantLaboratoryFacade.convertAliquotRole(convertAliquotRoleDTO)).build();
     }
-
 }

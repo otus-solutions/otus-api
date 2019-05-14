@@ -26,5 +26,5 @@ public interface ParticipantLaboratoryService {
 
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException;
 
-  boolean convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) throws DataNotFoundException;
+  String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) throws DataNotFoundException;
 }
