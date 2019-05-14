@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.ccem.otus.permissions.model.user.Permission;
-import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.utils.PermissionAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;

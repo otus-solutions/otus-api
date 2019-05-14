@@ -9,9 +9,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.rest.Response;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 
+import br.org.otus.rest.Response;
 
 @Path("/permission")
 public class UserPermissionResource {
