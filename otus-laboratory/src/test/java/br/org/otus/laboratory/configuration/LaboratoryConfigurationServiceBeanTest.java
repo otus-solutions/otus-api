@@ -6,6 +6,7 @@ import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
 import br.org.otus.laboratory.configuration.label.LabelReference;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,8 @@ import static org.junit.Assert.assertEquals;
 
 
 public class LaboratoryConfigurationServiceBeanTest {
+	private static final String CENTER = "MG";
+
 
 	@InjectMocks
 	private LaboratoryConfigurationServiceBean laboratoryConfigurationServiceBean;
@@ -70,15 +73,15 @@ public class LaboratoryConfigurationServiceBeanTest {
 		tubeSet.add(new TubeDefinition(1, "CITRATE", "NONE"));
 
 		Set<CollectGroupDescriptor> collectGroupDescriptor = new HashSet<>();
-		collectGroupDescriptor.add(new CollectGroupDescriptor("MG", "Center", tubeSet));
+		collectGroupDescriptor.add(new CollectGroupDescriptor(CENTER, "Center", tubeSet));
 		CollectGroupConfiguration collectGroupConfiguration = new CollectGroupConfiguration(collectGroupDescriptor);
 		PowerMockito.when(laboratoryConfiguration.getCollectGroupConfiguration()).thenReturn(collectGroupConfiguration);
 
 
 		TubeDefinition expectedTubeSet = new TubeDefinition(1, "CITRATE", "NONE");
-		assertEquals(expectedTubeSet.getCount(), laboratoryConfigurationServiceBean.getTubeSetByGroupName("MG").stream().findFirst().get().getCount());
-		assertEquals(expectedTubeSet.getType(), laboratoryConfigurationServiceBean.getTubeSetByGroupName("MG").stream().findFirst().get().getType());
-		assertEquals(expectedTubeSet.getMoment(), laboratoryConfigurationServiceBean.getTubeSetByGroupName("MG").stream().findFirst().get().getMoment());
+		assertEquals(expectedTubeSet.getCount(), laboratoryConfigurationServiceBean.getTubeSetByGroupName(CENTER).stream().findFirst().get().getCount());
+		assertEquals(expectedTubeSet.getType(), laboratoryConfigurationServiceBean.getTubeSetByGroupName(CENTER).stream().findFirst().get().getType());
+		assertEquals(expectedTubeSet.getMoment(), laboratoryConfigurationServiceBean.getTubeSetByGroupName(CENTER).stream().findFirst().get().getMoment());
 
 	}
 
@@ -88,7 +91,7 @@ public class LaboratoryConfigurationServiceBeanTest {
 		tubeSet.add(new TubeDefinition(1, "CITRATE", "NONE"));
 
 		Set<CollectGroupDescriptor> collectGroupDescriptor = new HashSet<>();
-		collectGroupDescriptor.add(new CollectGroupDescriptor("MG", "Center", tubeSet));
+		collectGroupDescriptor.add(new CollectGroupDescriptor(CENTER, "Center", tubeSet));
 		CollectGroupConfiguration collectGroupConfiguration = new CollectGroupConfiguration(collectGroupDescriptor);
 		PowerMockito.when(laboratoryConfiguration.getCollectGroupConfiguration()).thenReturn(collectGroupConfiguration);
 
@@ -146,4 +149,21 @@ public class LaboratoryConfigurationServiceBeanTest {
 		expectedCodes.add("33100032");
 		assertEquals(expectedCodes, laboratoryConfigurationServiceBean.generateCodes(seed));
 	}
+
+	@Test
+	public void should_call_laboratoryConfigurationDao_to_list_the_centerAliquots() throws DataNotFoundException {
+		laboratoryConfigurationServiceBean.listPossibleExams(CENTER);
+		Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).listCenterAliquots(CENTER);
+	}
+
+	@Test
+	public void should_call_laboratoryConfigurationDao_to_listPossibleExams_passing_the_centerAliquots() throws DataNotFoundException {
+		ArrayList arrayList = new ArrayList();
+		Mockito.when(laboratoryConfigurationDao.listCenterAliquots(CENTER)).thenReturn(arrayList);
+
+		laboratoryConfigurationServiceBean.listPossibleExams(CENTER);
+		Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getAliquotsExams(arrayList);
+	}
+
+
 }

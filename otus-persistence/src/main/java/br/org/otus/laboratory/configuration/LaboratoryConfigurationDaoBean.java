@@ -1,22 +1,21 @@
 package br.org.otus.laboratory.configuration;
 
-import static com.mongodb.client.model.Filters.exists;
-
+import br.org.mongodb.MongoGenericDao;
+import br.org.otus.laboratory.configuration.aliquot.AliquotConfigurationQueryBuilder;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.exists;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -57,7 +56,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         ArrayList<Bson> pipeline = new ArrayList<Bson>();
         pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
         pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
-        pipeline.add(new Document("$match",new Document("aliquots.name",new Document("$in",centerAliquots))));
+        pipeline.add(new Document("$match", new Document("aliquots.name", new Document("$in", centerAliquots))));
         pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
         pipeline.add(parseQuery("{$group:{_id:\"$aliquots.exams\"}}"));
         pipeline.add(parseQuery("{$sort:{\"_id\":1}}"));
@@ -65,7 +64,27 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
         Document resultsDocument = collection.aggregate(pipeline).first();
 
-        if(resultsDocument != null) {
+        if (resultsDocument != null) {
+            exams = (ArrayList<String>) resultsDocument.get("exams");
+        }
+
+        return exams;
+    }
+
+    @Override
+    public List<String> getAliquotsExams(List<String> aliquots) {
+        List<String> exams = null;
+
+        ArrayList<Bson> pipeline = new ArrayList<Bson>();
+        pipeline.add(parseQuery("{$match:{objectType:\"AliquotExamCorrelation\"}}"));
+        pipeline.add(parseQuery("{$unwind:\"$aliquots\"}"));
+        pipeline.add(new Document("$match", new Document("aliquots.name", new Document("$in", aliquots))));
+        pipeline.add(parseQuery("{$unwind:\"$aliquots.exams\"}"));
+        pipeline.add(parseQuery("{$group:{_id:{},exams:{$addToSet:\"$aliquots.exams\"}}}"));
+
+        Document resultsDocument = collection.aggregate(pipeline).first();
+
+        if (resultsDocument != null) {
             exams = (ArrayList<String>) resultsDocument.get("exams");
         }
 
@@ -153,5 +172,17 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         Document updateLotCode = collection.findOneAndUpdate(query, new Document("$inc", new Document("codeConfiguration.lastInsertion", quantity)),
                 new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE));
         return ((Document) updateLotCode.get("codeConfiguration")).getInteger("lastInsertion");
+    }
+
+    @Override
+    public ArrayList listCenterAliquots(String center) throws DataNotFoundException {
+        ArrayList<Bson> pipeline = new AliquotConfigurationQueryBuilder().getCenterAliquotsQuery(center);
+        Document first = collection.aggregate(pipeline).first();
+        ArrayList centerAliquots = first.get("centerAliquots", ArrayList.class);
+
+        if (centerAliquots == null || centerAliquots.size() == 0) {
+            throw new DataNotFoundException("Any exams available found for the given center: \"" + center + "\"");
+        }
+        return centerAliquots;
     }
 }
