@@ -2,16 +2,15 @@ package br.org.otus.permission;
 
 import java.util.Arrays;
 
-import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 
-import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.model.UpdateOptions;
 
-import static com.mongodb.client.model.Filters.eq;
+import br.org.mongodb.MongoGenericDao;
 
 public class UserPermissionDaoBean extends MongoGenericDao<Document> implements UserPermissionDao {
 

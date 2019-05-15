@@ -1,6 +1,9 @@
 package br.org.otus.permission;
 
-import com.google.gson.GsonBuilder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -9,12 +12,9 @@ import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 import org.ccem.otus.permissions.persistence.user.UserPermissionProfileDao;
 
-import br.org.mongodb.MongoGenericDao;
+import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import br.org.mongodb.MongoGenericDao;
 
 public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> implements UserPermissionProfileDao {
   private static final String COLLECTION_NAME = "user_permission_profile";

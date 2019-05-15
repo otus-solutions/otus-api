@@ -1,18 +1,27 @@
 package br.org.otus.laboratory.permission;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import br.org.otus.laboratory.configuration.permission.LaboratoryAccessPermission;
+import br.org.otus.laboratory.configuration.permission.LaboratoryAccessPermissionService;
+
 public class LaboratoryAccessPermissionFacade {
 
-  public void create(Object deserialize) {
-    // TODO Auto-generated method stub
+  @Inject
+  private LaboratoryAccessPermissionService laboratoryAccessPermissionService;
+
+  public void create(LaboratoryAccessPermission permission) {
+    laboratoryAccessPermissionService.create(permission);
   }
 
-  public void update(Object deserialize) {
-    // TODO Auto-generated method stub
+  public void update(LaboratoryAccessPermission permission) {
+    laboratoryAccessPermissionService.update(permission);
   }
 
-  public Object getAll() {
-    // TODO Auto-generated method stub
-    return null;
+  public List<LaboratoryAccessPermission> getAll() {
+    return laboratoryAccessPermissionService.list();
   }
 
 }
