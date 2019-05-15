@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
@@ -90,10 +90,8 @@ public class ParticipantLaboratoryResource {
     @PUT
     @Secured
     @Path("/convert-aliquot-role")
-    //@Consumes(MediaType.APPLICATION_JSON)
-    //@Produces(MediaType.APPLICATION_JSON)
-    public javax.ws.rs.core.Response convertAliquotRole(String convertAliquotRoleJson) {
-        ConvertAliquotRoleDTO convertAliquotRoleDTO = ConvertAliquotRoleDTO.deserialize(convertAliquotRoleJson);
-        return javax.ws.rs.core.Response.ok( participantLaboratoryFacade.convertAliquotRole(convertAliquotRoleDTO)).build();
+    public javax.ws.rs.core.Response convertAliquotRole(String convertedAliquotJson) {
+        Aliquot convertedAliquot = Aliquot.deserialize(convertedAliquotJson);
+        return javax.ws.rs.core.Response.ok(participantLaboratoryFacade.convertAliquotRole(convertedAliquot)).build();
     }
 }

@@ -3,13 +3,11 @@ package br.org.otus.laboratory.participant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.MongoIterable;
 
 import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;

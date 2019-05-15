@@ -3,14 +3,10 @@ package br.org.otus.laboratory.participant;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
-import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.Block;
-import com.mongodb.client.ClientSession;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
@@ -18,8 +14,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -177,10 +171,10 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     }
 
     @Override
-    public String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
-        Bson filter = new Document("code", convertAliquotRoleDTO.getAliquotCode());
+    public String convertAliquotRole(Aliquot convertedAliquot) {
+        Bson filter = new Document("code", convertedAliquot.getCode());
         Bson convertHistory = Document.parse(new GsonBuilder().create()
-                .toJson(new Document("aliquotHistory", convertAliquotRoleDTO.getAliquotHistories()).append("role", convertAliquotRoleDTO.getRole())));
+                .toJson(new Document("aliquotHistory", convertedAliquot.getAliquotHistories()).append("role", convertedAliquot.getRole())));
         Bson updateOperation= new Document("$set", convertHistory);
 
         UpdateResult result = collection.updateOne(filter, updateOperation);

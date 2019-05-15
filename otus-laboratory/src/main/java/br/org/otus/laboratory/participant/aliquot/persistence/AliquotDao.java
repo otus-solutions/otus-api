@@ -1,7 +1,6 @@
 package br.org.otus.laboratory.participant.aliquot.persistence;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
@@ -42,5 +41,5 @@ public interface AliquotDao {
 
   void executeFunction(String function);
 
-  String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO);
+  String convertAliquotRole(Aliquot convertedAliquot);
 }

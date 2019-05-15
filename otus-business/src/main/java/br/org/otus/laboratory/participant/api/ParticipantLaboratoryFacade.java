@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
-import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -84,10 +84,10 @@ public class ParticipantLaboratoryFacade {
         }
     }
 
-    public String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
+    public String convertAliquotRole(Aliquot convertedAliquot) {
         try {
-            return service.convertAliquotRole(convertAliquotRoleDTO);
-        } catch (DataNotFoundException e) {
+            return service.convertAliquotRole(convertedAliquot);
+        } catch (Exception e) {
             throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
         }
     }

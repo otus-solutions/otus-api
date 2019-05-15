@@ -6,9 +6,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.swing.text.Document;
 
-import br.org.otus.laboratory.participant.dto.ConvertAliquotRoleDTO;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -132,7 +130,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public String convertAliquotRole(ConvertAliquotRoleDTO convertAliquotRoleDTO) {
-    return aliquotDao.convertAliquotRole(convertAliquotRoleDTO);
+  public String convertAliquotRole(Aliquot convertedAliquot) {
+    return aliquotDao.convertAliquotRole(convertedAliquot);
   }
 }
