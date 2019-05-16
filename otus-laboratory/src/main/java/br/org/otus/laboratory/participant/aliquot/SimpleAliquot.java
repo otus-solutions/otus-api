@@ -53,8 +53,6 @@ public class SimpleAliquot {
 
 	public List<AliquotEvent> getAliquotHistory() { return aliquotHistory; }
 
-	public void setAliquotHistory(List<AliquotEvent> aliquotHistory) { this.aliquotHistory = aliquotHistory;
-	}
 
 	public AliquotCollectionData getAliquotCollectionData() {
 		return aliquotCollectionData;

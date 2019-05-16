@@ -1,25 +1,18 @@
 package br.org.otus.laboratory.participant.api;
 
+import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
-import org.powermock.reflect.Whitebox;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-
 public class ParticipantLaboratoryFacadeTest {
 
   @InjectMocks
