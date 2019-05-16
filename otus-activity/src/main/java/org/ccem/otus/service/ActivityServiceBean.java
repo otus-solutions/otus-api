@@ -118,4 +118,5 @@ public class ActivityServiceBean implements ActivityService {
     CheckerUpdatedDTO checkerUpdatedDTO = CheckerUpdatedDTO.deserialize(checkerUpdated);
     return activityDao.updateCheckerActivity(checkerUpdatedDTO);
   }
+
 }

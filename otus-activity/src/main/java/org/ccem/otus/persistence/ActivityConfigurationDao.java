@@ -11,6 +11,8 @@ public interface ActivityConfigurationDao {
 
     ActivityCategory findByName(String name) throws DataNotFoundException;
 
+    Boolean categoryExists(String name);
+
     List<ActivityCategory> findAll();
 
     ActivityCategory getLastInsertedCategory();

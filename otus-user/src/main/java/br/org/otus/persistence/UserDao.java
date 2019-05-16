@@ -1,4 +1,4 @@
-package br.org.otus.user;
+package br.org.otus.persistence;
 
 import java.util.List;
 

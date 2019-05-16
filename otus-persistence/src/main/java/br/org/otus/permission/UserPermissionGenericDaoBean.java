@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import br.org.otus.user.UserDao;
+import br.org.otus.persistence.UserDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
