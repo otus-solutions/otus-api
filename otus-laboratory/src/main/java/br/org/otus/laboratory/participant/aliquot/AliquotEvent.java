@@ -1,6 +1,6 @@
 package br.org.otus.laboratory.participant.aliquot;
 
-public class AliquotHistory {
+public class AliquotEvent {
     private String type;
     private String userEmail;
     private String description;

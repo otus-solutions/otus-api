@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class SimpleAliquot {
 
@@ -16,8 +17,10 @@ public class SimpleAliquot {
 	private AliquotContainer container;
 	private AliquotRole role;
 	private AliquotCollectionData aliquotCollectionData;
+	private List<AliquotEvent> aliquotHistory;
 
-  public SimpleAliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData) {
+
+	public SimpleAliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData) {
     this.objectType = objectType;
     this.code = code;
     this.name = name;
@@ -46,6 +49,11 @@ public class SimpleAliquot {
 
 	public String getName() {
 		return name;
+	}
+
+	public List<AliquotEvent> getAliquotHistory() { return aliquotHistory; }
+
+	public void setAliquotHistory(List<AliquotEvent> aliquotHistory) { this.aliquotHistory = aliquotHistory;
 	}
 
 	public AliquotCollectionData getAliquotCollectionData() {

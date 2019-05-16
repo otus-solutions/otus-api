@@ -26,7 +26,7 @@ public class Aliquot extends SimpleAliquot {
   private Sex sex;
   private FieldCenter fieldCenter;
   private ImmutableDate birthdate;
-  private List<AliquotHistory> aliquotHistory;
+  //private List<AliquotHistory> aliquotHistory;
 
   public Aliquot() {
     super();
@@ -116,10 +116,10 @@ public class Aliquot extends SimpleAliquot {
     this.examLotId = examLotId;
   }
 
-  public List<AliquotHistory> getAliquotHistory() { return aliquotHistory; }
-
-  public void setAliquotHistory(List<AliquotHistory> aliquotHistory) { this.aliquotHistory = aliquotHistory;
-  }
+//  public List<AliquotHistory> getAliquotHistory() { return aliquotHistory; }
+//
+//  public void setAliquotHistory(List<AliquotHistory> aliquotHistory) { this.aliquotHistory = aliquotHistory;
+//  }
 
   public static String serialize(Aliquot aliquot) {
     Gson builder = getGsonBuilder().create();
