@@ -174,7 +174,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     public String convertAliquotRole(Aliquot convertedAliquot) {
         Bson filter = new Document("code", convertedAliquot.getCode());
         Bson convertHistory = Document.parse(new GsonBuilder().create()
-                .toJson(new Document("aliquotHistory", convertedAliquot.getAliquotHistories()).append("role", convertedAliquot.getRole())));
+                .toJson(new Document("aliquotHistory", convertedAliquot.getAliquotHistory()).append("role", convertedAliquot.getRole())));
         Bson updateOperation= new Document("$set", convertHistory);
 
         UpdateResult result = collection.updateOne(filter, updateOperation);

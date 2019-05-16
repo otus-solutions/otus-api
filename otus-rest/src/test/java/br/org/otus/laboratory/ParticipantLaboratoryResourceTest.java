@@ -11,6 +11,10 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Aliquot.class})
 public class ParticipantLaboratoryResourceTest {
@@ -33,13 +37,12 @@ public class ParticipantLaboratoryResourceTest {
   @Mock
   private Aliquot convertedAliquot;
 
-
   @Test
   public void convertAliquotRole() throws Exception {
-    PowerMockito.mockStatic(Aliquot.class);
-    PowerMockito.when(Aliquot.class, "deserialize", CONVERTED_ALIQUOT_JSON).thenReturn(convertedAliquot);
+    mockStatic(Aliquot.class);
+    when(Aliquot.class, "deserialize", CONVERTED_ALIQUOT_JSON).thenReturn(convertedAliquot);
 
     resource.convertAliquotRole(CONVERTED_ALIQUOT_JSON);
-    Mockito.verify(participantLaboratoryFacade, Mockito.times(1)).convertAliquotRole(convertedAliquot);
+    verify(participantLaboratoryFacade, Mockito.times(1)).convertAliquotRole(convertedAliquot);
   }
 }

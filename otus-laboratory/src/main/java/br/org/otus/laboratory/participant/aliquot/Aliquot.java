@@ -26,7 +26,7 @@ public class Aliquot extends SimpleAliquot {
   private Sex sex;
   private FieldCenter fieldCenter;
   private ImmutableDate birthdate;
-  private List<AliquotHistory> aliquotHistories;
+  private List<AliquotHistory> aliquotHistory;
 
   public Aliquot() {
     super();
@@ -116,9 +116,9 @@ public class Aliquot extends SimpleAliquot {
     this.examLotId = examLotId;
   }
 
-  public List<AliquotHistory> getAliquotHistories() { return aliquotHistories; }
+  public List<AliquotHistory> getAliquotHistory() { return aliquotHistory; }
 
-  public void setAliquotHistories(List<AliquotHistory> aliquotHistories) { this.aliquotHistories = aliquotHistories;
+  public void setAliquotHistory(List<AliquotHistory> aliquotHistory) { this.aliquotHistory = aliquotHistory;
   }
 
   public static String serialize(Aliquot aliquot) {
