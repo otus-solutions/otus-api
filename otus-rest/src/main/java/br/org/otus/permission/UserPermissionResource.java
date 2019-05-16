@@ -19,6 +19,8 @@ public class UserPermissionResource {
   @Inject
   private PermissionFacade permissionFacade;
 
+  // TODO: @Secured?
+  
   @GET
   @Path("/user/{email}")
   @Produces(MediaType.APPLICATION_JSON)

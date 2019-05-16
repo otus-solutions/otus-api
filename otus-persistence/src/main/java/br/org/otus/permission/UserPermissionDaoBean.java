@@ -24,16 +24,18 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
   public UserPermissionDTO getAll(String email) {
     UserPermissionDTO userPermissionDTO = new UserPermissionDTO();
 
+    // TODO:  
     Document result = collection.aggregate(Arrays.asList(
         new Document("$match",
             new Document("email",email)
             ),
         new Document("$group",
-            new Document("_id",new Document())
+            new Document("_id", new Document())
             .append("permissions", 
-                new Document("$push",new Document("objectType","$objectType")
+                new Document("$push", new Document("objectType", "$objectType")
                     .append("groups", "$groups")))))
         ).first();
+    
     if (result != null) {
       userPermissionDTO = UserPermissionDTO.deserialize(result.toJson());
     }
