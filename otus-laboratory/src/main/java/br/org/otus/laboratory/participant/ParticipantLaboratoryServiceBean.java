@@ -113,7 +113,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       return null;
     });
 
-
     return getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
   }
 

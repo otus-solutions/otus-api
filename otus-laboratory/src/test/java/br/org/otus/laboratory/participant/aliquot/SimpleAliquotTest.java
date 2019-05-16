@@ -18,7 +18,7 @@ public class SimpleAliquotTest {
     public static final String ALIQUOT_JSON_STRING = "{\"objectType\":\"Aliquot\",\"code\":\"334000000\",\"name\":\"BIOCHEMICAL_SERUM\",\"container\":\"PALLET\",\"role\":\"EXAM\",\"aliquotCollectionData\":{\"objectType\":\"AliquotCollectionData\",\"metadata\":\"\",\"operator\":\"nando.souza97@hotmail.com\",\"time\":\"2017-10-09T18:30:06.811Z\",\"processing\":null},\"aliquotHistory\":" +
             "[{" +
             "\"type\":\"CONVERTED STORAGE\"," +
-            "\"userEmail\":\"fdrtec@gmail.com\"," +
+            "\"userEmail\":\"otus@gmail.com\"," +
             "\"description\":\"Falta de material para completar os exames\"," +
             "\"date\":\"2019-05-14T12:36:23.631Z\"" +
             "}]" +
@@ -72,6 +72,5 @@ public class SimpleAliquotTest {
         assertEquals(1, simpleAliquotFromJson.getAliquotHistory().size());
         assertEquals("CONVERTED STORAGE", simpleAliquotFromJson.getAliquotHistory().get(0).getType());
     }
-
 
 }

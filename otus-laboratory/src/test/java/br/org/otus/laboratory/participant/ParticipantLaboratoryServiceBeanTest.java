@@ -85,6 +85,8 @@ public class ParticipantLaboratoryServiceBeanTest {
   private ParticipantLaboratory participantLaboratory;
   @Mock
   private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
+  @Mock
+  private Aliquot convertedAliquot;
 
   private static final long RECRUIMENT_NUMBER = 12345;
   private static final String ALIQUOT_CODE = "354005002";
@@ -190,7 +192,13 @@ public class ParticipantLaboratoryServiceBeanTest {
   public void getLaboratoryExtraction_method_should_call_getLaboratoryExtraction_method() throws DataNotFoundException {
     participantLaboratoryServiceBean.getLaboratoryExtraction();
     
-    Mockito.verify(participantLaboratoryExtractionDao).getLaboratoryExtraction();
+    verify(participantLaboratoryExtractionDao).getLaboratoryExtraction();
+  }
+
+  @Test
+  public void convertAliquotRole_method_should_evoke_convert_of_aliquotDao(){
+    participantLaboratoryServiceBean.convertAliquotRole(convertedAliquot);
+    verify(aliquotDao, Mockito.times(1)).convertAliquotRole(convertedAliquot);
   }
 
 }

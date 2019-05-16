@@ -53,7 +53,6 @@ public class SimpleAliquot {
 
 	public List<AliquotEvent> getAliquotHistory() { return aliquotHistory; }
 
-
 	public AliquotCollectionData getAliquotCollectionData() {
 		return aliquotCollectionData;
 	}
@@ -72,7 +71,6 @@ public class SimpleAliquot {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 		builder.serializeNulls();
-
 		return builder;
 	}
 
@@ -80,9 +78,7 @@ public class SimpleAliquot {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null || getClass() != obj.getClass()) return false;
-
 		SimpleAliquot aliquot = (SimpleAliquot) obj;
-
 		return code.equals(aliquot.code);
 	}
 
