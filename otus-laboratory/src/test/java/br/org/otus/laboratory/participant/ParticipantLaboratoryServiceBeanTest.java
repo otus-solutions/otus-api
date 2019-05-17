@@ -196,7 +196,7 @@ public class ParticipantLaboratoryServiceBeanTest {
   }
 
   @Test
-  public void convertAliquotRole_method_should_evoke_convert_of_aliquotDao(){
+  public void convertAliquotRole_method_should_evoke_convert_of_aliquotDao() throws DataNotFoundException {
     participantLaboratoryServiceBean.convertAliquotRole(convertedAliquot);
     verify(aliquotDao, Mockito.times(1)).convertAliquotRole(convertedAliquot);
   }

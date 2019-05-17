@@ -41,5 +41,5 @@ public interface AliquotDao {
 
   void executeFunction(String function);
 
-  String convertAliquotRole(Aliquot convertedAliquot);
+  String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException;
 }

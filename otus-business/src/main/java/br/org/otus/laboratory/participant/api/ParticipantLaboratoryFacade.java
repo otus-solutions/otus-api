@@ -85,6 +85,10 @@ public class ParticipantLaboratoryFacade {
     }
 
     public String convertAliquotRole(Aliquot convertedAliquot) {
+        try {
             return service.convertAliquotRole(convertedAliquot);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+        }
     }
 }

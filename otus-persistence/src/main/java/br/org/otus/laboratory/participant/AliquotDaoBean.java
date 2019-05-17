@@ -171,7 +171,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     }
 
     @Override
-    public String convertAliquotRole(Aliquot convertedAliquot) {
+    public String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException {
         Bson filter = new Document("code", convertedAliquot.getCode());
         Bson convertHistory = Document.parse(new GsonBuilder().create()
                 .toJson(new Document("aliquotHistory", convertedAliquot.getAliquotHistory())
@@ -181,6 +181,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
         Bson updateOperation= new Document("$set", convertHistory);
 
         UpdateResult result = collection.updateOne(filter, updateOperation);
+        if(result.getMatchedCount() < 1) throw new DataNotFoundException(new Throwable("aliquot not found"));
         return String.valueOf(result.getModifiedCount());
     }
 }

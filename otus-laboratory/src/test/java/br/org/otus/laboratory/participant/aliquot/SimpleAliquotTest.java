@@ -17,6 +17,7 @@ public class SimpleAliquotTest {
     public static final String NAME = "BIOCHEMICAL_SERUM";
     public static final String ALIQUOT_JSON_STRING = "{\"objectType\":\"Aliquot\",\"code\":\"334000000\",\"name\":\"BIOCHEMICAL_SERUM\",\"container\":\"PALLET\",\"role\":\"EXAM\",\"aliquotCollectionData\":{\"objectType\":\"AliquotCollectionData\",\"metadata\":\"\",\"operator\":\"nando.souza97@hotmail.com\",\"time\":\"2017-10-09T18:30:06.811Z\",\"processing\":null},\"aliquotHistory\":" +
             "[{" +
+            "\"objectType\":\"AliquotEvent\"," +
             "\"type\":\"CONVERTED STORAGE\"," +
             "\"userEmail\":\"otus@gmail.com\"," +
             "\"description\":\"Falta de material para completar os exames\"," +
