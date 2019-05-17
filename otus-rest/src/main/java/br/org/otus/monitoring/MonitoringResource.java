@@ -1,9 +1,11 @@
 package br.org.otus.monitoring;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
-import org.ccem.otus.model.monitoring.ActivitiesProgressReport;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
+import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
 import javax.inject.Inject;
@@ -53,7 +55,7 @@ public class MonitoringResource {
   @Path("/activities/progress/{center}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getActivitiesProgress(@PathParam("center") String center) {
-    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ActivitiesProgressReport.getGsonBuilder());
+    return new Response().buildSuccess(monitoringFacade.getActivitiesProgress(center)).toJson(ProgressReport.getGsonBuilder());
   }
 
   @GET
@@ -83,6 +85,54 @@ public class MonitoringResource {
     monitoringFacade.deleteActivityApplicability(rn, acronym);
     return new Response().buildSuccess().toJson();
   }
+
+
+  /* Laboratory Monitoring */
+  @GET
+  @Secured
+  @Path("/laboratory/progress/{center}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getExamFlagReport(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getExamFlagReport(center)).toJson(ProgressReport.getGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/laboratory/progress/{center}/labels")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getExamFlagReportLabels(@PathParam("center") String center) {
+    return new Response().buildSuccess(monitoringFacade.getExamFlagReportLabels(center)).toJson(ProgressReport.getGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/exams/progress/participant/{rn}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getParticipantExamsProgress(@PathParam("rn") Long rn) {
+    return new Response().buildSuccess(monitoringFacade.getParticipantExamsProgress(rn)).toJson(ParticipantExamReportDto.getGsonBuilder());
+  }
+
+  @PUT
+  @Secured
+  @Path("/exams/progress/not-apply")
+  @Consumes (MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String defineExamInapplicability(String examApplicability) {
+    ExamInapplicability examInapplicability = ExamInapplicability.deserialize(examApplicability);
+    monitoringFacade.setExamApplicability(examInapplicability);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/exams/progress/not-apply/delete")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String deleteExamInapplicability( String examApplicability) {
+    ExamInapplicability examInapplicability = ExamInapplicability.deserialize(examApplicability);
+    monitoringFacade.deleteExamInapplicability(examInapplicability);
+    return new Response().buildSuccess().toJson();
+  }
+
 
   @GET
   @Secured

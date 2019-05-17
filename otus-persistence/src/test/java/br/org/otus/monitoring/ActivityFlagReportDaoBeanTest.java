@@ -23,13 +23,13 @@ import java.util.LinkedList;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ActivityStatusQueryBuilder.class, FlagReportDaoBean.class})
-public class FlagReportDaoBeanTest {
+@PrepareForTest({ActivityStatusQueryBuilder.class, ActivityFlagReportDaoBean.class})
+public class ActivityFlagReportDaoBeanTest {
   private static final String CENTER = "MG";
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
 
   @InjectMocks
-  private FlagReportDaoBean flagReportDaoBean;
+  private ActivityFlagReportDaoBean activityFlagReportDaoBean;
 
   @Mock
   private MongoCollection<Document> collection;
@@ -45,7 +45,7 @@ public class FlagReportDaoBeanTest {
 
   @Before
   public void setUp() throws Exception {
-    Whitebox.setInternalState(flagReportDaoBean, "collection", collection);
+    Whitebox.setInternalState(activityFlagReportDaoBean, "collection", collection);
 
     SURVEY_ACRONYM_LIST = new LinkedList<>();
     SURVEY_ACRONYM_LIST.add("HVSD");
@@ -64,7 +64,7 @@ public class FlagReportDaoBeanTest {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
     when(result.first()).thenReturn(new Document());
-    flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
+    activityFlagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
     Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(SURVEY_ACRONYM_LIST);
   }
 
@@ -73,7 +73,7 @@ public class FlagReportDaoBeanTest {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
     when(result.first()).thenReturn(new Document());
-    flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
+    activityFlagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
     Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(CENTER,SURVEY_ACRONYM_LIST);
   }
 
@@ -81,13 +81,13 @@ public class FlagReportDaoBeanTest {
   public void getActivitiesProgressReport_should_should_throws_DataNotFoundException() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
-    flagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
+    activityFlagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST);
   }
 
   @Test(expected = DataNotFoundException.class)
   public void getActivitiesProgressReport_by_center_should_throws_DataNotFoundException() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
-    flagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
+    activityFlagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST);
   }
 }

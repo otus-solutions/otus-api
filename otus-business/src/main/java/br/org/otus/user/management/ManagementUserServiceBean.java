@@ -7,7 +7,7 @@ import br.org.otus.email.user.management.PasswordResetEmail;
 import br.org.otus.model.User;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.user.UserDao;
+import br.org.otus.persistence.UserDao;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
 import br.org.tutty.Equalizer;

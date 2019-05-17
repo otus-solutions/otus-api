@@ -22,6 +22,7 @@ import br.org.otus.report.ReportResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
+import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.survey.group.SurveyGroupResource;
 import br.org.otus.user.UserResource;
@@ -67,6 +68,9 @@ public class EndPointsLoader extends Application {
 
     @Inject
     private ActivityResource activityResource;
+
+    @Inject
+    private ActivityImportationResource activityImportationResource;
 
     @Inject
     private ReportResource reportResource;
@@ -125,6 +129,7 @@ public class EndPointsLoader extends Application {
         resources.add(ReportResource.class);
         resources.add(ParticipantResource.class);
         resources.add(ActivityResource.class);
+        resources.add(ActivityImportationResource.class);
         resources.add(ParticipantLaboratoryResource.class);
         resources.add(DataSourceResource.class);
         resources.add(FileUploaderResource.class);
@@ -156,6 +161,7 @@ public class EndPointsLoader extends Application {
         resources.add(participantImportationResource);
         resources.add(participantResource);
         resources.add(activityResource);
+        resources.add(activityImportationResource);
         resources.add(laboratoryParticipantResource);
         resources.add(reportResource);
         resources.add(dataSourceResource);

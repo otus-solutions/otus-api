@@ -43,7 +43,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   @Override
   public ParticipantLaboratory find() {
     Document document = super.findFirst();
-
     return ParticipantLaboratory.deserialize(document.toJson());
   }
 
@@ -59,7 +58,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   @Override
   public Tube updateTubeCollectionData(long rn, Tube tube) throws DataNotFoundException {
     Document parsedCollectionData = Document.parse(TubeCollectionData.serialize(tube.getTubeCollectionData()));
-
     UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, rn), eq("tubes.code", tube.getCode())), set("tubes.$.tubeCollectionData", parsedCollectionData),
         new UpdateOptions().upsert(false));
 
@@ -82,7 +80,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   @Override
   public ArrayList<SimpleAliquot> getFullAliquotsList() {
     ArrayList<SimpleAliquot> fullList = new ArrayList<SimpleAliquot>();
-
     FindIterable<Document> list = collection.find();
     list.forEach((Block<Document>) document -> {
       ParticipantLaboratory laboratory = ParticipantLaboratory.deserialize(document.toJson());
@@ -105,7 +102,6 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
   @Override
   public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant() {
-    
     return null;
   }
 
@@ -113,7 +109,5 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   public AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline) {
     return collection.aggregate(pipeline).allowDiskUse(true);
   }
-  
-  
 
 }

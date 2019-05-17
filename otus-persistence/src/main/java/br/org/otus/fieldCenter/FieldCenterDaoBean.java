@@ -127,7 +127,7 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
         Document query = new Document();
         for(String acronym:collection.distinct("acronym", String.class)) {
           results.add(acronym);
-        };
+        }
  
         return results;
     }

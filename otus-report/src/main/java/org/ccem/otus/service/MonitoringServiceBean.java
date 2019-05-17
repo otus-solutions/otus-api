@@ -1,5 +1,7 @@
 package org.ccem.otus.service;
 
+import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
+import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -30,7 +32,7 @@ public class MonitoringServiceBean implements MonitoringService {
   private ParticipantDao participantDao;
 
   @Inject
-  private FlagReportDao flagReportDao;
+  private ActivityFlagReportDao activityFlagReportDao;
 
   @Inject
   private SurveyDao surveyDao;
@@ -39,10 +41,16 @@ public class MonitoringServiceBean implements MonitoringService {
   private SurveyMonitoringDao surveyMonitoringDao;
 
   @Inject
+  private ExamMonitoringDao examMonitoringDao;
+
+  @Inject
   private LaboratoryProgressDao laboratoryProgressDao;
 
   @Inject
   private ActivityInapplicabilityDao activityInapplicabilityDao;
+
+  @Inject
+  private ExamInapplicabilityDao examInapplicabilityDao;
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
@@ -74,30 +82,35 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   @Override
-  public ActivityProgressReportDto getActivitiesProgress() throws DataNotFoundException {
+  public ProgressReport getActivitiesProgress() throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(surveyAcronyms);
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(surveyAcronyms);
 
-    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
+    return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }
 
   @Override
-  public ActivityProgressReportDto getActivitiesProgress(String center) throws DataNotFoundException {
+  public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    Document activitiesProgressReportDocument = flagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
 
-    return getActivityProgressReportDto(surveyAcronyms, activitiesProgressReportDocument);
+    return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }
 
-  private ActivityProgressReportDto getActivityProgressReportDto(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
-    ActivityProgressReportDto activityProgressReportDto = ActivityProgressReportDto.deserialize(activitiesProgressReportDocument.toJson());
-    activityProgressReportDto.setColumns(surveyAcronyms);
-    return activityProgressReportDto;
+  private ProgressReport getProgressReport(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
+    ProgressReport progressReport = ProgressReport.deserialize(activitiesProgressReportDocument.toJson());
+    progressReport.setColumns(surveyAcronyms);
+    return progressReport;
   }
 
   @Override
   public ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn) {
     return surveyMonitoringDao.getParticipantActivities(rn);
+  }
+
+  @Override
+  public ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException{
+    return examMonitoringDao.getParticipantExams(rn);
   }
 
   @Override
@@ -108,6 +121,16 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException {
     activityInapplicabilityDao.delete(rn, acronym);
+  }
+
+  @Override
+  public void deleteExamInapplicability(ExamInapplicability applicability) {
+    examInapplicabilityDao.delete(applicability);
+  }
+
+  @Override
+  public void setExamInapplicability(ExamInapplicability applicability) {
+    examInapplicabilityDao.update(applicability);
   }
 
   @Override

@@ -9,6 +9,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -210,6 +211,19 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
     }
 
     return documents;
+  }
+
+  @Override
+  public SurveyJumpMap createJumpMap(String acronym, Integer version) {
+    SurveyJumpMap surveyJumpMap = new SurveyJumpMap();
+
+    Document first = super.aggregate(new SurveyJumpMapQueryBuilder().buildQuery(acronym,version)).first();
+
+    if(first != null){
+      surveyJumpMap = SurveyJumpMap.deserialize(first.toJson());
+    }
+
+    return surveyJumpMap;
   }
 
 }

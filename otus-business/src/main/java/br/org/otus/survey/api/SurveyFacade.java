@@ -43,7 +43,9 @@ public class SurveyFacade {
     public SurveyForm publishSurveyTemplate(SurveyTemplate surveyTemplate, String userEmail) {
         SurveyForm s = new SurveyForm(surveyTemplate, userEmail);
         try {
-            return surveyService.saveSurvey(s);
+            SurveyForm surveyForm = surveyService.saveSurvey(s);
+            surveyService.createSurveyJumpMap(surveyForm);
+            return surveyForm;
         } catch (DataNotFoundException | AlreadyExistException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
