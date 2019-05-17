@@ -59,6 +59,10 @@
             </ejbModule>
             <ejbModule>
               <groupId>org.ccem.otus</groupId>
+              <artifactId>otus-import</artifactId>
+            </ejbModule>
+            <ejbModule>
+              <groupId>org.ccem.otus</groupId>
               <artifactId>otus-datasource</artifactId>
             </ejbModule>
             <ejbModule>
@@ -114,6 +118,12 @@
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-commons</artifactId>
       <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-import</artifactId>
+      <version>${project.parent.version}</version>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>

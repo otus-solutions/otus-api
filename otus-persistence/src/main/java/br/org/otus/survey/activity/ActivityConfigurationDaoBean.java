@@ -65,6 +65,20 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
     }
 
     @Override
+    public Boolean categoryExists(String name) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("objectType", "ActivityCategory");
+        query.put("name", name);
+
+        Document first = collection.find(query).first();
+        if (first != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public ActivityCategory create(ActivityCategory activityCategory) {
         Document parsed = Document.parse(ActivityCategory.serialize(activityCategory));
         super.persist(parsed);

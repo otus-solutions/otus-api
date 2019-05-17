@@ -33,7 +33,7 @@ import br.org.otus.email.service.EmailNotifierService;
 import br.org.otus.email.user.signup.NewUserGreetingsEmail;
 import br.org.otus.email.user.signup.NewUserNotificationEmail;
 import br.org.otus.model.User;
-import br.org.otus.user.UserDao;
+import br.org.otus.persistence.UserDao;
 import br.org.otus.user.dto.SignupDataDto;
 import br.org.otus.user.management.ManagementUserService;
 import br.org.owail.sender.email.Recipient;

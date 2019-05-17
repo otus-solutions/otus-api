@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import br.org.otus.persistence.UserDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.permissions.model.user.Permission;
 import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
@@ -14,8 +15,6 @@ import org.ccem.otus.permissions.persistence.user.UserPermissionDao;
 import org.ccem.otus.permissions.persistence.user.UserPermissionGenericDao;
 import org.ccem.otus.permissions.persistence.user.UserPermissionProfileDao;
 import org.ccem.otus.persistence.SurveyGroupDao;
-
-import br.org.otus.user.UserDao;
 
 public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
 

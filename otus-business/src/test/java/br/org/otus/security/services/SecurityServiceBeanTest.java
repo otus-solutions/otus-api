@@ -2,8 +2,6 @@ package br.org.otus.security.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyByte;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,7 +15,6 @@ import static org.powermock.reflect.Whitebox.invokeMethod;
 
 import javax.persistence.NoResultException;
 
-import br.org.otus.response.builders.Email;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
@@ -31,7 +28,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
@@ -39,7 +35,7 @@ import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
-import br.org.otus.user.UserDao;
+import br.org.otus.persistence.UserDao;
 
 import java.security.SecureRandom;
 
