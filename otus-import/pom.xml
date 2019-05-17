@@ -3,7 +3,7 @@
   <parent>
     <artifactId>otus-root</artifactId>
     <groupId>org.ccem.otus</groupId>
-    <version>1.22-SNAPSHOT</version>
+    <version>1.21</version>
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -13,25 +13,25 @@
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-activity</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>1.21</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-commons</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>1.21</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-participant</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>1.21</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-user</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>1.21</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -43,7 +43,7 @@
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-activity</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>1.21</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -62,7 +62,7 @@
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-center</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>1.21</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
