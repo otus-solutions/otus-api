@@ -15,6 +15,8 @@ import br.org.otus.laboratory.configuration.label.LabelReference;
 
 public interface LaboratoryConfigurationService {
 
+  Boolean existsLaboratoryConfiguration();
+
   Set<TubeDefinition> getDefaultTubeSet();
 
   Set<TubeDefinition> getTubeSetByGroupName(String setName);
@@ -35,5 +37,5 @@ public interface LaboratoryConfigurationService {
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
-    List<String> listPossibleExams(String center) throws DataNotFoundException;
+  List<String> listPossibleExams(String center) throws DataNotFoundException;
 }

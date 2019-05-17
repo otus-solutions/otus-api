@@ -18,7 +18,13 @@ public class LaboratoryConfigurationResource {
 	@Inject
 	private LaboratoryConfigurationService laboratoryConfigurationService;
 
-
+	@GET
+	@Secured
+    @Path("/exists")
+	public boolean existsLaboratoryConfiguration() {
+	  return laboratoryConfigurationService.existsLaboratoryConfiguration();
+	}
+	
 	@GET
 	@Secured
 	@Path("/descriptor")

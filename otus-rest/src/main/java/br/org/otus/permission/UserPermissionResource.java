@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 
 import br.org.otus.rest.Response;
+import br.org.otus.security.Secured;
 
 @Path("/permission")
 public class UserPermissionResource {
@@ -19,9 +20,8 @@ public class UserPermissionResource {
   @Inject
   private PermissionFacade permissionFacade;
 
-  // TODO: @Secured?
-  
   @GET
+  @Secured
   @Path("/user/{email}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getAll(@PathParam("email") String email) {
@@ -29,6 +29,7 @@ public class UserPermissionResource {
   }
 
   @POST
+  @Secured
   @Path("/user/save")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)

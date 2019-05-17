@@ -49,8 +49,7 @@ public class UserPermissionGenericDaoBeanTest {
     @Ignore
     @Test
     public void getUserPermissions_should_call_concatenatePermissions() throws Exception {
-        // TODO:
-        // when(userPermissionDao.getAll(USER_EMAIL)).thenReturn(userPermissionDTO);
+        when(userPermissionDao.getAll(USER_EMAIL)).thenReturn(userPermissionDTO);
         when(userPermissionProfileDao.getProfile(DEFAULT_PROFILE)).thenReturn(userPermissionDTO);
         userPermissionGenericDaoBean.getUserPermissions(USER_EMAIL);
         Mockito.verify(userPermissionDTO, Mockito.times(1)).concatenatePermissions(userPermissionDTO);
