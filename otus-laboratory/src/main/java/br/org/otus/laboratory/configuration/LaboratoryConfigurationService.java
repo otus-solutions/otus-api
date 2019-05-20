@@ -15,7 +15,7 @@ import br.org.otus.laboratory.configuration.label.LabelReference;
 
 public interface LaboratoryConfigurationService {
 
-  Boolean existsLaboratoryConfiguration();
+  Boolean getCheckingExist();
 
   Set<TubeDefinition> getDefaultTubeSet();
 

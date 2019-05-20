@@ -40,7 +40,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     }
     
     @Override
-    public Boolean existsLaboratoryConfiguration() {
+    public Boolean getCheckingExist() {
       Document query = new Document("objectType", "LaboratoryConfiguration");
 
       Document first = collection.find(query).first();

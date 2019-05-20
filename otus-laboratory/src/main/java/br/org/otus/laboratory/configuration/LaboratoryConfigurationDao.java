@@ -15,7 +15,7 @@ public interface LaboratoryConfigurationDao {
 
   LaboratoryConfiguration find();
 
-  Boolean existsLaboratoryConfiguration();
+  Boolean getCheckingExist();
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 

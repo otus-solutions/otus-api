@@ -35,8 +35,8 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
   
   @Override
-  public Boolean existsLaboratoryConfiguration() {
-    return this.laboratoryConfigurationDao.existsLaboratoryConfiguration();
+  public Boolean getCheckingExist() {
+    return this.laboratoryConfigurationDao.getCheckingExist();
   }
 
   @Override

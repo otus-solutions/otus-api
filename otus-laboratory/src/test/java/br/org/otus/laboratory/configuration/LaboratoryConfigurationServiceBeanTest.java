@@ -51,9 +51,9 @@ public class LaboratoryConfigurationServiceBeanTest {
 	
 	@Test
 	public void getHeaders_method_should_call_getHeaders_method() {
-	  laboratoryConfigurationServiceBean.existsLaboratoryConfiguration();
+	  laboratoryConfigurationServiceBean.getCheckingExist();
 	  
-	  Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).existsLaboratoryConfiguration();
+	  Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getCheckingExist();
 	}
 
 	@Test

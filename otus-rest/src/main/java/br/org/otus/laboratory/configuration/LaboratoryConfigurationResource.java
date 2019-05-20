@@ -22,8 +22,8 @@ public class LaboratoryConfigurationResource {
   @GET
   @Secured
   @Path("/exists")
-  public boolean existsLaboratoryConfiguration() {
-    return laboratoryConfigurationService.existsLaboratoryConfiguration();
+  public boolean getCheckingExist() {
+    return laboratoryConfigurationService.getCheckingExist();
   }
 
   @GET
