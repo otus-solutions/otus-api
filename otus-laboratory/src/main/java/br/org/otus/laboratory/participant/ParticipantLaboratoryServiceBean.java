@@ -129,7 +129,10 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException {
+  public String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException, ValidationException {
+    if(convertedAliquot.getAliquotHistory().isEmpty()){
+      throw new ValidationException(new Throwable("aliquotHistory invalid"));
+    }
     return aliquotDao.convertAliquotRole(convertedAliquot);
   }
 }

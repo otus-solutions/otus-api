@@ -12,8 +12,10 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import br.org.otus.laboratory.participant.aliquot.AliquotEvent;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -46,6 +48,7 @@ import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValida
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import org.powermock.reflect.Whitebox;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ParticipantLaboratoryServiceBean.class)
@@ -87,6 +90,8 @@ public class ParticipantLaboratoryServiceBeanTest {
   private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
   @Mock
   private Aliquot convertedAliquot;
+  @Mock
+  private AliquotEvent aliquotEvent;
 
   private static final long RECRUIMENT_NUMBER = 12345;
   private static final String ALIQUOT_CODE = "354005002";
@@ -195,10 +200,17 @@ public class ParticipantLaboratoryServiceBeanTest {
     verify(participantLaboratoryExtractionDao).getLaboratoryExtraction();
   }
 
-  @Test
-  public void convertAliquotRole_method_should_evoke_convert_of_aliquotDao() throws DataNotFoundException {
+  @Test()
+  public void convertAliquotRole_method_should_evoke_convert_of_aliquotDao() throws DataNotFoundException, ValidationException {
+    List<AliquotEvent>mockAliquotHistory = Arrays.asList(aliquotEvent);
+    when(convertedAliquot.getAliquotHistory()).thenReturn(mockAliquotHistory);
     participantLaboratoryServiceBean.convertAliquotRole(convertedAliquot);
     verify(aliquotDao, Mockito.times(1)).convertAliquotRole(convertedAliquot);
+  }
+
+  @Test(expected = ValidationException.class)
+  public void convertAliquotRole_method_throws_ValidationException_in_case_aliquotHistory_empty() throws DataNotFoundException, ValidationException {
+    participantLaboratoryServiceBean.convertAliquotRole(convertedAliquot);
   }
 
 }
