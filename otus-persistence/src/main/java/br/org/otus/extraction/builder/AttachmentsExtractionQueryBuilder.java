@@ -23,8 +23,11 @@ public class AttachmentsExtractionQueryBuilder {
         return getBsons(acronym, version, objectIds, "$in:","Stored");
     }
 
+    /* TODO Adicionar Lookup em atividade */
     private ArrayList<Bson> getBsons(String acronym, Integer version, ArrayList<ObjectId> objectIds, String state, String statueSubtitle) {
-        pipeline.add(parseQuery("{$match:{\"surveyForm.surveyTemplate.identity.acronym\":"+acronym+",\"surveyForm.version\":"+version+",\"isDiscarded\":false}}"));
+        pipeline.add(parseQuery("{$match:{\"surveyForm.acronym\":"+acronym+",\"surveyForm.version\":"+version+",\"isDiscarded\":false}}"));
+        pipeline.add(parseQuery("{\"$lookup\":{\"from\":\"survey\",\"let\":{\"acronym\":\"$surveyForm.acronym\",\"version\":\"$surveyForm.version\"},\"pipeline\":[{\"$match\":{\"$expr\":{\"$and\":[{\"$eq\":[\"$surveyTemplate.identity.acronym\",\"$$acronym\"]},{\"$eq\":[\"$version\",\"$$version\"]}]}}},{\"$replaceRoot\":{\"newRoot\":\"$surveyTemplate\"}}],\"as\":\"surveyForm.surveyTemplate\"}}"));
+        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
         pipeline.add(parseQuery("{\"$addFields\":{\"itemContainer\":\"$surveyForm.surveyTemplate.itemContainer\"}}"));
         pipeline.add(parseQuery("{\"$project\":{\"itemContainer\":1,\"participantData.recruitmentNumber\":1.0,\"fillContainer\":1.0}}"));
         pipeline.add(parseQuery("{$unwind:\"$fillContainer.fillingList\"}"));
