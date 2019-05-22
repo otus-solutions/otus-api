@@ -1,7 +1,9 @@
 package br.org.otus.survey.activity;
 
 import br.org.mongodb.MongoGenericDao;
+import com.google.gson.GsonBuilder;
 import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
@@ -30,7 +32,7 @@ import static com.mongodb.client.model.Projections.fields;
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
 
     public static final String COLLECTION_NAME = "activity";
-    public static final String ACRONYM_PATH = "surveyForm.surveyTemplate.identity.acronym";
+    public static final String ACRONYM_PATH = "surveyForm.acronym";
     public static final String VERSION_PATH = "surveyForm.version";
     public static final String DISCARDED_PATH = "isDiscarded";
     public static final String TEMPLATE_PATH = "surveyForm.surveyTemplate";
@@ -40,6 +42,11 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
     public ActivityDaoBean() {
         super(COLLECTION_NAME, Document.class);
+    }
+
+    private Document parseQuery(String query) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        return gsonBuilder.create().fromJson(query, Document.class);
     }
 
     /**
@@ -52,11 +59,11 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     @UserPermission
     public List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn) {
         ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
-
-        FindIterable<Document> result = collection.find(and(eq(RECRUITMENT_NUMBER_PATH, rn),
-            eq(DISCARDED_PATH, false),
-            in("surveyForm.surveyTemplate.identity.acronym",permittedSurveys)
-         ));        
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(new Document("$match",new Document(RECRUITMENT_NUMBER_PATH,rn).append(DISCARDED_PATH,false).append(ACRONYM_PATH,new Document("$in",permittedSurveys))));
+        pipeline.add(parseQuery("{\"$lookup\":{\"from\":\"survey\",\"let\":{\"acronym\":\"$surveyForm.acronym\",\"version\":\"$surveyForm.version\"},\"pipeline\":[{\"$match\":{\"$expr\":{\"$and\":[{\"$eq\":[\"$surveyTemplate.identity.acronym\",\"$$acronym\"]},{\"$eq\":[\"$version\",\"$$version\"]}]}}},{\"$replaceRoot\":{\"newRoot\":\"$surveyTemplate\"}}],\"as\":\"surveyForm.surveyTemplate\"}}"));
+        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
+        AggregateIterable<Document> result = collection.aggregate(pipeline);
         
         result.forEach((Block<Document>) document -> {
             activities.add(SurveyActivity.deserialize(document.toJson()));
@@ -175,7 +182,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
 	private void removeOids(Document parsedActivity){
         parsedActivity.remove("_id");
-        ((Document) parsedActivity.get("surveyForm")).remove("_id");; //todo: remove when this id becomes standard
+        ((Document) parsedActivity.get("surveyForm")).remove("_id"); //todo: remove when this id becomes standard
     }
 
 }

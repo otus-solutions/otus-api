@@ -32,6 +32,9 @@ public class ActivityServiceBean implements ActivityService {
 
   @Override
   public String create(SurveyActivity surveyActivity) {
+    surveyActivity.getSurveyForm().setAcronym(surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
+    surveyActivity.getSurveyForm().setName(surveyActivity.getSurveyForm().getSurveyTemplate().identity.name);
+    surveyActivity.getSurveyForm().setSurveyTemplate(null);
     ObjectId objectId = activityDao.persist(surveyActivity);
     return objectId.toString();
   }
@@ -78,7 +81,7 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   private boolean isSameAcronym(ActivityAccessPermission permission, SurveyActivity activity) {
-    return (permission.getAcronym().equals(activity.getSurveyForm().getSurveyTemplate().identity.acronym));
+    return (permission.getAcronym().equals(activity.getSurveyForm().getAcronym()));
   }
 
   private boolean isUserInStatusHistory(SurveyActivity activity, String userEmail) {

@@ -8,6 +8,9 @@ import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
+import org.ccem.otus.survey.form.SurveyForm;
+import org.ccem.otus.survey.template.SurveyTemplate;
+import org.ccem.otus.survey.template.identity.Identity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +43,15 @@ public class ActivityServiceBeanTest {
   @Mock
   private ActivityDao activityDao;
   @Mock
-  private SurveyActivity Dieta;
+  private SurveyActivity surveyActivity;
+  @Mock
+  private SurveyForm surveyForm;
+  @Mock
+  private SurveyTemplate surveyTemplate;
+  @Mock
+  private Identity identity;
+  @Mock
+  private SurveyActivity surveyActivityToPersist;
   @Mock
   private ActivityAccessPermissionService activityAccessPermissionService;
   private ObjectId objectId;
@@ -53,21 +65,29 @@ public class ActivityServiceBeanTest {
   @Before
   public void setup() {
     objectId = new ObjectId(HASH);
-    when(activityDao.persist(Dieta)).thenReturn(objectId);
+    Whitebox.setInternalState(identity,"acronym","TST");
+    Whitebox.setInternalState(identity,"name","TEST");
+    Whitebox.setInternalState(surveyTemplate,"identity",identity);
+    when(activityDao.persist(any())).thenReturn(objectId);
+    when(surveyActivity.getSurveyForm()).thenReturn(surveyForm);
+    when(surveyForm.getSurveyTemplate()).thenReturn(surveyTemplate);
     ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
-    activities.add(Dieta);
+    activities.add(surveyActivity);
     when(activityDao.find(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER)).thenReturn(activities);
   }
 
   @Test
   public void method_create_should_call_ActivityDao_persist_method_with_a_mySurveyActivity() {
-    service.create(Dieta);
-    verify(activityDao, times(1)).persist(Dieta);
+    service.create(surveyActivity);
+    verify(activityDao, times(1)).persist(surveyActivity);
+    verify(surveyForm, times(1)).setSurveyTemplate(null);
+    verify(surveyForm, times(1)).setAcronym("TST");
+    verify(surveyForm, times(1)).setName("TEST");
   }
 
   @Test
   public void should_return_mySurveyActivity() {
-    assertEquals(HASH, service.create(Dieta));
+    assertEquals(HASH, service.create(surveyActivity));
   }
 
   @Test

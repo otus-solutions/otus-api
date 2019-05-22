@@ -10,7 +10,7 @@ public class MonitoringDataSource extends ReportDataSource<MonitoringDataSourceR
 
     public static final String COLLECTION_NAME = "activity";
     public static final String RN_PATH = "$participantData.recruitmentNumber";
-    public static final String ACRONYM_PATH = "$surveyForm.surveyTemplate.identity.acronym";
+    public static final String ACRONYM_PATH = "$surveyForm.acronym";
     public static final String ACRONYM = "acronym";
     public static final String PROJECT = "$project";
     public static final String MATCH = "$match";
@@ -50,7 +50,7 @@ public class MonitoringDataSource extends ReportDataSource<MonitoringDataSourceR
 
     private void buildAcronymMatchStage(ArrayList<Document> query,String acronym){
         Document match = new Document(MATCH,
-                new Document(DISCARDED_PATH, false).append("surveyForm.surveyTemplate.identity.acronym", acronym));
+                new Document(DISCARDED_PATH, false).append("surveyForm.acronym", acronym));
         query.add(match);
     }
 
