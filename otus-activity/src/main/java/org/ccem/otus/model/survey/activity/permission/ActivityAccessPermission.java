@@ -3,7 +3,6 @@ package org.ccem.otus.model.survey.activity.permission;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import com.google.gson.GsonBuilder;

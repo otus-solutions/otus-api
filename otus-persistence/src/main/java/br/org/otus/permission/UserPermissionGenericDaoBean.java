@@ -35,9 +35,9 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
   @Override
   public UserPermissionDTO getUserPermissions(String email) throws DataNotFoundException {
     UserPermissionDTO permissionProfile = userPermissionProfileDao.getProfile(DEFAULT_PROFILE);
-    UserPermissionDTO userCustomPermission = userPermissionDao.getAll(email);
+    UserPermissionDTO userPermissions = userPermissionDao.getAll(email);
 
-    permissionProfile.concatenatePermissions(userCustomPermission);
+    permissionProfile.concatenatePermissions(userPermissions);
     
     return permissionProfile;
   }

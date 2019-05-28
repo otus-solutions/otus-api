@@ -1,17 +1,21 @@
 package br.org.otus.laboratory.configuration;
 
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-import com.mongodb.client.AggregateIterable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.client.AggregateIterable;
+
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 public interface LaboratoryConfigurationDao {
 
   LaboratoryConfiguration find();
+
+  Boolean getCheckingExist();
 
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
