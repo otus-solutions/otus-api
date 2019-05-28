@@ -34,6 +34,14 @@ public class SurveyGroupPermission extends Permission {
     return Arrays.equals(groups.toArray(), c.groups.toArray());
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((groups == null) ? 0 : groups.hashCode());
+    return result;
+  }
+
   public Set<String> getGroups() {
     return this.groups;
   }
