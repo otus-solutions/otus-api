@@ -8,6 +8,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.SurveyJumpMapDao;
+import org.ccem.otus.service.ActivityServiceBean;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class ImportServiceBean implements ImportService {
     @Inject
     private SurveyJumpMapDao surveyJumpMapDao;
     @Inject
-    private ActivityDao activityDao;
+    private ActivityServiceBean activityServiceBean;
     @Inject
     private ActivityImportValidationService activityImportValidationService;
 
@@ -33,7 +34,7 @@ public class ImportServiceBean implements ImportService {
             if(activityImportResultDTO.getFailImport()){
                 failImports.add(activityImportResultDTO);
             } else {
-                activityDao.persist(importActivity);
+                activityServiceBean.create(importActivity);
             }
         }
 
