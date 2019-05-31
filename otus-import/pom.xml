@@ -13,37 +13,43 @@
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-activity</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>${project.parent.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-commons</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>${project.parent.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-participant</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>${project.parent.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-user</artifactId>
-      <version>1.22-SNAPSHOT</version>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-activity</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-center</artifactId>
+      <version>${project.parent.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>survey-model</artifactId>
       <version>1.6</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ccem.otus</groupId>
-      <artifactId>otus-activity</artifactId>
-      <version>1.22-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -57,13 +63,6 @@
       <artifactId>mongodb-driver</artifactId>
       <version>3.8.1</version>
       <scope>provided</scope>
-    </dependency>
-    <!-- - - Test scope - ! -->
-    <dependency>
-      <groupId>org.ccem.otus</groupId>
-      <artifactId>otus-center</artifactId>
-      <version>1.22-SNAPSHOT</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

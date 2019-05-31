@@ -3,7 +3,9 @@ package org.ccem.otus.importation.activity.service;
 import br.org.otus.persistence.UserDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.ActivityImportResultDTO;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
@@ -11,6 +13,7 @@ import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingIt
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.ActivityConfigurationDao;
 import org.ccem.otus.survey.template.item.SurveyItem;
@@ -41,9 +44,16 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
     @Override
     public ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap,SurveyActivity importActivity) throws DataNotFoundException {
         ActivityImportResultDTO activityImportResultDTO = new ActivityImportResultDTO();
-        validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
+        Participant found = validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
+        if (found != null){
+            importActivity.getParticipantData().setBirthdate(found.getBirthdate());
+            importActivity.getParticipantData().setName(found.getName());
+            importActivity.getParticipantData().setSex(found.getSex());
+            importActivity.getParticipantData().setLate(found.getLate());
+            importActivity.getParticipantData().setFieldCenter(found.getFieldCenter());
+        }
         validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.CREATED)));
-        validateCategory(activityImportResultDTO, importActivity.getCategory().getName());
+        validateCategory(activityImportResultDTO, importActivity.getCategory());
         if (importActivity.getMode().name().equals(String.valueOf(ActivityMode.PAPER))) {
             validatePaperInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.INITIALIZED_OFFLINE)));
         }
@@ -138,10 +148,12 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         return routeIsValid;
     }
 
-    private void validateCategory(ActivityImportResultDTO activityImportResultDTO, String categoryName) {
-        if(!activityConfigurationDao.categoryExists(categoryName)){
-            activityImportResultDTO.setCategoryValidationResult(categoryName,false);
+    private void validateCategory(ActivityImportResultDTO activityImportResultDTO, ActivityCategory activityCategory) {
+        if(!activityConfigurationDao.categoryExists(activityCategory.getName())){
+            activityImportResultDTO.setCategoryValidationResult(activityCategory.getLabel(),false);
             activityImportResultDTO.setFailImport();
+        } else {
+            activityImportResultDTO.setCategoryValidationResult(activityCategory.getLabel(),true);
         }
     }
 
@@ -150,6 +162,8 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
             if (!userDao.exists(initializedOffline.get().getUser().getEmail())) {
                 activityImportResultDTO.setPaperInterviewerValidationResult(initializedOffline.get().getUser().getEmail(),false);
                 activityImportResultDTO.setFailImport();
+            } else {
+                activityImportResultDTO.setPaperInterviewerValidationResult(initializedOffline.get().getUser().getEmail(),true);
             }
         } else {
             activityImportResultDTO.setPaperInterviewerValidationResult("NOT_IDENTIFIED",false);
@@ -162,6 +176,8 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
             if (!userDao.exists(created.get().getUser().getEmail())) {
                 activityImportResultDTO.setInterviewerValidationResult(created.get().getUser().getEmail(),false);
                 activityImportResultDTO.setFailImport();
+            } else {
+                activityImportResultDTO.setInterviewerValidationResult(created.get().getUser().getEmail(),true);
             }
         } else {
             activityImportResultDTO.setInterviewerValidationResult("NOT_IDENTIFIED",false);
@@ -169,10 +185,17 @@ public class ActivityImportValidationServiceBean implements ActivityImportValida
         }
     }
 
-    private void validateRecruitmentNumber(ActivityImportResultDTO activityImportResultDTO, Long recruitmentNumber){
-        if (!participantDao.exists(recruitmentNumber)){
+    private Participant validateRecruitmentNumber(ActivityImportResultDTO activityImportResultDTO, Long recruitmentNumber){
+        Participant participant = null;
+
+        try {
+            participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
+            activityImportResultDTO.setRecruitmentNumberValidationResult(recruitmentNumber,true);
+        } catch (DataNotFoundException e) {
             activityImportResultDTO.setRecruitmentNumberValidationResult(recruitmentNumber,false);
             activityImportResultDTO.setFailImport();
         }
+
+        return participant;
     }
 }
