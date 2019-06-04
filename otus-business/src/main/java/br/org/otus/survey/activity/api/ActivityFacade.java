@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.survey.services.SurveyService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -13,11 +14,14 @@ import com.google.gson.JsonSyntaxException;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import org.ccem.otus.survey.form.SurveyForm;
 
 public class ActivityFacade {
 
 	@Inject
 	private ActivityService activityService;
+	@Inject
+	private SurveyService surveyService;
 
 	public List<SurveyActivity> list(long rn, String userEmail) {
 		return activityService.list(rn, userEmail);		
@@ -37,6 +41,17 @@ public class ActivityFacade {
 		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		} catch (MemoryExcededException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}
+	}
+
+	public SurveyActivity getActivityFull(String surveyActivityJson, String acronym, Integer version){
+		try {
+			SurveyForm surveyForm = surveyService.get(acronym, version);
+
+			return activityService.findActivityFull(surveyActivityJson, surveyForm);
+
+		} catch (DataNotFoundException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}

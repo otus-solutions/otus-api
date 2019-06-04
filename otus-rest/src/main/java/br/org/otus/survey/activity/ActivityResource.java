@@ -49,6 +49,16 @@ public class ActivityResource {
 
   @POST
   @Secured
+  @Path("/{acronym}/{version}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getActivityFull(String surveyActivityJson,@PathParam("acronym") String acronym,@PathParam("version") Integer version) {
+
+    return new Response().buildSuccess(activityFacade.getActivityFull(surveyActivityJson, acronym, version)).toSurveyJson();
+  }
+
+  @POST
+  @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createActivity(@PathParam("rn") long rn, String surveyActivity) {
