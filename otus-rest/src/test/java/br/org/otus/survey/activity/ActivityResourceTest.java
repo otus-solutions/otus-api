@@ -166,7 +166,7 @@ public class ActivityResourceTest {
   }
 
   @Test
-  public void method_find_should_return_entire_getActivityFull(){
+  public void method_find_should_return_entire_getSurveyTemplate(){
     when(activityFacade.getSurveyTemplate(ACRONYM,VERSION)).thenReturn(surveyFormDeserialize);
     String listSurveyActivityExpected = new Response().buildSuccess(surveyFormDeserialize).toSurveyJson();
     assertEquals(listSurveyActivityExpected, activityResource.getSurveyTemplate(ACRONYM,VERSION));

@@ -120,9 +120,9 @@ public class ActivityFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void getSurveyTemplateMethod_should_throw_HttpResponseException_when_string_invalid() throws Exception {
-    when(surveyService.get(ACRONYM,VERSION)).thenThrow(new DataNotFoundException(new Throwable("Data Validation Fail: SURVEY ACRONYM {CISE} VERSION {2} not found.")));
-    activityFacade.getSurveyTemplate(ACRONYM,VERSION);
+  public void getSurveyTemplateMethod_should_throw_HttpResponseException_when_SurveyService_invalid() throws Exception {
+    when(surveyService.get(ACRONYM,2)).thenThrow(new DataNotFoundException(new Throwable("Data Validation Fail: SURVEY ACRONYM {CISE} VERSION {2} not found.")));
+    activityFacade.getSurveyTemplate(ACRONYM,2);
   }
 
 }
