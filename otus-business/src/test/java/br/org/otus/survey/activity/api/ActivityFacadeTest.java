@@ -113,16 +113,4 @@ public class ActivityFacadeTest {
     activityFacade.updateCheckerActivity(checkerUpdated);
   }
 
-  @Test
-  public void getSurveyTemplateMethod_should_invoke_get_of_SurveyService() throws DataNotFoundException {
-    activityFacade.getSurveyTemplate(ACRONYM,VERSION);
-    verify(surveyService, times(1)).get(ACRONYM,VERSION);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void getSurveyTemplateMethod_should_throw_HttpResponseException_when_SurveyService_invalid() throws Exception {
-    when(surveyService.get(ACRONYM,2)).thenThrow(new DataNotFoundException(new Throwable("Data Validation Fail: SURVEY ACRONYM {CISE} VERSION {2} not found.")));
-    activityFacade.getSurveyTemplate(ACRONYM,2);
-  }
-
 }

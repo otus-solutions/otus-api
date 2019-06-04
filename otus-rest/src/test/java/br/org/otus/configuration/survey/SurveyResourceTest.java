@@ -1,11 +1,13 @@
 package br.org.otus.configuration.survey;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
@@ -31,6 +33,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class SurveyResourceTest {
 	private static final String USER_EMAIL = "otus@tus.com";
 	private static final String ACRONYM = "USGC";
+	private static final Integer VERSION = 1;
 	private static final Boolean POSITIVE_RETURN = true;
 	private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
 
@@ -97,5 +100,12 @@ public class SurveyResourceTest {
 		assertTrue(surveyResource.updateLastSurveySurveyType(ACRONYM, updateSurveyFormTypeDto)
 				.contains(POSITIVE_RETURN.toString()));
 	}
+
+	@Test
+  public void method_find_should_return_entire_getSurveyTemplate(){
+    when(surveyFacade.get(ACRONYM,VERSION)).thenReturn(surveyForm);
+    String listSurveyActivityExpected = new Response().buildSuccess(surveyForm).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, surveyResource.get(ACRONYM,VERSION));
+  }
 
 }

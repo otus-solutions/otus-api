@@ -47,15 +47,6 @@ public class ActivityResource {
     return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
   }
 
-  @GET
-  @Secured
-  @Path("/{acronym}/{version}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String getSurveyTemplate(@PathParam("acronym") String acronym,@PathParam("version") Integer version) {
-
-    return new Response().buildSuccess(activityFacade.getSurveyTemplate(acronym, version)).toSurveyJson();
-  }
-
   @POST
   @Secured
   @Produces(MediaType.APPLICATION_JSON)

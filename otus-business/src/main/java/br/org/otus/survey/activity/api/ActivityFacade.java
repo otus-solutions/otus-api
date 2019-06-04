@@ -45,14 +45,6 @@ public class ActivityFacade {
 		}
 	}
 
-	public SurveyForm getSurveyTemplate(String acronym, Integer version){
-		try {
-			return surveyService.get(acronym, version);
-		} catch (DataNotFoundException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-	}
-
 	public String create(SurveyActivity surveyActivity) {
 		return activityService.create(surveyActivity);
 	}

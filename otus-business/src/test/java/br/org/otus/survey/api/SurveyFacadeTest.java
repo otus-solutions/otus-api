@@ -3,6 +3,8 @@ package br.org.otus.survey.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
@@ -100,7 +102,7 @@ public class SurveyFacadeTest {
 		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
 		when(surveyService.saveSurvey(survey)).thenReturn(survey);
 		surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL);
-		Mockito.verify(surveyService,Mockito.times(1)).createSurveyJumpMap(survey);
+		verify(surveyService, times(1)).createSurveyJumpMap(survey);
 	}
 
 	@Test(expected = HttpResponseException.class)
@@ -149,5 +151,17 @@ public class SurveyFacadeTest {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(new ValidationException(new Throwable("")));
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
+
+	@Test
+  public void getMethod_should_invoke_get_of_SurveyService() throws DataNotFoundException {
+    surveyFacade.get(ACRONYM,VERSION);
+    verify(surveyService, times(1)).get(ACRONYM,VERSION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getMethod_should_throw_HttpResponseException_when_SurveyService_invalid() throws Exception {
+    when(surveyService.get(ACRONYM,2)).thenThrow(new DataNotFoundException(new Throwable("Data Validation Fail: SURVEY ACRONYM {CISE} VERSION {2} not found.")));
+    surveyFacade.get(ACRONYM,2);
+  }
 
 }
