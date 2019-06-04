@@ -10,15 +10,12 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
-import org.ccem.otus.survey.form.SurveyForm;
 
 import java.util.List;
 
 public interface ActivityDao {
 
   List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn);
-
-//  SurveyActivity findActivityFull(String permittedSurveys, String userEmail, long rn);
 
   ObjectId persist(SurveyActivity surveyActivity);
 

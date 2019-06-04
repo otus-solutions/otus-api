@@ -61,8 +61,6 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
         List<Bson> pipeline = new ArrayList<>();
         pipeline.add(new Document("$match",new Document(RECRUITMENT_NUMBER_PATH,rn).append(DISCARDED_PATH,false).append(ACRONYM_PATH,new Document("$in",permittedSurveys))));
-//        pipeline.add(parseQuery("{\"$lookup\":{\"from\":\"survey\",\"let\":{\"acronym\":\"$surveyForm.acronym\",\"version\":\"$surveyForm.version\"},\"pipeline\":[{\"$match\":{\"$expr\":{\"$and\":[{\"$eq\":[\"$surveyTemplate.identity.acronym\",\"$$acronym\"]},{\"$eq\":[\"$version\",\"$$version\"]}]}}},{\"$replaceRoot\":{\"newRoot\":\"$surveyTemplate\"}}],\"as\":\"surveyForm.surveyTemplate\"}}"));
-//        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
         AggregateIterable<Document> result = collection.aggregate(pipeline);
         
         result.forEach((Block<Document>) document -> {
@@ -71,67 +69,6 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
         return activities;
     }
-//
-//    @Override
-//    @UserPermission
-//    public SurveyActivity findActivityFull(String acronym, String userEmail, long rn){
-//        SurveyActivity activity = new SurveyActivity();
-//        List<Bson> pipeline = new ArrayList<>();
-//        pipeline.add(parseQuery(" {\n" +
-//                "        $match:{\n" +
-//                "            \""+RECRUITMENT_NUMBER_PATH+,"\":"+rn+",\n" +
-//                "            \""+DISCARDED_PATH+"\":false,\n" +
-//                "            \""+ACRONYM_PATH+"\": \""+acronym+"\"\n" +
-//                "        }\n" +
-//                "            \n" +
-//                "    }"));
-//        pipeline.add(parseQuery("{ \n" +
-//                "        $lookup:{\n" +
-//                "                \"from\":\"survey\",\n" +
-//                "                let:{\n" +
-//                "                    \"acronym\":\"$surveyForm.acronym\",\n" +
-//                "                    \"version\":\"$surveyForm.version\"},\n" +
-//                "                    \"pipeline\":[\n" +
-//                "                        {\"$match\":{\n" +
-//                "                            \"$expr\":{\n" +
-//                "                                \"$and\":[\n" +
-//                "                                    {\n" +
-//                "                                        \"$eq\":[\"$surveyTemplate.identity.acronym\",\"$$acronym\"]\n" +
-//                "                                        \n" +
-//                "                                    },\n" +
-//                "                                        {\n" +
-//                "                                            \"$eq\":[\"$version\",\"$$version\"]\n" +
-//                "                                            \n" +
-//                "                                        }]\n" +
-//                "                                \n" +
-//                "                            }}},\n" +
-//                "                                        {\n" +
-//                "                                            \"$replaceRoot\":{\n" +
-//                "                                                \"newRoot\":\"$surveyTemplate\"\n" +
-//                "                                                \n" +
-//                "                                            }\n" +
-//                "                                            \n" +
-//                "                                        }\n" +
-//                "                                        ],\n" +
-//                "                                        \"as\":\"surveyForm.surveyTemplate\"\n" +
-//                "                \n" +
-//                "            }\n" +
-//                "        }"));
-//        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
-////        AggregateIterable<Document> result = collection.aggregate(pipeline);
-//
-//        Document result = collection.aggregate(pipeline).first();
-//
-//        if(result != null){
-//            activity = SurveyActivity.deserialize(result.toJson());
-//        }
-//
-////        result.forEach((Block<Document>) document -> {
-////            activities.add(SurveyActivity.deserialize(document.toJson()));
-////        });
-//
-//        return activity;
-//    }
 
     @Override
     public ObjectId persist(SurveyActivity surveyActivity) {

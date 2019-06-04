@@ -47,14 +47,13 @@ public class ActivityResource {
     return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
   }
 
-  @POST
+  @GET
   @Secured
   @Path("/{acronym}/{version}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String getActivityFull(String surveyActivityJson,@PathParam("acronym") String acronym,@PathParam("version") Integer version) {
+  public String getSurveyTemplate(@PathParam("acronym") String acronym,@PathParam("version") Integer version) {
 
-    return new Response().buildSuccess(activityFacade.getActivityFull(surveyActivityJson, acronym, version)).toSurveyJson();
+    return new Response().buildSuccess(activityFacade.getSurveyTemplate(acronym, version)).toSurveyJson();
   }
 
   @POST

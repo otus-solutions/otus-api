@@ -17,6 +17,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.survey.form.SurveyForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +47,8 @@ public class ActivityResourceTest {
   private static final String ACTIVITY_REVISION_EXPECTED = "{\"data\":true}";
   private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
   private static final String ACTIVITY_EXPECTED_BOOLEAN = "{\"data\":true}";
+  private static final Integer VERSION = 1;
+  private static final String ACRONYM = "TSTAC";
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
@@ -63,7 +66,10 @@ public class ActivityResourceTest {
   private ActivityFacade activityFacade;
   @Mock
   private ActivityRevisionFacade activityRevisionFacade;
+  @Mock
+  private SurveyForm surveyForm;
 
+  private SurveyForm surveyFormDeserialize;
   private String jsonActivity = "activity";
   private SurveyActivity activityDeserialize;
   private List<SurveyActivity> listSurveyActivity;
@@ -87,6 +93,7 @@ public class ActivityResourceTest {
     activityDeserialize = SurveyActivity.deserialize(jsonActivity);
     listSurveyActivity = new ArrayList<SurveyActivity>();
     listSurveyActivity.add(SurveyActivity.deserialize(jsonActivity));
+    surveyFormDeserialize = SurveyForm.deserialize(jsonActivity);
   }
 
   @Test
@@ -157,4 +164,12 @@ public class ActivityResourceTest {
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
     assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
   }
+
+  @Test
+  public void method_find_should_return_entire_getActivityFull(){
+    when(activityFacade.getSurveyTemplate(ACRONYM,VERSION)).thenReturn(surveyFormDeserialize);
+    String listSurveyActivityExpected = new Response().buildSuccess(surveyFormDeserialize).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.getSurveyTemplate(ACRONYM,VERSION));
+  }
+
 }

@@ -14,7 +14,6 @@ import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
-import org.ccem.otus.survey.form.SurveyForm;
 
 @Stateless
 public class ActivityServiceBean implements ActivityService {
@@ -74,16 +73,6 @@ public class ActivityServiceBean implements ActivityService {
       }
     });
     return filteredActivities;
-  }
-
-  @Override
-  public SurveyActivity findActivityFull(String surveyActivity, SurveyForm surveyForm){
-
-    SurveyActivity activity = SurveyActivity.deserialize(surveyActivity);
-
-    activity.getSurveyForm().setSurveyTemplate(surveyForm.getSurveyTemplate());
-
-    return activity;
   }
 
   private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn) {

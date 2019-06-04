@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.survey.services.SurveyService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -16,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.gson.Gson;
@@ -32,6 +32,7 @@ public class ActivityFacadeTest {
   private static final Integer VERSION = 1;
   private static final String USER_EMAIL = "otus@gmail.com";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+
   @Mock
   private SurveyActivity surveyActivityInvalid;
   @Mock
@@ -40,6 +41,8 @@ public class ActivityFacadeTest {
   ActivityFacade activityFacade;
   @Mock
   private SurveyActivity surveyActivity;
+  @Mock
+  private SurveyService surveyService;
   private SurveyActivity surveyActivityFull;
 
   @Before
@@ -108,6 +111,18 @@ public class ActivityFacadeTest {
   public void updateCheckerActivityMethod_should_throw_HttpResponseException_when_ObjectId_invalid() throws Exception {
     when(activityService.updateCheckerActivity(checkerUpdated)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateCheckerActivity(checkerUpdated);
+  }
+
+  @Test
+  public void getSurveyTemplateMethod_should_invoke_get_of_SurveyService() throws DataNotFoundException {
+    activityFacade.getSurveyTemplate(ACRONYM,VERSION);
+    verify(surveyService, times(1)).get(ACRONYM,VERSION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getSurveyTemplateMethod_should_throw_HttpResponseException_when_string_invalid() throws Exception {
+    when(surveyService.get(ACRONYM,VERSION)).thenThrow(new DataNotFoundException(new Throwable("Data Validation Fail: SURVEY ACRONYM {CISE} VERSION {2} not found.")));
+    activityFacade.getSurveyTemplate(ACRONYM,VERSION);
   }
 
 }
