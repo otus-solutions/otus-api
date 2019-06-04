@@ -79,12 +79,4 @@ public class SurveyResource {
 		return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toJson();
 	}
 
-	@GET
-  @Secured
-  @Path("/{acronym}/{version}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String get(@PathParam("acronym") String acronym,@PathParam("version") Integer version) {
-    return new Response().buildSuccess(surveyFacade.get(acronym, version)).toSurveyJson();
-  }
-
 }

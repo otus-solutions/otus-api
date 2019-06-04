@@ -39,6 +39,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public static final String RECRUITMENT_NUMBER_PATH = "participantData.recruitmentNumber";
     public static final String CATEGORY_NAME_PATH = "category.name";
     public static final String CATEGORY_LABEL_PATH = "category.label";
+    public static final String ID_PATH = "_id";
 
     public ActivityDaoBean() {
         super(COLLECTION_NAME, Document.class);
@@ -102,7 +103,37 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     @Override
     public SurveyActivity findByID(String id) throws DataNotFoundException {
         ObjectId oid = new ObjectId(id);
-        Document result = collection.find(eq("_id", oid)).first();
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(new Document("$match",new Document(ID_PATH,oid)));
+        pipeline.add(parseQuery("{\n" +
+                "        $lookup: {\n" +
+                "            from : \"survey\",\n" +
+                "             let:{\n" +
+                "                    \"acronym\":\"$surveyForm.acronym\",\n" +
+                "                    \"version\":\"$surveyForm.version\"},\n" +
+                "            pipeline:[\n" +
+                "                {\n" +
+                "                    $match:{\n" +
+                "                        $expr:{\n" +
+                "                            $and: [\n" +
+                "                                {$eq: [\"$$acronym\", \"$surveyTemplate.identity.acronym\"]},\n" +
+                "                                {$eq: [\"$$version\", \"$version\"]}\n" +
+                "                                ]\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                {\n" +
+                "                                  \"$replaceRoot\":{\n" +
+                "                                   \"newRoot\":\"$surveyTemplate\"\n" +
+                "                                   }\n" +
+                "                }\n" +
+                "                ],\n" +
+                "                \"as\":\"surveyForm.surveyTemplate\"\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
+
+        Document result = collection.aggregate(pipeline).first();
 
         if (result == null) {
             throw new DataNotFoundException(new Throwable("OID {" + id + "} not found."));

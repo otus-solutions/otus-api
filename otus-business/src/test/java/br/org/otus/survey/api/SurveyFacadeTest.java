@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -151,17 +150,4 @@ public class SurveyFacadeTest {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(new ValidationException(new Throwable("")));
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
-
-	@Test
-  public void getMethod_should_invoke_get_of_SurveyService() throws DataNotFoundException {
-    surveyFacade.get(ACRONYM,VERSION);
-    verify(surveyService, times(1)).get(ACRONYM,VERSION);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void getMethod_should_throw_HttpResponseException_when_SurveyService_invalid() throws Exception {
-    when(surveyService.get(ACRONYM,2)).thenThrow(new DataNotFoundException(new Throwable("Data Validation Fail: SURVEY ACRONYM {CISE} VERSION {2} not found.")));
-    surveyFacade.get(ACRONYM,2);
-  }
-
 }

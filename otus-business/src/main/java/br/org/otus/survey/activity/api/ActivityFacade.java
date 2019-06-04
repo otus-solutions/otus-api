@@ -20,7 +20,7 @@ public class ActivityFacade {
 	private ActivityService activityService;
 
 	public List<SurveyActivity> list(long rn, String userEmail) {
-		return activityService.list(rn, userEmail);		
+		return activityService.list(rn, userEmail);
 	}
 
 	public SurveyActivity getByID(String id) {
@@ -30,7 +30,7 @@ public class ActivityFacade {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}
-	
+
 	public List<SurveyActivity> get(String acronym, Integer version){
 		try {
 			return activityService.get(acronym, version);
