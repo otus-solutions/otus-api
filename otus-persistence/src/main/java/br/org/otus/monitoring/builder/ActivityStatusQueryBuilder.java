@@ -2,9 +2,14 @@ package br.org.otus.monitoring.builder;
 
 
 import com.google.gson.GsonBuilder;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Aggregates;
+import org.bson.BSON;
+import org.bson.BsonArray;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,15 +29,21 @@ public class ActivityStatusQueryBuilder {
     this.pipeline = new ArrayList<>();
   }
 
-  public ArrayList<Bson> getActivityStatusQuery(String center,LinkedList<String> surveyAcronyms) {
+  public ArrayList<Bson> getActivityStatusQuery(String center, LinkedList<String> surveyAcronyms) {
     addMatchFieldCenterStage(center);
-    addBuildDataStages(surveyAcronyms);
+    addBuildDataStages(surveyAcronyms, null);
+    return pipeline;
+  }
+
+  public ArrayList<Bson> getActivityStatusQueryWithInapplicability(String center, LinkedList<String> surveyAcronyms, List<Document> activityInapplicabilities) {
+    addMatchFieldCenterStage(center);
+    addBuildDataStages(surveyAcronyms, activityInapplicabilities);
     return pipeline;
   }
 
   public ArrayList<Bson> getActivityStatusQuery(LinkedList<String> surveyAcronyms) {
     addMatchIsDiscardedStage();
-    addBuildDataStages(surveyAcronyms);
+    addBuildDataStages(surveyAcronyms, null);
     return pipeline;
   }
 
@@ -53,7 +64,7 @@ public class ActivityStatusQueryBuilder {
             "  }"));
   }
 
-  private void addBuildDataStages(LinkedList<String> surveyAcronyms) {
+  private void addBuildDataStages(LinkedList<String> surveyAcronyms, List<Document> AIS) {
     pipeline.add(parseQuery("{\n" +
             "    $project: {\n" +
             "      _id: 0,\n" +
@@ -88,6 +99,23 @@ public class ActivityStatusQueryBuilder {
             "      lastStatus_Date: 1\n" +
             "    }\n" +
             "  }"));
+
+//    pipeline.add(parseQuery("{\n" +
+//            "    $addFields:{\n" +
+//            "        activityInapplicabilities:{ \n" +
+//            "            $filter: { \n" +
+//            "                input: "+ AIS +", as: \"activityInapplicalibity\",\n" +
+//            "                cond: {\n" +
+//            "                    $and:[\n" +
+//            "                        {$eq:[\"$$activityInapplicalibity.recruitmentNumber\",\"$_id\"]},\n" +
+//            "                        {$eq:[\"$$activityInapplicalibity.acronym\",\"$headers\"]}\n" +
+//            "                        ]\n" +
+//            "                    }\n" +
+//            "                }\n" +
+//            "            }\n" +
+//            "        }\n" +
+//            "    }"));
+
     pipeline.add(parseQuery("{\n" +
             "    $group: {\n" +
             "      _id:\"$rn\",\n" +
@@ -157,6 +185,38 @@ public class ActivityStatusQueryBuilder {
             "      }\n" +
             "    }\n" +
             "  }"));
+
+
+//    pipeline.add(parseQuery("{\n" +
+//            "        $group:{\n" +
+//            "            _id:\"$_id\",\n" +
+//            "            filteredActivities:{\n" +
+//            "                $push:{\n" +
+//            "                    $cond:[\n" +
+//            "                        {$gt:[{$size:\"$activityInapplicabilities\"},0]},\n" +
+//            "                        {\n" +
+//            "                            status: 0,\n" +
+//            "                            rn:\"$_id\",\n" +
+//            "                            acronym:\"$headers\"\n" +
+//            "                        },\n" +
+//            "                        { \n" +
+//            "                            $cond:[\n" +
+//            "                                {$gt:[{$size:\"$activityFound\"},0]},\n" +
+//            "                                {$arrayElemAt:[\"$activityFound\",-1]},\n" +
+//            "                                { \n" +
+//            "                                    status: null,\n" +
+//            "                                    rn:'$_id',\n" +
+//            "                                    acronym:'$headers'\n" +
+//            "                                }\n" +
+//            "                            ]\n" +
+//            "                        }\n" +
+//            "                    ]\n" +
+//            "                    \n" +
+//            "                }\n" +
+//            "            }\n" +
+//            "        }\n" +
+//            "    }"));
+
     pipeline.add(parseQuery("{\n" +
             "    $group: {\n" +
             "      _id: \"$_id\",\n" +
@@ -187,6 +247,7 @@ public class ActivityStatusQueryBuilder {
             "      }\n" +
             "    }\n" +
             "  }"));
+
     pipeline.add(parseQuery("{\n" +
             "    $group: {\n" +
             "      _id: {\n" +

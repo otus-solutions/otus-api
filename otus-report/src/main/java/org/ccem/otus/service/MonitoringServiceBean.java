@@ -2,7 +2,12 @@ package org.ccem.otus.service;
 
 import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
+import com.google.gson.GsonBuilder;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import org.bson.BSON;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -52,6 +57,8 @@ public class MonitoringServiceBean implements MonitoringService {
   @Inject
   private ExamInapplicabilityDao examInapplicabilityDao;
 
+  private ArrayList<Bson> pipeline = new ArrayList<>();
+
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
     MonitoringDataSource monitoringDataSource = new MonitoringDataSource();
@@ -92,7 +99,12 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, surveyAcronyms);
+
+    groupActivityInapplicatibilityStage();
+
+    Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
+
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, (List<Document>) activityInapplicabilities.get("AI"));
 
     return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }
@@ -168,4 +180,13 @@ public class MonitoringServiceBean implements MonitoringService {
     return laboratoryProgressDao.getDataToCSVOfOrphansByExam();
   }
 
+
+  private Document parseQuery(String query) {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    return gsonBuilder.create().fromJson(query, Document.class);
+  }
+
+  private void groupActivityInapplicatibilityStage() {
+    pipeline.add(parseQuery("{$group:{_id:{},AI:{$push:{acronym : $acronym,recruitmentNumber:$recruitmentNumber}}}}"));
+  }
 }
