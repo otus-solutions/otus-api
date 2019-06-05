@@ -164,7 +164,7 @@ public class ActivityStatusQueryBuilder {
                 "    }\n" +
                 "  }"));
 
-        //============================== pipeline adonis com new Document ======================================
+
         pipeline.add(new Document("$addFields",
                 new Document("activityInapplicabilities",
                         new Document("$filter",
@@ -172,20 +172,6 @@ public class ActivityStatusQueryBuilder {
                                         new Document("$and", Arrays.asList(
                                                 new Document("$eq", Arrays.asList("$$activityInapplicalibity.recruitmentNumber", "$_id")),
                                                 new Document("$eq", Arrays.asList("$$activityInapplicalibity.acronym", "$headers")))))))));
-
-        //==================================== pipeline Fabiano com parseQuery
-
-//        pipeline.add(parseQuery("{" +
-//                "    $addFields:{" +
-//                "        activityInapplicabilities:{" +
-//                "            $filter: {" +
-//                "                input:"+ AIS.get("AI")+", as: \"activityInapplicalibity\"," +
-//                "                cond: {" +
-//                "                    $and:[" +
-//                "                        {$eq:[\"$$activityInapplicalibity.recruitmentNumber\",\"$_id\"]}," +
-//                "                        {$eq:[\"$$activityInapplicalibity.acronym\",\"$headers\"]}" +
-//                "    ]}}}}}"));
-
 
         pipeline.add(parseQuery("{\n" +
                 "        $group:{\n" +

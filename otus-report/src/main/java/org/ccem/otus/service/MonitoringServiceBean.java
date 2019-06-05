@@ -57,7 +57,7 @@ public class MonitoringServiceBean implements MonitoringService {
   @Inject
   private ExamInapplicabilityDao examInapplicabilityDao;
 
-  private List<Bson> pipeline = new ArrayList<>();
+  private List<Bson> pipeline;
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
@@ -185,6 +185,7 @@ public class MonitoringServiceBean implements MonitoringService {
   }
 
   private void groupActivityInapplicabilityStage() {
+    pipeline = new ArrayList<>();
     pipeline.add(
             parseQuery("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
   }
