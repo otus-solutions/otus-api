@@ -57,7 +57,7 @@ public class MonitoringServiceBean implements MonitoringService {
   @Inject
   private ExamInapplicabilityDao examInapplicabilityDao;
 
-  private ArrayList<Bson> pipeline = new ArrayList<>();
+  private List<Bson> pipeline = new ArrayList<>();
 
   @Override
   public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
@@ -100,10 +100,8 @@ public class MonitoringServiceBean implements MonitoringService {
   public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
-    groupActivityInapplicatibilityStage();
-
+    groupActivityInapplicabilityStage();
     Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
-
     Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, (List<Document>) activityInapplicabilities.get("AI"));
 
     return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
@@ -186,7 +184,8 @@ public class MonitoringServiceBean implements MonitoringService {
     return gsonBuilder.create().fromJson(query, Document.class);
   }
 
-  private void groupActivityInapplicatibilityStage() {
-    pipeline.add(parseQuery("{$group:{_id:{},AI:{$push:{acronym : $acronym,recruitmentNumber:$recruitmentNumber}}}}"));
+  private void groupActivityInapplicabilityStage() {
+    pipeline.add(
+            parseQuery("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
   }
 }

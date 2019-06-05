@@ -13,6 +13,7 @@ import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability
 import org.ccem.otus.persistence.ActivityFlagReportDao;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
