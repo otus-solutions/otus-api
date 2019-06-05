@@ -32,7 +32,7 @@ public class ActivityStatusQueryBuilder {
         return pipeline;
     }
 
-    public ArrayList<Bson> getActivityStatusQueryWithInapplicability(String center, LinkedList<String> surveyAcronyms, List<Document> activityInapplicabilities) {
+    public ArrayList<Bson> getActivityStatusQueryWithInapplicability(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) {
         addMatchFieldCenterStage(center);
         addBuildDataStages(surveyAcronyms, activityInapplicabilities);
         return pipeline;
@@ -61,7 +61,7 @@ public class ActivityStatusQueryBuilder {
                 "  }"));
     }
 
-    private void addBuildDataStages(LinkedList<String> surveyAcronyms, List<Document>AIS) {
+    private void addBuildDataStages(LinkedList<String> surveyAcronyms, Document AIS) {
         pipeline.add(parseQuery("{\n" +
                 "    $project: {\n" +
                 "      _id: 0,\n" +
@@ -101,113 +101,113 @@ public class ActivityStatusQueryBuilder {
                 "    $addFields:{" +
                 "        activityInapplicabilities:{" +
                 "            $filter: {" +
-                "                input:"+ AIS.toString() +", as: \"activityInapplicalibity\"," +
-//                "                cond: {" +
-//                "                    $and:[" +
-//                "                        {$eq:[\"$$activityInapplicalibity.recruitmentNumber\",\"$_id\"]}," +
-//                "                        {$eq:[\"$$activityInapplicalibity.acronym\",\"$headers\"]}" +
+                "                input:"+ AIS.get("AI") +", as: \"activityInapplicalibity\"," +
+                "                cond: {" +
+                "                    $and:[" +
+                "                        {$eq:[\"$$activityInapplicalibity.recruitmentNumber\",\"$_id\"]}," +
+                "                        {$eq:[\"$$activityInapplicalibity.acronym\",\"$headers\"]}" +
                 "    ]}}}}}"));
 
-//    pipeline.add(parseQuery("{\n" +
-//            "    $group: {\n" +
-//            "      _id:\"$rn\",\n" +
-//            "      activities: {\n" +
-//            "        $push: {\n" +
-//            "          status: {\n" +
-//            "            $cond: [\n" +
-//            "              {\n" +
-//            "                $eq: [\n" +
-//            "                  \"$lastStatus_Name\",\n" +
-//            "                  \"CREATED\"\n" +
-//            "                ]\n" +
-//            "              },\n" +
-//            "              -1,\n" +
-//            "              {\n" +
-//            "                $cond: [\n" +
-//            "                  {\n" +
-//            "                    $eq: [\n" +
-//            "                      \"$lastStatus_Name\",\n" +
-//            "                      \"SAVED\"\n" +
-//            "                    ]\n" +
-//            "                  },\n" +
-//            "                  1,\n" +
-//            "                  {\n" +
-//            "                    $cond: [\n" +
-//            "                      {\n" +
-//            "                        $eq: [\n" +
-//            "                          \"$lastStatus_Name\",\n" +
-//            "                          \"FINALIZED\"\n" +
-//            "                        ]\n" +
-//            "                      },\n" +
-//            "                      2,\n" +
-//            "                      -1\n" +
-//            "                    ]\n" +
-//            "                  }\n" +
-//            "                ]\n" +
-//            "              }\n" +
-//            "            ]\n" +
-//            "          },\n" +
-//            "          rn: \"$rn\",\n" +
-//            "          acronym: \"$acronym\"\n" +
-//            "        }\n" +
-//            "      }\n" +
-//            "    }\n" +
-//            "  }"));
-//    pipeline.add(parseQuery("{\n" +
-//            "    $addFields: {\n" +
-//            "      \"headers\": "+ surveyAcronyms +"\n" +
-//            "    }\n" +
-//            "  }"));
-//    pipeline.add(parseQuery("{\n" +
-//            "    $unwind: \"$headers\"\n" +
-//            "  }"));
-//    pipeline.add(parseQuery("{\n" +
-//            "    $addFields: {\n" +
-//            "      \"activityFound\": {\n" +
-//            "        $filter: {\n" +
-//            "          input: \"$activities\",\n" +
-//            "          as: \"item\",\n" +
-//            "          cond: {\n" +
-//            "            $eq: [\n" +
-//            "              \"$$item.acronym\",\n" +
-//            "              \"$headers\"\n" +
-//            "            ]\n" +
-//            "          }\n" +
-//            "        }\n" +
-//            "      }\n" +
-//            "    }\n" +
-//            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $group: {\n" +
+            "      _id:\"$rn\",\n" +
+            "      activities: {\n" +
+            "        $push: {\n" +
+            "          status: {\n" +
+            "            $cond: [\n" +
+            "              {\n" +
+            "                $eq: [\n" +
+            "                  \"$lastStatus_Name\",\n" +
+            "                  \"CREATED\"\n" +
+            "                ]\n" +
+            "              },\n" +
+            "              -1,\n" +
+            "              {\n" +
+            "                $cond: [\n" +
+            "                  {\n" +
+            "                    $eq: [\n" +
+            "                      \"$lastStatus_Name\",\n" +
+            "                      \"SAVED\"\n" +
+            "                    ]\n" +
+            "                  },\n" +
+            "                  1,\n" +
+            "                  {\n" +
+            "                    $cond: [\n" +
+            "                      {\n" +
+            "                        $eq: [\n" +
+            "                          \"$lastStatus_Name\",\n" +
+            "                          \"FINALIZED\"\n" +
+            "                        ]\n" +
+            "                      },\n" +
+            "                      2,\n" +
+            "                      -1\n" +
+            "                    ]\n" +
+            "                  }\n" +
+            "                ]\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          rn: \"$rn\",\n" +
+            "          acronym: \"$acronym\"\n" +
+            "        }\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $addFields: {\n" +
+            "      \"headers\": "+ surveyAcronyms +"\n" +
+            "    }\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $unwind: \"$headers\"\n" +
+            "  }"));
+    pipeline.add(parseQuery("{\n" +
+            "    $addFields: {\n" +
+            "      \"activityFound\": {\n" +
+            "        $filter: {\n" +
+            "          input: \"$activities\",\n" +
+            "          as: \"item\",\n" +
+            "          cond: {\n" +
+            "            $eq: [\n" +
+            "              \"$$item.acronym\",\n" +
+            "              \"$headers\"\n" +
+            "            ]\n" +
+            "          }\n" +
+            "        }\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"));
 
 
-//    pipeline.add(parseQuery("{\n" +
-//            "        $group:{\n" +
-//            "            _id:\"$_id\",\n" +
-//            "            filteredActivities:{\n" +
-//            "                $push:{\n" +
-//            "                    $cond:[\n" +
-//            "                        {$gt:[{$size:\"$activityInapplicabilities\"},0]},\n" +
-//            "                        {\n" +
-//            "                            status: 0,\n" +
-//            "                            rn:\"$_id\",\n" +
-//            "                            acronym:\"$headers\"\n" +
-//            "                        },\n" +
-//            "                        { \n" +
-//            "                            $cond:[\n" +
-//            "                                {$gt:[{$size:\"$activityFound\"},0]},\n" +
-//            "                                {$arrayElemAt:[\"$activityFound\",-1]},\n" +
-//            "                                { \n" +
-//            "                                    status: null,\n" +
-//            "                                    rn:'$_id',\n" +
-//            "                                    acronym:'$headers'\n" +
-//            "                                }\n" +
-//            "                            ]\n" +
-//            "                        }\n" +
-//            "                    ]\n" +
-//            "                    \n" +
-//            "                }\n" +
-//            "            }\n" +
-//            "        }\n" +
-//            "    }"));
+    pipeline.add(parseQuery("{\n" +
+            "        $group:{\n" +
+            "            _id:\"$_id\",\n" +
+            "            filteredActivities:{\n" +
+            "                $push:{\n" +
+            "                    $cond:[\n" +
+            "                        {$gt:[{$size:\"$activityInapplicabilities\"},0]},\n" +
+            "                        {\n" +
+            "                            status: 0,\n" +
+            "                            rn:\"$_id\",\n" +
+            "                            acronym:\"$headers\"\n" +
+            "                        },\n" +
+            "                        { \n" +
+            "                            $cond:[\n" +
+            "                                {$gt:[{$size:\"$activityFound\"},0]},\n" +
+            "                                {$arrayElemAt:[\"$activityFound\",-1]},\n" +
+            "                                { \n" +
+            "                                    status: null,\n" +
+            "                                    rn:'$_id',\n" +
+            "                                    acronym:'$headers'\n" +
+            "                                }\n" +
+            "                            ]\n" +
+            "                        }\n" +
+            "                    ]\n" +
+            "                    \n" +
+            "                }\n" +
+            "            }\n" +
+            "        }\n" +
+            "    }"));
 
 //    pipeline.add(parseQuery("{\n" +
 //            "    $group: {\n" +

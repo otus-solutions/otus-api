@@ -102,7 +102,7 @@ public class MonitoringServiceBean implements MonitoringService {
 
     groupActivityInapplicabilityStage();
     Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
-    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, (List<Document>) activityInapplicabilities.get("AI"));
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, activityInapplicabilities);
 
     return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }
