@@ -2,10 +2,6 @@ package org.ccem.otus.service;
 
 import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
-import com.google.gson.GsonBuilder;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
-import org.bson.BSON;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -27,166 +23,160 @@ import java.util.List;
 @Stateless
 public class MonitoringServiceBean implements MonitoringService {
 
-  @Inject
-  private MonitoringDao monitoringDao;
+    @Inject
+    private MonitoringDao monitoringDao;
 
-  @Inject
-  private FieldCenterDao fieldCenterDao;
+    @Inject
+    private FieldCenterDao fieldCenterDao;
 
-  @Inject
-  private ParticipantDao participantDao;
+    @Inject
+    private ParticipantDao participantDao;
 
-  @Inject
-  private ActivityFlagReportDao activityFlagReportDao;
+    @Inject
+    private ActivityFlagReportDao activityFlagReportDao;
 
-  @Inject
-  private SurveyDao surveyDao;
+    @Inject
+    private SurveyDao surveyDao;
 
-  @Inject
-  private SurveyMonitoringDao surveyMonitoringDao;
+    @Inject
+    private SurveyMonitoringDao surveyMonitoringDao;
 
-  @Inject
-  private ExamMonitoringDao examMonitoringDao;
+    @Inject
+    private ExamMonitoringDao examMonitoringDao;
 
-  @Inject
-  private LaboratoryProgressDao laboratoryProgressDao;
+    @Inject
+    private LaboratoryProgressDao laboratoryProgressDao;
 
-  @Inject
-  private ActivityInapplicabilityDao activityInapplicabilityDao;
+    @Inject
+    private ActivityInapplicabilityDao activityInapplicabilityDao;
 
-  @Inject
-  private ExamInapplicabilityDao examInapplicabilityDao;
+    @Inject
+    private ExamInapplicabilityDao examInapplicabilityDao;
 
-  private List<Bson> pipeline;
+    private List<Bson> pipeline;
 
-  @Override
-  public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
-    MonitoringDataSource monitoringDataSource = new MonitoringDataSource();
-    return monitoringDao.get(monitoringDataSource.buildQuery(acronym));
-  }
-
-  @Override
-  public ArrayList<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException {
-
-    ArrayList<MonitoringCenter> results = new ArrayList<>();
-    ArrayList<String> centers = fieldCenterDao.listAcronyms();
-
-    for (String acronymCenter : centers) {
-
-      FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
-      Long goals = participantDao.countParticipantActivities(acronymCenter);
-
-      MonitoringCenter monitoring = new MonitoringCenter();
-      monitoring.setName(fieldCenter.getName());
-      monitoring.setGoal(goals);
-      monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
-      monitoring.setBorderColor(fieldCenter.getBorderColor());
-
-      results.add(monitoring);
-      monitoring = null;
+    @Override
+    public List<MonitoringDataSourceResult> get(String acronym) throws ValidationException {
+        MonitoringDataSource monitoringDataSource = new MonitoringDataSource();
+        return monitoringDao.get(monitoringDataSource.buildQuery(acronym));
     }
-    return results;
-  }
 
-  @Override
-  public ProgressReport getActivitiesProgress() throws DataNotFoundException {
-    LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(surveyAcronyms);
+    @Override
+    public ArrayList<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException {
 
-    return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
-  }
+        ArrayList<MonitoringCenter> results = new ArrayList<>();
+        ArrayList<String> centers = fieldCenterDao.listAcronyms();
 
-  @Override
-  public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
-    LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
+        for (String acronymCenter : centers) {
 
-    groupActivityInapplicabilityStage();
-    Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
-    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, activityInapplicabilities);
+            FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(acronymCenter);
+            Long goals = participantDao.countParticipantActivities(acronymCenter);
 
-    return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
-  }
+            MonitoringCenter monitoring = new MonitoringCenter();
+            monitoring.setName(fieldCenter.getName());
+            monitoring.setGoal(goals);
+            monitoring.setBackgroundColor(fieldCenter.getBackgroundColor());
+            monitoring.setBorderColor(fieldCenter.getBorderColor());
 
-  private ProgressReport getProgressReport(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
-    ProgressReport progressReport = ProgressReport.deserialize(activitiesProgressReportDocument.toJson());
-    progressReport.setColumns(surveyAcronyms);
-    return progressReport;
-  }
+            results.add(monitoring);
+            monitoring = null;
+        }
+        return results;
+    }
 
-  @Override
-  public ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn) {
-    return surveyMonitoringDao.getParticipantActivities(rn);
-  }
+    @Override
+    public ProgressReport getActivitiesProgress() throws DataNotFoundException {
+        LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
+        Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(surveyAcronyms);
 
-  @Override
-  public ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException{
-    return examMonitoringDao.getParticipantExams(rn);
-  }
+        return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
+    }
 
-  @Override
-  public void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException {
-    activityInapplicabilityDao.update(applicability);
-  }
+    @Override
+    public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
+        LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
-  @Override
-  public void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException {
-    activityInapplicabilityDao.delete(rn, acronym);
-  }
+        groupActivityInapplicabilityStage();
+        Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
+        Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, activityInapplicabilities);
 
-  @Override
-  public void deleteExamInapplicability(ExamInapplicability applicability) {
-    examInapplicabilityDao.delete(applicability);
-  }
+        return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
+    }
 
-  @Override
-  public void setExamInapplicability(ExamInapplicability applicability) {
-    examInapplicabilityDao.update(applicability);
-  }
+    private ProgressReport getProgressReport(LinkedList<String> surveyAcronyms, Document activitiesProgressReportDocument) {
+        ProgressReport progressReport = ProgressReport.deserialize(activitiesProgressReportDocument.toJson());
+        progressReport.setColumns(surveyAcronyms);
+        return progressReport;
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOrphanByExams();
-  }
+    @Override
+    public ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn) {
+        return surveyMonitoringDao.getParticipantActivities(rn);
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getDataQuantitativeByTypeOfAliquots(center);
-  }
+    @Override
+    public ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException {
+        return examMonitoringDao.getParticipantExams(rn);
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOfPendingResultsByAliquot(center);
-  }
+    @Override
+    public void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException {
+        activityInapplicabilityDao.update(applicability);
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getDataOfStorageByAliquot(center);
-  }
+    @Override
+    public void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException {
+        activityInapplicabilityDao.delete(rn, acronym);
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getDataByExam(center);
-  }
+    @Override
+    public void deleteExamInapplicability(ExamInapplicability applicability) {
+        examInapplicabilityDao.delete(applicability);
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException {
-    return laboratoryProgressDao.getDataToCSVOfPendingResultsByAliquots(center);
-  }
+    @Override
+    public void setExamInapplicability(ExamInapplicability applicability) {
+        examInapplicabilityDao.update(applicability);
+    }
 
-  @Override
-  public LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException {
-    return laboratoryProgressDao.getDataToCSVOfOrphansByExam();
-  }
+    @Override
+    public LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException {
+        return laboratoryProgressDao.getDataOrphanByExams();
+    }
 
+    @Override
+    public LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException {
+        return laboratoryProgressDao.getDataQuantitativeByTypeOfAliquots(center);
+    }
 
-  private Document parseQuery(String query) {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    return gsonBuilder.create().fromJson(query, Document.class);
-  }
+    @Override
+    public LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException {
+        return laboratoryProgressDao.getDataOfPendingResultsByAliquot(center);
+    }
 
-  private void groupActivityInapplicabilityStage() {
-    pipeline = new ArrayList<>();
-    pipeline.add(
-            parseQuery("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
-  }
+    @Override
+    public LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException {
+        return laboratoryProgressDao.getDataOfStorageByAliquot(center);
+    }
+
+    @Override
+    public LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException {
+        return laboratoryProgressDao.getDataByExam(center);
+    }
+
+    @Override
+    public LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException {
+        return laboratoryProgressDao.getDataToCSVOfPendingResultsByAliquots(center);
+    }
+
+    @Override
+    public LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException {
+        return laboratoryProgressDao.getDataToCSVOfOrphansByExam();
+    }
+
+    private void groupActivityInapplicabilityStage() {
+        pipeline = new ArrayList<>();
+        pipeline.add(
+                ParseQuery.toDocument("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
+    }
 }

@@ -4,19 +4,14 @@ package br.org.otus.monitoring.builder;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ActivityStatusQueryBuilder {
 
     private ArrayList<Bson> pipeline;
-
-    private Document parseQuery(String query) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().fromJson(query, Document.class);
-    }
 
     public ActivityStatusQueryBuilder() {
         this.pipeline = new ArrayList<>();
@@ -41,7 +36,7 @@ public class ActivityStatusQueryBuilder {
     }
 
     private void addMatchFieldCenterStage(String center) {
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $match: {\n" +
                 "      \"participantData.fieldCenter.acronym\": " + center + ",\n" +
                 "      \"isDiscarded\":false" +
@@ -50,7 +45,7 @@ public class ActivityStatusQueryBuilder {
     }
 
     private void addMatchIsDiscardedStage() {
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $match: {\n" +
                 "      \"isDiscarded\":false" +
                 "    }\n" +
@@ -58,7 +53,7 @@ public class ActivityStatusQueryBuilder {
     }
 
     private void addBuildDataStages(LinkedList<String> surveyAcronyms, Document AIS) {
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $project: {\n" +
                 "      _id: 0,\n" +
                 "      rn: \"$participantData.recruitmentNumber\",\n" +
@@ -87,14 +82,14 @@ public class ActivityStatusQueryBuilder {
                 "      }\n" +
                 "    }\n" +
                 "  }"));
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $sort: {\n" +
                 "      lastStatus_Date: 1\n" +
                 "    }\n" +
                 "  }"));
 
 
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $group: {\n" +
                 "      _id:\"$rn\",\n" +
                 "      activities: {\n" +
@@ -139,15 +134,15 @@ public class ActivityStatusQueryBuilder {
                 "      }\n" +
                 "    }\n" +
                 "  }"));
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $addFields: {\n" +
                 "      \"headers\": " + surveyAcronyms + "\n" +
                 "    }\n" +
                 "  }"));
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $unwind: \"$headers\"\n" +
                 "  }"));
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $addFields: {\n" +
                 "      \"activityFound\": {\n" +
                 "        $filter: {\n" +
@@ -164,16 +159,19 @@ public class ActivityStatusQueryBuilder {
                 "    }\n" +
                 "  }"));
 
+        pipeline.add(ParseQuery.toDocument("{" +
+                "    $addFields:{" +
+                "        activityInapplicabilities:{" +
+                "            $filter: {" +
+                "                input:" + new GsonBuilder().create().toJson(AIS.get("AI")) + ", as: \"activityInapplicalibity\"," +
+                "                cond: {" +
+                "                    $and:[" +
+                "                        {$eq:[\"$$activityInapplicalibity.recruitmentNumber\",\"$_id\"]}," +
+                "                        {$eq:[\"$$activityInapplicalibity.acronym\",\"$headers\"]}" +
+                "    ]}}}}}"));
 
-        pipeline.add(new Document("$addFields",
-                new Document("activityInapplicabilities",
-                        new Document("$filter",
-                                new Document("input", AIS.get("AI")).append("as", "activityInapplicalibity").append("cond",
-                                        new Document("$and", Arrays.asList(
-                                                new Document("$eq", Arrays.asList("$$activityInapplicalibity.recruitmentNumber", "$_id")),
-                                                new Document("$eq", Arrays.asList("$$activityInapplicalibity.acronym", "$headers")))))))));
 
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "        $group:{\n" +
                 "            _id:\"$_id\",\n" +
                 "            filteredActivities:{\n" +
@@ -204,7 +202,7 @@ public class ActivityStatusQueryBuilder {
                 "    }"));
 
 
-        pipeline.add(parseQuery("{\n" +
+        pipeline.add(ParseQuery.toDocument("{\n" +
                 "    $group: {\n" +
                 "      _id: {\n" +
                 "      },\n" +
