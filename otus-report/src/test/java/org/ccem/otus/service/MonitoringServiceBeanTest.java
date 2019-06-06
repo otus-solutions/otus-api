@@ -1,18 +1,16 @@
 package org.ccem.otus.service;
 
 import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
-import com.google.gson.GsonBuilder;
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.participant.persistence.ParticipantDao;
-import org.ccem.otus.persistence.ActivityFlagReportDao;
-import org.ccem.otus.persistence.ExamMonitoringDao;
-import org.ccem.otus.persistence.FieldCenterDao;
-import org.ccem.otus.persistence.SurveyDao;
+import org.ccem.otus.persistence.*;
 import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +20,8 @@ import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,8 +33,10 @@ public class MonitoringServiceBeanTest {
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
   private static final String CENTER = "RS";
   private static final Long RN = Long.valueOf(7016098);
+  private static Document ACTIVITY_INAPPLICABILITY = new Document();
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
   private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";
+  private static List<Bson> PIPELINE;
 
   private static final FieldCenter fieldCenter = new FieldCenter();
   private static final Long GOAL = (long) 3025L;
@@ -63,10 +63,16 @@ public class MonitoringServiceBeanTest {
   private LaboratoryProgressDao laboratoryProgressDao;
 
   @Mock
+  private ActivityInapplicabilityDao activityInapplicabilityDao;
+
+  @Mock
   private ExamInapplicabilityDao examInapplicabilityDao;
 
-   @Mock
+  @Mock
   private ExamMonitoringDao examMonitoringDao;
+
+  @Mock
+  private AggregateIterable<Document> result;
 
   @Before
   public void setUp() throws DataNotFoundException {
@@ -120,10 +126,12 @@ public class MonitoringServiceBeanTest {
 
 //  @Test
 //  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
-//    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
+//    when(activityInapplicabilityDao.aggregate(any())).thenReturn(result);
+//    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY)).thenReturn(ACTIVITY_INAPPLICABILITY);
 //    ProgressReport progressReport = monitoringServiceBean.getActivitiesProgress(CENTER);
-//    GsonBuilder builder = new GsonBuilder();
-//    assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(progressReport));
+//    System.out.print(progressReport);
+//    verify(activityInapplicabilityDao,times(1)).aggregate(PIPELINE);
+//    verify(activityFlagReportDao,times(1)).getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY);
 //  }
 
   @Test
