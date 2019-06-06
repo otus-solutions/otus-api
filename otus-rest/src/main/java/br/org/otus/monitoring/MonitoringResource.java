@@ -86,7 +86,6 @@ public class MonitoringResource {
     return new Response().buildSuccess().toJson();
   }
 
-
   /* Laboratory Monitoring */
   @GET
   @Secured

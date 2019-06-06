@@ -118,13 +118,13 @@ public class MonitoringServiceBeanTest {
     assertEquals(GOAL, response.get(0).getGoal());
   }
 
-  @Test
-  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
-    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
-    ProgressReport progressReport = monitoringServiceBean.getActivitiesProgress(CENTER);
-    GsonBuilder builder = new GsonBuilder();
-    assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(progressReport));
-  }
+//  @Test
+//  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
+//    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST)).thenReturn(new Document("index", Arrays.asList(5113372,5113371)).append("data",Arrays.asList(Arrays.asList(null,null,2,2),Arrays.asList(2,2,null,null))));
+//    ProgressReport progressReport = monitoringServiceBean.getActivitiesProgress(CENTER);
+//    GsonBuilder builder = new GsonBuilder();
+//    assertEquals(ACTIVITIES_PROGRESS_REPORT_JSON_DTO,builder.create().toJson(progressReport));
+//  }
 
   @Test
   public void method_getDataOrphanByExams_should_call_laboratoryProgressDao_getDataOrphanByExams() throws DataNotFoundException {

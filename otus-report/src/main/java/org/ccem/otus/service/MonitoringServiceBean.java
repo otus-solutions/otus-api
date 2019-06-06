@@ -87,7 +87,10 @@ public class MonitoringServiceBean implements MonitoringService {
     @Override
     public ProgressReport getActivitiesProgress() throws DataNotFoundException {
         LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
-        Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(surveyAcronyms);
+
+        groupActivityInapplicabilityStage();
+        Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
+        Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(surveyAcronyms, activityInapplicabilities);
 
         return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
     }
@@ -98,7 +101,7 @@ public class MonitoringServiceBean implements MonitoringService {
 
         groupActivityInapplicabilityStage();
         Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
-        Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReportWithInapplicability(center, surveyAcronyms, activityInapplicabilities);
+        Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, surveyAcronyms, activityInapplicabilities);
 
         return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
     }

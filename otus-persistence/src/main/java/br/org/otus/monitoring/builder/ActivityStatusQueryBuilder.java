@@ -17,21 +17,15 @@ public class ActivityStatusQueryBuilder {
         this.pipeline = new ArrayList<>();
     }
 
-    public ArrayList<Bson> getActivityStatusQuery(String center, LinkedList<String> surveyAcronyms) {
-        addMatchFieldCenterStage(center);
-        addBuildDataStages(surveyAcronyms, null);
-        return pipeline;
-    }
-
-    public ArrayList<Bson> getActivityStatusQueryWithInapplicability(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) {
+    public ArrayList<Bson> getActivityStatusQuery(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) {
         addMatchFieldCenterStage(center);
         addBuildDataStages(surveyAcronyms, activityInapplicabilities);
         return pipeline;
     }
 
-    public ArrayList<Bson> getActivityStatusQuery(LinkedList<String> surveyAcronyms) {
+    public ArrayList<Bson> getActivityStatusQuery(LinkedList<String> surveyAcronyms, Document activityInapplicabilities) {
         addMatchIsDiscardedStage();
-        addBuildDataStages(surveyAcronyms, null);
+        addBuildDataStages(surveyAcronyms, activityInapplicabilities);
         return pipeline;
     }
 

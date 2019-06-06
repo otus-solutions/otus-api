@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface ActivityFlagReportDao {
 
-  Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms) throws DataNotFoundException;
-  Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms) throws DataNotFoundException;
-  Document getActivitiesProgressReportWithInapplicability(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) throws DataNotFoundException;
+  Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms, Document activityInapplicabilities ) throws DataNotFoundException;
+  Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) throws DataNotFoundException;
 }
