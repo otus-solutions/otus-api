@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.participant.aliquot;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
@@ -113,6 +114,7 @@ public class Aliquot extends SimpleAliquot {
   public void setExamLotId(ObjectId examLotId) {
     this.examLotId = examLotId;
   }
+
 
   public static String serialize(Aliquot aliquot) {
     Gson builder = getGsonBuilder().create();

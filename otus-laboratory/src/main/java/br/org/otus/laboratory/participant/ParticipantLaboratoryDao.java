@@ -8,7 +8,6 @@ import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.MongoIterable;
 
 import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
@@ -33,5 +32,4 @@ public interface ParticipantLaboratoryDao {
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
   
   AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
-
 }

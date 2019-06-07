@@ -23,8 +23,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(LaboratoryConfigurationServiceBean.class)
-
-
 public class LaboratoryConfigurationServiceBeanTest {
 	private static final String CENTER = "MG";
 
@@ -49,6 +47,13 @@ public class LaboratoryConfigurationServiceBeanTest {
 	@Before
 	public void setup() throws Exception {
 		PowerMockito.when(laboratoryConfigurationDao.find()).thenReturn(laboratoryConfiguration);
+	}
+	
+	@Test
+	public void getHeaders_method_should_call_getHeaders_method() {
+	  laboratoryConfigurationServiceBean.getCheckingExist();
+	  
+	  Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getCheckingExist();
 	}
 
 	@Test

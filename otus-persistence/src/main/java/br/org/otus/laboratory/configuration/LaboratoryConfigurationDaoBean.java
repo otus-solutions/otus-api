@@ -1,21 +1,23 @@
 package br.org.otus.laboratory.configuration;
 
-import br.org.mongodb.MongoGenericDao;
-import br.org.otus.laboratory.configuration.aliquot.AliquotConfigurationQueryBuilder;
-import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
-import com.google.gson.GsonBuilder;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import static com.mongodb.client.model.Filters.exists;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.exists;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+
+import com.google.gson.GsonBuilder;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
+
+import br.org.mongodb.MongoGenericDao;
+import br.org.otus.laboratory.configuration.aliquot.AliquotConfigurationQueryBuilder;
+import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
@@ -35,6 +37,17 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
         Document first = collection.find(query).first();
 
         return LaboratoryConfiguration.deserialize(first.toJson());
+    }
+    
+    @Override
+    public Boolean getCheckingExist() {
+      Document query = new Document("objectType", "LaboratoryConfiguration");
+
+      Document first = collection.find(query).first();
+      if(first != null) {
+        return true;    
+      }
+      return false; 
     }
 
     @Override

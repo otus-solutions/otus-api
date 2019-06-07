@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.swing.text.Document;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -114,7 +113,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       return null;
     });
 
-
     return getLaboratory(updateAliquotsDTO.getRecruitmentNumber());
   }
 
@@ -128,5 +126,13 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   @Override
   public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException {
     return participantLaboratoryExtractionDao.getLaboratoryExtraction();
+  }
+
+  @Override
+  public String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException, ValidationException {
+    if(convertedAliquot.getAliquotHistory().isEmpty()){
+      throw new ValidationException(new Throwable("aliquotHistory invalid"));
+    }
+    return aliquotDao.convertAliquotRole(convertedAliquot);
   }
 }

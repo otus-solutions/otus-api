@@ -1,10 +1,9 @@
 package org.ccem.otus.permissions.persistence.user;
 
+import java.util.List;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.permissions.model.user.Permission;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public interface UserPermissionGenericDao {
 

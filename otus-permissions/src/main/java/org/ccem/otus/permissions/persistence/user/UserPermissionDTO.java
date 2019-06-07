@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.ccem.otus.permissions.model.user.Permission;
-import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
 import org.ccem.otus.permissions.utils.PermissionAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +55,7 @@ public class UserPermissionDTO {
       e.printStackTrace();
     }
     UserPermissionDTO userPermissionsDTO = UserPermissionDTO.getGsonBuilder().create()
-      .fromJson(String.valueOf(jsonObject), UserPermissionDTO.class);
+        .fromJson(String.valueOf(jsonObject), UserPermissionDTO.class);
     return userPermissionsDTO;
   }
 

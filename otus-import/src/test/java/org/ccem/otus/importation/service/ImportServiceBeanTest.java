@@ -1,13 +1,12 @@
 package org.ccem.otus.importation.service;
 
-import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.importation.activity.ActivityImportDTO;
 import org.ccem.otus.importation.activity.ActivityImportResultDTO;
 import org.ccem.otus.importation.activity.service.ActivityImportValidationService;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
-import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.SurveyJumpMapDao;
+import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +29,7 @@ public class ImportServiceBeanTest {
     @Mock
     private SurveyJumpMapDao surveyJumpMapDao;
     @Mock
-    private ActivityDao activityDao;
+    private ActivityService activityService;
     @Mock
     private ActivityImportResultDTO activityImportResultDTO;
     @Mock
@@ -49,12 +48,12 @@ public class ImportServiceBeanTest {
     }
 
     @Test
-    public void importActivities_should_call_activityDao_persist() throws DataNotFoundException {
+    public void importActivities_should_call_activityService_create() throws DataNotFoundException {
         PowerMockito.when(surveyJumpMapDao.get(ACRONYM,VERSION)).thenReturn(surveyJumpMap);
         PowerMockito.when(activityImportValidationService.validateActivity(surveyJumpMap,activityImportDTO.getActivityList().get(0))).thenReturn(activityImportResultDTO);
-        PowerMockito.when(activityDao.persist(activityImportDTO.getActivityList().get(0))).thenReturn(new ObjectId());
+        PowerMockito.when(activityService.create(activityImportDTO.getActivityList().get(0))).thenReturn(SURVEY_ACTIVITY_JSON);
         importServiceBean.importActivities(ACRONYM, VERSION, activityImportDTO);
-        Mockito.verify(activityDao).persist(activityImportDTO.getActivityList().get(0));
+        Mockito.verify(activityService).create(activityImportDTO.getActivityList().get(0));
     }
 
     @Test
@@ -62,7 +61,7 @@ public class ImportServiceBeanTest {
         PowerMockito.when(surveyJumpMapDao.get(ACRONYM,VERSION)).thenReturn(surveyJumpMap);
         activityImportResultDTO.setFailImport();
         PowerMockito.when(activityImportValidationService.validateActivity(surveyJumpMap,activityImportDTO.getActivityList().get(0))).thenReturn(activityImportResultDTO);
-        PowerMockito.when(activityDao.persist(activityImportDTO.getActivityList().get(0))).thenReturn(new ObjectId());
+        PowerMockito.when(activityService.create(activityImportDTO.getActivityList().get(0))).thenReturn(SURVEY_ACTIVITY_JSON);
         assertEquals(activityImportResultDTO,importServiceBean.importActivities(ACRONYM, VERSION, activityImportDTO).get(0));
     }
 }

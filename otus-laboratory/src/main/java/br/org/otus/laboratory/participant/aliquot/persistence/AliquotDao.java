@@ -40,4 +40,6 @@ public interface AliquotDao {
   List<Aliquot> getExamLotAliquots(ObjectId lotOId);
 
   void executeFunction(String function);
+
+  String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException;
 }
