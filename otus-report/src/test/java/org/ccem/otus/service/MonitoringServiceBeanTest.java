@@ -8,7 +8,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.monitoring.MonitoringCenter;
-import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.*;
 import org.ccem.otus.persistence.laboratory.LaboratoryProgressDao;
@@ -33,11 +32,10 @@ public class MonitoringServiceBeanTest {
   private static final ArrayList<String> LIST_ACRONYMS_CENTERS = new ArrayList<>();
   private static final String CENTER = "RS";
   private static final Long RN = Long.valueOf(7016098);
-  private static Document ACTIVITY_INAPPLICABILITY = new Document();
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
-  private static String ACTIVITIES_PROGRESS_REPORT_JSON_DTO = "{\"columns\":[[\"C\",\"HVSD\"],[\"C\",\"PSEC\"],[\"C\",\"ABC\"],[\"C\",\"DEF\"]],\"index\":[5113372,5113371],\"data\":[[null,null,2,2],[2,2,null,null]]}";
-  private static List<Bson> PIPELINE;
-
+  private static List<Bson> PIPELINE = new ArrayList<>();
+  private static Document ACTIVITY_INAPPLICABILITY_RESULT =  ParseQuery.toDocument("{_id: {}, AI: [{acronym: DSN, recruitmentNumber: 2000735}, {acronym: TSA, recruitmentNumber: 2000735}, {acronym: BIOC, recruitmentNumber: 2000735}, {acronym: CSP, recruitmentNumber: 3051442}, {acronym: CSJ, recruitmentNumber: 3019660}, {acronym: AMAC, recruitmentNumber: 1063154}, {acronym: CSP, recruitmentNumber: 2000735}, {acronym: ISG, recruitmentNumber: 2000735}]}");
+  private static Document ACTIVITIES_PROGRESS_REPORT_RESULT =  ParseQuery.toDocument("{_id: {}, index: [3019660, 3036402, 3004950, 3012464, 3051442], data: [[0.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, -1.0, null, null, null, null, null, null, null, null, 2.0, -1.0, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [1.0, null, null, 0.0, null, 2.0, null, null, 1.0, null, null, null, null, null, null, null, null, 2.0, -1.0, -1.0, null, -1.0, null, null, null, null, null, null, null, null, -1.0, -1.0, null, null, null, 2.0, -1.0, -1.0, null, -1.0, null, null, -1.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]]}");
   private static final FieldCenter fieldCenter = new FieldCenter();
   private static final Long GOAL = (long) 3025L;
 
@@ -93,7 +91,6 @@ public class MonitoringServiceBeanTest {
     SURVEY_ACRONYM_LIST.add("ABC");
     SURVEY_ACRONYM_LIST.add("DEF");
     when(surveyDao.listAcronyms()).thenReturn(SURVEY_ACRONYM_LIST);
-
   }
 
   @Test
@@ -124,15 +121,18 @@ public class MonitoringServiceBeanTest {
     assertEquals(GOAL, response.get(0).getGoal());
   }
 
-//  @Test
-//  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
-//    when(activityInapplicabilityDao.aggregate(any())).thenReturn(result);
-//    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY)).thenReturn(ACTIVITY_INAPPLICABILITY);
-//    ProgressReport progressReport = monitoringServiceBean.getActivitiesProgress(CENTER);
-//    System.out.print(progressReport);
-//    verify(activityInapplicabilityDao,times(1)).aggregate(PIPELINE);
-//    verify(activityFlagReportDao,times(1)).getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY);
-//  }
+  @Test
+  public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
+    PIPELINE.add(ParseQuery.toDocument("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
+    when(activityInapplicabilityDao.aggregate(PIPELINE)).thenReturn(result);
+    when(result.first()).thenReturn(ACTIVITY_INAPPLICABILITY_RESULT);
+    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY_RESULT)).thenReturn(ACTIVITIES_PROGRESS_REPORT_RESULT);
+
+    monitoringServiceBean.getActivitiesProgress(CENTER);
+
+    verify(activityInapplicabilityDao,times(1)).aggregate(PIPELINE);
+    verify(activityFlagReportDao,times(1)).getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY_RESULT);
+  }
 
   @Test
   public void method_getDataOrphanByExams_should_call_laboratoryProgressDao_getDataOrphanByExams() throws DataNotFoundException {
