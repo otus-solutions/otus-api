@@ -41,14 +41,14 @@ public class LaboratoryMonitoringServiceBeanTest {
         PowerMockito.when(ProgressReport.class, "deserialize", PROGRESS_REPORT_DOCUMENT.toJson()).thenReturn(progressReport);
     }
 
-    @Test
-    public void getExamFlagReport_should_call_the_DAO_and_set_columns_on_the_progress_report() throws Exception {
-        LinkedList<String> possibleExams = new LinkedList<>();
-        ArrayList<Long> centerRns = new ArrayList<>();
-        Mockito.when(examFlagReportDao.getExamProgressReport(possibleExams, centerRns)).thenReturn(PROGRESS_REPORT_DOCUMENT);
-
-        laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRns);
-        Mockito.verify(examFlagReportDao).getExamProgressReport(possibleExams,centerRns);
-        Mockito.verify(progressReport).setColumns(possibleExams);
-    }
+//    @Test
+//    public void getExamFlagReport_should_call_the_DAO_and_set_columns_on_the_progress_report() throws Exception {
+//        LinkedList<String> possibleExams = new LinkedList<>();
+//        ArrayList<Long> centerRns = new ArrayList<>();
+//        Mockito.when(examFlagReportDao.getExamProgressReport(possibleExams, centerRns)).thenReturn(PROGRESS_REPORT_DOCUMENT);
+//
+//        laboratoryMonitoringService.getExamFlagReport(possibleExams, centerRns);
+//        Mockito.verify(examFlagReportDao).getExamProgressReport(possibleExams,centerRns);
+//        Mockito.verify(progressReport).setColumns(possibleExams);
+//    }
 }

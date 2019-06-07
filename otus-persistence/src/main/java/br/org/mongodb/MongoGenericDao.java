@@ -59,6 +59,8 @@ public abstract class MongoGenericDao<T> {
         return collection.aggregate(query).allowDiskUse(true);
     }
 
+
+
   public void executeFunction(String function){
     db.runCommand(new Document("$eval", function));
   }
