@@ -23,15 +23,12 @@ public class LaboratoryMonitoringServiceBean implements LaboratoryMonitoringServ
 
     @Override
     public ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException {
-
         List<Document> examInapplicabilities = new ArrayList();
         MongoCursor<Document> inapplicabilitiesCursor = examInapplicabilityDao.list().iterator();
         while (inapplicabilitiesCursor.hasNext()){
             examInapplicabilities.add(inapplicabilitiesCursor.next());
         }
-
         Document flagReportDocument = examFlagReportDao.getExamProgressReport(possibleExams, centerRns, examInapplicabilities);
-
         return getProgressReport(possibleExams, flagReportDocument);
     }
 

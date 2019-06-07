@@ -19,6 +19,6 @@ public class ParseQueryTest {
 
     @Test
     public void toDocumentMethod_should_check_return() {
-        assertEquals(builder.toDocument(query), new GsonBuilder().create().fromJson(query, Document.class));
+        assertEquals(builder.toDocument(query), new GsonBuilder().create().fromJson(query , Document.class));
     }
 }

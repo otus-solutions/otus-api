@@ -52,37 +52,35 @@ public class ExamFlagReportQueryBuilder {
         pipeline.add(ParseQuery.toDocument("{\"$addFields\":{\"found\":{\"$filter\":{\"input\":\"$exams\",\"as\":\"item\",\"cond\":{\"$eq\":[\"$$item\",\"$headers\"]}}}}}"));
 
 
-        pipeline.add(ParseQuery.toDocument("{$addFields:{\n" +
-                "        examInapplicatibityFound:{\n" +
-                "            $filter:{\n" +
-                "                input: " + new GsonBuilder().create().toJson(EIS) + ", as: \"examInnaplicability\",\n" +
-                "                cond: {\n" +
-                "                    $and:[\n" +
-                "                        {$eq:[\"$$examInnaplicability.recruitmentNumber\",\"$_id\"]},\n" +
-                "                        {$eq:[\"$$examInnaplicability.name\", \"$headers\"]}\n" +
-                "                        ]\n" +
-                "                }\n" +
-                "            }\n" +
+        pipeline.add(ParseQuery.toDocument("{$addFields:{" +
+                "        examInapplicatibityFound:{" +
+                "            $filter:{" +
+                "                input: " + new GsonBuilder().create().toJson(EIS) + ", as: \"examInnaplicability\"," +
+                "                cond: {" +
+                "                    $and:[" +
+                "                        {$eq:[\"$$examInnaplicability.recruitmentNumber\",\"$_id\"]}," +
+                "                        {$eq:[\"$$examInnaplicability.name\", \"$headers\"]}" +
+                "                        ]" +
+                "                }" +
+                "            }" +
                 "        }}}"));
 
 
-        //sets 1 if the participant has the exam, -1 if ausent and 0 inapplicability
+        //sets 1 if the participant has the exam, -1 if ausent and 0 if inapplicability
         pipeline.add(ParseQuery.toDocument("{$group:{\n" +
-                "        _id:\"$_id\",\n" +
-                "        filtered:{\n" +
-                "            $push:{\n" +
-                "                $cond:[{\n" +
-                "                    $gt:[{$size: \"$examInapplicatibityFound\"},0]\n" +
-                "                },0, \n" +
-                "                {$cond:[{\n" +
-                "                    $gt:[{$size:\"$found\"},0]\n" +
-                "                },1,-1]}]\n" +
-                "        }\n" +
+                "        _id:\"$_id\"," +
+                "        filtered:{" +
+                "            $push:{" +
+                "                $cond:[{" +
+                "                    $gt:[{$size: \"$examInapplicatibityFound\"},0]" +
+                "                },0," +
+                "                {$cond:[{" +
+                "                    $gt:[{$size:\"$found\"},0]" +
+                "                },1,-1]}]" +
+                "        }" +
                 "    }}}"));
-
 
         // adapt the result to the flag report format (expected by D3 (js library))
         pipeline.add(ParseQuery.toDocument("{\"$group\":{\"_id\":{},\"index\":{\"$push\":\"$_id\"},\"data\":{\"$push\":\"$filtered\"}}}"));
-
     }
 }

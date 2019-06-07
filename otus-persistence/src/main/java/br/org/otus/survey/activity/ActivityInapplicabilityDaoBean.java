@@ -1,19 +1,13 @@
 package br.org.otus.survey.activity;
 
 import br.org.mongodb.MongoGenericDao;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import org.bson.BSON;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.persistence.ActivityInapplicabilityDao;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -32,9 +26,10 @@ public class ActivityInapplicabilityDaoBean extends MongoGenericDao<Document> im
     public void update(ActivityInapplicability applicability) throws DataNotFoundException {
         Document parsed = Document.parse(ActivityInapplicability.serialize(applicability));
 
-        UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()), eq(ACRONYM, applicability.getAcronym())),
+        UpdateResult updateLabData = collection.updateOne(and(
+                eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),
+                eq(ACRONYM, applicability.getAcronym())),
                 new Document("$set", parsed), new UpdateOptions().upsert(true));
-
 
         if ((updateLabData.getModifiedCount() == 0) && (updateLabData.getUpsertedId() == null)) {
             throw new DataNotFoundException(new Throwable("Update Fail"));

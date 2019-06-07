@@ -5,7 +5,6 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.List;
 
@@ -18,6 +17,4 @@ public interface ExamInapplicabilityDao {
     AggregateIterable<Document> aggregate(List<Bson> query);
 
     FindIterable<Document> list();
-
-
 }
