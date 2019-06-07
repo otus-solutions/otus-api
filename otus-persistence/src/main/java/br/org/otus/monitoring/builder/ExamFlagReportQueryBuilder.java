@@ -4,6 +4,7 @@ package br.org.otus.monitoring.builder;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,53 +14,75 @@ public class ExamFlagReportQueryBuilder {
 
     private ArrayList<Bson> pipeline;
 
-    private Document parseQuery(String query) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().fromJson(query, Document.class);
-    }
-
     public ExamFlagReportQueryBuilder() {
         this.pipeline = new ArrayList<>();
     }
 
-    public ArrayList<Bson> getExamResultsStatusQuery(LinkedList<String> allPossibleExams, ArrayList<Long> centerRns, List<Document> examInapplicabilities) {
+    public ArrayList<Bson> getExamResultsStatusQuery(LinkedList<String> allPossibleExams, ArrayList<Long> centerRns, List<Document> EIS) {
         matchRnList(centerRns);
         collectParticipantExams(centerRns);
-        buildFlagReport(allPossibleExams);
+        buildFlagReport(allPossibleExams, EIS);
         return pipeline;
     }
 
     private void matchRnList(ArrayList<Long> centerRns) {
-        pipeline.add(parseQuery("{\"$match\":{\"recruitmentNumber\":{\"$in\":" + centerRns + "}}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$match\":{\"recruitmentNumber\":{\"$in\":" + centerRns + "}}}"));
     }
 
     private void collectParticipantExams(ArrayList<Long> centerRns) {
-        pipeline.add(parseQuery("{\"$project\":{\"recruitmentNumber\":1,\"examName\":1}}"));
-        pipeline.add(parseQuery("{\"$group\":{\"_id\":\"$recruitmentNumber\",\"exams\":{\"$addToSet\":\"$examName\"}}}"));
-        pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"participantList\":{\"$push\":{\"recruitmentNumber\":\"$_id\",\"exams\":\"$exams\"}}}}"));
-        pipeline.add(parseQuery("{\"$addFields\":{\"allRns\":" + centerRns + "}}"));
-        pipeline.add(parseQuery("{\"$unwind\":\"$allRns\"}"));
-        pipeline.add(parseQuery("{\"$addFields\":{" +
+        pipeline.add(ParseQuery.toDocument("{\"$project\":{\"recruitmentNumber\":1,\"examName\":1}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$group\":{\"_id\":\"$recruitmentNumber\",\"exams\":{\"$addToSet\":\"$examName\"}}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$group\":{\"_id\":{},\"participantList\":{\"$push\":{\"recruitmentNumber\":\"$_id\",\"exams\":\"$exams\"}}}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$addFields\":{\"allRns\":" + centerRns + "}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$unwind\":\"$allRns\"}"));
+        pipeline.add(ParseQuery.toDocument("{\"$addFields\":{" +
                 "\"participantFound\":{" +
                 "   \"$arrayElemAt\":[" +
                 "       {\"$filter\":{" +
                 "           \"input\":\"$participantList\",\"as\":\"participant\"," +
                 "           \"cond\":{\"$eq\":[\"$$participant.recruitmentNumber\",\"$allRns\"]}" +
                 "}},0]}}}"));
-        pipeline.add(parseQuery("{\"$project\":{\"_id\":\"$allRns\",\"exams\":{\"$ifNull\":[\"$participantFound.exams\",[]]}}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$project\":{\"_id\":\"$allRns\",\"exams\":{\"$ifNull\":[\"$participantFound.exams\",[]]}}}"));
     }
 
-    private void buildFlagReport(LinkedList<String> headers) {
+    private void buildFlagReport(LinkedList<String> headers, List<Document> EIS) {
         pipeline.add(new Document("$addFields", new Document("headers", headers)));
-        pipeline.add(parseQuery("{\"$unwind\":\"$headers\"}"));
+        pipeline.add(ParseQuery.toDocument("{\"$unwind\":\"$headers\"}"));
 
-        pipeline.add(parseQuery("{\"$addFields\":{\"found\":{\"$filter\":{\"input\":\"$exams\",\"as\":\"item\",\"cond\":{\"$eq\":[\"$$item\",\"$headers\"]}}}}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$addFields\":{\"found\":{\"$filter\":{\"input\":\"$exams\",\"as\":\"item\",\"cond\":{\"$eq\":[\"$$item\",\"$headers\"]}}}}}"));
 
-        //sets 1 if the participant has the exam, 0 if doesn't
-        pipeline.add(parseQuery("{\"$group\":{\"_id\":\"$_id\",\"filtered\":{\"$push\":{\"$cond\":[{\"$gt\":[{\"$size\":\"$found\"},0]},1,-1]}}}}"));
+
+        pipeline.add(ParseQuery.toDocument("{$addFields:{\n" +
+                "        examInapplicatibityFound:{\n" +
+                "            $filter:{\n" +
+                "                input: " + new GsonBuilder().create().toJson(EIS) + ", as: \"examInnaplicability\",\n" +
+                "                cond: {\n" +
+                "                    $and:[\n" +
+                "                        {$eq:[\"$$examInnaplicability.recruitmentNumber\",\"$_id\"]},\n" +
+                "                        {$eq:[\"$$examInnaplicability.name\", \"$headers\"]}\n" +
+                "                        ]\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }}}"));
+
+
+        //sets 1 if the participant has the exam, -1 if ausent and 0 inapplicability
+        pipeline.add(ParseQuery.toDocument("{$group:{\n" +
+                "        _id:\"$_id\",\n" +
+                "        filtered:{\n" +
+                "            $push:{\n" +
+                "                $cond:[{\n" +
+                "                    $gt:[{$size: \"$examInapplicatibityFound\"},0]\n" +
+                "                },0, \n" +
+                "                {$cond:[{\n" +
+                "                    $gt:[{$size:\"$found\"},0]\n" +
+                "                },1,-1]}]\n" +
+                "        }\n" +
+                "    }}}"));
+
 
         // adapt the result to the flag report format (expected by D3 (js library))
-        pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"index\":{\"$push\":\"$_id\"},\"data\":{\"$push\":\"$filtered\"}}}"));
+        pipeline.add(ParseQuery.toDocument("{\"$group\":{\"_id\":{},\"index\":{\"$push\":\"$_id\"},\"data\":{\"$push\":\"$filtered\"}}}"));
 
     }
 }
