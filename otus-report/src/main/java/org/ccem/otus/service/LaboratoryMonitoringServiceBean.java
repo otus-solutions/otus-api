@@ -1,12 +1,8 @@
 package org.ccem.otus.service;
 
-import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.persistence.ExamFlagReportDao;
@@ -14,20 +10,16 @@ import org.ccem.otus.persistence.ExamFlagReportDao;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
 public class LaboratoryMonitoringServiceBean implements LaboratoryMonitoringService {
 
-
     @Inject
     private ExamFlagReportDao examFlagReportDao;
     @Inject
     private ExamInapplicabilityDao examInapplicabilityDao;
-
-
 
     @Override
     public ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException {
