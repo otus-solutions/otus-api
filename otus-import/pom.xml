@@ -3,7 +3,7 @@
   <parent>
     <artifactId>otus-root</artifactId>
     <groupId>org.ccem.otus</groupId>
-    <version>1.22-SNAPSHOT</version>
+    <version>1.23-SNAPSHOT</version>
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>survey-model</artifactId>
-      <version>1.6</version>
+      <version>${survey.model.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
