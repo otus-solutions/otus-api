@@ -17,6 +17,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.survey.form.SurveyForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -157,4 +158,5 @@ public class ActivityResourceTest {
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
     assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
   }
+
 }
