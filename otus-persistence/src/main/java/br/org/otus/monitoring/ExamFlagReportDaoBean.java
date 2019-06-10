@@ -17,7 +17,6 @@ public class ExamFlagReportDaoBean extends MongoGenericDao<Document> implements 
     public static final String COLLECTION_NAME = "exam_result";
 
     public ExamFlagReportDaoBean() {
-
         super(COLLECTION_NAME, Document.class);
     }
 
