@@ -97,5 +97,4 @@ public class SurveyResourceTest {
 		assertTrue(surveyResource.updateLastSurveySurveyType(ACRONYM, updateSurveyFormTypeDto)
 				.contains(POSITIVE_RETURN.toString()));
 	}
-
 }
