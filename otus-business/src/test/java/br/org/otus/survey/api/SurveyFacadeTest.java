@@ -3,6 +3,8 @@ package br.org.otus.survey.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
@@ -20,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -100,7 +101,7 @@ public class SurveyFacadeTest {
 		whenNew(SurveyForm.class).withArguments(surveyTemplate, USER_EMAIL).thenReturn(survey);
 		when(surveyService.saveSurvey(survey)).thenReturn(survey);
 		surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL);
-		Mockito.verify(surveyService,Mockito.times(1)).createSurveyJumpMap(survey);
+		verify(surveyService, times(1)).createSurveyJumpMap(survey);
 	}
 
 	@Test(expected = HttpResponseException.class)
@@ -149,5 +150,4 @@ public class SurveyFacadeTest {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(new ValidationException(new Throwable("")));
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
-
 }

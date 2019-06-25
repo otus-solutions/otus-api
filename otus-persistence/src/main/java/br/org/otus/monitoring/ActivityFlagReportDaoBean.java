@@ -13,38 +13,30 @@ import java.util.List;
 
 public class ActivityFlagReportDaoBean extends MongoGenericDao<Document> implements ActivityFlagReportDao {
 
-  public static final String COLLECTION_NAME = "activity";
+    public static final String COLLECTION_NAME = "activity";
 
-  public ActivityFlagReportDaoBean() {
-    super(COLLECTION_NAME, Document.class);
-  }
-
-  @Override
-  public Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms) throws DataNotFoundException {
-    List<Bson> query = new ActivityStatusQueryBuilder()
-        .getActivityStatusQuery(surveyAcronyms);
-
-      return getDocument(query);
-  }
-
-  @Override
-  public Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms) throws DataNotFoundException {
-    List<Bson> query = new ActivityStatusQueryBuilder()
-            .getActivityStatusQuery(center,surveyAcronyms);
-
-      return getDocument(query);
-  }
-
- @NotNull
- private Document getDocument(List<Bson> query) throws DataNotFoundException {
-    Document result = collection.aggregate(query).allowDiskUse(true).first();
-
-    if(result == null){
-      throw new DataNotFoundException("There are no results");
+    public ActivityFlagReportDaoBean() {
+        super(COLLECTION_NAME, Document.class);
     }
 
-    return result;
- }
+    @Override
+    public Document getActivitiesProgressReport(LinkedList<String> surveyAcronyms, Document activityInapplicabilities) throws DataNotFoundException {
+        List<Bson> query = new ActivityStatusQueryBuilder().getActivityStatusQuery(surveyAcronyms, activityInapplicabilities);
+        return getDocument(query);
+    }
 
+    @Override
+    public Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) throws DataNotFoundException {
+        List<Bson> query = new ActivityStatusQueryBuilder().getActivityStatusQuery(center, surveyAcronyms, activityInapplicabilities);
+        return getDocument(query);
+    }
 
+    @NotNull
+    private Document getDocument(List<Bson> query) throws DataNotFoundException {
+        Document result = collection.aggregate(query).allowDiskUse(true).first();
+        if (result == null) {
+            throw new DataNotFoundException("There are no results");
+        }
+        return result;
+    }
 }

@@ -32,8 +32,6 @@ public class ActivityServiceBean implements ActivityService {
 
   @Override
   public String create(SurveyActivity surveyActivity) {
-    surveyActivity.getSurveyForm().setAcronym(surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-    surveyActivity.getSurveyForm().setName(surveyActivity.getSurveyForm().getSurveyTemplate().identity.name);
     surveyActivity.getSurveyForm().setSurveyTemplate(null);
     ObjectId objectId = activityDao.persist(surveyActivity);
     return objectId.toString();
@@ -41,8 +39,6 @@ public class ActivityServiceBean implements ActivityService {
 
   @Override
   public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
-    surveyActivity.getSurveyForm().setAcronym(surveyActivity.getSurveyForm().getSurveyTemplate().identity.acronym);
-    surveyActivity.getSurveyForm().setName(surveyActivity.getSurveyForm().getSurveyTemplate().identity.name);
     surveyActivity.getSurveyForm().setSurveyTemplate(null);
     return activityDao.update(surveyActivity);
   }

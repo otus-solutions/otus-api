@@ -21,22 +21,17 @@ public class ExamFlagReportDaoBean extends MongoGenericDao<Document> implements 
     }
 
     @Override
-    public Document getExamProgressReport(LinkedList<String> surveyAcronyms, ArrayList<Long> centerRns) throws DataNotFoundException {
-        List<Bson> query = new ExamFlagReportQueryBuilder().getExamResultsStatusQuery(surveyAcronyms, centerRns);
-
+    public Document getExamProgressReport(LinkedList<String> surveyAcronyms, ArrayList<Long> centerRns, List<Document> examInapplicabilities) throws DataNotFoundException {
+        List<Bson> query = new ExamFlagReportQueryBuilder().getExamResultsStatusQuery(surveyAcronyms, centerRns, examInapplicabilities);
         return getDocument(query);
     }
 
     @NotNull
     private Document getDocument(List<Bson> query) throws DataNotFoundException {
         Document result = collection.aggregate(query).allowDiskUse(true).first();
-
         if (result == null) {
             throw new DataNotFoundException("There are no results");
         }
-
         return result;
     }
-
-
 }

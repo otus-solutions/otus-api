@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ccem.otus</groupId>
   <artifactId>otus-root</artifactId>
-  <version>1.22.1</version>
+  <version>1.23</version>
   <packaging>pom</packaging>
   <name>otus-api</name>
 
@@ -22,6 +22,7 @@
 
     <!-- External dependencies -->
     <mongodb.driver.version>3.8.1</mongodb.driver.version>
+    <mongodb.bson.version>3.10.1</mongodb.bson.version>
     <google.gson.version>2.3.1</google.gson.version>
     <org.json.version>2.0</org.json.version>
     <nimbusds.version>4.18</nimbusds.version>

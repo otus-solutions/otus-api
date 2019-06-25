@@ -3,9 +3,9 @@ package br.org.otus.monitoring;
 import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
-import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.monitoring.ParticipantActivityReportDto;
 import org.ccem.otus.model.monitoring.ParticipantExamReportDto;
+import org.ccem.otus.model.monitoring.ProgressReport;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 
 import javax.inject.Inject;
@@ -85,7 +85,6 @@ public class MonitoringResource {
     monitoringFacade.deleteActivityApplicability(rn, acronym);
     return new Response().buildSuccess().toJson();
   }
-
 
   /* Laboratory Monitoring */
   @GET

@@ -81,8 +81,6 @@ public class ActivityServiceBeanTest {
     service.create(surveyActivity);
     verify(activityDao, times(1)).persist(surveyActivity);
     verify(surveyForm, times(1)).setSurveyTemplate(null);
-    verify(surveyForm, times(1)).setAcronym("TST");
-    verify(surveyForm, times(1)).setName("TEST");
   }
 
   @Test

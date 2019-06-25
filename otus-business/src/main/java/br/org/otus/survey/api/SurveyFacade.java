@@ -26,19 +26,19 @@ public class SurveyFacade {
         return surveyService.listAllUndiscarded();
     }
 
-	public List<SurveyForm> findByAcronym(String acronym) {
-		return surveyService.findByAcronym(acronym);
-	}
-	
-	public SurveyForm get(String acronym, Integer version) {
-		try {
-			return surveyService.get(acronym, version);
-			
-		} catch (DataNotFoundException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-		
-	}
+    public List<SurveyForm> findByAcronym(String acronym) {
+        return surveyService.findByAcronym(acronym);
+    }
+
+    public SurveyForm get(String acronym, Integer version) {
+        try {
+            return surveyService.get(acronym, version);
+
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+
+    }
 
     public SurveyForm publishSurveyTemplate(SurveyTemplate surveyTemplate, String userEmail) {
         SurveyForm s = new SurveyForm(surveyTemplate, userEmail);
@@ -70,9 +70,9 @@ public class SurveyFacade {
     public List<Integer> listVersions(String acronym) {
         return surveyService.listSurveyVersions(acronym);
     }
-    
+
     public List<String> listAcronyms() {
-      return surveyService.listAcronyms();
-  }
+        return surveyService.listAcronyms();
+    }
 
 }
