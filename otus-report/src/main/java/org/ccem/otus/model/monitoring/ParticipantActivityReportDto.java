@@ -3,6 +3,7 @@ package org.ccem.otus.model.monitoring;
 import com.google.gson.GsonBuilder;
 import org.ccem.otus.model.survey.activity.configuration.ActivityInapplicability;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.utils.LongAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ParticipantActivityReportDto {
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-
+    builder.registerTypeAdapter(Long.class, new LongAdapter());
     builder.serializeNulls();
     return builder;
   }
