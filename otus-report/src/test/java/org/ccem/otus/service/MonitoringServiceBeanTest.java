@@ -123,7 +123,8 @@ public class MonitoringServiceBeanTest {
 
   @Test
   public void method_get_activities_progress_should_padronize_the_result_array_with_the_survey_list() throws DataNotFoundException {
-    PIPELINE.add(ParseQuery.toDocument("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
+    PIPELINE.add(ParseQuery.toDocument("{$group:{_id:$recruitmentNumber,AI:{$push:{acronym : $acronym,recruitmentNumber :$recruitmentNumber}}}}"));
+    PIPELINE.add(ParseQuery.toDocument("{$group:{_id:\"\",participantAI:{$push:{rn:$_id,AI:\"$AI\"}}}}"));
     when(activityInapplicabilityDao.aggregate(PIPELINE)).thenReturn(result);
     when(result.first()).thenReturn(ACTIVITY_INAPPLICABILITY_RESULT);
     when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY_RESULT)).thenReturn(ACTIVITIES_PROGRESS_REPORT_RESULT);
