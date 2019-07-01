@@ -61,7 +61,7 @@ public class DataSourceServiceBean implements DataSourceService {
 	public String getElementExtractionValue(List<String> dataSources, String value) {
 		String valueFound = "";
 		for(String dataSource : dataSources){
-			String extractionValue = this.dataSourceValuesMapping.getExtractionValue(dataSource, value);
+			String extractionValue = this.dataSourceValuesMapping.getExtractionValue(dataSource.toLowerCase(), value);
 			if(extractionValue != null){
 				valueFound = extractionValue;
 			}
