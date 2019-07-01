@@ -179,7 +179,11 @@ public class MonitoringServiceBean implements MonitoringService {
 
     private void groupActivityInapplicabilityStage() {
         pipeline = new ArrayList<>();
-        pipeline.add(
-                ParseQuery.toDocument("{$group:{_id:{},AI:{$push:{acronym: \"$acronym\",recruitmentNumber:\"$recruitmentNumber\"}}}}"));
+        pipeline.add(ParseQuery.toDocument("{" +
+                "         $group:{_id:\"$recruitmentNumber\",AI:{$push:{acronym : \"$acronym\",recruitmentNumber :\"$recruitmentNumber\"}}}" +
+                "    }"));
+        pipeline.add(ParseQuery.toDocument("{\n" +
+                "         $group:{_id:\"\",participantAI:{$push:{rn:\"$_id\",AI:\"$AI\"}}}" +
+                "    }"));
     }
 }
