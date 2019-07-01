@@ -80,8 +80,6 @@ public class ActivityStatusQueryBuilder {
                 "      lastStatus_Date: 1" +
                 "    }" +
                 "  }"));
-
-
         pipeline.add(ParseQuery.toDocument("{" +
                 "    \"$group\": {" +
                 "      \"_id\": \"$rn\"," +
@@ -128,6 +126,19 @@ public class ActivityStatusQueryBuilder {
                 "    }" +
                 "  }"));
         pipeline.add(ParseQuery.toDocument("{$addFields:{activityInapplicabilities:{$arrayElemAt:[{$filter:{\"input\":" + new GsonBuilder().create().toJson(AIS.get("participantAI")) + ",\"as\":\"activityInapplicalibity\",\"cond\":{\"$and\":[{\"$eq\":[\"$$activityInapplicalibity.rn\",\"$_id\"]}]}}},0]}}}"));
+        pipeline.add(ParseQuery.toDocument("{" +
+                "      \"$addFields\":{" +
+                "          \"activityInapplicabilities\":{" +
+                "              \"$cond\":[" +
+                "                  {" +
+                "                      \"$ifNull\":[\"$activityInapplicabilities\",false]" +
+                "                  }," +
+                "                  \"$activityInapplicabilities\"," +
+                "                  []" +
+                "                  ]" +
+                "          }" +
+                "      }" +
+                "  }"));
         pipeline.add(ParseQuery.toDocument("{" +
                 "    $addFields: {" +
                 "      \"headers\": " + surveyAcronyms + "" +
