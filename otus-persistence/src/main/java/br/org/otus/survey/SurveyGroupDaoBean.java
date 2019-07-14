@@ -130,7 +130,7 @@ public class SurveyGroupDaoBean extends MongoGenericDao<Document> implements Sur
             pipeline.add(parseQuery("{$replaceRoot:{newRoot:{orphanSurveys:{$arrayElemAt:[\"$orphan.orphans\",0]}}}}"));
 
             Document first = collection.aggregate(pipeline).first();
-            if (first != null)
+            if (first.size() > 0)
                 acronyms = (List<String>) first.get("orphanSurveys");
         } else {
             acronyms = surveyDaoBean.listAcronyms();
