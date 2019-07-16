@@ -114,6 +114,15 @@ public class ActivityResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @GET
+  @Secured
+  @Path("/set-of-variables")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getVariables(@PathParam("rn") long rn) {
+
+    return new Response().buildSuccess(activityFacade.listVariables(rn)).toSurveyJson();
+  }
+
   private void isValidRecruitmentNumber(long rn) {
     participantFacade.getByRecruitmentNumber(rn);
   }

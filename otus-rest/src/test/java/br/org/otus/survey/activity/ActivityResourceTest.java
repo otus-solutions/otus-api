@@ -159,4 +159,11 @@ public class ActivityResourceTest {
     assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
   }
 
+  @Test
+  public void method_getVariables_should_return_variablesJson(){
+    when(activityFacade.listVariables(RECRUIMENT_NUMBER)).thenReturn(listSurveyActivity);
+    String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.getVariables(RECRUIMENT_NUMBER));
+  }
+
 }

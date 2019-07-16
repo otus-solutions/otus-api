@@ -1,5 +1,6 @@
 package br.org.otus.survey.activity.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -60,6 +61,19 @@ public class ActivityFacade {
 			throw new HttpResponseException(
 					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
+	}
+
+	public List<SurveyActivity> listVariables(long rn) {
+//	try {
+		ArrayList<SurveyActivity> listVariables = new ArrayList<SurveyActivity>();
+
+		listVariables.add(SurveyActivity.deserialize(""));
+
+		return listVariables;
+//		} catch (DataNotFoundException e) {
+//			throw new HttpResponseException(
+//					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+//		}
 	}
 
 	@SuppressWarnings("static-access")
