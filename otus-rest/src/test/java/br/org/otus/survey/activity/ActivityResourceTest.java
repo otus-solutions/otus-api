@@ -15,6 +15,7 @@ import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
+import org.ccem.otus.model.survey.activity.variables.Variables;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -68,6 +69,7 @@ public class ActivityResourceTest {
   private String jsonActivity = "activity";
   private SurveyActivity activityDeserialize;
   private List<SurveyActivity> listSurveyActivity;
+  private List<Variables> listVariables;
   private List<ActivityRevision> listActivityRevision;
   private Participant participant;
 
@@ -160,10 +162,10 @@ public class ActivityResourceTest {
   }
 
   @Test
-  public void method_getVariables_should_return_variablesJson(){
-    when(activityFacade.listVariables(RECRUIMENT_NUMBER)).thenReturn(listSurveyActivity);
-    String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
-    assertEquals(listSurveyActivityExpected, activityResource.getVariables(RECRUIMENT_NUMBER));
+  public void method_listVariables_should_return_variablesJson(){
+    when(activityFacade.listVariables(RECRUIMENT_NUMBER)).thenReturn(listVariables);
+    String listSurveyActivityExpected = new Response().buildSuccess(listVariables).toSurveyJson();
+    assertEquals(listSurveyActivityExpected, activityResource.listVariables(RECRUIMENT_NUMBER));
   }
 
 }

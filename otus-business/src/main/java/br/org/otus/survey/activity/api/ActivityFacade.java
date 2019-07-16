@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.variables.Variables;
 import org.ccem.otus.service.ActivityService;
 
 import com.google.gson.JsonSyntaxException;
@@ -63,11 +64,11 @@ public class ActivityFacade {
 		}
 	}
 
-	public List<SurveyActivity> listVariables(long rn) {
+	public List<Variables> listVariables(long rn) {
 //	try {
-		ArrayList<SurveyActivity> listVariables = new ArrayList<SurveyActivity>();
+		ArrayList<Variables> listVariables = new ArrayList<Variables>();
 
-		listVariables.add(SurveyActivity.deserialize(""));
+		listVariables.add(Variables.deserialize("{identification: 123456,name: tst1,value: Text, sendingID: 1}"));
 
 		return listVariables;
 //		} catch (DataNotFoundException e) {

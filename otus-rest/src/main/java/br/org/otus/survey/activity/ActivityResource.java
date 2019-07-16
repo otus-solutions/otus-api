@@ -114,11 +114,11 @@ public class ActivityResource {
     return new Response().buildSuccess().toJson();
   }
 
-  @GET
+  @POST
   @Secured
-  @Path("/set-of-variables")
+  @Path("/variables")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getVariables(@PathParam("rn") long rn) {
+  public String listVariables(@PathParam("rn") long rn) {
 
     return new Response().buildSuccess(activityFacade.listVariables(rn)).toSurveyJson();
   }
