@@ -11,31 +11,36 @@ public class GatewayFacade {
 
     private static final String HOST = "http://localhost:";
     private static final String PORT = "8083";
-    private static final String END_POINT = "/api/findAllCurrentVariables";
+    private static final String LIST_VARIABLES_RESOURCE = "/api/findAllCurrentVariables";
 
 
     public String getCurrentVariables() throws IOException {
-
-            URL url = new URL(HOST + PORT + END_POINT);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            //conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            if(conn.getResponseCode() != 200){
-                throw new RuntimeException("Failed: HTTP error code:"
-                + conn.getResponseCode());
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
-
-            String currentVariables =  br.readLine();
-            conn.disconnect();
-
+        HttpURLConnection microserviceConnection = connectorPerTypeOfRequest(HOST, PORT, LIST_VARIABLES_RESOURCE, "GET");
+        requisitionValidator(microserviceConnection);
+        String currentVariables = extractionCurrentVariables(microserviceConnection);
+        microserviceConnection.disconnect();
         return currentVariables;
-
     }
 
+    private HttpURLConnection connectorPerTypeOfRequest(String host, String port, String resource, String typeReq) throws IOException {
+        URL url = new URL(host + port + resource);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(typeReq);
+        return conn;
+    }
+
+    private void requisitionValidator(HttpURLConnection microserviceConnection) throws IOException {
+        if (microserviceConnection.getResponseCode() != 200) {
+            throw new RuntimeException("Failed: HTTP error code:"
+                    + microserviceConnection.getResponseCode());
+        }
+    }
+
+    private String extractionCurrentVariables(HttpURLConnection microserviceConnection) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                microserviceConnection.getInputStream()));
+        return br.readLine();
+    }
 }
 
 
