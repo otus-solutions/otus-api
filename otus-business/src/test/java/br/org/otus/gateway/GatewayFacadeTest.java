@@ -32,7 +32,7 @@ public class GatewayFacadeTest {
 
     @Test
     public void getCurrentFacadeMethod_should_bring_currentVariableListJson() throws IOException {
-        //assertEquals(gatewayFacade.findCurrentVariables(INFO_VARIABLE_PARAMS), CURRENT_VARIABLES_BY_MICROSERVICE);
+        assertEquals(gatewayFacade.findCurrentVariables(INFO_VARIABLE_PARAMS).getData(), CURRENT_VARIABLES_BY_MICROSERVICE);
         assertEquals("variable", "variable");
     }
 
