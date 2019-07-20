@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import com.google.gson.Gson;
 import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({ActivityFacade.class})
 public class ActivityFacadeTest {
   private static final long RECRUITMENT_NUMBER = 5112345;
   private static final String ACRONYM = "CISE";
@@ -32,6 +35,7 @@ public class ActivityFacadeTest {
   private static final Integer VERSION = 1;
   private static final String USER_EMAIL = "otus@gmail.com";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+  private static final String INFO_VARIABLE_PARAMS = "{\"recruitmentNumber\":2047555,\"variables\":[{\"identification\":123456,\"name\":\"tst1\",\"value\":\"Text\",\"sending\":null}]}";
 
   @Mock
   private SurveyActivity surveyActivityInvalid;
@@ -44,6 +48,8 @@ public class ActivityFacadeTest {
   @Mock
   private SurveyService surveyService;
   private SurveyActivity surveyActivityFull;
+//  @Mock//TODO test for use gatewayfacade
+//  private GatewayFacade gatewayFacade;
 
   @Before
   public void setUp() {
@@ -112,5 +118,13 @@ public class ActivityFacadeTest {
     when(activityService.updateCheckerActivity(checkerUpdated)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateCheckerActivity(checkerUpdated);
   }
+
+//  @Test//TODO test for use gatewayfacade
+//  public void listVariablesMethod_should_invoke_gatewayFacade_of_microservice() throws Exception {
+//    PowerMockito.whenNew(GatewayFacade.class).withAnyArguments().thenReturn(gatewayFacade);
+//    PowerMockito.when(gatewayFacade.findCurrentVariables(INFO_VARIABLE_PARAMS)).thenCallRealMethod();
+//
+//    activityFacade.listVariables(INFO_VARIABLE_PARAMS);
+//  }
 
 }

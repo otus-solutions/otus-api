@@ -15,7 +15,8 @@ import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
-import org.ccem.otus.model.survey.activity.variables.Variables;
+import org.ccem.otus.model.survey.activity.variables.StaticVariableRequest;
+import org.ccem.otus.model.survey.activity.variables.StaticVariableRequestDTO;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -51,6 +52,7 @@ public class ActivityResourceTest {
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+  private static final String INFO_VARIABLE_PARAMS = "{\"recruitmentNumber\":2047555,\"variables\":[{\"identification\":123456,\"name\":\"tst1\",\"value\":\"Text\",\"sending\":null}]}";
 
 
   @InjectMocks
@@ -69,7 +71,7 @@ public class ActivityResourceTest {
   private String jsonActivity = "activity";
   private SurveyActivity activityDeserialize;
   private List<SurveyActivity> listSurveyActivity;
-  private List<Variables> listVariables;
+  private List<StaticVariableRequest> listVariables;
   private List<ActivityRevision> listActivityRevision;
   private Participant participant;
 
@@ -81,6 +83,8 @@ public class ActivityResourceTest {
   private SessionIdentifier sessionIdentifier;
   @Mock
   private AuthenticationData authenticationData;
+  @Mock
+  private StaticVariableRequestDTO staticVariableRequestDTO;
 
   @Before
   public void setUp() {
@@ -163,9 +167,9 @@ public class ActivityResourceTest {
 
   @Test
   public void method_listVariables_should_return_variablesJson(){
-    when(activityFacade.listVariables(RECRUIMENT_NUMBER)).thenReturn(listVariables);
-    String listSurveyActivityExpected = new Response().buildSuccess(listVariables).toSurveyJson();
-    assertEquals(listSurveyActivityExpected, activityResource.listVariables(RECRUIMENT_NUMBER));
+    staticVariableRequestDTO = StaticVariableRequestDTO.deserialize(INFO_VARIABLE_PARAMS);
+    when(activityFacade.listVariables(INFO_VARIABLE_PARAMS)).thenReturn(staticVariableRequestDTO);
+    String listVariablesExpected = new Response().buildSuccess(staticVariableRequestDTO).toJson();
+    assertEquals(listVariablesExpected, activityResource.listVariables(INFO_VARIABLE_PARAMS));
   }
-
 }

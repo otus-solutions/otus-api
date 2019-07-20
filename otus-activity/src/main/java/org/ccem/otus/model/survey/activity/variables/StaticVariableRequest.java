@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
-public class Variables {
+public class StaticVariableRequest {
     private long identification;
     private String name;
     private String value;
@@ -42,12 +42,12 @@ public class Variables {
         this.sending = sending;
     }
 
-     public static String serialize(Variables variables) {
-        return getGsonBuilder().create().toJson(variables);
+     public static String serialize(StaticVariableRequest staticVariableRequest) {
+        return getGsonBuilder().create().toJson(staticVariableRequest);
     }
 
-    public static Variables deserialize(String variables) {
-        return Variables.getGsonBuilder().create().fromJson(variables, Variables.class);
+    public static StaticVariableRequest deserialize(String variables) {
+        return StaticVariableRequest.getGsonBuilder().create().fromJson(variables, StaticVariableRequest.class);
     }
 
     public static GsonBuilder getGsonBuilder() {

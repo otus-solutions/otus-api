@@ -116,11 +116,12 @@ public class ActivityResource {
 
   @POST
   @Secured
-  @Path("/variables")
+  @Path("/static-variable")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listVariables(@PathParam("rn") long rn) {
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String listVariables(String variablesJson) {
 
-    return new Response().buildSuccess(activityFacade.listVariables(rn)).toSurveyJson();
+    return new Response().buildSuccess(activityFacade.listVariables(variablesJson)).toJson();
   }
 
   private void isValidRecruitmentNumber(long rn) {
