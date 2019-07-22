@@ -5,18 +5,9 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class StaticVariableRequest {
-    private long identification;
     private String name;
     private String value;
     private String sending;
-
-    public long getIdentification() {
-        return identification;
-    }
-
-    public void setIdentification(long identification) {
-        this.identification = identification;
-    }
 
     public String getName() {
         return name;

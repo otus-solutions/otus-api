@@ -8,7 +8,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.junit.Assert.*;
 @RunWith(PowerMockRunner.class)
 public class StaticVariableRequestTest {
-    private static final long IDENTIFICATION = Long.parseLong("123456");
     private static final String NAME = "tst1";
     private static final String VALUE = "Text";
     private static final String SENDING = "1";
@@ -19,7 +18,6 @@ public class StaticVariableRequestTest {
     @Before
     public void setUp() {
         staticVariableRequest = new StaticVariableRequest();
-        staticVariableRequest.setIdentification(IDENTIFICATION);
         staticVariableRequest.setName(NAME);
         staticVariableRequest.setValue(VALUE);
         staticVariableRequest.setSending(SENDING);
@@ -28,7 +26,6 @@ public class StaticVariableRequestTest {
 
     @Test
     public void unitTest_for_evoke_getters() {
-        assertEquals(IDENTIFICATION, staticVariableRequest.getIdentification());
         assertEquals(NAME, staticVariableRequest.getName());
         assertEquals(VALUE, staticVariableRequest.getValue());
         assertEquals(SENDING, staticVariableRequest.getSending());
