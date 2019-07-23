@@ -48,8 +48,7 @@ public class ActivityFacadeTest {
   @Mock
   private SurveyService surveyService;
   private SurveyActivity surveyActivityFull;
-//  @Mock//TODO test for use gatewayfacade
-//  private GatewayFacade gatewayFacade;
+//TODO test for use gatewayfacade private GatewayFacade gatewayFacade;
 
   @Before
   public void setUp() {
@@ -119,12 +118,6 @@ public class ActivityFacadeTest {
     activityFacade.updateCheckerActivity(checkerUpdated);
   }
 
-//  @Test//TODO test for use gatewayfacade
-//  public void listVariablesMethod_should_invoke_gatewayFacade_of_microservice() throws Exception {
-//    PowerMockito.whenNew(GatewayFacade.class).withAnyArguments().thenReturn(gatewayFacade);
-//    PowerMockito.when(gatewayFacade.findCurrentVariables(INFO_VARIABLE_PARAMS)).thenCallRealMethod();
-//
-//    activityFacade.listVariables(INFO_VARIABLE_PARAMS);
-//  }
+  //TODO test for use gatewayfacade
 
 }

@@ -65,18 +65,14 @@ public class ActivityFacade {
 	}
 
 	public StaticVariableRequestDTO listVariables(String listVariables) {
-        try {
-            //TODO - line 76 and 77 are method for use gateway, descommit two line
-//            GatewayResponse variables = new GatewayFacade().findCurrentVariables(listVariables);
-//            return VariablesDTO.deserialize(variables.getData().toString());
-            return StaticVariableRequestDTO.deserialize(listVariables);
-        } catch (JsonSyntaxException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }//TODO - line 82 and 83 case for exception, descommit three line
-//        catch (IOException e) {
-//            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-//        }
-    }
+		try {
+			//TODO - method for use GatewayFacade, place to add.
+			return StaticVariableRequestDTO.deserialize(listVariables);
+		} catch (JsonSyntaxException e) {
+			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+		}//TODO - case for exception of Gatewayfacade, place to add.
+	}
+
 	@SuppressWarnings("static-access")
 	public SurveyActivity deserialize(String surveyActivity) {
 		try {
