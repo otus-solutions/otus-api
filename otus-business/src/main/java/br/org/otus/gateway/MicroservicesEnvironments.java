@@ -1,7 +1,7 @@
 package br.org.otus.gateway;
 
 public enum MicroservicesEnvironments {
-    DBDISTRIBUITION("DBDISTRIBUITION_HOST", "DBDISTRIBUITION_PORT");
+    DBDISTRIBUTION("DBDISTRIBUITION_HOST", "DBDISTRIBUITION_PORT");
 
     private String host;
     private String port;

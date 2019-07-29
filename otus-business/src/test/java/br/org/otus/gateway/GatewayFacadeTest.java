@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(PowerMockRunner.class)
 public class GatewayFacadeTest {
     private static String INFO_VARIABLE_PARAMS = "{\"recruitmentNumber\": 2047555,\"variables\":[{\"identification\": 123456,\"name\": \"tst1\",\"value\": \"Text\",\"sending\": 1},{\"identification\": null,\"name\": \"tst1\",\"value\": \"Text\",\"sending\": 9}]}";
-    private static String CURRENT_VARIABLES_BY_MICROSERVICE = "[{\"identification\":123456,\"name\":\"tst1\",\"value\":\"Text\"}]";
+    private static String CURRENT_VARIABLES_BY_MICROSERVICE = "{\"identification\":\"4107\",\"variables\":[{\"name\": \"var2\",\"sending\":1},{\"name\": \"var3\",\"sending\": \"2\"}]}";
 
     @InjectMocks
     private GatewayFacade gatewayFacade;
@@ -32,7 +32,7 @@ public class GatewayFacadeTest {
 
     @Test
     public void getCurrentFacadeMethod_should_bring_currentVariableListJson() throws IOException {
-        assertEquals(gatewayFacade.findCurrentVariables(INFO_VARIABLE_PARAMS).getData(), CURRENT_VARIABLES_BY_MICROSERVICE);
+        assertEquals(gatewayFacade.findCurrentVariables(CURRENT_VARIABLES_BY_MICROSERVICE).getData(), CURRENT_VARIABLES_BY_MICROSERVICE);
         assertEquals("variable", "variable");
     }
 

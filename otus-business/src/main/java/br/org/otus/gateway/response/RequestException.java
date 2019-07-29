@@ -1,10 +1,10 @@
-package br.org.otus.gateway;
+package br.org.otus.gateway.response;
 
 public class RequestException extends RuntimeException {
 
     private int errorCode;
 
-    RequestException(int errorCode){
+    public RequestException(int errorCode){
         this.errorCode = errorCode;
     }
 

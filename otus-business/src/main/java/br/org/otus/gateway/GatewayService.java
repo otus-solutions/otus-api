@@ -1,5 +1,8 @@
 package br.org.otus.gateway;
 
+import br.org.otus.gateway.response.RequestException;
+import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -12,7 +15,7 @@ public class GatewayService {
     }
 
     private HttpURLConnection connect(String requestType, String body) throws MalformedURLException {
-        URL url = new DBDistribuitionMicroServiceResources().getAddressPostVariablesResource();
+        URL url = new DBDistributionMicroServiceResources().getAddressPostVariablesResource();
         HttpURLConnection microserviceConnection = request(url, requestType, body);
         requestValidator(microserviceConnection);
         return microserviceConnection;
@@ -22,6 +25,7 @@ public class GatewayService {
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Content-Type","application/json");
             conn.setRequestMethod(typeReq);
             conn.setDoOutput(true);
             conn.getOutputStream().write(body.getBytes("UTF-8"));
@@ -42,7 +46,7 @@ public class GatewayService {
                         + microserviceConnection.getResponseCode());
             }
         } catch (IOException e) {
-            throw new RequestException(responseCode);
+            throw new RequestException(9);
         }
     }
 

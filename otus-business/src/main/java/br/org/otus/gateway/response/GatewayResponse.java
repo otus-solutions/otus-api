@@ -1,4 +1,4 @@
-package br.org.otus.gateway;
+package br.org.otus.gateway.response;
 
 import br.org.otus.examUploader.ExamResult;
 import com.google.gson.Gson;
