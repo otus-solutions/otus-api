@@ -1,4 +1,4 @@
-package br.org.otus.gateway.response;
+package br.org.otus.gateway.response.exception;
 
 public class RequestException extends RuntimeException {
 
