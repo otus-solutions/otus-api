@@ -1,6 +1,6 @@
 package br.org.otus.gateway;
 
-import br.org.otus.gateway.gates.DbDistributionGateway;
+import br.org.otus.gateway.gates.DBDistributionGateway;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ public class GatewayFacadeTest {
     private static String CURRENT_VARIABLES_BY_MICROSERVICE = "{\"variables\":[{\"identification\": \"tst1\",\"\"name\": \"var2\",\"sending\": \"1\"}]}";
 
     @InjectMocks
-    private DbDistributionGateway dbDistributionGateway;
+    private DBDistributionGateway dbDistributionGateway;
     @Mock
     private URL url;
 
