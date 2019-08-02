@@ -21,6 +21,7 @@ import br.org.otus.permission.UserPermissionResource;
 import br.org.otus.report.ReportResource;
 import br.org.otus.security.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
+import br.org.otus.staticVariable.StaticVariableResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
@@ -114,6 +115,9 @@ public class EndPointsLoader extends Application {
     @Inject
     private SurveyGroupResource surveyGroupResource;
 
+    @Inject
+    private StaticVariableResource staticVariableResource;
+
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -143,6 +147,7 @@ public class EndPointsLoader extends Application {
         resources.add(ActivityPermissionResource.class);
         resources.add(UserPermissionResource.class);
         resources.add(SurveyGroupResource.class);
+        resources.add(StaticVariableResource.class);
 
         return resources;
     }
@@ -176,6 +181,7 @@ public class EndPointsLoader extends Application {
         resources.add(activityAccessPermissionResource);
         resources.add(userPermissionResource);
         resources.add(surveyGroupResource);
+        resources.add(staticVariableResource);
 
         return resources;
     }

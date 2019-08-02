@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 @RunWith(PowerMockRunner.class)
 public class StaticVariableRequestDTOTest {
     private static final long RN = Long.parseLong("2047555");
-    private static final String variablesDTOJson = "{recruitmentNumber:2047555, variables:[{identification: 123456, name: tst1,value: Text, sending: 1},{identification: 987456,name: tst1,value: Text, sendingID: 9}]}";
+    private static final String variablesDTOJson = "{recruitmentNumber:2047555, variables:[{identification: 123456, name: tst1,value: Text, sending: 1},{identification: 987456,name: tst1,value: Text, sending: 9}]}";
     private static final String variablesJson = "{identification: 123456, name: tst1,value: Text, sending: 1}";
 
     private StaticVariableRequestDTO staticVariableRequestDTO;

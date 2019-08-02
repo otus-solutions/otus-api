@@ -1,25 +1,19 @@
 package br.org.otus.survey.activity;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import br.org.otus.participant.api.ParticipantFacade;
+import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.context.SecurityContext;
+import br.org.otus.security.context.SessionIdentifier;
+import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
+import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 import org.ccem.otus.model.survey.activity.variables.StaticVariableRequest;
-import org.ccem.otus.model.survey.activity.variables.StaticVariableRequestDTO;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
-import org.ccem.otus.survey.form.SurveyForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,13 +24,13 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.participant.api.ParticipantFacade;
-import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.context.SecurityContext;
-import br.org.otus.security.context.SessionIdentifier;
-import br.org.otus.security.dtos.AuthenticationData;
-import br.org.otus.survey.activity.api.ActivityFacade;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AuthorizationHeaderReader.class)
@@ -52,8 +46,6 @@ public class ActivityResourceTest {
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
-  private static final String INFO_VARIABLE_PARAMS = "{\"recruitmentNumber\":2047555,\"variables\":[{\"identification\":123456,\"name\":\"tst1\",\"value\":\"Text\",\"sending\":null}]}";
-
 
   @InjectMocks
   private ActivityResource activityResource;
@@ -71,7 +63,6 @@ public class ActivityResourceTest {
   private String jsonActivity = "activity";
   private SurveyActivity activityDeserialize;
   private List<SurveyActivity> listSurveyActivity;
-  private List<StaticVariableRequest> listVariables;
   private List<ActivityRevision> listActivityRevision;
   private Participant participant;
 
@@ -83,8 +74,6 @@ public class ActivityResourceTest {
   private SessionIdentifier sessionIdentifier;
   @Mock
   private AuthenticationData authenticationData;
-  @Mock
-  private StaticVariableRequestDTO staticVariableRequestDTO;
 
   @Before
   public void setUp() {
@@ -163,13 +152,5 @@ public class ActivityResourceTest {
     when(activityRevisionFacade.getActivityRevisions(ID_ACITIVITY)).thenReturn(listActivityRevision);
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
     assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
-  }
-
-  @Test
-  public void method_listVariables_should_return_variablesJson(){
-    staticVariableRequestDTO = StaticVariableRequestDTO.deserialize(INFO_VARIABLE_PARAMS);
-    when(activityFacade.listVariables(INFO_VARIABLE_PARAMS)).thenReturn(staticVariableRequestDTO);
-    String listVariablesExpected = new Response().buildSuccess(staticVariableRequestDTO).toJson();
-    assertEquals(listVariablesExpected, activityResource.listVariables(INFO_VARIABLE_PARAMS));
   }
 }

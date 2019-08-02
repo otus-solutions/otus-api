@@ -5,6 +5,7 @@ import br.org.otus.gateway.request.MultipartPOSTUtility;
 import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.gateway.response.exception.RequestException;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,49 +14,49 @@ import java.net.URL;
 
 public class DBDistributionGateway {
 
-    public GatewayResponse findVariables(String body) throws MalformedURLException {
-        URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
-        try {
-            JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
+  public GatewayResponse findVariables(String body) throws MalformedURLException {
+    URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
 
-            String response = jsonPOST.finish();
+      String response = jsonPOST.finish();
 
-            return new GatewayResponse().buildSuccess(response);
-        } catch (IOException ex) {
-            throw new ReadRequestException();
-        }
-
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException | RequestException ex) {
+      throw new ReadRequestException();
     }
 
-    public GatewayResponse uploadDatabase(File databaseFile) throws MalformedURLException {
-        URL requestURL = new DBDistributionMicroServiceResources().getDatabaseUploadAddress();
-        try {
-            MultipartPOSTUtility multipartPOST = new MultipartPOSTUtility(requestURL);
+  }
 
-            multipartPOST.addFilePart("databaseJson", databaseFile);
+  public GatewayResponse uploadDatabase(File databaseFile) throws MalformedURLException {
+    URL requestURL = new DBDistributionMicroServiceResources().getDatabaseUploadAddress();
+    try {
+      MultipartPOSTUtility multipartPOST = new MultipartPOSTUtility(requestURL);
 
-            String response = multipartPOST.finish();
+      multipartPOST.addFilePart("databaseJson", databaseFile);
 
-            return new GatewayResponse().buildSuccess(response);
-        } catch (IOException ex) {
-            throw new ReadRequestException();
-        }
+      String response = multipartPOST.finish();
+
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
     }
+  }
 
-    public GatewayResponse uploadVariableTypeCorrelation(File variableCorrelation) throws MalformedURLException {
-        URL requestURL = new DBDistributionMicroServiceResources().getVariableTypeCorrelationUploadAddress();
-        try {
-            MultipartPOSTUtility multipartPOST = new MultipartPOSTUtility(requestURL);
+  public GatewayResponse uploadVariableTypeCorrelation(File variableCorrelation) throws MalformedURLException {
+    URL requestURL = new DBDistributionMicroServiceResources().getVariableTypeCorrelationUploadAddress();
+    try {
+      MultipartPOSTUtility multipartPOST = new MultipartPOSTUtility(requestURL);
 
-            multipartPOST.addFilePart("variableTypeCorrelationJson", variableCorrelation);
+      multipartPOST.addFilePart("variableTypeCorrelationJson", variableCorrelation);
 
-            String response = multipartPOST.finish();
+      String response = multipartPOST.finish();
 
-            return new GatewayResponse().buildSuccess(response);
-        } catch (IOException ex) {
-            throw new ReadRequestException();
-        }
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
     }
+  }
 }
 
 

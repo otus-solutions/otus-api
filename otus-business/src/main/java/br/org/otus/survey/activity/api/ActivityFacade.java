@@ -1,20 +1,15 @@
 package br.org.otus.survey.activity.api;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
+import com.google.gson.JsonSyntaxException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.variables.StaticVariableRequestDTO;
 import org.ccem.otus.service.ActivityService;
 
-import com.google.gson.JsonSyntaxException;
-
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
+import javax.inject.Inject;
+import java.util.List;
 
 public class ActivityFacade {
 
@@ -62,15 +57,6 @@ public class ActivityFacade {
 			throw new HttpResponseException(
 					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
 		}
-	}
-
-	public StaticVariableRequestDTO listVariables(String listVariables) {
-		try {
-			//TODO - method for use GatewayFacade, place to add.
-			return StaticVariableRequestDTO.deserialize(listVariables);
-		} catch (JsonSyntaxException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}//TODO - case for exception of Gatewayfacade, place to add.
 	}
 
 	@SuppressWarnings("static-access")

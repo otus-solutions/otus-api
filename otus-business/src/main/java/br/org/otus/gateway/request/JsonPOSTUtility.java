@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class JsonPOSTUtility {
     private HttpURLConnection httpConn;
@@ -22,10 +23,10 @@ public class JsonPOSTUtility {
         httpConn.setRequestProperty("Cache-Control", "no-cache");
         httpConn.setRequestProperty("Content-Type", "application/json");
         request = new DataOutputStream(httpConn.getOutputStream());
-        request.write(body.getBytes("UTF-8"));
+        request.write(body.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String finish() throws IOException {
+    public String finish() throws IOException, RequestException {
         String response;
 
         request.flush();
