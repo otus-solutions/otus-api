@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DbDistributionGateway {
+public class DBDistributionGateway {
 
     public GatewayResponse findVariables(String body) throws MalformedURLException {
         URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
