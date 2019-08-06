@@ -8,7 +8,11 @@ public class StaticVariableRequestDTO {
     private long recruitmentNumber;
     private ArrayList<StaticVariableRequest> variables;
 
-    public long getRecruitmentNumber() {
+    public void setRecruitmentNumber(long recruitmentNumber) {
+      this.recruitmentNumber = recruitmentNumber;
+    }
+
+  public long getRecruitmentNumber() {
         return recruitmentNumber;
     }
 

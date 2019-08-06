@@ -15,9 +15,6 @@ public class MicroservicesResources {
   private void readAddress() {
     HOST = System.getenv(microservicesEnvironments.getHost());
     PORT = System.getenv(microservicesEnvironments.getPort());
-
-    HOST = "http://otus-db-distribuition-api:";
-    PORT = "8081";
   }
 
 }

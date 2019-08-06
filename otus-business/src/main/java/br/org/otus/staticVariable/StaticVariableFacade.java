@@ -13,10 +13,9 @@ public class StaticVariableFacade {
   public StaticVariableRequestDTO listVariables(String listVariables) {
     try {
       GatewayResponse variables = new DBDistributionGateway().findVariables(listVariables);
-
-      return StaticVariableRequestDTO.deserialize(listVariables);
+      return StaticVariableRequestDTO.deserialize((String) variables.getData());
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    }//TODO - case for exception of Gatewayfacade, place to add.
+    }
   }
 }
