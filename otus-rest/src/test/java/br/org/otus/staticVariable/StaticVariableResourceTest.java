@@ -29,9 +29,6 @@ public class StaticVariableResourceTest {
   @Mock
   private StaticVariableRequestDTO staticVariableRequestDTO;
 
-  private List<StaticVariableRequest> listVariables;
-
-
   @Test
   public void method_listVariables_should_return_variablesJson(){
     staticVariableRequestDTO = StaticVariableRequestDTO.deserialize(INFO_VARIABLE_PARAMS);

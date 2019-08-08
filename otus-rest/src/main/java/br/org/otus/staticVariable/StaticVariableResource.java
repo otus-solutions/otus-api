@@ -2,7 +2,6 @@ package br.org.otus.staticVariable;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.Secured;
-import br.org.otus.survey.activity.api.ActivityFacade;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -18,7 +17,7 @@ public class StaticVariableResource {
   private StaticVariableFacade staticVariableFacade;
 
   @POST
-//  @Secured
+  @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String listVariables(String variablesJson) {
