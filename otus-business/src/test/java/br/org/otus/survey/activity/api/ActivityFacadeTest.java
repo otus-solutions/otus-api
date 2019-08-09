@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import com.google.gson.Gson;
 import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({ActivityFacade.class})
 public class ActivityFacadeTest {
   private static final long RECRUITMENT_NUMBER = 5112345;
   private static final String ACRONYM = "CISE";
@@ -44,6 +47,7 @@ public class ActivityFacadeTest {
   @Mock
   private SurveyService surveyService;
   private SurveyActivity surveyActivityFull;
+//TODO test for use gatewayfacade private GatewayFacade gatewayFacade;
 
   @Before
   public void setUp() {
@@ -112,5 +116,4 @@ public class ActivityFacadeTest {
     when(activityService.updateCheckerActivity(checkerUpdated)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateCheckerActivity(checkerUpdated);
   }
-
 }
