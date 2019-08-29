@@ -1,16 +1,16 @@
 package br.org.otus.gateway.gates;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import br.org.otus.gateway.request.JsonPOSTUtility;
 import br.org.otus.gateway.request.MultipartPOSTUtility;
 import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class DBDistributionGateway {
 
@@ -25,7 +25,6 @@ public class DBDistributionGateway {
     } catch (IOException | RequestException ex) {
       throw new ReadRequestException();
     }
-
   }
 
   public GatewayResponse uploadDatabase(File databaseFile) throws MalformedURLException {
@@ -57,8 +56,5 @@ public class DBDistributionGateway {
       throw new ReadRequestException();
     }
   }
+
 }
-
-
-
-
