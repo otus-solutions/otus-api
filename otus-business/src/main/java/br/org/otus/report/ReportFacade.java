@@ -25,6 +25,7 @@ public class ReportFacade {
         }
     }
     
+    // TODO: Retorna a lista de relatorios disponiveis para o participante, incialmente não ira ter modificações
     public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber){
         try {
             return reportService.getReportByParticipant(recruitmentNumber);

@@ -27,6 +27,19 @@ public class DBDistributionGateway {
     }
   }
 
+  public GatewayResponse findExamsImage(String body) throws MalformedURLException {
+    URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
+
+      String response = jsonPOST.finish();
+
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException | RequestException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
   public GatewayResponse uploadDatabase(File databaseFile) throws MalformedURLException {
     URL requestURL = new DBDistributionMicroServiceResources().getDatabaseUploadAddress();
     try {

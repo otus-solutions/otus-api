@@ -8,8 +8,8 @@ import com.google.gson.JsonSyntaxException;
 
 import br.org.otus.gateway.gates.DBDistributionGateway;
 import br.org.otus.gateway.response.GatewayResponse;
-import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.Validation;
 
 public class StaticVariableFacade {
 
@@ -18,7 +18,7 @@ public class StaticVariableFacade {
       GatewayResponse variables = new DBDistributionGateway().findVariables(listVariables);
       return StaticVariableRequestDTO.deserialize((String) variables.getData());
     } catch (JsonSyntaxException | MalformedURLException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
