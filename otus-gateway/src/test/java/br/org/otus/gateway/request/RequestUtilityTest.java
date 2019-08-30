@@ -1,5 +1,10 @@
 package br.org.otus.gateway.request;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.BufferedReader;
+import java.net.HttpURLConnection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -7,15 +12,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-
-import static org.junit.Assert.assertTrue;
-
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({RequestUtility.class})
+@PrepareForTest({ RequestUtility.class })
 public class RequestUtilityTest {
 
   private static final String RESPONSE = "{data: \"OK\"}";

@@ -52,7 +52,7 @@ public class ReportServiceBean implements ReportService {
       } else if (dataSource instanceof ExamDataSource) {
         ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
       } else if (dataSource instanceof ExamImageDataSource) {
-        ((ExamImageDataSource) dataSource).getResult();
+        ((ExamImageDataSource) dataSource).getResult(); // TODO: melhorar o nome sobre o DataSource
         // TODO:
       }
     }

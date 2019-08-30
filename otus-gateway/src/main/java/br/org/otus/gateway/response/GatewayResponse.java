@@ -1,11 +1,7 @@
 package br.org.otus.gateway.response;
 
-import org.ccem.otus.model.survey.activity.SurveyActivity;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import br.org.otus.examUploader.ExamResult;
 
 public class GatewayResponse {
 
@@ -27,14 +23,6 @@ public class GatewayResponse {
 
   public String toJson(GsonBuilder builder) {
     return builder.create().toJson(this);
-  }
-
-  public String toSurveyJson() {
-    return SurveyActivity.getGsonBuilder().create().toJson(this);
-  }
-
-  public String toExamJson() {
-    return ExamResult.getGsonBuilder().create().toJson(this);
   }
 
   public GatewayResponse buildSuccess(Object data) {
