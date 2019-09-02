@@ -1,5 +1,6 @@
-package org.ccem.otus.service;
+package br.org.otus.report;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -12,7 +13,8 @@ import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
-import org.ccem.otus.model.dataSources.exam.image.ExamImageDataSource;
+import org.ccem.otus.model.dataSources.exam.image.DICOMDataSource;
+import org.ccem.otus.model.dataSources.exam.image.DICOMDataSourceResult;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
@@ -21,6 +23,10 @@ import org.ccem.otus.persistence.ExamDataSourceDao;
 import org.ccem.otus.persistence.ParticipantDataSourceDao;
 import org.ccem.otus.persistence.ReportDao;
 import org.ccem.otus.persistence.ReportTemplateDTO;
+import org.ccem.otus.service.ReportService;
+
+import br.org.otus.gateway.gates.DBDistributionGateway;
+import br.org.otus.gateway.response.GatewayResponse;
 
 @Stateless
 public class ReportServiceBean implements ReportService {
@@ -41,19 +47,21 @@ public class ReportServiceBean implements ReportService {
   private ExamDataSourceDao examDataSourceDao;
 
   @Override
-  public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException {
+  public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException, MalformedURLException {
     ObjectId reportObjectId = new ObjectId(reportId);
     ReportTemplate report = reportDao.findReport(reportObjectId);
-    for (ReportDataSource dataSource : report.getDataSources()) {
+    for (ReportDataSource<?> dataSource : report.getDataSources()) {
       if (dataSource instanceof ParticipantDataSource) {
         ((ParticipantDataSource) dataSource).getResult().add(participantDataSourceDao.getResult(recruitmentNumber, (ParticipantDataSource) dataSource));
       } else if (dataSource instanceof ActivityDataSource) {
         ((ActivityDataSource) dataSource).getResult().add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
       } else if (dataSource instanceof ExamDataSource) {
         ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
-      } else if (dataSource instanceof ExamImageDataSource) {
-        ((ExamImageDataSource) dataSource).getResult(); // TODO: melhorar o nome sobre o DataSource
-        // TODO:
+      } else if (dataSource instanceof DICOMDataSource) {
+        // TODO: criar a conversão entre template e filtros do DICOM
+        String filter = ((DICOMDataSource) dataSource).buildFilterToDICOM();
+        GatewayResponse examsImage = new DBDistributionGateway().findExamsImage(filter);
+        ((DICOMDataSource) dataSource).getResult().add((DICOMDataSourceResult) examsImage.getData());
       }
     }
     return report;

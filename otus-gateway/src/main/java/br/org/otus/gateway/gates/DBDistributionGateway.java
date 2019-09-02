@@ -27,8 +27,9 @@ public class DBDistributionGateway {
     }
   }
 
+  // TODO: Se continuar quase igual como o método acima, vale quem sabe melhorar!
   public GatewayResponse findExamsImage(String body) throws MalformedURLException {
-    URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
+    URL requestURL = new DBDistributionMicroServiceResources().getExamsImageAddress();
     try {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
 

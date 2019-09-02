@@ -1,4 +1,5 @@
 package org.ccem.otus.service;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -8,7 +9,7 @@ import org.ccem.otus.persistence.ReportTemplateDTO;
 
 public interface ReportService {
 
-    ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException;
+    ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException, MalformedURLException;
     
     List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException;
 
