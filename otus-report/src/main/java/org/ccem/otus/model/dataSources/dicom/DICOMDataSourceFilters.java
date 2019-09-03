@@ -1,4 +1,4 @@
-package org.ccem.otus.model.dataSources.exam.image;
+package org.ccem.otus.model.dataSources.dicom;
 
 public class DICOMDataSourceFilters {
 

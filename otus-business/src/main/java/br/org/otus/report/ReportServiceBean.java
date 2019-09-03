@@ -12,9 +12,9 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.dicom.DICOMDataSource;
+import org.ccem.otus.model.dataSources.dicom.DICOMDataSourceResult;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
-import org.ccem.otus.model.dataSources.exam.image.DICOMDataSource;
-import org.ccem.otus.model.dataSources.exam.image.DICOMDataSourceResult;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
@@ -59,8 +59,16 @@ public class ReportServiceBean implements ReportService {
         ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
       } else if (dataSource instanceof DICOMDataSource) {
         // TODO: criar a conversão entre template e filtros do DICOM
+        GatewayResponse examsImage = null;
         String filter = ((DICOMDataSource) dataSource).buildFilterToDICOM();
-        GatewayResponse examsImage = new DBDistributionGateway().findExamsImage(filter);
+        switch (((DICOMDataSource) dataSource).getFilters().getExamName()) {
+        case "Retinography": // Enum para cada tipo possível?
+          examsImage = new DBDistributionGateway().findRetinography(filter);
+          break;
+        default:
+          // DataNotFoundException
+          break;
+        }
         ((DICOMDataSource) dataSource).getResult().add((DICOMDataSourceResult) examsImage.getData());
       }
     }

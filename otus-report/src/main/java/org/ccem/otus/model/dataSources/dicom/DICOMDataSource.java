@@ -1,13 +1,14 @@
-package org.ccem.otus.model.dataSources.exam.image;
+package org.ccem.otus.model.dataSources.dicom;
 
 import java.util.ArrayList;
 
 import org.bson.Document;
 import org.ccem.otus.model.dataSources.ReportDataSource;
+import org.ccem.otus.model.dataSources.dicom.filters.GenericFilter;
 
 public class DICOMDataSource extends ReportDataSource<DICOMDataSourceResult> {
 
-  private DICOMDataSourceFilters filters;
+  private GenericFilter filters;
 
   @Override
   public void addResult(DICOMDataSourceResult result) {
@@ -23,6 +24,10 @@ public class DICOMDataSource extends ReportDataSource<DICOMDataSourceResult> {
   public String buildFilterToDICOM() {
     // TODO: converter modelo de filtro entregue do front para o modelo DICOM
     return "";
+  }
+
+  public GenericFilter getFilters() {
+    return filters;
   }
 
 }
