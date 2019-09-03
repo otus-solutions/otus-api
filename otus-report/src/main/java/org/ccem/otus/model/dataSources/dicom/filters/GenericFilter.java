@@ -4,6 +4,7 @@ import org.ccem.otus.model.dataSources.dicom.filters.enums.Quality;
 
 public class GenericFilter {
 
+  private Long recruitmentNumber;
   private String examName;
   private Quality quality;
 
@@ -13,6 +14,14 @@ public class GenericFilter {
 
   public Quality getQuality() {
     return quality;
+  }
+
+  public void setRecruitmentNumber(Long recruitmentNumber) {
+    this.recruitmentNumber = recruitmentNumber;
+  }
+
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
   }
 
 }

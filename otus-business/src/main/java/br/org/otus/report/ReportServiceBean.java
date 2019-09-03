@@ -60,7 +60,7 @@ public class ReportServiceBean implements ReportService {
       } else if (dataSource instanceof DICOMDataSource) {
         // TODO: criar a conversão entre template e filtros do DICOM
         GatewayResponse examsImage = null;
-        String filter = ((DICOMDataSource) dataSource).buildFilterToDICOM();
+        String filter = ((DICOMDataSource) dataSource).buildFilterToDICOM(recruitmentNumber);
         switch (((DICOMDataSource) dataSource).getFilters().getExamName()) {
         case "Retinography": // Enum para cada tipo possível?
           examsImage = new DBDistributionGateway().findRetinography(filter);

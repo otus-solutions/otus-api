@@ -17,13 +17,12 @@ public class DICOMDataSource extends ReportDataSource<DICOMDataSourceResult> {
 
   @Override
   public ArrayList<Document> buildQuery(Long recruitmentNumber) {
-    // TODO Auto-generated method stub
     return null;
   }
 
-  public String buildFilterToDICOM() {
-    // TODO: converter modelo de filtro entregue do front para o modelo DICOM
-    return "";
+  public String buildFilterToDICOM(Long recruitmentNumber) {
+    filters.setRecruitmentNumber(recruitmentNumber);
+    return filters.toString();
   }
 
   public GenericFilter getFilters() {
