@@ -20,7 +20,7 @@ public class DICOMDataSource extends ReportDataSource<DICOMDataSourceResult> {
     return null;
   }
 
-  public String buildFilterToDICOM(Long recruitmentNumber) {
+  public String buildFilterToRetinography(Long recruitmentNumber) {
     filters.setRecruitmentNumber(recruitmentNumber);
     return filters.toString();
   }

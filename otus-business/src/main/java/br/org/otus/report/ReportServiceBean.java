@@ -60,14 +60,14 @@ public class ReportServiceBean implements ReportService {
       } else if (dataSource instanceof DICOMDataSource) {
         // TODO: criar a conversão entre template e filtros do DICOM
         GatewayResponse examsImage = null;
-        String filter = ((DICOMDataSource) dataSource).buildFilterToDICOM(recruitmentNumber);
         switch (((DICOMDataSource) dataSource).getFilters().getExamName()) {
         case "Retinography": // Enum para cada tipo possível?
+          String filter = ((DICOMDataSource) dataSource).buildFilterToRetinography(recruitmentNumber);
           examsImage = new DBDistributionGateway().findRetinography(filter);
           break;
         default:
-          // DataNotFoundException
-          break;
+          // TODO:
+          throw new DataNotFoundException(new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
         }
         ((DICOMDataSource) dataSource).getResult().add((DICOMDataSourceResult) examsImage.getData());
       }

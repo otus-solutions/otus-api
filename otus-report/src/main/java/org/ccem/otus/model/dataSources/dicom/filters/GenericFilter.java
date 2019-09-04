@@ -7,6 +7,7 @@ public class GenericFilter {
   private Long recruitmentNumber;
   private String examName;
   private Quality quality;
+  private Integer sending;
 
   public String getExamName() {
     return examName;
@@ -22,6 +23,10 @@ public class GenericFilter {
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
+  }
+
+  public Integer getSending() {
+    return sending;
   }
 
 }

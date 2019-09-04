@@ -6,6 +6,6 @@ public class DICOMDataSourceResult {
 
   private LocalDateTime date;
   private String eye;
-  private byte[] image;
+  private byte[] result;
 
 }
