@@ -14,28 +14,10 @@ import br.org.otus.gateway.response.exception.RequestException;
 
 public class DBDistributionGateway {
 
-  public GatewayResponse findVariables(String body) throws MalformedURLException {
-    URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
+  public GatewayResponse find(String body, URL url) throws MalformedURLException {
     try {
-      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
-
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(url, body);
       String response = jsonPOST.finish();
-
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException | RequestException ex) {
-      throw new ReadRequestException();
-    }
-  }
-
-  // TODO: Se continuar quase igual como o método acima, vale quem sabe melhorar!
-  // TODO: Irá existir um método para cada resultado, assim como uma url?
-  public GatewayResponse findRetinography(String body) throws MalformedURLException {
-    URL requestURL = new DBDistributionMicroServiceResources().getExamsImageAddress();
-    try {
-      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
-
-      String response = jsonPOST.finish();
-
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException | RequestException ex) {
       throw new ReadRequestException();
@@ -46,11 +28,8 @@ public class DBDistributionGateway {
     URL requestURL = new DBDistributionMicroServiceResources().getDatabaseUploadAddress();
     try {
       MultipartPOSTUtility multipartPOST = new MultipartPOSTUtility(requestURL);
-
       multipartPOST.addFilePart("databaseJson", databaseFile);
-
       String response = multipartPOST.finish();
-
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
       throw new ReadRequestException();
@@ -61,11 +40,8 @@ public class DBDistributionGateway {
     URL requestURL = new DBDistributionMicroServiceResources().getVariableTypeCorrelationUploadAddress();
     try {
       MultipartPOSTUtility multipartPOST = new MultipartPOSTUtility(requestURL);
-
       multipartPOST.addFilePart("variableTypeCorrelationJson", variableCorrelation);
-
       String response = multipartPOST.finish();
-
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
       throw new ReadRequestException();

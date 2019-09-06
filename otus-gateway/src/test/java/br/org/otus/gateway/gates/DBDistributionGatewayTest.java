@@ -58,8 +58,8 @@ public class DBDistributionGatewayTest {
 
     PowerMockito.whenNew(JsonPOSTUtility.class).withAnyArguments().thenReturn(jsonPOSTUtility);
     PowerMockito.when(jsonPOSTUtility.finish()).thenReturn(CURRENT_VARIABLES_BY_MICROSERVICE);
-
-    final GatewayResponse response = dbDistributionGateway.findVariables(INFO_VARIABLE_PARAMS);
+    URL url = new DBDistributionMicroServiceResources().getFindVariableAddress();
+    final GatewayResponse response = dbDistributionGateway.find(INFO_VARIABLE_PARAMS, url);
     assertEquals(CURRENT_VARIABLES_BY_MICROSERVICE, response.getData());
 
     verify(jsonPOSTUtility, times(1)).finish();
@@ -69,7 +69,8 @@ public class DBDistributionGatewayTest {
   @Test(expected = MalformedURLException.class)
   public void findVariablesMethod_should_throw_exception_for_IOException() throws Exception {
     PowerMockito.when(jsonPOSTUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
-    dbDistributionGateway.findVariables(INFO_VARIABLE_PARAMS);
+    URL url = new DBDistributionMicroServiceResources().getFindVariableAddress();
+    dbDistributionGateway.find(INFO_VARIABLE_PARAMS, url);
   }
 
   @Test

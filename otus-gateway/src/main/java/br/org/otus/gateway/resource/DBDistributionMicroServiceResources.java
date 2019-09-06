@@ -8,7 +8,8 @@ import br.org.otus.gateway.MicroservicesEnvironments;
 public class DBDistributionMicroServiceResources extends MicroservicesResources {
   private static final String FIND_VARIABLES_RESOURCE = "/api/findVariables";
   private static final String DATABASE_UPLOAD_RESOURCE = "/api/upload/database";
-  private static final String EXAMS_IMAGE = "/api/examsImage";
+  private static final String RETINOGRAPHY_IMAGE = "/api/retinography";
+  private static final String ULTRASOUND_IMAGE = "/api/ultrasound";
   private static final String VARIABLE_TYPE_CORRELATION_UPLOAD_RESOURCE = "/api/upload/variable-type-correlation";
 
   public DBDistributionMicroServiceResources() {
@@ -27,7 +28,11 @@ public class DBDistributionMicroServiceResources extends MicroservicesResources 
     return new URL(this.HOST + this.PORT + VARIABLE_TYPE_CORRELATION_UPLOAD_RESOURCE);
   }
 
-  public URL getExamsImageAddress() throws MalformedURLException {
-    return new URL(this.HOST + this.PORT + EXAMS_IMAGE);
+  public URL getRetinographyImageAddress() throws MalformedURLException {
+    return new URL(this.HOST + this.PORT + RETINOGRAPHY_IMAGE);
+  }
+
+  public URL getUltrasoundImageAddress() throws MalformedURLException {
+    return new URL(this.HOST + this.PORT + ULTRASOUND_IMAGE);
   }
 }
