@@ -52,4 +52,16 @@ public class DBDistributionMicroServiceResourcesTest {
     url = new URL("http://localhost:8081/api/upload/variable-type-correlation");
     assertEquals(dbDistributionMicroServiceResources.getVariableTypeCorrelationUploadAddress(), url);
   }
+  
+  @Test
+  public void getRetinographyImageAddress_method_should_return_correlationUploadUrl() throws MalformedURLException {
+    url = new URL("http://localhost:8081/api/retinography");
+    assertEquals(dbDistributionMicroServiceResources.getRetinographyImageAddress(), url);
+  }
+  
+  @Test
+  public void getUltrasoundImageAddress_method_should_return_correlationUploadUrl() throws MalformedURLException {
+    url = new URL("http://localhost:8081/api/ultrasound");
+    assertEquals(dbDistributionMicroServiceResources.getUltrasoundImageAddress(), url);
+  }
 }

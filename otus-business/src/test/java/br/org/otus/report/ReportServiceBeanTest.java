@@ -17,6 +17,7 @@ import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
+import org.ccem.otus.model.dataSources.dcm.retinography.DCMRetinographyDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
 import org.ccem.otus.model.survey.activity.User;
@@ -213,6 +214,16 @@ public class ReportServiceBeanTest {
     PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(REPORT_UPDATE);
     PowerMockito.when(reportDao.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
     assertEquals(updateReport, reportServiceBean.updateFieldCenters(reportTemplate));
+  }
+
+  @Test
+  public void getParticipantReport_method_when_receive_instance_of_retinography_should_call_buildFilterToRetinography_method() throws Exception {
+    ReportTemplate reportTemplate = new ReportTemplate();
+    DCMRetinographyDataSource datasource = new DCMRetinographyDataSource();
+    Whitebox.setInternalState(reportTemplate, "dataSources", datasource);
+    when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
+
+    Mockito.verify(datasource).buildFilterToRetinography(RECRUITMENTNUMBER);
   }
 
 }

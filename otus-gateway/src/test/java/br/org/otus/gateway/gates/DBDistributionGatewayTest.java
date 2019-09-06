@@ -49,7 +49,7 @@ public class DBDistributionGatewayTest {
   private DBDistributionMicroServiceResources dbDistributionMicroServiceResources = PowerMockito.spy(new DBDistributionMicroServiceResources());
 
   @Test
-  public void findVariablesMethod_should_bring_currentVariableListJson() throws Exception {
+  public void find_should_bring_currentJson() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
