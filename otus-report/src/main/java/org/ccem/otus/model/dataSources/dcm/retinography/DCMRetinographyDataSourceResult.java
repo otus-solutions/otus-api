@@ -2,6 +2,8 @@ package org.ccem.otus.model.dataSources.dcm.retinography;
 
 import java.time.LocalDateTime;
 
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+
 import com.google.gson.GsonBuilder;
 
 public class DCMRetinographyDataSourceResult {
@@ -21,7 +23,7 @@ public class DCMRetinographyDataSourceResult {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.serializeNulls();
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     return builder;
   }
 

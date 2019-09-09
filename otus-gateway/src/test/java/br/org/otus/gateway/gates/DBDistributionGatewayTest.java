@@ -49,7 +49,7 @@ public class DBDistributionGatewayTest {
   private DBDistributionMicroServiceResources dbDistributionMicroServiceResources = PowerMockito.spy(new DBDistributionMicroServiceResources());
 
   @Test
-  public void find_should_bring_currentJson() throws Exception {
+  public void find_method_should_bring_currentJson() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
@@ -63,7 +63,6 @@ public class DBDistributionGatewayTest {
     assertEquals(CURRENT_VARIABLES_BY_MICROSERVICE, response.getData());
 
     verify(jsonPOSTUtility, times(1)).finish();
-
   }
 
   @Test(expected = MalformedURLException.class)
@@ -74,7 +73,7 @@ public class DBDistributionGatewayTest {
   }
 
   @Test
-  public void uploadDatabaseMethod_should_add_database_file() throws Exception {
+  public void uploadDatabase_method_should_add_database_file() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
@@ -96,7 +95,7 @@ public class DBDistributionGatewayTest {
   }
 
   @Test
-  public void uploadVariableTypeCorrelationMethod_should_add_type_variable_correlation() throws Exception {
+  public void uploadVariableTypeCorrelation_method_should_add_type_variable_correlation() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
@@ -112,7 +111,7 @@ public class DBDistributionGatewayTest {
   }
 
   @Test(expected = MalformedURLException.class)
-  public void uploadVariableTypeCorrelationMethod_should_throw_exception_for_IOException() throws Exception {
+  public void uploadVariableTypeCorrelation_method_should_throw_exception_for_IOException() throws Exception {
     PowerMockito.when(multipartPOST.finish()).thenThrow(new IOException(new Throwable("Message")));
     dbDistributionGateway.uploadVariableTypeCorrelation(file);
   }

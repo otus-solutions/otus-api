@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
-import org.ccem.otus.model.dataSources.dcm.retinography.DCMRetinographyDataSource;
+import org.ccem.otus.model.dataSources.dcm.ultrasound.DCMUltrasoundDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
 import org.ccem.otus.model.survey.activity.User;
@@ -30,6 +31,7 @@ import org.ccem.otus.persistence.ParticipantDataSourceDao;
 import org.ccem.otus.persistence.ReportDao;
 import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -40,11 +42,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ParticipantServiceBean.class, Participant.class, ReportTemplate.class })
 public class ReportServiceBeanTest {
   String REPORTID = "5a9199056ddc4f48a340b3ec";
-  Long RECRUITMENTNUMBER = (Long) 322148795L;
+  Long RECRUITMENT_NUMBER = (Long) 322148795L;
   String USER_MAIL = "teste@gmail.com";
   private static final String REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}";
 
@@ -71,6 +75,9 @@ public class ReportServiceBeanTest {
   @Mock
   private ParticipantServiceBean participantServiceBean;
 
+  @Mock
+  private DBDistributionMicroServiceResources resources;
+
   @Test
   public void method_find_report_by_id_instanceof_ParticipantDataSource() throws Exception {
     ParticipantDataSource participantDataSource = new ParticipantDataSource();
@@ -88,9 +95,9 @@ public class ReportServiceBeanTest {
     Whitebox.setInternalState(participantDataSourceResult, "recruitmentNumber", (long) 123456789);
     Whitebox.setInternalState(participantDataSourceResult, "fieldCenter", fieldCenterInstance);
     Whitebox.setInternalState(participantDataSourceResult, "birthdate", immutableDateInstance);
-    when(participantDataSourceDao.getResult(RECRUITMENTNUMBER, participantDataSource)).thenReturn(participantDataSourceResult);
+    when(participantDataSourceDao.getResult(RECRUITMENT_NUMBER, participantDataSource)).thenReturn(participantDataSourceResult);
     when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
-    ReportTemplate response = reportServiceBean.getParticipantReport(RECRUITMENTNUMBER, REPORTID);
+    ReportTemplate response = reportServiceBean.getParticipantReport(RECRUITMENT_NUMBER, REPORTID);
     assertTrue(response.getDataSources().get(0).getResult().get(0) instanceof ParticipantDataSourceResult);
     assertEquals(participantDataSourceResult.toString(), response.getDataSources().get(0).getResult().get(0).toString());
   }
@@ -115,8 +122,8 @@ public class ReportServiceBeanTest {
     statusHistory.add(activityStatus);
     ActivityDataSourceResult activityDataSourceResult = new ActivityDataSourceResult();
     when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
-    when(activityDataSourceDao.getResult(RECRUITMENTNUMBER, activityDataSource)).thenReturn(activityDataSourceResult);
-    ReportTemplate response = reportServiceBean.getParticipantReport(RECRUITMENTNUMBER, REPORTID);
+    when(activityDataSourceDao.getResult(RECRUITMENT_NUMBER, activityDataSource)).thenReturn(activityDataSourceResult);
+    ReportTemplate response = reportServiceBean.getParticipantReport(RECRUITMENT_NUMBER, REPORTID);
     assertTrue(response.getDataSources().get(0).getResult().get(0) instanceof ActivityDataSourceResult);
     assertEquals(activityDataSourceResult.toString(), response.getDataSources().get(0).getResult().get(0).toString());
   }
@@ -124,7 +131,7 @@ public class ReportServiceBeanTest {
   @Test
   public void method_getReportByParticipant_should_returns_list_reports() throws Exception {
     ReportTemplate reportTemplate = new ReportTemplate();
-    Participant participant = new Participant(RECRUITMENTNUMBER);
+    Participant participant = new Participant(RECRUITMENT_NUMBER);
     FieldCenter fieldCenter = new FieldCenter();
     fieldCenter.setAcronym("SP");
     participant.setFieldCenter(fieldCenter);
@@ -132,9 +139,9 @@ public class ReportServiceBeanTest {
     Whitebox.setInternalState(reportTemplate, "_id", reportObjectId);
     Whitebox.setInternalState(reportTemplate, "label", "teste");
     reports.add(new ReportTemplateDTO(reportTemplate));
-    PowerMockito.when(participantServiceBean.getByRecruitmentNumber(RECRUITMENTNUMBER)).thenReturn(participant);
+    PowerMockito.when(participantServiceBean.getByRecruitmentNumber(RECRUITMENT_NUMBER)).thenReturn(participant);
     PowerMockito.when(reportDao.getByCenter("SP")).thenReturn(reports);
-    assertEquals(reports, reportServiceBean.getReportByParticipant(RECRUITMENTNUMBER));
+    assertEquals(reports, reportServiceBean.getReportByParticipant(RECRUITMENT_NUMBER));
   }
 
   @Test
@@ -216,14 +223,32 @@ public class ReportServiceBeanTest {
     assertEquals(updateReport, reportServiceBean.updateFieldCenters(reportTemplate));
   }
 
+  @Ignore
   @Test
-  public void getParticipantReport_method_when_receive_instance_of_retinography_should_call_buildFilterToRetinography_method() throws Exception {
+  public void getParticipantReport_method_when_receive_instance_of_DCMUltrasoundDataSource_should_call_buildFilterToUltrasound_method() throws Exception {
+    DCMUltrasoundDataSource mock = Mockito.mock(DCMUltrasoundDataSource.class);
+    ArrayList<ReportDataSource> datasource = new ArrayList<>();
+    datasource.add(mock);
     ReportTemplate reportTemplate = new ReportTemplate();
-    DCMRetinographyDataSource datasource = new DCMRetinographyDataSource();
+
     Whitebox.setInternalState(reportTemplate, "dataSources", datasource);
     when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
+    PowerMockito.when(DBDistributionMicroServiceResources.class, "getUltrasoundImageAddress").thenReturn(new URL("localhost:8080/api/ultrasound"));
 
-    Mockito.verify(datasource).buildFilterToRetinography(RECRUITMENTNUMBER);
+    reportServiceBean.getParticipantReport(RECRUITMENT_NUMBER, REPORTID);
+
+    Mockito.verify(((DCMUltrasoundDataSource) datasource.get(0))).buildFilterToUltrasound(RECRUITMENT_NUMBER);
+  }
+
+  @Ignore
+  @Test
+  public void getParticipantReport_method_when_receive_data_source_of_Retinography_then_should_process_with_expected() throws Exception {
+    DCMUltrasoundDataSource mock = Mockito.mock(DCMUltrasoundDataSource.class);
+    ArrayList<ReportDataSource> datasource = new ArrayList<>();
+    datasource.add(mock);
+    ReportTemplate reportTemplate = new ReportTemplate();
+
+    when(reportDao.findReport(reportObjectId)).thenReturn(reportTemplate);
   }
 
 }
