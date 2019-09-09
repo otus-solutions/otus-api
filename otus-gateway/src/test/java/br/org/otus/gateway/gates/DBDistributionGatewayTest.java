@@ -49,7 +49,7 @@ public class DBDistributionGatewayTest {
   private DBDistributionMicroServiceResources dbDistributionMicroServiceResources = PowerMockito.spy(new DBDistributionMicroServiceResources());
 
   @Test
-  public void find_method_should_bring_currentJson() throws Exception {
+  public void findVariablesMethod_should_bring_currentVariableListJson() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
@@ -58,22 +58,22 @@ public class DBDistributionGatewayTest {
 
     PowerMockito.whenNew(JsonPOSTUtility.class).withAnyArguments().thenReturn(jsonPOSTUtility);
     PowerMockito.when(jsonPOSTUtility.finish()).thenReturn(CURRENT_VARIABLES_BY_MICROSERVICE);
-    URL url = new DBDistributionMicroServiceResources().getFindVariableAddress();
-    final GatewayResponse response = dbDistributionGateway.find(INFO_VARIABLE_PARAMS, url);
+
+    final GatewayResponse response = dbDistributionGateway.findVariables(INFO_VARIABLE_PARAMS);
     assertEquals(CURRENT_VARIABLES_BY_MICROSERVICE, response.getData());
 
     verify(jsonPOSTUtility, times(1)).finish();
+
   }
 
   @Test(expected = MalformedURLException.class)
   public void findVariablesMethod_should_throw_exception_for_IOException() throws Exception {
     PowerMockito.when(jsonPOSTUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
-    URL url = new DBDistributionMicroServiceResources().getFindVariableAddress();
-    dbDistributionGateway.find(INFO_VARIABLE_PARAMS, url);
+    dbDistributionGateway.findVariables(INFO_VARIABLE_PARAMS);
   }
 
   @Test
-  public void uploadDatabase_method_should_add_database_file() throws Exception {
+  public void uploadDatabaseMethod_should_add_database_file() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
@@ -95,7 +95,7 @@ public class DBDistributionGatewayTest {
   }
 
   @Test
-  public void uploadVariableTypeCorrelation_method_should_add_type_variable_correlation() throws Exception {
+  public void uploadVariableTypeCorrelationMethod_should_add_type_variable_correlation() throws Exception {
     PowerMockito.whenNew(DBDistributionMicroServiceResources.class).withNoArguments().thenReturn(dbDistributionMicroServiceResources);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "HOST", HOST);
     Whitebox.setInternalState(dbDistributionMicroServiceResources, "PORT", PORT);
@@ -111,7 +111,7 @@ public class DBDistributionGatewayTest {
   }
 
   @Test(expected = MalformedURLException.class)
-  public void uploadVariableTypeCorrelation_method_should_throw_exception_for_IOException() throws Exception {
+  public void uploadVariableTypeCorrelationMethod_should_throw_exception_for_IOException() throws Exception {
     PowerMockito.when(multipartPOST.finish()).thenThrow(new IOException(new Throwable("Message")));
     dbDistributionGateway.uploadVariableTypeCorrelation(file);
   }

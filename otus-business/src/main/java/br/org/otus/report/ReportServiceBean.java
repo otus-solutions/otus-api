@@ -1,7 +1,6 @@
 package br.org.otus.report;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -28,8 +27,7 @@ import org.ccem.otus.persistence.ReportDao;
 import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.service.ReportService;
 
-import br.org.otus.gateway.gates.DBDistributionGateway;
-import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
+import br.org.otus.gateway.gates.DCMGateway;
 import br.org.otus.gateway.response.GatewayResponse;
 
 @Stateless
@@ -63,13 +61,12 @@ public class ReportServiceBean implements ReportService {
         ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
       } else if (dataSource instanceof DCMRetinographyDataSource) {
         String filter = ((DCMRetinographyDataSource) dataSource).buildFilterToRetinography(recruitmentNumber);
-        URL url = new DBDistributionMicroServiceResources().getRetinographyImageAddress();
-        GatewayResponse response = new DBDistributionGateway().find(filter, url);
+        DCMGateway gateway = new DCMGateway();
+        GatewayResponse response = gateway.findRetinography(filter);
         ((DCMRetinographyDataSource) dataSource).getResult().add(DCMRetinographyDataSourceResult.deserialize((String) response.getData()));
       } else if (dataSource instanceof DCMUltrasoundDataSource) {
         String filter = ((DCMUltrasoundDataSource) dataSource).buildFilterToUltrasound(recruitmentNumber);
-        URL url = new DBDistributionMicroServiceResources().getUltrasoundImageAddress();
-        GatewayResponse response = new DBDistributionGateway().find(filter, url);
+        GatewayResponse response = new DCMGateway().findUltrasound(filter);
         ((DCMUltrasoundDataSource) dataSource).getResult().add(DCMUltrasoundDataSourceResult.deserialize((String) response.getData()));
       }
     }

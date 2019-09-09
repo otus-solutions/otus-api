@@ -14,9 +14,10 @@ import br.org.otus.gateway.response.exception.RequestException;
 
 public class DBDistributionGateway {
 
-  public GatewayResponse find(String body, URL url) throws MalformedURLException {
+  public GatewayResponse findVariables(String body) throws MalformedURLException {
+    URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();
     try {
-      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(url, body);
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, body);
       String response = jsonPOST.finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException | RequestException ex) {
@@ -47,5 +48,4 @@ public class DBDistributionGateway {
       throw new ReadRequestException();
     }
   }
-
 }
