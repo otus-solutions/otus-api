@@ -61,8 +61,7 @@ public class ReportServiceBean implements ReportService {
         ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
       } else if (dataSource instanceof DCMRetinographyDataSource) {
         String filter = ((DCMRetinographyDataSource) dataSource).buildFilterToRetinography(recruitmentNumber);
-        DCMGateway gateway = new DCMGateway();
-        GatewayResponse response = gateway.findRetinography(filter);
+        GatewayResponse response = new DCMGateway().findRetinography(filter);
         ((DCMRetinographyDataSource) dataSource).getResult().add(DCMRetinographyDataSourceResult.deserialize((String) response.getData()));
       } else if (dataSource instanceof DCMUltrasoundDataSource) {
         String filter = ((DCMUltrasoundDataSource) dataSource).buildFilterToUltrasound(recruitmentNumber);
