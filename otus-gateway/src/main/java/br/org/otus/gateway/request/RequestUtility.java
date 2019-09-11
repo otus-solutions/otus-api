@@ -12,7 +12,8 @@ import org.bson.Document;
 import com.google.gson.GsonBuilder;
 
 public class RequestUtility {
-  static String getString(HttpURLConnection httpConn) throws IOException {
+
+  public static String getString(HttpURLConnection httpConn) throws IOException {
     String response;
     InputStream responseStream = new BufferedInputStream(httpConn.getInputStream());
 
@@ -30,4 +31,5 @@ public class RequestUtility {
     httpConn.disconnect();
     return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, Document.class).get("data"));
   }
+
 }
