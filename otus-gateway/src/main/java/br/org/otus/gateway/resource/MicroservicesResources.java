@@ -5,7 +5,7 @@ import br.org.otus.gateway.MicroservicesEnvironments;
 public class MicroservicesResources {
 
   protected String HOST;
-  public String PORT;
+  protected String PORT;
   private MicroservicesEnvironments microservicesEnvironments;
 
   public MicroservicesResources(MicroservicesEnvironments microservicesEnvironments) {
