@@ -2,13 +2,8 @@ FROM jboss/wildfly:14.0.1.Final
 
 ARG DEPLOY_USER=admin
 ARG DEPLOY_PASS=admin
-ARG BIND_IP=0.0.0.0
-ARG BIND_IP_CONSOLE=0.0.0.0
 ARG EAR_FILE=otus-ear/target/otus-ear.ear
 ARG CUSTOM_STANDALONE=standalone-custom.xml
-
-ENV ENV_BIND_IP=${BIND_IP}
-ENV ENV_BIND_IP_CONSOLE=${BIND_IP_CONSOLE}
 
 USER root
 
