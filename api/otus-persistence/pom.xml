@@ -11,13 +11,6 @@
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
 
-  <properties>
-    <database.port>27017</database.port>
-    <database.host>localhost</database.host>
-    <database.username>otus</database.username>
-    <database.password>otus</database.password>
-  </properties>
-
   <dependencies>
     <!-- - - External Dependencies - ! -->
     <!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->

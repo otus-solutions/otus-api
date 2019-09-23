@@ -1,34 +1,24 @@
 package br.org.mongodb.connection;
 
-import java.io.InputStream;
-import java.util.Properties;
-
 public abstract class ConnectionConfiguration {
 
-    protected static final String DATABASE_PROPERTIES = "/META-INF/database.properties";
-    protected String username;
-    protected String password;
-    protected String database;
-    protected String host;
-    protected int port;
+  protected static final String DATABASE_NAME = "";
+  protected static final String DATABASE_HOST = "";
+  protected static final String DATABASE_PORT = "";
+  protected static final String DATABASE_USER = "";
+  protected static final String DATABASE_PWD = "";
 
-    public ConnectionConfiguration() {
-        Properties properties = this.read();
-        username = properties.getProperty("mongodb.username");
-        password = properties.getProperty("mongodb.password");
-        database = properties.getProperty("mongodb.database");
-        host = properties.getProperty("mongodb.host");
-        port = Integer.parseInt(properties.getProperty("mongodb.port"));
-    }
+  protected String username;
+  protected String password;
+  protected String database;
+  protected String host;
+  protected int port;
 
-    public Properties read() {
-        try {
-            Properties properties = new Properties();
-            InputStream resourceAsStream = ConnectionConfiguration.class.getClassLoader().getResourceAsStream(DATABASE_PROPERTIES);
-            properties.load(resourceAsStream);
-            return properties;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+  public ConnectionConfiguration() {
+    database = System.getenv(DATABASE_NAME);
+    username = System.getenv(DATABASE_USER);
+    password = System.getenv(DATABASE_PWD);
+    host = System.getenv(DATABASE_HOST);
+    port = Integer.parseInt(System.getenv(DATABASE_PORT));
+  }
 }
