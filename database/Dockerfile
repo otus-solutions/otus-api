@@ -1,14 +1,13 @@
-FROM jboss/wildfly:14.0.1.Final
+FROM mongo:4.0
 
-ARG DEPLOY_USER=admin
-ARG DEPLOY_PASS=admin
-ARG EAR_FILE=otus-ear/target/otus-ear.ear
-ARG CUSTOM_STANDALONE=standalone-custom.xml
+ARG INITDB_FILE=initdb.sh
 
-USER root
+ENV ROOT_USER="otus"
+ENV ROOT_PASS="otus"
+ENV MONGO_INITDB_DATABASE=admin
+ENV MONGO_INITDB_ROOT_USERNAME=${ROOT_USER}
+ENV MONGO_INITDB_ROOT_PASSWORD=${ROOT_PASS}
 
-ADD ${EAR_FILE} /opt/jboss/wildfly/standalone/deployments/
-RUN /opt/jboss/wildfly/bin/add-user.sh ${DEPLOY_USER} ${DEPLOY_PASS} --silent
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+ADD ${INITDB_FILE} /docker-entrypoint-initdb.d/
 
-EXPOSE 8080 9990
+EXPOSE 27017
