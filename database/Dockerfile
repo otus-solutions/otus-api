@@ -12,6 +12,7 @@ ENV MONGO_INITDB_DATABASE=admin
 ENV MONGO_INITDB_ROOT_USERNAME=${ROOT_USER}
 ENV MONGO_INITDB_ROOT_PASSWORD=${ROOT_PASS}
 
+COPY initdb /docker-entrypoint-initdb.d/initdb
 ADD ${INITDB_FILE} /docker-entrypoint-initdb.d/
 
 EXPOSE 27017
