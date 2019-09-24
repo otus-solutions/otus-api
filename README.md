@@ -4,7 +4,7 @@
 sudo docker build --build-arg INITDB_FILE="initdb.sh" -t otus-database .
 
 ## RUN CONTAINER
-sudo docker run -v $(pwd)/persistence:/data/db -p 51001:27017 -e DOMAIN_USER="domain" -e DOMAIN_PASS="domain" -e OTUS_USER="otus" -e OTUS_PASS="otus" -e ROOT_USER="admin" -e ROOT_PASS="admin" --name otus-database otus-database --wiredTigerCacheSizeGB='1.2'
+sudo docker run -v $(pwd)/persistence:/data/db -p 51001:27017 -e OTUS_PASS="Teste123" -e MONGO_INITDBROOT_USERNAME="admin" -e MONGO_INITDB_ROOT_PASSWORD="admin123" --name otus-database otus-database --wiredTigerCacheSizeGB='1.2'
 
 # API
 
