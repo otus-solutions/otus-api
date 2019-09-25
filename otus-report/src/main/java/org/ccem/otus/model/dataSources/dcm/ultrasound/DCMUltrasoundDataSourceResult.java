@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 public class DCMUltrasoundDataSourceResult {
 
   private LocalDateTime date;
-  private byte[] result;
+  private String result;
 
   public static String serialize(DCMUltrasoundDataSourceResult result) {
     return DCMUltrasoundDataSourceResult.getGsonBuilder().create().toJson(result);
