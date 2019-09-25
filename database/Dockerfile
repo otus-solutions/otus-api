@@ -1,4 +1,4 @@
-FROM mongo:4.0
+FROM mongo:4.2.0
 
 ARG INITDB_FILE=initdb.sh
 

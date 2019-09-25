@@ -8,4 +8,5 @@ db.createUser({
     db: "otus"
   }]
 });
-//db.grantRolesToUser("otus", [ { role: "executeFunctions", db: "admin" } ]);
+
+//db.grantRolesToUser(USER, [ { role: "executeFunctions", db: "otus" } ]);

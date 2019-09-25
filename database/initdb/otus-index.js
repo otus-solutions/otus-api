@@ -1,5 +1,7 @@
 db = db.getSiblingDB('otus');
 
+db.auth ("USER", "PASS")
+
 db.getCollection("activity").createIndex({ "surveyForm.surveyTemplate.identity.acronym": 1 });
 db.getCollection("activity").createIndex({ "participantData.recruitmentNumber": 1 });
 db.getCollection("activity").createIndex({ "participantData.fieldCenter.acronym": 1 });

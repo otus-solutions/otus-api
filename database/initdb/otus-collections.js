@@ -1,5 +1,7 @@
 db = db.getSiblingDB('otus');
 
+db.auth ("USER", "PASS")
+
 db.createCollection("activity");
 db.createCollection("activity_configuration");
 db.createCollection("activity_inapplicability");

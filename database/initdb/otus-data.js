@@ -1,5 +1,7 @@
 db = db.getSiblingDB('otus');
 
+db.auth ("USER", "PASS")
+
 db.getCollection("user_permission_profile").insert({
   "name": "DEFAULT",
   "permissions": [{
