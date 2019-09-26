@@ -94,10 +94,10 @@ public class ReportResource {
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/activity-report/{activityId}")
-	public String getActivityReport(@PathParam("activityId") String reportId) {
+	public String getActivityReport(@PathParam("activityId") String activityId) {
 		//todo para testar
 		Long recruitmentNumber = Long.valueOf(5001007);
-		List<ReportTemplateDTO> test = reportFacade.getReportByParticipant(recruitmentNumber);
-		return new Response().buildSuccess(test.get(1)).toSurveyJson();
+		ReportTemplate test = reportFacade.getParticipantReport(recruitmentNumber, activityId);
+		return new Response().buildSuccess(test).toJson(ReportTemplate.getResponseGsonBuilder());
 	}
 }
