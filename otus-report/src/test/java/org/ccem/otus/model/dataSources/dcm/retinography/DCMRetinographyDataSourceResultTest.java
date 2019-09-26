@@ -18,16 +18,16 @@ public class DCMRetinographyDataSourceResultTest {
     this.result = new DCMRetinographyDataSourceResult();
     Whitebox.setInternalState(this.result, "date", LocalDateTime.now());
     Whitebox.setInternalState(this.result, "eye", "left");
-    Whitebox.setInternalState(this.result, "result", new byte[10]);
+    Whitebox.setInternalState(this.result, "result", "R0lGODlhPQBEAPeoAJos595kzAP");
   }
 
   @Test
   public void serialize_method_should_return_string_with_values_expected() {
     String serialized = DCMRetinographyDataSourceResult.serialize(this.result);
-
+    
     assertTrue(serialized.contains("\"date\":"));
     assertTrue(serialized.contains("\"eye\":\"left\""));
-    assertTrue(serialized.contains("\"result\":[0,0,0,0,0,0,0,0,0,0]"));
+    assertTrue(serialized.contains("\"result\":\"R0lGODlhPQBEAPeoAJos595kzAP\""));
   }
 
   @Test

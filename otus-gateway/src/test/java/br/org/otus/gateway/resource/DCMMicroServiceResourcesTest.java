@@ -27,7 +27,7 @@ public class DCMMicroServiceResourcesTest {
 
   @Before
   public void setUp() throws Exception {
-    microservicesEnvironments = MicroservicesEnvironments.DBDISTRIBUTION;
+    microservicesEnvironments = MicroservicesEnvironments.DCM;
     mockStatic(System.class);
     when(System.getenv(microservicesEnvironments.getHost())).thenReturn(HOST);
     when(System.getenv(microservicesEnvironments.getPort())).thenReturn(PORT);
@@ -36,13 +36,13 @@ public class DCMMicroServiceResourcesTest {
   }
 
   @Test
-  public void getRetinographyImageAddress_method_should_return_correlationUploadUrl() throws MalformedURLException {
+  public void getRetinographyImageAddress_method_should_return_expected_url() throws MalformedURLException {
     url = new URL("http://localhost:8081/api/retinography");
     assertEquals(resources.getRetinographyImageAddress(), url);
   }
 
   @Test
-  public void getUltrasoundImageAddress_method_should_return_correlationUploadUrl() throws MalformedURLException {
+  public void getUltrasoundImageAddress_method_should_return_expected_url() throws MalformedURLException {
     url = new URL("http://localhost:8081/api/ultrasound");
     assertEquals(resources.getUltrasoundImageAddress(), url);
   }
