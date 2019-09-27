@@ -12,7 +12,7 @@ import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 
-public class DBDistributionGateway {
+public class DBDistributionGatewayService {
 
   public GatewayResponse findVariables(String body) throws MalformedURLException {
     URL requestURL = new DBDistributionMicroServiceResources().getFindVariableAddress();

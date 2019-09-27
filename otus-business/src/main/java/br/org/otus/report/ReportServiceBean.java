@@ -27,7 +27,7 @@ import org.ccem.otus.persistence.ReportDao;
 import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.service.ReportService;
 
-import br.org.otus.gateway.gates.DCMGateway;
+import br.org.otus.gateway.gates.DCMGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 
 @Stateless
@@ -35,18 +35,16 @@ public class ReportServiceBean implements ReportService {
 
   @Inject
   private ReportDao reportDao;
-
   @Inject
   private ParticipantDataSourceDao participantDataSourceDao;
-
   @Inject
   private ActivityDataSourceDao activityDataSourceDao;
-
   @Inject
   private ParticipantService participantService;
-
   @Inject
   private ExamDataSourceDao examDataSourceDao;
+  @Inject
+  private DCMGatewayService gateway;
 
   @Override
   public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException, MalformedURLException {
@@ -61,11 +59,11 @@ public class ReportServiceBean implements ReportService {
         ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
       } else if (dataSource instanceof DCMRetinographyDataSource) {
         String filter = ((DCMRetinographyDataSource) dataSource).buildFilterToRetinography(recruitmentNumber);
-        GatewayResponse response = new DCMGateway().findRetinography(filter);
+        GatewayResponse response = gateway.findRetinography(filter);
         ((DCMRetinographyDataSource) dataSource).getResult().add(DCMRetinographyDataSourceResult.deserialize((String) response.getData()));
       } else if (dataSource instanceof DCMUltrasoundDataSource) {
         String filter = ((DCMUltrasoundDataSource) dataSource).buildFilterToUltrasound(recruitmentNumber);
-        GatewayResponse response = new DCMGateway().findUltrasound(filter);
+        GatewayResponse response = gateway.findUltrasound(filter);
         ((DCMUltrasoundDataSource) dataSource).getResult().add(DCMUltrasoundDataSourceResult.deserialize((String) response.getData()));
       }
     }

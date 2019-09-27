@@ -25,7 +25,7 @@ public class RetinographyDataSourceFilterTest {
   public void instance_of_class_should_have_values_expected() {
 	Integer sending = 0;  
     assertEquals(Long.toString(RECRUITMENT_NUMBER), filter.getRecruitmentNumber());
-    assertEquals("Retinography", filter.getExamName());
+    assertEquals("DCMRetinography", filter.getExamName());
     assertEquals(sending, filter.getSending());
     assertEquals("left", filter.getEyeSelected());
   }

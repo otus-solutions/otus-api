@@ -2,6 +2,8 @@ package org.ccem.otus.model.dataSources.dcm.ultrasound;
 
 import java.time.LocalDateTime;
 
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+
 import com.google.gson.GsonBuilder;
 
 public class DCMUltrasoundDataSourceResult {
@@ -21,7 +23,7 @@ public class DCMUltrasoundDataSourceResult {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.serializeNulls();
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     return builder;
   }
 

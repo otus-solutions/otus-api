@@ -10,7 +10,7 @@ public class DCMRetinographyDataSourceResult {
 
   private LocalDateTime date;
   private String eye;
-  private byte[] result;
+  private String result;
 
   public static String serialize(DCMRetinographyDataSourceResult result) {
     return DCMRetinographyDataSourceResult.getGsonBuilder().create().toJson(result);

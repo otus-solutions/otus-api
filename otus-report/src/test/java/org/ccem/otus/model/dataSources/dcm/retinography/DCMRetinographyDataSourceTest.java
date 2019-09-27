@@ -19,7 +19,7 @@ public class DCMRetinographyDataSourceTest {
     this.datasource = new DCMRetinographyDataSource();
     RetinographyDataSourceFilter filters = new RetinographyDataSourceFilter();
     Whitebox.setInternalState(filters, "recruitmentNumber", Long.toString(RECRUITMENT_NUMBER));
-    Whitebox.setInternalState(filters, "examName", "Retinography");
+    Whitebox.setInternalState(filters, "examName", "DCMRetinography");
     Whitebox.setInternalState(filters, "sending", 0);
     Whitebox.setInternalState(filters, "eyeSelected", "left");
     Whitebox.setInternalState(datasource, "filters", filters);
@@ -44,7 +44,7 @@ public class DCMRetinographyDataSourceTest {
     String result = this.datasource.buildFilterToRetinography(RECRUITMENT_NUMBER);
 
     assertTrue(result.contains("\"recruitmentNumber\":\"" + Long.toString(RECRUITMENT_NUMBER) + "\""));
-    assertTrue(result.contains("\"examName\":\"Retinography"));
+    assertTrue(result.contains("\"examName\":\"DCMRetinography"));
     assertTrue(result.contains("\"sending\":\"0"));
     assertTrue(result.contains("\"eyeSelected\":\"left"));
   }
