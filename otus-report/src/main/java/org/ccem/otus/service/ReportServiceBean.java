@@ -6,6 +6,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.participant.model.Participant;
@@ -53,6 +54,24 @@ public class ReportServiceBean implements ReportService {
 				((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
 			}
 		}
+		return report;
+	}
+
+	@Override
+	public ReportTemplate getReportParticipantActivity(String activityID) throws DataNotFoundException, ValidationException {
+
+		ActivityDataSourceResult test = activityDataSourceDao.getAnswerFilling(activityID);
+		String acronym = test.getSurveyForm().getAcronym();
+		ReportTemplate report = reportDao.getByAcronym(acronym);
+//		ReportDataSource dataSource = report.getDataSources().get(0);
+
+		for (ReportDataSource dataSource : report.getDataSources()) {
+			if (dataSource instanceof ActivityDataSource) {
+				((ActivityDataSource) dataSource).getResult()
+						.add(test);
+			}
+		}
+
 		return report;
 	}
 

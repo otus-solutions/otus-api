@@ -9,7 +9,9 @@ import org.ccem.otus.persistence.ReportTemplateDTO;
 public interface ReportService {
 
     ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException;
-    
+
+    ReportTemplate getReportParticipantActivity(String activityId) throws DataNotFoundException, ValidationException;
+
     List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException;
 
     ReportTemplate create(ReportTemplate reportTemplate);

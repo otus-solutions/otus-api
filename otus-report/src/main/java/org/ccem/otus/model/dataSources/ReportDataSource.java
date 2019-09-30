@@ -15,6 +15,8 @@ public abstract class ReportDataSource<T> {
 
 	public abstract ArrayList<Document> buildQuery(Long recruitmentNumber);
 
+	public abstract ArrayList<Document> buildQueryAnwer();
+
 	public ArrayList<T> getResult() {
 		return result;
 	}

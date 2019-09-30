@@ -41,6 +41,18 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
+	public ReportTemplate getByAcronym(String acronym) throws DataNotFoundException, ValidationException {
+		Document result = this.collection.find(eq("label", acronym)).first();
+		if (acronym == null) {
+			throw new DataNotFoundException("parameter acronym is NULL.");
+		}
+		if (result == null) {
+			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + "} not found."));
+		}
+		return ReportTemplate.deserialize(result.toJson());
+	}
+
+	@Override
 	public ReportTemplate insert(ReportTemplate reportTemplate) {
 		Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
 		super.persist(parsed);

@@ -11,6 +11,8 @@ public interface ReportDao {
 
 	ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException;
 
+	ReportTemplate getByAcronym(String acronym) throws DataNotFoundException, ValidationException;
+
 	ReportTemplate insert(ReportTemplate report);
 
 	void deleteById(String id) throws DataNotFoundException;

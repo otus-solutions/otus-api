@@ -24,6 +24,14 @@ public class ReportFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
+
+    public ReportTemplate getReportParticipantActivity(String activityId){
+        try {
+            return reportService.getReportParticipantActivity(activityId);
+        } catch (DataNotFoundException | ValidationException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
+    }
     
     public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber){
         try {
