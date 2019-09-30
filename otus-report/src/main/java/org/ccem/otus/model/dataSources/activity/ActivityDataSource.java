@@ -25,14 +25,14 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
     return query;
   }
 
-  @Override
-  public ArrayList<Document> buildQueryAnwer() {
-    ArrayList<Document> query = new ArrayList<>();
-    this.buildProjectionStage(query);
-    this.appendStatusHistoryFilter(query);
-
-    return query;
-  }
+//  @Override
+//  public ArrayList<Document> buildQueryAnwer() {
+//    ArrayList<Document> query = new ArrayList<>();
+//    this.buildProjectionStage(query);
+//    this.appendStatusHistoryFilter(query);
+//
+//    return query;
+//  }
 
   private void buildMachStage(Long recruitmentNumber, ArrayList<Document> query) {
     Document filters = new Document("participantData.recruitmentNumber", recruitmentNumber).append("surveyForm.acronym", this.filters.getAcronym());
