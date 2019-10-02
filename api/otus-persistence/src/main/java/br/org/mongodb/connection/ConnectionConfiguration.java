@@ -2,11 +2,11 @@ package br.org.mongodb.connection;
 
 public abstract class ConnectionConfiguration {
 
-  protected static final String DATABASE_NAME = "";
-  protected static final String DATABASE_HOST = "";
-  protected static final String DATABASE_PORT = "";
-  protected static final String DATABASE_USER = "";
-  protected static final String DATABASE_PASS = "";
+  protected static final String DATABASE_NAME = "DATABASE_NAME";
+  protected static final String DATABASE_HOST = "DATABASE_HOST";
+  protected static final String DATABASE_PORT = "DATABASE_PORT";
+  protected static final String DATABASE_USER = "DATABASE_USER";
+  protected static final String DATABASE_PASS = "DATABASE_PASS";
 
   protected String username;
   protected String password;

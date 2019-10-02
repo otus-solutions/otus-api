@@ -226,12 +226,7 @@
       <version>${project.parent.version}</version>
       <type>ejb</type>
     </dependency>
-    <dependency>
-      <groupId>org.ccem.auditor</groupId>
-      <artifactId>auditor-core</artifactId>
-      <version>${auditor.core.version}</version>
-      <type>ejb</type>
-    </dependency>
+
 
     <!-- - - External Dependencies - ! -->
     <dependency>

@@ -141,13 +141,7 @@
       <version>${survey.model.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.ccem.auditor</groupId>
-      <artifactId>auditor-core</artifactId>
-      <version>${auditor.core.version}</version>
-      <scope>provided</scope>
-      <type>ejb</type>
-    </dependency>
+
     <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-file-uploader</artifactId>

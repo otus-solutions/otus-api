@@ -3,8 +3,6 @@ package br.org.otus.security.context;
 import br.org.otus.security.dtos.AuthenticationData;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import org.ccem.auditor.model.SessionLog;
-
 import java.text.ParseException;
 
 public class SessionIdentifier {
@@ -16,14 +14,6 @@ public class SessionIdentifier {
         this.token = token;
         this.secretKey = secretKey;
         this.authenticationData = authenticationData;
-    }
-
-    public SessionLog buildLog() {
-        SessionLog sessionLog = new SessionLog(authenticationData.getUserEmail(), authenticationData.getKey(), authenticationData.getMode());
-        sessionLog.setToken(token);
-        sessionLog.setSecretKey(secretKey);
-        sessionLog.setRequestAddress(authenticationData.getRequestAddress());
-        return sessionLog;
     }
 
     public String getToken() {

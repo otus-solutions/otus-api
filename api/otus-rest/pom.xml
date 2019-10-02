@@ -54,13 +54,7 @@
       <version>${google.gson.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.ccem.auditor</groupId>
-      <artifactId>auditor-core</artifactId>
-      <version>${auditor.core.version}</version>
-      <type>ejb</type>
-      <scope>provided</scope>
-    </dependency>
+
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongodb-driver</artifactId>

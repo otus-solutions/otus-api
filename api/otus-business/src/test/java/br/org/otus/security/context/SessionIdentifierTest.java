@@ -1,14 +1,8 @@
 package br.org.otus.security.context;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
-
-import org.ccem.auditor.model.SessionLog;
+import br.org.otus.security.dtos.AuthenticationData;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,10 +11,10 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-
-import br.org.otus.security.dtos.AuthenticationData;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ SessionIdentifier.class, SignedJWT.class })
@@ -33,8 +27,6 @@ public class SessionIdentifierTest {
 	private SessionIdentifier sessionIdentifier;
 	@Mock
 	private AuthenticationData authenticationData;
-	@Mock
-	private SessionLog sessionLog;
 	private SignedJWT signedJWT;
 	private byte[] secretKey;
 
@@ -43,12 +35,6 @@ public class SessionIdentifierTest {
 		when(authenticationData.getUserEmail()).thenReturn(USER);
 		when(authenticationData.getKey()).thenReturn(SECRET_KEY);
 		when(authenticationData.getMode()).thenReturn(MODE);
-		whenNew(SessionLog.class).withAnyArguments().thenReturn(sessionLog);
-		assertTrue(sessionIdentifier.buildLog() instanceof SessionLog);
-		verify(sessionLog).setToken(anyString());
-		verify(sessionLog).setSecretKey(anyObject());
-		verify(sessionLog).setRequestAddress(anyObject());
-
 	}
 
 	@Test
