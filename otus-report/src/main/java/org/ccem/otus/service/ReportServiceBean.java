@@ -6,16 +6,14 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
+import org.ccem.otus.model.dataSources.activity.AnswerFillingDataSource;
+import org.ccem.otus.model.dataSources.activity.AnswerFillingDataSourceResult;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
-import org.ccem.otus.persistence.ActivityDataSourceDao;
-import org.ccem.otus.persistence.ExamDataSourceDao;
-import org.ccem.otus.persistence.ParticipantDataSourceDao;
-import org.ccem.otus.persistence.ReportDao;
-import org.ccem.otus.persistence.ReportTemplateDTO;
+import org.ccem.otus.persistence.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -24,88 +22,95 @@ import java.util.List;
 @Stateless
 public class ReportServiceBean implements ReportService {
 
-	@Inject
-	private ReportDao reportDao;
+    @Inject
+    private ReportDao reportDao;
 
-	@Inject
-	private ParticipantDataSourceDao participantDataSourceDao;
+    @Inject
+    private ParticipantDataSourceDao participantDataSourceDao;
 
-	@Inject
-	private ActivityDataSourceDao activityDataSourceDao;
+    @Inject
+    private ActivityDataSourceDao activityDataSourceDao;
 
-	@Inject
-	private ParticipantService participantService;
+    @Inject
+    private ParticipantService participantService;
 
-	@Inject
-	private ExamDataSourceDao examDataSourceDao;
+    @Inject
+    private ExamDataSourceDao examDataSourceDao;
 
-	@Override
-	public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException {
-		ObjectId reportObjectId = new ObjectId(reportId);
-		ReportTemplate report = reportDao.findReport(reportObjectId);
-		for (ReportDataSource dataSource : report.getDataSources()) {
-			if (dataSource instanceof ParticipantDataSource) {
-				((ParticipantDataSource) dataSource).getResult()
-						.add(participantDataSourceDao.getResult(recruitmentNumber, (ParticipantDataSource) dataSource));
-			} else if (dataSource instanceof ActivityDataSource) {
-				((ActivityDataSource) dataSource).getResult()
-						.add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
-			} else if (dataSource instanceof ExamDataSource) {
-				((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
-			}
-		}
-		return report;
-	}
+    @Inject
+    private ActivityService activityService;
 
-	@Override
-	public ReportTemplate getReportParticipantActivity(String activityID) throws DataNotFoundException, ValidationException {
+    @Override
+    public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException {
+        ObjectId reportObjectId = new ObjectId(reportId);
+        ReportTemplate report = reportDao.findReport(reportObjectId);
+        return fillReport(recruitmentNumber, report);
+    }
 
-		ActivityDataSourceResult test = activityDataSourceDao.getAnswerFilling(activityID);
-		String acronym = test.getSurveyForm().getAcronym();
-		ReportTemplate report = reportDao.getByAcronym(acronym);
-//		ReportDataSource dataSource = report.getDataSources().get(0);
+    private ReportTemplate fillReport(Long recruitmentNumber, ReportTemplate report) throws DataNotFoundException, ValidationException {
+        for (ReportDataSource dataSource : report.getDataSources()) {
+            if (dataSource instanceof ParticipantDataSource) {
+                ((ParticipantDataSource) dataSource).getResult()
+                        .add(participantDataSourceDao.getResult(recruitmentNumber, (ParticipantDataSource) dataSource));
+            } else if (dataSource instanceof ActivityDataSource) {
+                ((ActivityDataSource) dataSource).getResult()
+                        .add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
+            } else if (dataSource instanceof ExamDataSource) {
+                ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
+            }
+        }
+        return report;
+    }
 
-		for (ReportDataSource dataSource : report.getDataSources()) {
-			if (dataSource instanceof ActivityDataSource) {
-				((ActivityDataSource) dataSource).getResult()
-						.add(test);
-			}
-		}
+    @Override
+    public ReportTemplate getParticipantReportActivity(String activityID) throws DataNotFoundException, ValidationException {
 
-		return report;
-	}
+        SurveyActivity activity = activityService.getByID(activityID);
+        Long recruitmentNumber = activity.getParticipantData().getRecruitmentNumber();
+        String acronym = activity.getSurveyForm().getAcronym();
+        Integer version = activity.getSurveyForm().getVersion();
 
-	@Override
-	public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException {
-		Participant participant = participantService.getByRecruitmentNumber(recruitmentNumber);
-		String field = participant.getFieldCenter().getAcronym();
-		return reportDao.getByCenter(field);
-	}
+        ReportTemplate report = reportDao.getActivityReport(acronym, version);
+        for (ReportDataSource dataSource : report.getDataSources()) {
+            if (dataSource instanceof AnswerFillingDataSource) {
+                ((AnswerFillingDataSource) dataSource).getResult().add(AnswerFillingDataSourceResult.deserialize(SurveyActivity.serialize(activity)));
+            }
+        }
 
-	@Override
-	public ReportTemplate create(ReportTemplate reportTemplate) {
-		ReportTemplate insertedReport = reportDao.insert(reportTemplate);
-		return insertedReport;
-	}
+        return fillReport(recruitmentNumber, report);
+    }
 
-	@Override
-	public void delete(String id) throws DataNotFoundException {
-		reportDao.deleteById(id);
-	}
+    @Override
+    public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException {
+        Participant participant = participantService.getByRecruitmentNumber(recruitmentNumber);
+        String field = participant.getFieldCenter().getAcronym();
+        return reportDao.getByCenter(field);
+    }
 
-	@Override
-	public List<ReportTemplate> list() throws ValidationException {
-		return reportDao.getAll();
-	}
+    @Override
+    public ReportTemplate create(ReportTemplate reportTemplate) {
+        ReportTemplate insertedReport = reportDao.insert(reportTemplate);
+        return insertedReport;
+    }
 
-	@Override
-	public ReportTemplate getByID(String id) throws DataNotFoundException, ValidationException {
-		return reportDao.getById(id);
-	}
+    @Override
+    public void delete(String id) throws DataNotFoundException {
+        reportDao.deleteById(id);
+    }
 
-	@Override
-	public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
-		return reportDao.updateFieldCenters(reportTemplate);
-	}
+    @Override
+    public List<ReportTemplate> list() throws ValidationException {
+        return reportDao.getAll();
+    }
+
+    @Override
+    public ReportTemplate getByID(String id) throws DataNotFoundException, ValidationException {
+        return reportDao.getById(id);
+    }
+
+    @Override
+    public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
+        return reportDao.updateFieldCenters(reportTemplate);
+    }
 
 }

@@ -3,10 +3,8 @@ package org.ccem.otus.model.dataSources.activity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
-import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import com.google.gson.GsonBuilder;
@@ -14,8 +12,6 @@ import com.google.gson.GsonBuilder;
 public class ActivityDataSourceResult {
   private List<ActivityStatus> statusHistory;
   private ActivityMode mode;
-  private FillContainer fillContainer;
-  private SurveyForm surveyForm;
 
   public static String serialize(ActivityDataSourceResult activityDataSourceResult) {
     return getGsonBuilder().create().toJson(activityDataSourceResult);
@@ -40,11 +36,4 @@ public class ActivityDataSourceResult {
     return mode;
   }
 
-  public FillContainer getFillContainer() {
-		return fillContainer;
-	}
-
-	public SurveyForm getSurveyForm() {
-    return surveyForm;
-  }
 }

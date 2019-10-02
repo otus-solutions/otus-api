@@ -45,15 +45,19 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
 	@Override
 	public ActivityDataSourceResult getAnswerFilling(String activityId) throws DataNotFoundException {
 		ObjectId oid = new ObjectId(activityId);
+		Document query = new Document();
+		query.put("_id", oid);
+		query.put("statusHistory.name","FINALIZED");
 //		List<Bson> pipeline = new ArrayList<>();
-//		pipeline.add(new Document( "$match",new Document("_id", oid)));
+//		pipeline.add(new Document("_id", oid));
+//		pipeline.add(new Document("statusHistory.name","FINALIZED"));
 //		pipeline.add(ActivityDataSource.buildQueryAnwer());
 
-		Document result = collection.find(new Document("_id", oid)).first();
+		Document result = collection.find(query).first();
 //		Document result = collection.aggregate().first();
 
 		if (result == null) {
-			throw new DataNotFoundException(new Throwable("ParticipantReportActivity not found. Id: " + activityId));
+			throw new DataNotFoundException(new Throwable("ParticipantReportActivity not finalized. Id: " + activityId));
 		}
 		return ActivityDataSourceResult.deserialize(new JSONObject(result).toString());
 	}

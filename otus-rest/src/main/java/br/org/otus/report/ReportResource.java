@@ -97,7 +97,7 @@ public class ReportResource {
 	public String getActivityReport(@PathParam("activityId") String activityId) {
 		//todo para testar
 		Long recruitmentNumber = Long.valueOf(5001007);
-		ReportTemplate test = reportFacade.getReportParticipantActivity(activityId);
+		ReportTemplate test = reportFacade.getParticipantReportActivity(activityId);
 		return new Response().buildSuccess(test).toJson(ReportTemplate.getResponseGsonBuilder());
 	}
 }
