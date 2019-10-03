@@ -1,8 +1,8 @@
-FROM jboss/wildfly:14.0.1.Final
+FROM jboss/wildfly:14.0.1.Final AS api
 
 ARG DEPLOY_USER=admin
 ARG DEPLOY_PASS=admin
-ARG EAR_FILE=otus-ear/target/otus-ear.ear
+ARG EAR_FILE="../../source/otus-ear/target/otus-ear.ear"
 
 ENV DATABASE_NAME="otus"
 ENV DATABASE_HOST="localhost"
