@@ -1,3 +1,6 @@
+# NETWORK
+sudo docker network create -d bridge otus-platform-network
+
 # DATABASE - BUILD IMAGE
 sudo docker build --target database -t otus-database .
 
