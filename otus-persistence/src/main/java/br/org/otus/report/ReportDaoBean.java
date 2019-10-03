@@ -45,9 +45,9 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	public ReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException, ValidationException {
 		//todo buscar por acronym e version
 		Document query = new Document();
-//		query.put("acronym", acronym);
-//		query.put("version",version);
-		query.put("label", acronym);
+		query.put("acronym", acronym);
+		query.put("version",version);
+//		query.put("label", acronym);
 
 		Document result = this.collection.find(query).first();
 		if (acronym == null) {

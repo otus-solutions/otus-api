@@ -6,7 +6,6 @@ import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
 
 import org.ccem.otus.model.ReportTemplate;
-import org.ccem.otus.persistence.ReportTemplateDTO;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Path("/report")
 public class ReportResource {
@@ -91,13 +89,11 @@ public class ReportResource {
 	}
 
 	@GET
-	@Secured
+//	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/activity-report/{activityId}")
 	public String getActivityReport(@PathParam("activityId") String activityId) {
 		//todo para testar
-		Long recruitmentNumber = Long.valueOf(5001007);
-		ReportTemplate test = reportFacade.getParticipantReportActivity(activityId);
-		return new Response().buildSuccess(test).toJson(ReportTemplate.getResponseGsonBuilder());
+		return new Response().buildSuccess(reportFacade.getActivityReport(activityId)).toJson(ReportTemplate.getResponseGsonBuilder());
 	}
 }

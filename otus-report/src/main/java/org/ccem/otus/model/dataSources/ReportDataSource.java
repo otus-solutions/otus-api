@@ -35,4 +35,7 @@ public abstract class ReportDataSource<T> {
 		return optional;
 	}
 
+	public void setResult(ArrayList<T> result) {
+		this.result = result;
+	}
 }
