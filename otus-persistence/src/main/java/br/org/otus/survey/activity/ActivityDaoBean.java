@@ -61,9 +61,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn) {
         ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
         List<Bson> pipeline = new ArrayList<>();
-        pipeline.add(new Document("$match",new Document(RECRUITMENT_NUMBER_PATH,rn).append(DISCARDED_PATH,false).append(ACRONYM_PATH,new Document("$in",permittedSurveys))));
+        pipeline.add(new Document("$match", new Document(RECRUITMENT_NUMBER_PATH, rn).append(DISCARDED_PATH, false).append(ACRONYM_PATH, new Document("$in", permittedSurveys))));
         AggregateIterable<Document> result = collection.aggregate(pipeline);
-        
+
         result.forEach((Block<Document>) document -> {
             activities.add(SurveyActivity.deserialize(document.toJson()));
         });
@@ -103,73 +103,61 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     @Override
     public SurveyActivity findByID(String id) throws DataNotFoundException {
         ObjectId oid = new ObjectId(id);
-        List<Bson> pipeline = new ArrayList<>();
-        pipeline.add(new Document("$match",new Document(ID_PATH,oid)));
-        pipeline.add(parseQuery("{\n" +
-                "        $lookup: {\n" +
-                "            from : \"survey\",\n" +
-                "             let:{\n" +
-                "                    \"acronym\":\"$surveyForm.acronym\",\n" +
-                "                    \"version\":\"$surveyForm.version\"},\n" +
-                "            pipeline:[\n" +
-                "                {\n" +
-                "                    $match:{\n" +
-                "                        $expr:{\n" +
-                "                            $and: [\n" +
-                "                                {$eq: [\"$$acronym\", \"$surveyTemplate.identity.acronym\"]},\n" +
-                "                                {$eq: [\"$$version\", \"$version\"]}\n" +
-                "                                ]\n" +
-                "                        }\n" +
-                "                    }\n" +
-                "                },\n" +
-                "                {\n" +
-                "                                  \"$replaceRoot\":{\n" +
-                "                                   \"newRoot\":\"$surveyTemplate\"\n" +
-                "                                   }\n" +
-                "                }\n" +
-                "                ],\n" +
-                "                \"as\":\"surveyForm.surveyTemplate\"\n" +
-                "        }\n" +
-                "    }"));
-        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
-
-        Document result = collection.aggregate(pipeline).first();
+        Document result = fetchWithSurveyTemplate(new Document(ID_PATH, oid)).first();
 
         if (result == null) {
             throw new DataNotFoundException(new Throwable("OID {" + id + "} not found."));
         }
 
         return SurveyActivity.deserialize(result.toJson());
+
     }
 
-	@Override
-	public List<SurveyActivity> getUndiscarded(String acronym, Integer version)
-			throws DataNotFoundException, MemoryExcededException {
-		Document query = new Document();
-		query.put(ACRONYM_PATH, acronym);
-		query.put(VERSION_PATH, version);
-		query.put(DISCARDED_PATH, Boolean.FALSE);
-		Bson projection = fields(exclude(TEMPLATE_PATH));
+    @Override
+    public List<SurveyActivity> getUndiscarded(String acronym, Integer version)
+            throws DataNotFoundException, MemoryExcededException {
+        Document query = new Document();
+        query.put(ACRONYM_PATH, acronym);
+        query.put(VERSION_PATH, version);
+        query.put(DISCARDED_PATH, Boolean.FALSE);
+        Bson projection = fields(exclude(TEMPLATE_PATH));
 
-		FindIterable<Document> documents = collection.find(query).projection(projection);
-		MongoCursor<Document> iterator = documents.iterator();
-		ArrayList<SurveyActivity> activities = new ArrayList<>();
+        FindIterable<Document> documents = collection.find(query).projection(projection);
+        MongoCursor<Document> iterator = documents.iterator();
+        ArrayList<SurveyActivity> activities = new ArrayList<>();
 
-		while (iterator.hasNext()) {
-			try {
-				activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
-			} catch (OutOfMemoryError e) {
-				activities.clear();
-				activities = null;
-				throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
-			}
-		}
+        while (iterator.hasNext()) {
+            try {
+                activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
+            } catch (OutOfMemoryError e) {
+                activities.clear();
+                activities = null;
+                throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
+            }
+        }
 
-		if (activities.isEmpty()) {
-			throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
-		}
+        if (activities.isEmpty()) {
+            throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
+        }
 
         return activities;
+    }
+
+    @Override
+    public SurveyActivity getActivity(String acronym, Integer version, String categoryName) throws DataNotFoundException {
+        Document query = new Document();
+        query.put("surveyForm.acronym", acronym);
+        query.put("surveyForm.version", version);
+        query.put(CATEGORY_NAME_PATH, categoryName);
+        query.put("isDiscarded", false);
+
+        Document result = fetchWithSurveyTemplate(query).first();
+
+        if (result == null) {
+            throw new DataNotFoundException(new Throwable("Activity not found"));
+        }
+
+        return SurveyActivity.deserialize(result.toJson());
     }
 
     @Override
@@ -199,8 +187,8 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
         UpdateResult updateResult = collection.updateOne(
                 and(eq("_id", new ObjectId(checkerUpdatedDTO.getId())),
-                    eq("statusHistory.name", checkerUpdatedDTO.getActivityStatus().getName())),
-                new Document("$set", new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date",dateUpdated)));
+                        eq("statusHistory.name", checkerUpdatedDTO.getActivityStatus().getName())),
+                new Document("$set", new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date", dateUpdated)));
 
         if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException(new Throwable("Activity of Participant not found"));
@@ -209,7 +197,42 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         return true;
     }
 
-	private void removeOids(Document parsedActivity){
+
+    private AggregateIterable<Document> fetchWithSurveyTemplate(Document matchQuery) {
+        List<Bson> pipeline = new ArrayList<>();
+        pipeline.add(new Document("$match", matchQuery));
+        pipeline.add(parseQuery("{\n" +
+                "        $lookup: {\n" +
+                "            from : \"survey\",\n" +
+                "             let:{\n" +
+                "                    \"acronym\":\"$surveyForm.acronym\",\n" +
+                "                    \"version\":\"$surveyForm.version\"},\n" +
+                "            pipeline:[\n" +
+                "                {\n" +
+                "                    $match:{\n" +
+                "                        $expr:{\n" +
+                "                            $and: [\n" +
+                "                                {$eq: [\"$$acronym\", \"$surveyTemplate.identity.acronym\"]},\n" +
+                "                                {$eq: [\"$$version\", \"$version\"]}\n" +
+                "                                ]\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                {\n" +
+                "                                  \"$replaceRoot\":{\n" +
+                "                                   \"newRoot\":\"$surveyTemplate\"\n" +
+                "                                   }\n" +
+                "                }\n" +
+                "                ],\n" +
+                "                \"as\":\"surveyForm.surveyTemplate\"\n" +
+                "        }\n" +
+                "    }"));
+        pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
+
+        return collection.aggregate(pipeline);
+    }
+
+    private void removeOids(Document parsedActivity) {
         parsedActivity.remove("_id");
         ((Document) parsedActivity.get("surveyForm")).remove("_id"); //todo: remove when this id becomes standard
     }

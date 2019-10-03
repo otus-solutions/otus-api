@@ -25,6 +25,8 @@ public interface ActivityDao {
 
   List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
 
+  SurveyActivity getActivity(String acronym, Integer version, String categoryName) throws DataNotFoundException;
+
   List<SurveyActivity> findByCategory(String categoryName);
 
   void updateCategory(ActivityCategory activityCategory);
