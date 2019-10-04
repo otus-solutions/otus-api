@@ -89,7 +89,7 @@ public class ReportResource {
 	}
 
 	@GET
-	@Secured
+//	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/activity-report/{activityId}")
 	public String getActivityReport(@PathParam("activityId") String activityId) {

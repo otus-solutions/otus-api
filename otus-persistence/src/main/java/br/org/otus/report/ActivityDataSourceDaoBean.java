@@ -1,12 +1,8 @@
 package br.org.otus.report;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSourceFilters;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
@@ -41,25 +37,4 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
 
 		return result;
 	}
-
-	@Override
-	public ActivityDataSourceResult getAnswerFilling(String activityId) throws DataNotFoundException {
-		ObjectId oid = new ObjectId(activityId);
-		Document query = new Document();
-		query.put("_id", oid);
-		query.put("statusHistory.name","FINALIZED");
-//		List<Bson> pipeline = new ArrayList<>();
-//		pipeline.add(new Document("_id", oid));
-//		pipeline.add(new Document("statusHistory.name","FINALIZED"));
-//		pipeline.add(ActivityDataSource.buildQueryAnwer());
-
-		Document result = collection.find(query).first();
-//		Document result = collection.aggregate().first();
-
-		if (result == null) {
-			throw new DataNotFoundException(new Throwable("ParticipantReportActivity not finalized. Id: " + activityId));
-		}
-		return ActivityDataSourceResult.deserialize(new JSONObject(result).toString());
-	}
-
 }

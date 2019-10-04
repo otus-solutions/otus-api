@@ -39,7 +39,10 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public static final String RECRUITMENT_NUMBER_PATH = "participantData.recruitmentNumber";
     public static final String CATEGORY_NAME_PATH = "category.name";
     public static final String CATEGORY_LABEL_PATH = "category.label";
+    public static final String IS_DISCARDED = "isDiscarded";
     public static final String ID_PATH = "_id";
+    public static final String STATUS_HISTORY_NAME = "statusHistory.name";
+    public static final String FINALIZED = "FINALIZED";
 
     public ActivityDaoBean() {
         super(COLLECTION_NAME, Document.class);
@@ -146,12 +149,12 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     @Override
     public SurveyActivity getLastFinalizedActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException {
         Document query = new Document();
-        query.put("surveyForm.acronym", acronym);
-        query.put("surveyForm.version", version);
+        query.put(ACRONYM_PATH, acronym);
+        query.put(VERSION_PATH, version);
         query.put(CATEGORY_NAME_PATH, categoryName);
-        query.put("isDiscarded", false);
-        query.put("statusHistory.name", "FINALIZED");
-        query.put("participantData.recruitmentNumber", recruitmentNumber);
+        query.put(IS_DISCARDED, false);
+        query.put(STATUS_HISTORY_NAME ,FINALIZED);
+        query.put(RECRUITMENT_NUMBER_PATH, recruitmentNumber);
 
 
         MongoCursor<Document> iterator = fetchWithSurveyTemplate(query).iterator();

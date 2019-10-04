@@ -13,6 +13,7 @@ import org.ccem.otus.model.dataSources.activity.AnswerFillingDataSourceFilters;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.persistence.*;
@@ -20,6 +21,7 @@ import org.ccem.otus.persistence.*;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 public class ReportServiceBean implements ReportService {
@@ -53,26 +55,36 @@ public class ReportServiceBean implements ReportService {
     }
 
     @Override
-    public ActivityReportTemplate getActivityReport(String activityID) throws DataNotFoundException {
-        SurveyActivity activity = activityService.getByID(activityID);
+    public ActivityReportTemplate getActivityReport(String activityID) throws DataNotFoundException, ValidationException {
         SurveyActivity activities;
+        AnswerFillingDataSourceFilters filters;
+        SurveyActivity activity = activityService.getByID(activityID);
         Long recruitmentNumber = activity.getParticipantData().getRecruitmentNumber();
         String acronym = activity.getSurveyForm().getAcronym();
         Integer version = activity.getSurveyForm().getVersion();
 
-        ActivityReportTemplate report = (ActivityReportTemplate) reportDao.getActivityReport(acronym, version);
-        for (ReportDataSource dataSource : report.getDataSources()) {
-            if (dataSource instanceof AnswerFillingDataSource) {
-                AnswerFillingDataSourceFilters filters = ((AnswerFillingDataSource) dataSource).getFilters();
-                activities = activityService.getActivity(filters.getAcronym(), filters.getVersion(), filters.getCategory(), recruitmentNumber);
-                ((AnswerFillingDataSource) dataSource).fillResult(activities);
-            }
-            if (dataSource instanceof ActivityReportAnswerFillingDataSource) {
-                ((ActivityReportAnswerFillingDataSource) dataSource).fillResult(activity);
-            }
-        }
+        ActivityReportTemplate report = reportDao.getActivityReport(acronym, version);
 
-        fillReport(recruitmentNumber, report);
+        if(activity.isFinalized()){
+            for (ReportDataSource dataSource : report.getDataSources()) {
+                if (dataSource instanceof AnswerFillingDataSource) {
+                    filters = ((AnswerFillingDataSource) dataSource).getFilters();
+                    try {
+                        activities = activityService.getActivity(filters.getAcronym(), filters.getVersion(), filters.getCategory(), recruitmentNumber);
+                    } catch (DataNotFoundException e) {
+                        activities = null;
+                    }
+
+                    ((AnswerFillingDataSource) dataSource).fillResult(activities);
+                }
+                if (dataSource instanceof ActivityReportAnswerFillingDataSource) {
+                    ((ActivityReportAnswerFillingDataSource) dataSource).fillResult(activity);
+                }
+            }
+            fillReport(recruitmentNumber, report);
+        } else {
+            throw new ValidationException(new Throwable("Activity with acronym {" + acronym + " and version " + version +"} not finalized."));
+        }
 
         return report;
     }
@@ -89,6 +101,7 @@ public class ReportServiceBean implements ReportService {
                 ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
             }
         }
+
         return report;
     }
 

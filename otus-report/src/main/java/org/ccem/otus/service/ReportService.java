@@ -11,7 +11,7 @@ public interface ReportService {
 
     ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException;
 
-    ReportTemplate getActivityReport(String activityId) throws DataNotFoundException;
+    ReportTemplate getActivityReport(String activityId) throws DataNotFoundException, ValidationException;
 
     List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException;
 
