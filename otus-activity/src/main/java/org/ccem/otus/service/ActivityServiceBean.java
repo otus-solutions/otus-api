@@ -123,7 +123,7 @@ public class ActivityServiceBean implements ActivityService {
 
   @Override
   public SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException {
-    return activityDao.getFinalizedActivity(acronym, version, categoryName, recruitmentNumber);
+    return activityDao.getLastFinalizedActivity(acronym, version, categoryName, recruitmentNumber);
   }
 
 }

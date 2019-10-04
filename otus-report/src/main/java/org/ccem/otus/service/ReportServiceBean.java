@@ -45,28 +45,14 @@ public class ReportServiceBean implements ReportService {
     public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId) throws DataNotFoundException, ValidationException {
         ObjectId reportObjectId = new ObjectId(reportId);
         ReportTemplate report = reportDao.findReport(reportObjectId);
-        return fillReport(recruitmentNumber, report);
-    }
 
-    private ReportTemplate fillReport(Long recruitmentNumber, ReportTemplate report) throws DataNotFoundException {
-        for (ReportDataSource dataSource : report.getDataSources()) {
-            if (dataSource instanceof ParticipantDataSource) {
-                ((ParticipantDataSource) dataSource).getResult()
-                        .add(participantDataSourceDao.getResult(recruitmentNumber, (ParticipantDataSource) dataSource));
-            } else if (dataSource instanceof ActivityDataSource) {
-                ((ActivityDataSource) dataSource).getResult()
-                        .add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
-            } else if (dataSource instanceof ExamDataSource) {
-                ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
-            }
-        }
+        fillReport(recruitmentNumber, report);
+
         return report;
     }
 
-
     @Override
     public ReportTemplate getActivityReport(String activityID) throws DataNotFoundException, ValidationException {
-
         SurveyActivity activity = activityService.getByID(activityID);
         SurveyActivity activities;
         Long recruitmentNumber = activity.getParticipantData().getRecruitmentNumber();
@@ -85,7 +71,24 @@ public class ReportServiceBean implements ReportService {
             }
         }
 
-        return fillReport(recruitmentNumber, report);
+        fillReport(recruitmentNumber, report);
+
+        return report;
+    }
+
+    private ReportTemplate fillReport(Long recruitmentNumber, ReportTemplate report) throws DataNotFoundException {
+        for (ReportDataSource dataSource : report.getDataSources()) {
+            if (dataSource instanceof ParticipantDataSource) {
+                ((ParticipantDataSource) dataSource).getResult()
+                        .add(participantDataSourceDao.getResult(recruitmentNumber, (ParticipantDataSource) dataSource));
+            } else if (dataSource instanceof ActivityDataSource) {
+                ((ActivityDataSource) dataSource).getResult()
+                        .add(activityDataSourceDao.getResult(recruitmentNumber, (ActivityDataSource) dataSource));
+            } else if (dataSource instanceof ExamDataSource) {
+                ((ExamDataSource) dataSource).getResult().add(examDataSourceDao.getResult(recruitmentNumber, (ExamDataSource) dataSource));
+            }
+        }
+        return report;
     }
 
 

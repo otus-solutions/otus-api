@@ -48,11 +48,8 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		query.put("version",version);
 
 		Document result = this.collection.find(query).first();
-		if (acronym == null) {
-			throw new DataNotFoundException("parameter acronym is NULL.");
-		}
 		if (result == null) {
-			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and " + version +"} not found."));
+			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and version" + version +"} not found."));
 		}
 		return ActivityReportTemplate.deserialize(result.toJson());
 	}
