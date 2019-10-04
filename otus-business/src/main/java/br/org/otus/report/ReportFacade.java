@@ -28,7 +28,7 @@ public class ReportFacade {
     public ReportTemplate getActivityReport(String activityId){
         try {
             return reportService.getActivityReport(activityId);
-        } catch (ValidationException | DataNotFoundException e) {
+        } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }

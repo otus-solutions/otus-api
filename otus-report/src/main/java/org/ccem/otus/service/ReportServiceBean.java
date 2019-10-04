@@ -3,6 +3,7 @@ package org.ccem.otus.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
@@ -52,14 +53,14 @@ public class ReportServiceBean implements ReportService {
     }
 
     @Override
-    public ReportTemplate getActivityReport(String activityID) throws DataNotFoundException, ValidationException {
+    public ActivityReportTemplate getActivityReport(String activityID) throws DataNotFoundException {
         SurveyActivity activity = activityService.getByID(activityID);
         SurveyActivity activities;
         Long recruitmentNumber = activity.getParticipantData().getRecruitmentNumber();
         String acronym = activity.getSurveyForm().getAcronym();
         Integer version = activity.getSurveyForm().getVersion();
 
-        ReportTemplate report = reportDao.getActivityReport(acronym, version);
+        ActivityReportTemplate report = (ActivityReportTemplate) reportDao.getActivityReport(acronym, version);
         for (ReportDataSource dataSource : report.getDataSources()) {
             if (dataSource instanceof AnswerFillingDataSource) {
                 AnswerFillingDataSourceFilters filters = ((AnswerFillingDataSource) dataSource).getFilters();

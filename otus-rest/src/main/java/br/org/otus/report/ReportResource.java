@@ -89,11 +89,10 @@ public class ReportResource {
 	}
 
 	@GET
-//	@Secured
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/activity-report/{activityId}")
 	public String getActivityReport(@PathParam("activityId") String activityId) {
-		//todo para testar
 		return new Response().buildSuccess(reportFacade.getActivityReport(activityId)).toJson(ReportTemplate.getResponseGsonBuilder());
 	}
 }

@@ -5,13 +5,14 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 
 public interface ReportDao {
 
 	ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException;
 
-	ReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException, ValidationException;
+	ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException;
 
 	ReportTemplate insert(ReportTemplate report);
 

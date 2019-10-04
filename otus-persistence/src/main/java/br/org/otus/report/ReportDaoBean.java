@@ -42,14 +42,14 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public ReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException, ValidationException {
+	public ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException {
 		Document query = new Document();
 		query.put("acronym", acronym);
 		query.put("version",version);
 
 		Document result = this.collection.find(query).first();
 		if (result == null) {
-			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and version" + version +"} not found."));
+			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and version " + version +"} not found."));
 		}
 		return ActivityReportTemplate.deserialize(result.toJson());
 	}
