@@ -1,4 +1,4 @@
-# NETWORK
+# NETWORK - CREATE 
 sudo docker network create -d bridge otus-platform-network
 
 # DATABASE - BUILD IMAGE
@@ -12,3 +12,7 @@ sudo docker build --target api -t otus-api .
 
 # API - BUILD CONTAINER
 sudo docker run -v $(pwd)/persistence:/opt/wildfly/standalone/log --network=otus-platform-network -p 51002:8080 -p 51003:9990 --name otus-api otus-api
+
+# NETWORK - CONNECT DB-NETWORK
+sudo docker network connect db-network otus-api 
+
