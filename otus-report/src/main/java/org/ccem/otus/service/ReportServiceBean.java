@@ -6,7 +6,9 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
+import org.ccem.otus.model.dataSources.activity.ActivityReportAnswerFillingDataSource;
 import org.ccem.otus.model.dataSources.activity.AnswerFillingDataSource;
+import org.ccem.otus.model.dataSources.activity.AnswerFillingDataSourceFilters;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -46,7 +48,7 @@ public class ReportServiceBean implements ReportService {
         return fillReport(recruitmentNumber, report);
     }
 
-    private ReportTemplate fillReport(Long recruitmentNumber, ReportTemplate report) throws DataNotFoundException, ValidationException {
+    private ReportTemplate fillReport(Long recruitmentNumber, ReportTemplate report) throws DataNotFoundException {
         for (ReportDataSource dataSource : report.getDataSources()) {
             if (dataSource instanceof ParticipantDataSource) {
                 ((ParticipantDataSource) dataSource).getResult()
@@ -66,6 +68,7 @@ public class ReportServiceBean implements ReportService {
     public ReportTemplate getActivityReport(String activityID) throws DataNotFoundException, ValidationException {
 
         SurveyActivity activity = activityService.getByID(activityID);
+        SurveyActivity activities;
         Long recruitmentNumber = activity.getParticipantData().getRecruitmentNumber();
         String acronym = activity.getSurveyForm().getAcronym();
         Integer version = activity.getSurveyForm().getVersion();
@@ -73,7 +76,12 @@ public class ReportServiceBean implements ReportService {
         ReportTemplate report = reportDao.getActivityReport(acronym, version);
         for (ReportDataSource dataSource : report.getDataSources()) {
             if (dataSource instanceof AnswerFillingDataSource) {
-                ((AnswerFillingDataSource) dataSource).fillResult(activity);
+                AnswerFillingDataSourceFilters filters = ((AnswerFillingDataSource) dataSource).getFilters();
+                activities = activityService.getActivity(filters.getAcronym(), filters.getVersion(), filters.getCategory(), recruitmentNumber);
+                ((AnswerFillingDataSource) dataSource).fillResult(activities);
+            }
+            if (dataSource instanceof ActivityReportAnswerFillingDataSource) {
+                ((ActivityReportAnswerFillingDataSource) dataSource).fillResult(activity);
             }
         }
 

@@ -144,14 +144,21 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     }
 
     @Override
-    public SurveyActivity getActivity(String acronym, Integer version, String categoryName) throws DataNotFoundException {
+    public SurveyActivity getFinalizedActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException {
         Document query = new Document();
         query.put("surveyForm.acronym", acronym);
         query.put("surveyForm.version", version);
         query.put(CATEGORY_NAME_PATH, categoryName);
         query.put("isDiscarded", false);
+        query.put("statusHistory.name", "FINALIZED");
+        query.put("participantData.recruitmentNumber", recruitmentNumber);
 
-        Document result = fetchWithSurveyTemplate(query).first();
+
+        MongoCursor<Document> iterator = fetchWithSurveyTemplate(query).iterator();
+        Document result = null;
+        while (iterator.hasNext()) {
+            result = iterator.next();
+        }
 
         if (result == null) {
             throw new DataNotFoundException(new Throwable("Activity not found"));

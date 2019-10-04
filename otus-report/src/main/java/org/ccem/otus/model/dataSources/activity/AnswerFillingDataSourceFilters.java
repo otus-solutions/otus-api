@@ -1,20 +1,21 @@
 package org.ccem.otus.model.dataSources.activity;
 
-public class ActivityDataSourceFilters {
+public class AnswerFillingDataSourceFilters {
 	
 	private String acronym = null;
+	private Integer version = null;
 	private String category = null;
-	private ActivityDataSourceStatusHistoryFilter statusHistory = null;
 
 	public String getAcronym() {
 		return acronym;
+	}
+
+	public Integer getVersion() {
+		return version;
 	}
 
 	public String getCategory() {
 		return category;
 	}
 
-	public ActivityDataSourceStatusHistoryFilter getStatusHistory() {
-		return statusHistory;
-	}
 }

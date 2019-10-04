@@ -9,9 +9,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class AnswerFillingDataSource extends ReportDataSource<QuestionFill> {
-
-    private AnswerFillingDataSourceFilters filters;
+public class ActivityReportAnswerFillingDataSource extends ReportDataSource<QuestionFill> {
 
     @Override
     public void addResult(QuestionFill result) {
@@ -21,10 +19,6 @@ public class AnswerFillingDataSource extends ReportDataSource<QuestionFill> {
     @Override
     public ArrayList<Document> buildQuery(Long recruitmentNumber) {
         return null;
-    }
-
-    public AnswerFillingDataSourceFilters getFilters() {
-        return filters;
     }
 
     public void fillResult(SurveyActivity activity) {

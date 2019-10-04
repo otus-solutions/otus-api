@@ -20,5 +20,5 @@ public interface ActivityService {
 
     boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException;
 
-    SurveyActivity getActivity(String acronym, Integer version, String categoryName) throws DataNotFoundException;
+    SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException;
 }

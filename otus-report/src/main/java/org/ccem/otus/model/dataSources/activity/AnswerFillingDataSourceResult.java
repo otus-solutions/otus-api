@@ -7,10 +7,6 @@ import org.ccem.otus.utils.AnswerAdapter;
 
 public class AnswerFillingDataSourceResult extends QuestionFill {
 
-    public AnswerFillingDataSourceResult(QuestionFill questionFill) {
-
-    }
-
     public static String serialize(AnswerFillingDataSourceResult answerFillingDataSourceResult) {
         return getGsonBuilder().create().toJson(answerFillingDataSourceResult);
     }

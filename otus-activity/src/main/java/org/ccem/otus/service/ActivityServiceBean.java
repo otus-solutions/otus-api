@@ -122,8 +122,8 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public SurveyActivity getActivity (String acronym, Integer version, String categoryName) throws DataNotFoundException {
-    return activityDao.getActivity(acronym, version, categoryName);
+  public SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException {
+    return activityDao.getFinalizedActivity(acronym, version, categoryName, recruitmentNumber);
   }
 
 }

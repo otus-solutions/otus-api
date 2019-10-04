@@ -1,11 +1,11 @@
 package org.ccem.otus.model;
 
-public class ActivityReport extends ReportTemplate{
+public class ActivityReportTemplate extends ReportTemplate{
 
     private String acronym;
     private Integer version;
 
-    public ActivityReport (){
+    public ActivityReportTemplate(){
         super();
     }
 

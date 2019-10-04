@@ -9,7 +9,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.ActivityReport;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportDao;
 import org.ccem.otus.persistence.ReportTemplateDTO;
@@ -43,11 +43,9 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 
 	@Override
 	public ReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException, ValidationException {
-		//todo buscar por acronym e version
 		Document query = new Document();
 		query.put("acronym", acronym);
 		query.put("version",version);
-//		query.put("label", acronym);
 
 		Document result = this.collection.find(query).first();
 		if (acronym == null) {
@@ -56,7 +54,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		if (result == null) {
 			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and " + version +"} not found."));
 		}
-		return ActivityReport.deserialize(result.toJson());
+		return ActivityReportTemplate.deserialize(result.toJson());
 	}
 
 	@Override
