@@ -76,16 +76,11 @@ public class ReportResourceTest {
 
 	private ReportTemplate reportTemplate;
 
-	private ActivityReportTemplate activityreportTemplate;
+	private ActivityReportTemplate activityReportTemplate;
 
 	List<ReportTemplate> reports = new ArrayList<>();
 
 	ObjectId id = new ObjectId("5ab128d713cdd20490497f58");
-
-	@Before
-	public void setUp() throws Exception {
-
-	}
 
 	@Test
 	public void method_getParticipantReport_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
@@ -98,9 +93,9 @@ public class ReportResourceTest {
 
 	@Test
 	public void method_getActivityReport_should_return_report_activity() throws DataNotFoundException {
-		activityreportTemplate = new ActivityReportTemplate();
-		Whitebox.setInternalState(activityreportTemplate, "_id", id);
-		when(reportFacade.getActivityReport(REPORT_ID)).thenReturn(activityreportTemplate);
+		activityReportTemplate = new ActivityReportTemplate();
+		Whitebox.setInternalState(activityReportTemplate, "_id", id);
+		when(reportFacade.getActivityReport(REPORT_ID)).thenReturn(activityReportTemplate);
 		assertEquals(REPORTS_ACTIVITY, reportResource.getActivityReport(REPORT_ID));
 	}
 
