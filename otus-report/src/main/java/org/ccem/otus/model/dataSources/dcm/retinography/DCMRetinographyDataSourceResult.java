@@ -13,7 +13,6 @@ import com.google.gson.JsonParser;
 
 public class DCMRetinographyDataSourceResult {
 
-  private String id;
   private LocalDateTime date;
   private String eye;
   private String result;
