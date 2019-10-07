@@ -5,6 +5,7 @@ import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
 
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 
 import javax.inject.Inject;
@@ -89,10 +90,10 @@ public class ReportResource {
 	}
 
 	@GET
-//	@Secured
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/activity-report/{activityId}")
 	public String getActivityReport(@PathParam("activityId") String activityId) {
-		return new Response().buildSuccess(reportFacade.getActivityReport(activityId)).toJson(ReportTemplate.getResponseGsonBuilder());
+		return new Response().buildSuccess(reportFacade.getActivityReport(activityId)).toJson(ActivityReportTemplate.getResponseGsonBuilder());
 	}
 }

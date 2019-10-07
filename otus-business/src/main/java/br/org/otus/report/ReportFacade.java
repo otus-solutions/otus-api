@@ -10,6 +10,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.service.ReportService;
@@ -27,7 +28,7 @@ public class ReportFacade {
         }
     }
 
-    public ReportTemplate getActivityReport(String activityId){
+    public ActivityReportTemplate getActivityReport(String activityId){
         try {
             return reportService.getActivityReport(activityId);
         } catch (DataNotFoundException e) {
