@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.builders.Security;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -28,8 +29,12 @@ public class ReportFacade {
     public ReportTemplate getActivityReport(String activityId){
         try {
             return reportService.getActivityReport(activityId);
-        } catch (DataNotFoundException | ValidationException e) {
+        } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
+        } catch (ValidationException e) {
+            throw new HttpResponseException(
+                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
         }
     }
     
