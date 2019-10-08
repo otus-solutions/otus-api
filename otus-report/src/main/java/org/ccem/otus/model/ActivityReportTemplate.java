@@ -10,7 +10,7 @@ public class ActivityReportTemplate extends ReportTemplate{
         super();
     }
 
-    public static ActivityReportTemplate deserialize(String reportTemplateJson) {
-        return ReportTemplate.getGsonBuilder().create().fromJson(reportTemplateJson, ActivityReportTemplate.class);
+    public static ActivityReportTemplate deserialize(String activityReportTemplateJson) {
+        return ReportTemplate.getGsonBuilder().create().fromJson(activityReportTemplateJson, ActivityReportTemplate.class);
     }
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.bson.Document;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSource;
-import org.ccem.otus.model.dataSources.activity.ActivityDataSourceFilters;
 import org.ccem.otus.model.dataSources.activity.ActivityDataSourceResult;
 import org.ccem.otus.persistence.ActivityDataSourceDao;
 import org.json.JSONObject;
@@ -14,8 +13,6 @@ import com.mongodb.client.AggregateIterable;
 import br.org.mongodb.MongoGenericDao;
 
 public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> implements ActivityDataSourceDao {
-
-	private ActivityDataSourceFilters filters;
 
 	private static final String COLLECTION_NAME = "activity";
 
