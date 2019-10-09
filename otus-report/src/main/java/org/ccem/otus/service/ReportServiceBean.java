@@ -13,7 +13,6 @@ import org.ccem.otus.model.dataSources.activity.AnswerFillingDataSourceFilters;
 import org.ccem.otus.model.dataSources.exam.ExamDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.persistence.*;
@@ -21,7 +20,6 @@ import org.ccem.otus.persistence.*;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
 @Stateless
 public class ReportServiceBean implements ReportService {

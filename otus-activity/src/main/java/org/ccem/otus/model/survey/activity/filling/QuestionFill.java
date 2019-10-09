@@ -4,7 +4,7 @@ public class QuestionFill {
 
 	private String objectType;
 	private String questionID;
-	private String customID; //todo: testar funcionamento no sistema
+	private String customID;
 	private AnswerFill answer;
 	private boolean forceAnswer;
 	private MetadataFill metadata;
