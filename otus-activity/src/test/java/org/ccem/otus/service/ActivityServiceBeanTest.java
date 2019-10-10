@@ -37,6 +37,8 @@ public class ActivityServiceBeanTest {
   private static final Integer VERSION = 1;
   private static final String USER_EMAIL = "otus@gmail.com";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+  private static final String ACRONYM = "ACTA";
+  private static final String CATEGORY_NAME = "C0";
 
   @InjectMocks
   private ActivityServiceBean service;
@@ -125,4 +127,19 @@ public class ActivityServiceBeanTest {
     service.updateCheckerActivity(checkerUpdated);
     verify(activityDao, times(1)).updateCheckerActivity(checkerUpdatedDTO);
   }
+
+  @Test
+  public void method_getActivity_should_call_ActivityDao_getLastFinalizedActivity() throws DataNotFoundException {
+    service.getActivity(ACRONYM, VERSION,CATEGORY_NAME, RECRUIMENT_NUMBER);
+    verify(activityDao, times(1)).getLastFinalizedActivity(ACRONYM, VERSION,CATEGORY_NAME, RECRUIMENT_NUMBER);
+  }
+
+  @Test(expected = DataNotFoundException.class)
+	public void method_getActivity_should_throw_HttpResponseException()
+			throws DataNotFoundException {
+		doThrow(new DataNotFoundException(
+				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(activityDao)
+						.getLastFinalizedActivity(ACRONYM, VERSION,CATEGORY_NAME, RECRUIMENT_NUMBER);
+		service.getActivity(ACRONYM, VERSION,CATEGORY_NAME, RECRUIMENT_NUMBER);
+	}
 }

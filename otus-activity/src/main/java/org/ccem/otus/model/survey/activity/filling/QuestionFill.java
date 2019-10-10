@@ -4,6 +4,7 @@ public class QuestionFill {
 
 	private String objectType;
 	private String questionID;
+	private String customID;
 	private AnswerFill answer;
 	private boolean forceAnswer;
 	private MetadataFill metadata;
@@ -31,6 +32,10 @@ public class QuestionFill {
 
 	public boolean isForceAnswer() {
 		return forceAnswer;
+	}
+
+	public void setCustomID(String customID) {
+		this.customID = customID;
 	}
 
 	public ExtractionFill extraction() {
