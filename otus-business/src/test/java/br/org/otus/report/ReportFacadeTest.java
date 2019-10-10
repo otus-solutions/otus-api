@@ -12,6 +12,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
@@ -35,13 +36,13 @@ import br.org.otus.response.exception.HttpResponseException;
 @PrepareForTest({ ReportFacadeTest.class, ReportTemplate.class })
 public class ReportFacadeTest {
 	private static final String USER_MAIL = "otus@otus.com";
-	private static final String REPORTID = "5a9199056ddc4f48a340b3ec";
+	private static final String REPORT_ID = "5a9199056ddc4f48a340b3ec";
 	private static final String RESULT = "{\"data\":true}";
 	private static final String reportUploadJson = "{\"template\" : \"<span></span>\",\"label\": \"tiago\",\"fieldCenter\": [],\"dataSources\" : [{\"key\" : \"HS\",\"label\": \"tester\", \"dataSource\" : \"Participant\",\"filters\" : {\"statusHistory\" : {\"name\" : \"FINALIZED\",\"position\" : -1},\"acronym\" : \"TF\",\"category\" : \"C0\"}}]}";
 	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 	Long RECRUITMENTNUMBER = 322148795L;
 	private ReportTemplate reportTemplate = new ReportTemplate();
-	
+
 	@InjectMocks
 	private ReportFacade reportFacade;
 	@Mock
@@ -50,6 +51,8 @@ public class ReportFacadeTest {
 	private ReportServiceBean reportServiceBean;
 	@Mock
 	private String userEmail;
+
+	private ActivityReportTemplate activityReportTemplate;
 
 	private ObjectId objectId = new ObjectId("5a9199056ddc4f48a340b3ec");
 
@@ -63,8 +66,8 @@ public class ReportFacadeTest {
 		Whitebox.setInternalState(reportTemplate, "template", template);
 		Whitebox.setInternalState(reportTemplate, "dataSources", new ArrayList<>());
 		reportTemplate.getDataSources().add(participantDataSource);
-		when(reportService.getParticipantReport(RECRUITMENTNUMBER, REPORTID)).thenReturn(reportTemplate);
-		assertTrue(reportFacade.getParticipantReport(RECRUITMENTNUMBER, REPORTID) instanceof ReportTemplate);
+		when(reportService.getParticipantReport(RECRUITMENTNUMBER, REPORT_ID)).thenReturn(reportTemplate);
+		assertTrue(reportFacade.getParticipantReport(RECRUITMENTNUMBER, REPORT_ID) instanceof ReportTemplate);
 	}
 
 	@Test(expected = HttpResponseException.class)
@@ -72,21 +75,21 @@ public class ReportFacadeTest {
 			throws HttpResponseException, DataNotFoundException, ValidationException {
 		doThrow(new DataNotFoundException(
 				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService)
-						.getParticipantReport(RECRUITMENTNUMBER, REPORTID);
-		reportFacade.getParticipantReport(RECRUITMENTNUMBER, REPORTID);
+						.getParticipantReport(RECRUITMENTNUMBER, REPORT_ID);
+		reportFacade.getParticipantReport(RECRUITMENTNUMBER, REPORT_ID);
 	}
 
 	@Test
 	public void method_getReportByParticipant_should_returns_list_reports() throws DataNotFoundException, ValidationException {
 		ReportTemplate reportTemplate = new ReportTemplate();
 		ArrayList<ReportTemplateDTO> reports = new ArrayList<>();
-		
+
 		Whitebox.setInternalState(reportTemplate, "_id", objectId);
 		Whitebox.setInternalState(reportTemplate, "label", "teste");
 		reports.add(new ReportTemplateDTO(reportTemplate));
-		
+
 		PowerMockito.when(reportService.getReportByParticipant(RECRUITMENTNUMBER)).thenReturn(reports);
-		
+
 		assertEquals(reports, reportFacade.getReportByParticipant(RECRUITMENTNUMBER));
 
 	}
@@ -123,26 +126,26 @@ public class ReportFacadeTest {
 		).when(reportService).create(Mockito.anyObject());
 		reportFacade.create(reportUploadJson, Mockito.anyString());
 	}
-	
+
 	@Test
 	public void method_delete_should_remove_report() throws Exception {
-		PowerMockito.doNothing().when(reportService,"delete",REPORTID);
-		reportFacade.deleteById(REPORTID);
+		PowerMockito.doNothing().when(reportService,"delete", REPORT_ID);
+		reportFacade.deleteById(REPORT_ID);
 	}
-	
+
 	@Test(expected = HttpResponseException.class)
 	public void method_delete_should_throw_DataNotFoundException() throws Exception {
-		PowerMockito.doNothing().when(reportService,"delete",REPORTID);
+		PowerMockito.doNothing().when(reportService,"delete", REPORT_ID);
 		doThrow(new DataNotFoundException(
 				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).delete(Mockito.anyString());
-		reportFacade.deleteById(REPORTID);
+		reportFacade.deleteById(REPORT_ID);
 	}
-	
+
 	@Test
 	public void method_list_should_returns_list_reports() throws ValidationException {
 		ReportTemplate reportTemplate = new ReportTemplate();
 		ArrayList<String> fieldCenter = new ArrayList<>();
-		ArrayList<ReportDataSource> dataSources = new ArrayList<>();	
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
 		fieldCenter.add("SP");
 		dataSources = reportTemplate.getDataSources();
 		List<ReportTemplate> reports = new ArrayList<>();
@@ -154,14 +157,14 @@ public class ReportFacadeTest {
 		reports.add(reportTemplate);
 		PowerMockito.when(reportService.list()).thenReturn(reports);
 		assertEquals(reports, reportFacade.list());
-		
+
 	}
-	
+
 	@Test
 	public void method_getById_should_return_report() throws DataNotFoundException, ValidationException {
 		ReportTemplate reportTemplate = new ReportTemplate();
 		ArrayList<String> fieldCenter = new ArrayList<>();
-		ArrayList<ReportDataSource> dataSources = new ArrayList<>();	
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
 		fieldCenter.add("SP");
 		dataSources = reportTemplate.getDataSources();
 		List<ReportTemplate> reports = new ArrayList<>();
@@ -171,24 +174,24 @@ public class ReportFacadeTest {
 		Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
 		Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
 		reports.add(reportTemplate);
-		PowerMockito.when(reportService.getByID(REPORTID)).thenReturn(reportTemplate);
-		assertEquals(reportTemplate, reportFacade.getById(REPORTID));
-		
+		PowerMockito.when(reportService.getByID(REPORT_ID)).thenReturn(reportTemplate);
+		assertEquals(reportTemplate, reportFacade.getById(REPORT_ID));
+
 	}
-	
+
 	@Test(expected = HttpResponseException.class)
 	public void method_getById_should_throw_DataNotFoundException() throws Exception {
 		doThrow(new DataNotFoundException(
 				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).getByID(Mockito.anyString());
-		reportFacade.getById(REPORTID);
+		reportFacade.getById(REPORT_ID);
 	}
-	
+
 	@Test
 	public void method_update_should_alter_report() throws Exception {
 		ReportTemplate reportTemplate = new ReportTemplate();
 		ReportTemplate updateReport = new ReportTemplate();
 		ArrayList<String> fieldCenter = new ArrayList<>();
-		ArrayList<ReportDataSource> dataSources = new ArrayList<>();	
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
 		fieldCenter.add("SP");
 		dataSources = report.getDataSources();
 
@@ -202,13 +205,13 @@ public class ReportFacadeTest {
 		Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
 		Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
 		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
-		mockStatic(ReportTemplate.class);		
+		mockStatic(ReportTemplate.class);
 		PowerMockito.when(ReportTemplate.class, "deserialize", Mockito.any()).thenReturn(updateReport);
 		PowerMockito.when(ReportTemplate.class, "serialize", Mockito.any()).thenReturn(reportUploadJson);
 		PowerMockito.when(reportService.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
 		assertEquals(updateReport, reportFacade.updateFieldCenters(reportUploadJson));
-		
-		
+
+
 	}
 	@Test(expected = HttpResponseException.class)
 	public void method_update_should_throw_DataNotFoundException()
@@ -217,7 +220,7 @@ public class ReportFacadeTest {
 				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService).updateFieldCenters(Mockito.anyObject());
 		reportFacade.updateFieldCenters(reportUploadJson);
 	}
-	
+
 	@Test(expected = HttpResponseException.class)
 	public void method_update_should_throw_ValidationException()
 			throws HttpResponseException, DataNotFoundException, ValidationException {
@@ -225,6 +228,45 @@ public class ReportFacadeTest {
 				new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService).updateFieldCenters(Mockito.anyObject());
 		reportFacade.updateFieldCenters(reportUploadJson);
 	}
-	
-	
+
+
+	@Test
+	public void method_getActivityReport_should_returns_report() throws DataNotFoundException, ValidationException {
+		activityReportTemplate = new ActivityReportTemplate();
+		ActivityReportTemplate updateReport = new ActivityReportTemplate();
+		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+
+		Whitebox.setInternalState(activityReportTemplate, "_id", objectId);
+		Whitebox.setInternalState(activityReportTemplate, "label", "teste");
+		Whitebox.setInternalState(activityReportTemplate, "template", "<span></span>");
+		Whitebox.setInternalState(activityReportTemplate, "dataSources", dataSources);
+		Whitebox.setInternalState(updateReport, "_id", objectId);
+		Whitebox.setInternalState(updateReport, "label", "teste");
+		Whitebox.setInternalState(updateReport, "template", "<span></span>");
+		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
+
+		PowerMockito.when(reportService.getActivityReport(REPORT_ID)).thenReturn(activityReportTemplate);
+
+		assertEquals(ActivityReportTemplate.serialize(updateReport), ActivityReportTemplate.serialize(reportFacade.getActivityReport(REPORT_ID)));
+
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_getActivityReport_should_throw_HttpResponseException()
+			throws HttpResponseException, DataNotFoundException, ValidationException {
+		doThrow(new DataNotFoundException(
+				new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(reportService)
+						.getActivityReport(REPORT_ID);
+		reportFacade.getActivityReport(REPORT_ID);
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void method_getActivityReport_should_throw_HttpResponseException_ValidationException()
+			throws HttpResponseException, DataNotFoundException, ValidationException {
+		doThrow(new ValidationException(
+				new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService)
+						.getActivityReport(REPORT_ID);
+		reportFacade.getActivityReport(REPORT_ID);
+	}
+
 }

@@ -12,6 +12,7 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.persistence.ReportTemplateDTO;
@@ -53,6 +54,7 @@ public class ReportResourceTest {
 	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
 	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
+	private static final Object REPORTS_ACTIVITY = "{\"data\":{\"objectType\":null,\"acronym\":null,\"version\":null,\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
 	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 
 	@InjectMocks
@@ -74,14 +76,11 @@ public class ReportResourceTest {
 
 	private ReportTemplate reportTemplate;
 
+	private ActivityReportTemplate activityReportTemplate;
+
 	List<ReportTemplate> reports = new ArrayList<>();
 
 	ObjectId id = new ObjectId("5ab128d713cdd20490497f58");
-
-	@Before
-	public void setUp() throws Exception {
-
-	}
 
 	@Test
 	public void method_getParticipantReport_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
@@ -90,6 +89,14 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(reportTemplate, "label", label);
 		when(reportFacade.getParticipantReport(recruitmentNumber, REPORT_ID)).thenReturn(reportTemplate);
 		assertEquals(REPORT_BY_RN, reportResource.getParticipantReport(recruitmentNumber, REPORT_ID));
+	}
+
+	@Test
+	public void method_getActivityReport_should_return_report_activity() throws DataNotFoundException {
+		activityReportTemplate = new ActivityReportTemplate();
+		Whitebox.setInternalState(activityReportTemplate, "_id", id);
+		when(reportFacade.getActivityReport(REPORT_ID)).thenReturn(activityReportTemplate);
+		assertEquals(REPORTS_ACTIVITY, reportResource.getActivityReport(REPORT_ID));
 	}
 
 	@Test
