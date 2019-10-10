@@ -5,6 +5,8 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -45,7 +47,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	public ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException {
 		Document query = new Document();
 		query.put("acronym", acronym);
-		query.put("version",version);
+		query.put("versions",version);
 
 		Document result = this.collection.find(query).first();
 		if (result == null) {
@@ -135,5 +137,17 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		}
 
 		return reportTemplate;
+	}
+
+	@Override
+	public List<ActivityReportTemplate> getActivityReportList(String acronym) {
+		ArrayList<ActivityReportTemplate> results = new ArrayList<>();
+
+		FindIterable<Document> result = collection.find(eq("acronym", acronym));
+    result.forEach((Block<Document>) document -> {
+      results.add(ActivityReportTemplate.deserialize(document.toJson()));
+    });
+
+		return results;
 	}
 }

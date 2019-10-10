@@ -142,4 +142,9 @@ public class ReportServiceBean implements ReportService {
         return reportDao.insertActivityReport(activityReportTemplate);
     }
 
+    @Override
+    public List<ActivityReportTemplate> getActivityReportList(String acronym) {
+        return reportDao.getActivityReportList(acronym);
+    }
+
 }

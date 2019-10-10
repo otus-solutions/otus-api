@@ -102,4 +102,8 @@ public class ReportFacade {
         insertedReport = reportService.createActivityReport(activityReportTemplate);
         return insertedReport;
     }
+
+    public List<ActivityReportTemplate> getActivityReportList(String acronym) {
+        return reportService.getActivityReportList(acronym);
+    }
 }

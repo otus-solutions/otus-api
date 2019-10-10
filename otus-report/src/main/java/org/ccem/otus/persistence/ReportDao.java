@@ -28,4 +28,5 @@ public interface ReportDao {
 
 	ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException;
 
+	List<ActivityReportTemplate> getActivityReportList(String acronym);
 }

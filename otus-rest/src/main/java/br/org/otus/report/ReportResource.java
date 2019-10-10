@@ -107,4 +107,13 @@ public class ReportResource {
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 		return new Response().buildSuccess(reportFacade.createActivityReport(activityReportTemplateJson, userEmail)).toJson(ActivityReportTemplate.getGsonBuilder());
 	}
+
+	@GET
+//	@Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/activity-report/list/{acronym}")
+	public String getActivityReportList(@PathParam("acronym") String acronym) {
+		return new Response().buildSuccess(reportFacade.getActivityReportList(acronym)).toJson(ActivityReportTemplate.getResponseGsonBuilder());
+	}
+
 }

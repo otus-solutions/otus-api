@@ -1,10 +1,12 @@
 package org.ccem.otus.model;
 
+import java.util.ArrayList;
+
 public class ActivityReportTemplate extends ReportTemplate{
 
     private String objectType;
     private String acronym;
-    private Integer version;
+    private ArrayList<Integer> versions;
 
     public ActivityReportTemplate(){
         super();
