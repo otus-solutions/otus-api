@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ public class ReportServiceBeanTest {
   private Long RECRUITMENT_NUMBER = (Long) 322148795L;
   private static final String REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}";
   private String template = "<span>teste</span>";
-  private String RESPONSE_TO_RETINOGRAPHY = "{\"date\":\"2019-09-09T17:40:34.699Z\",eye\":\"left\",result\":\"R0lGODlhPQBEAPeoAJos595kzAP\"}";
+  private String RESPONSE_TO_RETINOGRAPHY = "[{\"date\":\"2019-09-09T17:40:34.699Z\",eye\":\"left\",result\":\"R0lGODlhPQBEAPeoAJos595kzAP\"}]";
   private ReportTemplate reportTemplate;
 
   @InjectMocks

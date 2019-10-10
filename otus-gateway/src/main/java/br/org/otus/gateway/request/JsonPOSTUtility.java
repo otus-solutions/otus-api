@@ -1,12 +1,12 @@
 package br.org.otus.gateway.request;
 
-import br.org.otus.gateway.response.exception.RequestException;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
+import br.org.otus.gateway.response.exception.RequestException;
 
 public class JsonPOSTUtility {
   private HttpURLConnection httpConn;
