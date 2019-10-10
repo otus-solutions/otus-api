@@ -15,7 +15,7 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import com.google.gson.GsonBuilder;
 
-public class ReportTemplate {
+public class ReportTemplate{
 	private ObjectId _id;
 	private String template;
 	private String label;

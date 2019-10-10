@@ -121,4 +121,9 @@ public class ActivityServiceBean implements ActivityService {
     return activityDao.updateCheckerActivity(checkerUpdatedDTO);
   }
 
+  @Override
+  public SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException {
+    return activityDao.getLastFinalizedActivity(acronym, version, categoryName, recruitmentNumber);
+  }
+
 }

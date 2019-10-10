@@ -35,4 +35,5 @@ public class ActivityDataSourceResult {
   public ActivityMode getMode() {
     return mode;
   }
+
 }
