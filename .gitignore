@@ -16,3 +16,4 @@
 **/.sonar
 **/*npm-debug.log
 database/persistence/**
+persistence/
