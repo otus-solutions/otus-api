@@ -14,6 +14,8 @@ public interface ReportDao {
 
 	ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException;
 
+	ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate);
+
 	ReportTemplate insert(ReportTemplate report);
 
 	void deleteById(String id) throws DataNotFoundException;

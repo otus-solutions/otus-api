@@ -137,4 +137,9 @@ public class ReportServiceBean implements ReportService {
         return reportDao.updateFieldCenters(reportTemplate);
     }
 
+    @Override
+    public ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate) {
+        return reportDao.insertActivityReport(activityReportTemplate);
+    }
+
 }

@@ -19,7 +19,7 @@ public class ReportFacade {
 
     @Inject
     private ReportService reportService;
-    
+
     public ReportTemplate getParticipantReport(Long recruitmentNumber, String reportId){
         try {
             return reportService.getParticipantReport(recruitmentNumber, reportId);
@@ -39,7 +39,7 @@ public class ReportFacade {
                     Security.Validation.build(e.getCause().getMessage(), e.getData()));
         }
     }
-    
+
     public List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber){
         try {
             return reportService.getReportByParticipant(recruitmentNumber);
@@ -47,10 +47,10 @@ public class ReportFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
-    
+
     public ReportTemplate create(String reportUploadJson, String userEmail){
-    	ReportTemplate insertedReport;
-    	try {
+        ReportTemplate insertedReport;
+        try {
             ReportTemplate reportTemplate = ReportTemplate.deserialize(reportUploadJson);
             reportTemplate.setSender(userEmail);
             insertedReport = reportService.create(reportTemplate);
@@ -59,15 +59,15 @@ public class ReportFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
-    
+
     public void deleteById(String id){
         try {
-        	reportService.delete(id);
+            reportService.delete(id);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
         }
     }
-    
+
     public List<ReportTemplate> list(){
         try {
             return reportService.list();
@@ -75,7 +75,7 @@ public class ReportFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
-    
+
     public ReportTemplate getById(String id){
         try {
             return reportService.getByID(id);
@@ -85,9 +85,9 @@ public class ReportFacade {
             throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
         }
     }
-    
+
     public ReportTemplate updateFieldCenters(String updateReportJson) {
-    	try {
+        try {
             ReportTemplate reportTemplate = ReportTemplate.deserialize(updateReportJson);
             return reportService.updateFieldCenters(reportTemplate);
         } catch (DataNotFoundException | ValidationException e) {
@@ -95,4 +95,11 @@ public class ReportFacade {
         }
     }
 
+    public ActivityReportTemplate createActivityReport(String activityReportTemplateJson, String userEmail) {
+        ActivityReportTemplate insertedReport;
+        ActivityReportTemplate activityReportTemplate =  ActivityReportTemplate.deserialize(activityReportTemplateJson);
+        activityReportTemplate.setSender(userEmail);
+        insertedReport = reportService.createActivityReport(activityReportTemplate);
+        return insertedReport;
+    }
 }

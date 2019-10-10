@@ -26,4 +26,5 @@ public interface ReportService {
     
     ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
 
+    ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate);
 }

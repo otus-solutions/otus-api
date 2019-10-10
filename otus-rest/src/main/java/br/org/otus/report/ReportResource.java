@@ -96,4 +96,15 @@ public class ReportResource {
 	public String getActivityReport(@PathParam("activityId") String activityId) {
 		return new Response().buildSuccess(reportFacade.getActivityReport(activityId)).toJson(ActivityReportTemplate.getResponseGsonBuilder());
 	}
+
+	@POST
+	@Secured
+	@Path("/activity-report")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String createActivityReport(@Context HttpServletRequest request, String activityReportTemplateJson) {
+		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+		return new Response().buildSuccess(reportFacade.createActivityReport(activityReportTemplateJson, userEmail)).toJson(ActivityReportTemplate.getGsonBuilder());
+	}
 }

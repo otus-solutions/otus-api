@@ -55,6 +55,14 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
+	public ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) {
+		Document parsed = Document.parse(ActivityReportTemplate.serialize(activityReportTemplate));
+		super.persist(parsed);
+		activityReportTemplate.setId((ObjectId) parsed.get("_id"));
+		return activityReportTemplate;
+	}
+
+	@Override
 	public ReportTemplate insert(ReportTemplate reportTemplate) {
 		Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
 		super.persist(parsed);
@@ -68,7 +76,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		DeleteResult deleteResult = collection.deleteOne(query);
 
 		if (deleteResult.getDeletedCount() == 0) {
-			throw new DataNotFoundException(new Throwable("ExamReport not found. Id: " + id));
+			throw new DataNotFoundException(new Throwable("Report not found. Id: " + id));
 		}
 
 	}
