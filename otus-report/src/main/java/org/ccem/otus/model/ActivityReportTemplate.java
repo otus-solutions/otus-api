@@ -8,6 +8,15 @@ public class ActivityReportTemplate extends ReportTemplate{
     private String acronym;
     private ArrayList<Integer> versions;
 
+
+    public String getAcronym() {
+        return acronym;
+    }
+
+    public ArrayList<Integer> getVersions() {
+        return versions;
+    }
+
     public ActivityReportTemplate(){
         super();
     }

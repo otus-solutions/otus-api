@@ -25,7 +25,9 @@ public interface ReportService {
     
     ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException, ValidationException;
 
-    ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate);
+    ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException;
 
-    List<ActivityReportTemplate> getActivityReportList(String acronym);
+    List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException;
+
+    void updateActivityReport(String activityId, String updateActivityReport) throws DataNotFoundException;
 }

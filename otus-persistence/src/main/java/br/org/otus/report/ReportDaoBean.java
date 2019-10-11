@@ -50,18 +50,71 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		query.put("versions",version);
 
 		Document result = this.collection.find(query).first();
+
 		if (result == null) {
 			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and version " + version +"} not found."));
 		}
+
 		return ActivityReportTemplate.deserialize(result.toJson());
 	}
 
 	@Override
-	public ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) {
+	public ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException {
+
+		String acronym = activityReportTemplate.getAcronym();
+		List<Integer> version = activityReportTemplate.getVersions();
 		Document parsed = Document.parse(ActivityReportTemplate.serialize(activityReportTemplate));
-		super.persist(parsed);
-		activityReportTemplate.setId((ObjectId) parsed.get("_id"));
+
+		if(findVersionActivityReport(acronym, version)){
+			super.persist(parsed);
+			activityReportTemplate.setId((ObjectId) parsed.get("_id"));
+		} else {
+			throw new ValidationException(new Throwable("Activity Report with acronym {" + acronym + " and version " + version +"} exists in base."));
+		}
+
 		return activityReportTemplate;
+	}
+
+	@Override
+	public List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException {
+		ArrayList<ActivityReportTemplate> results = new ArrayList<>();
+
+		FindIterable<Document> result = collection.find(eq("acronym", acronym));
+		result.forEach((Block<Document>) document -> {
+			results.add(ActivityReportTemplate.deserialize(document.toJson()));
+		});
+
+		if (results.isEmpty()) {
+			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + "} not found."));
+		}
+
+		return results;
+	}
+
+	@Override
+	public void updateActivityReport(ObjectId activityId, ArrayList<Integer> versions) throws DataNotFoundException {
+
+		UpdateResult updateReportData = collection.updateOne(eq("_id", activityId), new Document("$set", new Document("versions", versions)));
+
+		if (updateReportData.getMatchedCount() == 0) {
+			throw new DataNotFoundException(new Throwable("Activity Report not found"));
+		}
+
+	}
+
+	private Boolean findVersionActivityReport(String acronym, List<Integer> version) {
+		Boolean confirmation = false;
+		Document query = new Document();
+		query.put("acronym", acronym);
+		query.put("versions",version);
+
+		Document result = this.collection.find(query).first();
+
+		if(result == null){
+			confirmation = true;
+		}
+
+		return confirmation;
 	}
 
 	@Override
@@ -137,17 +190,5 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		}
 
 		return reportTemplate;
-	}
-
-	@Override
-	public List<ActivityReportTemplate> getActivityReportList(String acronym) {
-		ArrayList<ActivityReportTemplate> results = new ArrayList<>();
-
-		FindIterable<Document> result = collection.find(eq("acronym", acronym));
-    result.forEach((Block<Document>) document -> {
-      results.add(ActivityReportTemplate.deserialize(document.toJson()));
-    });
-
-		return results;
 	}
 }

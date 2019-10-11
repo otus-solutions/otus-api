@@ -99,9 +99,9 @@ public class ReportResource {
 
 	@POST
 	@Secured
-	@Path("/activity-report")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/activity-report")
 	public String createActivityReport(@Context HttpServletRequest request, String activityReportTemplateJson) {
 		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
@@ -109,11 +109,20 @@ public class ReportResource {
 	}
 
 	@GET
-//	@Secured
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/activity-report/list/{acronym}")
 	public String getActivityReportList(@PathParam("acronym") String acronym) {
 		return new Response().buildSuccess(reportFacade.getActivityReportList(acronym)).toJson(ActivityReportTemplate.getResponseGsonBuilder());
+	}
+
+	@PUT
+	@Secured
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/activity-report/update/{activityId}")
+	public String updateActivityReport(@PathParam("activityId") String activityId, String activityReportJson) {
+		reportFacade.updateActivityReport(activityId, activityReportJson);
+		return new Response().buildSuccess().toJson();
 	}
 
 }

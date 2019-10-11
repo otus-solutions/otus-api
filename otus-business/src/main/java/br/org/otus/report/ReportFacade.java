@@ -97,13 +97,29 @@ public class ReportFacade {
 
     public ActivityReportTemplate createActivityReport(String activityReportTemplateJson, String userEmail) {
         ActivityReportTemplate insertedReport;
-        ActivityReportTemplate activityReportTemplate =  ActivityReportTemplate.deserialize(activityReportTemplateJson);
-        activityReportTemplate.setSender(userEmail);
-        insertedReport = reportService.createActivityReport(activityReportTemplate);
-        return insertedReport;
+        try {
+            ActivityReportTemplate activityReportTemplate =  ActivityReportTemplate.deserialize(activityReportTemplateJson);
+            activityReportTemplate.setSender(userEmail);
+            insertedReport = reportService.createActivityReport(activityReportTemplate);
+            return insertedReport;
+        } catch (ValidationException e) {
+            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        }
     }
 
     public List<ActivityReportTemplate> getActivityReportList(String acronym) {
-        return reportService.getActivityReportList(acronym);
+        try {
+            return reportService.getActivityReportList(acronym);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+        }
+    }
+
+    public void updateActivityReport(String activityId, String updateReportJson) {
+        try {
+            reportService.updateActivityReport(activityId, updateReportJson);
+        } catch (DataNotFoundException e) {
+            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+        }
     }
 }

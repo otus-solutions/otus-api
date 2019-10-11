@@ -19,6 +19,7 @@ import org.ccem.otus.persistence.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -138,13 +139,22 @@ public class ReportServiceBean implements ReportService {
     }
 
     @Override
-    public ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate) {
+    public ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException {
         return reportDao.insertActivityReport(activityReportTemplate);
     }
 
     @Override
-    public List<ActivityReportTemplate> getActivityReportList(String acronym) {
+    public List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException {
         return reportDao.getActivityReportList(acronym);
+    }
+
+    @Override
+    public void updateActivityReport(String activityId, String updateActivityReport) throws DataNotFoundException {
+        ObjectId objectId = new ObjectId(activityId);
+        ActivityReportTemplate activityReportTemplate = ActivityReportTemplate.deserialize(updateActivityReport);
+        ArrayList<Integer> versions = activityReportTemplate.getVersions();
+
+        reportDao.updateActivityReport(objectId, versions);
     }
 
 }
