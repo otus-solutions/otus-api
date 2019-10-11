@@ -3,8 +3,9 @@ package br.org.otus.gateway.resource;
 import br.org.otus.gateway.MicroservicesEnvironments;
 
 public class MicroservicesResources {
-  protected String HOST;
-  public String PORT;
+  protected static String PROTOCOL = "HTTP";;
+  protected static String HOST;
+  public static int PORT;
   private MicroservicesEnvironments microservicesEnvironments;
 
   public MicroservicesResources(MicroservicesEnvironments microservicesEnvironments) {
@@ -14,7 +15,7 @@ public class MicroservicesResources {
 
   private void readAddress() {
     HOST = System.getenv(microservicesEnvironments.getHost());
-    PORT = System.getenv(microservicesEnvironments.getPort());
+    PORT = Integer.parseInt(System.getenv(microservicesEnvironments.getPort()));
   }
 
 }

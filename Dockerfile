@@ -31,12 +31,12 @@ ENV DATABASE_PORT="27017"
 ENV DATABASE_USER="otus"
 ENV DATABASE_PASS="otus"
 ENV DBDISTRIBUTION_PORT="8080"
-ENV DBDISTRIBUTION_HOST="http://db-api"
+ENV DBDISTRIBUTION_HOST="db-distribution-api"
 
 USER root
 
 ADD server/api/standalone-custom.xml /opt/jboss/wildfly/standalone/configuration/
 ADD ${EAR_FILE} /opt/jboss/wildfly/standalone/deployments/
 RUN /opt/jboss/wildfly/bin/add-user.sh ${DEPLOY_USER} ${DEPLOY_PASS} --silent
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-custom.xml", "-b", "0.0.0.0", "-bmanagement", "127.0.0.1"]
-EXPOSE 8080 9990
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-custom.xml", "-b", "0.0.0.0", "-bmanagement", "127.0.0.1", "--debug"]
+EXPOSE 8080 9990 8787

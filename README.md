@@ -14,5 +14,5 @@ sudo docker build --target api -t otus-api .
 sudo docker run -v $(pwd)/persistence:/opt/wildfly/standalone/log --network=otus-platform-network -p 51002:8080 -p 51007:9990 --name otus-api otus-api
 
 # NETWORK - CONNECT DB-NETWORK
-sudo docker network connect db-network otus-api 
+sudo docker network connect db-distribution-network otus-api 
 
