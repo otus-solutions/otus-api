@@ -55,6 +55,9 @@ public class ReportResourceTest {
 	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORTS_ACTIVITY = "{\"data\":{\"objectType\":null,\"acronym\":null,\"version\":null,\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
+	private static final Object REPORTS_ACTIVITY_LIST = "{\"data\":[{\"objectType\":null,\"acronym\":\"ACTA\",\"versions\":null,\"_id\":null,\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}]}";
+	private static final Object REPORTS_ACTIVITY_UPDATE = "{\"data\":true}";
+	private static final String ACRONYM = "ACTA";
 	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 
 	@InjectMocks
@@ -185,6 +188,41 @@ public class ReportResourceTest {
 		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
 		PowerMockito.when(reportFacade.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
 		assertEquals(REPORT_UPDATE, reportResource.updateFieldCenters(Mockito.anyObject()));
+	}
+
+	@Test
+	public void method_create_should_insert_activityReportTemplate() throws Exception {
+		when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(TOKEN);
+		mockStatic(AuthorizationHeaderReader.class);
+		when(AuthorizationHeaderReader.class, "readToken", TOKEN).thenReturn(AUTHORIZATION_HEADER_TOKEN);
+		when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
+		when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+		when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
+		activityReportTemplate = new ActivityReportTemplate();
+		Whitebox.setInternalState(activityReportTemplate, "_id", id);
+		when(reportFacade.createActivityReport(reportUploadJson, USER_MAIL)).thenReturn(activityReportTemplate);
+
+		assertEquals("{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"}}}", reportResource.createActivityReport(request, reportUploadJson));
+	}
+
+	@Test
+	public void method_getActivityReportList_should_return_list_report_activity() {
+		activityReportTemplate = new ActivityReportTemplate();
+		List<ActivityReportTemplate> activityReportTemplates = new ArrayList<>();
+
+		Whitebox.setInternalState(activityReportTemplate, "acronym", ACRONYM);
+
+		activityReportTemplates.add(activityReportTemplate);
+
+		when(reportFacade.getActivityReportList(ACRONYM)).thenReturn(activityReportTemplates);
+
+		assertEquals(REPORTS_ACTIVITY_LIST, reportResource.getActivityReportList(ACRONYM));
+	}
+
+	@Test
+	public void method_update_should_alter_activity_report() throws Exception {
+		PowerMockito.doNothing().when(reportFacade,"updateActivityReport", Mockito.anyString(), Mockito.anyString());
+		assertEquals(REPORTS_ACTIVITY_UPDATE, reportResource.updateActivityReport(Mockito.anyString(),Mockito.anyString()));
 	}
 
 }
