@@ -102,11 +102,11 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 
 	}
 
-	private Boolean findVersionActivityReport(String acronym, List<Integer> version) {
+	private Boolean findVersionActivityReport(String acronym, List<Integer> versions) {
 		Boolean confirmation = false;
 		Document query = new Document();
 		query.put("acronym", acronym);
-		query.put("versions",version);
+		query.put("versions", new Document("$all", versions));
 
 		Document result = this.collection.find(query).first();
 
