@@ -54,7 +54,7 @@ public class ReportResourceTest {
 	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
 	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
 	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
-	private static final Object REPORTS_ACTIVITY = "{\"data\":{\"objectType\":null,\"acronym\":null,\"version\":null,\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
+	private static final Object REPORTS_ACTIVITY = "{\"data\":{\"objectType\":null,\"acronym\":null,\"versions\":null,\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
 	private static final Object REPORTS_ACTIVITY_LIST = "{\"data\":[{\"objectType\":null,\"acronym\":\"ACTA\",\"versions\":null,\"_id\":null,\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}]}";
 	private static final Object REPORTS_ACTIVITY_UPDATE = "{\"data\":true}";
 	private static final String ACRONYM = "ACTA";
