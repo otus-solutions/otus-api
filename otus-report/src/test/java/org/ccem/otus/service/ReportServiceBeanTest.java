@@ -240,7 +240,7 @@ public class ReportServiceBeanTest {
 	}
 
 	@Test
-	public void method_getActivityReport_report_by_id_instanceof_activity_report_data_source() throws Exception {
+	public void getActivityReportMethod_report_by_id_instanceof_activity_report_data_source() throws Exception {
 
 		Participant participant = new Participant(RECRUITMENTNUMBER);
 
@@ -285,13 +285,16 @@ public class ReportServiceBeanTest {
 		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
 
 		activityReportTemplate = new ActivityReportTemplate();
-		reportTemplate = new ReportTemplate();
+
+		ArrayList<Integer> versions = new ArrayList();
+		versions.add(VERSION);
+
 		dataSources.add(answerFillingDataSource);
 		dataSources.add(activityReportAnswerFillingDataSource);
 
 		Whitebox.setInternalState(activityReportTemplate, "template", template);
 		Whitebox.setInternalState(activityReportTemplate, "acronym", ACRONYM);
-		Whitebox.setInternalState(activityReportTemplate, "version", VERSION);
+		Whitebox.setInternalState(activityReportTemplate, "versions", versions);
 		Whitebox.setInternalState(activityReportTemplate, "dataSources", new ArrayList<>());
 		activityReportTemplate.getDataSources().add(answerFillingDataSource);
 
@@ -318,9 +321,43 @@ public class ReportServiceBeanTest {
 	}
 
 	@Test(expected = DataNotFoundException.class)
-	public void method_getActivityReport_shoud_called_DataNotFoundException() throws Exception {
+	public void getActivityReportMethod_shoud_called_DataNotFoundException() throws Exception {
 		when(activityService.getByID(REPORTID)).thenThrow(new DataNotFoundException(new Throwable("")));
 		reportServiceBean.getActivityReport(REPORTID);
+	}
+
+	@Test
+	public void createActivityReportMethod__should_insert_new_activity_report() throws Exception {
+		activityReportTemplate = new ActivityReportTemplate();
+
+		PowerMockito.when(reportDao.insertActivityReport(Mockito.anyObject())).thenReturn(activityReportTemplate);
+		assertEquals(activityReportTemplate, reportServiceBean.createActivityReport(activityReportTemplate));
+	}
+
+	@Test
+	public void getActivityReportListMethod_should_return_activity_report() throws Exception {
+		activityReportTemplate = new ActivityReportTemplate();
+		List<ActivityReportTemplate> activityReportTemplates = new ArrayList<>();
+		activityReportTemplates.add(activityReportTemplate);
+
+		PowerMockito.when(reportDao.getActivityReportList(Mockito.anyObject())).thenReturn(activityReportTemplates);
+
+		assertEquals(activityReportTemplates, reportServiceBean.getActivityReportList(ACRONYM));
+	}
+
+
+	@Test
+	public void updateActivityReportMethod_should_update_activity_report() throws Exception {
+		activityReportTemplate = new ActivityReportTemplate();
+
+		ArrayList<Integer> versions = new ArrayList();
+		versions.add(VERSION);
+
+		Whitebox.setInternalState(activityReportTemplate, "versions", versions);
+
+		reportServiceBean.updateActivityReport(REPORTID,ActivityReportTemplate.serialize(activityReportTemplate));
+
+		Mockito.verify(reportDao, Mockito.times(1)).updateActivityReport(reportObjectId, versions);
 	}
 
 }
