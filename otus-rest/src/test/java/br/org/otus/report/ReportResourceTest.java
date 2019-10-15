@@ -17,8 +17,6 @@ import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.dataSources.ReportDataSource;
 import org.ccem.otus.persistence.ReportTemplateDTO;
 import org.ccem.otus.service.ReportService;
-import org.ccem.otus.service.ReportServiceBean;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -60,126 +58,126 @@ public class ReportResourceTest {
 	private static final String ACRONYM = "ACTA";
 	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 
-	@InjectMocks
-	private ReportResource reportResource;
-	@Mock
-	private ReportFacade reportFacade;
-	@Mock
-	private ReportService reportService;
-	@Mock
-	private ReportServiceBean reportServiceBean;
-	@Mock
-	private SecurityContext securityContext;
-	@Mock
-	private HttpServletRequest request;
-	@Mock
-	private SessionIdentifier sessionIdentifier;
-	@Mock
-	private AuthenticationData authenticationData;
+  @InjectMocks
+  private ReportResource reportResource;
+  @Mock
+  private ReportFacade reportFacade;
+  @Mock
+  private ReportService reportService;
+  @Mock
+  private ReportServiceBean reportServiceBean;
+  @Mock
+  private SecurityContext securityContext;
+  @Mock
+  private HttpServletRequest request;
+  @Mock
+  private SessionIdentifier sessionIdentifier;
+  @Mock
+  private AuthenticationData authenticationData;
 
-	private ReportTemplate reportTemplate;
+  private ReportTemplate reportTemplate;
 
-	private ActivityReportTemplate activityReportTemplate;
+  private ActivityReportTemplate activityReportTemplate;
 
-	List<ReportTemplate> reports = new ArrayList<>();
+  List<ReportTemplate> reports = new ArrayList<>();
 
-	ObjectId id = new ObjectId("5ab128d713cdd20490497f58");
+  ObjectId id = new ObjectId("5ab128d713cdd20490497f58");
 
-	@Test
-	public void method_getParticipantReport_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
-		reportTemplate = new ReportTemplate();
-		Whitebox.setInternalState(reportTemplate, "_id", id);
-		Whitebox.setInternalState(reportTemplate, "label", label);
-		when(reportFacade.getParticipantReport(recruitmentNumber, REPORT_ID)).thenReturn(reportTemplate);
-		assertEquals(REPORT_BY_RN, reportResource.getParticipantReport(recruitmentNumber, REPORT_ID));
-	}
+  @Test
+  public void method_getParticipantReport_should_return_report_byRecruitmentNumber() throws DataNotFoundException {
+    reportTemplate = new ReportTemplate();
+    Whitebox.setInternalState(reportTemplate, "_id", id);
+    Whitebox.setInternalState(reportTemplate, "label", label);
+    when(reportFacade.getParticipantReport(recruitmentNumber, REPORT_ID)).thenReturn(reportTemplate);
+    assertEquals(REPORT_BY_RN, reportResource.getParticipantReport(recruitmentNumber, REPORT_ID));
+  }
 
-	@Test
-	public void method_getActivityReport_should_return_report_activity() throws DataNotFoundException {
-		activityReportTemplate = new ActivityReportTemplate();
-		Whitebox.setInternalState(activityReportTemplate, "_id", id);
-		when(reportFacade.getActivityReport(REPORT_ID)).thenReturn(activityReportTemplate);
-		assertEquals(REPORTS_ACTIVITY, reportResource.getActivityReport(REPORT_ID));
-	}
+  @Test
+  public void method_getActivityReport_should_return_report_activity() throws DataNotFoundException {
+    activityReportTemplate = new ActivityReportTemplate();
+    Whitebox.setInternalState(activityReportTemplate, "_id", id);
+    when(reportFacade.getActivityReport(REPORT_ID)).thenReturn(activityReportTemplate);
+    assertEquals(REPORTS_ACTIVITY, reportResource.getActivityReport(REPORT_ID));
+  }
 
-	@Test
-	public void method_listByParticipant_should_returns_datasourceLists() throws DataNotFoundException {
-		List<ReportTemplateDTO> reportTemplateDTOs = new ArrayList<>();
-		reportTemplate = new ReportTemplate();
-		Whitebox.setInternalState(reportTemplate, "_id", id);
-		Whitebox.setInternalState(reportTemplate, "label", label);
-		reportTemplateDTOs.add(new ReportTemplateDTO(reportTemplate));
-		when(reportFacade.getReportByParticipant(recruitmentNumber)).thenReturn(reportTemplateDTOs);
-		assertEquals(PARTICIPANT_LIST, reportResource.listByParticipant(recruitmentNumber));
-	}
+  @Test
+  public void method_listByParticipant_should_returns_datasourceLists() throws DataNotFoundException {
+    List<ReportTemplateDTO> reportTemplateDTOs = new ArrayList<>();
+    reportTemplate = new ReportTemplate();
+    Whitebox.setInternalState(reportTemplate, "_id", id);
+    Whitebox.setInternalState(reportTemplate, "label", label);
+    reportTemplateDTOs.add(new ReportTemplateDTO(reportTemplate));
+    when(reportFacade.getReportByParticipant(recruitmentNumber)).thenReturn(reportTemplateDTOs);
+    assertEquals(PARTICIPANT_LIST, reportResource.listByParticipant(recruitmentNumber));
+  }
 
-	@Test
-	public void method_create_should_insert_reportTemplate() throws Exception {
-		when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(TOKEN);
-		mockStatic(AuthorizationHeaderReader.class);
-		when(AuthorizationHeaderReader.class, "readToken", TOKEN).thenReturn(AUTHORIZATION_HEADER_TOKEN);
-		when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
-		when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
-		when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
-		reportTemplate = new ReportTemplate();
-		Whitebox.setInternalState(reportTemplate, "_id", id);
-		when(reportFacade.create(reportUploadJson, USER_MAIL)).thenReturn(reportTemplate);
-		assertEquals("{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"}}}", reportResource.create(request, reportUploadJson));
-	}
+  @Test
+  public void method_create_should_insert_reportTemplate() throws Exception {
+    when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(TOKEN);
+    mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.class, "readToken", TOKEN).thenReturn(AUTHORIZATION_HEADER_TOKEN);
+    when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
+    reportTemplate = new ReportTemplate();
+    Whitebox.setInternalState(reportTemplate, "_id", id);
+    when(reportFacade.create(reportUploadJson, USER_MAIL)).thenReturn(reportTemplate);
+    assertEquals("{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"}}}", reportResource.create(request, reportUploadJson));
+  }
 
-	@Test
-	public void method_delete_should_remove_report() throws Exception {
-		PowerMockito.doNothing().when(reportFacade, "deleteById", REPORT_ID);
-		assertEquals(RESULT, reportResource.delete(REPORT_ID));
-	}
+  @Test
+  public void method_delete_should_remove_report() throws Exception {
+    PowerMockito.doNothing().when(reportFacade, "deleteById", REPORT_ID);
+    assertEquals(RESULT, reportResource.delete(REPORT_ID));
+  }
 
-	@Test
-	public void method_list_should_returns_list_reports() {
-		reportTemplate = new ReportTemplate();
-		ArrayList<String> fieldCenter = new ArrayList<>();
-		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
-		fieldCenter.add("SP");
-		dataSources = reportTemplate.getDataSources();
-		Whitebox.setInternalState(reportTemplate, "_id", id);
-		Whitebox.setInternalState(reportTemplate, "label", label);
-		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
-		Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
-		Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
-		reports.add(reportTemplate);
-		when(reportFacade.list()).thenReturn(reports);
-		assertEquals(REPORTS, reportResource.list());
-	}
+  @Test
+  public void method_list_should_returns_list_reports() {
+    reportTemplate = new ReportTemplate();
+    ArrayList<String> fieldCenter = new ArrayList<>();
+    ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+    fieldCenter.add("SP");
+    dataSources = reportTemplate.getDataSources();
+    Whitebox.setInternalState(reportTemplate, "_id", id);
+    Whitebox.setInternalState(reportTemplate, "label", label);
+    Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
+    Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
+    Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
+    reports.add(reportTemplate);
+    when(reportFacade.list()).thenReturn(reports);
+    assertEquals(REPORTS, reportResource.list());
+  }
 
-	@Test
-	public void method_getById_should_return_report() {
-		reportTemplate = new ReportTemplate();
-		ArrayList<String> fieldCenter = new ArrayList<>();
-		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
-		fieldCenter.add("SP");
-		dataSources = reportTemplate.getDataSources();
-		Whitebox.setInternalState(reportTemplate, "_id", id);
-		Whitebox.setInternalState(reportTemplate, "label", label);
-		Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
-		Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
-		Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
-		reports.add(reportTemplate);
-		when(reportFacade.getById(REPORT_ID)).thenReturn(reportTemplate);
-		assertEquals(REPORTS_BY_ID, reportResource.getById(REPORT_ID));
-	}
+  @Test
+  public void method_getById_should_return_report() {
+    reportTemplate = new ReportTemplate();
+    ArrayList<String> fieldCenter = new ArrayList<>();
+    ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+    fieldCenter.add("SP");
+    dataSources = reportTemplate.getDataSources();
+    Whitebox.setInternalState(reportTemplate, "_id", id);
+    Whitebox.setInternalState(reportTemplate, "label", label);
+    Whitebox.setInternalState(reportTemplate, "template", "<span></span>");
+    Whitebox.setInternalState(reportTemplate, "fieldCenter", fieldCenter);
+    Whitebox.setInternalState(reportTemplate, "dataSources", dataSources);
+    reports.add(reportTemplate);
+    when(reportFacade.getById(REPORT_ID)).thenReturn(reportTemplate);
+    assertEquals(REPORTS_BY_ID, reportResource.getById(REPORT_ID));
+  }
 
-	@Test
-	public void method_update_should_alter_report() throws Exception {
-		reportTemplate = new ReportTemplate();
-		ReportTemplate updateReport = new ReportTemplate();
-		ArrayList<String> fieldCenter = new ArrayList<>();
-		ArrayList<ReportDataSource> dataSources = new ArrayList<>();
-		fieldCenter.add("SP");
-		dataSources = report.getDataSources();
-		Whitebox.setInternalState(report, "_id", id);
-		Whitebox.setInternalState(report, "label", label);
-		Whitebox.setInternalState(report, "template", "<span></span>");
-		Whitebox.setInternalState(report, "fieldCenter", fieldCenter);
-		Whitebox.setInternalState(report, "dataSources", dataSources);
+  @Test
+  public void method_update_should_alter_report() throws Exception {
+    reportTemplate = new ReportTemplate();
+    ReportTemplate updateReport = new ReportTemplate();
+    ArrayList<String> fieldCenter = new ArrayList<>();
+    ArrayList<ReportDataSource> dataSources = new ArrayList<>();
+    fieldCenter.add("SP");
+    dataSources = report.getDataSources();
+    Whitebox.setInternalState(report, "_id", id);
+    Whitebox.setInternalState(report, "label", label);
+    Whitebox.setInternalState(report, "template", "<span></span>");
+    Whitebox.setInternalState(report, "fieldCenter", fieldCenter);
+    Whitebox.setInternalState(report, "dataSources", dataSources);
 
 		Whitebox.setInternalState(updateReport, "_id", id);
 		Whitebox.setInternalState(updateReport, "label", "Novo Template");

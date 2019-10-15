@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ccem.otus</groupId>
   <artifactId>otus-root</artifactId>
@@ -66,6 +67,7 @@
     <module>../otus-exam-uploader</module>
     <module>../otus-report</module>
     <module>../otus-configuration</module>
+    <module>../otus-gateway</module>
   </modules>
 
   <repositories>
@@ -168,8 +170,10 @@
           <ejbVersion>3.1</ejbVersion>
         </configuration>
       </plugin>
-      <!-- * Maven Plugin : Control Workflow Development Team * - Start Feature : mvn jgitflow:feature-start * - Finish Feature : mvn jgitflow:feature-finish * - Start Hotfix : mvn jgitflow:hotfix-start * - Finish Hotfix : mvn jgitflow:hotfix-finish * -
-      Start Release : mvn jgitflow:release-start * - Finish Release : mvn jgitflow:release-finish -->
+      <!-- * Maven Plugin : Control Workflow Development Team * - Start Feature 
+        : mvn jgitflow:feature-start * - Finish Feature : mvn jgitflow:feature-finish 
+        * - Start Hotfix : mvn jgitflow:hotfix-start * - Finish Hotfix : mvn jgitflow:hotfix-finish 
+        * - Start Release : mvn jgitflow:release-start * - Finish Release : mvn jgitflow:release-finish -->
       <plugin>
         <groupId>external.atlassian.jgitflow</groupId>
         <artifactId>jgitflow-maven-plugin</artifactId>
