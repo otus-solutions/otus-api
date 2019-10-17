@@ -8,34 +8,32 @@ variable "otus-api" {
   }
 }
 
-variable "otus-api-database" {
+variable "otus-database" {
   type = "map"
   default = {
-	"name" = "otus-api-database"
-	"persistence-directory" = "/home/drferreira/otus-platform/docker-persistence/otus-api-database"
-	"port" = 51003
-  }
+	"name" = "otus-database"
+	"persistence-directory" = "/home/drferreira/otus-platform/docker-persistence/otus-database"
+	"port" = 51003}
 }
 
 resource "docker_image" "otus-api" {
   name = "otus-api:latest"
 }
 
-resource "docker_image" "otus-api-database" {
-  name = "otus-api-database:latest"
+resource "docker_image" "otus-database" {
+  name = "otus-database:latest"
 }
 
-resource "docker_network" "otus-api-network"{
+resource "docker_network" "otus-api-network" {
   name = "otus-api-network"
 }
 
 resource "docker_container" "otus-api" {
-  depends_on = [docker_container.otus-api-database]
   name = "otus-api"
   image = "${docker_image.otus-api.latest}"
   ports {
-	internal = 8080
-	external = "${var.otus-api["port_http"]}"
+	  internal = 8080
+	  external = "${var.otus-api["port_http"]}"
   }
   ports {
 	internal = 9990
@@ -46,18 +44,20 @@ resource "docker_container" "otus-api" {
   }
 }
 
-resource "docker_container" "otus-api-database" {
-  name = "otus-api-database"
-  image = "${docker_image.otus-api-database.latest}"
+resource "docker_container" "otus-database" {
+  name = "otus-database"
+  image = "${docker_image.otus-database.latest}"
+  sysctls = "--wiredTigerCacheSizeGB=2"
   ports {
 	internal = 27017
-	external = "${var.otus-api-database["port"]}"
+	external = "${var.otus-database["port"]}"
   }
   volumes {
-	host_path = "${var.otus-api-database["persistence-directory"]}"
+	host_path = "${var.otus-database["persistence-directory"]}"
 	container_path = "/data/db"
   }
   networks_advanced {
     name    = "${docker_network.otus-api-network.name}"
   }
+  
 }
