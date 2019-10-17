@@ -155,7 +155,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	public List<ReportTemplate> getAll() throws ValidationException {
 		ArrayList<ReportTemplate> results = new ArrayList<>();
 
-		MongoCursor iterator = collection.find().iterator();
+		MongoCursor iterator = collection.find(eq("objectType", "ParticipantReport")).iterator();
 
 		while (iterator.hasNext()) {
 			Document next = (Document) iterator.next();

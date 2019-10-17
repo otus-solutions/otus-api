@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 public class ActivityReportTemplate extends ReportTemplate{
 
-    private String objectType;
     private String acronym;
     private ArrayList<Integer> versions;
-
 
     public String getAcronym() {
         return acronym;
