@@ -8,6 +8,7 @@ variable "otus-api" {
     "name" = "otus-api"
     "directory" = "otus-api"
     "source" = "source/otus-root"
+    "mavenBuildCommand" = "clean install"
   }
 }
 variable "otus-database" {
@@ -24,7 +25,10 @@ variable "otus-database" {
 ###############################################
 resource "null_resource" "otus-api" {
   provisioner "local-exec"{
-   command = "cd ${var.otus-api["directory"]}/${var.otus-api["source"]} && mvn clean install -DskipTests && cd ../../../ && docker build -t ${var.otus-api["name"]} ${var.otus-api["directory"]}" 
+   command = "mvn ${var.otus-api["mavenBuildCommand"]} -f ${var.otus-api["source"]}/pom.xml"
+  }
+  provisioner "local-exec"{
+   command = "docker build --target api -t ${var.otus-api["name"]} ."
   }
 }
 
@@ -33,6 +37,6 @@ resource "null_resource" "otus-api" {
 ###############################################
 resource "null_resource" "otus-database" {
   provisioner "local-exec" {
-    command = "docker build --target database -t ${var.otus-database["name"]} ${var.otus-database["directory"]}"
+    command = "docker build --target database -t ${var.otus-database["name"]} ."
   }
 }
