@@ -1,5 +1,6 @@
 package org.ccem.otus.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -10,11 +11,17 @@ import org.ccem.otus.model.ReportTemplate;
 
 public interface ReportDao {
 
-	ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException;
+	ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException;
 
 	ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException;
 
+	List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException;
+
+	void updateActivityReport(ObjectId reportId, ArrayList<Integer> versions) throws DataNotFoundException;
+
 	ReportTemplate insert(ReportTemplate report);
+
+	ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException;
 
 	void deleteById(String id) throws DataNotFoundException;
 
@@ -25,5 +32,4 @@ public interface ReportDao {
 	ReportTemplate getById(String id) throws DataNotFoundException, ValidationException;
 
 	ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException;
-
 }

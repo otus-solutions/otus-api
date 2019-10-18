@@ -38,22 +38,25 @@ import br.org.otus.security.dtos.AuthenticationData;
 @PrepareForTest({ ReportTemplate.class, AuthorizationHeaderReader.class, GsonBuilder.class })
 public class ReportResourceTest {
 
-  private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
-  private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
-  private static final Long recruitmentNumber = (Long) 5001007L;
-  private static final String label = "teste";
-  private static final String PARTICIPANT_LIST = "{\"data\":[{\"_id\":\"5ab128d713cdd20490497f58\",\"label\":\"teste\"}]}";
-  private static final String REPORT_ID = "5ab3a88013cdd20490873afe";
-  private static final String reportUploadJson = "{\"template\" : \"<span></span>\",\"label\": \"tiago\",\"fieldCenter\": [],\"dataSources\" : [{\"key\" : \"HS\",\"label\": \"tester\", \"dataSource\" : \"Participant\",\"filters\" : {\"statusHistory\" : {\"name\" : \"FINALIZED\",\"position\" : -1},\"acronym\" : \"TF\",\"category\" : \"C0\"}}]}";
-  private static final String reportJson = "{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}";
-  private static final String USER_MAIL = "otus@otus.com";
-  private static final String RESULT = "{\"data\":true}";
-  private static final String REPORT_BY_RN = "{\"data\":{\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":\"teste\",\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
-  private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
-  private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
-  private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
-  private static final Object REPORTS_ACTIVITY = "{\"data\":{\"objectType\":null,\"acronym\":null,\"version\":null,\"_id\":\"5ab128d713cdd20490497f58\",\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
-  private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
+	private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
+	private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
+	private static final Long recruitmentNumber = (Long) 5001007L;
+	private static final String label = "teste";
+	private static final String PARTICIPANT_LIST = "{\"data\":[{\"_id\":\"5ab128d713cdd20490497f58\",\"label\":\"teste\"}]}";
+	private static final String REPORT_ID = "5ab3a88013cdd20490873afe";
+	private static final String reportUploadJson = "{\"template\" : \"<span></span>\",\"label\": \"tiago\",\"fieldCenter\": [],\"dataSources\" : [{\"key\" : \"HS\",\"label\": \"tester\", \"dataSource\" : \"Participant\",\"filters\" : {\"statusHistory\" : {\"name\" : \"FINALIZED\",\"position\" : -1},\"acronym\" : \"TF\",\"category\" : \"C0\"}}]}";
+	private static final String reportJson = "{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"\\u003cspan\\u003e\\u003c/span\\u003e\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}";
+	private static final String USER_MAIL = "otus@otus.com";
+	private static final String RESULT = "{\"data\":true}";
+	private static final String REPORT_BY_RN = "{\"data\":{\"_id\":\"5ab128d713cdd20490497f58\",\"objectType\":null,\"template\":null,\"label\":\"teste\",\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
+	private static final Object REPORTS = "{\"data\":[{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}]}";
+	private static final Object REPORTS_BY_ID = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<span></span>\",\"label\":\"teste\",\"fieldCenter\":[\"SP\"]}}";
+	private static final Object REPORT_UPDATE = "{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"},\"template\":\"<h1></h1>\",\"label\":\"Novo Template\",\"fieldCenter\":[\"SP\"]}}";
+	private static final Object REPORTS_ACTIVITY = "{\"data\":{\"acronym\":null,\"versions\":null,\"_id\":\"5ab128d713cdd20490497f58\",\"objectType\":null,\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}}";
+	private static final Object REPORTS_ACTIVITY_LIST = "{\"data\":[{\"acronym\":\"ACTA\",\"versions\":null,\"_id\":null,\"objectType\":null,\"template\":null,\"label\":null,\"sender\":null,\"sendingDate\":null,\"fieldCenter\":null,\"dataSources\":null}]}";
+	private static final Object REPORTS_ACTIVITY_UPDATE = "{\"data\":true}";
+	private static final String ACRONYM = "ACTA";
+	private ReportTemplate report = PowerMockito.spy(new ReportTemplate());
 
   @InjectMocks
   private ReportResource reportResource;
@@ -176,13 +179,48 @@ public class ReportResourceTest {
     Whitebox.setInternalState(report, "fieldCenter", fieldCenter);
     Whitebox.setInternalState(report, "dataSources", dataSources);
 
-    Whitebox.setInternalState(updateReport, "_id", id);
-    Whitebox.setInternalState(updateReport, "label", "Novo Template");
-    Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
-    Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
-    Whitebox.setInternalState(updateReport, "dataSources", dataSources);
-    PowerMockito.when(reportFacade.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
-    assertEquals(REPORT_UPDATE, reportResource.updateFieldCenters(Mockito.anyObject()));
-  }
+		Whitebox.setInternalState(updateReport, "_id", id);
+		Whitebox.setInternalState(updateReport, "label", "Novo Template");
+		Whitebox.setInternalState(updateReport, "template", "<h1></h1>");
+		Whitebox.setInternalState(updateReport, "fieldCenter", fieldCenter);
+		Whitebox.setInternalState(updateReport, "dataSources", dataSources);
+		PowerMockito.when(reportFacade.updateFieldCenters(Mockito.anyObject())).thenReturn(updateReport);
+		assertEquals(REPORT_UPDATE, reportResource.updateFieldCenters(Mockito.anyObject()));
+	}
+
+	@Test
+	public void method_create_should_insert_activityReportTemplate() throws Exception {
+		when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(TOKEN);
+		mockStatic(AuthorizationHeaderReader.class);
+		when(AuthorizationHeaderReader.class, "readToken", TOKEN).thenReturn(AUTHORIZATION_HEADER_TOKEN);
+		when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
+		when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+		when(authenticationData.getUserEmail()).thenReturn(USER_MAIL);
+		activityReportTemplate = new ActivityReportTemplate();
+		Whitebox.setInternalState(activityReportTemplate, "_id", id);
+		when(reportFacade.createActivityReport(reportUploadJson, USER_MAIL)).thenReturn(activityReportTemplate);
+
+		assertEquals("{\"data\":{\"_id\":{\"$oid\":\"5ab128d713cdd20490497f58\"}}}", reportResource.createActivityReport(request, reportUploadJson));
+	}
+
+	@Test
+	public void method_getActivityReportList_should_return_list_report_activity() {
+		activityReportTemplate = new ActivityReportTemplate();
+		List<ActivityReportTemplate> activityReportTemplates = new ArrayList<>();
+
+		Whitebox.setInternalState(activityReportTemplate, "acronym", ACRONYM);
+
+		activityReportTemplates.add(activityReportTemplate);
+
+		when(reportFacade.getActivityReportList(ACRONYM)).thenReturn(activityReportTemplates);
+
+		assertEquals(REPORTS_ACTIVITY_LIST, reportResource.getActivityReportList(ACRONYM));
+	}
+
+	@Test
+	public void method_update_should_alter_activity_report() throws Exception {
+		PowerMockito.doNothing().when(reportFacade,"updateActivityReport", Mockito.anyString(), Mockito.anyString());
+		assertEquals(REPORTS_ACTIVITY_UPDATE, reportResource.updateActivityReport(Mockito.anyString(),Mockito.anyString()));
+	}
 
 }

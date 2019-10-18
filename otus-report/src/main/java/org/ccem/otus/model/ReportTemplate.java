@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder;
 
 public class ReportTemplate{
 	private ObjectId _id;
+	private String objectType;
 	private String template;
 	private String label;
 	private String sender;
@@ -53,6 +54,10 @@ public class ReportTemplate{
 		return dataSources;
 	}
 
+	public String getObjectType() {
+		return objectType;
+	}
+
 	public String getTemplate() {
 		return template;
 	}
@@ -79,6 +84,7 @@ public class ReportTemplate{
 
 	private static void validate(ReportTemplate reportTemplate) throws ValidationException {
 		String result = "";
+		result = validateObjectType(reportTemplate.objectType, result);
 		result = validateTemplate(reportTemplate.template, result);
 		result = validateLabel(reportTemplate.label, result);
 		result = validateSendingDate(reportTemplate.sendingDate, result);
@@ -87,6 +93,13 @@ public class ReportTemplate{
 		if (!result.trim().isEmpty()) {
 			throw new ValidationException(new Throwable("Required field(s) " + result + " is(are) invalid"));
 		}
+	}
+
+	private static String validateObjectType(String objectType, String result) {
+		if (objectType == null || objectType.trim().isEmpty()) {
+			result = (result.equals("")) ? "ObjectType" : result.concat(", ObjectType");
+		}
+		return result;
 	}
 
 	private static String validateTemplate(String template, String result) {

@@ -2,6 +2,7 @@ package br.org.otus.report;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -245,5 +246,50 @@ public class ReportFacadeTest {
     doThrow(new ValidationException(new Exception("method_RegisterProject_should_captured_ValidationException"))).when(reportService).getActivityReport(REPORT_ID);
     reportFacade.getActivityReport(REPORT_ID);
   }
+
+@Test
+	public void createMethod_should_insert_new_activity_report() throws Exception {
+		activityReportTemplate = new ActivityReportTemplate();
+		Whitebox.setInternalState(activityReportTemplate, "_id", objectId);
+		String report = ActivityReportTemplate.serialize(activityReportTemplate);
+
+		PowerMockito.when(reportService.createActivityReport(Mockito.anyObject())).thenReturn(activityReportTemplate);
+
+		assertEquals(activityReportTemplate, reportFacade.createActivityReport(report, USER_MAIL));
+	}
+
+	@Test
+	public void getActivityReportListMethod_should_return_activity_report() throws Exception {
+		activityReportTemplate = new ActivityReportTemplate();
+		List<ActivityReportTemplate> activityReportTemplates = new ArrayList<>();
+		activityReportTemplates.add(activityReportTemplate);
+
+		PowerMockito.when(reportService.getActivityReportList(Mockito.anyObject())).thenReturn(activityReportTemplates);
+
+		assertEquals(activityReportTemplates, reportFacade.getActivityReportList(anyString()));
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void getActivityReportListMethod_should_return_throw_DataNotFoundException()
+			throws DataNotFoundException {
+		when(reportService.getActivityReportList(anyString())).thenThrow(
+				new DataNotFoundException(new Throwable("method_RegisterProject_should_captured_Exception")));
+		reportFacade.getActivityReportList(anyString());
+	}
+
+	@Test
+	public void updateActivityReportMethod_should_update_activity_report() throws Exception {
+		reportFacade.updateActivityReport(anyString(),anyString());
+
+		Mockito.verify(reportService, Mockito.times(1)).updateActivityReport(anyString(),anyString());
+	}
+
+	@Test(expected = HttpResponseException.class)
+	public void updateActivityReportMethod_should_return_throw_DataNotFoundException()
+			throws DataNotFoundException {
+		doThrow(new DataNotFoundException(new Exception())).when(reportService).updateActivityReport(anyString(),anyString());
+
+		reportFacade.updateActivityReport(anyString(),anyString());
+	}
 
 }

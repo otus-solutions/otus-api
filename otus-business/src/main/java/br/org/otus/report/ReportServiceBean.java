@@ -1,6 +1,7 @@
 package br.org.otus.report;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -151,6 +152,25 @@ public class ReportServiceBean implements ReportService {
   @Override
   public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
     return reportDao.updateFieldCenters(reportTemplate);
+  }
+
+  @Override
+  public ActivityReportTemplate createActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException {
+    return reportDao.insertActivityReport(activityReportTemplate);
+  }
+
+  @Override
+  public List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException {
+    return reportDao.getActivityReportList(acronym);
+  }
+
+  @Override
+  public void updateActivityReport(String reportId, String updateActivityReport) throws DataNotFoundException {
+    ObjectId objectId = new ObjectId(reportId);
+    ActivityReportTemplate activityReportTemplate = ActivityReportTemplate.deserialize(updateActivityReport);
+    ArrayList<Integer> versions = activityReportTemplate.getVersions();
+
+    reportDao.updateActivityReport(objectId, versions);
   }
 
 }
