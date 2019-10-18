@@ -28,8 +28,13 @@ public class AnswerFillingDataSource extends ReportDataSource<QuestionFill> {
     }
 
     public void fillResult(SurveyActivity activity) {
-            ArrayList<QuestionFill> result = getTemplateAndCustomIDS(activity);
-            setResult(result);
+        ArrayList<QuestionFill> result = null;
+
+        if(activity != null) {
+            result = getTemplateAndCustomIDS(activity);
+        }
+
+        setResult(result);
     }
 
     public ArrayList<QuestionFill> getResult() {
