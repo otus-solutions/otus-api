@@ -116,9 +116,9 @@ public class ReportFacade {
         }
     }
 
-    public void updateActivityReport(String activityId, String updateReportJson) {
+    public void updateActivityReport(String reportId, String updateReportJson) {
         try {
-            reportService.updateActivityReport(activityId, updateReportJson);
+            reportService.updateActivityReport(reportId, updateReportJson);
         } catch (DataNotFoundException e) {
             throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
         }

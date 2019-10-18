@@ -17,7 +17,7 @@ public interface ReportDao {
 
 	List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException;
 
-	void updateActivityReport(ObjectId activityId, ArrayList<Integer> versions) throws DataNotFoundException;
+	void updateActivityReport(ObjectId reportId, ArrayList<Integer> versions) throws DataNotFoundException;
 
 	ReportTemplate insert(ReportTemplate report);
 

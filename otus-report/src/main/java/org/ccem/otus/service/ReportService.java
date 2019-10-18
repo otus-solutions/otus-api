@@ -31,5 +31,5 @@ public interface ReportService {
 
   List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException;
 
-  void updateActivityReport(String activityId, String updateActivityReport) throws DataNotFoundException;
+  void updateActivityReport(String reportId, String updateActivityReport) throws DataNotFoundException;
 }

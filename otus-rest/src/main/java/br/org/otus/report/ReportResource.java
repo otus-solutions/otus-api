@@ -119,9 +119,9 @@ public class ReportResource {
     @PUT
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/activity-report/update/{activityId}")
-    public String updateActivityReport(@PathParam("activityId") String activityId, String activityReportJson) {
-        reportFacade.updateActivityReport(activityId, activityReportJson);
+    @Path("/activity-report/update/{reportId}")
+    public String updateActivityReport(@PathParam("reportId") String reportId, String activityReportJson) {
+        reportFacade.updateActivityReport(reportId, activityReportJson);
         return new Response().buildSuccess().toJson();
     }
 

@@ -92,9 +92,9 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
-	public void updateActivityReport(ObjectId activityId, ArrayList<Integer> versions) throws DataNotFoundException {
+	public void updateActivityReport(ObjectId reportId, ArrayList<Integer> versions) throws DataNotFoundException {
 
-		UpdateResult updateReportData = collection.updateOne(eq("_id", activityId), new Document("$set", new Document("versions", versions)));
+		UpdateResult updateReportData = collection.updateOne(eq("_id", reportId), new Document("$set", new Document("versions", versions)));
 
 		if (updateReportData.getMatchedCount() == 0) {
 			throw new DataNotFoundException(new Throwable("Activity Report not found"));

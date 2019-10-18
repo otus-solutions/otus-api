@@ -165,8 +165,8 @@ public class ReportServiceBean implements ReportService {
   }
 
   @Override
-  public void updateActivityReport(String activityId, String updateActivityReport) throws DataNotFoundException {
-    ObjectId objectId = new ObjectId(activityId);
+  public void updateActivityReport(String reportId, String updateActivityReport) throws DataNotFoundException {
+    ObjectId objectId = new ObjectId(reportId);
     ActivityReportTemplate activityReportTemplate = ActivityReportTemplate.deserialize(updateActivityReport);
     ArrayList<Integer> versions = activityReportTemplate.getVersions();
 
