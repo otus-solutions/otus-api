@@ -47,7 +47,6 @@ resource "docker_container" "otus-api" {
 resource "docker_container" "otus-database" {
   name = "otus-database"
   image = "${docker_image.otus-database.latest}"
-  sysctls = "--wiredTigerCacheSizeGB=2"
   ports {
 	internal = 27017
 	external = "${var.otus-database["port"]}"

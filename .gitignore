@@ -17,3 +17,6 @@
 **/*npm-debug.log
 database/persistence/**
 persistence/
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
