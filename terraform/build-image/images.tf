@@ -2,6 +2,9 @@
 ###               Variables                 ###
 ###############################################
 
+variable "otus-api-dockerfile" {
+  default = "."
+}
 variable "otus-api-name" {
   default = "otus-api"
 }
@@ -13,7 +16,7 @@ variable "otus-api-source" {
 }
 
 variable "otus-api-mvnbuild" {
-  default = "clean install"
+  default = "clean install -DskipTests=true"
 }
 
 variable "otus-database-name" {
@@ -41,7 +44,7 @@ resource "null_resource" "otus-api" {
   depends_on = [null_resource.mvn-build]
 
   provisioner "local-exec" {
-    command = "docker build --target api -t ${var.otus-api-name} ."
+    command = "docker build --target api -t ${var.otus-api-name} ${var.otus-api-dockerfile}"
   }
 }
 
@@ -50,6 +53,6 @@ resource "null_resource" "otus-api" {
 ###############################################
 resource "null_resource" "otus-database" {
   provisioner "local-exec" {
-    command = "docker build --target database -t ${var.otus-database-name} ."
+    command = "docker build --target database -t ${var.otus-database-name} ${var.otus-api-dockerfile}"
   }
 }
