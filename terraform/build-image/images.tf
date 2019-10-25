@@ -16,7 +16,7 @@ variable "otus-api-source" {
 }
 
 variable "otus-api-mvnbuild" {
-  default = "clean install -DskipTests=true"
+  default = "clean install"
 }
 
 variable "otus-database-name" {
