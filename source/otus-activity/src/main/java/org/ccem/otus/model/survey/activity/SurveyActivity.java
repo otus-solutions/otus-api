@@ -102,6 +102,11 @@ public class SurveyActivity {
 
 	}
 
+	public Boolean isFinalized() {
+			ActivityStatus activityStatus = getCurrentStatus().get();
+			return activityStatus.getName().equals("FINALIZED");
+    }
+
 	public static String serialize(SurveyActivity surveyActivity) {
 		return getGsonBuilder().create().toJson(surveyActivity);
 	}

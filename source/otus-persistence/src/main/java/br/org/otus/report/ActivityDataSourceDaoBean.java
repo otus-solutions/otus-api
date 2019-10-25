@@ -34,5 +34,4 @@ public class ActivityDataSourceDaoBean extends MongoGenericDao<Document> impleme
 
 		return result;
 	}
-
 }

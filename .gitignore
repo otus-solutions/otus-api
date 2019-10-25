@@ -15,6 +15,7 @@
 /**/npm-debug.log.*
 **/.sonar
 **/*npm-debug.log
+**/.iml
 database/persistence/**
 persistence/
 .terraform/

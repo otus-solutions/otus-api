@@ -5,10 +5,13 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.persistence.ReportDao;
 import org.ccem.otus.persistence.ReportTemplateDTO;
@@ -41,6 +44,80 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	}
 
 	@Override
+	public ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException {
+		Document query = new Document();
+		query.put("acronym", acronym);
+		query.put("versions",version);
+
+		Document result = this.collection.find(query).first();
+
+		if (result == null) {
+			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + " and version " + version +"} not found."));
+		}
+
+		return ActivityReportTemplate.deserialize(result.toJson());
+	}
+
+	@Override
+	public ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException {
+
+		String acronym = activityReportTemplate.getAcronym();
+		List<Integer> version = activityReportTemplate.getVersions();
+		Document parsed = Document.parse(ActivityReportTemplate.serialize(activityReportTemplate));
+
+		if(findVersionActivityReport(acronym, version)){
+			super.persist(parsed);
+			activityReportTemplate.setId((ObjectId) parsed.get("_id"));
+		} else {
+			throw new ValidationException(new Throwable("Activity Report with acronym {" + acronym + " and version " + version +"} exists in base."));
+		}
+
+		return activityReportTemplate;
+	}
+
+	@Override
+	public List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException {
+		ArrayList<ActivityReportTemplate> results = new ArrayList<>();
+
+		FindIterable<Document> result = collection.find(eq("acronym", acronym));
+		result.forEach((Block<Document>) document -> {
+			results.add(ActivityReportTemplate.deserialize(document.toJson()));
+		});
+
+		if (results.isEmpty()) {
+			throw new DataNotFoundException(new Throwable("Report with acronym {" + acronym + "} not found."));
+		}
+
+		return results;
+	}
+
+	@Override
+	public void updateActivityReport(ObjectId reportId, ArrayList<Integer> versions) throws DataNotFoundException {
+
+		UpdateResult updateReportData = collection.updateOne(eq("_id", reportId), new Document("$set", new Document("versions", versions)));
+
+		if (updateReportData.getMatchedCount() == 0) {
+			throw new DataNotFoundException(new Throwable("Activity Report not found"));
+		}
+
+	}
+
+	private Boolean findVersionActivityReport(String acronym, List<Integer> versions) {
+		Boolean confirmation = false;
+		Document query = new Document();
+		query.put("acronym", acronym);
+		query.put("versions", new Document("$all", versions));
+
+		Document result = this.collection.find(query).first();
+
+		if(result == null){
+			confirmation = true;
+		}
+
+		return confirmation;
+	}
+
+	@Override
 	public ReportTemplate insert(ReportTemplate reportTemplate) {
 		Document parsed = Document.parse(ReportTemplate.serialize(reportTemplate));
 		super.persist(parsed);
@@ -54,7 +131,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 		DeleteResult deleteResult = collection.deleteOne(query);
 
 		if (deleteResult.getDeletedCount() == 0) {
-			throw new DataNotFoundException(new Throwable("ExamReport not found. Id: " + id));
+			throw new DataNotFoundException(new Throwable("Report not found. Id: " + id));
 		}
 
 	}
@@ -78,7 +155,7 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
 	public List<ReportTemplate> getAll() throws ValidationException {
 		ArrayList<ReportTemplate> results = new ArrayList<>();
 
-		MongoCursor iterator = collection.find().iterator();
+		MongoCursor iterator = collection.find(eq("objectType", "ParticipantReport")).iterator();
 
 		while (iterator.hasNext()) {
 			Document next = (Document) iterator.next();

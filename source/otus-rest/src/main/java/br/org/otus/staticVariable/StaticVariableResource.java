@@ -21,7 +21,7 @@ public class StaticVariableResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String listVariables(String variablesJson) {
-
     return new Response().buildSuccess(staticVariableFacade.listVariables(variablesJson)).toJson();
   }
+  
 }
