@@ -13,7 +13,7 @@
     <owail.sender.version>1.0</owail.sender.version>
     <equalize.version>2.0.2</equalize.version>
     <survey.model.version>1.10-SNAPSHOT</survey.model.version>
-    <auditor.core.version>1.2</auditor.core.version>
+
 
     <!-- External dependencies -->
     <mongodb.driver.version>3.8.1</mongodb.driver.version>
@@ -164,9 +164,9 @@
           <ejbVersion>3.1</ejbVersion>
         </configuration>
       </plugin>
-      <!-- * Maven Plugin : Control Workflow Development Team * - Start Feature 
-        : mvn jgitflow:feature-start * - Finish Feature : mvn jgitflow:feature-finish 
-        * - Start Hotfix : mvn jgitflow:hotfix-start * - Finish Hotfix : mvn jgitflow:hotfix-finish 
+      <!-- * Maven Plugin : Control Workflow Development Team * - Start Feature
+        : mvn jgitflow:feature-start * - Finish Feature : mvn jgitflow:feature-finish
+        * - Start Hotfix : mvn jgitflow:hotfix-start * - Finish Hotfix : mvn jgitflow:hotfix-finish
         * - Start Release : mvn jgitflow:release-start * - Finish Release : mvn jgitflow:release-finish -->
       <plugin>
         <groupId>external.atlassian.jgitflow</groupId>

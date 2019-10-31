@@ -227,12 +227,6 @@
       <type>ejb</type>
     </dependency>
     <dependency>
-      <groupId>org.ccem.auditor</groupId>
-      <artifactId>auditor-core</artifactId>
-      <version>${auditor.core.version}</version>
-      <type>ejb</type>
-    </dependency>
-    <dependency>
       <groupId>org.ccem.otus</groupId>
       <artifactId>otus-gateway</artifactId>
       <version>${project.parent.version}</version>
