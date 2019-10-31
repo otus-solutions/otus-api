@@ -5,6 +5,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import com.google.gson.JsonSyntaxException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 
@@ -60,10 +61,15 @@ public class ActivityFacade {
 	}
 
 	@SuppressWarnings("static-access")
-	public SurveyActivity deserialize(String surveyActivity) {
+	public SurveyActivity deserialize(String surveyActivity) throws ValidationException {
 		try {
-			return SurveyActivity.deserialize(surveyActivity);
-		} catch (JsonSyntaxException e) {
+		  SurveyActivity activity = SurveyActivity.deserialize(surveyActivity);
+		  if(activity.getExternalID() == null && activity.getSurveyForm().getRequiredExternalID()){
+        throw new ValidationException(new Throwable("Missing external ID required"));
+      }
+		  return activity;
+      //return SurveyActivity.deserialize(surveyActivity);
+    } catch (JsonSyntaxException e) {
 			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 		}
 	}

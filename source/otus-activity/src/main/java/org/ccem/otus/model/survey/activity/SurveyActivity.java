@@ -34,6 +34,7 @@ public class SurveyActivity {
 	private List<ActivityStatus> statusHistory;
 	private Boolean isDiscarded;
 	private NavigationTracker navigationTracker;
+	private String externalID;
 
 	public SurveyActivity() {
 		this.isDiscarded = Boolean.FALSE;
@@ -87,7 +88,15 @@ public class SurveyActivity {
 		return navigationTracker;
 	}
 
-	public Optional<ActivityStatus> getCurrentStatus() {
+  public String getExternalID() {
+    return externalID;
+  }
+
+  public void setExternalID(String externalID) {
+    this.externalID = externalID;
+  }
+
+  public Optional<ActivityStatus> getCurrentStatus() {
 		return this.statusHistory.stream().reduce((activityStatus, activityStatus2) -> activityStatus2);
 	}
 
@@ -121,7 +130,7 @@ public class SurveyActivity {
 	 * @return a GsonBuilder instance with AnswerAdapter, ObjectIdToStringAdapter
 	 *         registered and also all registered adapters of SurveyForm.
 	 *         {@link SurveyForm#getGsonBuilder}
-	 * 
+	 *
 	 */
 	public static GsonBuilder getGsonBuilder() {
 		//antes de editar este método, levar em conta os usuários de Response.toSurveyJson()
