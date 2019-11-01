@@ -36,9 +36,7 @@ public class SurveyActivity {
 	private NavigationTracker navigationTracker;
 	private String externalID;
 
-	public SurveyActivity() {
-		this.isDiscarded = Boolean.FALSE;
-	}
+	public SurveyActivity() {	this.isDiscarded = Boolean.FALSE;	}
 
 	public void setIsDiscarded(Boolean isDiscarded) {
 		this.isDiscarded = isDiscarded;
@@ -88,12 +86,12 @@ public class SurveyActivity {
 		return navigationTracker;
 	}
 
-  public String getExternalID() {
-    return externalID;
-  }
+  public String getExternalID() { return externalID; }
 
-  public void setExternalID(String externalID) {
-    this.externalID = externalID;
+  public void setExternalID(String externalID) { this.externalID = externalID; }
+
+  public Boolean hasRequiredExternalID(){
+	  return this.getSurveyForm().getRequiredExternalID();
   }
 
   public Optional<ActivityStatus> getCurrentStatus() {
