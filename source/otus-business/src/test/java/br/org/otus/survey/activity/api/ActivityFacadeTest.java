@@ -25,7 +25,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.google.gson.Gson;
 
 import br.org.otus.response.exception.HttpResponseException;
-@Ignore
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ActivityFacade.class})
 public class ActivityFacadeTest {
