@@ -26,7 +26,6 @@ public class ActivityResource {
   private ActivityFacade activityFacade;
   @Inject
   private ParticipantFacade participantFacade;
-
   @Inject
   private SecurityContext securityContext;
 
@@ -68,7 +67,6 @@ public class ActivityResource {
     isValidRecruitmentNumber(rn);
     SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
     SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
-
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
 
@@ -106,5 +104,4 @@ public class ActivityResource {
   private void isValidRecruitmentNumber(long rn) {
     participantFacade.getByRecruitmentNumber(rn);
   }
-
 }
