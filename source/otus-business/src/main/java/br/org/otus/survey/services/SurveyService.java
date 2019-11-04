@@ -30,4 +30,6 @@ public interface SurveyService {
   List<String> listAcronyms();
 
   void createSurveyJumpMap(SurveyForm surveyForm);
+
+  Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId);
 }

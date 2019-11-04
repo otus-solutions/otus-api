@@ -226,4 +226,9 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
     return surveyJumpMap;
   }
 
+  @Override
+  public Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId){
+    return true;
+  }
+
 }

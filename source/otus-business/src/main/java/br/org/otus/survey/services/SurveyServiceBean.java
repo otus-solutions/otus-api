@@ -123,6 +123,11 @@ public class SurveyServiceBean implements SurveyService {
     surveyJumpMapDao.persist(surveyJumpMap);
   }
 
+  @Override
+  public Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId){
+    return surveyDao.updateSurveyRequiredExternalID(surveyId, requiredExternalId);
+  }
+
   private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
     try {
       surveyDao.discardSurvey(survey.getSurveyID());

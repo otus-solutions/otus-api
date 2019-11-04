@@ -38,4 +38,6 @@ public interface SurveyDao {
     List<String> aggregate(ArrayList<Document> query);
 
     SurveyJumpMap createJumpMap(String acronym, Integer version);
+
+  Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId);
 }

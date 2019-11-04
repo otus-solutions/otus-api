@@ -70,9 +70,16 @@ public class SurveyFacade {
     public List<Integer> listVersions(String acronym) {
         return surveyService.listSurveyVersions(acronym);
     }
-
     public List<String> listAcronyms() {
         return surveyService.listAcronyms();
     }
 
+  public Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId) {
+      try {
+        return  surveyService.updateSurveyRequiredExternalID(surveyId, requiredExternalId);
+      } catch (Exception e){
+        //throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      }
+    return true;
+  }
 }

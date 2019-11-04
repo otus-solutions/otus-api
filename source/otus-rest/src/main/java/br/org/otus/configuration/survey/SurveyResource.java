@@ -77,9 +77,7 @@ public class SurveyResource {
   @Secured
   @Path("/update-required-external-id/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String updateSurveyRequiredExternalID(@PathParam("id") String surveyId, Boolean requiredExternalId) {
-    //return new Response().buildSuccess(surveyFacade.updateSurveyRequiredExternalID(surveyId, requiredExternalId)).toJson();
-    return new Response().buildSuccess().toJson();
+  public String updateSurveyRequiredExternalID(@PathParam("id") String surveyId, String requiredExternalId) {
+    return new Response().buildSuccess(surveyFacade.updateSurveyRequiredExternalID(surveyId, requiredExternalId)).toJson();
   }
-
 }
