@@ -9,6 +9,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
+import org.json.JSONException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -74,12 +75,11 @@ public class SurveyFacade {
         return surveyService.listAcronyms();
     }
 
-  public Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId) {
+  public long updateSurveyRequiredExternalID(String surveyID, String requiredExternalID) {
       try {
-        return  surveyService.updateSurveyRequiredExternalID(surveyId, requiredExternalId);
-      } catch (Exception e){
-        //throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+        return  surveyService.updateSurveyRequiredExternalID(surveyID, requiredExternalID).getModifiedCount();
+      } catch (JSONException | DataNotFoundException e){
+        throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
       }
-    return true;
   }
 }

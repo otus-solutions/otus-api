@@ -1,5 +1,6 @@
 package org.ccem.otus.persistence;
 
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -39,5 +40,5 @@ public interface SurveyDao {
 
     SurveyJumpMap createJumpMap(String acronym, Integer version);
 
-  Boolean updateSurveyRequiredExternalID(String surveyId, String requiredExternalId);
+  UpdateResult updateSurveyRequiredExternalID(ObjectId surveyID, Boolean stateRequiredExternalID) throws DataNotFoundException;
 }
