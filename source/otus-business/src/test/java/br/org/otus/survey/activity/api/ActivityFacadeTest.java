@@ -25,6 +25,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.google.gson.Gson;
 
 import br.org.otus.response.exception.HttpResponseException;
+import org.powermock.reflect.Whitebox;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ActivityFacade.class})
 public class ActivityFacadeTest {
@@ -90,6 +92,12 @@ public class ActivityFacadeTest {
     when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
     activityFacade.create(surveyActivity);
     verify(activityService, times(1)).create(surveyActivity);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void createMethodTest_should_trigger_requiredExternalID_validation() {
+    PowerMockito.when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
+    activityFacade.create(surveyActivity);
   }
 
   @Test
