@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -40,9 +39,8 @@ public class SurveyServiceBeanTest {
   private static final String ACRONYM_NULL = null;
   private static final Integer LATEST_VERSION = 1;
   private static final Integer VERSION = 1;
-  private static final String surveyID = "5aff3edaaf11bb0d302be236";
-  private static final String requiredExternalID = "{\"requiredExternalID\": true}";
-
+  private static final String SURVEY_ID = "5aff3edaaf11bb0d302be236";
+  private static final String REQUIRED_EXT_ID = "{\"requiredExternalID\": true}";
 
   @InjectMocks
   private SurveyServiceBean service;
@@ -93,13 +91,9 @@ public class SurveyServiceBeanTest {
     when(lastVersionSurvey.getVersion()).thenReturn(LATEST_VERSION);
 
     when(surveyDaoBean.getLastVersionByAcronym(ACRONYM)).thenReturn(lastVersionSurvey);
-
     when(surveyDaoBean.updateSurveyRequiredExternalID(Mockito.any(), Mockito.any())).thenReturn(updateResult);
-
-
   }
 
-  //save survey unit tests
   @Test
   public void saveSurvey_shoud_call_method_validateSurvey() throws AlreadyExistException, DataNotFoundException {
     service.saveSurvey(survey);
@@ -142,7 +136,6 @@ public class SurveyServiceBeanTest {
   @Test
   public void should_set_survey_objectId_from_persistence() throws AlreadyExistException, DataNotFoundException {
     ObjectId objectId = new ObjectId();
-
     when(surveyDaoBean.persist(survey)).thenReturn(objectId);
     service.saveSurvey(survey).getVersion();
     verify(survey).setSurveyID(objectId);
@@ -217,6 +210,6 @@ public class SurveyServiceBeanTest {
 
   @Test
   public void updateSurveyRequiredExternalIDMethod_should_return_instance_by_UpdateResult() throws JSONException, DataNotFoundException {
-    assertTrue(service.updateSurveyRequiredExternalID(surveyID, requiredExternalID) instanceof UpdateResult);
+    assertTrue(service.updateSurveyRequiredExternalID(SURVEY_ID, REQUIRED_EXT_ID) instanceof UpdateResult);
   }
 }
