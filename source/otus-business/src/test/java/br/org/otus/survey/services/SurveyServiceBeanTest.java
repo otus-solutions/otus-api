@@ -216,7 +216,7 @@ public class SurveyServiceBeanTest {
   }
 
   @Test
-  public void updateSurveyRequiredExternalIDMethod_should() throws JSONException, DataNotFoundException {
+  public void updateSurveyRequiredExternalIDMethod_should_return_instance_by_UpdateResult() throws JSONException, DataNotFoundException {
     assertTrue(service.updateSurveyRequiredExternalID(surveyID, requiredExternalID) instanceof UpdateResult);
   }
 }

@@ -12,16 +12,20 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.client.result.UpdateResult;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -34,10 +38,12 @@ import br.org.otus.survey.services.SurveyService;
 public class SurveyFacadeTest {
 	private static final String USER_EMAIL = "otus@tus.com";
 	private static final String ACRONYM = "USGC";
-	private static final String ACRONYM_ALREADY_EXIST = "Acronym";
 	private static final Boolean POSITIVE_ANSWER = true;
 	private static final Boolean NEGATIVE_ANSWER = false;
 	private static final Integer VERSION = 1;
+  private static final String surveyID = "5aff3edaaf11bb0d302be236";
+  private static final String requiredExternalID = "{\"requiredExternalID\": true}";
+
 	@InjectMocks
 	private SurveyFacade surveyFacade;
 	@Mock
@@ -46,13 +52,20 @@ public class SurveyFacadeTest {
 	private SurveyForm survey;
 	@Mock
 	private UpdateSurveyFormTypeDto updateSurveyFormTypeDto;
+	@Mock
+  private UpdateResult updateResult;
+
+
 	private List<SurveyForm> surveys;
 	private SurveyTemplate surveyTemplate;
 	private SurveyForm surveyAcronym;
 	private Throwable e;
 
+
+
+
 	@Before
-	public void setUp() {
+	public void setUp() throws JSONException, DataNotFoundException {
 		surveys = new ArrayList<SurveyForm>();
 		surveyTemplate = new SurveyTemplate();
 		surveyAcronym = new SurveyForm(surveyTemplate, USER_EMAIL);
@@ -81,7 +94,7 @@ public class SurveyFacadeTest {
 		when(surveyService.findByAcronym(ACRONYM)).thenReturn(surveys);
 		assertEquals(surveys.size(), surveyFacade.findByAcronym(ACRONYM).size());
 	}
-	
+
 	@Test
 	public void method_findByAcronymWithVersion_should_return_survey_by_acronym() throws DataNotFoundException {
 		surveys.add(surveyAcronym);
@@ -111,7 +124,6 @@ public class SurveyFacadeTest {
 		when(surveyService.saveSurvey(survey)).thenThrow(e);
 		when(e.getCause()).thenReturn(e);
 		when(e.getMessage()).thenReturn(ACRONYM);
-
 		surveyFacade.publishSurveyTemplate(surveyTemplate, USER_EMAIL);
 	}
 
@@ -150,4 +162,31 @@ public class SurveyFacadeTest {
 		when(surveyService.deleteLastVersionByAcronym(ACRONYM)).thenThrow(new ValidationException(new Throwable("")));
 		assertFalse(surveyFacade.deleteLastVersionByAcronym(ACRONYM));
 	}
+
+	@Test
+	public void updateSurveyRequiredExternalIDMethod_should_invoke_updateSurveyRequiredExternalID_of_surveyService() throws JSONException, DataNotFoundException {
+    when(surveyService.updateSurveyRequiredExternalID(surveyID, requiredExternalID)).thenReturn(updateResult);
+    surveyFacade.updateSurveyRequiredExternalID(surveyID, requiredExternalID);
+	  Mockito.verify(surveyService, Mockito.times(1)).updateSurveyRequiredExternalID(surveyID,requiredExternalID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void updateSurveyRequiredExternalIDMethod_catch_and_handle_JSONException() throws Exception {
+	  Throwable jsx = spy(new JSONException("JSONException Test"));
+	  when(surveyService.updateSurveyRequiredExternalID(surveyID, requiredExternalID)).thenThrow(jsx);
+	  when(jsx.getCause()).thenReturn(jsx);
+	  when(e.getMessage()).thenReturn("fail");
+    surveyFacade.updateSurveyRequiredExternalID(surveyID, requiredExternalID);
+  }
+
+
+  @Test(expected = HttpResponseException.class)
+  public void updateSurveyRequiredExternalIDMethod_catch_and_handle_dataNotFoundException() throws Exception {
+    Throwable dx = spy(new DataNotFoundException("DataNotFoundException Test"));
+    when(surveyService.updateSurveyRequiredExternalID(surveyID, requiredExternalID)).thenThrow(dx);
+    when(dx.getCause()).thenReturn(dx);
+    when(e.getMessage()).thenReturn("fail");
+    surveyFacade.updateSurveyRequiredExternalID(surveyID, requiredExternalID);
+  }
+
 }
