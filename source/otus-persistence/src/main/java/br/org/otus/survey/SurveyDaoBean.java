@@ -226,4 +226,17 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
     return surveyJumpMap;
   }
 
+  @Override
+  public UpdateResult updateSurveyRequiredExternalID(ObjectId surveyID, Boolean stateRequiredExternalID) throws DataNotFoundException {
+
+    UpdateResult updateResult = collection.updateOne(
+      eq("_id", surveyID),
+        new Document("$set",
+          new Document("requiredExternalID", stateRequiredExternalID)));
+
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("survey not found");
+    }
+    return updateResult;
+  }
 }

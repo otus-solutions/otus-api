@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.mongodb.client.result.UpdateResult;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -17,6 +18,8 @@ import org.ccem.otus.persistence.SurveyJumpMapDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Stateless
 public class SurveyServiceBean implements SurveyService {
@@ -121,6 +124,14 @@ public class SurveyServiceBean implements SurveyService {
     surveyJumpMap.setSurveyAcronym(surveyForm.getSurveyTemplate().identity.acronym);
     surveyJumpMap.setSurveyVersion(surveyForm.getVersion());
     surveyJumpMapDao.persist(surveyJumpMap);
+  }
+
+  @Override
+  public UpdateResult updateSurveyRequiredExternalID(String surveyID, String requiredExternalID) throws JSONException, DataNotFoundException {
+    ObjectId objectId = new ObjectId(surveyID);
+    JSONObject requiredExternalIDJsonObject = new JSONObject(requiredExternalID);
+    Boolean stateRequiredExternalID = (Boolean) requiredExternalIDJsonObject.get("requiredExternalID");
+    return surveyDao.updateSurveyRequiredExternalID(objectId, stateRequiredExternalID);
   }
 
   private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
