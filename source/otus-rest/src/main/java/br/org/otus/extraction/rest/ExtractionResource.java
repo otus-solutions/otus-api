@@ -77,7 +77,7 @@ public class ExtractionResource {
 
   @GET
   @SecuredExtraction
-  //@Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activities/progress/{center}")
   public byte[] extractActivitiesProgress(@PathParam("center") String center) throws DataNotFoundException {
     return extractionFacade.createActivityProgressExtraction(center);
