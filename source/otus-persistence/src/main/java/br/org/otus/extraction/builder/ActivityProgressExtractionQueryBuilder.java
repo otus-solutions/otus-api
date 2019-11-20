@@ -19,7 +19,7 @@ public class ActivityProgressExtractionQueryBuilder {
     this.pipeline = new ArrayList<>();
   }
 
-  public ArrayList<Bson> getActivityStatusQueryToExtraction(String center, AggregateIterable<Document> rns, LinkedList<String> acronyms, AggregateIterable<Document> inapplicabilities) {
+  public ArrayList<Bson> getActivityStatusQueryToExtraction(String center, AggregateIterable<Document> rns, AggregateIterable<Document> acronyms, AggregateIterable<Document> inapplicabilities) {
     pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $match: {\n" + 
         "      \"participantData.fieldCenter.acronym\": \"RS\",\n" + 
@@ -70,7 +70,7 @@ public class ActivityProgressExtractionQueryBuilder {
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $addFields: {\n" + 
-        "      rns: " + new GsonBuilder().create().toJson(rns.first().get("allRns")) + 
+        "      rns: " + new GsonBuilder().create().toJson(rns.first().get("allRns")) + "\n" + 
         "    }\n" + 
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 
@@ -171,7 +171,7 @@ public class ActivityProgressExtractionQueryBuilder {
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $addFields: {\n" + 
-        "      \"headers\": " + acronyms + "" +
+        "      headers: "+ new GsonBuilder().create().toJson(acronyms.first().get("acronyms")) +"\n" + 
         "    }\n" + 
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 
@@ -210,7 +210,7 @@ public class ActivityProgressExtractionQueryBuilder {
         "      }\n" + 
         "    }\n" + 
         "  }"));
-    pipeline.add(ParseQuery.toDocument("  {\n" + 
+    pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $group: {\n" + 
         "      _id: \"$_id\",\n" + 
         "      filteredActivities: {\n" + 
@@ -277,6 +277,7 @@ public class ActivityProgressExtractionQueryBuilder {
         "    $unwind: \"$filteredActivities\"\n" + 
         "  }"));
     pipeline.add(ParseQuery.toDocument("{ $replaceRoot: { newRoot: \"$filteredActivities\" } }"));
+    
     return pipeline;
   }
   
@@ -299,6 +300,7 @@ public class ActivityProgressExtractionQueryBuilder {
         "      }\n" + 
         "    }\n" + 
         "  }"));
+    
     return pipeline;
   }
   
@@ -340,6 +342,19 @@ public class ActivityProgressExtractionQueryBuilder {
         "      }\n" + 
         "    }\n" + 
         "  }"));
+    
+    return pipeline;
+  }
+  
+  public List<Bson> getAllAcronyms() {
+    List<Bson> pipeline = new ArrayList<>();
+    pipeline.add(ParseQuery.toDocument("{\n" + 
+        "    $group: {\n" + 
+        "      _id: '',\n" + 
+        "      acronyms: { $addToSet: \"$surveyTemplate.identity.acronym\" }\n" + 
+        "    }\n" + 
+        "  }"));
+    
     return pipeline;
   }
 
