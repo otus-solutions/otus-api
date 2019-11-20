@@ -14,7 +14,6 @@ import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,14 +29,13 @@ import com.mongodb.client.MongoCursor;
 
 import br.org.otus.extraction.builder.ActivityProgressExtractionQueryBuilder;
 
-@Ignore
 @RunWith(PowerMockRunner.class)
 public class ActivityProgressExtractionDaoBeanTest {
 
   private static final String CENTER = "RS";
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
   private MongoCursor cursor = PowerMockito.mock(MongoCursor.class);
-  
+
   @InjectMocks
   private ActivityProgressExtractionDaoBean activityProgressExtractionDaoBean = PowerMockito.spy(new ActivityProgressExtractionDaoBean());
   @Mock
@@ -64,20 +62,20 @@ public class ActivityProgressExtractionDaoBeanTest {
         .append("acronym", "CSJ")
         .append("statusDate", "2018-10-15T11:40:05.282Z")
         .append("observation", "");
-    
+
     Whitebox.setInternalState(activityProgressExtractionDaoBean, "collection", collection);
-    when(surveyDao.listAcronyms()).thenReturn(SURVEY_ACRONYM_LIST);
+    when(surveyDao.aggregate(Matchers.anyList())).thenReturn(aggregateResultMock);
     when(participantDao.aggregate(Matchers.anyList())).thenReturn(aggregateResultMock);
     when(activityInapplicabilityDao.aggregate(Matchers.anyList())).thenReturn(aggregateResultMock);
     when(aggregateResultMock.allowDiskUse(true)).thenReturn(aggregateResultMock);
     when(aggregateResultMock.first()).thenReturn(new Document());
-    
+
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
     when(result.iterator()).thenReturn(cursor);
     when(cursor.hasNext()).thenReturn(true).thenReturn(false);
     when(cursor.next()).thenReturn(document);
-    
+
     builder = PowerMockito.spy(new ActivityProgressExtractionQueryBuilder());
     PowerMockito.whenNew(ActivityProgressExtractionQueryBuilder.class).withNoArguments().thenReturn(builder);
   }
@@ -86,11 +84,11 @@ public class ActivityProgressExtractionDaoBeanTest {
   public void getActivityProgressExtraction_method_should_return_instance_of_list() throws DataNotFoundException {
     Assert.assertTrue(activityProgressExtractionDaoBean.getActivityProgressExtraction(CENTER) instanceof LinkedList);
   }
-  
+
   @Test
   public void getActivityProgressExtraction_method_should_return_expected_values() throws DataNotFoundException {
     LinkedList<ActivityProgressResultExtraction> result = activityProgressExtractionDaoBean.getActivityProgressExtraction(CENTER);
-    
+
     Assert.assertEquals("5006259", result.get(0).getRecruitmentNumber().toString());
     Assert.assertEquals("FINALIZED", result.get(0).getStatus());
     Assert.assertEquals("CSJ", result.get(0).getAcronym());
