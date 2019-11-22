@@ -40,7 +40,7 @@ public class ParticipantServiceBean implements ParticipantService {
 
   @Override
   public ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException {
-    return participantDao.getCenterRns(center);
+    return participantDao.getRecruitmentNumbersByFieldCenter(center);
   }
 
 

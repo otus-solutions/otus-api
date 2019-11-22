@@ -43,12 +43,14 @@ public class ActivityProgressExtractionDaoBean extends MongoGenericDao<Document>
     AggregateIterable<Document> acronyms = this.surveyDao.aggregate(queryToAcronyms).allowDiskUse(true);
 
     List<Bson> queryToParticipants = queryBuilder.getParticipants();
-    AggregateIterable<Document> rns = this.participantDao.aggregate(queryToParticipants).allowDiskUse(true);
+    AggregateIterable<Document> participantsByFieldCenter = this.participantDao.aggregate(queryToParticipants).allowDiskUse(true);
+    
+    ArrayList<Long> rns = this.participantDao.getRecruitmentNumbersByFieldCenter(center);
 
     List<Bson> queryToInapplicabilities = queryBuilder.getInapplicabilities();
     AggregateIterable<Document> inapplicabilities = this.activityInapplicabilityDao.aggregate(queryToInapplicabilities).allowDiskUse(true);
 
-    ArrayList<Bson> query = queryBuilder.getActivityStatusQueryToExtraction(center, rns, acronyms, inapplicabilities);
+    ArrayList<Bson> query = queryBuilder.getActivityStatusQueryToExtraction(center, rns, participantsByFieldCenter, acronyms, inapplicabilities);
     AggregateIterable<Document> results = collection.aggregate(query).allowDiskUse(true);
 
     if (results == null) {

@@ -1,7 +1,6 @@
 package br.org.otus.extraction.builder;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.Document;
@@ -19,10 +18,10 @@ public class ActivityProgressExtractionQueryBuilder {
     this.pipeline = new ArrayList<>();
   }
 
-  public ArrayList<Bson> getActivityStatusQueryToExtraction(String center, AggregateIterable<Document> rns, AggregateIterable<Document> acronyms, AggregateIterable<Document> inapplicabilities) {
+  public ArrayList<Bson> getActivityStatusQueryToExtraction(String center, ArrayList<Long> rns, AggregateIterable<Document> participantsByFieldCenter, AggregateIterable<Document> acronyms, AggregateIterable<Document> inapplicabilities) {
     pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $match: {\n" + 
-        "      \"participantData.fieldCenter.acronym\": \"RS\",\n" + 
+        "      \"participantData.recruitmentNumber\": { $in: " + rns + "},\n" + 
         "      \"isDiscarded\": false\n" + 
         "    }\n" + 
         "  }"));
@@ -70,7 +69,7 @@ public class ActivityProgressExtractionQueryBuilder {
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $addFields: {\n" + 
-        "      rns: " + new GsonBuilder().create().toJson(rns.first().get("allRns")) + "\n" + 
+        "      rns: " + new GsonBuilder().create().toJson(participantsByFieldCenter.first().get("allRns")) + "\n" + 
         "    }\n" + 
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 

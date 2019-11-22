@@ -27,7 +27,7 @@ public interface ParticipantDao {
 
   Participant getLastInsertion(FieldCenter fieldCenter) throws DataNotFoundException;
 
-  ArrayList<Long> getCenterRns(String center) throws DataNotFoundException;
+  ArrayList<Long> getRecruitmentNumbersByFieldCenter(String center) throws DataNotFoundException;
 
   AggregateIterable<Document> aggregate(List<Bson> query);
 
