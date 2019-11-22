@@ -63,7 +63,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public ArrayList<Long> getCenterRns(String center) throws DataNotFoundException {
+  public ArrayList<Long> getRecruitmentNumbersByFieldCenter(String center) throws DataNotFoundException {
     Document query = new Document("fieldCenter.acronym", center);
     MongoCursor<Long> cursor = collection.distinct("recruitmentNumber", query, Long.class).iterator();
 
