@@ -2,13 +2,11 @@ package org.ccem.otus.participant.model;
 
 import java.time.LocalDateTime;
 
-
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.utils.LongAdapter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
-
 
 import com.google.gson.GsonBuilder;
 
@@ -102,6 +100,7 @@ public class Participant {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.registerTypeAdapter(Long.class, new LongAdapter());
     return builder;
 }
    
