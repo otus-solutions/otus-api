@@ -29,7 +29,8 @@ ENV DATABASE_PASS="otus"
 ENV DBDISTRIBUTION_PORT="8080"
 ENV DBDISTRIBUTION_HOST="db-distribution-service"
 ENV DEBUG_MODE="false"
-
+ENV DCM_HOST="dcm-service"
+ENV DCM_PORT="54001"
 
 
 ADD server/api/standalone-custom.xml /opt/jboss/wildfly/standalone/configuration/ 
