@@ -1,16 +1,22 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import com.google.gson.JsonSyntaxException;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
-import javax.inject.Inject;
-import java.util.List;
+import com.google.gson.JsonSyntaxException;
+
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.Validation;
 
 public class ActivityFacade {
 
@@ -25,7 +31,7 @@ public class ActivityFacade {
     try {
       return activityService.getByID(id);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -33,9 +39,9 @@ public class ActivityFacade {
     try {
       return activityService.get(acronym, version);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (MemoryExcededException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -45,16 +51,15 @@ public class ActivityFacade {
       return activityService.create(surveyActivity);
 
     } catch (ValidationException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
-
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
     try {
       return activityService.update(surveyActivity);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -62,8 +67,15 @@ public class ActivityFacade {
     try {
       return activityService.updateCheckerActivity(checkerUpdated);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(
-        ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
+    }
+  }
+
+  public LinkedList<ActivityProgressResultExtraction> getActivityProgressExtraction(String center) {
+    try {
+      return activityService.getActivityProgressExtraction(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 

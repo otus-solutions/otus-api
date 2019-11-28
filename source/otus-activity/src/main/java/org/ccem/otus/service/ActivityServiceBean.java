@@ -1,6 +1,7 @@
 package org.ccem.otus.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -13,6 +14,8 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
+import org.ccem.otus.persistence.ActivityProgressExtractionDao;
+import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 
 @Stateless
@@ -22,6 +25,8 @@ public class ActivityServiceBean implements ActivityService {
   private ActivityDao activityDao;
   @Inject
   private ActivityAccessPermissionService activityAccessPermissionService;
+  @Inject
+  private ActivityProgressExtractionDao activityProgressExtractionDao;
 
   private boolean permissionStatus;
   private boolean userStatusHistory;
@@ -124,6 +129,11 @@ public class ActivityServiceBean implements ActivityService {
   @Override
   public SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException {
     return activityDao.getLastFinalizedActivity(acronym, version, categoryName, recruitmentNumber);
+  }
+
+  @Override
+  public LinkedList<ActivityProgressResultExtraction> getActivityProgressExtraction(String center) throws DataNotFoundException {
+    return activityProgressExtractionDao.getActivityProgressExtraction(center);
   }
 
 }

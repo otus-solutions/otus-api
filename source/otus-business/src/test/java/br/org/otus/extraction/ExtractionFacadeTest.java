@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.DataSourceService;
+import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -34,6 +35,7 @@ public class ExtractionFacadeTest {
 
   private static final SurveyTemplate surveyTemplate = new SurveyTemplate();
   private static final String userEmail = "otus@otus.com";
+  private static final String CENTER = "RS";
 
   @InjectMocks
   private ExtractionFacade extractionFacade;
@@ -57,6 +59,8 @@ public class ExtractionFacadeTest {
   private ExtractionServiceBean extractionService;
   @Mock
   private DataSourceService dataSourceService;
+  @Mock
+  private ActivityProgressExtraction activityProgressExtraction;
 
   SurveyForm surveyForm = new SurveyForm(surveyTemplate, userEmail);
 
@@ -73,6 +77,7 @@ public class ExtractionFacadeTest {
     PowerMockito.whenNew(SurveyActivityExtraction.class).withAnyArguments().thenReturn(surveyActivityExtraction);
     PowerMockito.whenNew(ExamUploadExtration.class).withAnyArguments().thenReturn(examUploadExtration);
     PowerMockito.whenNew(LaboratoryExtraction.class).withAnyArguments().thenReturn(laboratoryExtraction);
+    PowerMockito.whenNew(ActivityProgressExtraction.class).withAnyArguments().thenReturn(activityProgressExtraction);
   }
 
   @Test
@@ -113,6 +118,14 @@ public class ExtractionFacadeTest {
 
     Mockito.verify(participantLaboratoryFacade).getLaboratoryExtraction();
     Mockito.verify(extractionService).createExtraction(laboratoryExtraction);
+  }
+
+  @Test
+  public void createActivityProgressExtraction_method_should_call_methods_expected() throws DataNotFoundException {
+    extractionFacade.createActivityProgressExtraction(CENTER);
+
+    Mockito.verify(activityFacade, Mockito.times(1)).getActivityProgressExtraction(CENTER);
+    Mockito.verify(extractionService, Mockito.times(1)).createExtraction(activityProgressExtraction);
   }
 
 }

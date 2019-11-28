@@ -19,6 +19,7 @@ public class ExtractionResourceTest {
 
   private static final String acronym = "ANTC";
   private static final Integer version = 1;
+  private static final String CENTER = "RS";
 
   @InjectMocks
   private ExtractionResource extractionResource;
@@ -48,24 +49,31 @@ public class ExtractionResourceTest {
     extractionResource.listSurveyVersions(acronym);
     Mockito.verify(extractionFacade).listSurveyVersions(acronym);
   }
-  
+
   @Test
   public void should_verify_method_extractExamsValues_have_been_called() throws DataNotFoundException {
     extractionResource.extractExamsValues();
     Mockito.verify(extractionFacade).createLaboratoryExamsValuesExtraction();
   }
 
-	@Test
-	public void should_verify_method_extractAnnexesReport_have_been_called() throws DataNotFoundException {
-		extractionResource.extractAnnexesReport(acronym,version);
-		Mockito.verify(extractionFacade).createAttachmentsReportExtraction(acronym,version);
-	}
+  @Test
+  public void should_verify_method_extractAnnexesReport_have_been_called() throws DataNotFoundException {
+    extractionResource.extractAnnexesReport(acronym, version);
+    Mockito.verify(extractionFacade).createAttachmentsReportExtraction(acronym, version);
+  }
 
   @Test
   public void extractLaboratory_method_should_call_createLaboratoryExtraction_method() throws DataNotFoundException {
     extractionResource.extractLaboratory();
-    
+
     Mockito.verify(extractionFacade).createLaboratoryExtraction();
+  }
+
+  @Test
+  public void extractActivitiesProgress_method_should_call_createActivityProgressExtraction_method() throws DataNotFoundException {
+    extractionResource.extractActivitiesProgress(CENTER);
+
+    Mockito.verify(extractionFacade).createActivityProgressExtraction(CENTER);
   }
 
 }
