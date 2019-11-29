@@ -7,7 +7,7 @@ variable "otus-database-host" {
 }
 
 variable "otus-database-port" {
-	default = 51003
+	default = 27017
 }
 
 variable "otus-database-user" {
