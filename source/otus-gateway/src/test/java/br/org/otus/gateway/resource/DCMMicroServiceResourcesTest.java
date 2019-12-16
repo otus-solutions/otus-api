@@ -19,7 +19,7 @@ import br.org.otus.gateway.MicroservicesEnvironments;
 @PrepareForTest({ DCMMicroServiceResources.class })
 public class DCMMicroServiceResourcesTest {
 
-  private static final String HOST = "http://localhost:";
+  private static final String HOST = "localhost";
   private static final String PORT = "8081";
   private DCMMicroServiceResources resources;
   private MicroservicesEnvironments microservicesEnvironments;
