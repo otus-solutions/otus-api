@@ -15,11 +15,11 @@ public class DCMMicroServiceResources extends MicroservicesResources {
   }
 
   public URL getRetinographyImageAddress() throws MalformedURLException {
-    return new URL(this.HOST + this.PORT + RETINOGRAPHY_IMAGE);
+    return new URL("http://" + this.HOST + ":" + this.PORT + RETINOGRAPHY_IMAGE);
   }
 
   public URL getUltrasoundImageAddress() throws MalformedURLException {
-    return new URL(this.HOST + this.PORT + ULTRASOUND_IMAGE);
+    return new URL("http://" + this.HOST + ":" + this.PORT + ULTRASOUND_IMAGE);
   }
 
 }

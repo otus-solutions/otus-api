@@ -28,10 +28,10 @@ ENV DATABASE_USER="otus"
 ENV DATABASE_PASS="otus"
 ENV DBDISTRIBUTION_PORT="8080"
 ENV DBDISTRIBUTION_HOST="db-distribution-service"
-ENV DEBUG_MODE="false"
 ENV DCM_HOST="dcm-service"
-ENV DCM_PORT="54001"
+ENV DCM_PORT="8080"
 
+USER root
 
 ADD server/api/standalone-custom.xml /opt/jboss/wildfly/standalone/configuration/ 
 ADD server/api/standalone.sh /opt/jboss/wildfly/bin/

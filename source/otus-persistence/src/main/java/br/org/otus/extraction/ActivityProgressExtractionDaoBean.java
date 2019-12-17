@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.survey.SurveyDaoBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -25,12 +26,12 @@ public class ActivityProgressExtractionDaoBean extends MongoGenericDao<Document>
 
   public static final String COLLECTION_NAME = "activity";
   @Inject
-  private SurveyDao surveyDao;
+  private SurveyDaoBean surveyDao;
   @Inject
   private ParticipantDao participantDao;
   @Inject
   private ActivityInapplicabilityDao activityInapplicabilityDao;
-  
+
   public ActivityProgressExtractionDaoBean() {
     super(COLLECTION_NAME, Document.class);
   }
@@ -44,7 +45,7 @@ public class ActivityProgressExtractionDaoBean extends MongoGenericDao<Document>
 
     List<Bson> queryToParticipants = queryBuilder.getParticipants();
     AggregateIterable<Document> participantsByFieldCenter = this.participantDao.aggregate(queryToParticipants).allowDiskUse(true);
-    
+
     ArrayList<Long> rns = this.participantDao.getRecruitmentNumbersByFieldCenter(center);
 
     List<Bson> queryToInapplicabilities = queryBuilder.getInapplicabilities();

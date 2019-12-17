@@ -17,6 +17,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
@@ -44,7 +45,7 @@ public class ActivityServiceBeanTest {
   private static final String ACRONYM = "ACTA";
   private static final String CATEGORY_NAME = "C0";
   private static final String CENTER = "RS";
-
+  private ActivityAccessPermission permission;
   private List<SurveyActivity> surveyActivities;
 
   @InjectMocks

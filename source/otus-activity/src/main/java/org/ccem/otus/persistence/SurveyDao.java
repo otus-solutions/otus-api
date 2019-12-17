@@ -44,6 +44,6 @@ public interface SurveyDao {
   SurveyJumpMap createJumpMap(String acronym, Integer version);
 
   UpdateResult updateSurveyRequiredExternalID(ObjectId surveyID, Boolean stateRequiredExternalID) throws DataNotFoundException;
-  
+
   AggregateIterable<Document> aggregate(List<Bson> query);
 }
