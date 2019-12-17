@@ -39,11 +39,13 @@ public class SurveyActivityExtractionRecordsFactory {
     return this.surveyInformation;
   }
 
-  public void buildSurveyBasicInfo(SurveyActivity surveyActivity) {
+  public void buildSurveyBasicInfo(SurveyActivity surveyActivity, String participanteFieldCenter) {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), SurveyBasicInfoRecordsFactory.getRecruitmentNumber(surveyActivity));
+    this.surveyInformation.replace(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER.getValue(), participanteFieldCenter);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), this.surveyForm.getSurveyTemplate().identity.acronym);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.MODE.getValue(), surveyActivity.getMode());
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), SurveyBasicInfoRecordsFactory.getCategory(surveyActivity));
+    this.surveyInformation.replace(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER_BY_ACTIVITY.getValue(), SurveyBasicInfoRecordsFactory.getParticipantFieldCenter(surveyActivity));
 
     final String interviewerEmail = SurveyBasicInfoRecordsFactory.getLastInterviewer(surveyActivity);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getValue(), interviewerEmail);

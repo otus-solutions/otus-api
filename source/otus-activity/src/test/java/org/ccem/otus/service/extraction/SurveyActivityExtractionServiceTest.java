@@ -19,10 +19,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SurveyActivityExtraction.class })
-public class SurveyActivityExtractionTest {
+@PrepareForTest({ SurveyActivityExtractionServiceBean.class })
+public class SurveyActivityExtractionServiceTest {
 
-  private SurveyActivityExtraction surveyActivityExtraction;
+  private SurveyActivityExtractionServiceBean surveyActivityExtraction;
   private List<SurveyActivity> surveyActivities;
 
   @Mock
@@ -44,7 +44,7 @@ public class SurveyActivityExtractionTest {
     PowerMockito.whenNew(SurveyActivityExtractionRecordsFactory.class).withAnyArguments().thenReturn(records);
     PowerMockito.whenNew(SurveyActivityExtractionHeadersFactory.class).withAnyArguments().thenReturn(headers);
     surveyActivities = Arrays.asList(surveyActivity);
-    surveyActivityExtraction = new SurveyActivityExtraction(surveyForm, surveyActivities);
+    // surveyActivityExtraction = new SurveyActivityExtractionService(surveyForm, surveyActivities);
     PowerMockito.when(activityPreProcessor.process(Mockito.any(), Mockito.any())).thenReturn(records);
   }
 
