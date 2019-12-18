@@ -46,9 +46,9 @@ public class SurveyActivityExtractionServiceBean implements Extractable, SurveyA
     List<List<Object>> values = new ArrayList<>();
 
     for (SurveyActivity surveyActivity : this.surveyActivities) {
+      List<Object> resultInformation = new ArrayList<>();
       String participantFieldCenter = getParticipantFieldCenterByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
       this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());
-      List<Object> resultInformation = new ArrayList<>();
       this.recordsFactory.buildSurveyBasicInfo(surveyActivity, participantFieldCenter);
       this.recordsFactory.buildSurveyQuestionInfo(surveyActivity);
       for (ActivityPreProcessor preprocessor : this.processors) {

@@ -1,17 +1,16 @@
 package org.ccem.otus.service.extraction.factories;
 
-import org.ccem.otus.model.FieldCenter;
+import java.time.LocalDateTime;
+
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 
-import java.time.LocalDateTime;
-
 public class SurveyBasicInfoRecordsFactory {
 
-  public static final String HEADER_MESSAGE = "[EXTRACTION]";
-  public static final String LAST_INTERVIEWER_NOT_FOUND = "Interviewer value error";
+  private static final String HEADER_MESSAGE = "[EXTRACTION]";
+  private static final String LAST_INTERVIEWER_NOT_FOUND = "Interviewer value error";
   private static final String CURRENT_STATUS_NAME_NOT_FOUND = "Current status name value error";
   private static final String CURRENT_STATUS_DATE_NOT_FOUND = "Current status date value error";
   private static final String CREATION_DATE_NOT_FOUND = "Current creation date value error";
@@ -20,7 +19,7 @@ public class SurveyBasicInfoRecordsFactory {
   private static final String FINALIZED_STATUS_NOT_FOUND = "Finalized status value error";
   private static final String CATEGORY_NOT_FOUND = "Category value error";
   private static final String PARTICIPANT_NOT_FOUND = "Participant value error";
-  private static final String FIELD_CENTER_NOT_FOUND = "Participant Field Center by activity error";
+  private static final String PARTICIPANT_FIELD_CENTER_NOT_FOUND = "Participant Field Center by activity error";
 
   public static Long getRecruitmentNumber(SurveyActivity surveyActivity) {
     try {
@@ -115,11 +114,16 @@ public class SurveyBasicInfoRecordsFactory {
   }
 
   public static String getParticipantFieldCenter(SurveyActivity surveyActivity) {
+    String acronym = null;
     try {
-      final String acronym = surveyActivity.getParticipantData().getFieldCenter().getAcronym();
+      if (surveyActivity.getParticipantData() != null) {
+        if (surveyActivity.getParticipantData().getFieldCenter() != null) {
+          acronym = surveyActivity.getParticipantData().getFieldCenter().getAcronym();
+        }
+      }
       return (acronym != null) ? acronym : null;
     } catch (Exception e) {
-      SurveyBasicInfoRecordsFactory.printMessageError(FIELD_CENTER_NOT_FOUND);
+      SurveyBasicInfoRecordsFactory.printMessageError(PARTICIPANT_FIELD_CENTER_NOT_FOUND);
       return null;
     }
   }
