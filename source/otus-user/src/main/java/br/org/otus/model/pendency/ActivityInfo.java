@@ -30,19 +30,19 @@ public class ActivityInfo {
     this.externalID = "";
   }
 
-//  public static String serialize(ActivityInfo surveyGroup) {
-//    return getGsonBuilder().create().toJson(surveyGroup);
-//  }
-//
-//  public static ActivityInfo deserialize(String surveyGroupJson) {
-//    return ActivityInfo.getGsonBuilder().create().fromJson(surveyGroupJson, ActivityInfo.class);
-//  }
-//
-//  public static GsonBuilder getGsonBuilder() {
-//    GsonBuilder builder = new GsonBuilder();
-//    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-//    builder.serializeNulls();
-//    return builder;
-//  }
+  public static String serialize(ActivityInfo surveyGroup) {
+    return getGsonBuilder().create().toJson(surveyGroup);
+  }
+
+  public static ActivityInfo deserialize(String surveyGroupJson) {
+    return ActivityInfo.getGsonBuilder().create().fromJson(surveyGroupJson, ActivityInfo.class);
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+//    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter()); // TODO
+    builder.serializeNulls();
+    return builder;
+  }
 
 }
