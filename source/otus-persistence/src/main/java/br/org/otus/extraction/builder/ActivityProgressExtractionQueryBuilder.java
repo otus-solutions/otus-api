@@ -280,11 +280,11 @@ public class ActivityProgressExtractionQueryBuilder {
     return pipeline;
   }
   
-  public List<Bson> getParticipants() {
+  public List<Bson> getParticipants(String center) {
     List<Bson> pipeline = new ArrayList<>();
     pipeline.add(ParseQuery.toDocument("{\n" + 
         "    $match: {\n" + 
-        "      \"fieldCenter.acronym\": \"RS\"\n" + 
+        "      fieldCenter.acronym: " + center + "\n" + 
         "    }\n" + 
         "  }"));
     pipeline.add(ParseQuery.toDocument("{\n" + 
