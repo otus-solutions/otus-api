@@ -1,8 +1,7 @@
-package br.org.otus.model.userActivityPendency;
+package br.org.otus.model.pendency;
 
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
-import org.bson.types.ObjectId;
 //import org.ccem.otus.utils.ObjectIdAdapter;
 import java.util.Date;
 

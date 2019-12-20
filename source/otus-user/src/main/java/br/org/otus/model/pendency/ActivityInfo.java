@@ -1,4 +1,4 @@
-package br.org.otus.model.userActivityPendency;
+package br.org.otus.model.pendency;
 
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
