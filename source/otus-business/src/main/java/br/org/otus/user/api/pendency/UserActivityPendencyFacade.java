@@ -6,6 +6,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.service.pendency.UserActivityPendencyService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ public class UserActivityPendencyFacade {
   public void create(String userActivityPendencyJson) {
     try {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      userActivityPendencyService.create(userActivityPendency); //inserted UserActivityPendency
+      userActivityPendencyService.create(userActivityPendency);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
@@ -28,7 +29,7 @@ public class UserActivityPendencyFacade {
   public void update(String userActivityPendencyJson) {
     try {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      userActivityPendencyService.update(userActivityPendency); //inserted UserActivityPendency
+      userActivityPendencyService.update(userActivityPendency);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
@@ -37,7 +38,7 @@ public class UserActivityPendencyFacade {
   public List<UserActivityPendency> list() {
     try {
       return userActivityPendencyService.list();
-    } catch (DataNotFoundException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
