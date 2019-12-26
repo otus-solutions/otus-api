@@ -153,9 +153,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
       List<Bson> pipeline = new ArrayList<>();
       pipeline.add(ParseQuery.toDocument("{\n" + 
           "    '$match': {\n" + 
-          "      'surveyForm.acronym':" + acronym + ", \n" + 
-          "      'surveyForm.version':" + version + ", \n" + 
-          "      'isDiscarded': false\n" + 
+          "      \"surveyForm.acronym\":" + acronym + ", \n" + 
+          "      \"surveyForm.version\":" + version + ", \n" + 
+          "      \"isDiscarded\": false\n" + 
           "    }\n" + 
           "  }"));
       AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
