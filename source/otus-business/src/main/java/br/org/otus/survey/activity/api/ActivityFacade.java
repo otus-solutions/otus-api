@@ -44,6 +44,16 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+  
+  public List<SurveyActivity> getExtraction(String acronym, Integer version) {
+    try {
+      return activityService.getExtraction(acronym, version);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (MemoryExcededException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 
   public String create(SurveyActivity surveyActivity) {
     try {

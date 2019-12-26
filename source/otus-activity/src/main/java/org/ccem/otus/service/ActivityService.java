@@ -19,6 +19,8 @@ public interface ActivityService {
   SurveyActivity getByID(String id) throws DataNotFoundException;
 
   List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
+  
+  List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
 
   boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException;
 

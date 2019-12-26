@@ -19,6 +19,8 @@ import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.ActivityDao;
+import org.ccem.otus.service.ParseQuery;
+import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import static com.mongodb.client.model.Projections.fields;
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
 
     public static final String COLLECTION_NAME = "activity";
+    
     public static final String ACRONYM_PATH = "surveyForm.acronym";
     public static final String VERSION_PATH = "surveyForm.version";
     public static final String DISCARDED_PATH = "isDiscarded";
@@ -144,6 +147,39 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         }
 
         return activities;
+    }
+    
+    public List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
+      List<Bson> pipeline = new ArrayList<>();
+      pipeline.add(ParseQuery.toDocument("{\n" + 
+          "    '$match': {\n" + 
+          "      'surveyForm.acronym':" + acronym + ", \n" + 
+          "      'surveyForm.version':" + version + ", \n" + 
+          "      'isDiscarded': false\n" + 
+          "    }\n" + 
+          "  }"));
+      AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+      if (results == null) {
+        throw new DataNotFoundException("There are no results");
+      }
+      
+      MongoCursor<Document> iterator = results.iterator();
+      ArrayList<SurveyActivity> activities = new ArrayList<>();
+      while (iterator.hasNext()) {
+        try {
+          activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
+        } catch (OutOfMemoryError e) {
+          activities.clear();
+          activities = null;
+          throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
+        }
+      }
+      
+      if (activities.isEmpty()) {
+        throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
+      }
+      
+      return activities;
     }
 
     @Override

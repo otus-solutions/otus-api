@@ -119,6 +119,11 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
   }
+  
+  @Override
+  public List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
+    return activityDao.getExtraction(acronym, version);
+  }
 
   @Override
   public boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException {

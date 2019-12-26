@@ -51,7 +51,7 @@ public class ExtractionFacade {
   private SurveyActivityExtractionServiceBean activityExtraction;
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
-    List<SurveyActivity> activities = activityFacade.get(acronym, version);
+    List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
 
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     dataSourceService.populateDataSourceMapping();
