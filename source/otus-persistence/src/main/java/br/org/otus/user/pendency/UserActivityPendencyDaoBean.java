@@ -79,8 +79,8 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public boolean exists(String userActivityPendencyId) {
-    Document result = this.collection.find(eq("activityInfo.id", userActivityPendencyId)).first();
+  public boolean exists(String activityInfoId) {
+    Document result = this.collection.find(eq("activityInfo.id", activityInfoId)).first();
     return (result != null);
   }
 }
