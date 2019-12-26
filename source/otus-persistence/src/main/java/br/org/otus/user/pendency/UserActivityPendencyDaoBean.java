@@ -3,6 +3,8 @@ package br.org.otus.user.pendency;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -35,8 +37,16 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public void update(Object data) throws ValidationException, DataNotFoundException {
-    throw new NotImplementedException();
+  public void update(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
+    Document parsed = Document.parse(UserActivityPendency.serialize(userActivityPendency));
+    //parsed.remove("_id");
+    UpdateResult updateOne = collection.updateOne(
+      eq("_id", userActivityPendency.getId()),
+      new Document("$set", parsed), new UpdateOptions().upsert(false));
+
+    if (updateOne.getMatchedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("OID {" + userActivityPendency.getId().toString() + "} not found."));
+    }
   }
 
   @Override
