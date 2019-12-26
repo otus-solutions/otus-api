@@ -21,8 +21,8 @@ public class UserActivityPendencyResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String create(String userActivityPendencyJson) {
-      userActivityPendencyFacade.create(userActivityPendencyJson);
-      return (new Response()).buildSuccess().toJson();
+    userActivityPendencyFacade.create(userActivityPendencyJson);
+    return (new Response()).buildSuccess().toJson();
   }
 
   @PUT
@@ -63,4 +63,3 @@ public class UserActivityPendencyResource {
   }
 
 }
-
