@@ -5,8 +5,6 @@ import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 
-import java.util.Date;
-
 public class UserActivityPendency {
 
   @Equalization(name = "_id")
@@ -16,10 +14,10 @@ public class UserActivityPendency {
   private String objectType;
 
   @Equalization(name = "creationDate")
-  private Date creationDate;
+  private String creationDate;
 
   @Equalization(name = "dueDate")
-  private Date dueDate;
+  private String dueDate;
 
   @Equalization(name = "requester")
   private String requester;
@@ -48,11 +46,11 @@ public class UserActivityPendency {
     return objectType;
   }
 
-  public Date getCreationDate() {
+  public String getCreationDate() {
     return creationDate;
   }
 
-  public Date getDueDate() {
+  public String getDueDate() {
     return dueDate;
   }
 
@@ -83,13 +81,13 @@ public class UserActivityPendency {
   }
 
   public static UserActivityPendency deserialize(String userActivityPendencyJson) {
-    return UserActivityPendency.getGsonBuilder().create().fromJson(userActivityPendencyJson, UserActivityPendency.class);
+    GsonBuilder builder = UserActivityPendency.getGsonBuilder();
+    return builder.create().fromJson(userActivityPendencyJson, UserActivityPendency.class);
   }
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter()); //TODO
-    builder.serializeNulls();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
   }
 }

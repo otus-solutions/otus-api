@@ -53,7 +53,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ArrayList<UserActivityPendency> find() throws MemoryExcededException {
+  public ArrayList<UserActivityPendency> find() throws DataNotFoundException, MemoryExcededException {
     ArrayList<UserActivityPendency> userActivityPendencies = new ArrayList<>();
 
     FindIterable<Document> find = this.collection.find();

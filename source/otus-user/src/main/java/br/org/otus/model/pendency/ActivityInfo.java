@@ -1,14 +1,14 @@
 package br.org.otus.model.pendency;
 
+import br.org.otus.utils.ObjectIdAdapter;
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
-//import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class ActivityInfo {
 
   @Equalization(name = "id")
-  private ObjectId id;
+  private String id;
 
   @Equalization(name = "acronym")
   private String acronym;
@@ -30,6 +30,26 @@ public class ActivityInfo {
     this.externalID = "";
   }
 
+  public String getId() {
+    return id;
+  }
+
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public int getRecruitmentNumber() {
+    return recruitmentNumber;
+  }
+
+  public String getLastStatusName() {
+    return lastStatusName;
+  }
+
+  public String getExternalID() {
+    return externalID;
+  }
+
   public static String serialize(ActivityInfo surveyGroup) {
     return getGsonBuilder().create().toJson(surveyGroup);
   }
@@ -40,8 +60,7 @@ public class ActivityInfo {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-//    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter()); // TODO
-    builder.serializeNulls();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
   }
 
