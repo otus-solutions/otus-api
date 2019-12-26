@@ -26,7 +26,7 @@ import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.survey.group.SurveyGroupResource;
-import br.org.otus.user.UserActivityPendencyResource;
+import br.org.otus.user.pendency.UserActivityPendencyResource;
 import br.org.otus.user.UserResource;
 
 import javax.inject.Inject;
