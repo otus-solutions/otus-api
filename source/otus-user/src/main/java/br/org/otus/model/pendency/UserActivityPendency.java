@@ -1,16 +1,16 @@
 package br.org.otus.model.pendency;
 
+import br.org.otus.utils.ObjectIdAdapter;
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
-//import org.ccem.otus.utils.ObjectIdAdapter;
-import java.util.Date;
+import org.bson.types.ObjectId;
 
+import java.util.Date;
 
 public class UserActivityPendency {
 
   @Equalization(name = "_id")
-//  private ObjectId id;
-  private String id;
+  private ObjectId id;
 
   @Equalization(name = "objectType")
   private String objectType;
@@ -40,7 +40,7 @@ public class UserActivityPendency {
     this.activityInfo = null;
   }
 
-  public String getId() {
+  public ObjectId getId() {
     return id;
   }
 
@@ -88,7 +88,7 @@ public class UserActivityPendency {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    //builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter()); //TODO
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter()); //TODO
     builder.serializeNulls();
     return builder;
   }
