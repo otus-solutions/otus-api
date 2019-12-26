@@ -39,9 +39,9 @@ public class UserActivityPendencyResource {
   @Path("/{id}/{state}")
   @Produces(MediaType.APPLICATION_JSON)
   public String get(@PathParam("id") String id, @PathParam("state") String state) {
+    System.out.println("here");
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
     return (new Response()).buildSuccess(userActivityPendencyList).toJson();
-    //return response.buildSuccess("get method works fine!").toJson();
   }
 
   @GET
