@@ -4,6 +4,7 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -27,9 +28,10 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public void create(UserActivityPendency userActivityPendency) {
+  public ObjectId create(UserActivityPendency userActivityPendency) {
     Document parsed = Document.parse(UserActivityPendency.serialize(userActivityPendency));
     this.collection.insertOne(parsed);
+    return parsed.getObjectId("_id");
   }
 
   @Override
