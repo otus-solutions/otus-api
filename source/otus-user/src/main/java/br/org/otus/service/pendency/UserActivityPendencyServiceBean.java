@@ -6,14 +6,20 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
 public class UserActivityPendencyServiceBean implements UserActivityPendencyService {
 
   @Inject
   private UserActivityPendencyDao userActivityPendencyDao;
 
+  public UserActivityPendencyServiceBean() {
+    super();
+  }
 
   @Override
   public void create(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
@@ -32,10 +38,9 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
 
   @Override
   public List<UserActivityPendency> list() {
-    throw new NotImplementedException();
-//    List<UserActivityPendency> userActivityPendencies = new ArrayList<>();
-//    //TODO
-//    return userActivityPendencies;
+    List<UserActivityPendency> userActivityPendencies = new ArrayList<>();
+    //TODO
+    return userActivityPendencies;
   }
 
   @Override
