@@ -3,11 +3,14 @@ package br.org.otus.user.pendency;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -50,8 +53,24 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ArrayList<UserActivityPendency> find() {
-    throw new NotImplementedException();
+  public ArrayList<UserActivityPendency> find() throws MemoryExcededException {
+    ArrayList<UserActivityPendency> userActivityPendencies = new ArrayList<>();
+
+    FindIterable<Document> find = this.collection.find();
+
+    MongoCursor<Document> iterator = find.iterator();
+    while (iterator.hasNext()) {
+      try {
+        Document document = iterator.next();
+        UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(document.toJson());
+        userActivityPendencies.add(userActivityPendency);
+      } catch (OutOfMemoryError e) {
+        userActivityPendencies.clear();
+        throw new MemoryExcededException("User activity pendency extraction exceded memory used.");
+      }
+    }
+
+    return userActivityPendencies;
   }
 
   @Override
