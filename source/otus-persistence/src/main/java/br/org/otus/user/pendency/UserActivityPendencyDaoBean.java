@@ -2,6 +2,7 @@ package br.org.otus.user.pendency;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
