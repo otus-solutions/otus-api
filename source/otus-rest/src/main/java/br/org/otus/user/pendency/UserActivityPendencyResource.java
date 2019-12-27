@@ -39,8 +39,8 @@ public class UserActivityPendencyResource {
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String update(@PathParam("id") String id, String newDataForUserActivityPendencyJson) {
-    userActivityPendencyFacade.update(newDataForUserActivityPendencyJson);
+  public String update(@PathParam("id") String userActivityPendencyID, String newDataForUserActivityPendencyJson) {
+    userActivityPendencyFacade.update(userActivityPendencyID, newDataForUserActivityPendencyJson);
     return (new Response()).buildSuccess().toJson();
   }
 

@@ -1,6 +1,7 @@
 package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -15,7 +16,7 @@ public interface UserActivityPendencyService {
 
   void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException;
 
-  void update(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
+  void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
 
   UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 

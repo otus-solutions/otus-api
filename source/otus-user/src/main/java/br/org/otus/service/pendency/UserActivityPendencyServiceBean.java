@@ -2,6 +2,7 @@ package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -9,7 +10,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -29,8 +29,8 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public void update(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
-    throw new NotImplementedException();
+  public void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
+    userActivityPendencyDao.update(userActivityPendencyOID, userActivityPendency);
   }
 
   @Override

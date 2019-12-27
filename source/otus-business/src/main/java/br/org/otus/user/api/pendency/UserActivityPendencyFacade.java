@@ -5,6 +5,7 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.service.pendency.UserActivityPendencyService;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -26,10 +27,11 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public void update(String userActivityPendencyJson) {
+  public void update(String userActivityPendencyOID, String userActivityPendencyJson) {
     try {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      userActivityPendencyService.update(userActivityPendency);
+      ObjectId oid = new ObjectId(userActivityPendencyOID);
+      userActivityPendencyService.update(oid, userActivityPendency);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
