@@ -5,6 +5,7 @@ import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -73,17 +74,18 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   @Override
   public UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException {
     Document result = collection.find(eq("activityInfo.id", activityId)).first();
-
     if (result == null) {
       throw new DataNotFoundException("No user activity pendency found for activity { " + activityId  + " }.");
     }
-
     return UserActivityPendency.deserialize(result.toJson());
   }
 
   @Override
-  public void delete(String name) throws DataNotFoundException {
-    throw new NotImplementedException();
+  public void delete(ObjectId oid) throws DataNotFoundException {
+    DeleteResult deleteResult = this.collection.deleteOne(eq("_id", oid));
+    if (deleteResult.getDeletedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("User activity pendency with id { " + oid.toString() + " } not found"));
+    }
   }
 
   @Override

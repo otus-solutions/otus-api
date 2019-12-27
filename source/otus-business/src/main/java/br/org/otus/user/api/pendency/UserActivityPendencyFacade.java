@@ -53,10 +53,9 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public void delete(String userActivityPendencyJson) {
+  public void delete(String userActivityPendencyOID) {
     try {
-      UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      userActivityPendencyService.delete(userActivityPendency);
+      userActivityPendencyService.delete(userActivityPendencyOID);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

@@ -44,7 +44,7 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public void delete(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
-    throw new NotImplementedException();
+  public void delete(String userActivityPendencyOID) throws ValidationException, DataNotFoundException {
+    userActivityPendencyDao.delete(new ObjectId(userActivityPendencyOID));
   }
 }

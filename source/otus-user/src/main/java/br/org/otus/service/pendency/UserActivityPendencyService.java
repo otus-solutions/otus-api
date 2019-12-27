@@ -22,5 +22,5 @@ public interface UserActivityPendencyService {
 
   List<UserActivityPendency> list() throws DataNotFoundException, MemoryExcededException;
 
-  void delete(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
+  void delete(String userActivityPendencyOID) throws ValidationException, DataNotFoundException;
 }

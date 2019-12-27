@@ -46,9 +46,29 @@ public class UserActivityPendencyResource {
 
   @GET
   @Secured
-  @Path("/{id}/{state}")
+  @Path("/list/open")
   @Produces(MediaType.APPLICATION_JSON)
-  public String get(@PathParam("id") String id, @PathParam("state") String state) {
+  public String listOpen() {
+    System.out.println("here");
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
+    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/list/done")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listDone() {
+    System.out.println("here");
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
+    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/list")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String list() {
     System.out.println("here");
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
     return (new Response()).buildSuccess(userActivityPendencyList).toJson();
