@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import br.org.otus.survey.SurveyDaoBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -39,7 +40,7 @@ public class ActivityProgressExtractionDaoBeanTest {
   @InjectMocks
   private ActivityProgressExtractionDaoBean activityProgressExtractionDaoBean = PowerMockito.spy(new ActivityProgressExtractionDaoBean());
   @Mock
-  private SurveyDao surveyDao;
+  private SurveyDaoBean surveyDao;
   @Mock
   private ParticipantDao participantDao;
   @Mock

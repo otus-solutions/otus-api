@@ -15,15 +15,15 @@ public class DBDistributionMicroServiceResources extends MicroservicesResources 
   }
 
   public URL getFindVariableAddress() throws MalformedURLException {
-    return new URL(this.HOST + this.PORT + FIND_VARIABLES_RESOURCE);
+    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_VARIABLES_RESOURCE);
   }
 
   public URL getDatabaseUploadAddress() throws MalformedURLException {
-    return new URL(this.HOST + this.PORT + DATABASE_UPLOAD_RESOURCE);
+    return new URL("http://" + this.HOST + ":" + this.PORT + DATABASE_UPLOAD_RESOURCE);
   }
 
   public URL getVariableTypeCorrelationUploadAddress() throws MalformedURLException {
-    return new URL(this.HOST + this.PORT + VARIABLE_TYPE_CORRELATION_UPLOAD_RESOURCE);
+    return new URL("http://" + this.HOST + ":" + this.PORT + VARIABLE_TYPE_CORRELATION_UPLOAD_RESOURCE);
   }
 
 }

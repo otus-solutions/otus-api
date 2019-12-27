@@ -1,12 +1,12 @@
 package org.ccem.otus.model.survey.jumpMap;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 public class SurveyJumpMapTest {

@@ -2,20 +2,8 @@ variable "otus-database-persistence"{
   default = "/otus-platform/docker-persistence/otus-database"
 }
 
-variable "otus-database-host" {
-	default = "otus-database"
-}
-
 variable "otus-database-port" {
-	default = 27017
-}
-
-variable "otus-database-user" {
-        default = "otus"
-}
-
-variable "otus-database-pass" {
-        default = "otus"
+	default = 51003
 }
 
 variable "otus-database-version" {
@@ -65,20 +53,16 @@ resource "docker_container" "otus-api" {
   name = "otus-api"
   image = "${docker_image.otus-api.name}"
   env = [
-		"DEBUG_MODE=${var.otus-api-debug}", 
-		"DATABASE_HOST=${var.otus-database-host}", 
-		"DATABASE_PORT=${var.otus-database-port}",
-		"DATABASE_USER=${var.otus-database-user}",
-		"DATABASE_PASS=${var.otus-database-pass}",
-		"JVM_MEMORY=${var.otus-api-jvm-memory}"
-	]
+        "DEBUG_MODE=${var.otus-api-debug}",
+        "JVM_MEMORY=${var.otus-api-jvm-memory}"
+  ]
   ports {
 	  internal = 8080
 	  external = "${var.otus-api-porthttp}"
   }
   ports {
-	  internal = 9990
-	  external = "${var.otus-api-portmanagement}"
+	internal = 9990
+	external = "${var.otus-api-portmanagement}"
   }
   ports {
 	  internal = 8787

@@ -1,12 +1,12 @@
 package org.ccem.otus.service;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public interface ActivityService {
 
