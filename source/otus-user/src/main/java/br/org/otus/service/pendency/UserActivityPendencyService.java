@@ -17,7 +17,7 @@ public interface UserActivityPendencyService {
 
   void update(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
 
-  UserActivityPendency getByActivityId(Long activityId) throws DataNotFoundException;
+  UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 
   List<UserActivityPendency> list() throws DataNotFoundException, MemoryExcededException;
 

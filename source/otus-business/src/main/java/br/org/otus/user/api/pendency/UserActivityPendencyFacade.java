@@ -45,7 +45,7 @@ public class UserActivityPendencyFacade {
 
   public UserActivityPendency getByActivityId(String activityId) {
     try {
-      return userActivityPendencyService.getByActivityId(Long.parseLong(activityId));
+      return userActivityPendencyService.getByActivityId(activityId);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

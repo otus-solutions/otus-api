@@ -25,7 +25,7 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   @Override
   public void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException {
     userActivityPendency.setRequester(userEmail);
-
+    userActivityPendencyDao.create(userActivityPendency);
   }
 
   @Override
@@ -34,8 +34,8 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public UserActivityPendency getByActivityId(Long activityId) throws DataNotFoundException {
-    throw new NotImplementedException();
+  public UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException {
+    return userActivityPendencyDao.findByActivityInfo(activityId);
   }
 
   @Override

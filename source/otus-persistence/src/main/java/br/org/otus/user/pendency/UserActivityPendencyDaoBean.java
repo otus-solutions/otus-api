@@ -1,6 +1,7 @@
 package br.org.otus.user.pendency;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.laboratory.participant.ParticipantQualityControl;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import com.mongodb.client.FindIterable;
@@ -9,6 +10,7 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -71,6 +73,17 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
     }
 
     return userActivityPendencies;
+  }
+
+  @Override
+  public UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException {
+    Document result = collection.find(eq("activityInfo.id", activityId)).first();
+
+    if (result == null) {
+      throw new DataNotFoundException("No user activity pendency found for activity { " + activityId  + " }.");
+    }
+
+    return UserActivityPendency.deserialize(result.toJson());
   }
 
   @Override
