@@ -28,16 +28,6 @@ public class UserActivityPendency {
   @Equalization(name = "activityInfo")
   private ActivityInfo activityInfo;
 
-  public UserActivityPendency() {
-    this.id = null;
-    this.objectType = null;
-    this.creationDate = null;
-    this.dueDate = null;
-    this.requester = null;
-    this.receiver = null;
-    this.activityInfo = null;
-  }
-
   public ObjectId getId() {
     return id;
   }
@@ -64,6 +54,10 @@ public class UserActivityPendency {
 
   public ActivityInfo getActivityInfo() {
     return activityInfo;
+  }
+
+  public void setRequester(String requester) {
+    this.requester = requester;
   }
 
   @Override
