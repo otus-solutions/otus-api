@@ -15,12 +15,6 @@ public class ActivityInfo {
 
   @Equalization(name = "recruitmentNumber")
   private int recruitmentNumber;
-
-  @Equalization(name = "lastStatusName")
-  private String lastStatusName;
-
-  @Equalization(name = "externalID")
-  private String externalID;
   
   public String getId() {
     return id;
@@ -32,14 +26,6 @@ public class ActivityInfo {
 
   public int getRecruitmentNumber() {
     return recruitmentNumber;
-  }
-
-  public String getLastStatusName() {
-    return lastStatusName;
-  }
-
-  public String getExternalID() {
-    return externalID;
   }
 
   public static String serialize(ActivityInfo surveyGroup) {
