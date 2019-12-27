@@ -34,6 +34,11 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
+  public void delete(ObjectId userActivityPendencyOID) throws ValidationException, DataNotFoundException {
+    userActivityPendencyDao.delete(userActivityPendencyOID);
+  }
+
+  @Override
   public UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException {
     return userActivityPendencyDao.findByActivityInfo(activityId);
   }
@@ -43,8 +48,4 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
     return userActivityPendencyDao.find();
   }
 
-  @Override
-  public void delete(String userActivityPendencyOID) throws ValidationException, DataNotFoundException {
-    userActivityPendencyDao.delete(new ObjectId(userActivityPendencyOID));
-  }
 }

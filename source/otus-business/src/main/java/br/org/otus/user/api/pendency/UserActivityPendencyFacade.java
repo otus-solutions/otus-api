@@ -37,11 +37,12 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> list() {
+  public void delete(String userActivityPendencyOID) {
     try {
-      return userActivityPendencyService.list();
-    } catch (DataNotFoundException | MemoryExcededException e) {
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
+      ObjectId oid = new ObjectId(userActivityPendencyOID);
+      userActivityPendencyService.delete(oid);
+    } catch (ValidationException | DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -53,11 +54,11 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public void delete(String userActivityPendencyOID) {
+  public List<UserActivityPendency> list() {
     try {
-      userActivityPendencyService.delete(userActivityPendencyOID);
-    } catch (ValidationException | DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      return userActivityPendencyService.list();
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 

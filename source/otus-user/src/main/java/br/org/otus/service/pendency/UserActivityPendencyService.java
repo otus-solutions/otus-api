@@ -18,9 +18,10 @@ public interface UserActivityPendencyService {
 
   void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
 
+  void delete(ObjectId userActivityPendencyOID) throws ValidationException, DataNotFoundException;
+
   UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 
   List<UserActivityPendency> list() throws DataNotFoundException, MemoryExcededException;
 
-  void delete(String userActivityPendencyOID) throws ValidationException, DataNotFoundException;
 }
