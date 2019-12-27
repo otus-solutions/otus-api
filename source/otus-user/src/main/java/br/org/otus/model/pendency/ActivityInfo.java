@@ -8,15 +8,15 @@ import org.bson.types.ObjectId;
 public class ActivityInfo {
 
   @Equalization(name = "id")
-  private String id;
+  private ObjectId id;
 
   @Equalization(name = "acronym")
   private String acronym;
 
   @Equalization(name = "recruitmentNumber")
   private int recruitmentNumber;
-  
-  public String getId() {
+
+  public ObjectId getId() {
     return id;
   }
 
