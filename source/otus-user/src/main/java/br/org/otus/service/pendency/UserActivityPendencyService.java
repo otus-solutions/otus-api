@@ -13,7 +13,7 @@ public interface UserActivityPendencyService {
     ANY, CREATED, EXISTENT
   }
 
-  void create(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
+  void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException;
 
   void update(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
 

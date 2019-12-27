@@ -17,10 +17,10 @@ public class UserActivityPendencyFacade {
   @Inject
   private UserActivityPendencyService userActivityPendencyService;
 
-  public void create(String userActivityPendencyJson) {
+  public void create(String userActivityPendencyJson, String userEmail) {
     try {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      userActivityPendencyService.create(userActivityPendency);
+      userActivityPendencyService.create(userActivityPendency, userEmail);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

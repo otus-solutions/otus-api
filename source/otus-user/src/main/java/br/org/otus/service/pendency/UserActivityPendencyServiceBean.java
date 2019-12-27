@@ -23,8 +23,9 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public void create(UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
-    throw new NotImplementedException();
+  public void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException {
+    userActivityPendency.setRequester(userEmail);
+
   }
 
   @Override
@@ -39,10 +40,6 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
 
   @Override
   public List<UserActivityPendency> list() throws DataNotFoundException, MemoryExcededException {
-//    List<UserActivityPendency> userActivityPendencies = new ArrayList<>();
-//    //TODO
-//    return userActivityPendencies;
-
     return userActivityPendencyDao.find();
   }
 
