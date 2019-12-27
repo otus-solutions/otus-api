@@ -51,7 +51,24 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ArrayList<UserActivityPendency> find() throws DataNotFoundException, MemoryExcededException {
+  public void delete(ObjectId oid) throws DataNotFoundException {
+    DeleteResult deleteResult = this.collection.deleteOne(eq("_id", oid));
+    if (deleteResult.getDeletedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("User activity pendency with id { " + oid.toString() + " } not found"));
+    }
+  }
+
+  @Override
+  public UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException {
+    Document result = collection.find(eq("activityInfo.id", activityId)).first();
+    if (result == null) {
+      throw new DataNotFoundException("No user activity pendency found for activity { " + activityId  + " }.");
+    }
+    return UserActivityPendency.deserialize(result.toJson());
+  }
+
+  @Override
+  public ArrayList<UserActivityPendency> findAllPendencies() throws DataNotFoundException, MemoryExcededException {
     ArrayList<UserActivityPendency> userActivityPendencies = new ArrayList<>();
 
     FindIterable<Document> find = this.collection.find();
@@ -72,25 +89,13 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException {
-    Document result = collection.find(eq("activityInfo.id", activityId)).first();
-    if (result == null) {
-      throw new DataNotFoundException("No user activity pendency found for activity { " + activityId  + " }.");
-    }
-    return UserActivityPendency.deserialize(result.toJson());
+  public ArrayList<UserActivityPendency> findOpenedPendencies() throws DataNotFoundException, MemoryExcededException {
+    return null;
   }
 
   @Override
-  public void delete(ObjectId oid) throws DataNotFoundException {
-    DeleteResult deleteResult = this.collection.deleteOne(eq("_id", oid));
-    if (deleteResult.getDeletedCount() == 0) {
-      throw new DataNotFoundException(new Throwable("User activity pendency with id { " + oid.toString() + " } not found"));
-    }
+  public ArrayList<UserActivityPendency> findDonePendencies() throws DataNotFoundException, MemoryExcededException {
+    return null;
   }
 
-  @Override
-  public boolean exists(String activityInfoId) {
-    Document result = this.collection.find(eq("activityInfo.id", activityInfoId)).first();
-    return (result != null);
-  }
 }

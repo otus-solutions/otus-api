@@ -10,10 +10,6 @@ import java.util.List;
 
 public interface UserActivityPendencyService {
 
-  enum State {
-    ANY, CREATED, EXISTENT
-  }
-
   void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException;
 
   void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
@@ -22,6 +18,9 @@ public interface UserActivityPendencyService {
 
   UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 
-  List<UserActivityPendency> list() throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> listAllPendencies() throws DataNotFoundException, MemoryExcededException;
 
+  List<UserActivityPendency> listOpenedPendencies() throws DataNotFoundException, MemoryExcededException;
+
+  List<UserActivityPendency> listDonePendencies() throws DataNotFoundException, MemoryExcededException;
 }

@@ -54,9 +54,25 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> list() {
+  public List<UserActivityPendency> listAllPendencies() {
     try {
-      return userActivityPendencyService.list();
+      return userActivityPendencyService.listAllPendencies();
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<UserActivityPendency> listOpenedPendencies() {
+    try {
+      return userActivityPendencyService.listOpenedPendencies();
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<UserActivityPendency> listDonePendencies() {
+    try {
+      return userActivityPendencyService.listDonePendencies();
     } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

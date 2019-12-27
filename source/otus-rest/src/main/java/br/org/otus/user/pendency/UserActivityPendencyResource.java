@@ -44,34 +44,13 @@ public class UserActivityPendencyResource {
     return (new Response()).buildSuccess().toJson();
   }
 
-  @GET
+  @DELETE
   @Secured
-  @Path("/list/open")
+  @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listOpen() {
-    System.out.println("here");
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
-    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
-  }
-
-  @GET
-  @Secured
-  @Path("/list/done")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String listDone() {
-    System.out.println("here");
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
-    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
-  }
-
-  @GET
-  @Secured
-  @Path("/list")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String list() {
-    System.out.println("here");
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.list();
-    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+  public String delete(@PathParam("id") String id) {
+    userActivityPendencyFacade.delete(id);
+    return (new Response()).buildSuccess().toJson();
   }
 
   @GET
@@ -83,13 +62,34 @@ public class UserActivityPendencyResource {
     return (new Response()).buildSuccess(userActivityPendency).toJson();
   }
 
-  @DELETE
+  @GET
   @Secured
-  @Path("/{id}")
+  @Path("/list/open")
   @Produces(MediaType.APPLICATION_JSON)
-  public String delete(@PathParam("id") String id) {
-    userActivityPendencyFacade.delete(id);
-    return (new Response()).buildSuccess().toJson();
+  public String listOpenedPendencies() {
+    System.out.println("here");
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies();
+    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/list/done")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listDonePendencies() {
+    System.out.println("here");
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendencies();
+    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/list/done")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listAllPendencies() {
+    System.out.println("here");
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies();
+    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
   }
 
 }
