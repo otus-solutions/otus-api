@@ -21,15 +21,7 @@ public class ActivityInfo {
 
   @Equalization(name = "externalID")
   private String externalID;
-
-  public ActivityInfo() {
-    this.id = null;
-    this.acronym = "";
-    this.recruitmentNumber = 0;
-    this.lastStatusName = "";
-    this.externalID = "";
-  }
-
+  
   public String getId() {
     return id;
   }
