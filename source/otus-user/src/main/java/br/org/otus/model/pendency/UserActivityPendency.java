@@ -1,35 +1,24 @@
 package br.org.otus.model.pendency;
 
 import br.org.otus.utils.ObjectIdAdapter;
-import br.org.tutty.Equalization;
+import br.org.otus.utils.ObjectIdToStringAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 
 public class UserActivityPendency {
 
-  @Equalization(name = "_id")
-  private ObjectId id;
+  public static final String OID_KEY = "_id";
 
-  @Equalization(name = "objectType")
+  private ObjectId _id;
   private String objectType;
-
-  @Equalization(name = "creationDate")
   private String creationDate;
-
-  @Equalization(name = "dueDate")
   private String dueDate;
-
-  @Equalization(name = "requester")
   private String requester;
-
-  @Equalization(name = "receiver")
   private String receiver;
-
-  @Equalization(name = "activityInfo")
   private ActivityInfo activityInfo;
 
   public ObjectId getId() {
-    return id;
+    return _id;
   }
 
   public String getObjectType() {
@@ -67,21 +56,39 @@ public class UserActivityPendency {
 
     UserActivityPendency that = (UserActivityPendency) o;
 
-    return id != null ? id.equals(that.getId()) : that.getId() == null;
+    return _id != null ? _id.equals(that.getId()) : that.getId() == null;
   }
 
-  public static String serialize(UserActivityPendency userActivityPendencyJson) {
-    return getGsonBuilder().create().toJson(userActivityPendencyJson);
+  public static String serialize(UserActivityPendency userActivityPendency) {
+    return getGsonBuilder().create().toJson(userActivityPendency);
   }
 
   public static UserActivityPendency deserialize(String userActivityPendencyJson) {
-    GsonBuilder builder = UserActivityPendency.getGsonBuilder();
-    return builder.create().fromJson(userActivityPendencyJson, UserActivityPendency.class);
+    return UserActivityPendency.getGsonBuilder().create().fromJson(userActivityPendencyJson, UserActivityPendency.class);
   }
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
+  }
+
+  public static GsonBuilder getFrontGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+    return builder;
+  }
+
+  //.
+  @Override
+  public String toString(){
+    return "{\n" +
+      " _id: " + getId().toString() + "\n" +
+      " objectType: " + getObjectType() + "\n" +
+      " creationDate: " + getCreationDate() + "\n" +
+      " dueDate: " + getDueDate()  + "\n" +
+      " requester: " + getRequester() + "\n" +
+      " receiver: "+ getReceiver()  +"\n" +
+      " activityInfo: " + getActivityInfo().toString() + "\n}\n";
   }
 }

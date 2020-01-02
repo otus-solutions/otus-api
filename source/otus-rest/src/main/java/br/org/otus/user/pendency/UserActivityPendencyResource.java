@@ -59,7 +59,18 @@ public class UserActivityPendencyResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getByActivityId(@PathParam("activityId") String id) {
     UserActivityPendency userActivityPendency = userActivityPendencyFacade.getByActivityId(id);
-    return (new Response()).buildSuccess(userActivityPendency).toJson();
+    return (new Response()).buildSuccess(userActivityPendency)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/list")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listAllPendencies() {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies();
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
   @GET
@@ -67,7 +78,6 @@ public class UserActivityPendencyResource {
   @Path("/list/open")
   @Produces(MediaType.APPLICATION_JSON)
   public String listOpenedPendencies() {
-    System.out.println("here");
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies();
     return (new Response()).buildSuccess(userActivityPendencyList).toJson();
   }
@@ -77,18 +87,7 @@ public class UserActivityPendencyResource {
   @Path("/list/done")
   @Produces(MediaType.APPLICATION_JSON)
   public String listDonePendencies() {
-    System.out.println("here");
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendencies();
-    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
-  }
-
-  @GET
-  @Secured
-  @Path("/list/done")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String listAllPendencies() {
-    System.out.println("here");
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies();
     return (new Response()).buildSuccess(userActivityPendencyList).toJson();
   }
 

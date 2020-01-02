@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 
@@ -72,14 +71,14 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
     ArrayList<UserActivityPendency> userActivityPendencies = new ArrayList<>();
 
     FindIterable<Document> find = this.collection.find();
-
     MongoCursor<Document> iterator = find.iterator();
     while (iterator.hasNext()) {
       try {
         Document document = iterator.next();
         UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(document.toJson());
         userActivityPendencies.add(userActivityPendency);
-      } catch (OutOfMemoryError e) {
+      }
+      catch (OutOfMemoryError e) {
         userActivityPendencies.clear();
         throw new MemoryExcededException("User activity pendency extraction exceded memory used.");
       }
