@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.ccem.otus.participant.model.Participant;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -56,5 +57,4 @@ public abstract class MongoGenericDao<T> {
     public AggregateIterable<T> aggregate(List<Bson> query) {return collection.aggregate(query).allowDiskUse(true); }
 
     public void executeFunction(String function) { db.runCommand(new Document("$eval", function)); }
-
 }

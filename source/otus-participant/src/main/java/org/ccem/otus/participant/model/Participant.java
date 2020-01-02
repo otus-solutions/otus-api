@@ -18,7 +18,8 @@ public class Participant {
     private ImmutableDate birthdate;
     private FieldCenter fieldCenter;
     private Boolean late;
-    
+    private String password;
+
 
 	public Participant(Long recruitmentNumber) {
 		this.recruitmentNumber = recruitmentNumber;
@@ -63,7 +64,11 @@ public class Participant {
 	public void setBirthdate(ImmutableDate birthdate) {
 		this.birthdate = birthdate;
 	}
-	
+
+  public String getPassword() {
+    return password;
+  }
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,7 +91,7 @@ public class Participant {
     public void setLate(Boolean late) {
       this.late = late;
     }
-    
+
     public static String serialize(Participant participantJson) {
       return Participant.getGsonBuilder().create().toJson(participantJson);
   }
@@ -95,7 +100,7 @@ public class Participant {
     Participant participant = Participant.getGsonBuilder().create().fromJson(participantJson, Participant.class);
       return participant;
   }
-  
+
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
@@ -103,5 +108,5 @@ public class Participant {
     builder.registerTypeAdapter(Long.class, new LongAdapter());
     return builder;
 }
-   
+
 }

@@ -2,10 +2,7 @@ package br.org.otus.security.services;
 
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
-import br.org.otus.security.dtos.AuthenticationData;
-import br.org.otus.security.dtos.JWTClaimSetBuilder;
-import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
+import br.org.otus.security.dtos.*;
 import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.persistence.UserDao;
@@ -13,6 +10,8 @@ import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,6 +22,9 @@ public class SecurityServiceBean implements SecurityService {
 
   @Inject
   private UserDao userDao;
+
+  @Inject
+  private ParticipantDao participantDao;
 
   @Inject
   private SystemConfigDaoBean systemConfigDao;
@@ -63,6 +65,26 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
+  public ParticipantSecurityAuthorizationDto participantAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
+    try {
+      Participant participant = participantDao.fetchByEmail(authenticationData.getUserEmail());
+
+      if (participant.getPassword().equals(authenticationData.getKey())) {
+        ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = new ParticipantSecurityAuthorizationDto();
+        Equalizer.equalize(participant, participantSecurityAuthorizationDto);
+
+        String token = initializeToken(authenticationData);
+        participantSecurityAuthorizationDto.addToken(token);
+        return participantSecurityAuthorizationDto;
+      } else {
+        throw new AuthenticationException();
+      }
+    } catch (DataNotFoundException e) {
+      throw new AuthenticationException();
+    }
+  }
+
+  @Override
   public String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
     try {
       SystemConfig systemConfig = systemConfigDao.fetchSystemConfig();
@@ -90,18 +112,18 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
-    if(userDao.exists(requestData.getEmail())){
+    if (userDao.exists(requestData.getEmail())) {
       String token = buildToken(requestData);
       requestData.setToken(token);
       passwordResetContextService.registerToken(requestData);
       return token;
-    }else{
+    } else {
       throw new DataNotFoundException(new Throwable("User with email: {" + requestData.getEmail() + "} not found."));
     }
   }
 
   @Override
-  public String getRequestEmail (String token) throws DataNotFoundException {
+  public String getRequestEmail(String token) throws DataNotFoundException {
     return passwordResetContextService.getRequestEmail(token);
   }
 

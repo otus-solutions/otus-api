@@ -1,6 +1,7 @@
 package br.org.otus.security.services;
 
 import br.org.otus.security.dtos.AuthenticationData;
+import br.org.otus.security.dtos.ParticipantSecurityAuthorizationDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -13,7 +14,9 @@ public interface SecurityService {
 
 	void invalidate(String token);
 
-	String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
+  ParticipantSecurityAuthorizationDto participantAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
+
+  String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
 	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
 

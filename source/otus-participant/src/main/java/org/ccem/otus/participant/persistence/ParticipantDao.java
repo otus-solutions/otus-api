@@ -31,4 +31,5 @@ public interface ParticipantDao {
 
   AggregateIterable<Document> aggregate(List<Bson> query);
 
+  Participant fetchByEmail(String userEmail) throws DataNotFoundException;
 }

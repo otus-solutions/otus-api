@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import br.org.otus.model.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -24,6 +25,7 @@ import br.org.mongodb.MongoGenericDao;
 public class ParticipantDaoBean extends MongoGenericDao<Document> implements ParticipantDao {
 
   private static final String COLLECTION_NAME = "participant";
+  private static final String EMAIL = "email";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -82,6 +84,15 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     }
 
     return rns;
+  }
+
+  @Override
+  public Participant fetchByEmail(String userEmail) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(EMAIL, userEmail)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant with email: {" + userEmail + "} not found."));
+    }
+    return Participant.deserialize(participantFound.toJson());
   }
 
   @Override

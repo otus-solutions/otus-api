@@ -2,10 +2,7 @@ package br.org.otus.security.api;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.security.dtos.AuthenticationDto;
-import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.security.dtos.ProjectAuthenticationDto;
-import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
+import br.org.otus.security.dtos.*;
 import br.org.otus.security.services.SecurityService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
@@ -22,7 +19,6 @@ public class SecurityFacade {
     try {
       authenticationDto.setRequestAddress(requestAddress);
       return securityService.authenticate(authenticationDto);
-
     } catch (AuthenticationException | TokenException e) {
       throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
     }
@@ -71,4 +67,11 @@ public class SecurityFacade {
     }
   }
 
+  public ParticipantSecurityAuthorizationDto participantAuthentication(AuthenticationDto authenticationDto) {
+    try {
+      return securityService.participantAuthenticate(authenticationDto);
+    } catch (AuthenticationException | TokenException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
+    }
+  }
 }
