@@ -1,13 +1,11 @@
 package org.ccem.otus.service.extraction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionHeadersFactory;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecordsFactory;
 import org.ccem.otus.service.extraction.preprocessing.ActivityPreProcessor;
@@ -15,33 +13,27 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.api.Extractable;
 
-public class SurveyActivityExtractionServiceBean implements Extractable, SurveyActivityExtractionService {
-
-  @Inject
-  private ParticipantService participantService;
+public class SurveyActivityExtraction implements Extractable {
 
   private List<SurveyActivity> surveyActivities;
   private SurveyForm surveyForm;
   private SurveyActivityExtractionHeadersFactory headersFactory;
   private SurveyActivityExtractionRecordsFactory recordsFactory;
-  private List<ActivityPreProcessor> processors = new ArrayList<>();
+  private List<ActivityPreProcessor> processors;
+  private HashMap<Long, String> fieldCenterByRecruitmentNumber;
 
-  public SurveyActivityExtractionServiceBean() {
-  }
-
-  @Override
-  public void createExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities) {
+  public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities, HashMap<Long, String> fieldCenterByRecruitmentNumber) {
+    this.processors = new ArrayList<>();
     this.surveyActivities = surveyActivities;
     this.surveyForm = surveyForm;
     this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyForm);
+    this.fieldCenterByRecruitmentNumber = fieldCenterByRecruitmentNumber;
   }
 
-  @Override
   public List<String> getHeaders() {
     return this.headersFactory.getHeaders();
   }
 
-  @Override
   public List<List<Object>> getValues() throws DataNotFoundException {
     List<List<Object>> values = new ArrayList<>();
 
@@ -69,7 +61,7 @@ public class SurveyActivityExtractionServiceBean implements Extractable, SurveyA
   }
 
   private String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    return participantService.getParticipantFieldCenterByRecruitmentNumber(recruitmentNumber);
+    return fieldCenterByRecruitmentNumber.get(recruitmentNumber);
   }
 
 }

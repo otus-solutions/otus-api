@@ -19,10 +19,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SurveyActivityExtractionServiceBean.class })
+@PrepareForTest({ SurveyActivityExtraction.class })
 public class SurveyActivityExtractionServiceTest {
 
-  private SurveyActivityExtractionServiceBean surveyActivityExtraction;
+  private SurveyActivityExtraction surveyActivityExtraction;
   private List<SurveyActivity> surveyActivities;
 
   @Mock

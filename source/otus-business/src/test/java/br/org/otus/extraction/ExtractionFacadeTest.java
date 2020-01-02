@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
-import org.ccem.otus.service.extraction.SurveyActivityExtractionServiceBean;
+import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
@@ -52,7 +52,7 @@ public class ExtractionFacadeTest {
   @Mock
   private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
   @Mock
-  private SurveyActivityExtractionServiceBean surveyActivityExtraction;
+  private SurveyActivityExtraction surveyActivityExtraction;
   @Mock
   private ExamUploadExtration examUploadExtration;
   @Mock
@@ -74,7 +74,7 @@ public class ExtractionFacadeTest {
     surveys.add(surveyForm);
     PowerMockito.when(surveyFacade.get(acronym, version)).thenReturn(surveys.get(0));
     PowerMockito.when(activityFacade.get(acronym, version)).thenReturn(new ArrayList<>());
-    PowerMockito.whenNew(SurveyActivityExtractionServiceBean.class).withAnyArguments().thenReturn(surveyActivityExtraction);
+    PowerMockito.whenNew(SurveyActivityExtraction.class).withAnyArguments().thenReturn(surveyActivityExtraction);
     PowerMockito.whenNew(ExamUploadExtration.class).withAnyArguments().thenReturn(examUploadExtration);
     PowerMockito.whenNew(LaboratoryExtraction.class).withAnyArguments().thenReturn(laboratoryExtraction);
     PowerMockito.whenNew(ActivityProgressExtraction.class).withAnyArguments().thenReturn(activityProgressExtraction);

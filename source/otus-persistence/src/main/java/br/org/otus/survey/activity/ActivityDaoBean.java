@@ -1,13 +1,15 @@
 package br.org.otus.survey.activity;
 
-import br.org.mongodb.MongoGenericDao;
-import com.google.gson.GsonBuilder;
-import com.mongodb.Block;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Projections.exclude;
+import static com.mongodb.client.model.Projections.fields;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -20,15 +22,16 @@ import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.service.ParseQuery;
-import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
-import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Projections.exclude;
-import static com.mongodb.client.model.Projections.fields;
+import br.org.mongodb.MongoGenericDao;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {

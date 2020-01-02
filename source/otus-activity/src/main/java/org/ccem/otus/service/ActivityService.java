@@ -5,6 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,5 +28,7 @@ public interface ActivityService {
   SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException;
 
   LinkedList<ActivityProgressResultExtraction> getActivityProgressExtraction(String center) throws DataNotFoundException;
+  
+  HashMap<Long, String> getParticipantFieldCenterByActivity(String acronym, Integer version) throws DataNotFoundException;
 
 }

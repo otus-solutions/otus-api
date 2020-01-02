@@ -1,6 +1,7 @@
 package br.org.otus.extraction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
-import org.ccem.otus.service.extraction.SurveyActivityExtractionServiceBean;
+import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
@@ -47,19 +48,18 @@ public class ExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private DataSourceService dataSourceService;
-  @Inject
-  private SurveyActivityExtractionServiceBean activityExtraction;
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
-    List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
-
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
+    List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
+    HashMap<Long, String> fieldCenterByRecruitmentNumber = activityFacade.getParticipantFieldCenterByActivity(acronym, version);
+
     dataSourceService.populateDataSourceMapping();
-    activityExtraction.createExtraction(surveyForm, activities);
-    activityExtraction.addPreProcessor(autocompleteQuestionPreProcessor);
+    SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities, fieldCenterByRecruitmentNumber);
+    extractor.addPreProcessor(autocompleteQuestionPreProcessor);
 
     try {
-      return extractionService.createExtraction(activityExtraction);
+      return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
       throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
     }
