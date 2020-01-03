@@ -49,6 +49,8 @@ public class UserActivityPendency {
     this.requester = requester;
   }
 
+  public void setReceiver(String receiver) { this.receiver = receiver; }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

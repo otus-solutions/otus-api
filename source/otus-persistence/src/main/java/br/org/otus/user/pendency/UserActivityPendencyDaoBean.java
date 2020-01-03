@@ -34,7 +34,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   @Override
   public ObjectId create(UserActivityPendency userActivityPendency) {
     Document parsed = Document.parse(UserActivityPendency.serialize(userActivityPendency));
-    this.collection.insertOne(parsed);
+    collection.insertOne(parsed);
     return parsed.getObjectId("_id");
   }
 
@@ -64,10 +64,10 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException {
-    Document result = collection.find(eq("activityInfo.id", new ObjectId(activityId))).first();
+  public UserActivityPendency findByActivityInfo(ObjectId activityOID) throws DataNotFoundException {
+    Document result = collection.find(eq("activityInfo.id", activityOID)).first();
     if (result == null) {
-      throw new DataNotFoundException("No user activity pendency found for activity { " + activityId  + " }.");
+      throw new DataNotFoundException("No user activity pendency found for activityOID { " + activityOID  + " }.");
     }
     return UserActivityPendency.deserialize(result.toJson());
   }
@@ -76,7 +76,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   public ArrayList<UserActivityPendency> findAllPendencies() throws DataNotFoundException, MemoryExcededException {
     ArrayList<UserActivityPendency> userActivityPendencies = new ArrayList<>();
 
-    FindIterable<Document> find = this.collection.find();
+    FindIterable<Document> find = collection.find();
     MongoCursor<Document> iterator = find.iterator();
     while (iterator.hasNext()) {
       try {

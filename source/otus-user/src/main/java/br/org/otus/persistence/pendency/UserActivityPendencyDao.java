@@ -17,7 +17,7 @@ public interface UserActivityPendencyDao {
 
   void delete(ObjectId oid) throws DataNotFoundException;
 
-  UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException;
+  UserActivityPendency findByActivityInfo(ObjectId activityOID) throws DataNotFoundException;
 
   ArrayList<UserActivityPendency> findAllPendencies() throws DataNotFoundException, MemoryExcededException;
 
