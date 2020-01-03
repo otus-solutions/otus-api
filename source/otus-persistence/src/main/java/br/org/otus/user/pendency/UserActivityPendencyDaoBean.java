@@ -59,7 +59,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public UserActivityPendency findByActivityInfo(String activityId) throws DataNotFoundException {
-    Document result = collection.find(eq("activityInfo.id", activityId)).first();
+    Document result = collection.find(eq("activityInfo.id", new ObjectId(activityId))).first();
     if (result == null) {
       throw new DataNotFoundException("No user activity pendency found for activity { " + activityId  + " }.");
     }
