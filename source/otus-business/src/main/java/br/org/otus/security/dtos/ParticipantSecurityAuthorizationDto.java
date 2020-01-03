@@ -3,33 +3,31 @@ package br.org.otus.security.dtos;
 import br.org.otus.user.dto.FieldCenterDTO;
 import br.org.tutty.Equalization;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.participant.model.Sex;
+import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import java.util.ArrayList;
 
 public class ParticipantSecurityAuthorizationDto implements Dto {
 
   @Equalization(name = "recruitmentNumber")
-  private String recruitmentNumber;
+  private Long recruitmentNumber;
 
   @Equalization(name = "name")
   private String name;
 
   @Equalization(name = "sex")
-  private String sex;
+  private Sex sex;
 
   @Equalization(name = "birthdate")
-  private String birthdate;
+  private ImmutableDate birthdate;
 
   private FieldCenterDTO fieldCenter;
 
   @Equalization(name = "email")
   private String email;
 
-  @Equalization(name = "password")
-  private String password;
-
-  @Equalization(name = "password")
-  private ArrayList<String> tokenList;
+  private String token;
 
   @Override
   public Boolean isValid() {
@@ -44,7 +42,7 @@ public class ParticipantSecurityAuthorizationDto implements Dto {
     this.fieldCenter = fieldCenter;
   }
 
-  public void addToken(String token) {
-    this.tokenList.add(token);
+  public void setToken(String token) {
+    this.token = token;
   }
 }

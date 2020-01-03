@@ -74,4 +74,12 @@ public class SecurityFacade {
       throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
     }
   }
+
+  public void invalidateParticipantAuthentication(String email, String token) {
+    try {
+      securityService.invalidateParticipantAuthenticate(email, token);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Commons.UnexpectedError.build());
+    }
+  }
 }

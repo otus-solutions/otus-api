@@ -25,4 +25,6 @@ public interface SecurityService {
 	void validatePasswordReset(String token) throws TokenException;
 
 	void removePasswordResetRequests(String email);
+
+  void invalidateParticipantAuthenticate(String email, String token);
 }

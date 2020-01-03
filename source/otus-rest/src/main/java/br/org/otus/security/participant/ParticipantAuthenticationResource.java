@@ -6,8 +6,6 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.dtos.ParticipantSecurityAuthorizationDto;
-import br.org.otus.security.dtos.ProjectAuthenticationDto;
-import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import javax.inject.Inject;
@@ -27,17 +25,27 @@ public class ParticipantAuthenticationResource {
   private SecurityFacade securityFacade;
 
   @POST
+  @Path("/auth")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String authenticate(AuthenticationDto authenticationDto, @Context HttpServletRequest request) {
     try {
       authenticationDto.encrypt();
       Response response = new Response();
-        ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = securityFacade.participantAuthentication(authenticationDto);
-        return response.buildSuccess(participantSecurityAuthorizationDto).toJson();
+      ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = securityFacade.participantAuthentication(authenticationDto);
+      return response.buildSuccess(participantSecurityAuthorizationDto).toJson();
     } catch (EncryptedException e) {
       throw new HttpResponseException(Validation.build());
     }
   }
 
+  @POST
+  @Path("/invalidate")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String invalidate(AuthenticationDto authenticationDto, @Context HttpServletRequest request) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    securityFacade.invalidateParticipantAuthentication(authenticationDto.userEmail, token);
+    return new Response().buildSuccess().toJson();
+  }
 }

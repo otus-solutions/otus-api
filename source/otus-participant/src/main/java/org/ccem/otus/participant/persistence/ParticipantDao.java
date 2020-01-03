@@ -23,6 +23,10 @@ public interface ParticipantDao {
 
   Long countParticipantActivities(String centerAcronym) throws DataNotFoundException;
 
+  void addAuthToken(String email, String Token);
+
+  void removeAuthToken(String email, String Token);
+
   boolean exists(Long rn);
 
   Participant getLastInsertion(FieldCenter fieldCenter) throws DataNotFoundException;

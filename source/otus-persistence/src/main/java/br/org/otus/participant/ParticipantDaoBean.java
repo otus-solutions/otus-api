@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import br.org.otus.model.User;
+import com.sun.org.apache.bcel.internal.generic.PUSH;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -25,7 +26,10 @@ import br.org.mongodb.MongoGenericDao;
 public class ParticipantDaoBean extends MongoGenericDao<Document> implements ParticipantDao {
 
   private static final String COLLECTION_NAME = "participant";
+  private static final String TOKEN_LIST_FIELD = "tokenList";
   private static final String EMAIL = "email";
+  private static final String PUSH = "$push";
+  private static final String PULL = "$pull";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -38,6 +42,16 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   public void persist(Participant participant) {
     Document parsed = Document.parse(Participant.serialize(participant));
     this.collection.insertOne(parsed);
+  }
+
+  @Override
+  public void addAuthToken(String email, String Token) {
+    this.collection.updateOne(new Document(EMAIL, email),new Document(PUSH, new Document(TOKEN_LIST_FIELD, Token)));
+  }
+
+  @Override
+  public void removeAuthToken(String email, String Token) {
+    this.collection.updateOne(new Document(EMAIL, email),new Document(PULL, new Document(TOKEN_LIST_FIELD, Token)));
   }
 
   @Override

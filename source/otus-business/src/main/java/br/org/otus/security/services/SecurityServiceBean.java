@@ -71,10 +71,11 @@ public class SecurityServiceBean implements SecurityService {
 
       if (participant.getPassword().equals(authenticationData.getKey())) {
         ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = new ParticipantSecurityAuthorizationDto();
-        Equalizer.equalize(participant, participantSecurityAuthorizationDto);
 
+        Equalizer.equalize(participant, participantSecurityAuthorizationDto);
         String token = initializeToken(authenticationData);
-        participantSecurityAuthorizationDto.addToken(token);
+        participantDao.addAuthToken(authenticationData.getUserEmail(),token);
+        participantSecurityAuthorizationDto.setToken(token);
         return participantSecurityAuthorizationDto;
       } else {
         throw new AuthenticationException();
@@ -82,6 +83,11 @@ public class SecurityServiceBean implements SecurityService {
     } catch (DataNotFoundException e) {
       throw new AuthenticationException();
     }
+  }
+
+  @Override
+  public void invalidateParticipantAuthenticate(String email, String token) {
+    participantDao.removeAuthToken(email,token);
   }
 
   @Override
