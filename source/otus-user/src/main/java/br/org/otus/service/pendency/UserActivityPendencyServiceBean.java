@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
