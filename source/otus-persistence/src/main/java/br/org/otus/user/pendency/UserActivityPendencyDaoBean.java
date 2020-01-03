@@ -15,10 +15,8 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.service.ParseQuery;
-import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;

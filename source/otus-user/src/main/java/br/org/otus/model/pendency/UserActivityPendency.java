@@ -79,16 +79,4 @@ public class UserActivityPendency {
     return builder;
   }
 
-  //.
-  @Override
-  public String toString(){
-    return "{\n" +
-      " _id: " + getId().toString() + "\n" +
-      " objectType: " + getObjectType() + "\n" +
-      " creationDate: " + getCreationDate() + "\n" +
-      " dueDate: " + getDueDate()  + "\n" +
-      " requester: " + getRequester() + "\n" +
-      " receiver: "+ getReceiver()  +"\n" +
-      " activityInfo: " + getActivityInfo().toString() + "\n}\n";
-  }
 }
