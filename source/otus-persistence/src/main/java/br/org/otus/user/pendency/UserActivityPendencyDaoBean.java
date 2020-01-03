@@ -3,23 +3,31 @@ package br.org.otus.user.pendency;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.service.ParseQuery;
+import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> implements UserActivityPendencyDao {
 
   private static final String COLLECTION_NAME = "pendency";
+  private static final String CREATED_STATUS = "CREATED";
+  private static final String FINALIZED_STATUS = "FINALIZED";
 
   public UserActivityPendencyDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -89,12 +97,68 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public ArrayList<UserActivityPendency> findOpenedPendencies() throws DataNotFoundException, MemoryExcededException {
-    return null;
+    return findPendenciesByStatus(CREATED_STATUS);
   }
 
   @Override
   public ArrayList<UserActivityPendency> findDonePendencies() throws DataNotFoundException, MemoryExcededException {
-    return null;
+    return findPendenciesByStatus(FINALIZED_STATUS);
+  }
+
+  private ArrayList<UserActivityPendency> findPendenciesByStatus(String statusName) throws DataNotFoundException {
+    String statusCondition = "{ $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] }";
+    if(!statusName.equals(FINALIZED_STATUS)){
+      statusCondition = "{ $not: [" + statusCondition + "] }";
+    }
+
+    List<Bson> pipeline = new ArrayList<>();
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "        $lookup: {\n" +
+      "            from:\"activity\",\n" +
+      "            let: {\n" +
+      "                activityInfo_id: \"$activityInfo.id\"\n" +
+      "            },\n" +
+      "            pipeline: [\n" +
+      "                {\n" +
+      "                    $match: {\n" +
+      "                        $expr: {\n" +
+      "                            $and: [\n" +
+      "                                { $eq: [\"$$activityInfo_id\", \"$_id\"] },\n" +
+      "                                " + statusCondition +"\n" +
+      "                            ]\n" +
+      "                        }\n" +
+      "                    }\n" +
+      "                }\n" +
+      "            ],\n" +
+      "            as:\"joinResult\"\n" +
+      "        }\n" +
+      "        \n" +
+      "    }"));
+
+    pipeline.add(ParseQuery.toDocument("{ \n" +
+      "        $match: {\n" +
+      "            $expr: { \n" +
+      "                $gt: [ { $size: \"$joinResult\"}, 0] \n" +
+      "            }\n" +
+      "        } \n" +
+      "    }"));
+
+    pipeline.add(ParseQuery.toDocument("{ $project: { \"joinResult\": 0 } }"));
+
+    AggregateIterable<Document> results = this.collection.aggregate(pipeline).allowDiskUse(true);
+
+    if (results == null) {
+      throw new DataNotFoundException("There are no results");
+    }
+
+    ArrayList<UserActivityPendency> progress = new ArrayList<>();
+    MongoCursor<Document> iterator = results.iterator();
+    while (iterator.hasNext()) {
+      Document next = iterator.next();
+      progress.add(UserActivityPendency.deserialize(next.toJson()));
+    }
+
+    return progress;
   }
 
 }

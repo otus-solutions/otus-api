@@ -50,12 +50,12 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
 
   @Override
   public List<UserActivityPendency> listOpenedPendencies() throws DataNotFoundException, MemoryExcededException {
-    return null;
+    return userActivityPendencyDao.findOpenedPendencies();
   }
 
   @Override
   public List<UserActivityPendency> listDonePendencies() throws DataNotFoundException, MemoryExcededException {
-    return null;
+    return userActivityPendencyDao.findDonePendencies();
   }
 
 
