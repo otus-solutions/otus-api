@@ -36,11 +36,4 @@ public class ActivityInfo {
     return builder;
   }
 
-  @Override
-  public String toString() {
-    return "{\n" +
-      " _id: " + getId() + "\n" +
-      " acronym: " + getAcronym() + "\n" +
-      " recruitmentNumber: " + getRecruitmentNumber() + "\n}\n";
-  }
 }

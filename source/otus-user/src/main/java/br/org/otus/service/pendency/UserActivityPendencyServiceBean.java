@@ -7,7 +7,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
@@ -50,13 +49,12 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
 
   @Override
   public List<UserActivityPendency> listOpenedPendencies() throws DataNotFoundException, MemoryExcededException {
-    return null;
+    return userActivityPendencyDao.findOpenedPendencies();
   }
 
   @Override
   public List<UserActivityPendency> listDonePendencies() throws DataNotFoundException, MemoryExcededException {
-    return null;
+    return userActivityPendencyDao.findDonePendencies();
   }
-
 
 }

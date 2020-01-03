@@ -75,7 +75,7 @@ public class UserActivityPendencyResource {
 
   @GET
   @Secured
-  @Path("/list/open")
+  @Path("/list/opened")
   @Produces(MediaType.APPLICATION_JSON)
   public String listOpenedPendencies() {
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies();
