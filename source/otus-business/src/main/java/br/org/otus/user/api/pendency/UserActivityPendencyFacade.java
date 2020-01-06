@@ -40,6 +40,15 @@ public class UserActivityPendencyFacade {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
+  
+  public void deleteByActivityId(String activityId) {
+    try {
+      ObjectId oid = getByActivityId(activityId).getId();
+      userActivityPendencyService.delete(oid);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
 
   public UserActivityPendency getByActivityId(String activityId) {
     try {
