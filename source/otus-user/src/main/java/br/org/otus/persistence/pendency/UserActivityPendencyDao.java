@@ -13,7 +13,7 @@ public interface UserActivityPendencyDao {
 
   ObjectId create(UserActivityPendency userActivityPendency);
 
-  void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
+  void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws DataNotFoundException;
 
   void delete(ObjectId oid) throws DataNotFoundException;
 

@@ -8,7 +8,6 @@ import br.org.otus.service.pendency.UserActivityPendencyService;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -19,12 +18,8 @@ public class UserActivityPendencyFacade {
   private UserActivityPendencyService userActivityPendencyService;
 
   public String create(String userEmail, String userActivityPendencyJson) {
-    try {
-      UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      return userActivityPendencyService.create(userActivityPendency, userEmail).toString();
-    } catch (ValidationException | DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-    }
+    UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
+    return userActivityPendencyService.create(userEmail, userActivityPendency).toString();
   }
 
   public void update(String userActivityPendencyID, String userActivityPendencyJson) {
@@ -32,7 +27,7 @@ public class UserActivityPendencyFacade {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
       ObjectId oid = new ObjectId(userActivityPendencyID);
       userActivityPendencyService.update(oid, userActivityPendency);
-    } catch (ValidationException | DataNotFoundException e) {
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
@@ -41,7 +36,7 @@ public class UserActivityPendencyFacade {
     try {
       ObjectId oid = new ObjectId(userActivityPendencyID);
       userActivityPendencyService.delete(oid);
-    } catch (ValidationException | DataNotFoundException e) {
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }

@@ -39,7 +39,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
+  public void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws DataNotFoundException {
     UpdateResult updateOne1 = collection.updateOne(
       eq("_id", userActivityPendencyOID),
       new Document("$set", new Document("dueDate", userActivityPendency.getDueDate()))

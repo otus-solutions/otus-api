@@ -22,18 +22,18 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public ObjectId create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException {
+  public ObjectId create(String userEmail, UserActivityPendency userActivityPendency) {
     userActivityPendency.setRequester(userEmail);
     return userActivityPendencyDao.create(userActivityPendency);
   }
 
   @Override
-  public void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException {
+  public void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws DataNotFoundException {
     userActivityPendencyDao.update(userActivityPendencyOID, userActivityPendency);
   }
 
   @Override
-  public void delete(ObjectId userActivityPendencyOID) throws ValidationException, DataNotFoundException {
+  public void delete(ObjectId userActivityPendencyOID) throws DataNotFoundException {
     userActivityPendencyDao.delete(userActivityPendencyOID);
   }
 
