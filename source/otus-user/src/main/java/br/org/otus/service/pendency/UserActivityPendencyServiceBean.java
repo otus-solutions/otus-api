@@ -39,7 +39,7 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
 
   @Override
   public UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException {
-    return userActivityPendencyDao.findByActivityInfo(new ObjectId(activityId));
+    return userActivityPendencyDao.findByActivityOID(new ObjectId(activityId));
   }
 
   @Override
