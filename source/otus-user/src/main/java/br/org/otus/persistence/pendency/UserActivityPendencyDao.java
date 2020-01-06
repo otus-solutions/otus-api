@@ -9,7 +9,6 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import java.util.ArrayList;
 
 public interface UserActivityPendencyDao {
-  //here
 
   ObjectId create(UserActivityPendency userActivityPendency);
 
@@ -19,10 +18,10 @@ public interface UserActivityPendencyDao {
 
   UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException;
 
-  ArrayList<UserActivityPendency> findAllPendencies() throws DataNotFoundException, MemoryExcededException;
+  ArrayList<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
 
-  ArrayList<UserActivityPendency> findOpenedPendencies() throws DataNotFoundException, MemoryExcededException;
+  ArrayList<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
 
-  ArrayList<UserActivityPendency> findDonePendencies() throws DataNotFoundException, MemoryExcededException;
+  ArrayList<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
 
 }

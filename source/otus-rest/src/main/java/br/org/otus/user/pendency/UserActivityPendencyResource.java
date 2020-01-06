@@ -29,9 +29,7 @@ public class UserActivityPendencyResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String create(@Context HttpServletRequest request, String userActivityPendencyJson) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    String pendencyId = userActivityPendencyFacade.create(userEmail, userActivityPendencyJson);
+    String pendencyId = userActivityPendencyFacade.create(getUserEmail(request), userActivityPendencyJson);
     return (new Response()).buildSuccess(pendencyId).toJson();
   }
 
@@ -67,8 +65,8 @@ public class UserActivityPendencyResource {
   @Secured
   @Path("/list")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listAllPendencies() {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies();
+  public String listAllPendencies(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
@@ -77,8 +75,8 @@ public class UserActivityPendencyResource {
   @Secured
   @Path("/list/opened")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listOpenedPendencies() {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies();
+  public String listOpenedPendencies(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
@@ -87,10 +85,15 @@ public class UserActivityPendencyResource {
   @Secured
   @Path("/list/done")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listDonePendencies() {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendencies();
+  public String listDonePendencies(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendencies(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
+  }
+
+  private String getUserEmail(HttpServletRequest request){
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    return securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
   }
 
 }

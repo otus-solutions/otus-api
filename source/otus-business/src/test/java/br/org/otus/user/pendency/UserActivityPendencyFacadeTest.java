@@ -99,56 +99,56 @@ public class UserActivityPendencyFacadeTest {
 
   @Test
   public void listAllPendenciesMethod_should_invoke_listAllPendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
-    userActivityPendencyFacade.listAllPendencies();
-    verify(userActivityPendencyService, times(1)).listAllPendencies();
+    userActivityPendencyFacade.listAllPendencies(USER_EMAIL);
+    verify(userActivityPendencyService, times(1)).listAllPendencies(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listAllPendenciesMethod_should_handle_DataNotFoundException_in_case_of_no_pendency() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listAllPendencies()).thenThrow(dataNotFoundException);
-    userActivityPendencyFacade.listAllPendencies();
+    when(userActivityPendencyService.listAllPendencies(USER_EMAIL)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listAllPendencies(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listAllPendenciesMethod_should_handle_MemoryExcededException_in_case_of_many_pendencies() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listAllPendencies()).thenThrow(memoryExcededException);
-    userActivityPendencyFacade.listAllPendencies();
+    when(userActivityPendencyService.listAllPendencies(USER_EMAIL)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listAllPendencies(USER_EMAIL);
   }
 
   @Test
   public void listOpenedPendenciesMethod_should_invoke_listOpenedPendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
-    userActivityPendencyFacade.listOpenedPendencies();
-    verify(userActivityPendencyService, times(1)).listOpenedPendencies();
+    userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL);
+    verify(userActivityPendencyService, times(1)).listOpenedPendencies(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listOpenedPendenciesMethod_should_handle_DataNotFoundException_in_case_of_no_pendency() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listOpenedPendencies()).thenThrow(dataNotFoundException);
-    userActivityPendencyFacade.listOpenedPendencies();
+    when(userActivityPendencyService.listOpenedPendencies(USER_EMAIL)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listOpenedPendenciesMethod_should_handle_MemoryExcededException_in_case_of_many_pendencies() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listOpenedPendencies()).thenThrow(memoryExcededException);
-    userActivityPendencyFacade.listOpenedPendencies();
+    when(userActivityPendencyService.listOpenedPendencies(USER_EMAIL)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL);
   }
 
   @Test
   public void listDonePendenciesMethod_should_invoke_listDonePendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
-    userActivityPendencyFacade.listDonePendencies();
-    verify(userActivityPendencyService, times(1)).listDonePendencies();
+    userActivityPendencyFacade.listDonePendencies(USER_EMAIL);
+    verify(userActivityPendencyService, times(1)).listDonePendencies(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listDonePendenciesMethod_should_handle_DataNotFoundException_in_case_of_no_pendency() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listDonePendencies()).thenThrow(dataNotFoundException);
-    userActivityPendencyFacade.listDonePendencies();
+    when(userActivityPendencyService.listDonePendencies(USER_EMAIL)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listDonePendencies(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listDonePendenciesMethod_should_handle_MemoryExcededException_in_case_of_many_pendencies() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listDonePendencies()).thenThrow(memoryExcededException);
-    userActivityPendencyFacade.listDonePendencies();
+    when(userActivityPendencyService.listDonePendencies(USER_EMAIL)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listDonePendencies(USER_EMAIL);
   }
 
 }
