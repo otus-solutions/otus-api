@@ -28,7 +28,7 @@ public class UserActivityPendencyFacade {
       ObjectId oid = new ObjectId(userActivityPendencyID);
       userActivityPendencyService.update(oid, userActivityPendency);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
@@ -37,7 +37,7 @@ public class UserActivityPendencyFacade {
       ObjectId oid = new ObjectId(userActivityPendencyID);
       userActivityPendencyService.delete(oid);
     } catch (DataNotFoundException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
