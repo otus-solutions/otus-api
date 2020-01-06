@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserActivityPendencyService {
 
-  void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException;
+  ObjectId create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException;
 
   void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws ValidationException, DataNotFoundException;
 

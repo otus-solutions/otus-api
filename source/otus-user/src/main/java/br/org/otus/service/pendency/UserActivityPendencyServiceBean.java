@@ -22,9 +22,9 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public void create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException {
+  public ObjectId create(UserActivityPendency userActivityPendency, String userEmail) throws ValidationException, DataNotFoundException {
     userActivityPendency.setRequester(userEmail);
-    userActivityPendencyDao.create(userActivityPendency);
+    return userActivityPendencyDao.create(userActivityPendency);
   }
 
   @Override

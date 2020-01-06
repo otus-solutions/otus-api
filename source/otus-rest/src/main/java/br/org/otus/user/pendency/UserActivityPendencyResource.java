@@ -31,8 +31,8 @@ public class UserActivityPendencyResource {
   public String create(@Context HttpServletRequest request, String userActivityPendencyJson) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    userActivityPendencyFacade.create(userActivityPendencyJson, userEmail);
-    return (new Response()).buildSuccess().toJson();
+    String pendencyId = userActivityPendencyFacade.create(userEmail, userActivityPendencyJson);
+    return (new Response()).buildSuccess(pendencyId).toJson();
   }
 
   @PUT
@@ -79,7 +79,8 @@ public class UserActivityPendencyResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String listOpenedPendencies() {
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies();
-    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
   @GET
@@ -88,7 +89,8 @@ public class UserActivityPendencyResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String listDonePendencies() {
     List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendencies();
-    return (new Response()).buildSuccess(userActivityPendencyList).toJson();
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
 }

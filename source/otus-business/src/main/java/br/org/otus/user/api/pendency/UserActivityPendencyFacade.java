@@ -18,28 +18,28 @@ public class UserActivityPendencyFacade {
   @Inject
   private UserActivityPendencyService userActivityPendencyService;
 
-  public void create(String userActivityPendencyJson, String userEmail) {
+  public String create(String userEmail, String userActivityPendencyJson) {
     try {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      userActivityPendencyService.create(userActivityPendency, userEmail);
+      return userActivityPendencyService.create(userActivityPendency, userEmail).toString();
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public void update(String userActivityPendencyOID, String userActivityPendencyJson) {
+  public void update(String userActivityPendencyID, String userActivityPendencyJson) {
     try {
       UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      ObjectId oid = new ObjectId(userActivityPendencyOID);
+      ObjectId oid = new ObjectId(userActivityPendencyID);
       userActivityPendencyService.update(oid, userActivityPendency);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public void delete(String userActivityPendencyOID) {
+  public void delete(String userActivityPendencyID) {
     try {
-      ObjectId oid = new ObjectId(userActivityPendencyOID);
+      ObjectId oid = new ObjectId(userActivityPendencyID);
       userActivityPendencyService.delete(oid);
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
