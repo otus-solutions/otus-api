@@ -4,7 +4,6 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -73,31 +72,20 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public List<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
-    FindIterable<Document> find = collection.find(eq("requester", userEmail));
-    MongoCursor<Document> iterator = find.iterator();
-    if (!iterator.hasNext()) {
-      throw new DataNotFoundException("There are no results for user activity pendency");
-    }
-    return extractPendenciesFromDocumentIterator(iterator);
+    return listPendencies(userEmail, "", "");
   }
 
   @Override
   public List<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
-    return findPendenciesByStatus(userEmail, CREATED_STATUS);
+    return listPendencies(userEmail, CREATED_STATUS, ",\n{ $not: [ { $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] } ] }");
   }
 
   @Override
   public List<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
-    return findPendenciesByStatus(userEmail, FINALIZED_STATUS);
+    return listPendencies(userEmail, FINALIZED_STATUS, ",\n{ $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] }");
   }
 
-
-  private List<UserActivityPendency> findPendenciesByStatus(String userEmail, String statusName) throws DataNotFoundException, MemoryExcededException {
-    String statusCondition = "{ $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] }";
-    if(!statusName.equals(FINALIZED_STATUS)){
-      statusCondition = "{ $not: [" + statusCondition + "] }";
-    }
-
+  private List<UserActivityPendency> listPendencies(String userEmail, String statusName, String statusCondition) throws DataNotFoundException, MemoryExcededException {
     List<Bson> pipeline = new ArrayList<>();
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $lookup: {\n" +
@@ -111,7 +99,8 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
       "                        $expr: {\n" +
       "                            $and: [\n" +
       "                                { $eq: [\"$$activityInfo_id\", \"$_id\"] },\n" +
-      "                                " + statusCondition +"\n" +
+      "                                { $eq: [false, \"$isDiscarded\"] }" +
+      "                                " + statusCondition +
       "                            ]\n" +
       "                        }\n" +
       "                    }\n" +
@@ -124,7 +113,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
       "        $match: {\n" +
       "            $expr: { \n" +
       "                $and: [\n" +
-      "                    { $eq: [ \"$requester\"," + userEmail + "] },\n" +
+      "                    { $eq: [ \"$requester\", " + userEmail + " ] },\n" +
       "                    { $gt: [ { $size: \"$joinResult\"}, 0] }\n" +
       "                ]\n" +
       "            }\n" +
@@ -132,15 +121,16 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
       "    }"));
     pipeline.add(ParseQuery.toDocument("{ $project: { \"joinResult\": 0 } }"));
 
+    pipeline.forEach( pip -> System.out.println(pip + ",\n"));//.
+
     AggregateIterable<Document> results = this.collection.aggregate(pipeline).allowDiskUse(true);
+
     if (results == null) {
       throw new DataNotFoundException("There are no results for " + statusName + " user activity pendency.");
     }
-    return extractPendenciesFromDocumentIterator(results.iterator());
-  }
 
-  private ArrayList<UserActivityPendency> extractPendenciesFromDocumentIterator(MongoCursor<Document> iterator) throws MemoryExcededException {
-    ArrayList<UserActivityPendency> userActivityPendencies = new ArrayList<>();
+    MongoCursor<Document> iterator = results.iterator();
+    List<UserActivityPendency> userActivityPendencies = new ArrayList<>();
     while (iterator.hasNext()) {
       try {
         Document document = iterator.next();
