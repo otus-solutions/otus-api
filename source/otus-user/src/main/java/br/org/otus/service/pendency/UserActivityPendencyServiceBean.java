@@ -5,7 +5,6 @@ import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
