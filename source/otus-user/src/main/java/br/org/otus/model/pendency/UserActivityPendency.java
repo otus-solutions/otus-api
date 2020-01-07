@@ -5,9 +5,9 @@ import br.org.otus.utils.ObjectIdToStringAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 
-public class UserActivityPendency {
+import java.util.Objects;
 
-  public static final String OID_KEY = "_id";
+public class UserActivityPendency {
 
   private ObjectId _id;
   private String objectType;
@@ -55,10 +55,7 @@ public class UserActivityPendency {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
-    UserActivityPendency that = (UserActivityPendency) o;
-
-    return _id != null ? _id.equals(that.getId()) : that.getId() == null;
+    return Objects.equals(_id, ((UserActivityPendency) o).getId());
   }
 
   public static String serialize(UserActivityPendency userActivityPendency) {
