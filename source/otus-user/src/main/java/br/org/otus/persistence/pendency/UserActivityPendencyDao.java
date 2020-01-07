@@ -4,9 +4,8 @@ import br.org.otus.model.pendency.UserActivityPendency;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface UserActivityPendencyDao {
 
@@ -18,10 +17,10 @@ public interface UserActivityPendencyDao {
 
   UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException;
 
-  ArrayList<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
 
-  ArrayList<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
 
-  ArrayList<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
 
 }

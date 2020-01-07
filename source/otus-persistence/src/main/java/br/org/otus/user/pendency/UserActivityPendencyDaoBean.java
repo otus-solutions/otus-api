@@ -72,7 +72,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ArrayList<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
     FindIterable<Document> find = collection.find(eq("requester", userEmail));
     MongoCursor<Document> iterator = find.iterator();
     if (!iterator.hasNext()) {
@@ -82,17 +82,17 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ArrayList<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
     return findPendenciesByStatus(userEmail, CREATED_STATUS);
   }
 
   @Override
-  public ArrayList<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
     return findPendenciesByStatus(userEmail, FINALIZED_STATUS);
   }
 
 
-  private ArrayList<UserActivityPendency> findPendenciesByStatus(String userEmail, String statusName) throws DataNotFoundException, MemoryExcededException {
+  private List<UserActivityPendency> findPendenciesByStatus(String userEmail, String statusName) throws DataNotFoundException, MemoryExcededException {
     String statusCondition = "{ $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] }";
     if(!statusName.equals(FINALIZED_STATUS)){
       statusCondition = "{ $not: [" + statusCondition + "] }";
