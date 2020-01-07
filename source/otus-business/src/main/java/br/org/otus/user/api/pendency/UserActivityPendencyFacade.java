@@ -1,11 +1,9 @@
 package br.org.otus.user.api.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
-import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.service.pendency.UserActivityPendencyService;
-import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 
@@ -18,33 +16,29 @@ public class UserActivityPendencyFacade {
   private UserActivityPendencyService userActivityPendencyService;
 
   public String create(String userEmail, String userActivityPendencyJson) {
-    UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-    return userActivityPendencyService.create(userEmail, userActivityPendency).toString();
+    return userActivityPendencyService.create(userEmail, userActivityPendencyJson).toString();
   }
 
-  public void update(String userActivityPendencyID, String userActivityPendencyJson) {
+  public void update(String userActivityPendencyId, String userActivityPendencyJson) {
     try {
-      UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
-      ObjectId oid = new ObjectId(userActivityPendencyID);
-      userActivityPendencyService.update(oid, userActivityPendency);
+      userActivityPendencyService.update(userActivityPendencyId, userActivityPendencyJson);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public void delete(String userActivityPendencyID) {
+  public void delete(String userActivityPendencyId) {
     try {
-      ObjectId oid = new ObjectId(userActivityPendencyID);
-      userActivityPendencyService.delete(oid);
+      userActivityPendencyService.delete(userActivityPendencyId);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
-  
+
   public void deleteByActivityId(String activityId) {
     try {
-      ObjectId oid = getByActivityId(activityId).getId();
-      userActivityPendencyService.delete(oid);
+      String pendencyId = getByActivityId(activityId).getId().toString();
+      userActivityPendencyService.delete(pendencyId);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

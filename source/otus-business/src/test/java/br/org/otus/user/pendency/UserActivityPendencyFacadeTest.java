@@ -57,31 +57,31 @@ public class UserActivityPendencyFacadeTest {
 
   @Test
   public void createMethod_should_invoke_create_from_userActivityPendencyService() {
-    when(userActivityPendencyService.create(USER_EMAIL, userActivityPendency)).thenReturn(userActivityPendencyOID);
+    when(userActivityPendencyService.create(USER_EMAIL, userActivityPendencyJson)).thenReturn(userActivityPendencyOID);
     assertEquals(PENDENCY_ID, userActivityPendencyFacade.create(USER_EMAIL, userActivityPendencyJson));
   }
 
   @Test
   public void updateMethod_should_invoke_update_from_userActivityPendencyService() throws DataNotFoundException {
     userActivityPendencyFacade.update(PENDENCY_ID, userActivityPendencyJson);
-    verify(userActivityPendencyService, times(1)).update(userActivityPendencyOID, userActivityPendency);
+    verify(userActivityPendencyService, times(1)).update(PENDENCY_ID, userActivityPendencyJson);
   }
 
   @Test (expected = HttpResponseException.class)
   public void updateMethod_should_handle_DataNotFoundException() throws Exception {
-    PowerMockito.doThrow(dataNotFoundException).when(userActivityPendencyService, "update", userActivityPendencyOID, userActivityPendency);
+    PowerMockito.doThrow(dataNotFoundException).when(userActivityPendencyService, "update", PENDENCY_ID, userActivityPendencyJson);
     userActivityPendencyFacade.update(PENDENCY_ID, userActivityPendencyJson);
   }
 
   @Test
   public void deleteMethod_should_invoke_delete_from_userActivityPendencyService() throws DataNotFoundException {
     userActivityPendencyFacade.delete(PENDENCY_ID);
-    verify(userActivityPendencyService, times(1)).delete(userActivityPendencyOID);
+    verify(userActivityPendencyService, times(1)).delete(PENDENCY_ID);
   }
 
   @Test (expected = HttpResponseException.class)
   public void deleteMethod_should_handle_DataNotFoundException() throws Exception {
-    PowerMockito.doThrow(dataNotFoundException).when(userActivityPendencyService, "delete", userActivityPendencyOID);
+    PowerMockito.doThrow(dataNotFoundException).when(userActivityPendencyService, "delete", PENDENCY_ID);
     userActivityPendencyFacade.delete(PENDENCY_ID);
   }
 

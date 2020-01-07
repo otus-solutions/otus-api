@@ -21,19 +21,22 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public ObjectId create(String userEmail, UserActivityPendency userActivityPendency) {
+  public ObjectId create(String userEmail, String userActivityPendencyJson) {
+    UserActivityPendency userActivityPendency = UserActivityPendency.deserialize(userActivityPendencyJson);
     userActivityPendency.setRequester(userEmail);
     return userActivityPendencyDao.create(userActivityPendency);
   }
 
   @Override
-  public void update(ObjectId userActivityPendencyOID, UserActivityPendency userActivityPendency) throws DataNotFoundException {
-    userActivityPendencyDao.update(userActivityPendencyOID, userActivityPendency);
+  public void update(String userActivityPendencyId, String userActivityPendencyJson) throws DataNotFoundException {
+    userActivityPendencyDao.update(
+      new ObjectId(userActivityPendencyId),
+      UserActivityPendency.deserialize(userActivityPendencyJson));
   }
 
   @Override
-  public void delete(ObjectId userActivityPendencyOID) throws DataNotFoundException {
-    userActivityPendencyDao.delete(userActivityPendencyOID);
+  public void delete(String userActivityPendencyId) throws DataNotFoundException {
+    userActivityPendencyDao.delete(new ObjectId(userActivityPendencyId));
   }
 
   @Override
