@@ -2,10 +2,16 @@ package br.org.otus.security.dtos;
 
 import br.org.otus.user.dto.FieldCenterDTO;
 import br.org.tutty.Equalization;
+import com.google.gson.GsonBuilder;
 import org.ccem.otus.exceptions.Dto;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.model.Sex;
+import org.ccem.otus.participant.utils.LongAdapter;
+import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ParticipantSecurityAuthorizationDto implements Dto {
@@ -44,5 +50,17 @@ public class ParticipantSecurityAuthorizationDto implements Dto {
 
   public void setToken(String token) {
     this.token = token;
+  }
+
+  public static String serialize(ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto) {
+    return Participant.getGsonBuilder().create().toJson(participantSecurityAuthorizationDto);
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.registerTypeAdapter(Long.class, new LongAdapter());
+    return builder;
   }
 }

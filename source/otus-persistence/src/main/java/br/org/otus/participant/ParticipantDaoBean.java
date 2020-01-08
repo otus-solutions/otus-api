@@ -8,8 +8,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import br.org.otus.model.User;
-import com.sun.org.apache.bcel.internal.generic.PUSH;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -30,6 +29,8 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   private static final String EMAIL = "email";
   private static final String PUSH = "$push";
   private static final String PULL = "$pull";
+  private static final String SET = "$set";
+  private static final String PASSWORD = "password";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -107,6 +108,14 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
       throw new DataNotFoundException(new Throwable("Participant with email: {" + userEmail + "} not found."));
     }
     return Participant.deserialize(participantFound.toJson());
+  }
+
+  @Override
+  public void registerPassword(String email, String password) throws DataNotFoundException {
+    UpdateResult updateResult = this.collection.updateOne(new Document(EMAIL, email), new Document(SET,new Document(PASSWORD, password)));
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("Participant no found");
+    }
   }
 
   @Override

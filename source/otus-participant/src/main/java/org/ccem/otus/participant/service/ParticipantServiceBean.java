@@ -43,6 +43,11 @@ public class ParticipantServiceBean implements ParticipantService {
     return participantDao.getRecruitmentNumbersByFieldCenter(center);
   }
 
+  @Override
+  public void registerPassword(String email, String password) throws DataNotFoundException {
+    participantDao.registerPassword(email, password);
+  }
+
 
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {

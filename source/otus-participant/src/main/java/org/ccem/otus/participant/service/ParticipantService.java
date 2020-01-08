@@ -23,4 +23,5 @@ public interface ParticipantService {
 
   ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException;
 
+  void registerPassword(String token, String Password) throws DataNotFoundException;
 }
