@@ -28,6 +28,8 @@ public class ParticipantServiceBeanTest {
   private static final long RECRUIMENT_NUMBER = 3051442;
   private static final String PARTICIPANT_NAME = "Jose Otus";
   private static final String ACRONYM = "RS";
+  private static final String EMAIL = "email@test.com";
+  private static final String PASSWORD = "password";
   @InjectMocks
   ParticipantServiceBean participantServiceBean;
   @Mock
@@ -77,7 +79,7 @@ public class ParticipantServiceBeanTest {
     assertEquals(PARTICIPANT_NAME, participantServiceBean.list(fieldCenter).get(0).getName());
     verify(participantDao, times(0)).findByFieldCenter(fieldCenter);
   }
-  
+
   @Test
   public void method_create_participant_should_insert_successfully_when_a_participant_with_given_rn_doesnt_exist() throws ValidationException {
     setParticipants.add(participant);
@@ -91,7 +93,7 @@ public class ParticipantServiceBeanTest {
     when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
     participantServiceBean.create(setParticipants);
   }
-  
+
   @Test(expected = ValidationException.class)
   public void method_create_a_participant_validate_recruitmentNumber_should_return_exception() throws ValidationException, DataNotFoundException {
     when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
@@ -149,4 +151,9 @@ public class ParticipantServiceBeanTest {
 
   }
 
+  @Test
+  public void method_registerPassword_should_call_participantDao_registerPassword() throws DataNotFoundException {
+    participantServiceBean.registerPassword(EMAIL, PASSWORD);
+    verify(participantDao,times(1)).registerPassword(EMAIL, PASSWORD);
+  }
 }
