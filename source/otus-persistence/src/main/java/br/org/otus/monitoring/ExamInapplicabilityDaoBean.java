@@ -1,13 +1,12 @@
 package br.org.otus.monitoring;
 
+import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.project.exam.examInapplicability.ExamInapplicability;
 import br.org.otus.laboratory.project.exam.examInapplicability.persistence.ExamInapplicabilityDao;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
-import br.org.mongodb.MongoGenericDao;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;

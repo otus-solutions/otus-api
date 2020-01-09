@@ -1,10 +1,12 @@
 package br.org.otus.survey.services;
 
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
+import com.mongodb.client.result.UpdateResult;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.survey.form.SurveyForm;
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -30,4 +32,6 @@ public interface SurveyService {
   List<String> listAcronyms();
 
   void createSurveyJumpMap(SurveyForm surveyForm);
+
+  UpdateResult updateSurveyRequiredExternalID(String surveyID, String requiredExternalID) throws JSONException, DataNotFoundException;
 }

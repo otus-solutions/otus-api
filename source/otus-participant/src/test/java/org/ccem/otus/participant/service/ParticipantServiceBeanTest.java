@@ -145,7 +145,7 @@ public class ParticipantServiceBeanTest {
   @Test
   public void should_call_dao_for_the_list_of_rns() throws DataNotFoundException, ValidationException {
     participantServiceBean.listCenterRecruitmentNumbers(ACRONYM);
-    Mockito.verify(participantDao, Mockito.times(1)).getCenterRns(ACRONYM);
+    Mockito.verify(participantDao, Mockito.times(1)).getRecruitmentNumbersByFieldCenter(ACRONYM);
 
   }
 

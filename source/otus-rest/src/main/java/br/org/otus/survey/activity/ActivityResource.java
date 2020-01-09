@@ -7,6 +7,7 @@ import br.org.otus.security.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import br.org.otus.survey.activity.api.ActivityFacade;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import javax.inject.Inject;
@@ -25,7 +26,6 @@ public class ActivityResource {
   private ActivityFacade activityFacade;
   @Inject
   private ParticipantFacade participantFacade;
-
   @Inject
   private SecurityContext securityContext;
 
@@ -36,7 +36,6 @@ public class ActivityResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     isValidRecruitmentNumber(rn);
-
     return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
   }
 
@@ -47,7 +46,6 @@ public class ActivityResource {
   public String createActivity(@PathParam("rn") long rn, String surveyActivity) {
     isValidRecruitmentNumber(rn);
     String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity));
-
     return new Response().buildSuccess(objectID).toJson();
   }
 
@@ -57,7 +55,6 @@ public class ActivityResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getByID(@PathParam("rn") long rn, @PathParam("id") String id) {
     isValidRecruitmentNumber(rn);
-
     return new Response().buildSuccess(activityFacade.getByID(id)).toSurveyJson();
   }
 
@@ -70,7 +67,6 @@ public class ActivityResource {
     isValidRecruitmentNumber(rn);
     SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
     SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
-
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
 
@@ -101,14 +97,11 @@ public class ActivityResource {
   public String createActivityRevision(@Context HttpServletRequest request, String activityRevisionJson) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-
     activityRevisionFacade.create(activityRevisionJson, userEmail);
-
     return new Response().buildSuccess().toJson();
   }
 
   private void isValidRecruitmentNumber(long rn) {
     participantFacade.getByRecruitmentNumber(rn);
   }
-
 }
