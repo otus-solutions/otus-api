@@ -4,6 +4,7 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.*;
 import br.org.otus.security.services.SecurityService;
+import com.mongodb.MongoException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
@@ -76,10 +77,6 @@ public class SecurityFacade {
   }
 
   public void invalidateParticipantAuthentication(String email, String token) {
-    try {
-      securityService.invalidateParticipantAuthenticate(email, token);
-    } catch (Exception e) {
-      throw new HttpResponseException(ResponseBuild.Commons.UnexpectedError.build());
-    }
+    securityService.invalidateParticipantAuthenticate(email, token);
   }
 }

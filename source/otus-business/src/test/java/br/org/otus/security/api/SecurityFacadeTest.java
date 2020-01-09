@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 import br.org.otus.security.dtos.PasswordResetRequestDto;
+import com.mongodb.MongoException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
@@ -40,7 +41,7 @@ public class SecurityFacadeTest {
 	private ProjectAuthenticationDto projectAuthenticationDto;
 	@Mock
 	private PasswordResetRequestDto passwordResetRequestDto;
-	
+
 	@Test
 	public void method_UserAuthentication_should_return_userSecurityAuthorizationDto()
 			throws TokenException, AuthenticationException {
@@ -139,4 +140,31 @@ public class SecurityFacadeTest {
 		doThrow(new DataNotFoundException()).when(securityService).getRequestEmail(TOKEN);
 		securityFacade.getRequestEmail(TOKEN);
 	}
+
+  @Test
+  public void method_participantAuthentication_should_call_participantAuthenticate() throws DataNotFoundException, TokenException, AuthenticationException {
+    AuthenticationDto authenticationDto = new AuthenticationDto();
+	  securityFacade.participantAuthentication(authenticationDto);
+    verify(securityService, times(1)).participantAuthenticate(authenticationDto);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void  method_participantAuthentication_should_Throw_TokenException() throws DataNotFoundException, TokenException, AuthenticationException {
+    AuthenticationDto authenticationDto = new AuthenticationDto();
+    doThrow(new TokenException()).when(securityService).participantAuthenticate(authenticationDto);
+    securityFacade.participantAuthentication(authenticationDto);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void  method_participantAuthentication_should_Throw_AuthenticationException() throws DataNotFoundException, TokenException, AuthenticationException {
+    AuthenticationDto authenticationDto = new AuthenticationDto();
+    doThrow(new AuthenticationException()).when(securityService).participantAuthenticate(authenticationDto);
+    securityFacade.participantAuthentication(authenticationDto);
+  }
+
+  @Test
+  public void method_invalidateParticipantAuthentication_should_call_securityService_invalidateParticipantAuthenticate() throws DataNotFoundException, TokenException, AuthenticationException {
+    securityFacade.invalidateParticipantAuthentication("email", "token");
+    verify(securityService, times(1)).invalidateParticipantAuthenticate("email", "token");
+  }
 }
