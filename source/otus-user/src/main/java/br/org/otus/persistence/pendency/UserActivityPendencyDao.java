@@ -17,10 +17,10 @@ public interface UserActivityPendencyDao {
 
   UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException;
 
-  List<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> findAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> findOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> findDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
 }

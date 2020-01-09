@@ -89,61 +89,61 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.getByActivityId(ACTIVITY_ID);
   }
 
-  // list All
+  // list All To Receiver
   @Test
-  public void listAllPendencies_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findAllPendencies(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listAllPendencies(USER_EMAIL));
+  public void listAllPendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
+    when(userActivityPendencyDao.findAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
+    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
-  public void listAllPendencies_should_handle_DataNotFoundException() throws Exception {
-    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendencies", USER_EMAIL);
-    userActivityPendencyServiceBean.listAllPendencies(USER_EMAIL);
+  public void listAllPendenciesToReceiver_should_handle_DataNotFoundException() throws Exception {
+    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendenciesToReceiver", USER_EMAIL);
+    userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = MemoryExcededException.class)
-  public void listAllPendencies_should_handle_MemoryExcededException() throws Exception {
-    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendencies", USER_EMAIL);
-    userActivityPendencyServiceBean.listAllPendencies(USER_EMAIL);
+  public void listAllPendenciesToReceiver_should_handle_MemoryExcededException() throws Exception {
+    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendenciesToReceiver", USER_EMAIL);
+    userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL);
   }
 
-  // list Opened
+  // list Opened To Receiver
   @Test
-  public void listOpenedPendencies_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findOpenedPendencies(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listOpenedPendencies(USER_EMAIL));
+  public void listOpenedPendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
+    when(userActivityPendencyDao.findOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
+    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
-  public void listOpenedPendencies_should_handle_DataNotFoundException() throws Exception {
-    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findOpenedPendencies", USER_EMAIL);
-    userActivityPendencyServiceBean.listOpenedPendencies(USER_EMAIL);
+  public void listOpenedPendenciesToReceiver_should_handle_DataNotFoundException() throws Exception {
+    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findOpenedPendenciesToReceiver", USER_EMAIL);
+    userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = MemoryExcededException.class)
-  public void listOpenedPendencies_should_handle_MemoryExcededException() throws Exception {
-    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findOpenedPendencies", USER_EMAIL);
-    userActivityPendencyServiceBean.listOpenedPendencies(USER_EMAIL);
+  public void listOpenedPendenciesToReceiver_should_handle_MemoryExcededException() throws Exception {
+    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findOpenedPendenciesToReceiver", USER_EMAIL);
+    userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
-  // list Done
+  // list Done To Receiver
   @Test
-  public void listDonePendencies_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findDonePendencies(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listDonePendencies(USER_EMAIL));
+  public void listDonePendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
+    when(userActivityPendencyDao.findDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
+    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
-  public void listDonePendencies_should_handle_DataNotFoundException() throws Exception {
-    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findDonePendencies", USER_EMAIL);
-    userActivityPendencyServiceBean.listDonePendencies(USER_EMAIL);
+  public void listDonePendenciesToReceiver_should_handle_DataNotFoundException() throws Exception {
+    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findDonePendenciesToReceiver", USER_EMAIL);
+    userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = MemoryExcededException.class)
-  public void listDonePendencies_should_handle_MemoryExcededException() throws Exception {
-    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findDonePendencies", USER_EMAIL);
-    userActivityPendencyServiceBean.listDonePendencies(USER_EMAIL);
+  public void listDonePendenciesToReceiver_should_handle_MemoryExcededException() throws Exception {
+    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findDonePendenciesToReceiver", USER_EMAIL);
+    userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
 }

@@ -18,9 +18,9 @@ public interface UserActivityPendencyService {
 
   UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 
-  List<UserActivityPendency> listAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> listAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendency> listDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 }

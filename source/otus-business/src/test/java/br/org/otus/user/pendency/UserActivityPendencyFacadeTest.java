@@ -99,56 +99,56 @@ public class UserActivityPendencyFacadeTest {
 
   @Test
   public void listAllPendenciesMethod_should_invoke_listAllPendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
-    userActivityPendencyFacade.listAllPendencies(USER_EMAIL);
-    verify(userActivityPendencyService, times(1)).listAllPendencies(USER_EMAIL);
+    userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL);
+    verify(userActivityPendencyService, times(1)).listAllPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listAllPendenciesMethod_should_handle_DataNotFoundException_in_case_of_no_pendency() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listAllPendencies(USER_EMAIL)).thenThrow(dataNotFoundException);
-    userActivityPendencyFacade.listAllPendencies(USER_EMAIL);
+    when(userActivityPendencyService.listAllPendenciesToReceiver(USER_EMAIL)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listAllPendenciesMethod_should_handle_MemoryExcededException_in_case_of_many_pendencies() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listAllPendencies(USER_EMAIL)).thenThrow(memoryExcededException);
-    userActivityPendencyFacade.listAllPendencies(USER_EMAIL);
+    when(userActivityPendencyService.listAllPendenciesToReceiver(USER_EMAIL)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test
   public void listOpenedPendenciesMethod_should_invoke_listOpenedPendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
-    userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL);
-    verify(userActivityPendencyService, times(1)).listOpenedPendencies(USER_EMAIL);
+    userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL);
+    verify(userActivityPendencyService, times(1)).listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listOpenedPendenciesMethod_should_handle_DataNotFoundException_in_case_of_no_pendency() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listOpenedPendencies(USER_EMAIL)).thenThrow(dataNotFoundException);
-    userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL);
+    when(userActivityPendencyService.listOpenedPendenciesToReceiver(USER_EMAIL)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listOpenedPendenciesMethod_should_handle_MemoryExcededException_in_case_of_many_pendencies() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listOpenedPendencies(USER_EMAIL)).thenThrow(memoryExcededException);
-    userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL);
+    when(userActivityPendencyService.listOpenedPendenciesToReceiver(USER_EMAIL)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
   @Test
   public void listDonePendenciesMethod_should_invoke_listDonePendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
-    userActivityPendencyFacade.listDonePendencies(USER_EMAIL);
-    verify(userActivityPendencyService, times(1)).listDonePendencies(USER_EMAIL);
+    userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL);
+    verify(userActivityPendencyService, times(1)).listDonePendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listDonePendenciesMethod_should_handle_DataNotFoundException_in_case_of_no_pendency() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listDonePendencies(USER_EMAIL)).thenThrow(dataNotFoundException);
-    userActivityPendencyFacade.listDonePendencies(USER_EMAIL);
+    when(userActivityPendencyService.listDonePendenciesToReceiver(USER_EMAIL)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
   @Test (expected = HttpResponseException.class)
   public void listDonePendenciesMethod_should_handle_MemoryExcededException_in_case_of_many_pendencies() throws DataNotFoundException, MemoryExcededException {
-    when(userActivityPendencyService.listDonePendencies(USER_EMAIL)).thenThrow(memoryExcededException);
-    userActivityPendencyFacade.listDonePendencies(USER_EMAIL);
+    when(userActivityPendencyService.listDonePendenciesToReceiver(USER_EMAIL)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
 }

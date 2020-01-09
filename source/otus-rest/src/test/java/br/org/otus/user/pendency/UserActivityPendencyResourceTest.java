@@ -113,10 +113,10 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     List<String> pendenciesJson = getPendenciesJson();
     userActivityPendencies = deserializePendenciesList(pendenciesJson);
-    when(userActivityPendencyFacade.listAllPendencies(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", pendenciesJson) + "]"),
-      userActivityPendencyResource.listAllPendencies(request));
+      userActivityPendencyResource.listAllPendenciesToReceiver(request));
   }
 
   @Test
@@ -127,10 +127,10 @@ public class UserActivityPendencyResourceTest {
       .collect(Collectors.toList());
 
     userActivityPendencies = deserializePendenciesList(pendenciesJson);
-    when(userActivityPendencyFacade.listOpenedPendencies(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", pendenciesJson) + "]"),
-      userActivityPendencyResource.listOpenedPendencies(request));
+      userActivityPendencyResource.listOpenedPendenciesToReceiver(request));
   }
 
   @Test
@@ -141,10 +141,10 @@ public class UserActivityPendencyResourceTest {
       .collect(Collectors.toList());
 
     userActivityPendencies = deserializePendenciesList(pendenciesJson);
-    when(userActivityPendencyFacade.listDonePendencies(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", pendenciesJson) + "]"),
-      userActivityPendencyResource.listDonePendencies(request));
+      userActivityPendencyResource.listDonePendenciesToReceiver(request));
   }
 
 

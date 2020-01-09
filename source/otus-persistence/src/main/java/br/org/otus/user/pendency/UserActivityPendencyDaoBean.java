@@ -22,8 +22,14 @@ import static com.mongodb.client.model.Filters.eq;
 public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> implements UserActivityPendencyDao {
 
   private static final String COLLECTION_NAME = "pendency";
+
+  private static final String REQUESTER_ATTRIBUTE_NAME = "requester";
+  private static final String RECEIVER_ATTRIBUTE_NAME = "receiver";
+
   private static final String CREATED_STATUS = "CREATED";
   private static final String FINALIZED_STATUS = "FINALIZED";
+  private static final String FINALIZED_STATUS_CONDITION = "{ $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] }";
+  private static final String NOT_FINALIZED_STATUS_CONDITION = "{ $not: [ " + FINALIZED_STATUS_CONDITION + " ] }";
 
   public UserActivityPendencyDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -71,21 +77,23 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public List<UserActivityPendency> findAllPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies(userEmail, "", "");
+  public List<UserActivityPendency> findAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverEmail, "", "");
   }
 
   @Override
-  public List<UserActivityPendency> findOpenedPendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies(userEmail, CREATED_STATUS, ",\n{ $not: [ { $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] } ] }");
+  public List<UserActivityPendency> findOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverEmail, CREATED_STATUS, "," + NOT_FINALIZED_STATUS_CONDITION);
   }
 
   @Override
-  public List<UserActivityPendency> findDonePendencies(String userEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies(userEmail, FINALIZED_STATUS, ",\n{ $in: [\"" + FINALIZED_STATUS + "\", \"$statusHistory.name\"] }");
+  public List<UserActivityPendency> findDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverEmail, FINALIZED_STATUS, "," + FINALIZED_STATUS_CONDITION);
   }
 
-  private List<UserActivityPendency> listPendencies(String userEmail, String statusName, String statusCondition) throws DataNotFoundException, MemoryExcededException {
+  private List<UserActivityPendency> listPendencies(String userRole, String userEmail,
+                                                    String statusName, String statusCondition) throws DataNotFoundException, MemoryExcededException {
+
     List<Bson> pipeline = new ArrayList<>();
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $lookup: {\n" +
@@ -113,15 +121,13 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
       "        $match: {\n" +
       "            $expr: { \n" +
       "                $and: [\n" +
-      "                    { $eq: [ \"$requester\", " + userEmail + " ] },\n" +
+      "                    { $eq: [ \"$"+ userRole +"\", " + userEmail + " ] },\n" +
       "                    { $gt: [ { $size: \"$joinResult\"}, 0] }\n" +
       "                ]\n" +
       "            }\n" +
       "        } \n" +
       "    }"));
     pipeline.add(ParseQuery.toDocument("{ $project: { \"joinResult\": 0 } }"));
-
-    pipeline.forEach( pip -> System.out.println(pip + ",\n"));//.
 
     AggregateIterable<Document> results = this.collection.aggregate(pipeline).allowDiskUse(true);
 

@@ -63,34 +63,34 @@ public class UserActivityPendencyResource {
 
   @GET
   @Secured
-  @Path("/list")
+  @Path("/list/receiver")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listAllPendencies(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies(getUserEmail(request));
+  public String listAllPendenciesToReceiver(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendenciesToReceiver(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
   @GET
   @Secured
-  @Path("/list/opened")
+  @Path("/list/receiver/opened")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listOpenedPendencies(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendencies(getUserEmail(request));
+  public String listOpenedPendenciesToReceiver(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendenciesToReceiver(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
   @GET
   @Secured
-  @Path("/list/done")
+  @Path("/list/receiver/done")
   @Produces(MediaType.APPLICATION_JSON)
-  public String listDonePendencies(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendencies(getUserEmail(request));
+  public String listDonePendenciesToReceiver(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendenciesToReceiver(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
-
+  
   private String getUserEmail(HttpServletRequest request){
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     return securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
