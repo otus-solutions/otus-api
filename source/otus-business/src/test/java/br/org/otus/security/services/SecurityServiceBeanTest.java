@@ -5,21 +5,22 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.verifyNew;
-import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static org.powermock.reflect.Whitebox.invokeMethod;
 
 import javax.persistence.NoResultException;
 
+import br.org.otus.security.dtos.ParticipantSecurityAuthorizationDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -71,6 +72,12 @@ public class SecurityServiceBeanTest {
 	private SystemConfig systemConfig;
 	@Mock
 	private PasswordResetRequestDto passwordResetRequestDto;
+	@Mock
+	private ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto;
+  @Mock
+  private ParticipantDao participantDao;
+  @Mock
+  private Participant participant;
 	@Mock
 	private SessionIdentifier sessionIdentifier;
 	private UserSecurityAuthorizationDto userSecurityAuthorizationDto;
@@ -251,4 +258,38 @@ public class SecurityServiceBeanTest {
 		securityServiceBean.removePasswordResetRequests(EMAIL);
 		verify(passwordResetContextService, times(1)).removeRequests(EMAIL);
 	}
+
+  @Test
+  public void method_participantAuthenticate_should_return_ParticipantSecurityAuthorizationDto() throws DataNotFoundException, TokenException, AuthenticationException {
+    byte[] sharedSecret = new byte[32];
+	  when(authenticationData.getUserEmail()).thenReturn(EMAIL);
+    when(authenticationData.getKey()).thenReturn(PASSWORD);
+    when(participantDao.fetchByEmail(EMAIL)).thenReturn(participant);
+    when(participant.getPassword()).thenReturn(PASSWORD);
+    when(securityContextService.generateSecretKey()).thenReturn(sharedSecret);
+    when(securityContextService.generateToken(authenticationData,sharedSecret)).thenReturn(JWT_SIGNED_SERIALIZED);
+    assertEquals(securityServiceBean.participantAuthenticate(authenticationData).getToken(),JWT_SIGNED_SERIALIZED);
+    verify(participantDao, times(1)).addAuthToken(EMAIL,JWT_SIGNED_SERIALIZED);
+  }
+
+  @Test(expected = AuthenticationException.class)
+  public void method_participantAuthenticate_should_throw_DataNotFoundException() throws DataNotFoundException, TokenException, AuthenticationException {
+    when(participantDao.fetchByEmail(EMAIL)).thenThrow(new DataNotFoundException());
+    securityServiceBean.participantAuthenticate(authenticationData);
+  }
+
+  @Test(expected = AuthenticationException.class)
+  public void method_participantAuthenticate_should_throw_AuthenticationException() throws DataNotFoundException, TokenException, AuthenticationException {
+    when(authenticationData.getUserEmail()).thenReturn(EMAIL);
+    when(authenticationData.getKey()).thenReturn(PASSWORD);
+    when(participantDao.fetchByEmail(EMAIL)).thenReturn(participant);
+    when(participant.getPassword()).thenReturn("PASSWORD");
+    securityServiceBean.participantAuthenticate(authenticationData);
+  }
+
+  @Test
+  public void method_invalidateParticipantAuthenticate_should_call_removeAuthToken(){
+    securityServiceBean.invalidateParticipantAuthenticate(EMAIL, TOKEN);
+    verify(participantDao, times(1)).removeAuthToken(EMAIL, TOKEN);
+  }
 }

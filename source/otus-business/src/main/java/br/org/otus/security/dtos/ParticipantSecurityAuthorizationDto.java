@@ -12,7 +12,6 @@ import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class ParticipantSecurityAuthorizationDto implements Dto {
 
@@ -50,6 +49,10 @@ public class ParticipantSecurityAuthorizationDto implements Dto {
 
   public void setToken(String token) {
     this.token = token;
+  }
+
+  public String getToken(){
+    return this.token;
   }
 
   public static String serialize(ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto) {
