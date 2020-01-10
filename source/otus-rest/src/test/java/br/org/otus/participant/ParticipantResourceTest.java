@@ -13,6 +13,8 @@ import static org.mockito.Mockito.verify;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
@@ -115,5 +117,12 @@ public class ParticipantResourceTest {
     when(participantFacade.create(PARTICIPANT)).thenReturn(participant);
     assertTrue(participantResource.create(request, PARTICIPANT) instanceof String);
     verify(participantFacade, times(1)).create(PARTICIPANT);
+  }
+
+  @Test
+  public void method_registerPassword_should_call_participantFacade_registerPassword() throws Exception {
+    PasswordResetDto passwordResetDto = new PasswordResetDto();
+    participantResource.registerPassword(passwordResetDto, request);
+    verify(participantFacade, times(1)).registerPassword(passwordResetDto);
   }
 }
