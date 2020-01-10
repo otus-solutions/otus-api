@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ccem.otus</groupId>
   <artifactId>otus-root</artifactId>
-  <version>1.26-SNAPSHOT</version>
+  <version>1.27-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>otus-api</name>
 
@@ -12,7 +12,7 @@
 
     <owail.sender.version>1.0</owail.sender.version>
     <equalize.version>2.0.2</equalize.version>
-    <survey.model.version>1.10-SNAPSHOT</survey.model.version>
+    <survey.model.version>1.10</survey.model.version>
 
 
     <!-- External dependencies -->
