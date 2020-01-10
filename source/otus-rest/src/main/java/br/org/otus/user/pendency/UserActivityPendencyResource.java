@@ -90,7 +90,38 @@ public class UserActivityPendencyResource {
     return (new Response()).buildSuccess(userActivityPendencyList)
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
-  
+
+  @GET
+  @Secured
+  @Path("/list/requester")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listAllPendenciesFromRequester(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendenciesFromRequester(getUserEmail(request));
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/list/requester/opened")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listOpenedPendenciesFromRequester(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendenciesFromRequester(getUserEmail(request));
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/list/requester/done")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listDonePendenciesFromRequester(@Context HttpServletRequest request) {
+    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendenciesFromRequester(getUserEmail(request));
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendency.getFrontGsonBuilder());
+  }
+
+
   private String getUserEmail(HttpServletRequest request){
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     return securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();

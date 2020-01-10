@@ -32,18 +32,10 @@ public class UserActivityPendencyResourceTest {
 
   private static final String USER_EMAIL = "requester@otus.com";
   private static final String TOKEN = "123456";
-  private static final String NEW_PENDENCY_DATA = "{" +
-    "\"objectType\":\"userActivityPendency\"," +
-    "\"creationDate\":\"2019-12-19T19:31:08.570Z\"," +
-    "\"dueDate\":\"2019-12-19T19:31:08.570Z\"," +
-    "\"requester\":\"" + USER_EMAIL + "\"," +
-    "\"receiver\":\"ativ_created22@otus.com\"," +
-    "\"activityInfo\":{" +
-    "\"id\":\"5dd55b8e415e9c6746ca2da1\"," +
-    "\"acronym\":\"ABR\"," +
-    "\"recruitmentNumber\":5001007" +
-    "}" +
-    "}";
+  private static final String PENDENCY_ID = "5e0658135b4ff40f8916d2b5";
+  private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
+
+  private static final String NEW_PENDENCY_DATA = "";
   private static final String EXPECTED_EMPTY_RESPONSE = "{\"data\":true}";
   private static final String EXPECTED_CREATE_RESPONSE = "12355b8e415e9c6746ca2da1";
 
@@ -72,9 +64,8 @@ public class UserActivityPendencyResourceTest {
   }
 
   @Test
-  public void createMethod_should_be_create_pendency_by_userActivityPendencyFacade() {
+  public void create_method_should_be_create_pendency_by_userActivityPendencyFacade() {
     mockContextToSetUserEmail();
-
     when(userActivityPendencyFacade.create(USER_EMAIL, NEW_PENDENCY_DATA)).thenReturn(EXPECTED_CREATE_RESPONSE);
     assertEquals(
       encapsulateExpectedResponse("\"" + EXPECTED_CREATE_RESPONSE + "\""),
@@ -83,138 +74,77 @@ public class UserActivityPendencyResourceTest {
   }
 
   @Test
-  public void updateMethod_should_be_update_pendency_by_userActivityPendencyFacade() {
-    String pendencyJson = getPendenciesJson().get(0);
-    String pendencyId = UserActivityPendency.deserialize(pendencyJson).getId().toString();
-    assertEquals(EXPECTED_EMPTY_RESPONSE, userActivityPendencyResource.update(pendencyId, pendencyJson));
-    verify(userActivityPendencyFacade, Mockito.times(1)).update(pendencyId, pendencyJson);
+  public void update_method_should_be_update_pendency_by_userActivityPendencyFacade() {
+    assertEquals(EXPECTED_EMPTY_RESPONSE, userActivityPendencyResource.update(PENDENCY_ID, userActivityPendencyJson));
+    verify(userActivityPendencyFacade, Mockito.times(1)).update(PENDENCY_ID, userActivityPendencyJson);
   }
 
   @Test
-  public void deleteMethod_should_be_delete_pendency_by_userActivityPendencyFacade() {
-    String pendencyId = UserActivityPendency.deserialize(getPendenciesJson().get(0)).getId().toString();
-    assertEquals(EXPECTED_EMPTY_RESPONSE, userActivityPendencyResource.delete(pendencyId));
-    verify(userActivityPendencyFacade, Mockito.times(1)).delete(pendencyId);
+  public void delete_method_should_be_delete_pendency_by_userActivityPendencyFacade() {
+    assertEquals(EXPECTED_EMPTY_RESPONSE, userActivityPendencyResource.delete(PENDENCY_ID));
+    verify(userActivityPendencyFacade, Mockito.times(1)).delete(PENDENCY_ID);
   }
 
   @Test
-  public void getByActivityIdMethod_should_return_pendency_by_activityInfo() {
-    String pendencyJson = getPendenciesJson().get(0);
-    userActivityPendency = UserActivityPendency.deserialize(pendencyJson);
-    String activityId = userActivityPendency.getActivityInfo().getId().toString();
-    when(userActivityPendencyFacade.getByActivityId(activityId)).thenReturn(userActivityPendency);
+  public void getByActivityId_method_should_return_pendency_by_activityInfo() {
+    when(userActivityPendencyFacade.getByActivityId(ACTIVITY_ID)).thenReturn(userActivityPendency);
     assertEquals(
-      encapsulateExpectedResponse(pendencyJson),
-      userActivityPendencyResource.getByActivityId(activityId));
+      encapsulateExpectedResponse(userActivityPendencyJson),
+      userActivityPendencyResource.getByActivityId(ACTIVITY_ID));
   }
 
   @Test
-  public void listAllPendenciesMethod_should_return_all_pendencies() {
+  public void listAllPendenciesToReceiver_method_should_return_all_pendencies() {
     mockContextToSetUserEmail();
-    List<String> pendenciesJson = getPendenciesJson();
-    userActivityPendencies = deserializePendenciesList(pendenciesJson);
     when(userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", pendenciesJson) + "]"),
+      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listAllPendenciesToReceiver(request));
   }
 
   @Test
-  public void listOpenedPendenciesMethod_should_return_only_opened_pendencies() {
+  public void listOpenedPendenciesToReceiver_method_should_return_only_opened_pendencies() {
     mockContextToSetUserEmail();
-    List<String> pendenciesJson = getPendenciesJson();
-    pendenciesJson = pendenciesJson.stream().filter(pendencyJson -> pendencyJson.contains("created"))
-      .collect(Collectors.toList());
-
-    userActivityPendencies = deserializePendenciesList(pendenciesJson);
     when(userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", pendenciesJson) + "]"),
+      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listOpenedPendenciesToReceiver(request));
   }
 
   @Test
-  public void listDonePendencies_should_return_only_done_pendencies() {
+  public void listDonePendenciesToReceiver_method_should_return_only_done_pendencies() {
     mockContextToSetUserEmail();
-    List<String> pendenciesJson = getPendenciesJson();
-    pendenciesJson = pendenciesJson.stream().filter(pendencyJson -> pendencyJson.contains("finalized"))
-      .collect(Collectors.toList());
-
-    userActivityPendencies = deserializePendenciesList(pendenciesJson);
     when(userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", pendenciesJson) + "]"),
+      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listDonePendenciesToReceiver(request));
   }
 
-
-  private List<String> getPendenciesJson(){
-    List<String> pendenciesJson = new ArrayList<>();
-    // CREATED
-    pendenciesJson.add("{" +
-      "\"_id\":\"5e0658135b4ff40f8916d2b5\"," +
-      "\"objectType\":\"userActivityPendency\"," +
-      "\"creationDate\":\"2019-12-19T19:31:08.570Z\"," +
-      "\"dueDate\":\"2019-12-19T19:31:08.570Z\"," +
-      "\"requester\":\"flavia.avila@ufrgs.br\"," +
-      "\"receiver\":\"ativ_created@otus.com\"," +
-      "\"activityInfo\":{" +
-      "\"id\":\"5a33cb4a28f10d1043710f7d\"," +
-      "\"acronym\":\"CSI\"," +
-      "\"recruitmentNumber\":5005283" +
-      "}" +
-      "}");
-    // FINALIZED
-    pendenciesJson.add("{" +
-      "\"_id\":\"5e065caf5b4ff40f8916d2b6\"," +
-      "\"objectType\":\"userActivityPendency\"," +
-      "\"creationDate\":\"2019-12-30T19:31:08.570Z\"," +
-      "\"dueDate\":\"2019-11-20T19:31:08.570Z\"," +
-      "\"requester\":\"flavia.avila@ufrgs.br\"," +
-      "\"receiver\":\"ativ_finalized@otus.com\"," +
-      "\"activityInfo\":{" +
-      "\"id\":\"5a37fa6428f10d1043711055\"," +
-      "\"acronym\":\"MED3\"," +
-      "\"recruitmentNumber\":4028230" +
-      "}" +
-      "}");
-    // CREATED
-    pendenciesJson.add("{" +
-      "\"_id\":\"5e06659bf9d5924d303db335\"," +
-      "\"objectType\":\"userActivityPendency\"," +
-      "\"creationDate\":\"2019-12-19T19:31:08.570Z\"," +
-      "\"dueDate\":\"2020-12-19T19:31:08.570Z\"," +
-      "\"requester\":\"flavia.avila@ufrgs.br\"," +
-      "\"receiver\":\"ativ_created2@otus.com\"," +
-      "\"activityInfo\":{" +
-      "\"id\":\"5a33cb4b28f10d1043710f82\"," +
-      "\"acronym\":\"DSOC\"," +
-      "\"recruitmentNumber\":5005283" +
-      "}" +
-      "}");
-    // FINALIZED
-    pendenciesJson.add("{" +
-      "\"_id\":\"5e0e33d9dd944271e8e700f5\"," +
-      "\"objectType\":\"userActivityPendency\"," +
-      "\"creationDate\":\"2019-12-30T19:31:08.570Z\"," +
-      "\"dueDate\":\"2018-11-20T19:31:08.570Z\"," +
-      "\"requester\":\"flavia.avila@ufrgs.br\"," +
-      "\"receiver\":\"ativ_finalized2@otus.com\"," +
-      "\"activityInfo\":{" +
-      "\"id\":\"5a37fa6428f10d104371105c\"," +
-      "\"acronym\":\"ECGC\"," +
-      "\"recruitmentNumber\":5000891" +
-      "}" +
-      "}");
-    return pendenciesJson;
+  @Test
+  public void listAllPendenciesFromRequester_method_should_return_all_pendencies() {
+    mockContextToSetUserEmail();
+    when(userActivityPendencyFacade.listAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
+    assertEquals(
+      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      userActivityPendencyResource.listAllPendenciesFromRequester(request));
   }
 
-  private List<UserActivityPendency> deserializePendenciesList(List<String> pendenciesJson){
-    List<UserActivityPendency> deserialiazed = new ArrayList<>();
-    for (String pendencyJson : pendenciesJson) {
-      deserialiazed.add(UserActivityPendency.deserialize(pendencyJson));
-    }
-    return deserialiazed;
+  @Test
+  public void listOpenedPendenciesFromRequester_method_should_return_only_opened_pendencies() {
+    mockContextToSetUserEmail();
+    when(userActivityPendencyFacade.listOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
+    assertEquals(
+      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      userActivityPendencyResource.listOpenedPendenciesFromRequester(request));
+  }
+
+  @Test
+  public void listDonePendenciesFromRequester_method_should_return_only_done_pendencies() {
+    mockContextToSetUserEmail();
+    when(userActivityPendencyFacade.listDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
+    assertEquals(
+      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      userActivityPendencyResource.listDonePendenciesFromRequester(request));
   }
 
   private String encapsulateExpectedResponse(String data){

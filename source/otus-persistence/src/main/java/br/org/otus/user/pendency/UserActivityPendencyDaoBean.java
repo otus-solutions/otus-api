@@ -77,18 +77,33 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public List<UserActivityPendency> findAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverEmail, "", "");
+  public List<UserActivityPendency> findAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail, "", "");
   }
 
   @Override
-  public List<UserActivityPendency> findOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverEmail, CREATED_STATUS, "," + NOT_FINALIZED_STATUS_CONDITION);
+  public List<UserActivityPendency> findOpenedPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail, CREATED_STATUS, "," + NOT_FINALIZED_STATUS_CONDITION);
   }
 
   @Override
-  public List<UserActivityPendency> findDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverEmail, FINALIZED_STATUS, "," + FINALIZED_STATUS_CONDITION);
+  public List<UserActivityPendency> findDonePendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail, FINALIZED_STATUS, "," + FINALIZED_STATUS_CONDITION);
+  }
+
+  @Override
+  public List<UserActivityPendency> findAllPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail, "", "");
+  }
+
+  @Override
+  public List<UserActivityPendency> findOpenedPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail, CREATED_STATUS, "," + NOT_FINALIZED_STATUS_CONDITION);
+  }
+
+  @Override
+  public List<UserActivityPendency> findDonePendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return listPendencies(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail, FINALIZED_STATUS, "," + FINALIZED_STATUS_CONDITION);
   }
 
   private List<UserActivityPendency> listPendencies(String userRole, String userEmail,

@@ -45,18 +45,33 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public List<UserActivityPendency> listAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
-    return userActivityPendencyDao.findAllPendenciesToReceiver(receiverEmail);
+  public List<UserActivityPendency> listAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.findAllPendenciesToReceiver(receiverUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
-    return userActivityPendencyDao.findOpenedPendenciesToReceiver(receiverEmail);
+  public List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.findOpenedPendenciesToReceiver(receiverUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException {
-    return userActivityPendencyDao.findDonePendenciesToReceiver(receiverEmail);
+  public List<UserActivityPendency> listDonePendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.findDonePendenciesToReceiver(receiverUserEmail);
+  }
+
+  @Override
+  public List<UserActivityPendency> listAllPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.findAllPendenciesFromRequester(requesterUserEmail);
+  }
+
+  @Override
+  public List<UserActivityPendency> listOpenedPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.findOpenedPendenciesFromRequester(requesterUserEmail);
+  }
+
+  @Override
+  public List<UserActivityPendency> listDonePendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.findDonePendenciesFromRequester(requesterUserEmail);
   }
 
 }

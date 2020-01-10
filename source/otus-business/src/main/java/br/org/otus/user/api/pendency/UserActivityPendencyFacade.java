@@ -52,25 +52,49 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listAllPendenciesToReceiver(String receiverEmail) {
+  public List<UserActivityPendency> listAllPendenciesToReceiver(String receiverUserEmail) {
     try {
-      return userActivityPendencyService.listAllPendenciesToReceiver(receiverEmail);
+      return userActivityPendencyService.listAllPendenciesToReceiver(receiverUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverEmail) {
+  public List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverUserEmail) {
     try {
-      return userActivityPendencyService.listOpenedPendenciesToReceiver(receiverEmail);
+      return userActivityPendencyService.listOpenedPendenciesToReceiver(receiverUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public List<UserActivityPendency> listDonePendenciesToReceiver(String receiverEmail) {
+  public List<UserActivityPendency> listDonePendenciesToReceiver(String receiverUserEmail) {
     try {
-      return userActivityPendencyService.listDonePendenciesToReceiver(receiverEmail);
+      return userActivityPendencyService.listDonePendenciesToReceiver(receiverUserEmail);
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<UserActivityPendency> listAllPendenciesFromRequester(String requesterUserEmail) {
+    try {
+      return userActivityPendencyService.listAllPendenciesFromRequester(requesterUserEmail);
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<UserActivityPendency> listOpenedPendenciesFromRequester(String requesterUserEmail) {
+    try {
+      return userActivityPendencyService.listOpenedPendenciesFromRequester(requesterUserEmail);
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<UserActivityPendency> listDonePendenciesFromRequester(String requesterUserEmail) {
+    try {
+      return userActivityPendencyService.listDonePendenciesFromRequester(requesterUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
