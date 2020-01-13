@@ -16,7 +16,6 @@ public class UserActivityPendency {
   protected String requester;
   protected String receiver;
   protected ObjectId activityId;
-  private ActivityInfo[] activityInfo;
 
   public ObjectId getId() {
     return _id;
