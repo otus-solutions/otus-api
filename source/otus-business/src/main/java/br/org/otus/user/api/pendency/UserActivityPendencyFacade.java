@@ -1,6 +1,7 @@
 package br.org.otus.user.api.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.service.pendency.UserActivityPendencyService;
@@ -52,7 +53,7 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listAllPendenciesToReceiver(String receiverUserEmail) {
+  public List<UserActivityPendencyResponse> listAllPendenciesToReceiver(String receiverUserEmail) {
     try {
       return userActivityPendencyService.listAllPendenciesToReceiver(receiverUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
@@ -60,7 +61,7 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverUserEmail) {
+  public List<UserActivityPendencyResponse> listOpenedPendenciesToReceiver(String receiverUserEmail) {
     try {
       return userActivityPendencyService.listOpenedPendenciesToReceiver(receiverUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
@@ -68,7 +69,7 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listDonePendenciesToReceiver(String receiverUserEmail) {
+  public List<UserActivityPendencyResponse> listDonePendenciesToReceiver(String receiverUserEmail) {
     try {
       return userActivityPendencyService.listDonePendenciesToReceiver(receiverUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
@@ -76,7 +77,7 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listAllPendenciesFromRequester(String requesterUserEmail) {
+  public List<UserActivityPendencyResponse> listAllPendenciesFromRequester(String requesterUserEmail) {
     try {
       return userActivityPendencyService.listAllPendenciesFromRequester(requesterUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
@@ -84,7 +85,7 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listOpenedPendenciesFromRequester(String requesterUserEmail) {
+  public List<UserActivityPendencyResponse> listOpenedPendenciesFromRequester(String requesterUserEmail) {
     try {
       return userActivityPendencyService.listOpenedPendenciesFromRequester(requesterUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {
@@ -92,7 +93,7 @@ public class UserActivityPendencyFacade {
     }
   }
 
-  public List<UserActivityPendency> listDonePendenciesFromRequester(String requesterUserEmail) {
+  public List<UserActivityPendencyResponse> listDonePendenciesFromRequester(String requesterUserEmail) {
     try {
       return userActivityPendencyService.listDonePendenciesFromRequester(requesterUserEmail);
     } catch (DataNotFoundException | MemoryExcededException e) {

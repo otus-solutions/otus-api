@@ -1,6 +1,7 @@
 package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -18,15 +19,15 @@ public interface UserActivityPendencyService {
 
   UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 
-  List<UserActivityPendency> listAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listOpenedPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listDonePendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listAllPendenciesFromRequester(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listAllPendenciesFromRequester(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listOpenedPendenciesFromRequester(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listOpenedPendenciesFromRequester(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
-  List<UserActivityPendency> listDonePendenciesFromRequester(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listDonePendenciesFromRequester(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 }

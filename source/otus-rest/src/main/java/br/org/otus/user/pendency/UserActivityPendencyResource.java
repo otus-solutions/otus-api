@@ -10,6 +10,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.Secured;
@@ -66,9 +67,9 @@ public class UserActivityPendencyResource {
   @Path("/list/receiver")
   @Produces(MediaType.APPLICATION_JSON)
   public String listAllPendenciesToReceiver(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendenciesToReceiver(getUserEmail(request));
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listAllPendenciesToReceiver(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
-      .toJson(UserActivityPendency.getFrontGsonBuilder());
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
   }
 
   @GET
@@ -76,9 +77,9 @@ public class UserActivityPendencyResource {
   @Path("/list/receiver/opened")
   @Produces(MediaType.APPLICATION_JSON)
   public String listOpenedPendenciesToReceiver(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendenciesToReceiver(getUserEmail(request));
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendenciesToReceiver(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
-      .toJson(UserActivityPendency.getFrontGsonBuilder());
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
   }
 
   @GET
@@ -86,9 +87,9 @@ public class UserActivityPendencyResource {
   @Path("/list/receiver/done")
   @Produces(MediaType.APPLICATION_JSON)
   public String listDonePendenciesToReceiver(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendenciesToReceiver(getUserEmail(request));
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listDonePendenciesToReceiver(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
-      .toJson(UserActivityPendency.getFrontGsonBuilder());
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
   }
 
   @GET
@@ -96,9 +97,9 @@ public class UserActivityPendencyResource {
   @Path("/list/requester")
   @Produces(MediaType.APPLICATION_JSON)
   public String listAllPendenciesFromRequester(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listAllPendenciesFromRequester(getUserEmail(request));
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listAllPendenciesFromRequester(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
-      .toJson(UserActivityPendency.getFrontGsonBuilder());
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
   }
 
   @GET
@@ -106,9 +107,9 @@ public class UserActivityPendencyResource {
   @Path("/list/requester/opened")
   @Produces(MediaType.APPLICATION_JSON)
   public String listOpenedPendenciesFromRequester(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendenciesFromRequester(getUserEmail(request));
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listOpenedPendenciesFromRequester(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
-      .toJson(UserActivityPendency.getFrontGsonBuilder());
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
   }
 
   @GET
@@ -116,9 +117,9 @@ public class UserActivityPendencyResource {
   @Path("/list/requester/done")
   @Produces(MediaType.APPLICATION_JSON)
   public String listDonePendenciesFromRequester(@Context HttpServletRequest request) {
-    List<UserActivityPendency> userActivityPendencyList = userActivityPendencyFacade.listDonePendenciesFromRequester(getUserEmail(request));
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listDonePendenciesFromRequester(getUserEmail(request));
     return (new Response()).buildSuccess(userActivityPendencyList)
-      .toJson(UserActivityPendency.getFrontGsonBuilder());
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
   }
 
 

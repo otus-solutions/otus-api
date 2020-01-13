@@ -1,6 +1,7 @@
 package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -45,32 +46,32 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public List<UserActivityPendency> listAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
     return userActivityPendencyDao.findAllPendenciesToReceiver(receiverUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listOpenedPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listOpenedPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
     return userActivityPendencyDao.findOpenedPendenciesToReceiver(receiverUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listDonePendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listDonePendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
     return userActivityPendencyDao.findDonePendenciesToReceiver(receiverUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listAllPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listAllPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
     return userActivityPendencyDao.findAllPendenciesFromRequester(requesterUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listOpenedPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listOpenedPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
     return userActivityPendencyDao.findOpenedPendenciesFromRequester(requesterUserEmail);
   }
 
   @Override
-  public List<UserActivityPendency> listDonePendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listDonePendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
     return userActivityPendencyDao.findDonePendenciesFromRequester(requesterUserEmail);
   }
 
