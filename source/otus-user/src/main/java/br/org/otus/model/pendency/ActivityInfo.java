@@ -2,7 +2,7 @@ package br.org.otus.model.pendency;
 
 import com.google.gson.GsonBuilder;
 
-public class ActivityInfo { // NR participante, status, acrônimo, nome, tempo pendente, ID externo e data realização.
+public class ActivityInfo {
 
   private Long recruitmentNumber;
   private String acronym;
@@ -37,18 +37,11 @@ public class ActivityInfo { // NR participante, status, acrônimo, nome, tempo p
   }
 
   public static String serialize(ActivityInfo activityInfo) {
-//    return getGsonBuilder().create().toJson(activityInfo);
     return (new GsonBuilder()).create().toJson(activityInfo);
   }
 
   public static ActivityInfo deserialize(String activityInfoJson) {
-//    return ActivityInfo.getGsonBuilder().create().fromJson(activityInfoJson, ActivityInfo.class);
     return (new GsonBuilder()).create().fromJson(activityInfoJson, ActivityInfo.class);
   }
-
-//  public static GsonBuilder getGsonBuilder() {
-//    GsonBuilder builder = new GsonBuilder();
-//    return builder;
-//  }
 
 }
