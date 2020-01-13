@@ -1,6 +1,7 @@
 package br.org.otus.user.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.service.pendency.UserActivityPendencyService;
 import br.org.otus.user.api.pendency.UserActivityPendencyFacade;
@@ -27,7 +28,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 public class UserActivityPendencyFacadeTest {
 
-  private static final String USER_EMAIL = "requester@otus.com";
+  private static final String USER_EMAIL = "user@otus.com";
   private static final String PENDENCY_ID = "5e0658135b4ff40f8916d2b5";
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
 
@@ -37,7 +38,8 @@ public class UserActivityPendencyFacadeTest {
   private UserActivityPendencyService userActivityPendencyService;
 
   private UserActivityPendency userActivityPendency;
-  private List<UserActivityPendency> userActivityPendencies;
+  private UserActivityPendencyResponse userActivityPendencyResponse;
+  private List<UserActivityPendencyResponse> userActivityPendencyResponses;
   private String userActivityPendencyJson;
   private ObjectId userActivityPendencyOID;
   private ValidationException validationException;
@@ -47,7 +49,8 @@ public class UserActivityPendencyFacadeTest {
   @Before
   public void setUp() throws Exception {
     userActivityPendency = new UserActivityPendency();
-    userActivityPendencies = asList(userActivityPendency);
+    userActivityPendencyResponse = new UserActivityPendencyResponse();
+    userActivityPendencyResponses = asList(userActivityPendencyResponse);
     userActivityPendencyJson = UserActivityPendency.serialize(userActivityPendency);
     userActivityPendencyOID = new ObjectId(PENDENCY_ID);
     validationException = PowerMockito.spy(new ValidationException());

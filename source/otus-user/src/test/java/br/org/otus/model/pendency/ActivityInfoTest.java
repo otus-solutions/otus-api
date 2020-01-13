@@ -1,6 +1,5 @@
 package br.org.otus.model.pendency;
 
-import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,26 +12,35 @@ import static org.junit.Assert.assertTrue;
 @RunWith(PowerMockRunner.class)
 public class ActivityInfoTest {
 
-  private static final ObjectId ACTIVITY_OID = new ObjectId("5c7400d2d767afded0d84dcf");
-  private static final String ACTIVITY_ACRONYM = "ABCD";
-  private static final int ACTIVITY_RECRUITMENT_NUMBER = 1234567;
+  private static final Long RECRUITMENT_NUMBER = 1234567L;
+  private static final String ACRONYM = "ABCD";
+  private static final String NAME = "Activity Name";
+  private static final String LAST_STATUS_NAME = "CREATED";
+  private static final String LAST_STATUS_DATE = "2000-01-01T10:00:00.000Z";
+  private static final String EXTERNAL_ID = "0364AAA645";
 
   private ActivityInfo activityInfo = new ActivityInfo();
   private String activityInfoJson;
 
   @Before
   public void setUp(){
-    Whitebox.setInternalState(activityInfo, "id", ACTIVITY_OID);
-    Whitebox.setInternalState(activityInfo, "acronym", ACTIVITY_ACRONYM);
-    Whitebox.setInternalState(activityInfo, "recruitmentNumber", ACTIVITY_RECRUITMENT_NUMBER);
+    Whitebox.setInternalState(activityInfo, "recruitmentNumber", RECRUITMENT_NUMBER);
+    Whitebox.setInternalState(activityInfo, "acronym", ACRONYM);
+    Whitebox.setInternalState(activityInfo, "name", NAME);
+    Whitebox.setInternalState(activityInfo, "lastStatusName", LAST_STATUS_NAME);
+    Whitebox.setInternalState(activityInfo, "lastStatusDate", LAST_STATUS_DATE);
+    Whitebox.setInternalState(activityInfo, "externalID", EXTERNAL_ID);
     activityInfoJson = ActivityInfo.serialize(activityInfo);
   }
 
   @Test
   public void unitTest_for_invoke_getters(){
-    assertEquals(ACTIVITY_OID, activityInfo.getId());
-    assertEquals(ACTIVITY_ACRONYM, activityInfo.getAcronym());
-    assertEquals(ACTIVITY_RECRUITMENT_NUMBER, activityInfo.getRecruitmentNumber());
+    assertEquals(RECRUITMENT_NUMBER, activityInfo.getRecruitmentNumber());
+    assertEquals(ACRONYM, activityInfo.getAcronym());
+    assertEquals(NAME, activityInfo.getName());
+    assertEquals(EXTERNAL_ID, activityInfo.getExternalID());
+    assertEquals(LAST_STATUS_NAME, activityInfo.getLastStatusName());
+    assertEquals(LAST_STATUS_DATE, activityInfo.getLastStatusDate());
   }
 
   @Test

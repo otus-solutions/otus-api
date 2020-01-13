@@ -1,6 +1,8 @@
 package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -24,7 +26,7 @@ import java.util.List;
 @RunWith(PowerMockRunner.class)
 public class UserActivityPendencyServiceBeanTest {
 
-  private static final String USER_EMAIL = "requester@otus.com";
+  private static final String USER_EMAIL = "user@otus.com";
   private static final String PENDENCY_ID = "5e13997795818e14a91a5268";
   private static final ObjectId PENDENCY_OID = new ObjectId(PENDENCY_ID);
   private static final String ACTIVITY_ID = "5c7400d2d767afded0d84dcf";
@@ -36,13 +38,15 @@ public class UserActivityPendencyServiceBeanTest {
   private UserActivityPendencyDao userActivityPendencyDao;
 
   private UserActivityPendency userActivityPendency;
-  private List<UserActivityPendency> userActivityPendencies;
+  private UserActivityPendencyResponse userActivityPendencyResponse;
+  private List<UserActivityPendencyResponse> userActivityPendencyResponses;
   private String userActivityPendencyJson;
 
   @Before
   public void setUp(){
     userActivityPendency = new UserActivityPendency();
-    userActivityPendencies = asList(userActivityPendency);
+    userActivityPendencyResponse = new UserActivityPendencyResponse();
+    userActivityPendencyResponses = asList(userActivityPendencyResponse);
     userActivityPendencyJson = UserActivityPendency.serialize(userActivityPendency);
   }
 
@@ -92,8 +96,8 @@ public class UserActivityPendencyServiceBeanTest {
   // list All To Receiver
   @Test
   public void listAllPendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL));
+    when(userActivityPendencyDao.findAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
@@ -111,8 +115,8 @@ public class UserActivityPendencyServiceBeanTest {
   // list Opened To Receiver
   @Test
   public void listOpenedPendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL));
+    when(userActivityPendencyDao.findOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
@@ -130,8 +134,8 @@ public class UserActivityPendencyServiceBeanTest {
   // list Done To Receiver
   @Test
   public void listDonePendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL));
+    when(userActivityPendencyDao.findDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
@@ -149,8 +153,8 @@ public class UserActivityPendencyServiceBeanTest {
   // list All To Requester
   @Test
   public void listAllPendenciesFromRequester_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listAllPendenciesFromRequester(USER_EMAIL));
+    when(userActivityPendencyDao.findAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendenciesFromRequester(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
@@ -168,8 +172,8 @@ public class UserActivityPendencyServiceBeanTest {
   // list Opened To Requester
   @Test
   public void listOpenedPendenciesFromRequester_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listOpenedPendenciesFromRequester(USER_EMAIL));
+    when(userActivityPendencyDao.findOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listOpenedPendenciesFromRequester(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)
@@ -187,8 +191,8 @@ public class UserActivityPendencyServiceBeanTest {
   // list Done To Requester
   @Test
   public void listDonePendenciesFromRequester_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
-    when(userActivityPendencyDao.findDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
-    assertEquals(userActivityPendencies, userActivityPendencyServiceBean.listDonePendenciesFromRequester(USER_EMAIL));
+    when(userActivityPendencyDao.findDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listDonePendenciesFromRequester(USER_EMAIL));
   }
 
   @Test (expected = DataNotFoundException.class)

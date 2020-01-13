@@ -1,6 +1,7 @@
 package br.org.otus.user.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
@@ -30,7 +31,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({AuthorizationHeaderReader.class})
 public class UserActivityPendencyResourceTest {
 
-  private static final String USER_EMAIL = "requester@otus.com";
+  private static final String USER_EMAIL = "user@otus.com";
   private static final String TOKEN = "123456";
   private static final String PENDENCY_ID = "5e0658135b4ff40f8916d2b5";
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
@@ -53,13 +54,15 @@ public class UserActivityPendencyResourceTest {
   private AuthenticationData authenticationData;
 
   private UserActivityPendency userActivityPendency;
-  private List<UserActivityPendency> userActivityPendencies;
+  private UserActivityPendencyResponse userActivityPendencyResponse;
+  private List<UserActivityPendencyResponse> userActivityPendencyResponses;
   private String userActivityPendencyJson;
 
   @Before
   public void setUp() {
     userActivityPendency = new UserActivityPendency();
-    userActivityPendencies = asList(userActivityPendency);
+    userActivityPendencyResponse = new UserActivityPendencyResponse();
+    userActivityPendencyResponses = asList(userActivityPendencyResponse);
     userActivityPendencyJson = UserActivityPendency.serialize(userActivityPendency);
   }
 
@@ -96,7 +99,7 @@ public class UserActivityPendencyResourceTest {
   @Test
   public void listAllPendenciesToReceiver_method_should_return_all_pendencies() {
     mockContextToSetUserEmail();
-    when(userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listAllPendenciesToReceiver(request));
@@ -105,7 +108,7 @@ public class UserActivityPendencyResourceTest {
   @Test
   public void listOpenedPendenciesToReceiver_method_should_return_only_opened_pendencies() {
     mockContextToSetUserEmail();
-    when(userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listOpenedPendenciesToReceiver(request));
@@ -114,7 +117,7 @@ public class UserActivityPendencyResourceTest {
   @Test
   public void listDonePendenciesToReceiver_method_should_return_only_done_pendencies() {
     mockContextToSetUserEmail();
-    when(userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listDonePendenciesToReceiver(request));
@@ -123,7 +126,7 @@ public class UserActivityPendencyResourceTest {
   @Test
   public void listAllPendenciesFromRequester_method_should_return_all_pendencies() {
     mockContextToSetUserEmail();
-    when(userActivityPendencyFacade.listAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listAllPendenciesFromRequester(request));
@@ -132,7 +135,7 @@ public class UserActivityPendencyResourceTest {
   @Test
   public void listOpenedPendenciesFromRequester_method_should_return_only_opened_pendencies() {
     mockContextToSetUserEmail();
-    when(userActivityPendencyFacade.listOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listOpenedPendenciesFromRequester(request));
@@ -141,7 +144,7 @@ public class UserActivityPendencyResourceTest {
   @Test
   public void listDonePendenciesFromRequester_method_should_return_only_done_pendencies() {
     mockContextToSetUserEmail();
-    when(userActivityPendencyFacade.listDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencies);
+    when(userActivityPendencyFacade.listDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
       encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listDonePendenciesFromRequester(request));
