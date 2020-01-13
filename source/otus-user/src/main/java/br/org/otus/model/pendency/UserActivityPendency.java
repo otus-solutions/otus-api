@@ -9,13 +9,14 @@ import java.util.Objects;
 
 public class UserActivityPendency {
 
-  private ObjectId _id;
-  private String objectType;
-  private String creationDate;
-  private String dueDate;
-  private String requester;
-  private String receiver;
-  private ActivityInfo activityInfo;
+  protected ObjectId _id;
+  protected String objectType;
+  protected String creationDate;
+  protected String dueDate;
+  protected String requester;
+  protected String receiver;
+  protected ObjectId activityId;
+  private ActivityInfo[] activityInfo;
 
   public ObjectId getId() {
     return _id;
@@ -41,9 +42,7 @@ public class UserActivityPendency {
     return receiver;
   }
 
-  public ActivityInfo getActivityInfo() {
-    return activityInfo;
-  }
+  public ObjectId getActivityId() { return activityId; }
 
   public void setRequester(String requester) {
     this.requester = requester;
