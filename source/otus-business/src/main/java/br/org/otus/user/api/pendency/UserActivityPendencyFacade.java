@@ -17,12 +17,12 @@ public class UserActivityPendencyFacade {
   private UserActivityPendencyService userActivityPendencyService;
 
   public String create(String userEmail, String userActivityPendencyJson) {
-    return userActivityPendencyService.create(userEmail, userActivityPendencyJson).toString();
+    return userActivityPendencyService.create(userEmail, UserActivityPendency.deserialize(userActivityPendencyJson)).toString();
   }
 
   public void update(String userActivityPendencyId, String userActivityPendencyJson) {
     try {
-      userActivityPendencyService.update(userActivityPendencyId, userActivityPendencyJson);
+      userActivityPendencyService.update(userActivityPendencyId, UserActivityPendency.deserialize(userActivityPendencyJson));
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

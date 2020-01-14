@@ -60,19 +60,19 @@ public class UserActivityPendencyFacadeTest {
 
   @Test
   public void createMethod_should_invoke_create_from_userActivityPendencyService() {
-    when(userActivityPendencyService.create(USER_EMAIL, userActivityPendencyJson)).thenReturn(userActivityPendencyOID);
+    when(userActivityPendencyService.create(USER_EMAIL, userActivityPendency)).thenReturn(userActivityPendencyOID);
     assertEquals(PENDENCY_ID, userActivityPendencyFacade.create(USER_EMAIL, userActivityPendencyJson));
   }
 
   @Test
   public void updateMethod_should_invoke_update_from_userActivityPendencyService() throws DataNotFoundException {
     userActivityPendencyFacade.update(PENDENCY_ID, userActivityPendencyJson);
-    verify(userActivityPendencyService, times(1)).update(PENDENCY_ID, userActivityPendencyJson);
+    verify(userActivityPendencyService, times(1)).update(PENDENCY_ID, userActivityPendency);
   }
 
   @Test (expected = HttpResponseException.class)
   public void updateMethod_should_handle_DataNotFoundException() throws Exception {
-    PowerMockito.doThrow(dataNotFoundException).when(userActivityPendencyService, "update", PENDENCY_ID, userActivityPendencyJson);
+    PowerMockito.doThrow(dataNotFoundException).when(userActivityPendencyService, "update", PENDENCY_ID, userActivityPendency);
     userActivityPendencyFacade.update(PENDENCY_ID, userActivityPendencyJson);
   }
 

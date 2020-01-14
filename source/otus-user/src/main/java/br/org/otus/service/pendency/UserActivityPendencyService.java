@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface UserActivityPendencyService {
 
-  ObjectId create(String userEmail, String userActivityPendencyJson);
+  ObjectId create(String userEmail, UserActivityPendency userActivityPendency);
 
-  void update(String userActivityPendencyId, String userActivityPendencyJson) throws DataNotFoundException;
+  void update(String userActivityPendencyId, UserActivityPendency userActivityPendency) throws DataNotFoundException;
 
   void delete(String userActivityPendencyId) throws DataNotFoundException;
 

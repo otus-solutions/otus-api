@@ -53,19 +53,19 @@ public class UserActivityPendencyServiceBeanTest {
   @Test
   public void createMethod_should_return_ID_in_success_case_persist(){
     when(userActivityPendencyDao.create(userActivityPendency)).thenReturn(PENDENCY_OID);
-    assertEquals(PENDENCY_OID, userActivityPendencyServiceBean.create(USER_EMAIL, userActivityPendencyJson));
+    assertEquals(PENDENCY_OID, userActivityPendencyServiceBean.create(USER_EMAIL, userActivityPendency));
   }
 
   @Test
   public void updateMethod_should_invoke_update_from_userActivityPendencyDao() throws DataNotFoundException {
-    userActivityPendencyServiceBean.update(PENDENCY_ID, userActivityPendencyJson);
+    userActivityPendencyServiceBean.update(PENDENCY_ID, userActivityPendency);
     verify(userActivityPendencyDao, times(1)).update(PENDENCY_OID, userActivityPendency);
   }
 
   @Test (expected = DataNotFoundException.class)
   public void updateMethod_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "update", PENDENCY_OID, userActivityPendency);
-    userActivityPendencyServiceBean.update(PENDENCY_ID, userActivityPendencyJson);
+    userActivityPendencyServiceBean.update(PENDENCY_ID, userActivityPendency);
   }
 
   @Test
