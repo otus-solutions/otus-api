@@ -1,4 +1,4 @@
-package br.org.otus.security.rest;
+package br.org.otus.security.user.rest;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;

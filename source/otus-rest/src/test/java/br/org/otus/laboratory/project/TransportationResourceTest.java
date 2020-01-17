@@ -5,7 +5,7 @@ import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.user.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;

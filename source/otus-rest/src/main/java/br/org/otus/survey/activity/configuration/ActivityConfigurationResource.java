@@ -1,7 +1,7 @@
 package br.org.otus.survey.activity.configuration;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

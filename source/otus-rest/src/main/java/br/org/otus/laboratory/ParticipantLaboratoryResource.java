@@ -20,7 +20,7 @@ import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.dto.UpdateTubeCollectionDataDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("/laboratory-participant")
 public class ParticipantLaboratoryResource {

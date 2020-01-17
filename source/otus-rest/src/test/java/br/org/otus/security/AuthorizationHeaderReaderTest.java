@@ -3,6 +3,7 @@ package br.org.otus.security;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 
+import br.org.otus.security.user.AuthorizationHeaderReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;

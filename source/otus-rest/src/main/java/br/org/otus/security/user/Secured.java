@@ -1,4 +1,4 @@
-package br.org.otus.security;
+package br.org.otus.security.user;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

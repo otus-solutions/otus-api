@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.user.AuthorizationHeaderReader;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
 import org.ccem.otus.survey.form.SurveyForm;

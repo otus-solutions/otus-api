@@ -1,4 +1,4 @@
-package br.org.otus.security.rest;
+package br.org.otus.security.user.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;

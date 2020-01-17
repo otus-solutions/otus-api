@@ -2,12 +2,11 @@ package br.org.otus.survey.activity;
 
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import br.org.otus.survey.activity.api.ActivityFacade;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import javax.inject.Inject;

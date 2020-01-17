@@ -18,8 +18,8 @@ import com.google.gson.GsonBuilder;
 import br.org.otus.laboratory.project.api.ExamLotFacade;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 
 @Path("/laboratory-project/exam-lot")

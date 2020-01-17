@@ -13,8 +13,8 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.survey.api.SurveyFacade;
 

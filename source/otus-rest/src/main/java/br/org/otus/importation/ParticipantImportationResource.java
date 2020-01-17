@@ -18,7 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import br.org.otus.importation.participant.api.ParticipantImportationFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("importation/participant")
 public class ParticipantImportationResource {

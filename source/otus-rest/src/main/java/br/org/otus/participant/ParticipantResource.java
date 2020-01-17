@@ -12,21 +12,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.info.Validation;
-import br.org.otus.security.dtos.AuthenticationDto;
-import br.org.otus.security.dtos.ParticipantSecurityAuthorizationDto;
 import br.org.otus.user.dto.PasswordResetDto;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.security.EncryptedException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
 
 import br.org.otus.model.User;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.UserFacade;
 

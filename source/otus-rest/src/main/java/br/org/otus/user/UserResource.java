@@ -13,7 +13,7 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.SignupDataDto;

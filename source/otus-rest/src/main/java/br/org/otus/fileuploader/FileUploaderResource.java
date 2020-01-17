@@ -1,7 +1,7 @@
 package br.org.otus.fileuploader;
 
 import br.org.otus.fileuploader.api.FileUploaderFacade;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 import org.ccem.otus.model.FileUploaderPOJO;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 

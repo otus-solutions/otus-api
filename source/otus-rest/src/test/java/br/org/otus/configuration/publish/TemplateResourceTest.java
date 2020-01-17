@@ -18,7 +18,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.user.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;

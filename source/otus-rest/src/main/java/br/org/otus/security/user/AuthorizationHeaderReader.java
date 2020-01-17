@@ -1,4 +1,4 @@
-package br.org.otus.security;
+package br.org.otus.security.user;
 
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;

@@ -2,7 +2,7 @@ package br.org.otus.survey.activity;
 
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.user.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
@@ -11,7 +11,6 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
-import org.ccem.otus.model.survey.activity.variables.StaticVariableRequest;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;

@@ -14,7 +14,7 @@ import org.ccem.otus.model.FieldCenter;
 
 import br.org.otus.fieldCenter.api.FieldCenterFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("/center")
 public class FieldCenterResource {

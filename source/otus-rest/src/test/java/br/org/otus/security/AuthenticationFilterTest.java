@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
+import br.org.otus.security.user.AuthenticationFilter;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.junit.Before;
 import org.junit.Test;

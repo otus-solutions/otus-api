@@ -10,11 +10,11 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.org.otus.datasource.api.DataSourceFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("/configuration/datasources")
 public class DataSourceResource {
-	
+
 	@Inject
 	private DataSourceFacade dataSourceFacade;
 
@@ -39,7 +39,7 @@ public class DataSourceResource {
 		dataSourceFacade.update(dataSource, csvToJson.getDuplicatedElements());
 		return new Response().buildSuccess().toJson();
 	}
-	
+
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)

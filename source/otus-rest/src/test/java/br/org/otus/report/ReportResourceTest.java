@@ -29,7 +29,7 @@ import org.powermock.reflect.Whitebox;
 
 import com.google.gson.GsonBuilder;
 
-import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.user.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;

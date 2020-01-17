@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.permissions.persistence.user.UserPermissionDTO;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("/permission")
 public class UserPermissionResource {
