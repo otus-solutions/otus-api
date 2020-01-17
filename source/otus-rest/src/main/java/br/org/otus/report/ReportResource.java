@@ -18,7 +18,7 @@ import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 

@@ -30,7 +30,7 @@ import com.google.gson.GsonBuilder;
 
 import br.org.otus.model.User;
 import br.org.otus.participant.api.ParticipantFacade;
-import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;

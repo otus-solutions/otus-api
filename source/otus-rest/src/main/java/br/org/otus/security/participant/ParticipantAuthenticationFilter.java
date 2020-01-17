@@ -1,6 +1,8 @@
-package br.org.otus.security.user;
+package br.org.otus.security.participant;
 
-import java.io.IOException;
+import br.org.otus.response.info.Authorization;
+import br.org.otus.security.services.SecurityContextService;
+import br.org.otus.security.AuthorizationHeaderReader;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -9,15 +11,12 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
+import java.io.IOException;
 
-import br.org.otus.response.info.Authorization;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.services.SecurityContextService;
-
-@Secured
+@ParticipantSecured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class AuthenticationFilter implements ContainerRequestFilter {
+public class ParticipantAuthenticationFilter implements ContainerRequestFilter {
 
 	@Inject
 	private SecurityContextService securityContextService;

@@ -6,7 +6,7 @@ import br.org.otus.security.EncryptorResources;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.dtos.ParticipantSecurityAuthorizationDto;
-import br.org.otus.security.dtos.ProjectAuthenticationDto;
+import br.org.otus.security.participant.rest.ParticipantAuthenticationResource;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.junit.Before;
 import org.junit.Test;

@@ -19,7 +19,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import br.org.otus.extraction.ExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
-import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.UserFacade;

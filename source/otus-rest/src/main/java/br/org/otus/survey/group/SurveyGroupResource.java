@@ -1,7 +1,7 @@
 package br.org.otus.survey.group;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import org.ccem.otus.model.survey.group.dto.SurveyGroupNameDto;

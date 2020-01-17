@@ -19,7 +19,7 @@ import br.org.otus.participant.ParticipantResource;
 import br.org.otus.permission.ActivityPermissionResource;
 import br.org.otus.permission.UserPermissionResource;
 import br.org.otus.report.ReportResource;
-import br.org.otus.security.participant.ParticipantAuthenticationResource;
+import br.org.otus.security.participant.rest.ParticipantAuthenticationResource;
 import br.org.otus.security.user.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.staticVariable.StaticVariableResource;

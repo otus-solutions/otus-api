@@ -2,7 +2,7 @@ package br.org.otus.examUploader;
 
 import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.user.AuthorizationHeaderReader;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 
