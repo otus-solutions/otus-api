@@ -6,10 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class OutcomesMicroServiceResources extends MicroservicesResources {
-  private static final String CREATE_FOLLOWUP_RESOURCE = "/create";
-  private static final String UPDATE_FOLLOWUP_RESOURCE = "/update";
-  private static final String DEACTIVATED_FOLLOWUP_RESOURCE = "/deactivate";
-  private static final String LIST_FOLLOWUPS_RESOURCE = "/list";
+  private static final String CREATE_FOLLOWUP_RESOURCE = "/followUp/add";
+  private static final String UPDATE_FOLLOWUP_RESOURCE = "/followUp/update";
+  private static final String DEACTIVATED_FOLLOWUP_RESOURCE = "/followUp/deactivate";
+  private static final String LIST_FOLLOWUPS_RESOURCE = "/followUp/list";
 
   public OutcomesMicroServiceResources() {
     super(MicroservicesEnvironments.OUTCOMES);

@@ -3,6 +3,7 @@ package br.org.otus.gateway.response.exception;
 public class RequestException extends RuntimeException {
 
   private int errorCode;
+  private String errorBody;
 
   public RequestException(int errorCode) {
     this.errorCode = errorCode;

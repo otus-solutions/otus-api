@@ -15,6 +15,8 @@ import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
 import br.org.otus.laboratory.project.ExamResource;
 import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.monitoring.MonitoringResource;
+import br.org.otus.outcomes.ParticipantFollowUp;
+import br.org.otus.outcomes.configuration.FollowUpConfiguration;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.permission.ActivityPermissionResource;
 import br.org.otus.permission.UserPermissionResource;
@@ -81,6 +83,12 @@ public class EndPointsLoader extends Application {
     private ReportResource reportResource;
 
     @Inject
+    private FollowUpConfiguration followUpConfigurationResource;
+
+    @Inject
+    private ParticipantFollowUp participantFollowUpResource;
+
+    @Inject
     private ParticipantLaboratoryResource laboratoryParticipantResource;
 
     @Inject
@@ -137,6 +145,8 @@ public class EndPointsLoader extends Application {
         resources.add(ParticipantImportationResource.class);
         resources.add(ReportResource.class);
         resources.add(ParticipantResource.class);
+        resources.add(FollowUpConfiguration.class);
+        resources.add(ParticipantFollowUp.class);
         resources.add(ActivityResource.class);
         resources.add(ActivityImportationResource.class);
         resources.add(ParticipantLaboratoryResource.class);
@@ -171,6 +181,8 @@ public class EndPointsLoader extends Application {
         resources.add(visualIdentityResource);
         resources.add(participantImportationResource);
         resources.add(participantResource);
+        resources.add(followUpConfigurationResource);
+        resources.add(participantFollowUpResource);
         resources.add(activityResource);
         resources.add(activityImportationResource);
         resources.add(laboratoryParticipantResource);
