@@ -29,7 +29,7 @@ public class JsonPUTRequestUtility {
     this.request.write(body.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String finish() throws IOException, RequestException {
+  public String finish() throws IOException {
     String response;
 
     request.flush();
@@ -38,7 +38,9 @@ public class JsonPUTRequestUtility {
     if (status == HttpURLConnection.HTTP_OK) {
       response = RequestUtility.getString(httpConn);
     } else {
-      throw new RequestException(status);
+      String errorMessage = httpConn.getResponseMessage();
+      Object errorContent = RequestUtility.getErrorContent(httpConn);
+      throw new RequestException(status, errorMessage, errorContent);
     }
 
     return response;

@@ -32,7 +32,7 @@ public class RequestUtility {
     return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, Document.class).get("data"));
   }
 
-  public static String getErrorString(HttpURLConnection httpConn) throws IOException {
+  public static Object getErrorContent(HttpURLConnection httpConn) throws IOException {
     BufferedReader in =  new BufferedReader(new InputStreamReader(httpConn.getErrorStream()));
     StringBuilder response = new StringBuilder();
     String currentLine;
@@ -43,7 +43,7 @@ public class RequestUtility {
     in.close();
 
     String responseString = response.toString();
-    return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(responseString, Document.class).get("data"));
+    return new GsonBuilder().create().fromJson(responseString, Document.class).get("data");
   }
 
 }

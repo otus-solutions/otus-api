@@ -1,5 +1,6 @@
 package br.org.otus.gateway.gates;
 
+import br.org.otus.gateway.request.JsonGETUtility;
 import br.org.otus.gateway.request.JsonPOSTUtility;
 import br.org.otus.gateway.request.JsonPUTRequestUtility;
 import br.org.otus.gateway.resource.OutcomesMicroServiceResources;
@@ -29,10 +30,9 @@ public class OutcomeGatewayService {
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       jsonPUT.writeBody(followUpJson);
-      String response = jsonPUT.finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException | RequestException ex) {
-
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -41,8 +41,8 @@ public class OutcomeGatewayService {
     URL requestURL = new OutcomesMicroServiceResources().getDeactivateFollowUpsAddress(followUpId);
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
-      String response = jsonPUT.finish();
-      return new GatewayResponse().buildSuccess(response);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
     } catch (RequestException | IOException ex) {
       throw new ReadRequestException();
     }
@@ -51,10 +51,10 @@ public class OutcomeGatewayService {
   public GatewayResponse listFollowUps() throws MalformedURLException {
     URL requestURL = new OutcomesMicroServiceResources().getListFollowUpsAddress();
     try {
-//      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL);
-//      String response = jsonPOST.finish();
-      return new GatewayResponse().buildSuccess();
-    } catch (RequestException ex) {
+      JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
+      String response = jsonGETUtility.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
       throw new ReadRequestException();
     }
   }
