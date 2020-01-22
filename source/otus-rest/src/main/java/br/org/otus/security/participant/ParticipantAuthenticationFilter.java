@@ -27,7 +27,6 @@ public class ParticipantAuthenticationFilter implements ContainerRequestFilter {
 
 		try {
 			securityContextService.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
-
 		} catch (Exception e) {
 			containerRequestContext.abortWith(Authorization.build().toResponse());
 		}

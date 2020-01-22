@@ -11,7 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("static-variable")
+@Path("participant-followUp")
 public class ParticipantFollowUp {
 
   @Inject
@@ -21,8 +21,8 @@ public class ParticipantFollowUp {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String listVariables(String variablesJson) {
-    return new Response().buildSuccess(staticVariableFacade.listVariables(variablesJson)).toJson();
+  public String listEvent(String variablesJson) {
+    return new Response().buildSuccess().toJson();
   }
 
 }

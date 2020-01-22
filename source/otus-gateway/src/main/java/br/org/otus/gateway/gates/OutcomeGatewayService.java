@@ -58,4 +58,26 @@ public class OutcomeGatewayService {
       throw new ReadRequestException();
     }
   }
+
+  public GatewayResponse createFollowUpEvent(String followUpId, String eventJson) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getCreateFollowUpEventAddress(followUpId);
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, eventJson);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse removeFollowUpEvent(String eventId) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getRemoveFollowUpEventAddress(eventId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 }

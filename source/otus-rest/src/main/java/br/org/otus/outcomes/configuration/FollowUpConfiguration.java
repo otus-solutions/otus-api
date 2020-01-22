@@ -14,7 +14,7 @@ public class FollowUpConfiguration {
   @Inject
   private FollowUpFacade followUpFacade;
 
-  @POST
+  @PUT
   @Path("/add")
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
@@ -23,7 +23,7 @@ public class FollowUpConfiguration {
     return new Response().buildSuccess(followUpFacade.createFollowUp(followUpJson)).toJson();
   }
 
-  @PUT
+  @POST
   @Path("/update")
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +32,7 @@ public class FollowUpConfiguration {
     return new Response().buildSuccess(followUpFacade.updateFollowUp(followUpJson)).toJson();
   }
 
-  @PUT
+  @DELETE
   @Path("/deactivate/{followUpId}")
   @Secured
   @Produces(MediaType.APPLICATION_JSON)

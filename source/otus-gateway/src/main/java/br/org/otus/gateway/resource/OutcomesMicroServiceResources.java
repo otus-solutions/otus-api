@@ -10,6 +10,8 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
   private static final String UPDATE_FOLLOWUP_RESOURCE = "/followUp/update";
   private static final String DEACTIVATED_FOLLOWUP_RESOURCE = "/followUp/deactivate";
   private static final String LIST_FOLLOWUPS_RESOURCE = "/followUp/list";
+  private static final String CREATE_FOLLOWUP_EVENT_RESOURCE = "/event/create";
+  private static final String REMOVE_FOLLOWUP_EVENT_RESOURCE = "/event/remove";
 
   public OutcomesMicroServiceResources() {
     super(MicroservicesEnvironments.OUTCOMES);
@@ -31,4 +33,11 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + LIST_FOLLOWUPS_RESOURCE);
   }
 
+  public URL getCreateFollowUpEventAddress(String followUpId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + CREATE_FOLLOWUP_EVENT_RESOURCE + "/" + followUpId);
+  }
+
+  public URL getRemoveFollowUpEventAddress(String eventId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + REMOVE_FOLLOWUP_EVENT_RESOURCE + "/" + eventId);
+  }
 }
