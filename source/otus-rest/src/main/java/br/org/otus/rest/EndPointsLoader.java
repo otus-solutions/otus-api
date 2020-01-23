@@ -30,6 +30,7 @@ import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.survey.group.SurveyGroupResource;
+import br.org.otus.user.pendency.UserActivityPendencyResource;
 import br.org.otus.user.UserResource;
 
 import javax.inject.Inject;
@@ -58,6 +59,9 @@ public class EndPointsLoader extends Application {
 
     @Inject
     private UserResource userResource;
+
+    @Inject
+    private UserActivityPendencyResource userActivityPendencyResource;
 
     @Inject
     private SurveyResource surveyResource;
@@ -143,6 +147,7 @@ public class EndPointsLoader extends Application {
         resources.add(ParticipantAuthenticationResource.class);
         resources.add(FieldCenterResource.class);
         resources.add(UserResource.class);
+        resources.add(UserActivityPendencyResource.class);
         resources.add(SurveyResource.class);
         resources.add(TemplateResource.class);
         resources.add(VisualIdentityResource.class);
@@ -181,6 +186,7 @@ public class EndPointsLoader extends Application {
         resources.add(participantAuthenticationResource);
         resources.add(fieldCenterResource);
         resources.add(userResource);
+        resources.add(userActivityPendencyResource);
         resources.add(surveyResource);
         resources.add(templateResource);
         resources.add(visualIdentityResource);
