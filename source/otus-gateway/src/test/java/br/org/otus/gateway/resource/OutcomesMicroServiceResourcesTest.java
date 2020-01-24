@@ -37,19 +37,19 @@ public class OutcomesMicroServiceResourcesTest {
 
   @Test
   public void getCreateOutcomeAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:8081/create");
+    url = new URL("http://localhost:8081/followUp/add");
     Assert.assertEquals(resources.getCreateFollowUpAddress(), url);
   }
 
   @Test
   public void getUpdateOutcomeAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:8081/update");
+    url = new URL("http://localhost:8081/followUp/update");
     Assert.assertEquals(resources.getUpdateFollowUpAddress(), url);
   }
 
   @Test
   public void getListOutcomesAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:8081/list");
+    url = new URL("http://localhost:8081/followUp/list");
     Assert.assertEquals(resources.getListFollowUpsAddress(), url);
   }
 }
