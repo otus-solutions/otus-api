@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -169,6 +170,12 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     String acronym = participant.getFieldCenter().getAcronym();
     participant.setFieldCenter(fieldCenterMap.get(acronym));
     return participant;
+  }
+
+  @Override
+  public ObjectId findIdByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+    return result.getObjectId("_id");
   }
 
   @Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -18,6 +19,8 @@ public interface ParticipantDao {
   ArrayList<Participant> find();
 
   Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;
+
+  ObjectId findIdByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
   ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 

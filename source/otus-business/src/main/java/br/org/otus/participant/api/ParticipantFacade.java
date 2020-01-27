@@ -9,6 +9,7 @@ import br.org.otus.response.info.Validation;
 import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.services.SecurityService;
 import br.org.otus.user.dto.PasswordResetDto;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -31,6 +32,15 @@ public class ParticipantFacade {
   public Participant getByRecruitmentNumber(long rn) {
     try {
       return participantService.getByRecruitmentNumber(rn);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
+    }
+  }
+
+  public ObjectId findIdByRecruitmentNumber(long rn) {
+    try {
+      return participantService.findIdByRecruitmentNumber(rn);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 

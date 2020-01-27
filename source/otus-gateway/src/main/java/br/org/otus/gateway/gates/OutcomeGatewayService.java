@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class OutcomeGatewayService {
-
   public GatewayResponse createFollowUp(String followUpJson) throws MalformedURLException {
     URL requestURL = new OutcomesMicroServiceResources().getCreateFollowUpAddress();
     try {
@@ -59,11 +58,66 @@ public class OutcomeGatewayService {
     }
   }
 
+  public GatewayResponse listFollowUpsByParticipant(String participantId) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getListFollowUpsAddress(participantId);
+    try {
+      JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
+      String response = jsonGETUtility.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
   public GatewayResponse createFollowUpEvent(String followUpId, String eventJson) throws MalformedURLException {
     URL requestURL = new OutcomesMicroServiceResources().getCreateFollowUpEventAddress(followUpId);
     try {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, eventJson);
       String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse startParticipantEvent(String participantId, String eventJson) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getStartParticipantEventAddress(participantId);
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, eventJson);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse cancelParticipantEvent(String eventId) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getCancelParticipantEventAddress(eventId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse searchParticipantEvent(String participantId, String eventId) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getSearchParticipantEventAddress(participantId, eventId);
+    try {
+      JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
+      String response = jsonGETUtility.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse accomplishedParticipantEvent(String eventId) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().getAccomplishedParticipantEventAddress(eventId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      String response = jsonPUT.finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (RequestException | IOException ex) {
       throw new ReadRequestException();

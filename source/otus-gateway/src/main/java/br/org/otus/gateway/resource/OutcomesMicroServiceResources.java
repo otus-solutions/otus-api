@@ -12,6 +12,9 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
   private static final String LIST_FOLLOWUPS_RESOURCE = "/followUp/list";
   private static final String CREATE_FOLLOWUP_EVENT_RESOURCE = "/event/create";
   private static final String REMOVE_FOLLOWUP_EVENT_RESOURCE = "/event/remove";
+  private static final String START_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/start";
+  private static final String CANCEL_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/cancel";
+  private static final String ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/accomplished";
 
   public OutcomesMicroServiceResources() {
     super(MicroservicesEnvironments.OUTCOMES);
@@ -29,6 +32,10 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + DEACTIVATED_FOLLOWUP_RESOURCE + "/" + followUpId);
   }
 
+  public URL getListFollowUpsAddress(String participantId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + LIST_FOLLOWUPS_RESOURCE + "/" + participantId);
+  }
+
   public URL getListFollowUpsAddress() throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + LIST_FOLLOWUPS_RESOURCE);
   }
@@ -39,5 +46,21 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
 
   public URL getRemoveFollowUpEventAddress(String eventId) throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + REMOVE_FOLLOWUP_EVENT_RESOURCE + "/" + eventId);
+  }
+
+  public URL getStartParticipantEventAddress(String participantId) throws MalformedURLException{
+    return new URL("http://" + this.HOST + ":" + this.PORT + START_PARTICIPANT_EVENT_RESOURCE + "/" + participantId);
+  }
+
+  public URL getCancelParticipantEventAddress(String eventId) throws MalformedURLException{
+    return new URL("http://" + this.HOST + ":" + this.PORT + CANCEL_PARTICIPANT_EVENT_RESOURCE + "/" + eventId);
+  }
+
+  public URL getSearchParticipantEventAddress(String participantId, String eventId) throws MalformedURLException{
+    return new URL("http://" + this.HOST + ":" + this.PORT + "/participantEvent/" + participantId + "/search/" + eventId);
+  }
+
+  public URL getAccomplishedParticipantEventAddress(String eventId) throws MalformedURLException{
+    return new URL("http://" + this.HOST + ":" + this.PORT + ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE + "/" + eventId);
   }
 }
