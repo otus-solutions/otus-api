@@ -26,7 +26,7 @@ variable "otus-api-debug-port"{
 }
 
 variable "otus-api-debug"{
-  default = false
+  default = true
 }
 
 variable "otus-api-jvm-memory" {

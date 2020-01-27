@@ -9,13 +9,13 @@ import br.org.otus.examUploader.ExamUploadResource;
 import br.org.otus.extraction.rest.ExtractionResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
+import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.importation.ParticipantImportationResource;
 import br.org.otus.laboratory.ParticipantLaboratoryResource;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
 import br.org.otus.laboratory.project.ExamResource;
 import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.monitoring.MonitoringResource;
-import br.org.otus.outcomes.ParticipantFollowUp;
 import br.org.otus.outcomes.configuration.FollowUpConfiguration;
 import br.org.otus.outcomes.configuration.FollowUpEventConfiguration;
 import br.org.otus.participant.ParticipantResource;
@@ -27,11 +27,10 @@ import br.org.otus.security.user.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.staticVariable.StaticVariableResource;
 import br.org.otus.survey.activity.ActivityResource;
-import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.survey.group.SurveyGroupResource;
-import br.org.otus.user.pendency.UserActivityPendencyResource;
 import br.org.otus.user.UserResource;
+import br.org.otus.user.pendency.UserActivityPendencyResource;
 
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
@@ -94,9 +93,6 @@ public class EndPointsLoader extends Application {
     private FollowUpEventConfiguration followUpEventConfiguration;
 
     @Inject
-    private ParticipantFollowUp participantFollowUpResource;
-
-    @Inject
     private ParticipantLaboratoryResource laboratoryParticipantResource;
 
     @Inject
@@ -156,7 +152,6 @@ public class EndPointsLoader extends Application {
         resources.add(ParticipantResource.class);
         resources.add(FollowUpConfiguration.class);
         resources.add(FollowUpEventConfiguration.class);
-        resources.add(ParticipantFollowUp.class);
         resources.add(ActivityResource.class);
         resources.add(ActivityImportationResource.class);
         resources.add(ParticipantLaboratoryResource.class);
@@ -194,7 +189,6 @@ public class EndPointsLoader extends Application {
         resources.add(participantResource);
         resources.add(followUpConfigurationResource);
         resources.add(followUpEventConfiguration);
-        resources.add(participantFollowUpResource);
         resources.add(activityResource);
         resources.add(activityImportationResource);
         resources.add(laboratoryParticipantResource);
