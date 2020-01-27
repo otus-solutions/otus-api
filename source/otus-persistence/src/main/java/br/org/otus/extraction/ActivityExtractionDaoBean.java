@@ -3,7 +3,6 @@ package br.org.otus.extraction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -30,7 +29,7 @@ public class ActivityExtractionDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public Map<Long, String> getParticipantFieldCenter(String acronym, Integer version) {
+  public HashMap<Long, String> getParticipantFieldCenter(String acronym, Integer version) {
     List<Long> recruitmentNumbersByActivity = getRecruitmentNumbersByActivity(acronym, version);
     List<Bson> pipeline = new ArrayList<>();
     pipeline.add(ParseQuery.toDocument("{\n" +
@@ -44,11 +43,11 @@ public class ActivityExtractionDaoBean extends MongoGenericDao<Document> impleme
         "      \"fieldCenter\": \"$fieldCenter.acronym\"\n" +
         "    }\n" +
         "  }"));
-    Map<Long, String> fieldCenterByRecruitmentNumber = new HashMap<Long, String>();
+    HashMap<Long, String> fieldCenterByRecruitmentNumber = new HashMap<Long, String>();
     AggregateIterable<Document> results = participantDao.aggregate(pipeline).allowDiskUse(true);
     MongoCursor<Document> iterator = results.iterator();
     while(iterator.hasNext()) {
-      fieldCenterByRecruitmentNumber.put((Long) iterator.next().get("_id"), iterator.next().getString("fieldCenter"));
+      fieldCenterByRecruitmentNumber.put(Long.parseLong( iterator.next().get("_id").toString()), iterator.next().getString("fieldCenter"));
     }
 
     return fieldCenterByRecruitmentNumber;
