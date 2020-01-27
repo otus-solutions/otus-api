@@ -54,38 +54,38 @@ public class SurveyActivityExtractionRecordsFactoryTest {
     Assert.assertTrue(values instanceof LinkedHashMap);
   }
 
-  @Test
-  public void getSurveyInformation_method_should_return_values_expected() {
-    Participant participant = new Participant(RECRUITMENT_NUMBER);
-
-    ActivityStatusOptions activityStatusOptions = ActivityStatusOptions.FINALIZED;
-
-    ActivityStatus activityStatus = new ActivityStatus();
-    Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
-    Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
-    Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
-
-    ArrayList<ActivityStatus> statusHistory = new ArrayList<>();
-    statusHistory.add(activityStatus);
-
-    FillContainer fillContainer = new FillContainer();
-    List<QuestionFill> fillingList = new ArrayList<>();
-    QuestionFill questionFill = new QuestionFill();
-    Whitebox.setInternalState(questionFill, "questionID", "ATCA4");
-
-    fillingList.add(questionFill);
-
-    Whitebox.setInternalState(fillContainer, "fillingList", fillingList);
-
-    this.surveyActivity = new SurveyActivity();
-    Whitebox.setInternalState(this.surveyActivity, "surveyForm", surveyForm);
-    Whitebox.setInternalState(this.surveyActivity, "participantData", participant);
-    Whitebox.setInternalState(this.surveyActivity, "statusHistory", statusHistory);
-    Whitebox.setInternalState(this.surveyActivity, "fillContainer", fillContainer);
-    
-    this.records.buildSurveyBasicInfo(surveyActivity, FIELD_CENTER);
-    LinkedHashMap<String, Object> values = this.records.getSurveyInformation();
-    
-  }
+//  @Test
+//  public void getSurveyInformation_method_should_return_values_expected() {
+//    Participant participant = new Participant(RECRUITMENT_NUMBER);
+//
+//    ActivityStatusOptions activityStatusOptions = ActivityStatusOptions.FINALIZED;
+//
+//    ActivityStatus activityStatus = new ActivityStatus();
+//    Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
+//    Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
+//    Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
+//
+//    ArrayList<ActivityStatus> statusHistory = new ArrayList<>();
+//    statusHistory.add(activityStatus);
+//
+//    FillContainer fillContainer = new FillContainer();
+//    List<QuestionFill> fillingList = new ArrayList<>();
+//    QuestionFill questionFill = new QuestionFill();
+//    Whitebox.setInternalState(questionFill, "questionID", "ATCA4");
+//
+//    fillingList.add(questionFill);
+//
+//    Whitebox.setInternalState(fillContainer, "fillingList", fillingList);
+//
+//    this.surveyActivity = new SurveyActivity();
+//    Whitebox.setInternalState(this.surveyActivity, "surveyForm", surveyForm);
+//    Whitebox.setInternalState(this.surveyActivity, "participantData", participant);
+//    Whitebox.setInternalState(this.surveyActivity, "statusHistory", statusHistory);
+//    Whitebox.setInternalState(this.surveyActivity, "fillContainer", fillContainer);
+//
+//    this.records.buildSurveyBasicInfo(surveyActivity, FIELD_CENTER);
+//    LinkedHashMap<String, Object> values = this.records.getSurveyInformation();
+//
+//  }
 
 }

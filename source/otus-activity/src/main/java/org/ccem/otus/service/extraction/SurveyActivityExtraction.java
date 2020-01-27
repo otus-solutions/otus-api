@@ -1,8 +1,8 @@
 package org.ccem.otus.service.extraction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -20,9 +20,9 @@ public class SurveyActivityExtraction implements Extractable {
   private SurveyActivityExtractionHeadersFactory headersFactory;
   private SurveyActivityExtractionRecordsFactory recordsFactory;
   private List<ActivityPreProcessor> processors;
-  private HashMap<Long, String> fieldCenterByRecruitmentNumber;
+  private Map<Long, String> fieldCenterByRecruitmentNumber;
 
-  public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities, HashMap<Long, String> fieldCenterByRecruitmentNumber) {
+  public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities, Map<Long, String> fieldCenterByRecruitmentNumber) {
     this.processors = new ArrayList<>();
     this.surveyActivities = surveyActivities;
     this.surveyForm = surveyForm;

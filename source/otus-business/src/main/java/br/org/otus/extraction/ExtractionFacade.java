@@ -1,9 +1,6 @@
 package br.org.otus.extraction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 
@@ -52,7 +49,7 @@ public class ExtractionFacade {
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
-    HashMap<Long, String> fieldCenterByRecruitmentNumber = activityFacade.getParticipantFieldCenterByActivity(acronym, version);
+    Map<Long, String> fieldCenterByRecruitmentNumber = activityFacade.getParticipantFieldCenterByActivity(acronym, version);
 
     dataSourceService.populateDataSourceMapping();
     SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities, fieldCenterByRecruitmentNumber);
