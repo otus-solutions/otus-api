@@ -2,6 +2,7 @@ package br.org.otus.outcomes.configuration;
 
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.rest.Response;
+import br.org.otus.security.participant.ParticipantSecured;
 import br.org.otus.security.user.Secured;
 
 import javax.inject.Inject;
@@ -88,10 +89,19 @@ public class FollowUpConfiguration {
 
   @PUT
   @Path("/participantEvent/accomplished/{id}")
-  @Secured
+  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String accomplishedParticipantEvent(@PathParam("id") String id) {
     return new Response().buildSuccess(followUpFacade.accomplishedParticipantEvent(id)).toJson();
+  }
+
+  @GET
+  @Path("/participantEvent/listAll/{rn}")
+  @ParticipantSecured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String listAllParticipantEvents(@PathParam("rn") String rn) {
+    return new Response().buildSuccess(followUpFacade.listAllParticipantEvents(rn)).toJson();
   }
 }

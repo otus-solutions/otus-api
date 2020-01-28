@@ -134,4 +134,15 @@ public class OutcomeGatewayService {
       throw new ReadRequestException();
     }
   }
+
+  public Object listAllParticipantEvents(String rn) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().listAllParticipantEvents(rn);
+    try {
+      JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
+      String response = jsonGETUtility.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (RequestException | IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 }
