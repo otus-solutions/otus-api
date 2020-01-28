@@ -43,11 +43,12 @@ public class ActivityExtractionDaoBean extends MongoGenericDao<Document> impleme
         "      \"fieldCenter\": \"$fieldCenter.acronym\"\n" +
         "    }\n" +
         "  }"));
-    HashMap<Long, String> fieldCenterByRecruitmentNumber = new HashMap<Long, String>();
+    HashMap<Long, String> fieldCenterByRecruitmentNumber = new HashMap<>();
     AggregateIterable<Document> results = participantDao.aggregate(pipeline).allowDiskUse(true);
     MongoCursor<Document> iterator = results.iterator();
     while(iterator.hasNext()) {
-      fieldCenterByRecruitmentNumber.put(Long.parseLong( iterator.next().get("_id").toString()), iterator.next().getString("fieldCenter"));
+      Document document = iterator.next();
+      fieldCenterByRecruitmentNumber.put((Long) document.get("_id"), document.getString("fieldCenter"));
     }
 
     return fieldCenterByRecruitmentNumber;
