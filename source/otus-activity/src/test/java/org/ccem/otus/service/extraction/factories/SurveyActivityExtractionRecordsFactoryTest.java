@@ -6,8 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
+import org.ccem.otus.model.survey.activity.interviewer.Interviewer;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
@@ -25,6 +27,7 @@ public class SurveyActivityExtractionRecordsFactoryTest {
   private Long RECRUITMENT_NUMBER = (Long) 322148795L;
   private static final String ACRONYM = "ATCA";
   private static final String FIELD_CENTER = "RS";
+  private static final String LABEL = "Repetição";
 
   private SurveyActivityExtractionRecordsFactory records;
   private NumericQuestion numericQuestion;
@@ -34,6 +37,8 @@ public class SurveyActivityExtractionRecordsFactoryTest {
   private SurveyForm surveyForm;
   private SurveyActivity surveyActivity;
   private SurveyActivityExtractionHeadersFactory headers;
+  private ActivityCategory category;
+  private List<Interviewer> interviews;
 
   @Before
   public void setup() {
@@ -51,6 +56,9 @@ public class SurveyActivityExtractionRecordsFactoryTest {
     this.headers = new SurveyActivityExtractionHeadersFactory(this.surveyForm);
 
     this.records = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headers.getHeaders());
+
+    category = new ActivityCategory(LABEL);
+    interviews = new ArrayList<>();
   }
 
   @Test
@@ -85,6 +93,8 @@ public class SurveyActivityExtractionRecordsFactoryTest {
 
     this.surveyActivity = new SurveyActivity();
     Whitebox.setInternalState(this.surveyActivity, "surveyForm", surveyForm);
+    Whitebox.setInternalState(this.surveyActivity, "category", category);
+    Whitebox.setInternalState(this.surveyActivity, "interviews", interviews);
     Whitebox.setInternalState(this.surveyActivity, "participantData", participant);
     Whitebox.setInternalState(this.surveyActivity, "statusHistory", statusHistory);
     Whitebox.setInternalState(this.surveyActivity, "fillContainer", fillContainer);
