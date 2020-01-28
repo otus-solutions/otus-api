@@ -159,7 +159,8 @@ public class FollowUpFacade {
   public Object listAllParticipantEvents(String rn) {
      try {
        ObjectId participantId = participantFacade.findIdByRecruitmentNumber(Long.parseLong(rn));
-      return new OutcomeGatewayService().listAllParticipantEvents(participantId.toString());
+      GatewayResponse gatewayResponse = new OutcomeGatewayService().listAllParticipantEvents(participantId.toString());
+       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {

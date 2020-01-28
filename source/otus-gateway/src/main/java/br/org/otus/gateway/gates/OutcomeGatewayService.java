@@ -135,7 +135,7 @@ public class OutcomeGatewayService {
     }
   }
 
-  public Object listAllParticipantEvents(String rn) throws MalformedURLException {
+  public GatewayResponse listAllParticipantEvents(String rn) throws MalformedURLException {
     URL requestURL = new OutcomesMicroServiceResources().listAllParticipantEvents(rn);
     try {
       JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
