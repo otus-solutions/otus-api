@@ -3,7 +3,6 @@ package br.org.otus.outcomes.configuration;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
-import br.org.otus.security.participant.ParticipantSecured;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -18,7 +17,6 @@ public class FollowUpConfiguration {
   @PUT
   @Path("/add")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createFollowUp(String followUpJson) {
@@ -28,7 +26,6 @@ public class FollowUpConfiguration {
   @POST
   @Path("/update")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateFollowUp(String followUpJson) {
@@ -38,7 +35,6 @@ public class FollowUpConfiguration {
   @DELETE
   @Path("/deactivate/{followUpId}")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String deactivateFollowUp(@PathParam("followUpId") String followUpId) {
@@ -48,7 +44,6 @@ public class FollowUpConfiguration {
   @GET
   @Path("/list")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String listFollowUps() {
@@ -58,7 +53,6 @@ public class FollowUpConfiguration {
   @GET
   @Path("/list/{rn}")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String listFollowUps(@PathParam("rn") String rn) {
@@ -68,7 +62,6 @@ public class FollowUpConfiguration {
   @GET
   @Path("/participantEvent/{rn}/search/{id}")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String searchParticipantEvent(@PathParam("rn") String rn, @PathParam("id") String id) {
@@ -78,7 +71,6 @@ public class FollowUpConfiguration {
   @PUT
   @Path("/participantEvent/cancel/{id}")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String cancelParticipantEvent(@PathParam("id") String id) {
@@ -88,7 +80,6 @@ public class FollowUpConfiguration {
   @POST
   @Path("/participantEvent/add/{rn}")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String startParticipantEvent(@PathParam("rn") String rn, String eventJson) {
@@ -98,7 +89,6 @@ public class FollowUpConfiguration {
   @PUT
   @Path("/participantEvent/accomplished/{id}")
   @Secured
-  @ParticipantSecured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String accomplishedParticipantEvent(@PathParam("id") String id) {

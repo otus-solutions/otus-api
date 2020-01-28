@@ -112,6 +112,15 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
+  public Participant fetchByToken(String token) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(TOKEN_LIST_FIELD, token)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant token not found."));
+    }
+    return Participant.deserialize(participantFound.toJson());
+  }
+
+  @Override
   public void registerPassword(String email, String password) throws DataNotFoundException {
     UpdateResult updateResult = this.collection.updateOne(new Document(EMAIL, email), new Document(SET,new Document(PASSWORD, password)));
     if(updateResult.getMatchedCount() == 0){

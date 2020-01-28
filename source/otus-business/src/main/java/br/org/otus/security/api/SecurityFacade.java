@@ -76,6 +76,14 @@ public class SecurityFacade {
     }
   }
 
+  public void validateToken(String token) {
+    try {
+      securityService.validateToken(token);
+    } catch (AuthenticationException | TokenException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
+    }
+  }
+
   public void invalidateParticipantAuthentication(String email, String token) {
     securityService.invalidateParticipantAuthenticate(email, token);
   }

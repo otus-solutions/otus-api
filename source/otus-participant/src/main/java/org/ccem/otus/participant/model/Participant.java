@@ -48,6 +48,10 @@ public class Participant {
     return name;
   }
 
+  public String getEmail() {
+    return this.email;
+  }
+
   public void setName(String name) {
     this.name = name;
   }

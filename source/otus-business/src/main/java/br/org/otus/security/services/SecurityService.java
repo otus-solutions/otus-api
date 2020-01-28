@@ -16,6 +16,8 @@ public interface SecurityService {
 
   ParticipantSecurityAuthorizationDto participantAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
+  void validateToken(String token) throws TokenException, AuthenticationException;
+
   String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
 	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;

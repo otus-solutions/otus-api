@@ -7,18 +7,30 @@ import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.response.info.Validation;
+import br.org.otus.survey.activity.api.ActivityFacade;
+import br.org.otus.survey.api.SurveyFacade;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.zip.DataFormatException;
+
 public class FollowUpFacade {
+
   @Inject
   private ParticipantFacade participantFacade;
+  @Inject
+  private SurveyFacade surveyFacade;
+  @Inject
+  private ActivityFacade activityFacade;
+
   public Object createFollowUp(String FollowUpJson) {
     try {
       GatewayResponse followUpId = new OutcomeGatewayService().createFollowUp(FollowUpJson);
@@ -97,8 +109,15 @@ public class FollowUpFacade {
   public Object startParticipantEvent(String rn, String eventJson) {
     try {
       ObjectId participantId = participantFacade.findIdByRecruitmentNumber(Long.parseLong(rn));
-      GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
+      ParticipantEventDTO participantEventDTO = ParticipantEventDTO.deserialize(eventJson);
+
+      if (!participantEventDTO.isValid()) {
+        return new DataFormatException();
+      }
+
+
+      GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), participantEventDTO.toString());
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Object.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
