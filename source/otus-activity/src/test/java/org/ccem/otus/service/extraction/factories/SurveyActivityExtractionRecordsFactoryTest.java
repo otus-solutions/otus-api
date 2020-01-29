@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
@@ -26,6 +27,7 @@ import org.powermock.reflect.Whitebox;
 public class SurveyActivityExtractionRecordsFactoryTest {
   private Long RECRUITMENT_NUMBER = (Long) 322148795L;
   private static final String ACRONYM = "ATCA";
+  private static final String USER_NAME = "Fulano";
   private static final String FIELD_CENTER = "RS";
   private static final String LABEL = "Repetição";
 
@@ -38,6 +40,7 @@ public class SurveyActivityExtractionRecordsFactoryTest {
   private SurveyActivity surveyActivity;
   private SurveyActivityExtractionHeadersFactory headers;
   private ActivityCategory category;
+  private User user;
   private List<Interviewer> interviews;
 
   @Before
@@ -59,6 +62,9 @@ public class SurveyActivityExtractionRecordsFactoryTest {
 
     category = new ActivityCategory(LABEL);
     interviews = new ArrayList<>();
+
+    user = new User();
+    Whitebox.setInternalState(user,"name",USER_NAME);
   }
 
   @Test
@@ -78,6 +84,7 @@ public class SurveyActivityExtractionRecordsFactoryTest {
     Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
     Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
     Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
+    Whitebox.setInternalState(activityStatus, "user", user);
 
     ArrayList<ActivityStatus> statusHistory = new ArrayList<>();
     statusHistory.add(activityStatus);
