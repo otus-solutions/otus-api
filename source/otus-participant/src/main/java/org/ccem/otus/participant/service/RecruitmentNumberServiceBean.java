@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 @Stateless
-public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
+public class RecruitmentNumberServiceBean implements RecruitmentNumberService {
   public static final Integer RN_MIN_SIZE = 7;
   public static final Integer INITIAL_VALUE = 1;
 
@@ -27,7 +27,7 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
 
     FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(centerAcronym);
 
-    if(fieldCenter == null) {
+    if (fieldCenter == null) {
       throw new DataNotFoundException("Field center not found: " + centerAcronym);
     }
 
@@ -52,23 +52,23 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
 
     String prefix = rnString.substring(0, codeString.length());
 
-    if(!prefix.equals(codeString)) {
+    if (!prefix.equals(codeString)) {
       throw new ValidationException(new Throwable("RN inconsistency. RN " + rnString + " does not match with given center: " + fieldCenter.getAcronym()));
     }
   }
 
   private Long getNextValidRecruitmentNumber(Long rn, FieldCenter fieldCenter) throws ValidationException {
-    this.validate(fieldCenter,rn);
+    this.validate(fieldCenter, rn);
 
     String rnString = rn.toString();
     String codeString = fieldCenter.getCode().toString();
 
     String substring = rnString.substring(codeString.length());
-    Long aLong = new Long(substring) + 1 ;
+    Long aLong = new Long(substring) + 1;
 
-    String newRnString =  padZeroes(aLong.toString(), RN_MIN_SIZE -1);
+    String newRnString = padZeroes(aLong.toString(), RN_MIN_SIZE - 1);
     Long result = new Long(codeString + newRnString);
-    
+
     if (!participantDao.exists(result)) {
       return result;
     } else {
@@ -77,15 +77,15 @@ public class RecruitmentNumberServiceBean implements RecruitmentNumberService{
 
   }
 
-  private Long createFirst (Integer centerCode) {
+  private Long createFirst(Integer centerCode) {
     String radical = padZeroes(INITIAL_VALUE.toString(), RN_MIN_SIZE - 1);
-    return new Long (centerCode + radical);
+    return new Long(centerCode + radical);
   }
 
-  private String padZeroes (String s, Integer maximumSize) {
+  private String padZeroes(String s, Integer maximumSize) {
     StringBuilder prefix = new StringBuilder();
 
-    for (int i = 0; i < maximumSize - s.length(); i ++) {
+    for (int i = 0; i < maximumSize - s.length(); i++) {
       prefix.append("0");
     }
 

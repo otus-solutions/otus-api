@@ -38,18 +38,18 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
     UserPermissionDTO userPermissions = userPermissionDao.getAll(email);
 
     permissionProfile.concatenatePermissions(userPermissions);
-    
+
     return permissionProfile;
   }
 
   @Override
   public Permission savePermission(Permission permission) throws DataNotFoundException {
-    if(!userDao.emailExists(permission.getEmail())){
+    if (!userDao.emailExists(permission.getEmail())) {
       throw new DataNotFoundException(new Throwable("User with email: {" + permission.getEmail() + "} not found."));
     }
     UserPermissionDTO permissionProfile = userPermissionProfileDao.getProfile(DEFAULT_PROFILE);
     List<Permission> permissionFound = permissionProfile.getPermissions().stream().filter(profilePermission -> profilePermission.equals(permission)).collect(Collectors.toList());
-    if(permissionFound.isEmpty()){
+    if (permissionFound.isEmpty()) {
       userPermissionDao.savePermission(permission);
     } else {
       userPermissionDao.deletePermission(permission);
@@ -61,7 +61,7 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
   public List<String> getUserPermittedSurveys(String email) {
     SurveyGroupPermission groupPermission;
     groupPermission = userPermissionDao.getGroupPermission(email);
-    if (groupPermission == null){
+    if (groupPermission == null) {
       groupPermission = userPermissionProfileDao.getGroupPermission(DEFAULT_PROFILE);
     }
     Set<String> surveyGroups = groupPermission.getGroups();
@@ -73,8 +73,8 @@ public class UserPermissionGenericDaoBean implements UserPermissionGenericDao {
 
   @Override
   public void removeFromPermissions(String surveyGroupName) throws DataNotFoundException {
-      userPermissionDao.removeFromPermissions(surveyGroupName);
-      userPermissionProfileDao.removeFromPermissionsProfile(surveyGroupName);
+    userPermissionDao.removeFromPermissions(surveyGroupName);
+    userPermissionProfileDao.removeFromPermissionsProfile(surveyGroupName);
   }
 
 }

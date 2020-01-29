@@ -8,7 +8,7 @@ import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
 
 public interface ActivityRevisionDao {
 
-    void persist(ActivityRevision activityRevision);
+  void persist(ActivityRevision activityRevision);
 
-    List<ActivityRevision> findByActivityID(ObjectId activityID) throws DataNotFoundException;
+  List<ActivityRevision> findByActivityID(ObjectId activityID) throws DataNotFoundException;
 }

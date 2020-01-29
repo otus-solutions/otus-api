@@ -61,9 +61,9 @@ public class ParticipantServiceBean implements ParticipantService {
       return participant;
 
     } else {
-      recruitmentNumberService.validate(participant.getFieldCenter(),participant.getRecruitmentNumber());
+      recruitmentNumberService.validate(participant.getFieldCenter(), participant.getRecruitmentNumber());
 
-      if(participantDao.exists(participant.getRecruitmentNumber())){
+      if (participantDao.exists(participant.getRecruitmentNumber())) {
         String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} already exists.";
         throw new ValidationException(new Throwable(error));
       }

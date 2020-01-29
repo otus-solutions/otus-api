@@ -20,18 +20,18 @@ import java.util.List;
 @Path("activities/import")
 public class ActivityImportationResource {
 
-    @Inject
-    private ActivityImportationFacade activityImportationFacade;
+  @Inject
+  private ActivityImportationFacade activityImportationFacade;
 
-    @PUT
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{acronym}/{version}")
-    public String importActivities(String surveyActivities, @PathParam("acronym") String acronym, @PathParam("version") int version) {
-        ActivityImportDTO activityImportDTO = ActivityImportDTO.deserialize(surveyActivities);
-        List<ActivityImportResultDTO> failImports = activityImportationFacade.importActivities(acronym, version, activityImportDTO);
-        return new Response().buildSuccess(failImports).toJson();
-    }
+  @PUT
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Path("/{acronym}/{version}")
+  public String importActivities(String surveyActivities, @PathParam("acronym") String acronym, @PathParam("version") int version) {
+    ActivityImportDTO activityImportDTO = ActivityImportDTO.deserialize(surveyActivities);
+    List<ActivityImportResultDTO> failImports = activityImportationFacade.importActivities(acronym, version, activityImportDTO);
+    return new Response().buildSuccess(failImports).toJson();
+  }
 
 }

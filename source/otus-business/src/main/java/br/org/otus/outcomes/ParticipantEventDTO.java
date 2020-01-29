@@ -13,7 +13,7 @@ public class ParticipantEventDTO implements Dto {
   public String description;
   public String activityId;
 
-  public String getObjectType(){
+  public String getObjectType() {
     this.updateObjectType();
     return this.objectType;
   }
@@ -22,7 +22,7 @@ public class ParticipantEventDTO implements Dto {
     this.objectType = "Participant".concat(this.objectType);
   }
 
-  public String getActivityId(){
+  public String getActivityId() {
     return this.activityId;
   }
 

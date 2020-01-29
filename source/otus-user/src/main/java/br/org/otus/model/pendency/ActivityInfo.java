@@ -19,13 +19,21 @@ public class ActivityInfo {
     return acronym;
   }
 
-  public String getName() { return name; }
+  public String getName() {
+    return name;
+  }
 
-  public String getExternalID() { return externalID; }
+  public String getExternalID() {
+    return externalID;
+  }
 
-  public String getLastStatusName() { return lastStatusName; }
+  public String getLastStatusName() {
+    return lastStatusName;
+  }
 
-  public String getLastStatusDate() { return lastStatusDate; }
+  public String getLastStatusDate() {
+    return lastStatusDate;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -33,7 +41,7 @@ public class ActivityInfo {
     if (o == null || getClass() != o.getClass()) return false;
     ActivityInfo other = (ActivityInfo) o;
     return (recruitmentNumber == other.getRecruitmentNumber() &&
-            acronym.equals(other.getAcronym()));
+      acronym.equals(other.getAcronym()));
   }
 
   public static String serialize(ActivityInfo activityInfo) {

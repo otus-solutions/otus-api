@@ -17,10 +17,10 @@ public interface ManagementUserService {
   User fetchByEmail(String email) throws DataNotFoundException;
 
   void enable(ManagementUserDto managementUserDto)
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
   void disable(ManagementUserDto managementUserDto)
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
   void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 
@@ -33,7 +33,7 @@ public interface ManagementUserService {
   Boolean isUnique(String emailToVerify);
 
   void requestPasswordReset(PasswordResetRequestDto requestData)
-      throws EncryptedException, DataNotFoundException, EmailNotificationException;
+    throws EncryptedException, DataNotFoundException, EmailNotificationException;
 
-  void updateUserPassword (PasswordResetDto passwordResetDto) throws EncryptedException;
+  void updateUserPassword(PasswordResetDto passwordResetDto) throws EncryptedException;
 }

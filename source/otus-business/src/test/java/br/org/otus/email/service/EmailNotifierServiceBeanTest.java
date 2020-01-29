@@ -32,8 +32,8 @@ import br.org.owail.sender.gmail.GMailer;
 import br.org.tutty.Equalizer;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ EmailNotifierServiceBean.class, Equalizer.class, Recipient.class, BasicEmailSender.class,
-    Sender.class, EncryptorResources.class, OtusEmailFactory.class, TemplateReader.class, GMailer.class })
+@PrepareForTest({EmailNotifierServiceBean.class, Equalizer.class, Recipient.class, BasicEmailSender.class,
+  Sender.class, EncryptorResources.class, OtusEmailFactory.class, TemplateReader.class, GMailer.class})
 
 public class EmailNotifierServiceBeanTest {
 
@@ -59,7 +59,7 @@ public class EmailNotifierServiceBeanTest {
   @Mock
   private TemplateReader templateReader;
   @Mock
-  private GMailer mailer; 
+  private GMailer mailer;
 
   @Before
   public void setUp() throws Exception {
@@ -98,14 +98,14 @@ public class EmailNotifierServiceBeanTest {
 
   @Test
   public void sendEmailMethod_should_invoke_sendEmailSync()
-      throws EmailNotificationException, EmailCompositionException, MessagingException {
+    throws EmailNotificationException, EmailCompositionException, MessagingException {
     emailNotifierServiceBean.sendEmail(email);
     verify(emailNotifierServiceBean, Mockito.times(1)).sendEmailSync(email);
   }
 
   @Test
   public void sendEmailSyncMethod_should_invoke_send_of_mailer()
-      throws EmailNotificationException, EmailCompositionException, MessagingException {
+    throws EmailNotificationException, EmailCompositionException, MessagingException {
     emailNotifierServiceBean.sendEmailSync(email);
     Mockito.verify(mailer, Mockito.times(1)).send();
   }

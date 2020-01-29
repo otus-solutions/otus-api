@@ -8,24 +8,24 @@ import java.util.Map;
 
 public class CheckboxAnswer extends AnswerFill {
 
-	private List<CheckboxAnswerOption> value;
+  private List<CheckboxAnswerOption> value;
 
-	public List<CheckboxAnswerOption> getValue() {
-		return value;
-	}
+  public List<CheckboxAnswerOption> getValue() {
+    return value;
+  }
 
-	@Override
-	public Map<String, Object> getAnswerExtract(String questionID) {
-		Map<String, Object> extraction = new LinkedHashMap<String, Object>();
-		if (this.value != null) {
-			for (CheckboxAnswerOption answer : value) {
-				extraction.put(answer.getOption(), parseBooleanToInt(answer.getState()));
-			}
-		}
-		return extraction;
-	}
+  @Override
+  public Map<String, Object> getAnswerExtract(String questionID) {
+    Map<String, Object> extraction = new LinkedHashMap<String, Object>();
+    if (this.value != null) {
+      for (CheckboxAnswerOption answer : value) {
+        extraction.put(answer.getOption(), parseBooleanToInt(answer.getState()));
+      }
+    }
+    return extraction;
+  }
 
-	private int parseBooleanToInt(Boolean value) {
-		return value.equals(Boolean.TRUE) ? 1 : 0;
-	}
+  private int parseBooleanToInt(Boolean value) {
+    return value.equals(Boolean.TRUE) ? 1 : 0;
+  }
 }

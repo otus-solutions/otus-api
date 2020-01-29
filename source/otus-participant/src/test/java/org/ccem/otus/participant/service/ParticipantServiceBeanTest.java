@@ -61,7 +61,7 @@ public class ParticipantServiceBeanTest {
 
   @Test
   public void method_create_with_SetParticipant_should_evocate_forEach_of_participants_list()
-      throws ValidationException {
+    throws ValidationException {
     participantServiceBean.create(setParticipants);
     verify(setParticipants, times(1)).forEach(anyObject());
   }
@@ -130,7 +130,7 @@ public class ParticipantServiceBeanTest {
   public void create_should_throw_error_when_rn_is_null_and_not_provided() throws DataNotFoundException, ValidationException {
     when(projectConfigurationService.isRnProvided()).thenReturn(false);
     participant.setRecruitmentNumber(null);
-    doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(),null);
+    doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(), null);
     participantServiceBean.create(this.participant);
 
   }
@@ -139,7 +139,7 @@ public class ParticipantServiceBeanTest {
   public void validate_should_throw_error_when_rn_is_null_and_not_provided() throws DataNotFoundException, ValidationException {
     when(projectConfigurationService.isRnProvided()).thenReturn(false);
     participant.setRecruitmentNumber(null);
-    doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(),null);
+    doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(), null);
     participantServiceBean.create(this.participant);
 
   }
@@ -154,6 +154,6 @@ public class ParticipantServiceBeanTest {
   @Test
   public void method_registerPassword_should_call_participantDao_registerPassword() throws DataNotFoundException {
     participantServiceBean.registerPassword(EMAIL, PASSWORD);
-    verify(participantDao,times(1)).registerPassword(EMAIL, PASSWORD);
+    verify(participantDao, times(1)).registerPassword(EMAIL, PASSWORD);
   }
 }

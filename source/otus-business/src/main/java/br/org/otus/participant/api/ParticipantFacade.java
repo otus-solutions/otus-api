@@ -81,10 +81,10 @@ public class ParticipantFacade {
 
   public void registerPassword(PasswordResetDto passwordResetDto) {
     try {
-        passwordResetDto.encrypt();
-        String requestEmail = securityService.getRequestEmail(passwordResetDto.getToken());
-        participantService.registerPassword(requestEmail, passwordResetDto.getPassword());
-        securityService.removePasswordResetRequests(requestEmail);
+      passwordResetDto.encrypt();
+      String requestEmail = securityService.getRequestEmail(passwordResetDto.getToken());
+      participantService.registerPassword(requestEmail, passwordResetDto.getPassword());
+      securityService.removePasswordResetRequests(requestEmail);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     } catch (EncryptedException e) {

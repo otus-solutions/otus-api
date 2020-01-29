@@ -7,8 +7,8 @@ import org.bson.Document;
 
 public class ParseQuery {
 
-    public static Document toDocument(String query) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().fromJson(query, Document.class);
-    }
+  public static Document toDocument(String query) {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    return gsonBuilder.create().fromJson(query, Document.class);
+  }
 }

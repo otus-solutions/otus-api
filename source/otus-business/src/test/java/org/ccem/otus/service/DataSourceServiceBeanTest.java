@@ -53,12 +53,12 @@ public class DataSourceServiceBeanTest {
   private JsonArray elements_persisted = new JsonArray();
 
   @Before
-  public void setUp(){
+  public void setUp() {
     JsonObject object = new JsonObject();
     object.addProperty(VALUE_FIELD, VALUE_1);
     object.addProperty(EXTRACTION_FIELD, EXTRACTION_VALUE_1);
     elements_persisted.add(object);
-    DATASOURCE_PERSISTED = new DataSource(ID,NAME,elements_persisted);
+    DATASOURCE_PERSISTED = new DataSource(ID, NAME, elements_persisted);
   }
 
   @Test
@@ -71,9 +71,9 @@ public class DataSourceServiceBeanTest {
     object2.addProperty(EXTRACTION_FIELD, EXTRACTION_VALUE_2);
     elements.add(object1);
     elements.add(object2);
-    DATASOURCE = new DataSource(ID,NAME,elements);
+    DATASOURCE = new DataSource(ID, NAME, elements);
     when(dataSourceDao.findByID(DATASOURCE.getId())).thenReturn(DATASOURCE_PERSISTED);
-    dataSourceServiceBean.update(DATASOURCE,duplicatedElements);
+    dataSourceServiceBean.update(DATASOURCE, duplicatedElements);
     Mockito.verify(dataSourceDao, times(1)).findByID(ID);
     Mockito.verify(dataSourceDao, times(1)).update(DATASOURCE);
   }
@@ -84,10 +84,10 @@ public class DataSourceServiceBeanTest {
     object1.addProperty(VALUE_FIELD, VALUE_2);
     object1.addProperty(EXTRACTION_FIELD, EXTRACTION_VALUE_2);
     elements.add(object1);
-    DATASOURCE = new DataSource(ID,NAME,elements);
+    DATASOURCE = new DataSource(ID, NAME, elements);
     when(dataSourceDao.findByID(DATASOURCE.getId())).thenReturn(DATASOURCE_PERSISTED);
-    dataSourceServiceBean.update(DATASOURCE,duplicatedElements);
-    Mockito.doThrow(new ValidationException()).when(dataSourceServiceBean).update(DATASOURCE,duplicatedElements);
+    dataSourceServiceBean.update(DATASOURCE, duplicatedElements);
+    Mockito.doThrow(new ValidationException()).when(dataSourceServiceBean).update(DATASOURCE, duplicatedElements);
   }
 
   @Test
@@ -96,8 +96,8 @@ public class DataSourceServiceBeanTest {
     dataSourceServiceBean.populateDataSourceMapping();
     ArrayList<String> dataSources = new ArrayList<>();
     dataSources.add(DATASOURCE_NAME);
-    when(dataSourceValuesMapping.getExtractionValue(DATASOURCE_NAME,VALUE_1)).thenReturn(EXTRACTION_FIELD);
-    assertEquals(EXTRACTION_FIELD,dataSourceServiceBean.getElementExtractionValue(dataSources,VALUE_1));
+    when(dataSourceValuesMapping.getExtractionValue(DATASOURCE_NAME, VALUE_1)).thenReturn(EXTRACTION_FIELD);
+    assertEquals(EXTRACTION_FIELD, dataSourceServiceBean.getElementExtractionValue(dataSources, VALUE_1));
   }
 
   @Test
@@ -106,7 +106,7 @@ public class DataSourceServiceBeanTest {
     dataSourceServiceBean.populateDataSourceMapping();
     ArrayList<String> dataSources = new ArrayList<>();
     dataSources.add(DATASOURCE_NAME);
-    assertEquals(NOT_IDENTIFIED_EXTRACTION_FIELD,dataSourceServiceBean.getElementExtractionValue(dataSources,VALUE_1));
+    assertEquals(NOT_IDENTIFIED_EXTRACTION_FIELD, dataSourceServiceBean.getElementExtractionValue(dataSources, VALUE_1));
   }
 
 }

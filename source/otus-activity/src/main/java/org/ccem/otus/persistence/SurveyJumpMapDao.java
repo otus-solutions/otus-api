@@ -5,7 +5,7 @@ import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 
 public interface SurveyJumpMapDao {
 
-    void persist(SurveyJumpMap surveyJumpMap);
+  void persist(SurveyJumpMap surveyJumpMap);
 
-    SurveyJumpMap get(String acronym, Integer version) throws DataNotFoundException;
+  SurveyJumpMap get(String acronym, Integer version) throws DataNotFoundException;
 }

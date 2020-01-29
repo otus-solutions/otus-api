@@ -25,7 +25,7 @@ public class ProjectConfigurationFacadeTest {
 
   @Test
   public void getProjectConfigurationMethod_should_invoke_getProjectConfiguration_of_projectConfigurationService()
-      throws DataNotFoundException {
+    throws DataNotFoundException {
     projectConfigurationFacade.getProjectConfiguration();
     verify(projectConfigurationService, times(1)).getProjectConfiguration();
   }
@@ -39,7 +39,7 @@ public class ProjectConfigurationFacadeTest {
 
   @Test
   public void enableNewParticipantsMethod_should_invoke_enableNewParticipants_of_projectConfigurationService()
-      throws DataNotFoundException {
+    throws DataNotFoundException {
     projectConfigurationFacade.enableParticipantRegistration(PERMISSION);
     verify(projectConfigurationService, times(1)).enableParticipantRegistration(PERMISSION);
   }
@@ -53,7 +53,7 @@ public class ProjectConfigurationFacadeTest {
 
   @Test
   public void autoGenerateRecruitmentNumber_should_invoke_autoGenerateRecruitmentNumber_of_projectConfigurationService()
-          throws DataNotFoundException {
+    throws DataNotFoundException {
     projectConfigurationFacade.autoGenerateRecruitmentNumber(PERMISSION);
     verify(projectConfigurationService, times(1)).autoGenerateRecruitmentNumber(PERMISSION);
   }

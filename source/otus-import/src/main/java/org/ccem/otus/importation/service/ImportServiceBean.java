@@ -19,30 +19,30 @@ import java.util.List;
 @Stateless
 public class ImportServiceBean implements ImportService {
 
-    @Inject
-    private SurveyJumpMapDao surveyJumpMapDao;
-    @Inject
-    private ActivityService activityService;
-    @Inject
-    private ActivityImportValidationService activityImportValidationService;
+  @Inject
+  private SurveyJumpMapDao surveyJumpMapDao;
+  @Inject
+  private ActivityService activityService;
+  @Inject
+  private ActivityImportValidationService activityImportValidationService;
 
-    @Override
-    public List<ActivityImportResultDTO> importActivities(String acronym, Integer version, ActivityImportDTO activityImportDTO) throws DataNotFoundException {
-        List<ActivityImportResultDTO> failImports = new ArrayList<>();
-        SurveyJumpMap surveyJumpMap = surveyJumpMapDao.get(acronym,version);
-        List<SurveyActivity> activityList = activityImportDTO.getActivityList();
+  @Override
+  public List<ActivityImportResultDTO> importActivities(String acronym, Integer version, ActivityImportDTO activityImportDTO) throws DataNotFoundException {
+    List<ActivityImportResultDTO> failImports = new ArrayList<>();
+    SurveyJumpMap surveyJumpMap = surveyJumpMapDao.get(acronym, version);
+    List<SurveyActivity> activityList = activityImportDTO.getActivityList();
 
-        for (SurveyActivity importActivity: activityList){
-            ActivityImportResultDTO activityImportResultDTO = activityImportValidationService.validateActivity(surveyJumpMap, importActivity);
-            if(activityImportResultDTO.getFailImport()){
-                activityImportResultDTO.setSurveyActivity(null);
-                failImports.add(activityImportResultDTO);
-            } else {
-                activityService.create(importActivity);
-            }
-        }
-
-        return failImports;
+    for (SurveyActivity importActivity : activityList) {
+      ActivityImportResultDTO activityImportResultDTO = activityImportValidationService.validateActivity(surveyJumpMap, importActivity);
+      if (activityImportResultDTO.getFailImport()) {
+        activityImportResultDTO.setSurveyActivity(null);
+        failImports.add(activityImportResultDTO);
+      } else {
+        activityService.create(importActivity);
+      }
     }
+
+    return failImports;
+  }
 
 }

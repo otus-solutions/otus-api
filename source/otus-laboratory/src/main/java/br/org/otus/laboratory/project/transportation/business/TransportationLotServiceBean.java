@@ -35,7 +35,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
     ObjectId transportationLotId = transportationLotDao.persist(transportationLot);
 
-    if(!aliquotCodeList.isEmpty()) {
+    if (!aliquotCodeList.isEmpty()) {
       aliquotDao.addToTransportationLot(aliquotCodeList, transportationLotId);
     }
     return transportationLot;
@@ -45,7 +45,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
   public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException {
     _validateLot(transportationLot);
     TransportationLot oldTransportationLot = transportationLotDao.findByCode(transportationLot.getCode());
-    aliquotDao.updateTransportationLotId(transportationLot.getAliquotCodeList(),oldTransportationLot.getLotId());
+    aliquotDao.updateTransportationLotId(transportationLot.getAliquotCodeList(), oldTransportationLot.getLotId());
     TransportationLot updateResult = transportationLotDao.update(transportationLot);
     return updateResult;
   }

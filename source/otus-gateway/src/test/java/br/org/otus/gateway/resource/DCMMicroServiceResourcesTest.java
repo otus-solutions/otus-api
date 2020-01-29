@@ -16,7 +16,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import br.org.otus.gateway.MicroservicesEnvironments;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ DCMMicroServiceResources.class })
+@PrepareForTest({DCMMicroServiceResources.class})
 public class DCMMicroServiceResourcesTest {
 
   private static final String HOST = "localhost";

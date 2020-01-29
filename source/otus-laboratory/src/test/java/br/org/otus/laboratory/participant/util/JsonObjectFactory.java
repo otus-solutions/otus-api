@@ -4,6 +4,6 @@ import com.google.gson.JsonObject;
 
 public interface JsonObjectFactory {
 
-	public JsonObject create();
+  public JsonObject create();
 
 }

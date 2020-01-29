@@ -1,34 +1,35 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>otus-commons</artifactId>
-    <packaging>jar</packaging>
-    <parent>
-        <artifactId>otus-root</artifactId>
-        <groupId>org.ccem.otus</groupId>
-        <version>1.27-SNAPSHOT</version>
-        <relativePath>../otus-root/pom.xml</relativePath>
-    </parent>
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${google.gson.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${google.gson.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>bson</artifactId>
-            <version>${mongodb.bson.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+  <artifactId>otus-commons</artifactId>
+  <packaging>jar</packaging>
+  <parent>
+    <artifactId>otus-root</artifactId>
+    <groupId>org.ccem.otus</groupId>
+    <version>1.27-SNAPSHOT</version>
+    <relativePath>../otus-root/pom.xml</relativePath>
+  </parent>
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${google.gson.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${google.gson.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>bson</artifactId>
+      <version>${mongodb.bson.version}</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 
 
 </project>

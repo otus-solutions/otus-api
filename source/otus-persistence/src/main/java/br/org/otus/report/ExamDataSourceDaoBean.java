@@ -14,40 +14,40 @@ import java.util.ArrayList;
 
 public class ExamDataSourceDaoBean extends MongoGenericDao<Document> implements ExamDataSourceDao {
 
-	private static final String COLLECTION_NAME = "exam_result";
-	private ExamDataSourceResult result;
+  private static final String COLLECTION_NAME = "exam_result";
+  private ExamDataSourceResult result;
 
-	@Inject
-	private ExamSendingLotDataSourceDaoBean examSendingLotDataSource;
+  @Inject
+  private ExamSendingLotDataSourceDaoBean examSendingLotDataSource;
 
-	public ExamDataSourceDaoBean() {
-		super(COLLECTION_NAME, Document.class);
-	}
+  public ExamDataSourceDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
-	@Override
-	public ExamDataSourceResult getResult(Long recruitmentNumber, ExamDataSource examDataSource) {
-		this.result = null;
-		ExamResult examResult = null;
+  @Override
+  public ExamDataSourceResult getResult(Long recruitmentNumber, ExamDataSource examDataSource) {
+    this.result = null;
+    ExamResult examResult = null;
 
-		ArrayList<Document> queryToLot = examDataSource.buildQuery(recruitmentNumber);
-		AggregateIterable<?> outputLot = collection.aggregate(queryToLot);
+    ArrayList<Document> queryToLot = examDataSource.buildQuery(recruitmentNumber);
+    AggregateIterable<?> outputLot = collection.aggregate(queryToLot);
 
-		for (Object anOutput : outputLot) {
-			Document next = (Document) anOutput;
-			examResult = ExamResult.deserialize(next.toJson());
-		}
+    for (Object anOutput : outputLot) {
+      Document next = (Document) anOutput;
+      examResult = ExamResult.deserialize(next.toJson());
+    }
 
-		if (examResult != null) {
-			ArrayList<Document> queryToExam = examDataSource.buildQueryToExam(examResult.getExamId(), recruitmentNumber);
-			AggregateIterable<?> outputExam = collection.aggregate(queryToExam);
+    if (examResult != null) {
+      ArrayList<Document> queryToExam = examDataSource.buildQueryToExam(examResult.getExamId(), recruitmentNumber);
+      AggregateIterable<?> outputExam = collection.aggregate(queryToExam);
 
-			for (Object anOutput : outputExam) {
-				Document next = (Document) anOutput;
-				this.result = ExamDataSourceResult.deserialize(new JSONObject(next).toString());
-			}
-		}
+      for (Object anOutput : outputExam) {
+        Document next = (Document) anOutput;
+        this.result = ExamDataSourceResult.deserialize(new JSONObject(next).toString());
+      }
+    }
 
-		return this.result;
-	}
+    return this.result;
+  }
 
 }

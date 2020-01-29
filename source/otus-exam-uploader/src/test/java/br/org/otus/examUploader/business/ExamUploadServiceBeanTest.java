@@ -214,7 +214,7 @@ public class ExamUploadServiceBeanTest {
       allAliquots.add(mock);
     });
     aliquotExamCorrelation = AliquotExamCorrelation
-        .deserialize("{\"_id\" : \"5b2d5b936dcabba87ee60cfe\",\"objectType\" : \"AliquotExamCorrelation\", \"aliquots\" : [{\"name\" : \"a\",\"exams\" : [\"URÉIA - SANGUE\"]}]}");
+      .deserialize("{\"_id\" : \"5b2d5b936dcabba87ee60cfe\",\"objectType\" : \"AliquotExamCorrelation\", \"aliquots\" : [{\"name\" : \"a\",\"exams\" : [\"URÉIA - SANGUE\"]}]}");
 
     PowerMockito.when(aliquotDao.getAliquots()).thenReturn(allAliquots);
     PowerMockito.when(laboratoryProjectService.getAliquotExamCorrelation()).thenReturn(aliquotExamCorrelation);

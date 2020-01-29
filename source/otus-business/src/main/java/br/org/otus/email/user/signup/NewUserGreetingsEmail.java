@@ -10,43 +10,43 @@ import java.util.Map;
 
 public class NewUserGreetingsEmail extends Email implements OtusEmail {
 
-    private final String TEMPLATE = "/template/user/signup/greetings-template.html";
-    private final String SUBJECT = "Sistema Otus: Bem-vindo, ";
+  private final String TEMPLATE = "/template/user/signup/greetings-template.html";
+  private final String SUBJECT = "Sistema Otus: Bem-vindo, ";
 
-    private HashMap<String, String> dataMap;
+  private HashMap<String, String> dataMap;
 
-    public NewUserGreetingsEmail(Recipient recipient) {
-        buildDataMap(recipient);
-        defineSubject(recipient.getName());
-        defineRecipient(recipient.getEmailAddress());
-    }
+  public NewUserGreetingsEmail(Recipient recipient) {
+    buildDataMap(recipient);
+    defineSubject(recipient.getName());
+    defineRecipient(recipient.getEmailAddress());
+  }
 
-    @Override
-    public String getTemplatePath() {
-        return TEMPLATE;
-    }
+  @Override
+  public String getTemplatePath() {
+    return TEMPLATE;
+  }
 
-    @Override
-    public Map<String, String> getContentDataMap() {
-        return dataMap;
-    }
+  @Override
+  public Map<String, String> getContentDataMap() {
+    return dataMap;
+  }
 
-    @Override
-    public String getContentType() {
-        return Mailer.HTML;
-    }
+  @Override
+  public String getContentType() {
+    return Mailer.HTML;
+  }
 
-    public void defineRecipient(String email) {
-        addTORecipient("recipient", email);
-    }
+  public void defineRecipient(String email) {
+    addTORecipient("recipient", email);
+  }
 
-    private void defineSubject(String name) {
-        setSubject(SUBJECT + name);
-    }
+  private void defineSubject(String name) {
+    setSubject(SUBJECT + name);
+  }
 
-    private void buildDataMap(Recipient recipient) {
-        dataMap = new HashMap<String, String>();
-        dataMap.put("name", recipient.getName());
-    }
+  private void buildDataMap(Recipient recipient) {
+    dataMap = new HashMap<String, String>();
+    dataMap.put("name", recipient.getName());
+  }
 
 }

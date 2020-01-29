@@ -101,7 +101,7 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listAllPendenciesToReceiver(request));
   }
 
@@ -110,7 +110,7 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listOpenedPendenciesToReceiver(request));
   }
 
@@ -119,7 +119,7 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listDonePendenciesToReceiver(request));
   }
 
@@ -128,7 +128,7 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listAllPendenciesFromRequester(request));
   }
 
@@ -137,7 +137,7 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listOpenedPendenciesFromRequester(request));
   }
 
@@ -146,15 +146,15 @@ public class UserActivityPendencyResourceTest {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("["+ String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
       userActivityPendencyResource.listDonePendenciesFromRequester(request));
   }
 
-  private String encapsulateExpectedResponse(String data){
+  private String encapsulateExpectedResponse(String data) {
     return "{\"data\":" + data + "}";
   }
 
-  private void mockContextToSetUserEmail(){
+  private void mockContextToSetUserEmail() {
     mockStatic(AuthorizationHeaderReader.class);
     when(request.getHeader(Mockito.any())).thenReturn(TOKEN);
     when(AuthorizationHeaderReader.readToken(Mockito.any())).thenReturn(TOKEN);

@@ -15,42 +15,42 @@ import static org.mockito.Matchers.anyString;
 @Ignore
 public class OtusNewUserGreetingsEmailTest {
 
-    private final String SUBJECT = "Sistema Otus: Bem-vindo, ";
+  private final String SUBJECT = "Sistema Otus: Bem-vindo, ";
 
-    private Sender sender;
-    private Recipient recipient;
+  private Sender sender;
+  private Recipient recipient;
 
-    @Before
-    public void setup() {
-        sender = new Sender(anyString(), anyString(), anyString());
-        recipient = Recipient.createTO("Recipient Name", "recipient@email.com");
-    }
+  @Before
+  public void setup() {
+    sender = new Sender(anyString(), anyString(), anyString());
+    recipient = Recipient.createTO("Recipient Name", "recipient@email.com");
+  }
 
-    @Test
-    public void createNewUserGreetingsEmail_method_should_return_an_instance_of_NewUserGreetingsEmail() {
-        Object email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
+  @Test
+  public void createNewUserGreetingsEmail_method_should_return_an_instance_of_NewUserGreetingsEmail() {
+    Object email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
 
-        assertThat(email, instanceOf(NewUserGreetingsEmail.class));
-    }
+    assertThat(email, instanceOf(NewUserGreetingsEmail.class));
+  }
 
-    @Test
-    public void createNewUserGreetingsEmail_method_should_return_an_email_with_recipient_defined() {
-        Email email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
+  @Test
+  public void createNewUserGreetingsEmail_method_should_return_an_email_with_recipient_defined() {
+    Email email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
 
-        assertThat(email.getRecipients(), not(empty()));
-    }
+    assertThat(email.getRecipients(), not(empty()));
+  }
 
-    @Test
-    public void createNewUserGreetingsEmail_method_should_return_an_email_with_from_defined() {
-        Email email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
+  @Test
+  public void createNewUserGreetingsEmail_method_should_return_an_email_with_from_defined() {
+    Email email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
 
-        assertThat(email.getFrom(), notNullValue());
-    }
+    assertThat(email.getFrom(), notNullValue());
+  }
 
-    public void createNewUserGreetingsEmail_method_should_return_an_email_with_subject_defined() {
-        Email email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
+  public void createNewUserGreetingsEmail_method_should_return_an_email_with_subject_defined() {
+    Email email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
 
-        assertThat(email.getSubject(), equalTo(SUBJECT));
-    }
+    assertThat(email.getSubject(), equalTo(SUBJECT));
+  }
 
 }

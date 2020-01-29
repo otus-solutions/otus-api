@@ -12,15 +12,15 @@ import java.util.Set;
 
 public class ParticipantImportationFacade {
 
-	@Inject
-	private ParticipantImportService participantImportService;
+  @Inject
+  private ParticipantImportService participantImportService;
 
-	public void importParticipantSet(Set<ParticipantImport> participantSet) {
-		try {
-			participantImportService.importation(participantSet);
-		} catch (ValidationException | DataNotFoundException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-	}
+  public void importParticipantSet(Set<ParticipantImport> participantSet) {
+    try {
+      participantImportService.importation(participantSet);
+    } catch (ValidationException | DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 
 }

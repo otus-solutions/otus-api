@@ -5,5 +5,5 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 
 public interface TimeRuleValidatorService {
-    boolean run(String type, Rule rule, AnswerFill answer) throws DataNotFoundException;
+  boolean run(String type, Rule rule, AnswerFill answer) throws DataNotFoundException;
 }

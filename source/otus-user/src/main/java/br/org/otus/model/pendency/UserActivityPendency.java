@@ -41,13 +41,17 @@ public class UserActivityPendency {
     return receiver;
   }
 
-  public ObjectId getActivityId() { return activityId; }
+  public ObjectId getActivityId() {
+    return activityId;
+  }
 
   public void setRequester(String requester) {
     this.requester = requester;
   }
 
-  public void setReceiver(String receiver) { this.receiver = receiver; }
+  public void setReceiver(String receiver) {
+    this.receiver = receiver;
+  }
 
   @Override
   public boolean equals(Object o) {

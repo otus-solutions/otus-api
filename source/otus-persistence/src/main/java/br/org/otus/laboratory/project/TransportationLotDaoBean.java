@@ -35,7 +35,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
 
     AggregateIterable output = collection
-        .aggregate(Arrays.asList(Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")));
+      .aggregate(Arrays.asList(Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")));
     for (Object result : output) {
       Document document = (Document) result;
       transportationLots.add(TransportationLot.deserialize(document.toJson()));
@@ -69,7 +69,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     parsed.remove("aliquotList");
     parsed.remove("_id");
     UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
-        new Document("$set", parsed));
+      new Document("$set", parsed));
 
     if (updateLotData.getMatchedCount() == 0) {
       throw new DataNotFoundException(new Throwable("Transportation Lot not found"));
@@ -81,7 +81,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   @Override
   public void delete(String code) throws DataNotFoundException {
     Document updateResult = collection.findOneAndReplace(new Document("code", code),
-        new Document("objectType", "DeletedTransportationLot").append("code", code));
+      new Document("objectType", "DeletedTransportationLot").append("code", code));
     if (updateResult.size() == 0) {
       throw new DataNotFoundException(new Throwable("Transportation Lot does not exist"));
     }
@@ -117,9 +117,9 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   @Override
   public TransportationLot findByCode(String code) throws DataNotFoundException {
     Document document = collection.aggregate(
-        Arrays.asList(Aggregates.match(eq("code", code)), Aggregates.match(eq("objectType", "TransportationLot")),
-            Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")))
-        .first();
+      Arrays.asList(Aggregates.match(eq("code", code)), Aggregates.match(eq("objectType", "TransportationLot")),
+        Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")))
+      .first();
 
     if (document != null) {
       return TransportationLot.deserialize(document.toJson());

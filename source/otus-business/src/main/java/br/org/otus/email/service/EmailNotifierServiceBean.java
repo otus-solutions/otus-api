@@ -27,58 +27,58 @@ import java.util.Map;
 @Stateless
 public class EmailNotifierServiceBean implements EmailNotifierService {
 
-    @Inject
-    private SystemConfigDaoBean systemConfigDao;
+  @Inject
+  private SystemConfigDaoBean systemConfigDao;
 
-    @Override
-    public void sendSystemInstallationEmail(OtusInitializationConfigDto initializationData) throws EmailNotificationException, EncryptedException {
-        BasicEmailSender emailSenderDto = new BasicEmailSender();
-        Equalizer.equalize(initializationData.getEmailSender(), emailSenderDto);
-        Recipient recipient = Recipient.createTO(initializationData.getUser().getName(), initializationData.getUser().getEmail());
-        Sender sender = new Sender(emailSenderDto.getName(), emailSenderDto.getEmail(), EncryptorResources.decrypt(emailSenderDto.getPassword()));
-        SystemInstallationEmail email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
-        sendEmail(email);
+  @Override
+  public void sendSystemInstallationEmail(OtusInitializationConfigDto initializationData) throws EmailNotificationException, EncryptedException {
+    BasicEmailSender emailSenderDto = new BasicEmailSender();
+    Equalizer.equalize(initializationData.getEmailSender(), emailSenderDto);
+    Recipient recipient = Recipient.createTO(initializationData.getUser().getName(), initializationData.getUser().getEmail());
+    Sender sender = new Sender(emailSenderDto.getName(), emailSenderDto.getEmail(), EncryptorResources.decrypt(emailSenderDto.getPassword()));
+    SystemInstallationEmail email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
+    sendEmail(email);
+  }
+
+  @Override
+  @Asynchronous
+  public void sendEmail(OtusEmail email) throws EmailNotificationException {
+    sendEmailSync(email);
+  }
+
+  @Override
+  public void sendEmailSync(OtusEmail email) throws EmailNotificationException {
+    GMailer mailer = GMailer.createTLSMailer();
+
+    mailer.setFrom(email.getFrom());
+    mailer.addRecipients(email.getRecipients());
+    mailer.setSubject(email.getSubject());
+    mailer.setContentType(email.getContentType());
+    mailer.setContent(mergeTemplate(email.getContentDataMap(), email.getTemplatePath()));
+
+    try {
+      mailer.send();
+
+    } catch (MessagingException | EmailCompositionException e) {
+      throw new EmailNotificationException(e);
     }
+  }
 
-    @Override
-    @Asynchronous
-    public void sendEmail(OtusEmail email) throws EmailNotificationException {
-        sendEmailSync(email);
+  @Override
+  public Sender getSender() throws EncryptedException, DataNotFoundException {
+    try {
+      BasicEmailSender emailSender = systemConfigDao.findEmailSender();
+      return new Sender(emailSender.getName(), emailSender.getEmail(), EncryptorResources.decrypt(emailSender.getPassword()));
+
+    } catch (NoResultException e) {
+      throw new DataNotFoundException();
     }
+  }
 
-    @Override
-    public void sendEmailSync(OtusEmail email) throws EmailNotificationException {
-        GMailer mailer = GMailer.createTLSMailer();
-
-        mailer.setFrom(email.getFrom());
-        mailer.addRecipients(email.getRecipients());
-        mailer.setSubject(email.getSubject());
-        mailer.setContentType(email.getContentType());
-        mailer.setContent(mergeTemplate(email.getContentDataMap(), email.getTemplatePath()));
-
-        try {
-            mailer.send();
-
-        } catch ( MessagingException | EmailCompositionException e) {
-            throw new EmailNotificationException(e);
-        }
-    }
-
-    @Override
-    public Sender getSender() throws EncryptedException, DataNotFoundException {
-        try{
-            BasicEmailSender emailSender = systemConfigDao.findEmailSender();
-            return new Sender(emailSender.getName(), emailSender.getEmail(), EncryptorResources.decrypt(emailSender.getPassword()));
-
-        }catch (NoResultException e){
-            throw new DataNotFoundException();
-        }
-    }
-
-    private String mergeTemplate(Map<String, String> dataMap, String template) {
-        TemplateReader templateReader = new TemplateReader();
-        String templateContent = templateReader.getFileToString(getClass().getClassLoader(), template);
-        return templateReader.fillTemplate(dataMap, templateContent);
-    }
+  private String mergeTemplate(Map<String, String> dataMap, String template) {
+    TemplateReader templateReader = new TemplateReader();
+    String templateContent = templateReader.getFileToString(getClass().getClassLoader(), template);
+    return templateReader.fillTemplate(dataMap, templateContent);
+  }
 
 }

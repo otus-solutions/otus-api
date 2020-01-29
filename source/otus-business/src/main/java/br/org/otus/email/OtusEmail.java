@@ -8,16 +8,16 @@ import java.util.Map;
 
 public interface OtusEmail {
 
-	String getTemplatePath();
+  String getTemplatePath();
 
-    Sender getFrom();
+  Sender getFrom();
 
-    List<Recipient> getRecipients();
+  List<Recipient> getRecipients();
 
-    String getSubject();
+  String getSubject();
 
-    Map<String, String> getContentDataMap();
+  Map<String, String> getContentDataMap();
 
-    String getContentType();
-    
+  String getContentType();
+
 }

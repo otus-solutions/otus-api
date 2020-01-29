@@ -10,22 +10,22 @@ import org.ccem.otus.persistence.FileUploaderDao;
 @Stateless
 public class FileUploaderServiceBean implements FileUploaderService {
 
-	@Inject
-	private FileUploaderDao dao;
+  @Inject
+  private FileUploaderDao dao;
 
-	@Override
-	public String upload(FileUploader file) {
-		return dao.save(file);
-	}
+  @Override
+  public String upload(FileUploader file) {
+    return dao.save(file);
+  }
 
-	@Override
-	public byte[] getById(String oid) throws DataNotFoundException {
-		return dao.getById(oid).getFile();
-	}
+  @Override
+  public byte[] getById(String oid) throws DataNotFoundException {
+    return dao.getById(oid).getFile();
+  }
 
-	@Override
-	public void delete(String oid) throws DataNotFoundException {
-		dao.delete(oid);
-	}
+  @Override
+  public void delete(String oid) throws DataNotFoundException {
+    dao.delete(oid);
+  }
 
 }

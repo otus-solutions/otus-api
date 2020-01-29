@@ -27,7 +27,7 @@ public class UserPermissionServiceBean implements UserPermissionService {
   }
 
   @Override
-  public List<String> getUserPermittedSurveys(String userEmail){
+  public List<String> getUserPermittedSurveys(String userEmail) {
     return userPermissionGenericDao.getUserPermittedSurveys(userEmail);
   }
 }

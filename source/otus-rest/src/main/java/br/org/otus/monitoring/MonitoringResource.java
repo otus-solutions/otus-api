@@ -69,7 +69,7 @@ public class MonitoringResource {
   @PUT
   @Secured
   @Path("/activities/progress/not-apply")
-  @Consumes (MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String defineActivityInapplicability(String activityApplicability) {
     ActivityInapplicability activityInapplicability = ActivityInapplicability.deserialize(activityApplicability);
@@ -81,7 +81,7 @@ public class MonitoringResource {
   @Secured
   @Path("/activities/progress/not-apply/{rn}/{acronym}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteActivityInapplicability(@PathParam("rn") Long rn,@PathParam("acronym") String acronym) {
+  public String deleteActivityInapplicability(@PathParam("rn") Long rn, @PathParam("acronym") String acronym) {
     monitoringFacade.deleteActivityApplicability(rn, acronym);
     return new Response().buildSuccess().toJson();
   }
@@ -114,7 +114,7 @@ public class MonitoringResource {
   @PUT
   @Secured
   @Path("/exams/progress/not-apply")
-  @Consumes (MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String defineExamInapplicability(String examApplicability) {
     ExamInapplicability examInapplicability = ExamInapplicability.deserialize(examApplicability);
@@ -126,7 +126,7 @@ public class MonitoringResource {
   @Secured
   @Path("/exams/progress/not-apply/delete")
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteExamInapplicability( String examApplicability) {
+  public String deleteExamInapplicability(String examApplicability) {
     ExamInapplicability examInapplicability = ExamInapplicability.deserialize(examApplicability);
     monitoringFacade.deleteExamInapplicability(examInapplicability);
     return new Response().buildSuccess().toJson();

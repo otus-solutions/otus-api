@@ -28,8 +28,8 @@ public interface ParticipantLaboratoryDao {
   ArrayList<SimpleAliquot> getFullAliquotsList();
 
   ArrayList<ParticipantLaboratory> getAllParticipantLaboratory();
-  
+
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
-  
+
   AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
 }

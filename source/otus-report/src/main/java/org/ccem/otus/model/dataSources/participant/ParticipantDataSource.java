@@ -7,16 +7,16 @@ import java.util.ArrayList;
 
 public class ParticipantDataSource extends ReportDataSource<ParticipantDataSourceResult> {
 
-    @Override
-    public ArrayList<Document> buildQuery(Long recruitmentNumber) {
-        return null;
-    }
+  @Override
+  public ArrayList<Document> buildQuery(Long recruitmentNumber) {
+    return null;
+  }
 
-    public void addResult(ParticipantDataSourceResult result){
-        super.getResult().add(result);
-    }
+  public void addResult(ParticipantDataSourceResult result) {
+    super.getResult().add(result);
+  }
 
-    public ArrayList<ParticipantDataSourceResult> getResult() {
-        return super.getResult();
-    }
+  public ArrayList<ParticipantDataSourceResult> getResult() {
+    return super.getResult();
+  }
 }

@@ -41,172 +41,172 @@ import java.util.Set;
 @ApplicationPath("otus")
 public class EndPointsLoader extends Application {
 
-    @Inject
-    private MonitoringResource monitoringResource;
+  @Inject
+  private MonitoringResource monitoringResource;
 
-    @Inject
-    private InstallerResource installerResource;
+  @Inject
+  private InstallerResource installerResource;
 
-    @Inject
-    private AuthenticationResource authenticationResource;
+  @Inject
+  private AuthenticationResource authenticationResource;
 
-    @Inject
-    private ParticipantAuthenticationResource participantAuthenticationResource;
+  @Inject
+  private ParticipantAuthenticationResource participantAuthenticationResource;
 
-    @Inject
-    private FieldCenterResource fieldCenterResource;
+  @Inject
+  private FieldCenterResource fieldCenterResource;
 
-    @Inject
-    private UserResource userResource;
+  @Inject
+  private UserResource userResource;
 
-    @Inject
-    private UserActivityPendencyResource userActivityPendencyResource;
+  @Inject
+  private UserActivityPendencyResource userActivityPendencyResource;
 
-    @Inject
-    private SurveyResource surveyResource;
+  @Inject
+  private SurveyResource surveyResource;
 
-    @Inject
-    private TemplateResource templateResource;
+  @Inject
+  private TemplateResource templateResource;
 
-    @Inject
-    private VisualIdentityResource visualIdentityResource;
+  @Inject
+  private VisualIdentityResource visualIdentityResource;
 
-    @Inject
-    private ParticipantImportationResource participantImportationResource;
+  @Inject
+  private ParticipantImportationResource participantImportationResource;
 
-    @Inject
-    private ParticipantResource participantResource;
+  @Inject
+  private ParticipantResource participantResource;
 
-    @Inject
-    private ActivityResource activityResource;
+  @Inject
+  private ActivityResource activityResource;
 
-    @Inject
-    private ActivityImportationResource activityImportationResource;
+  @Inject
+  private ActivityImportationResource activityImportationResource;
 
-    @Inject
-    private ReportResource reportResource;
+  @Inject
+  private ReportResource reportResource;
 
-    @Inject
-    private FollowUpConfiguration followUpConfigurationResource;
+  @Inject
+  private FollowUpConfiguration followUpConfigurationResource;
 
-    @Inject
-    private FollowUpEventConfiguration followUpEventConfiguration;
+  @Inject
+  private FollowUpEventConfiguration followUpEventConfiguration;
 
-    @Inject
-    private ParticipantLaboratoryResource laboratoryParticipantResource;
+  @Inject
+  private ParticipantLaboratoryResource laboratoryParticipantResource;
 
-    @Inject
-    private DataSourceResource dataSourceResource;
+  @Inject
+  private DataSourceResource dataSourceResource;
 
-    @Inject
-    private FileUploaderResource fileUploaderResource;
+  @Inject
+  private FileUploaderResource fileUploaderResource;
 
-    @Inject
-    private TransportationResource transportationResource;
+  @Inject
+  private TransportationResource transportationResource;
 
-    @Inject
-    private LaboratoryConfigurationResource laboratoryConfigurationResource;
+  @Inject
+  private LaboratoryConfigurationResource laboratoryConfigurationResource;
 
-    @Inject
-    private ExtractionResource extractionResource;
+  @Inject
+  private ExtractionResource extractionResource;
 
-    @Inject
-    private ActivityConfigurationResource activityConfigurationResource;
+  @Inject
+  private ActivityConfigurationResource activityConfigurationResource;
 
-    @Inject
-    private ExamResource examResource;
+  @Inject
+  private ExamResource examResource;
 
-    @Inject
-    private ExamUploadResource examUploadResource;
+  @Inject
+  private ExamUploadResource examUploadResource;
 
-    @Inject
-    private ProjectConfigurationResource projectConfigurationResource;
+  @Inject
+  private ProjectConfigurationResource projectConfigurationResource;
 
-    @Inject
-    private ActivityPermissionResource activityAccessPermissionResource;
+  @Inject
+  private ActivityPermissionResource activityAccessPermissionResource;
 
-    @Inject
-    private UserPermissionResource userPermissionResource;
+  @Inject
+  private UserPermissionResource userPermissionResource;
 
-    @Inject
-    private SurveyGroupResource surveyGroupResource;
+  @Inject
+  private SurveyGroupResource surveyGroupResource;
 
-    @Inject
-    private StaticVariableResource staticVariableResource;
+  @Inject
+  private StaticVariableResource staticVariableResource;
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        Set<Class<?>> resources = new HashSet<Class<?>>();
-        resources.add(MonitoringResource.class);
-        resources.add(InstallerResource.class);
-        resources.add(AuthenticationResource.class);
-        resources.add(ParticipantAuthenticationResource.class);
-        resources.add(FieldCenterResource.class);
-        resources.add(UserResource.class);
-        resources.add(UserActivityPendencyResource.class);
-        resources.add(SurveyResource.class);
-        resources.add(TemplateResource.class);
-        resources.add(VisualIdentityResource.class);
-        resources.add(ParticipantImportationResource.class);
-        resources.add(ReportResource.class);
-        resources.add(ParticipantResource.class);
-        resources.add(FollowUpConfiguration.class);
-        resources.add(FollowUpEventConfiguration.class);
-        resources.add(ActivityResource.class);
-        resources.add(ActivityImportationResource.class);
-        resources.add(ParticipantLaboratoryResource.class);
-        resources.add(DataSourceResource.class);
-        resources.add(FileUploaderResource.class);
-        resources.add(TransportationResource.class);
-        resources.add(LaboratoryConfigurationResource.class);
-        resources.add(ExtractionResource.class);
-        resources.add(ActivityConfigurationResource.class);
-        resources.add(ExamResource.class);
-        resources.add(ExamUploadResource.class);
-        resources.add(ProjectConfigurationResource.class);
-        resources.add(ActivityPermissionResource.class);
-        resources.add(UserPermissionResource.class);
-        resources.add(SurveyGroupResource.class);
-        resources.add(StaticVariableResource.class);
+  @Override
+  public Set<Class<?>> getClasses() {
+    Set<Class<?>> resources = new HashSet<Class<?>>();
+    resources.add(MonitoringResource.class);
+    resources.add(InstallerResource.class);
+    resources.add(AuthenticationResource.class);
+    resources.add(ParticipantAuthenticationResource.class);
+    resources.add(FieldCenterResource.class);
+    resources.add(UserResource.class);
+    resources.add(UserActivityPendencyResource.class);
+    resources.add(SurveyResource.class);
+    resources.add(TemplateResource.class);
+    resources.add(VisualIdentityResource.class);
+    resources.add(ParticipantImportationResource.class);
+    resources.add(ReportResource.class);
+    resources.add(ParticipantResource.class);
+    resources.add(FollowUpConfiguration.class);
+    resources.add(FollowUpEventConfiguration.class);
+    resources.add(ActivityResource.class);
+    resources.add(ActivityImportationResource.class);
+    resources.add(ParticipantLaboratoryResource.class);
+    resources.add(DataSourceResource.class);
+    resources.add(FileUploaderResource.class);
+    resources.add(TransportationResource.class);
+    resources.add(LaboratoryConfigurationResource.class);
+    resources.add(ExtractionResource.class);
+    resources.add(ActivityConfigurationResource.class);
+    resources.add(ExamResource.class);
+    resources.add(ExamUploadResource.class);
+    resources.add(ProjectConfigurationResource.class);
+    resources.add(ActivityPermissionResource.class);
+    resources.add(UserPermissionResource.class);
+    resources.add(SurveyGroupResource.class);
+    resources.add(StaticVariableResource.class);
 
-        return resources;
-    }
+    return resources;
+  }
 
-    @Override
-    public Set<Object> getSingletons() {
-        Set<Object> resources = new HashSet<Object>();
-        resources.add(monitoringResource);
-        resources.add(installerResource);
-        resources.add(authenticationResource);
-        resources.add(participantAuthenticationResource);
-        resources.add(fieldCenterResource);
-        resources.add(userResource);
-        resources.add(userActivityPendencyResource);
-        resources.add(surveyResource);
-        resources.add(templateResource);
-        resources.add(visualIdentityResource);
-        resources.add(participantImportationResource);
-        resources.add(participantResource);
-        resources.add(followUpConfigurationResource);
-        resources.add(followUpEventConfiguration);
-        resources.add(activityResource);
-        resources.add(activityImportationResource);
-        resources.add(laboratoryParticipantResource);
-        resources.add(reportResource);
-        resources.add(dataSourceResource);
-        resources.add(fileUploaderResource);
-        resources.add(transportationResource);
-        resources.add(laboratoryConfigurationResource);
-        resources.add(extractionResource);
-        resources.add(activityConfigurationResource);
-        resources.add(examResource);
-        resources.add(examUploadResource);
-        resources.add(projectConfigurationResource);
-        resources.add(activityAccessPermissionResource);
-        resources.add(userPermissionResource);
-        resources.add(surveyGroupResource);
-        resources.add(staticVariableResource);
+  @Override
+  public Set<Object> getSingletons() {
+    Set<Object> resources = new HashSet<Object>();
+    resources.add(monitoringResource);
+    resources.add(installerResource);
+    resources.add(authenticationResource);
+    resources.add(participantAuthenticationResource);
+    resources.add(fieldCenterResource);
+    resources.add(userResource);
+    resources.add(userActivityPendencyResource);
+    resources.add(surveyResource);
+    resources.add(templateResource);
+    resources.add(visualIdentityResource);
+    resources.add(participantImportationResource);
+    resources.add(participantResource);
+    resources.add(followUpConfigurationResource);
+    resources.add(followUpEventConfiguration);
+    resources.add(activityResource);
+    resources.add(activityImportationResource);
+    resources.add(laboratoryParticipantResource);
+    resources.add(reportResource);
+    resources.add(dataSourceResource);
+    resources.add(fileUploaderResource);
+    resources.add(transportationResource);
+    resources.add(laboratoryConfigurationResource);
+    resources.add(extractionResource);
+    resources.add(activityConfigurationResource);
+    resources.add(examResource);
+    resources.add(examUploadResource);
+    resources.add(projectConfigurationResource);
+    resources.add(activityAccessPermissionResource);
+    resources.add(userPermissionResource);
+    resources.add(surveyGroupResource);
+    resources.add(staticVariableResource);
 
-        return resources;
-    }
+    return resources;
+  }
 }

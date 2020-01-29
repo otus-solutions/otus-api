@@ -16,31 +16,31 @@ import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityRevisionFacadeTest {
-    private static final String ACTIVITY_ID = "5c41cab016da480065be5d3c";
-    private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
-    private static final String USER_EMAIL = "otus@gmail.com";
+  private static final String ACTIVITY_ID = "5c41cab016da480065be5d3c";
+  private static final String ACTIVITY_REVISION_JSON = "{\"activityID\" : \"5c41c6b316da48006573a169\",\"reviewDate\" : \"17/01/2019\"}";
+  private static final String USER_EMAIL = "otus@gmail.com";
 
-    @InjectMocks
-    private ActivityRevisionFacade activityRevisionFacade;
+  @InjectMocks
+  private ActivityRevisionFacade activityRevisionFacade;
 
-    @Mock
-    private ActivityRevisionService activityRevisionService;
-    @Mock
-    private UserFacade userFacade;
-    @Mock
-    private User user;
+  @Mock
+  private ActivityRevisionService activityRevisionService;
+  @Mock
+  private UserFacade userFacade;
+  @Mock
+  private User user;
 
-    @Test
-    public void method_should_verify_create_with_activityRevision() {
-        when(userFacade.fetchByEmail(USER_EMAIL)).thenReturn(user);
-        activityRevisionFacade.create(ACTIVITY_REVISION_JSON,USER_EMAIL);
-        verify(activityRevisionService, times(1)).create(ACTIVITY_REVISION_JSON, user);
-    }
+  @Test
+  public void method_should_verify_create_with_activityRevision() {
+    when(userFacade.fetchByEmail(USER_EMAIL)).thenReturn(user);
+    activityRevisionFacade.create(ACTIVITY_REVISION_JSON, USER_EMAIL);
+    verify(activityRevisionService, times(1)).create(ACTIVITY_REVISION_JSON, user);
+  }
 
-    @Test
-    public void method_should_verify_getActivityRevisions_with() throws DataNotFoundException {
-        when(activityRevisionService.getActivityRevisions(ACTIVITY_ID)).thenReturn(new ArrayList<>());
-        activityRevisionFacade.getActivityRevisions(ACTIVITY_ID);
-        verify(activityRevisionService, times(1)).getActivityRevisions(ACTIVITY_ID);
-    }
+  @Test
+  public void method_should_verify_getActivityRevisions_with() throws DataNotFoundException {
+    when(activityRevisionService.getActivityRevisions(ACTIVITY_ID)).thenReturn(new ArrayList<>());
+    activityRevisionFacade.getActivityRevisions(ACTIVITY_ID);
+    verify(activityRevisionService, times(1)).getActivityRevisions(ACTIVITY_ID);
+  }
 }

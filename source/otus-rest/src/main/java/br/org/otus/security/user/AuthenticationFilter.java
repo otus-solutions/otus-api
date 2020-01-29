@@ -19,18 +19,18 @@ import br.org.otus.security.services.SecurityContextService;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
-	@Inject
-	private SecurityContextService securityContextService;
+  @Inject
+  private SecurityContextService securityContextService;
 
-	@Override
-	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+  @Override
+  public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+    String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-		try {
-			securityContextService.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
+    try {
+      securityContextService.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
 
-		} catch (Exception e) {
-			containerRequestContext.abortWith(Authorization.build().toResponse());
-		}
-	}
+    } catch (Exception e) {
+      containerRequestContext.abortWith(Authorization.build().toResponse());
+    }
+  }
 }

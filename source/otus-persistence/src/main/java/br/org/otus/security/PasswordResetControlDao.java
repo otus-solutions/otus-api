@@ -14,5 +14,5 @@ public interface PasswordResetControlDao {
 
   boolean hasRegister(String email);
 
-  String getRequestEmail (String token) throws DataNotFoundException;
+  String getRequestEmail(String token) throws DataNotFoundException;
 }

@@ -1,18 +1,19 @@
 package br.org.otus.security.dtos;
+
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
-public interface AuthenticationData extends JWTClaimSetBuilder{
+public interface AuthenticationData extends JWTClaimSetBuilder {
 
-	String getUserEmail();
+  String getUserEmail();
 
-    String getKey();
+  String getKey();
 
-    String getMode();
+  String getMode();
 
-    String getRequestAddress();
+  String getRequestAddress();
 
-    void setRequestAddress(String requestAddress);
+  void setRequestAddress(String requestAddress);
 
-    Boolean isValid();
+  Boolean isValid();
 }

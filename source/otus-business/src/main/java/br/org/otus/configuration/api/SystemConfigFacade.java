@@ -13,39 +13,39 @@ import javax.inject.Inject;
 
 public class SystemConfigFacade {
 
-    @Inject
-    private SystemConfigService systemConfigService;
+  @Inject
+  private SystemConfigService systemConfigService;
 
-    @Inject
-    private EmailNotifierService emailNotifierService;
+  @Inject
+  private EmailNotifierService emailNotifierService;
 
-    public String initConfiguration(OtusInitializationConfigDto initializationConfigDto, String projectToken) {
-        try {
-            systemConfigService.initConfiguration(initializationConfigDto, projectToken);
-            return projectToken;
+  public String initConfiguration(OtusInitializationConfigDto initializationConfigDto, String projectToken) {
+    try {
+      systemConfigService.initConfiguration(initializationConfigDto, projectToken);
+      return projectToken;
 
-        } catch (EmailNotificationException | EncryptedException e) {
-            throw new HttpResponseException(ResponseBuild.Email.CommunicationFail.build());
+    } catch (EmailNotificationException | EncryptedException e) {
+      throw new HttpResponseException(ResponseBuild.Email.CommunicationFail.build());
 
-        } catch (AlreadyExistException e) {
-            throw new HttpResponseException(ResponseBuild.User.AlreadyExist.build());
-        }
+    } catch (AlreadyExistException e) {
+      throw new HttpResponseException(ResponseBuild.User.AlreadyExist.build());
     }
+  }
 
-    public void validateEmailService(OtusInitializationConfigDto otusInitializationConfigDto){
-        try {
-            systemConfigService.verifyEmailService(otusInitializationConfigDto);
+  public void validateEmailService(OtusInitializationConfigDto otusInitializationConfigDto) {
+    try {
+      systemConfigService.verifyEmailService(otusInitializationConfigDto);
 
-        } catch (EmailNotificationException | EncryptedException e) {
-            throw new HttpResponseException(ResponseBuild.Email.CommunicationFail.build());
-        }
+    } catch (EmailNotificationException | EncryptedException e) {
+      throw new HttpResponseException(ResponseBuild.Email.CommunicationFail.build());
     }
+  }
 
-    public Boolean isReady() {
-        return systemConfigService.isReady();
-    }
+  public Boolean isReady() {
+    return systemConfigService.isReady();
+  }
 
-    public String buildToken() {
-        return systemConfigService.buildToken();
-    }
+  public String buildToken() {
+    return systemConfigService.buildToken();
+  }
 }

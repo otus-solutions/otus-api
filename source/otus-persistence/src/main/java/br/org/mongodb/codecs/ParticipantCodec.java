@@ -12,67 +12,67 @@ import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
 public class ParticipantCodec implements Codec<Participant> {
 
-	@Override
-	public void encode(BsonWriter writer, Participant value, EncoderContext encoderContext) {
-		writer.writeStartDocument();
+  @Override
+  public void encode(BsonWriter writer, Participant value, EncoderContext encoderContext) {
+    writer.writeStartDocument();
 
-		writer.writeInt64("recruitmentNumber", value.getRecruitmentNumber());
-		writer.writeString("name", value.getName());
-		writer.writeString("sex", value.getSex().toString());
-		
-		writer.writeStartDocument("birthdate");
-		writer.writeString("objectType", value.getBirthdate().getObjectType());
-		writer.writeString("value", value.getBirthdate().getFormattedValue());
-		writer.writeEndDocument();
+    writer.writeInt64("recruitmentNumber", value.getRecruitmentNumber());
+    writer.writeString("name", value.getName());
+    writer.writeString("sex", value.getSex().toString());
 
-		writer.writeStartDocument("fieldCenter");
-		writer.writeString("acronym", value.getFieldCenter().getAcronym());
-		
-		writer.writeEndDocument();
-		
-		writer.writeBoolean("late", value.getLate());
-		writer.writeEndDocument();
-	}
+    writer.writeStartDocument("birthdate");
+    writer.writeString("objectType", value.getBirthdate().getObjectType());
+    writer.writeString("value", value.getBirthdate().getFormattedValue());
+    writer.writeEndDocument();
 
-	@Override
-	public Participant decode(BsonReader reader, DecoderContext decoderContext) {
-		reader.readStartDocument();
-		reader.readObjectId("_id");
+    writer.writeStartDocument("fieldCenter");
+    writer.writeString("acronym", value.getFieldCenter().getAcronym());
 
-		long recruitmentNumber = reader.readInt64("recruitmentNumber");
-		Participant participant = new Participant(recruitmentNumber);
+    writer.writeEndDocument();
 
-		String name = reader.readString("name");
-		participant.setName(name);
+    writer.writeBoolean("late", value.getLate());
+    writer.writeEndDocument();
+  }
 
-		String sex = reader.readString("sex");
-		participant.setSex(Sex.valueOf(sex));
+  @Override
+  public Participant decode(BsonReader reader, DecoderContext decoderContext) {
+    reader.readStartDocument();
+    reader.readObjectId("_id");
 
-		reader.readStartDocument();
-		reader.readString("objectType");
-		String formattedBirthdate = reader.readString("value");
-		participant.setBirthdate(new ImmutableDate(formattedBirthdate));
-		reader.readEndDocument();
+    long recruitmentNumber = reader.readInt64("recruitmentNumber");
+    Participant participant = new Participant(recruitmentNumber);
 
-		reader.readStartDocument();
-		String fieldCenterAcronym = reader.readString("acronym");
-		FieldCenter fieldCenter = new FieldCenter();
-		fieldCenter.setAcronym(fieldCenterAcronym);
-		participant.setFieldCenter(fieldCenter);
-		 
-		reader.readEndDocument();
-		
-		Boolean late = reader.readBoolean("late");
-		participant.setLate(late);
+    String name = reader.readString("name");
+    participant.setName(name);
 
-		reader.readEndDocument();
+    String sex = reader.readString("sex");
+    participant.setSex(Sex.valueOf(sex));
 
-		return participant;
-	}
+    reader.readStartDocument();
+    reader.readString("objectType");
+    String formattedBirthdate = reader.readString("value");
+    participant.setBirthdate(new ImmutableDate(formattedBirthdate));
+    reader.readEndDocument();
 
-	@Override
-	public Class<Participant> getEncoderClass() {
-		return Participant.class;
-	}
+    reader.readStartDocument();
+    String fieldCenterAcronym = reader.readString("acronym");
+    FieldCenter fieldCenter = new FieldCenter();
+    fieldCenter.setAcronym(fieldCenterAcronym);
+    participant.setFieldCenter(fieldCenter);
+
+    reader.readEndDocument();
+
+    Boolean late = reader.readBoolean("late");
+    participant.setLate(late);
+
+    reader.readEndDocument();
+
+    return participant;
+  }
+
+  @Override
+  public Class<Participant> getEncoderClass() {
+    return Participant.class;
+  }
 
 }

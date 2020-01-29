@@ -142,14 +142,14 @@ public class ActivityResourceTest {
     when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
     when(authenticationData.getUserEmail()).thenReturn(userEmail);
     activityRevisionFacade.create(ACTIVITY_REVISION_JSON, userEmail);
-    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(request,ACTIVITY_REVISION_JSON));
-    verify(activityRevisionFacade,times (2)).create(ACTIVITY_REVISION_JSON, userEmail);
+    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(request, ACTIVITY_REVISION_JSON));
+    verify(activityRevisionFacade, times(2)).create(ACTIVITY_REVISION_JSON, userEmail);
   }
 
   @Test
-  public void method_list_should_return_entire_getActivityRevisions_by_recruitment_number(){
+  public void method_list_should_return_entire_getActivityRevisions_by_recruitment_number() {
     when(activityRevisionFacade.getActivityRevisions(ID_ACITIVITY)).thenReturn(listActivityRevision);
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
-    assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
+    assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request, ID_ACITIVITY));
   }
 }

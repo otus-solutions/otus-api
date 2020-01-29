@@ -33,86 +33,86 @@ import br.org.otus.rest.Response;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(InstallerResource.class)
 public class InstallerResourceTest {
-	private static final Boolean SYSTEM_CONFIG_FACADE_ISREADY = true;
-	private static final String RESPONSE_BUILD_SUCESS = "{\"data\":true}";
-	private static final String TOKEN = "a1c6ee0f-e332-4ec1-aec1-630089900f9d";
-	private static final String PROJECT_NAME = "otus-api";
-	@InjectMocks
-	private InstallerResource installerResource = spy(new InstallerResource());
-	@Mock
-	private SystemConfigFacade systemConfigFacade;
-	@Mock
-	private OtusInitializationConfigDto systemConfigDto;
-	@Mock
-	private HttpServletRequest request;
-	@Mock
-	private DomainRegisterResource domainRegisterResource;
-	@Mock
-	private OtusInitializationConfigDto otusInitializationConfigDto;
-	@Mock
-	private OtusInitializationConfigDto initData;
-	@Mock
-	private DomainDto domainDto;
-	@Mock
-	private ProjectDto projectDto;
-	@Mock
-	private DomainConnectionError domainConnectionError;
+  private static final Boolean SYSTEM_CONFIG_FACADE_ISREADY = true;
+  private static final String RESPONSE_BUILD_SUCESS = "{\"data\":true}";
+  private static final String TOKEN = "a1c6ee0f-e332-4ec1-aec1-630089900f9d";
+  private static final String PROJECT_NAME = "otus-api";
+  @InjectMocks
+  private InstallerResource installerResource = spy(new InstallerResource());
+  @Mock
+  private SystemConfigFacade systemConfigFacade;
+  @Mock
+  private OtusInitializationConfigDto systemConfigDto;
+  @Mock
+  private HttpServletRequest request;
+  @Mock
+  private DomainRegisterResource domainRegisterResource;
+  @Mock
+  private OtusInitializationConfigDto otusInitializationConfigDto;
+  @Mock
+  private OtusInitializationConfigDto initData;
+  @Mock
+  private DomainDto domainDto;
+  @Mock
+  private ProjectDto projectDto;
+  @Mock
+  private DomainConnectionError domainConnectionError;
 
-	@Test
-	public void method_ready_should_returns_responseBuildSucess() {
-		when(systemConfigFacade.isReady()).thenReturn(SYSTEM_CONFIG_FACADE_ISREADY);
-		assertEquals(RESPONSE_BUILD_SUCESS, installerResource.ready());
-	}
+  @Test
+  public void method_ready_should_returns_responseBuildSucess() {
+    when(systemConfigFacade.isReady()).thenReturn(SYSTEM_CONFIG_FACADE_ISREADY);
+    assertEquals(RESPONSE_BUILD_SUCESS, installerResource.ready());
+  }
 
-	@Test
-	public void method_config_should_returns_responseBuildSucess() throws Exception {
-		doNothing().when(installerResource).registerProjectOnDomain(systemConfigDto, request, TOKEN);
-		when(systemConfigFacade.buildToken()).thenReturn(TOKEN);
-		assertEquals(RESPONSE_BUILD_SUCESS, installerResource.config(systemConfigDto, request));
-		verify(systemConfigDto).encrypt();
-		verify(systemConfigFacade).initConfiguration(systemConfigDto, TOKEN);
-	}
+  @Test
+  public void method_config_should_returns_responseBuildSucess() throws Exception {
+    doNothing().when(installerResource).registerProjectOnDomain(systemConfigDto, request, TOKEN);
+    when(systemConfigFacade.buildToken()).thenReturn(TOKEN);
+    assertEquals(RESPONSE_BUILD_SUCESS, installerResource.config(systemConfigDto, request));
+    verify(systemConfigDto).encrypt();
+    verify(systemConfigFacade).initConfiguration(systemConfigDto, TOKEN);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_config_should_throws_HttpResponseException() throws EncryptedException {
-		doThrow(EncryptedException.class).when(systemConfigDto).encrypt();
-		installerResource.config(systemConfigDto, request);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_config_should_throws_HttpResponseException() throws EncryptedException {
+    doThrow(EncryptedException.class).when(systemConfigDto).encrypt();
+    installerResource.config(systemConfigDto, request);
+  }
 
-	@Test
-	public void method_validationEmail_should_returns_responseBuildSucess() throws EncryptedException {
-		Response response = new Response();
-		assertEquals(response.buildSuccess().toJson(), installerResource.validationEmail(otusInitializationConfigDto));
-		verify(otusInitializationConfigDto).encrypt();
-	}
+  @Test
+  public void method_validationEmail_should_returns_responseBuildSucess() throws EncryptedException {
+    Response response = new Response();
+    assertEquals(response.buildSuccess().toJson(), installerResource.validationEmail(otusInitializationConfigDto));
+    verify(otusInitializationConfigDto).encrypt();
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_validationEmail_should_throws_HttpResponseException() throws EncryptedException {
-		doThrow(EncryptedException.class).when(otusInitializationConfigDto).encrypt();
-		installerResource.validationEmail(otusInitializationConfigDto);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_validationEmail_should_throws_HttpResponseException() throws EncryptedException {
+    doThrow(EncryptedException.class).when(otusInitializationConfigDto).encrypt();
+    installerResource.validationEmail(otusInitializationConfigDto);
+  }
 
-	@Test
-	public void method_registerProjectOnDomain_should_evocate_internal_methods() throws Exception {
-		when(initData.getDomainDto()).thenReturn(domainDto);
-		whenNew(DomainRegisterResource.class).withAnyArguments().thenReturn(domainRegisterResource);
-		whenNew(DomainDto.class).withNoArguments().thenReturn(domainDto);
-		when(initData.getProject()).thenReturn(projectDto);
-		installerResource.registerProjectOnDomain(initData, request, TOKEN);
-		verify(domainDto).setDomainRestUrl(domainRegisterResource.DOMAIN_URL);
-		verify(domainRegisterResource).registerProject(RequestUrlMapping.getUrl(request),
-				initData.getProject().getProjectName(), TOKEN);
-	}
+  @Test
+  public void method_registerProjectOnDomain_should_evocate_internal_methods() throws Exception {
+    when(initData.getDomainDto()).thenReturn(domainDto);
+    whenNew(DomainRegisterResource.class).withAnyArguments().thenReturn(domainRegisterResource);
+    whenNew(DomainDto.class).withNoArguments().thenReturn(domainDto);
+    when(initData.getProject()).thenReturn(projectDto);
+    installerResource.registerProjectOnDomain(initData, request, TOKEN);
+    verify(domainDto).setDomainRestUrl(domainRegisterResource.DOMAIN_URL);
+    verify(domainRegisterResource).registerProject(RequestUrlMapping.getUrl(request),
+      initData.getProject().getProjectName(), TOKEN);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_registerProjectOnDomain_should_throws_domainConnectionError()
-			throws Exception, DomainConnectionError {
-		when(initData.getDomainDto()).thenReturn(domainDto);
-		whenNew(DomainRegisterResource.class).withAnyArguments().thenReturn(domainRegisterResource);
-		when(initData.getProject()).thenReturn(projectDto);
-		when(projectDto.getProjectName()).thenReturn(PROJECT_NAME);
-		PowerMockito.doThrow(domainConnectionError).when(domainRegisterResource, "registerProject", any(), any(),
-				any());
-		installerResource.registerProjectOnDomain(initData, request, TOKEN);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_registerProjectOnDomain_should_throws_domainConnectionError()
+    throws Exception, DomainConnectionError {
+    when(initData.getDomainDto()).thenReturn(domainDto);
+    whenNew(DomainRegisterResource.class).withAnyArguments().thenReturn(domainRegisterResource);
+    when(initData.getProject()).thenReturn(projectDto);
+    when(projectDto.getProjectName()).thenReturn(PROJECT_NAME);
+    PowerMockito.doThrow(domainConnectionError).when(domainRegisterResource, "registerProject", any(), any(),
+      any());
+    installerResource.registerProjectOnDomain(initData, request, TOKEN);
+  }
 }

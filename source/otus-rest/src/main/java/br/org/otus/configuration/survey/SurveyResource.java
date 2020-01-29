@@ -17,67 +17,67 @@ import javax.ws.rs.core.MediaType;
 @Path("configuration/surveys")
 public class SurveyResource {
 
-	@Inject
-	private SurveyFacade surveyFacade;
+  @Inject
+  private SurveyFacade surveyFacade;
 
-	@Inject
-	private SecurityContext securityContext;
+  @Inject
+  private SecurityContext securityContext;
 
-	@GET
-	@Secured
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getAllPermittedUndiscarded(@Context HttpServletRequest request) {
-		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-		String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-		return new Response().buildSuccess(surveyFacade.listUndiscarded(userEmail)).toSurveyJson();
-	}
+  @GET
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getAllPermittedUndiscarded(@Context HttpServletRequest request) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    return new Response().buildSuccess(surveyFacade.listUndiscarded(userEmail)).toSurveyJson();
+  }
 
-	@GET
-	@Secured
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getAllUndiscarded(@Context HttpServletRequest request) {
-		return new Response().buildSuccess(surveyFacade.listAllUndiscarded()).toSurveyJson();
-	}
+  @GET
+  @Secured
+  @Path("/all")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getAllUndiscarded(@Context HttpServletRequest request) {
+    return new Response().buildSuccess(surveyFacade.listAllUndiscarded()).toSurveyJson();
+  }
 
-	@GET
-	@Secured
-	@Path("/{acronym}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getByAcronym(@PathParam("acronym") String acronym) {
-		return new Response().buildSuccess(surveyFacade.findByAcronym(acronym)).toSurveyJson();
-	}
+  @GET
+  @Secured
+  @Path("/{acronym}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getByAcronym(@PathParam("acronym") String acronym) {
+    return new Response().buildSuccess(surveyFacade.findByAcronym(acronym)).toSurveyJson();
+  }
 
-	@DELETE
-	@Secured
-	@Path("/{acronym}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteLastVersionSurveyByAcronym(@PathParam("acronym") String acronym) {
-		return new Response().buildSuccess(surveyFacade.deleteLastVersionByAcronym(acronym)).toJson();
-	}
+  @DELETE
+  @Secured
+  @Path("/{acronym}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String deleteLastVersionSurveyByAcronym(@PathParam("acronym") String acronym) {
+    return new Response().buildSuccess(surveyFacade.deleteLastVersionByAcronym(acronym)).toJson();
+  }
 
-	@PUT
-	@Secured
-	@Path("/{acronym}/type")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String updateLastSurveySurveyType(@PathParam("acronym") String acronym, UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
-		updateSurveyFormTypeDto.acronym = acronym;
-		return new Response().buildSuccess(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto)).toJson();
-	}
+  @PUT
+  @Secured
+  @Path("/{acronym}/type")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String updateLastSurveySurveyType(@PathParam("acronym") String acronym, UpdateSurveyFormTypeDto updateSurveyFormTypeDto) {
+    updateSurveyFormTypeDto.acronym = acronym;
+    return new Response().buildSuccess(surveyFacade.updateLastVersionSurveyType(updateSurveyFormTypeDto)).toJson();
+  }
 
-	@GET
-	@Secured
-	@Path("/{acronym}/versions")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getSurveyVersions(@PathParam("acronym") String acronym) {
-		return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toJson();
-	}
+  @GET
+  @Secured
+  @Path("/{acronym}/versions")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getSurveyVersions(@PathParam("acronym") String acronym) {
+    return new Response().buildSuccess(surveyFacade.listVersions(acronym)).toJson();
+  }
 
   @PUT
   @Secured
   @Path("/update-required-external-id/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateSurveyRequiredExternalID(@PathParam("id") String surveyID, String requiredExternalID) {
-    return new Response().buildSuccess("modifiedCount: "+ surveyFacade.updateSurveyRequiredExternalID(surveyID, requiredExternalID)).toJson();
+    return new Response().buildSuccess("modifiedCount: " + surveyFacade.updateSurveyRequiredExternalID(surveyID, requiredExternalID)).toJson();
   }
 }

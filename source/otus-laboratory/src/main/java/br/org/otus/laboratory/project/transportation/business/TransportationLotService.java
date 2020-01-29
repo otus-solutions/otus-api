@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface TransportationLotService {
 
-	TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException;
+  TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException;
 
-	TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException;
+  TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException;
 
-	List<TransportationLot> list();
+  List<TransportationLot> list();
 
-	void delete(String id) throws DataNotFoundException;
+  void delete(String id) throws DataNotFoundException;
 }

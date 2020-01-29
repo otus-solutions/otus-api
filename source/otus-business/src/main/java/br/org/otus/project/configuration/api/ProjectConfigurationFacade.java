@@ -9,30 +9,30 @@ import service.ProjectConfigurationService;
 
 public class ProjectConfigurationFacade {
 
-    @Inject
-    private ProjectConfigurationService projectConfigurationService;
+  @Inject
+  private ProjectConfigurationService projectConfigurationService;
 
   public ProjectConfiguration getProjectConfiguration() {
-        try {
-            return projectConfigurationService.getProjectConfiguration();
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+    try {
+      return projectConfigurationService.getProjectConfiguration();
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public void enableParticipantRegistration(boolean permission) {
-        try {
-            projectConfigurationService.enableParticipantRegistration(permission);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void enableParticipantRegistration(boolean permission) {
+    try {
+      projectConfigurationService.enableParticipantRegistration(permission);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public void autoGenerateRecruitmentNumber(boolean permission) {
-        try {
-            projectConfigurationService.autoGenerateRecruitmentNumber(permission);
-        } catch (Exception e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void autoGenerateRecruitmentNumber(boolean permission) {
+    try {
+      projectConfigurationService.autoGenerateRecruitmentNumber(permission);
+    } catch (Exception e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 }

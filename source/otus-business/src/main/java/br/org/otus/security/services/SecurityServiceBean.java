@@ -88,7 +88,7 @@ public class SecurityServiceBean implements SecurityService {
 
         Equalizer.equalize(participant, participantSecurityAuthorizationDto);
         String token = initializeToken(authenticationData);
-        participantDao.addAuthToken(authenticationData.getUserEmail(),token);
+        participantDao.addAuthToken(authenticationData.getUserEmail(), token);
         participantSecurityAuthorizationDto.setToken(token);
         return participantSecurityAuthorizationDto;
       } else {
@@ -101,7 +101,7 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public void invalidateParticipantAuthenticate(String email, String token) {
-    participantDao.removeAuthToken(email,token);
+    participantDao.removeAuthToken(email, token);
   }
 
   @Override

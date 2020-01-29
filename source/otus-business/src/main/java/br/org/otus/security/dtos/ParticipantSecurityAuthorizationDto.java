@@ -51,7 +51,7 @@ public class ParticipantSecurityAuthorizationDto implements Dto {
     this.token = token;
   }
 
-  public String getToken(){
+  public String getToken() {
     return this.token;
   }
 

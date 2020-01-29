@@ -5,7 +5,7 @@ import br.org.otus.response.info.NonUniqueItemID;
 
 public class Survey {
 
-	public static NonUniqueItemID NonUniqueItemID;
-	public static AcronymAlreadyExist AcronymAlreadyExist;
+  public static NonUniqueItemID NonUniqueItemID;
+  public static AcronymAlreadyExist AcronymAlreadyExist;
 
 }

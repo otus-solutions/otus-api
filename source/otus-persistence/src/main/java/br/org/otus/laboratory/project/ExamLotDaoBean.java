@@ -40,23 +40,23 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
   @Override
   public ExamLot findByCode(String code) throws DataNotFoundException {
     Document document = collection
-        .aggregate(
-            Arrays
-                .asList(new Document("$match", new Document("code", code)),
-                    new Document(
-                        "$lookup", new Document("from", "aliquot")
-                            .append("let",
-                                new Document(
-                                    "lotId", "$_id"))
-                            .append("pipeline",
-                                Arrays.asList(
-                                    new Document("$match",
-                                        new Document("$expr", new Document("$or",
-                                            Arrays.asList(new Document("$eq", Arrays.asList("$examLotId", "$$lotId")),
-                                                new Document("$eq", Arrays.asList("$examLotData.id", "$$lotId")))))),
-                                    new Document("$sort", new Document("examLotData.position", 1))))
-                            .append("as", "aliquotList"))))
-        .first();
+      .aggregate(
+        Arrays
+          .asList(new Document("$match", new Document("code", code)),
+            new Document(
+              "$lookup", new Document("from", "aliquot")
+              .append("let",
+                new Document(
+                  "lotId", "$_id"))
+              .append("pipeline",
+                Arrays.asList(
+                  new Document("$match",
+                    new Document("$expr", new Document("$or",
+                      Arrays.asList(new Document("$eq", Arrays.asList("$examLotId", "$$lotId")),
+                        new Document("$eq", Arrays.asList("$examLotData.id", "$$lotId")))))),
+                  new Document("$sort", new Document("examLotData.position", 1))))
+              .append("as", "aliquotList"))))
+      .first();
     if (document != null) {
       return ExamLot.deserialize(document.toJson());
     } else {
@@ -70,7 +70,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
     parsed.remove("_id");
 
     UpdateResult updateLotData = collection.updateOne(eq("code", examLot.getCode()), new Document("$set", parsed),
-        new UpdateOptions().upsert(false));
+      new UpdateOptions().upsert(false));
 
     if (updateLotData.getMatchedCount() == 0) {
       throw new DataNotFoundException(new Throwable("Exam Lot not found"));
@@ -96,7 +96,7 @@ public class ExamLotDaoBean extends MongoGenericDao<Document> implements ExamLot
   @Override
   public void delete(ObjectId id) throws DataNotFoundException {
     Document updateResult = collection.findOneAndReplace(new Document("_id", id),
-        new Document("objectType", "DeletedExamLot").append("code", find(id).getCode()));
+      new Document("objectType", "DeletedExamLot").append("code", find(id).getCode()));
     if (updateResult.size() == 0) {
       throw new DataNotFoundException(new Throwable("Exam Lot does not exist"));
     }

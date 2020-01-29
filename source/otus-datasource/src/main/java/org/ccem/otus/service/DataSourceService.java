@@ -9,16 +9,16 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.DataSource;
 
 public interface DataSourceService {
-	
-	void create(DataSource dataSource, HashSet<String> duplicatedElements) throws AlreadyExistException, ValidationException;
 
-	void update(DataSource dataSource, HashSet<String> duplicatedElements) throws DataNotFoundException, ValidationException;
+  void create(DataSource dataSource, HashSet<String> duplicatedElements) throws AlreadyExistException, ValidationException;
 
-	List<DataSource> list();
+  void update(DataSource dataSource, HashSet<String> duplicatedElements) throws DataNotFoundException, ValidationException;
 
-	DataSource getByID(String id) throws DataNotFoundException;
+  List<DataSource> list();
 
-	String getElementExtractionValue(List<String> dataSources, String value);
+  DataSource getByID(String id) throws DataNotFoundException;
 
-	void populateDataSourceMapping();
+  String getElementExtractionValue(List<String> dataSources, String value);
+
+  void populateDataSourceMapping();
 }

@@ -10,9 +10,9 @@ import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 public interface SecurityService {
 
-	UserSecurityAuthorizationDto authenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
+  UserSecurityAuthorizationDto authenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
-	void invalidate(String token);
+  void invalidate(String token);
 
   ParticipantSecurityAuthorizationDto participantAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
@@ -20,13 +20,13 @@ public interface SecurityService {
 
   String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
-	String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
+  String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
 
-	String getRequestEmail (String token) throws DataNotFoundException;
+  String getRequestEmail(String token) throws DataNotFoundException;
 
-	void validatePasswordReset(String token) throws TokenException;
+  void validatePasswordReset(String token) throws TokenException;
 
-	void removePasswordResetRequests(String email);
+  void removePasswordResetRequests(String email);
 
   void invalidateParticipantAuthenticate(String email, String token);
 }

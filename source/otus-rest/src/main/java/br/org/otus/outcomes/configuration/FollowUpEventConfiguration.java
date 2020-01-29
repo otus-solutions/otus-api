@@ -28,6 +28,6 @@ public class FollowUpEventConfiguration {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   public String updateFollowUp(@PathParam("eventId") String eventId) {
-    return new Response().buildSuccess(followUpFacade.removeFollowUpEvent(  eventId)).toJson();
+    return new Response().buildSuccess(followUpFacade.removeFollowUpEvent(eventId)).toJson();
   }
 }

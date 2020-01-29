@@ -89,7 +89,7 @@ public class UserResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String requestRecovery(PasswordResetRequestDto requestData) {
-    Response response =  new Response();
+    Response response = new Response();
     userFacade.requestPasswordReset(requestData);
     return response.buildSuccess().toJson();
   }
@@ -97,8 +97,8 @@ public class UserResource {
   @GET
   @Path("/password-reset/validate/{token}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String validateToken (@PathParam("token") String token) {
-    Response response =  new Response();
+  public String validateToken(@PathParam("token") String token) {
+    Response response = new Response();
     userFacade.validatePasswordRecoveryRequest(token);
     return response.buildSuccess().toJson();
   }
@@ -108,7 +108,7 @@ public class UserResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updatePassword(PasswordResetDto resetData) {
-    Response response =  new Response();
+    Response response = new Response();
     userFacade.updateUserPassword(resetData);
     return response.buildSuccess().toJson();
   }

@@ -25,7 +25,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ MultipartPOSTUtility.class, URL.class, RequestUtility.class })
+@PrepareForTest({MultipartPOSTUtility.class, URL.class, RequestUtility.class})
 public class MultipartPOSTUtilityTest {
   private static String FIELD_NAME = "Text";
   private static String NAME = "Peso";

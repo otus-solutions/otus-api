@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>otus-configuration</artifactId>
-    <packaging>jar</packaging>
-    <parent>
-        <groupId>org.ccem.otus</groupId>
-        <artifactId>otus-root</artifactId>
-        <version>1.27-SNAPSHOT</version>
-        <relativePath>../otus-root/pom.xml</relativePath>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>otus-configuration</artifactId>
+  <packaging>jar</packaging>
+  <parent>
+    <groupId>org.ccem.otus</groupId>
+    <artifactId>otus-root</artifactId>
+    <version>1.27-SNAPSHOT</version>
+    <relativePath>../otus-root/pom.xml</relativePath>
+  </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.ccem.otus</groupId>
-            <artifactId>otus-commons</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-commons</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
 
-        <!--External Dependencies-->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${google.gson.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies> 
-    
+    <!--External Dependencies-->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${google.gson.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
 </project>

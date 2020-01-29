@@ -4,8 +4,8 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSource;
 import org.ccem.otus.model.dataSources.participant.ParticipantDataSourceResult;
 
-public interface ParticipantDataSourceDao{
+public interface ParticipantDataSourceDao {
 
-    ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException;
+  ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException;
 
 }

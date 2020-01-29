@@ -7,6 +7,6 @@ import java.util.Set;
 
 public interface ParticipantImportValidatorService {
 
-	boolean isImportable(Set<ParticipantImport> participantImports) throws ValidationException;
-	
+  boolean isImportable(Set<ParticipantImport> participantImports) throws ValidationException;
+
 }

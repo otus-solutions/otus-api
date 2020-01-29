@@ -4,15 +4,15 @@ import br.org.tutty.Equalization;
 
 public class ProjectDto {
 
-	@Equalization(name = "project_name")
-	private String projectName;
+  @Equalization(name = "project_name")
+  private String projectName;
 
-	public String getProjectName() {
-		return projectName;
-	}
+  public String getProjectName() {
+    return projectName;
+  }
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
+  public void setProjectName(String projectName) {
+    this.projectName = projectName;
+  }
 
 }

@@ -19,7 +19,8 @@ public class AuthenticationDtoTest {
   @Before
   public void setUp() throws EncryptedException {
     authenticationDto = new AuthenticationDto();
-    authenticationDto.setEmail(EMAIL);;
+    authenticationDto.setEmail(EMAIL);
+    ;
     authenticationDto.setRequestAddress(ADDRESS);
     authenticationDto.password = PASSWORD;
 
@@ -43,7 +44,7 @@ public class AuthenticationDtoTest {
   }
 
   @Test
-  public void shouldReturnEmail(){
+  public void shouldReturnEmail() {
     assertEquals(authenticationDto.getUserEmail(), EMAIL);
   }
 
@@ -53,7 +54,7 @@ public class AuthenticationDtoTest {
   }
 
   @Test
-  public void shouldReturnAddress(){
+  public void shouldReturnAddress() {
     assertEquals(authenticationDto.getRequestAddress(), ADDRESS);
   }
 
@@ -63,7 +64,7 @@ public class AuthenticationDtoTest {
   }
 
   @Test
-  public void shouldFillClaimsSetWithCorretValues(){
+  public void shouldFillClaimsSetWithCorretValues() {
     JWTClaimsSet jwtClaimsSet = authenticationDto.buildClaimSet();
     assertEquals(jwtClaimsSet.getClaim("mode"), "user");
     assertEquals(jwtClaimsSet.getIssuer(), EMAIL);

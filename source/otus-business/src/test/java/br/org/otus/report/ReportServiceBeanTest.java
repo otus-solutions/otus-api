@@ -58,7 +58,7 @@ import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ParticipantServiceBean.class, DCMGatewayService.class, Participant.class, ReportTemplate.class, GatewayResponse.class })
+@PrepareForTest({ParticipantServiceBean.class, DCMGatewayService.class, Participant.class, ReportTemplate.class, GatewayResponse.class})
 public class ReportServiceBeanTest {
   private static final String REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}";
   private static final String ACRONYM = "ACTA";
@@ -281,7 +281,7 @@ public class ReportServiceBeanTest {
 
     ActivityStatus activityStatus = new ActivityStatus();
     Whitebox.setInternalState(activityStatus, "objectType", "ActivityStatus");
-    Whitebox.setInternalState(activityStatus, "name",  activityStatusOptions);
+    Whitebox.setInternalState(activityStatus, "name", activityStatusOptions);
     Whitebox.setInternalState(activityStatus, "date", LocalDateTime.now());
 
     ArrayList<ActivityStatus> statusHistory = new ArrayList<>();
@@ -290,11 +290,11 @@ public class ReportServiceBeanTest {
     FillContainer fillContainer = new FillContainer();
     List<QuestionFill> fillingList = new ArrayList<>();
     QuestionFill questionFill = new QuestionFill();
-    Whitebox.setInternalState(questionFill,"questionID","ATCA4");
+    Whitebox.setInternalState(questionFill, "questionID", "ATCA4");
 
     fillingList.add(questionFill);
 
-    Whitebox.setInternalState(fillContainer,"fillingList",fillingList);
+    Whitebox.setInternalState(fillContainer, "fillingList", fillingList);
 
     activity = new SurveyActivity();
     Whitebox.setInternalState(activity, "activityID", reportObjectId);
@@ -304,9 +304,9 @@ public class ReportServiceBeanTest {
     Whitebox.setInternalState(activity, "fillContainer", fillContainer);
 
     filters = new AnswerFillingDataSourceFilters();
-    Whitebox.setInternalState(filters,"acronym", ACRONYM);
-    Whitebox.setInternalState(filters,"version", VERSION);
-    Whitebox.setInternalState(filters,"category", CATEGORY_NAME);
+    Whitebox.setInternalState(filters, "acronym", ACRONYM);
+    Whitebox.setInternalState(filters, "version", VERSION);
+    Whitebox.setInternalState(filters, "category", CATEGORY_NAME);
 
     answerFillingDataSource = new AnswerFillingDataSource();
     Whitebox.setInternalState(answerFillingDataSource, "dataSource", "AnswerFilling");
@@ -333,13 +333,13 @@ public class ReportServiceBeanTest {
 
     List<SurveyItem> surveyItemList = new ArrayList<>();
     SurveyItem surveyItem = new SurveyItem();
-    Whitebox.setInternalState(surveyItem,"customID","ACTC2");
-    Whitebox.setInternalState(surveyItem,"templateID","ACTA2");
+    Whitebox.setInternalState(surveyItem, "customID", "ACTC2");
+    Whitebox.setInternalState(surveyItem, "templateID", "ACTA2");
 
     surveyItemList.add(surveyItem);
 
     SurveyTemplate surveyTemplate = new SurveyTemplate();
-    Whitebox.setInternalState(surveyTemplate,"itemContainer", surveyItemList);
+    Whitebox.setInternalState(surveyTemplate, "itemContainer", surveyItemList);
 
     PowerMockito.when(surveyForm.getAcronym()).thenReturn(ACRONYM);
     PowerMockito.when(surveyForm.getVersion()).thenReturn(VERSION);
@@ -394,7 +394,7 @@ public class ReportServiceBeanTest {
 
     Whitebox.setInternalState(activityReportTemplate, "versions", versions);
 
-    reportServiceBean.updateActivityReport(REPORTID,ActivityReportTemplate.serialize(activityReportTemplate));
+    reportServiceBean.updateActivityReport(REPORTID, ActivityReportTemplate.serialize(activityReportTemplate));
 
     Mockito.verify(reportDao, Mockito.times(1)).updateActivityReport(reportObjectId, versions);
   }

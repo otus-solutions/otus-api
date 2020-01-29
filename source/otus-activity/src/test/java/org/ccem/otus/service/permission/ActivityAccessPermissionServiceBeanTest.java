@@ -16,7 +16,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityAccessPermissionServiceBeanTest {
-  
+
   @InjectMocks
   private ActivityAccessPermissionServiceBean service;
   @Mock
@@ -27,16 +27,18 @@ public class ActivityAccessPermissionServiceBeanTest {
   @Test
   public void listMethod_should_invoke_find_of_activityAccessPermissionDao() {
     service.list();
-    verify(activityAccessPermissionDao, times(1)).find();    
+    verify(activityAccessPermissionDao, times(1)).find();
   }
+
   @Test
   public void createMethod_should_invoke_persist_of_activityAccessPermissionDao() {
     service.create(activityAccessPermission);
-    verify(activityAccessPermissionDao, times(1)).persist(activityAccessPermission);    
+    verify(activityAccessPermissionDao, times(1)).persist(activityAccessPermission);
   }
+
   @Test
   public void updateMethod_should_invoke_() {
     service.update(activityAccessPermission);
-    verify(activityAccessPermissionDao, times(1)).update(activityAccessPermission);    
+    verify(activityAccessPermissionDao, times(1)).update(activityAccessPermission);
   }
 }

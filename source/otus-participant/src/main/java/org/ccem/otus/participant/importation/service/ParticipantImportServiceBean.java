@@ -15,28 +15,28 @@ import java.util.Set;
 @Stateless
 public class ParticipantImportServiceBean implements ParticipantImportService {
 
-	@Inject
-	private ParticipantService participantService;
+  @Inject
+  private ParticipantService participantService;
 
-	@Inject
-	private FieldCenterDao fieldCenterDao;
+  @Inject
+  private FieldCenterDao fieldCenterDao;
 
-	@Inject
-	private ParticipantImportValidatorService participantImportValidatorService;
+  @Inject
+  private ParticipantImportValidatorService participantImportValidatorService;
 
-	@Override
-	public void importation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException {
-		performImportation(participantImports);
-	}
+  @Override
+  public void importation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException {
+    performImportation(participantImports);
+  }
 
-	private void performImportation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException {
-		participantImportValidatorService.isImportable(participantImports);
-		ParticipantBuilder participantBuilder = new ParticipantBuilder(fieldCenterDao.find());
+  private void performImportation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException {
+    participantImportValidatorService.isImportable(participantImports);
+    ParticipantBuilder participantBuilder = new ParticipantBuilder(fieldCenterDao.find());
 
-		for (ParticipantImport participantImport : participantImports) {
-			Participant participant = participantBuilder.buildFromPartipantToImport(participantImport);
-			participantService.create(participant);
-		}
-	}
+    for (ParticipantImport participantImport : participantImports) {
+      Participant participant = participantBuilder.buildFromPartipantToImport(participantImport);
+      participantService.create(participant);
+    }
+  }
 
 }

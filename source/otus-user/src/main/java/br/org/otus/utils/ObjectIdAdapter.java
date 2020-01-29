@@ -19,8 +19,7 @@ public class ObjectIdAdapter implements JsonDeserializer<ObjectId>, JsonSerializ
     if (jsonElement.isJsonObject()) {
       String asString = jsonElement.getAsJsonObject().get("$oid").getAsString();
       return new ObjectId(asString);
-    }
-    else {
+    } else {
       return new ObjectId(jsonElement.getAsString());
     }
   }

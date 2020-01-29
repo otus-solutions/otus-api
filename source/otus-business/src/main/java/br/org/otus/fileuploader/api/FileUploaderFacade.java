@@ -40,7 +40,7 @@ public class FileUploaderFacade {
     return fileStoreBucket.store(form);
   }
 
-  public byte[]  downloadFiles(ArrayList<String> oids) {
+  public byte[] downloadFiles(ArrayList<String> oids) {
     try {
       return fileDownloadService.downloadFiles(oids).getByteArray();
     } catch (DataNotFoundException e) {

@@ -17,7 +17,7 @@ public class FieldCenterValidationResult {
     this.conflicts.add(fieldExistent);
   }
 
-  public List<String> getConflicts(){
+  public List<String> getConflicts() {
     return conflicts;
   }
 

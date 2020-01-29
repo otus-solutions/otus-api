@@ -28,43 +28,43 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ParticipantImportServiceBean.class)
 public class ParticipantImportServiceBeanTest {
-	@InjectMocks
-	ParticipantImportServiceBean participantImportServiceBean = PowerMockito.spy(new ParticipantImportServiceBean());
-	@Mock
-	private ParticipantImportValidatorService participantImportValidatorService;
-	@Mock
-	private ParticipantService participantService;
-	@Mock
-	private FieldCenterDao fieldCenterDao;
-	@Mock
-	private ParticipantBuilder participantBuilder;
-	@Mock
-	private ParticipantImport participantToImport;
-	@Mock
-	private Participant participant;
-	Set<ParticipantImport> participantImports;
+  @InjectMocks
+  ParticipantImportServiceBean participantImportServiceBean = PowerMockito.spy(new ParticipantImportServiceBean());
+  @Mock
+  private ParticipantImportValidatorService participantImportValidatorService;
+  @Mock
+  private ParticipantService participantService;
+  @Mock
+  private FieldCenterDao fieldCenterDao;
+  @Mock
+  private ParticipantBuilder participantBuilder;
+  @Mock
+  private ParticipantImport participantToImport;
+  @Mock
+  private Participant participant;
+  Set<ParticipantImport> participantImports;
 
-	@Before
-	public void setUp() {
-		participantImports = new HashSet<>();
-		participantImports.add(participantToImport);
-	}
+  @Before
+  public void setUp() {
+    participantImports = new HashSet<>();
+    participantImports.add(participantToImport);
+  }
 
-	@Test
-	public void method_importation_should_evocate_performImportationMethod() throws Exception {
-		doNothing().when(participantImportServiceBean, "performImportation", participantImports);
-		participantImportServiceBean.importation(participantImports);
-		verifyPrivate(participantImportServiceBean).invoke("performImportation", participantImports);
-	}
+  @Test
+  public void method_importation_should_evocate_performImportationMethod() throws Exception {
+    doNothing().when(participantImportServiceBean, "performImportation", participantImports);
+    participantImportServiceBean.importation(participantImports);
+    verifyPrivate(participantImportServiceBean).invoke("performImportation", participantImports);
+  }
 
-	@Test
-	public void method_performImportation_should_evocate_internals_methods() throws Exception {
-		whenNew(ParticipantBuilder.class).withAnyArguments().thenReturn(participantBuilder);
-		when(participantBuilder.buildFromPartipantToImport(participantToImport)).thenReturn(participant);
-		invokeMethod(participantImportServiceBean, "performImportation", participantImports);
-		verifyPrivate(participantImportValidatorService).invoke("isImportable", participantImports);
-		verifyNew(ParticipantBuilder.class).withArguments(Matchers.any());
-		verifyPrivate(participantService).invoke("create", participant);
-	}
+  @Test
+  public void method_performImportation_should_evocate_internals_methods() throws Exception {
+    whenNew(ParticipantBuilder.class).withAnyArguments().thenReturn(participantBuilder);
+    when(participantBuilder.buildFromPartipantToImport(participantToImport)).thenReturn(participant);
+    invokeMethod(participantImportServiceBean, "performImportation", participantImports);
+    verifyPrivate(participantImportValidatorService).invoke("isImportable", participantImports);
+    verifyNew(ParticipantBuilder.class).withArguments(Matchers.any());
+    verifyPrivate(participantService).invoke("create", participant);
+  }
 
 }

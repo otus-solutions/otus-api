@@ -41,129 +41,130 @@ import br.org.owail.sender.email.Sender;
 import br.org.tutty.Equalizer;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SignupServiceBean.class, Equalizer.class, Recipient.class, OtusEmailFactory.class,
-		SystemConfigBuilder.class })
+@PrepareForTest({SignupServiceBean.class, Equalizer.class, Recipient.class, OtusEmailFactory.class,
+  SystemConfigBuilder.class})
 public class SignupServiceBeanTest {
-	private static final Boolean NEGATIVE_ANSWER = false;
-	private static final Boolean POSITIVE_ANSWER = true;
-	private static final String EMAIL = "otus@otus.com";
-	private static final String NAME = "Otus";
-	private static final String PASSWORD = "#12345";
+  private static final Boolean NEGATIVE_ANSWER = false;
+  private static final Boolean POSITIVE_ANSWER = true;
+  private static final String EMAIL = "otus@otus.com";
+  private static final String NAME = "Otus";
+  private static final String PASSWORD = "#12345";
 
-	@InjectMocks
-	private SignupServiceBean signupServiceBean = spy(new SignupServiceBean());
-	@Mock
-	private UserDao userDao;
-	@Mock
-	private EmailNotifierService emailNotifierService;
-	@Mock
-	private ManagementUserService managementUserService;
-	@Mock
-	private SignupDataDto signupDataDto;
-	@Mock
-	private OtusInitializationConfigDto initializationConfigDto;
-	@Mock
-	private NewUserGreetingsEmail greetingsEmail;
-	@Mock
-	private User userToRegister;
-	@Mock
-	private NewUserNotificationEmail notificationEmail;
-	@Mock
-	private Recipient recipientUser;
-	@Mock
-	private EmailSenderDto emailSenderDto;
+  @InjectMocks
+  private SignupServiceBean signupServiceBean = spy(new SignupServiceBean());
+  @Mock
+  private UserDao userDao;
+  @Mock
+  private EmailNotifierService emailNotifierService;
+  @Mock
+  private ManagementUserService managementUserService;
+  @Mock
+  private SignupDataDto signupDataDto;
+  @Mock
+  private OtusInitializationConfigDto initializationConfigDto;
+  @Mock
+  private NewUserGreetingsEmail greetingsEmail;
+  @Mock
+  private User userToRegister;
+  @Mock
+  private NewUserNotificationEmail notificationEmail;
+  @Mock
+  private Recipient recipientUser;
+  @Mock
+  private EmailSenderDto emailSenderDto;
 
-	private User user;
-	private User systemAdministrator;
-	private Sender sender;
+  private User user;
+  private User systemAdministrator;
+  private Sender sender;
 
-	@Before
-	public void setUp() throws Exception {
-		user = spy(new User());
-		whenNew(User.class).withNoArguments().thenReturn(user);
-	}
-	//TODO refatorar este teste, quebrou na mudanca de versão do powerMock
-	@Ignore // atualização do powerMock para 1.7.3
-	@Test
-	public void method_create_with_signupDataDtoValid_and_managementUserServiceUnique_should_verify_evocation_internal_methods()
-			throws Exception {
-		when(signupDataDto.isValid()).thenReturn(POSITIVE_ANSWER);
-		when(managementUserService.isUnique(anyString())).thenReturn(POSITIVE_ANSWER);
-		mockStatic(Equalizer.class);
+  @Before
+  public void setUp() throws Exception {
+    user = spy(new User());
+    whenNew(User.class).withNoArguments().thenReturn(user);
+  }
 
-		sender = spy(new Sender(NAME, EMAIL, PASSWORD));
-		when(emailNotifierService.getSender()).thenReturn(sender);
-		when(user.getName()).thenReturn(NAME);
-		when(user.getEmail()).thenReturn(EMAIL);
-		mockStatic(Recipient.class);
+  //TODO refatorar este teste, quebrou na mudanca de versão do powerMock
+  @Ignore // atualização do powerMock para 1.7.3
+  @Test
+  public void method_create_with_signupDataDtoValid_and_managementUserServiceUnique_should_verify_evocation_internal_methods()
+    throws Exception {
+    when(signupDataDto.isValid()).thenReturn(POSITIVE_ANSWER);
+    when(managementUserService.isUnique(anyString())).thenReturn(POSITIVE_ANSWER);
+    mockStatic(Equalizer.class);
 
-		systemAdministrator = spy(new User());
-		when(userDao.findAdmin()).thenReturn(systemAdministrator);
-		when(systemAdministrator.getName()).thenReturn(NAME);
-		when(systemAdministrator.getEmail()).thenReturn(EMAIL);
-		mockStatic(OtusEmailFactory.class);
+    sender = spy(new Sender(NAME, EMAIL, PASSWORD));
+    when(emailNotifierService.getSender()).thenReturn(sender);
+    when(user.getName()).thenReturn(NAME);
+    when(user.getEmail()).thenReturn(EMAIL);
+    mockStatic(Recipient.class);
 
-		signupServiceBean.create(signupDataDto);
-		verifyNew(User.class, times(2)).withNoArguments();
-		verifyStatic(times(1));
-		Equalizer.equalize(signupDataDto, user);
-		verify(emailNotifierService).getSender();
-		verifyPrivate(signupServiceBean).invoke("sendEmailToUser", user, sender);
-		verifyPrivate(signupServiceBean).invoke("sendEmailToAdmin", sender, user);
-		verify(userDao).persist(user);
+    systemAdministrator = spy(new User());
+    when(userDao.findAdmin()).thenReturn(systemAdministrator);
+    when(systemAdministrator.getName()).thenReturn(NAME);
+    when(systemAdministrator.getEmail()).thenReturn(EMAIL);
+    mockStatic(OtusEmailFactory.class);
 
-	}
+    signupServiceBean.create(signupDataDto);
+    verifyNew(User.class, times(2)).withNoArguments();
+    verifyStatic(times(1));
+    Equalizer.equalize(signupDataDto, user);
+    verify(emailNotifierService).getSender();
+    verifyPrivate(signupServiceBean).invoke("sendEmailToUser", user, sender);
+    verifyPrivate(signupServiceBean).invoke("sendEmailToAdmin", sender, user);
+    verify(userDao).persist(user);
 
-	@Test(expected = ValidationException.class)
-	public void method_create_with_signupDataDtoInvalid_should_throw_ValidationException()
-			throws EmailNotificationException, DataNotFoundException, AlreadyExistException, ValidationException,
-			EncryptedException {
-		when(signupDataDto.isValid()).thenReturn(NEGATIVE_ANSWER);
-		signupServiceBean.create(signupDataDto);
+  }
 
-	}
+  @Test(expected = ValidationException.class)
+  public void method_create_with_signupDataDtoInvalid_should_throw_ValidationException()
+    throws EmailNotificationException, DataNotFoundException, AlreadyExistException, ValidationException,
+    EncryptedException {
+    when(signupDataDto.isValid()).thenReturn(NEGATIVE_ANSWER);
+    signupServiceBean.create(signupDataDto);
 
-	@Test(expected = AlreadyExistException.class)
-	public void method_create_with_signupDataDtoValid_and_managementUserServiceNotUnique_should_throw_AlreadyExistException()
-			throws EmailNotificationException, DataNotFoundException, AlreadyExistException, ValidationException,
-			EncryptedException {
-		when(signupDataDto.isValid()).thenReturn(POSITIVE_ANSWER);
-		when(managementUserService.isUnique(anyString())).thenReturn(NEGATIVE_ANSWER);
-		signupServiceBean.create(signupDataDto);
-	}
+  }
 
-	@Test
-	public void method_create_with_initializationConfigDtoValid_and_managementUserServiceUnique_should_invoke_internal_methods()
-			throws Exception {
-		when(initializationConfigDto.isValid()).thenReturn(POSITIVE_ANSWER);
-		when(initializationConfigDto.getEmailSender()).thenReturn(emailSenderDto);
-		when(emailSenderDto.getEmail()).thenReturn(EMAIL);
-		when(managementUserService.isUnique(EMAIL)).thenReturn(POSITIVE_ANSWER);
-		mockStatic(SystemConfigBuilder.class);
-		when(SystemConfigBuilder.class, "buildInitialUser", initializationConfigDto).thenReturn(user);
+  @Test(expected = AlreadyExistException.class)
+  public void method_create_with_signupDataDtoValid_and_managementUserServiceNotUnique_should_throw_AlreadyExistException()
+    throws EmailNotificationException, DataNotFoundException, AlreadyExistException, ValidationException,
+    EncryptedException {
+    when(signupDataDto.isValid()).thenReturn(POSITIVE_ANSWER);
+    when(managementUserService.isUnique(anyString())).thenReturn(NEGATIVE_ANSWER);
+    signupServiceBean.create(signupDataDto);
+  }
 
-		signupServiceBean.create(initializationConfigDto);
-		verifyStatic(times(1));
-		SystemConfigBuilder.buildInitialUser(initializationConfigDto);
-		verify(emailNotifierService).sendSystemInstallationEmail(initializationConfigDto);
-		verify(userDao).persist(user);
+  @Test
+  public void method_create_with_initializationConfigDtoValid_and_managementUserServiceUnique_should_invoke_internal_methods()
+    throws Exception {
+    when(initializationConfigDto.isValid()).thenReturn(POSITIVE_ANSWER);
+    when(initializationConfigDto.getEmailSender()).thenReturn(emailSenderDto);
+    when(emailSenderDto.getEmail()).thenReturn(EMAIL);
+    when(managementUserService.isUnique(EMAIL)).thenReturn(POSITIVE_ANSWER);
+    mockStatic(SystemConfigBuilder.class);
+    when(SystemConfigBuilder.class, "buildInitialUser", initializationConfigDto).thenReturn(user);
 
-	}
+    signupServiceBean.create(initializationConfigDto);
+    verifyStatic(times(1));
+    SystemConfigBuilder.buildInitialUser(initializationConfigDto);
+    verify(emailNotifierService).sendSystemInstallationEmail(initializationConfigDto);
+    verify(userDao).persist(user);
 
-	@Test(expected = ValidationException.class)
-	public void method_create_with_InitializationConfigDtoInvalid_should_throw_ValidationException()
-			throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
-		when(initializationConfigDto.isValid()).thenReturn(NEGATIVE_ANSWER);
-		signupServiceBean.create(initializationConfigDto);
-	}
+  }
 
-	@Test(expected = AlreadyExistException.class)
-	public void method_create_with_initializationConfigDtoValid_and_managementUserServiceNotUnique__should_throw_AlreadyExistException()
-			throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
-		when(initializationConfigDto.isValid()).thenReturn(POSITIVE_ANSWER);
-		when(initializationConfigDto.getEmailSender()).thenReturn(emailSenderDto);
-		when(emailSenderDto.getEmail()).thenReturn(EMAIL);
-		when(managementUserService.isUnique(EMAIL)).thenReturn(NEGATIVE_ANSWER);
-		signupServiceBean.create(initializationConfigDto);
-	}
+  @Test(expected = ValidationException.class)
+  public void method_create_with_InitializationConfigDtoInvalid_should_throw_ValidationException()
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    when(initializationConfigDto.isValid()).thenReturn(NEGATIVE_ANSWER);
+    signupServiceBean.create(initializationConfigDto);
+  }
+
+  @Test(expected = AlreadyExistException.class)
+  public void method_create_with_initializationConfigDtoValid_and_managementUserServiceNotUnique__should_throw_AlreadyExistException()
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    when(initializationConfigDto.isValid()).thenReturn(POSITIVE_ANSWER);
+    when(initializationConfigDto.getEmailSender()).thenReturn(emailSenderDto);
+    when(emailSenderDto.getEmail()).thenReturn(EMAIL);
+    when(managementUserService.isUnique(EMAIL)).thenReturn(NEGATIVE_ANSWER);
+    signupServiceBean.create(initializationConfigDto);
+  }
 }

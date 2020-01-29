@@ -33,7 +33,7 @@ public class RequestUtility {
   }
 
   public static Object getErrorContent(HttpURLConnection httpConn) throws IOException {
-    BufferedReader in =  new BufferedReader(new InputStreamReader(httpConn.getErrorStream()));
+    BufferedReader in = new BufferedReader(new InputStreamReader(httpConn.getErrorStream()));
     StringBuilder response = new StringBuilder();
     String currentLine;
 

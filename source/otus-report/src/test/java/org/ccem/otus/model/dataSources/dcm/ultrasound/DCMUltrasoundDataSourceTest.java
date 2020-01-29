@@ -46,5 +46,5 @@ public class DCMUltrasoundDataSourceTest {
     assertTrue(result.contains("\"examName\":\"DCMUltrasound"));
     assertTrue(result.contains("\"sending\":\"0"));
   }
-  
+
 }

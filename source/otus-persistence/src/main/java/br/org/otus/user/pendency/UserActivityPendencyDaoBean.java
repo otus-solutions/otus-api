@@ -26,7 +26,9 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   private static final String REQUESTER_ATTRIBUTE_NAME = "requester";
   private static final String RECEIVER_ATTRIBUTE_NAME = "receiver";
 
-  public UserActivityPendencyDaoBean() { super(COLLECTION_NAME, Document.class);  }
+  public UserActivityPendencyDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
   @Override
   public ObjectId create(UserActivityPendency userActivityPendency) {
@@ -64,7 +66,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   public UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException {
     Document result = collection.find(eq("activityInfo.id", activityOID)).first();
     if (result == null) {
-      throw new DataNotFoundException("No user activity pendency found for activityOID { " + activityOID  + " }.");
+      throw new DataNotFoundException("No user activity pendency found for activityOID { " + activityOID + " }.");
     }
     return UserActivityPendency.deserialize(result.toJson());
   }
@@ -113,8 +115,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
       try {
         Document document = iterator.next();
         userActivityPendenciesResponse.add(UserActivityPendencyResponse.deserialize(document.toJson()));
-      }
-      catch (OutOfMemoryError e) {
+      } catch (OutOfMemoryError e) {
         userActivityPendenciesResponse.clear();
         throw new MemoryExcededException("User activity pendency extraction exceded memory used.");
       }

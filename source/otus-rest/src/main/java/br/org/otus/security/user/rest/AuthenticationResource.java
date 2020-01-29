@@ -33,9 +33,9 @@ public class AuthenticationResource {
     try {
       authenticationDto.encrypt();
       Response response = new Response();
-        String requestAddress = request.getRemoteAddr().toString();
-        UserSecurityAuthorizationDto userSecurityAuthorizationDto = securityFacade.userAuthentication(authenticationDto, requestAddress);
-        return response.buildSuccess(userSecurityAuthorizationDto).toJson();
+      String requestAddress = request.getRemoteAddr().toString();
+      UserSecurityAuthorizationDto userSecurityAuthorizationDto = securityFacade.userAuthentication(authenticationDto, requestAddress);
+      return response.buildSuccess(userSecurityAuthorizationDto).toJson();
     } catch (EncryptedException e) {
       throw new HttpResponseException(Validation.build());
     }

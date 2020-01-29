@@ -24,11 +24,11 @@ public interface AliquotDao {
   void updateExamLotId(ArrayList<String> codeList, ObjectId loId) throws DataNotFoundException;
 
   Aliquot getAliquot(TransportationAliquotFiltersDTO workAliquotFiltersDTO) throws DataNotFoundException;
- 	
+
   void addToTransportationLot(ArrayList<String> aliquotCodeList, ObjectId transportationLotId) throws DataNotFoundException;
 
   void updateTransportationLotId(ArrayList<String> codeList, ObjectId loId) throws DataNotFoundException;
-	
+
   boolean exists(String code);
 
   void delete(String code) throws DataNotFoundException;

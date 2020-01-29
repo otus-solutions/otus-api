@@ -8,8 +8,10 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import java.util.Arrays;
 import java.util.List;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 
@@ -37,20 +39,20 @@ import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.user.api.UserFacade;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ AuthorizationHeaderReader.class, GsonBuilder.class })
+@PrepareForTest({AuthorizationHeaderReader.class, GsonBuilder.class})
 public class ParticipantResourceTest {
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String USER_MAIL = "otus@otus.com";
   private static final String ACRONYM = "RS";
   private static final String PARTICIPANT = "{\n" + "    \"data\": {\n" + "        \"recruitmentNumber\": 1366552,\n"
-      + "        \"name\": \"Tiago Matana\",\n" + "        \"sex\": \"M\",\n" + "        \"birthdate\": {\n"
-      + "            \"objectType\": \"ImmutableDate\",\n" + "            \"value\": \"1954-09-20 00:00:00.000\"\n"
-      + "        },\n" + "        \"fieldCenter\": {\n" + "            \"name\": \"Sao Paulo\",\n"
-      + "            \"code\": 6,\n" + "            \"acronym\": \"SP\",\n"
-      + "            \"backgroundColor\": \"rgba(54, 162, 235, 0.2)\",\n"
-      + "            \"borderColor\": \"rgba(54, 162, 235, 1)\"\n" + "        },\n" + "        \"late\": false\n"
-      + "    }\n" + "}";
+    + "        \"name\": \"Tiago Matana\",\n" + "        \"sex\": \"M\",\n" + "        \"birthdate\": {\n"
+    + "            \"objectType\": \"ImmutableDate\",\n" + "            \"value\": \"1954-09-20 00:00:00.000\"\n"
+    + "        },\n" + "        \"fieldCenter\": {\n" + "            \"name\": \"Sao Paulo\",\n"
+    + "            \"code\": 6,\n" + "            \"acronym\": \"SP\",\n"
+    + "            \"backgroundColor\": \"rgba(54, 162, 235, 0.2)\",\n"
+    + "            \"borderColor\": \"rgba(54, 162, 235, 1)\"\n" + "        },\n" + "        \"late\": false\n"
+    + "    }\n" + "}";
   private static final String PARTICIPANT_INVALID = "{}";
   private static final Long RECRUITMENT_NUMBER = (long) 1063154;
   @InjectMocks

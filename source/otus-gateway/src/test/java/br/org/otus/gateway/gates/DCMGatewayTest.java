@@ -17,7 +17,7 @@ import br.org.otus.gateway.resource.DCMMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ DCMGatewayService.class })
+@PrepareForTest({DCMGatewayService.class})
 public class DCMGatewayTest {
   private static String BODY = "\"{\"recruitmentNumber\":123456,\"examName\":\"DCMRetinography\",\"sending\":0,\"eyeSelected\":\"left\"}\"";
   private static String RESPONSE_TO_RETINOGRAPHY = "\"{\"data\":{\"date\":2019-09-09T17:40:34.699Z,\"eye\":\"left,\"result\":\"R0lGODlhPQBEAPeoAJos595kzAP==\"}}\"";

@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ImportService {
 
-    List<ActivityImportResultDTO> importActivities(String acronym, Integer version, ActivityImportDTO surveyActivities) throws DataNotFoundException;
+  List<ActivityImportResultDTO> importActivities(String acronym, Integer version, ActivityImportDTO surveyActivities) throws DataNotFoundException;
 
 }

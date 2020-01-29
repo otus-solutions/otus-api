@@ -49,8 +49,8 @@ public class DisableUserNotificationEmail extends Email implements OtusEmail {
     if (o == null || getClass() != o.getClass()) return false;
     DisableUserNotificationEmail that = (DisableUserNotificationEmail) o;
     return Objects.equals(TEMPLATE, that.TEMPLATE) &&
-            Objects.equals(SUBJECT, that.SUBJECT) &&
-            Objects.equals(dataMap, that.dataMap);
+      Objects.equals(SUBJECT, that.SUBJECT) &&
+      Objects.equals(dataMap, that.dataMap);
   }
 
   @Override

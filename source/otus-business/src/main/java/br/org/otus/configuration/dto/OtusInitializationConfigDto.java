@@ -9,51 +9,51 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class OtusInitializationConfigDto implements Dto, Encripting {
 
-	private UserDto user;
-	private EmailSenderDto emailSender;
-	private ProjectDto project;
-	private DomainDto domain;
+  private UserDto user;
+  private EmailSenderDto emailSender;
+  private ProjectDto project;
+  private DomainDto domain;
 
-	public UserDto getUser() {
-		return user;
-	}
+  public UserDto getUser() {
+    return user;
+  }
 
-	public ProjectDto getProject() {
-		return project;
-	}
+  public ProjectDto getProject() {
+    return project;
+  }
 
-	public DomainDto getDomainDto() {
-		return domain;
-	}
+  public DomainDto getDomainDto() {
+    return domain;
+  }
 
-	public EmailSenderDto getEmailSender() {
-		return emailSender;
-	}
+  public EmailSenderDto getEmailSender() {
+    return emailSender;
+  }
 
-	public void setUser(UserDto user) {
-		this.user = user;
-	}
+  public void setUser(UserDto user) {
+    this.user = user;
+  }
 
-	public void setEmailSender(EmailSenderDto emailSender) {
-		this.emailSender = emailSender;
-	}
+  public void setEmailSender(EmailSenderDto emailSender) {
+    this.emailSender = emailSender;
+  }
 
-	public void setProject(ProjectDto project) {
-		this.project = project;
-	}
+  public void setProject(ProjectDto project) {
+    this.project = project;
+  }
 
-	public void setDomain(DomainDto domain) {
-		this.domain = domain;
-	}
+  public void setDomain(DomainDto domain) {
+    this.domain = domain;
+  }
 
-	@Override
-	public Boolean isValid() {
-		return Boolean.TRUE;
-	}
+  @Override
+  public Boolean isValid() {
+    return Boolean.TRUE;
+  }
 
-	@Override
-	public void encrypt() throws EncryptedException {
-		emailSender.encrypt();
-		user.encrypt();
-	}
+  @Override
+  public void encrypt() throws EncryptedException {
+    emailSender.encrypt();
+    user.encrypt();
+  }
 }

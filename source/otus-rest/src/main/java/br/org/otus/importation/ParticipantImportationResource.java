@@ -31,7 +31,8 @@ public class ParticipantImportationResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String post(String participantImports) {
-    Type participantImportSetType = new TypeToken<HashSet<ParticipantImport>>() {}.getType();
+    Type participantImportSetType = new TypeToken<HashSet<ParticipantImport>>() {
+    }.getType();
 
     Set<ParticipantImport> participants = new Gson().fromJson(participantImports, participantImportSetType);
     participantImportationFacade.importParticipantSet(participants);

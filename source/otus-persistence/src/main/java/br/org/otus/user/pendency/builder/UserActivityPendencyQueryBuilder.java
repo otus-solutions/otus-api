@@ -11,19 +11,19 @@ public class UserActivityPendencyQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
-  public ArrayList<Bson> getListAllPendenciesByUserQuery(String userRole, String userEmail){
+  public ArrayList<Bson> getListAllPendenciesByUserQuery(String userRole, String userEmail) {
     return getListPendenciesByUserQuery(userRole, userEmail, "");
   }
 
-  public ArrayList<Bson> getListOpenedPendenciesByUserQuery(String userRole, String userEmail){
+  public ArrayList<Bson> getListOpenedPendenciesByUserQuery(String userRole, String userEmail) {
     return getListPendenciesByUserQuery(userRole, userEmail, getStatusCondition("ne"));
   }
 
-  public ArrayList<Bson> getListDonePendenciesByUserQuery(String userRole, String userEmail){
+  public ArrayList<Bson> getListDonePendenciesByUserQuery(String userRole, String userEmail) {
     return getListPendenciesByUserQuery(userRole, userEmail, getStatusCondition("eq"));
   }
 
-  private ArrayList<Bson> getListPendenciesByUserQuery(String userRole, String userEmail, String statusCondition){
+  private ArrayList<Bson> getListPendenciesByUserQuery(String userRole, String userEmail, String statusCondition) {
     pipeline = new ArrayList<>();
     addLookupMatchingActivityPendency(statusCondition);
     addMatchByPendencyUser(userRole, userEmail);
@@ -31,11 +31,11 @@ public class UserActivityPendencyQueryBuilder {
     return pipeline;
   }
 
-  private String getStatusCondition(String operator){
-    return ",\n{ $"+operator+": [\""+ FINALIZED_STATUS +"\", { $arrayElemAt: [ \"$statusHistory.name\", -1 ] } ] }";
+  private String getStatusCondition(String operator) {
+    return ",\n{ $" + operator + ": [\"" + FINALIZED_STATUS + "\", { $arrayElemAt: [ \"$statusHistory.name\", -1 ] } ] }";
   }
 
-  private void addLookupMatchingActivityPendency(String statusCondition){
+  private void addLookupMatchingActivityPendency(String statusCondition) {
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $lookup: {\n" +
       "            from:\"activity\",\n" +
@@ -69,12 +69,12 @@ public class UserActivityPendencyQueryBuilder {
       "    }"));
   }
 
-  private void addMatchByPendencyUser(String userRole, String userEmail){
+  private void addMatchByPendencyUser(String userRole, String userEmail) {
     pipeline.add(ParseQuery.toDocument("{ \n" +
       "        $match: {\n" +
       "            $expr: { \n" +
       "                $and: [\n" +
-      "                    { $eq: [ \"$"+ userRole +"\", " + userEmail + " ] },\n" +
+      "                    { $eq: [ \"$" + userRole + "\", " + userEmail + " ] },\n" +
       "                    { $gt: [ { $size: \"$activityInfo\"}, 0] }\n" +
       "                ]\n" +
       "            }\n" +
@@ -82,7 +82,7 @@ public class UserActivityPendencyQueryBuilder {
       "    }"));
   }
 
-  private void addSelectedFieldsFromActivityLookupResult(){
+  private void addSelectedFieldsFromActivityLookupResult() {
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $addFields: { 'activityInfo': { $arrayElemAt: [\"$activityInfo\", 0]} }\n" +
       "    }"));

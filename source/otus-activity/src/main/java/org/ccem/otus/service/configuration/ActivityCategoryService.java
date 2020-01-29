@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface ActivityCategoryService {
 
-    List<ActivityCategory> list();
+  List<ActivityCategory> list();
 
-    ActivityCategory getByName(String name) throws DataNotFoundException;
+  ActivityCategory getByName(String name) throws DataNotFoundException;
 
-    ActivityCategory create(ActivityCategory activityCategory);
+  ActivityCategory create(ActivityCategory activityCategory);
 
-    void delete(String name) throws DataNotFoundException;
+  void delete(String name) throws DataNotFoundException;
 
-    ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
+  ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
-    void setDefaultCategory(String name) throws DataNotFoundException;
+  void setDefaultCategory(String name) throws DataNotFoundException;
 }

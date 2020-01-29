@@ -7,6 +7,6 @@ import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 
 public interface ActivityImportValidationService {
 
-    ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap, SurveyActivity importActivity) throws DataNotFoundException;
+  ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap, SurveyActivity importActivity) throws DataNotFoundException;
 
 }

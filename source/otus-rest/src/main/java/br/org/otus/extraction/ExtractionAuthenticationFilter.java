@@ -16,30 +16,30 @@ import br.org.otus.response.info.ExtractionNotAuthorized;
 @SecuredExtraction
 public class ExtractionAuthenticationFilter implements ContainerRequestFilter {
 
-	@Inject
-	private ExtractionSecurityService extractionSecurityService;
+  @Inject
+  private ExtractionSecurityService extractionSecurityService;
 
-	@Context
-	private HttpServletRequest requestContext;
-	
-	public static final String HEADER = "X-Real-IP";
+  @Context
+  private HttpServletRequest requestContext;
 
-	@Override
-	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		
-		String authorizationToken = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-		String ipAddress = requestContext.getHeader(HEADER);
-		try {
-			Boolean authorization = extractionSecurityService.validateSecurityCredentials(authorizationToken, ipAddress);
-			validateAuthorization(authorization);
-		} catch (Exception e) {
-			containerRequestContext.abortWith(ExtractionNotAuthorized.build().toResponse());
-		}
-	}
+  public static final String HEADER = "X-Real-IP";
 
-	private void validateAuthorization(Boolean authorization) throws Exception {
-		if (!Boolean.TRUE.equals(authorization)) {
-			throw new Exception("Extraction not authorized");
-		}
-	}
+  @Override
+  public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+
+    String authorizationToken = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+    String ipAddress = requestContext.getHeader(HEADER);
+    try {
+      Boolean authorization = extractionSecurityService.validateSecurityCredentials(authorizationToken, ipAddress);
+      validateAuthorization(authorization);
+    } catch (Exception e) {
+      containerRequestContext.abortWith(ExtractionNotAuthorized.build().toResponse());
+    }
+  }
+
+  private void validateAuthorization(Boolean authorization) throws Exception {
+    if (!Boolean.TRUE.equals(authorization)) {
+      throw new Exception("Extraction not authorized");
+    }
+  }
 }

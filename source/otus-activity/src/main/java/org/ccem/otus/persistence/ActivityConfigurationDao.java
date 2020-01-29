@@ -7,23 +7,23 @@ import java.util.List;
 
 public interface ActivityConfigurationDao {
 
-    List<ActivityCategory> findNonDeleted();
+  List<ActivityCategory> findNonDeleted();
 
-    ActivityCategory findByName(String name) throws DataNotFoundException;
+  ActivityCategory findByName(String name) throws DataNotFoundException;
 
-    Boolean categoryExists(String name);
+  Boolean categoryExists(String name);
 
-    List<ActivityCategory> findAll();
+  List<ActivityCategory> findAll();
 
-    ActivityCategory getLastInsertedCategory();
+  ActivityCategory getLastInsertedCategory();
 
-    ActivityCategory create(ActivityCategory activityCategory);
+  ActivityCategory create(ActivityCategory activityCategory);
 
-    void disable(String name) throws DataNotFoundException;
+  void disable(String name) throws DataNotFoundException;
 
-    void delete(String name) throws DataNotFoundException;
+  void delete(String name) throws DataNotFoundException;
 
-    ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
+  ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
-    void setNewDefault(String name) throws DataNotFoundException;
+  void setNewDefault(String name) throws DataNotFoundException;
 }

@@ -12,89 +12,89 @@ import java.util.List;
 
 public class ExamResult {
 
-    private ObjectId examSendingLotId;
-    private ObjectId examId;
-    private ObjectId _id;
+  private ObjectId examSendingLotId;
+  private ObjectId examId;
+  private ObjectId _id;
 
-    private String objectType;
-    private String aliquotCode;
-    private String examName;
-    private String resultName;
-    private String value;
-    private Boolean aliquotValid;
-    private String releaseDate;
-    private List<Observation> observations;
+  private String objectType;
+  private String aliquotCode;
+  private String examName;
+  private String resultName;
+  private String value;
+  private Boolean aliquotValid;
+  private String releaseDate;
+  private List<Observation> observations;
 
-    private FieldCenter fieldCenter;
-    private Long recruitmentNumber;
-    private Sex sex;
-    private ImmutableDate birthdate;
+  private FieldCenter fieldCenter;
+  private Long recruitmentNumber;
+  private Sex sex;
+  private ImmutableDate birthdate;
 
-    public void setExamId(ObjectId examId) {
-        this.examId = examId;
-    }
+  public void setExamId(ObjectId examId) {
+    this.examId = examId;
+  }
 
-    public void setExamSendingLotId(ObjectId examId) {
-        this.examSendingLotId = examId;
-    }
+  public void setExamSendingLotId(ObjectId examId) {
+    this.examSendingLotId = examId;
+  }
 
-    public void setFieldCenter(FieldCenter fieldCenter) {
-        this.fieldCenter = fieldCenter;
-    }
+  public void setFieldCenter(FieldCenter fieldCenter) {
+    this.fieldCenter = fieldCenter;
+  }
 
-    public String getAliquotCode() {
-        return aliquotCode;
-    }
+  public String getAliquotCode() {
+    return aliquotCode;
+  }
 
-    //used for unit testing
-    public void setAliquotCode(String aliquotCode) {
-        this.aliquotCode = aliquotCode;
-    }
+  //used for unit testing
+  public void setAliquotCode(String aliquotCode) {
+    this.aliquotCode = aliquotCode;
+  }
 
-    public Long getRecruitmentNumber() {
-        return recruitmentNumber;
-    }
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
+  }
 
-    public ObjectId getExamId() {
-        return examId;
-    }
+  public ObjectId getExamId() {
+    return examId;
+  }
 
-    public void setRecruitmentNumber(Long recruitmentNumber) {
-        this.recruitmentNumber = recruitmentNumber;
-    }
+  public void setRecruitmentNumber(Long recruitmentNumber) {
+    this.recruitmentNumber = recruitmentNumber;
+  }
 
-    public void setSex(Sex sex) {
-        this.sex = sex;
-    }
+  public void setSex(Sex sex) {
+    this.sex = sex;
+  }
 
-    public void setBirthdate(ImmutableDate birthdate) {
-        this.birthdate = birthdate;
-    }
+  public void setBirthdate(ImmutableDate birthdate) {
+    this.birthdate = birthdate;
+  }
 
-    public void setAliquotValid(boolean aliquotValid) {
-        this.aliquotValid = aliquotValid;
-    }
+  public void setAliquotValid(boolean aliquotValid) {
+    this.aliquotValid = aliquotValid;
+  }
 
-    public static String serialize(ExamResult examResult) {
-        return getGsonBuilder().create().toJson(examResult);
-    }
+  public static String serialize(ExamResult examResult) {
+    return getGsonBuilder().create().toJson(examResult);
+  }
 
-    public static ExamResult deserialize(String examResultJson) {
-        return ExamResult.getGsonBuilder().create().fromJson(examResultJson, ExamResult.class);
-    }
+  public static ExamResult deserialize(String examResultJson) {
+    return ExamResult.getGsonBuilder().create().fromJson(examResultJson, ExamResult.class);
+  }
 
-    public static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-        builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
-        return builder;
-    }
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
+    return builder;
+  }
 
-    public String getExamName() {
-        return examName;
-    }
+  public String getExamName() {
+    return examName;
+  }
 
-    public void setExamName(String examName) {
-        this.examName = examName;
-    }
+  public void setExamName(String examName) {
+    this.examName = examName;
+  }
 }

@@ -123,7 +123,7 @@ public class UserActivityPendencyResource {
   }
 
 
-  private String getUserEmail(HttpServletRequest request){
+  private String getUserEmail(HttpServletRequest request) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     return securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
   }

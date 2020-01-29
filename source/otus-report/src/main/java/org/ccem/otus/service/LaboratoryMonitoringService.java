@@ -8,5 +8,5 @@ import java.util.LinkedList;
 
 public interface LaboratoryMonitoringService {
 
-    ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
+  ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException;
 }

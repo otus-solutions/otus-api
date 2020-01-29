@@ -11,44 +11,44 @@ import java.util.List;
 
 public class SurveyGroup {
 
-    @SerializedName("_id")
-    private ObjectId surveyGroupID;
-    private String objectType = "SurveyGroup";
-    private String name;
-    private List<String> surveyAcronyms;
+  @SerializedName("_id")
+  private ObjectId surveyGroupID;
+  private String objectType = "SurveyGroup";
+  private String name;
+  private List<String> surveyAcronyms;
 
-    public ObjectId getSurveyGroupID() {
-        return surveyGroupID;
-    }
+  public ObjectId getSurveyGroupID() {
+    return surveyGroupID;
+  }
 
-    public String getObjectType() {
-        return objectType;
-    }
+  public String getObjectType() {
+    return objectType;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public List<String> getSurveyAcronyms() {
-        return surveyAcronyms;
-    }
+  public List<String> getSurveyAcronyms() {
+    return surveyAcronyms;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public static String serialize(SurveyGroup surveyGroup) {
-        return getGsonBuilder().create().toJson(surveyGroup);
-    }
+  public static String serialize(SurveyGroup surveyGroup) {
+    return getGsonBuilder().create().toJson(surveyGroup);
+  }
 
-    public static SurveyGroup deserialize(String surveyGroupJson) {
-        return SurveyGroup.getGsonBuilder().create().fromJson(surveyGroupJson, SurveyGroup.class);
-    }
+  public static SurveyGroup deserialize(String surveyGroupJson) {
+    return SurveyGroup.getGsonBuilder().create().fromJson(surveyGroupJson, SurveyGroup.class);
+  }
 
-    public static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-        builder.serializeNulls();
-        return builder;
-    }
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    builder.serializeNulls();
+    return builder;
+  }
 }

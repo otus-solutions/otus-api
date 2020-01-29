@@ -18,16 +18,16 @@ import java.io.IOException;
 @Priority(Priorities.AUTHENTICATION)
 public class ParticipantAuthenticationFilter implements ContainerRequestFilter {
 
-	@Inject
+  @Inject
   private SecurityFacade securityFacade;
 
-	@Override
-	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-		try {
+  @Override
+  public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+    String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+    try {
       securityFacade.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
-		} catch (Exception e) {
-			containerRequestContext.abortWith(Authorization.build().toResponse());
-		}
-	}
+    } catch (Exception e) {
+      containerRequestContext.abortWith(Authorization.build().toResponse());
+    }
+  }
 }

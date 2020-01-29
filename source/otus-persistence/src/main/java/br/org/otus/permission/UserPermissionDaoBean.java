@@ -25,15 +25,15 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
     UserPermissionDTO userPermissionDTO = new UserPermissionDTO();
 
     Document result = collection.aggregate(Arrays.asList(
-        new Document("$match", new Document("email",email)),
-        new Document("$group", 
-            new Document("_id", "")
-            .append("permissions", 
-                new Document("$push","$$ROOT")
-                )
-            )
-        )).first();
-    
+      new Document("$match", new Document("email", email)),
+      new Document("$group",
+        new Document("_id", "")
+          .append("permissions",
+            new Document("$push", "$$ROOT")
+          )
+      )
+    )).first();
+
     if (result != null) {
       userPermissionDTO = UserPermissionDTO.deserialize(result.toJson());
     }
@@ -43,18 +43,18 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
   @Override
   public void savePermission(Permission permission) {
     Document parsed = Document.parse(SurveyGroupPermission.serialize(permission));
-    collection.updateOne(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail()),new Document("$set", parsed),new UpdateOptions().upsert(true));
+    collection.updateOne(new Document("objectType", permission.getObjectType()).append("email", permission.getEmail()), new Document("$set", parsed), new UpdateOptions().upsert(true));
   }
 
   @Override
   public void deletePermission(Permission permission) {
-    collection.deleteOne(new Document("objectType", permission.getObjectType()).append("email",permission.getEmail()));
+    collection.deleteOne(new Document("objectType", permission.getObjectType()).append("email", permission.getEmail()));
   }
 
   @Override
   public SurveyGroupPermission getGroupPermission(String email) {
     Document first = collection.find(new Document("objectType", "SurveyGroupPermission").append("email", email)).first();
-    if (first != null){
+    if (first != null) {
       return SurveyGroupPermission.deserialize(first.toJson());
     } else {
       return null;
@@ -63,7 +63,7 @@ public class UserPermissionDaoBean extends MongoGenericDao<Document> implements 
 
   @Override
   public void removeFromPermissions(String surveyGroupName) {
-    collection.updateMany(new Document("groups",surveyGroupName),new Document("$pull",new Document("groups", surveyGroupName)));
+    collection.updateMany(new Document("groups", surveyGroupName), new Document("$pull", new Document("groups", surveyGroupName)));
   }
 
 }

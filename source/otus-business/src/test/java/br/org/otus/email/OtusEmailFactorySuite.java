@@ -7,10 +7,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-    OtusNewUserNotificationEmailTest.class,
-    OtusNewUserGreetingsEmailTest.class,
-    OtusSystemInstallationEmailTest.class
+@Suite.SuiteClasses({
+  OtusNewUserNotificationEmailTest.class,
+  OtusNewUserGreetingsEmailTest.class,
+  OtusSystemInstallationEmailTest.class
 })
 public class OtusEmailFactorySuite {
 

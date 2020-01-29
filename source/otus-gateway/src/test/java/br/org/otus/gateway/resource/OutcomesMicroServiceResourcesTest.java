@@ -16,7 +16,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ OutcomesMicroServiceResources.class })
+@PrepareForTest({OutcomesMicroServiceResources.class})
 public class OutcomesMicroServiceResourcesTest {
 
   private static final String HOST = "localhost";

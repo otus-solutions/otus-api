@@ -13,7 +13,9 @@ import br.org.otus.security.dtos.AuthenticationData;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 import br.org.otus.security.context.SecurityContext;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
