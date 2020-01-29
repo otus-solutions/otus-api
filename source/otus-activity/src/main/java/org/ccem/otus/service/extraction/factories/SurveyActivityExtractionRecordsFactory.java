@@ -46,10 +46,9 @@ public class SurveyActivityExtractionRecordsFactory {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), SurveyBasicInfoRecordsFactory.getCategory(surveyActivity));
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER_BY_ACTIVITY.getValue(), SurveyBasicInfoRecordsFactory.getParticipantFieldCenter(surveyActivity));
 
-    final String interviewerEmail = SurveyBasicInfoRecordsFactory.getLastInterviewer(surveyActivity);
-    this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getValue(), interviewerEmail);
-
     final ActivityStatus currentActivityStatus = surveyActivity.getCurrentStatus().orElse(null);
+
+    this.surveyInformation.replace(SurveyActivityExtractionHeaders.INTERVIEWER.getValue(), currentActivityStatus.getUser().getEmail());
 
     final String currentStatus = SurveyBasicInfoRecordsFactory.getCurrentStatusName(currentActivityStatus);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.CURRENT_STATUS.getValue(), currentStatus);
