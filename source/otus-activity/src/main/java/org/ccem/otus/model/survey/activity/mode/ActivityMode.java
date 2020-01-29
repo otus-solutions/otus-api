@@ -6,6 +6,8 @@ public enum ActivityMode {
   @SerializedName("ONLINE")
   ONLINE,
   @SerializedName("PAPER")
-  PAPER
+  PAPER,
+  @SerializedName("AUTOFILL")
+  AUTOFILL
 
 }
