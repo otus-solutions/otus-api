@@ -51,13 +51,6 @@ public class ParticipantFacadeTest {
     assertTrue(participantFacade.getByRecruitmentNumber(RN) instanceof Participant);
   }
 
-
-  //TODO HttpResponseException test causes nullpointerException because of
-  //Static method call ResponseBuild per parameter
-  //Maybe whenNew HttpResponseException withAnyArguments can validate the
-  //Test, but would have to use powerMockito and will lose the coverage
-
-
   @Test
   public void method_list_should_return_instanceOf_ParticipantList() {
     when(participantService.list(fieldCenter)).thenReturn(partipantList);
