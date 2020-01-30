@@ -23,4 +23,6 @@ public interface ParticipantService {
 
   ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException;
 
+  String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
+
 }

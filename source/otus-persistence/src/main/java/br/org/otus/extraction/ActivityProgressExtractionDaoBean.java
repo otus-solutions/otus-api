@@ -60,8 +60,7 @@ public class ActivityProgressExtractionDaoBean extends MongoGenericDao<Document>
     LinkedList<ActivityProgressResultExtraction> progress = new LinkedList<>();
     MongoCursor<Document> iterator = results.iterator();
     while (iterator.hasNext()) {
-      Document next = (Document) iterator.next();
-      progress.add(ActivityProgressResultExtraction.deserialize(next.toJson()));
+      progress.add(ActivityProgressResultExtraction.deserialize(iterator.next().toJson()));
     }
 
     return progress;

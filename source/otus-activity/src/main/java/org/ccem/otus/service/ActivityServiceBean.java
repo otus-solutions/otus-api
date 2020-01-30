@@ -1,6 +1,7 @@
 package org.ccem.otus.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
+import org.ccem.otus.persistence.ActivityExtractionDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
@@ -27,6 +29,8 @@ public class ActivityServiceBean implements ActivityService {
   private ActivityAccessPermissionService activityAccessPermissionService;
   @Inject
   private ActivityProgressExtractionDao activityProgressExtractionDao;
+  @Inject
+  private ActivityExtractionDao activityExtractionDao;
 
   private boolean permissionStatus;
   private boolean userStatusHistory;
@@ -119,6 +123,11 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
   }
+  
+  @Override
+  public List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
+    return activityDao.getExtraction(acronym, version);
+  }
 
   @Override
   public boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException {
@@ -134,6 +143,11 @@ public class ActivityServiceBean implements ActivityService {
   @Override
   public LinkedList<ActivityProgressResultExtraction> getActivityProgressExtraction(String center) throws DataNotFoundException {
     return activityProgressExtractionDao.getActivityProgressExtraction(center);
+  }
+
+  @Override
+  public HashMap<Long, String> getParticipantFieldCenterByActivity(String acronym, Integer version) throws DataNotFoundException {
+    return activityExtractionDao.getParticipantFieldCenter(acronym, version);
   }
 
 }

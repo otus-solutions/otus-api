@@ -36,7 +36,7 @@ public class ActivityFacadeTest {
   private static final String USER_EMAIL = "otus@gmail.com";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
   private static final String CENTER = "RS";
-  
+
   @Mock
   private SurveyActivity surveyActivityInvalid;
   @Mock
@@ -123,10 +123,22 @@ public class ActivityFacadeTest {
     when(activityService.updateCheckerActivity(checkerUpdated)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateCheckerActivity(checkerUpdated);
   }
-  
+
   @Test
   public void getActivityProgressExtraction_method_should_call_method_getActivityProgressExtraction_of_service() throws DataNotFoundException {
     activityFacade.getActivityProgressExtraction(CENTER);
     verify(activityService, times(1)).getActivityProgressExtraction(CENTER);
+  }
+
+  @Test
+  public void getParticipantFieldCenterByActivity_method_should_call_method_getParticipantFieldCenterByActivity_of_service() throws DataNotFoundException {
+    activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+    verify(activityService, times(1)).getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
+    when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
+    activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
   }
 }

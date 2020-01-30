@@ -31,4 +31,6 @@ public interface ParticipantDao {
 
   AggregateIterable<Document> aggregate(List<Bson> query);
 
+  String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
+
 }

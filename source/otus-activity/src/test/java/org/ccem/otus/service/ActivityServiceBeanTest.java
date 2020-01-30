@@ -19,6 +19,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityDao;
+import org.ccem.otus.persistence.ActivityExtractionDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -71,6 +72,8 @@ public class ActivityServiceBeanTest {
   private CheckerUpdatedDTO checkerUpdatedDTO;
   @Mock
   private ActivityProgressExtractionDao activityProgressExtractionDao;
+  @Mock
+  private ActivityExtractionDao activityExtractionDao;
 
   @Before
   public void setup() {
@@ -151,5 +154,17 @@ public class ActivityServiceBeanTest {
   public void getActivityProgressExtraction_method_should_call_getActivityProgressExtraction_of_service() throws DataNotFoundException {
     service.getActivityProgressExtraction(CENTER);
     verify(activityProgressExtractionDao, times(1)).getActivityProgressExtraction(CENTER);
+  }
+
+  @Test
+  public void getExtraction_method_should_call_getExtraction_of_service() throws DataNotFoundException, MemoryExcededException {
+    service.getExtraction(ACRONYM, VERSION);
+    verify(activityDao, times(1)).getExtraction(ACRONYM, VERSION);
+  }
+
+  @Test
+  public void getParticipantFieldCenterByActivity_method_should_call_getParticipantFieldCenter_of_service() throws DataNotFoundException {
+    service.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+    verify(activityExtractionDao, times(1)).getParticipantFieldCenter(ACRONYM, VERSION);
   }
 }

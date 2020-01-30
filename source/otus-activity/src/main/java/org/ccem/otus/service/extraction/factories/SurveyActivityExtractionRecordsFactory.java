@@ -2,7 +2,6 @@ package org.ccem.otus.service.extraction.factories;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +38,13 @@ public class SurveyActivityExtractionRecordsFactory {
     return this.surveyInformation;
   }
 
-  public void buildSurveyBasicInfo(SurveyActivity surveyActivity) {
+  public void buildSurveyBasicInfo(SurveyActivity surveyActivity, String participanteFieldCenter) {
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue(), SurveyBasicInfoRecordsFactory.getRecruitmentNumber(surveyActivity));
+    this.surveyInformation.replace(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER.getValue(), participanteFieldCenter);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.ACRONYM.getValue(), this.surveyForm.getSurveyTemplate().identity.acronym);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.MODE.getValue(), surveyActivity.getMode());
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.CATEGORY.getValue(), SurveyBasicInfoRecordsFactory.getCategory(surveyActivity));
+    this.surveyInformation.replace(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER_BY_ACTIVITY.getValue(), SurveyBasicInfoRecordsFactory.getParticipantFieldCenter(surveyActivity));
 
     final ActivityStatus currentActivityStatus = surveyActivity.getCurrentStatus().orElse(null);
 
@@ -77,28 +78,28 @@ public class SurveyActivityExtractionRecordsFactory {
       SurveyItem surveyItem = this.surveyForm.getSurveyTemplate().findSurveyItem(trackingItem.id).orElseThrow(RuntimeException::new);
 
       switch (trackingItem.state) {
-        // TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
-        case "SKIPPED": {
-          skippAnswer(surveyItem.getCustomID());
-          break;
-        }
-        case "ANSWERED": {
-          // TODO: 16/10/17 create ExtractionExceptions
-          QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
+      // TODO: 11/10/17 apply enum: NavigationTrackingItemStatuses
+      case "SKIPPED": {
+        skippAnswer(surveyItem.getCustomID());
+        break;
+      }
+      case "ANSWERED": {
+        // TODO: 16/10/17 create ExtractionExceptions
+        QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElseThrow(DataNotFoundException::new);
+        ExtractionFill extraction = questionFill.extraction();
+        fillAnswerInfo(customIDMap, extraction, surveyItem);
+        break;
+      }
+      case "NOT_VISITED":
+      case "IGNORED":
+      case "VISITED": {
+        QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
+        if (questionFill != null) {
           ExtractionFill extraction = questionFill.extraction();
           fillAnswerInfo(customIDMap, extraction, surveyItem);
-          break;
         }
-        case "NOT_VISITED":
-        case "IGNORED":
-        case "VISITED": {
-          QuestionFill questionFill = surveyActivity.getFillContainer().getQuestionFill(trackingItem.id).orElse(null);
-          if (questionFill != null) {
-            ExtractionFill extraction = questionFill.extraction();
-            fillAnswerInfo(customIDMap, extraction, surveyItem);
-          }
-          break;
-        }
+        break;
+      }
       }
     }
   }
@@ -110,24 +111,23 @@ public class SurveyActivityExtractionRecordsFactory {
     for (Map.Entry<String, Object> pair : filler.getAnswerExtract().entrySet()) {
       String key = pair.getKey();
 
-
       switch (surveyItem.objectType) {
-        case "SingleSelectionQuestion": {
-          //TODO 17/10/18: check whan getValue comes null
-          this.surveyInformation.replace(customIDMap.get(key), getSingleSelectionExtractionValue(surveyItem, pair.getValue()));
-          break;
-        }
-        //TODO CheckboxQuestion Option ID FIX
-        case "CheckboxQuestion":
-        case "GridTextQuestion":
-        case "GridIntegerQuestion": {
-          this.surveyInformation.replace(key, pair.getValue());
-          break;
-        }
-        default: {
-          this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
-          break;
-        }
+      case "SingleSelectionQuestion": {
+        // TODO 17/10/18: check whan getValue comes null
+        this.surveyInformation.replace(customIDMap.get(key), getSingleSelectionExtractionValue(surveyItem, pair.getValue()));
+        break;
+      }
+      // TODO CheckboxQuestion Option ID FIX
+      case "CheckboxQuestion":
+      case "GridTextQuestion":
+      case "GridIntegerQuestion": {
+        this.surveyInformation.replace(key, pair.getValue());
+        break;
+      }
+      default: {
+        this.surveyInformation.replace(customIDMap.get(key), pair.getValue());
+        break;
+      }
       }
     }
 

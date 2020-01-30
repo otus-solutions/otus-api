@@ -34,7 +34,6 @@ public class ParticipantServiceBean implements ParticipantService {
       } catch (ValidationException | DataNotFoundException e) {
         insertedParticipants.add(null);
       }
-
     });
   }
 
@@ -42,7 +41,6 @@ public class ParticipantServiceBean implements ParticipantService {
   public ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException {
     return participantDao.getRecruitmentNumbersByFieldCenter(center);
   }
-
 
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {
@@ -76,13 +74,18 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
-  public Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException {
-    return participantDao.findByRecruitmentNumber(rn);
+  public Participant getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return participantDao.findByRecruitmentNumber(recruitmentNumber);
   }
 
   @Override
   public Long getPartipantsActives(String acronymCenter) throws DataNotFoundException {
     return participantDao.countParticipantActivities(acronymCenter);
+  }
+
+  @Override
+  public String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return participantDao.getParticipantFieldCenterByRecruitmentNumber(recruitmentNumber);
   }
 
 }
