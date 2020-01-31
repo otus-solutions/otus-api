@@ -18,64 +18,63 @@ public class DataSourceServiceBean implements DataSourceService {
   private DataSourceValuesMapping dataSourceValuesMapping;
 
   @Inject
-	private DataSourceDao dataSourceDao;
+  private DataSourceDao dataSourceDao;
 
+  public DataSourceServiceBean() { };
 
-	public DataSourceServiceBean (){};
-
-	@Override
-	public void create(DataSource dataSource, HashSet<String> duplicatedElements) throws AlreadyExistException, ValidationException {
-		if (duplicatedElements.size() > 0){
-			throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements + "}"),duplicatedElements);
-		}else {
-			dataSourceDao.persist(dataSource);
-		}
-	}
-
-	@Override
-	public void update(DataSource dataSource, HashSet<String> duplicatedElements) throws ValidationException, DataNotFoundException {
-		DataSource dataSourcePersisted = dataSourceDao.findByID(dataSource.getId());
-
-		if(dataSource.getDataAsSet().containsAll(dataSourcePersisted.getDataAsSet())){
-			if (duplicatedElements.size() == 0){
-				dataSourceDao.update(dataSource);
-			} else {
-				throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements + "}"));
-			}
-		} else {
-			throw new ValidationException(new Throwable("There are missing elements in datasource {" + dataSource.getId() + "}"));
-		}
-	}
-
-	@Override
-	public List<DataSource> list() {
-		return dataSourceDao.find();
-	}
-
-	@Override
-	public DataSource getByID(String id) throws DataNotFoundException {
-		return dataSourceDao.findByID(id);
-	}
-
-	@Override
-	public String getElementExtractionValue(List<String> dataSources, String value) {
-		String valueFound = "";
-		for(String dataSource : dataSources){
-			String extractionValue = this.dataSourceValuesMapping.getExtractionValue(dataSource.toLowerCase(), value);
-			if(extractionValue != null){
-				valueFound = extractionValue;
-			}
-		}
-		if(valueFound.equals("")){
-			valueFound = "NOT IDENTIFIED";
-		}
-		return valueFound;
-	}
-
-	@Override
-    public void populateDataSourceMapping() {
-	  this.dataSourceValuesMapping = dataSourceDao.getDataSourceMapping();
+  @Override
+  public void create(DataSource dataSource, HashSet<String> duplicatedElements) throws AlreadyExistException, ValidationException {
+    if (duplicatedElements.size() > 0) {
+      throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements + "}"), duplicatedElements);
+    } else {
+      dataSourceDao.persist(dataSource);
     }
+  }
+
+  @Override
+  public void update(DataSource dataSource, HashSet<String> duplicatedElements) throws ValidationException, DataNotFoundException {
+    DataSource dataSourcePersisted = dataSourceDao.findByID(dataSource.getId());
+
+    if (dataSource.getDataAsSet().containsAll(dataSourcePersisted.getDataAsSet())) {
+      if (duplicatedElements.size() == 0) {
+        dataSourceDao.update(dataSource);
+      } else {
+        throw new ValidationException(new Throwable("There are duplicated elements in datasource {" + duplicatedElements + "}"));
+      }
+    } else {
+      throw new ValidationException(new Throwable("There are missing elements in datasource {" + dataSource.getId() + "}"));
+    }
+  }
+
+  @Override
+  public List<DataSource> list() {
+    return dataSourceDao.find();
+  }
+
+  @Override
+  public DataSource getByID(String id) throws DataNotFoundException {
+    return dataSourceDao.findByID(id);
+  }
+
+  @Override
+  public String getElementExtractionValue(List<String> dataSources, String value) {
+    String valueFound = "";
+    for (String dataSource : dataSources) {
+      String extractionValue = this.dataSourceValuesMapping.getExtractionValue(dataSource.toLowerCase(), value);
+      if (extractionValue != null) {
+        valueFound = extractionValue;
+      }
+    }
+    if (valueFound.equals("")) {
+      valueFound = "NOT IDENTIFIED";
+    }
+    return valueFound;
+  }
+
+  @Override
+  public void populateDataSourceMapping() {
+    this.dataSourceValuesMapping = dataSourceDao.getDataSourceMapping();
+  }
 
 }
 

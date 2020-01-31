@@ -1,13 +1,15 @@
 package br.org.otus.survey.activity;
 
-import br.org.mongodb.MongoGenericDao;
-import com.google.gson.GsonBuilder;
-import com.mongodb.Block;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Projections.exclude;
+import static com.mongodb.client.model.Projections.fields;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -19,19 +21,23 @@ import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.ActivityDao;
+import org.ccem.otus.service.ParseQuery;
 
-import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Projections.exclude;
-import static com.mongodb.client.model.Projections.fields;
+import br.org.mongodb.MongoGenericDao;
 
 @Stateless
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
 
     public static final String COLLECTION_NAME = "activity";
+    
     public static final String ACRONYM_PATH = "surveyForm.acronym";
     public static final String VERSION_PATH = "surveyForm.version";
     public static final String DISCARDED_PATH = "isDiscarded";
@@ -144,6 +150,39 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         }
 
         return activities;
+    }
+    
+    public List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
+      List<Bson> pipeline = new ArrayList<>();
+      pipeline.add(ParseQuery.toDocument("{\n" + 
+          "    '$match': {\n" + 
+          "      \"surveyForm.acronym\":" + acronym + ", \n" + 
+          "      \"surveyForm.version\":" + version + ", \n" + 
+          "      \"isDiscarded\": false\n" + 
+          "    }\n" + 
+          "  }"));
+      AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+      if (results == null) {
+        throw new DataNotFoundException("There are no results");
+      }
+      
+      MongoCursor<Document> iterator = results.iterator();
+      ArrayList<SurveyActivity> activities = new ArrayList<>();
+      while (iterator.hasNext()) {
+        try {
+          activities.add(SurveyActivity.deserialize(iterator.next().toJson()));
+        } catch (OutOfMemoryError e) {
+          activities.clear();
+          activities = null;
+          throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
+        }
+      }
+      
+      if (activities.isEmpty()) {
+        throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
+      }
+      
+      return activities;
     }
 
     @Override

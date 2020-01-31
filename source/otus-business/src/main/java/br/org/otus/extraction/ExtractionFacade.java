@@ -1,8 +1,6 @@
 package br.org.otus.extraction;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 
@@ -24,7 +22,6 @@ import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.laboratory.extraction.LaboratoryExtraction;
 import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.api.ParticipantLaboratoryFacade;
-import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.survey.activity.api.ActivityFacade;
@@ -34,34 +31,28 @@ public class ExtractionFacade {
 
   @Inject
   private ActivityFacade activityFacade;
-
   @Inject
   private SurveyFacade surveyFacade;
-
   @Inject
   private ExamUploadFacade examUploadFacade;
-
   @Inject
   private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
-
   @Inject
   private ParticipantLaboratoryFacade participantLaboratoryFacade;
-
   @Inject
   private FileUploaderFacade fileUploaderFacade;
-
   @Inject
   private ExtractionService extractionService;
-
   @Inject
   private DataSourceService dataSourceService;
 
   public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
-    List<SurveyActivity> activities = activityFacade.get(acronym, version);
-
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
+    List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
+    Map<Long, String> fieldCenterByRecruitmentNumber = activityFacade.getParticipantFieldCenterByActivity(acronym, version);
+
     dataSourceService.populateDataSourceMapping();
-    SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities);
+    SurveyActivityExtraction extractor = new SurveyActivityExtraction(surveyForm, activities, fieldCenterByRecruitmentNumber);
     extractor.addPreProcessor(autocompleteQuestionPreProcessor);
 
     try {

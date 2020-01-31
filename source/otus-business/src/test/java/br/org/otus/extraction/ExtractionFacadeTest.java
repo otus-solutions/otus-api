@@ -73,7 +73,7 @@ public class ExtractionFacadeTest {
     surveys.add(surveyForm);
     surveys.add(surveyForm);
     PowerMockito.when(surveyFacade.get(acronym, version)).thenReturn(surveys.get(0));
-    PowerMockito.when(activityFacade.get(acronym, version)).thenReturn(new ArrayList<>());
+    PowerMockito.when(activityFacade.getExtraction(acronym, version)).thenReturn(new ArrayList<>());
     PowerMockito.whenNew(SurveyActivityExtraction.class).withAnyArguments().thenReturn(surveyActivityExtraction);
     PowerMockito.whenNew(ExamUploadExtration.class).withAnyArguments().thenReturn(examUploadExtration);
     PowerMockito.whenNew(LaboratoryExtraction.class).withAnyArguments().thenReturn(laboratoryExtraction);
@@ -84,7 +84,7 @@ public class ExtractionFacadeTest {
   public void should_return_new_extraction_of_activities() throws Exception {
     assertNotNull(extractionFacade);
     extractionFacade.createActivityExtraction(acronym, version);
-    Mockito.verify(activityFacade).get(acronym, version);
+    Mockito.verify(activityFacade).getExtraction(acronym, version);
     Mockito.verify(surveyFacade).get(acronym, version);
     Mockito.verify(surveyActivityExtraction, Mockito.times(1)).addPreProcessor(autocompleteQuestionPreProcessor);
     Mockito.verify(extractionService).createExtraction(surveyActivityExtraction);
