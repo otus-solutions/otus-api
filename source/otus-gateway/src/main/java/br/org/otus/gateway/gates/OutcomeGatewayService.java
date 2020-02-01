@@ -6,7 +6,6 @@ import br.org.otus.gateway.request.JsonPUTRequestUtility;
 import br.org.otus.gateway.resource.OutcomesMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
-import br.org.otus.gateway.response.exception.RequestException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,7 +18,7 @@ public class OutcomeGatewayService {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, followUpJson);
       String response = jsonPOST.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (IOException | RequestException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -42,7 +41,7 @@ public class OutcomeGatewayService {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       jsonPUT.finish();
       return new GatewayResponse().buildSuccess();
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -53,7 +52,7 @@ public class OutcomeGatewayService {
       JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
       String response = jsonGETUtility.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -64,7 +63,7 @@ public class OutcomeGatewayService {
       JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
       String response = jsonGETUtility.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -75,7 +74,7 @@ public class OutcomeGatewayService {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, eventJson);
       String response = jsonPOST.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -86,7 +85,7 @@ public class OutcomeGatewayService {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, eventJson);
       String response = jsonPOST.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -97,7 +96,7 @@ public class OutcomeGatewayService {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       jsonPUT.finish();
       return new GatewayResponse().buildSuccess();
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -108,7 +107,7 @@ public class OutcomeGatewayService {
       JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
       String response = jsonGETUtility.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -119,7 +118,7 @@ public class OutcomeGatewayService {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       String response = jsonPUT.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -130,7 +129,7 @@ public class OutcomeGatewayService {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       jsonPUT.finish();
       return new GatewayResponse().buildSuccess();
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
@@ -141,7 +140,7 @@ public class OutcomeGatewayService {
       JsonGETUtility jsonGETUtility = new JsonGETUtility(requestURL);
       String response = jsonGETUtility.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (RequestException | IOException ex) {
+    } catch (IOException ex) {
       throw new ReadRequestException();
     }
   }
