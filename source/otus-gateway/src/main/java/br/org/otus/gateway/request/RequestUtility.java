@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 
 import org.bson.Document;
 
 import com.google.gson.GsonBuilder;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RequestUtility {
 
@@ -17,7 +20,7 @@ public class RequestUtility {
     String response;
     InputStream responseStream = new BufferedInputStream(httpConn.getInputStream());
 
-    BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+    BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, UTF_8));
 
     String line = "";
     StringBuilder stringBuilder = new StringBuilder();
