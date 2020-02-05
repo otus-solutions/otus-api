@@ -25,10 +25,12 @@ public class SurveyActivityExtractionHeadersFactory {
   private void buildHeadersInfo() {
     /* Basic information headers */
     this.headers.add(SurveyActivityExtractionHeaders.RECRUITMENT_NUMBER.getValue());
+    this.headers.add(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.ACRONYM.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.MODE.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.TYPE.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.CATEGORY.getValue());
+    this.headers.add(SurveyActivityExtractionHeaders.PARTICIPANT_FIELD_CENTER_BY_ACTIVITY.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.INTERVIEWER.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.CURRENT_STATUS_DATE.getValue());

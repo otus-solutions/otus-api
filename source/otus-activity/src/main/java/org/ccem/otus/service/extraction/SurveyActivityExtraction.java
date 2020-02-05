@@ -1,6 +1,9 @@
 package org.ccem.otus.service.extraction;
 
-import br.org.otus.api.Extractable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionHeadersFactory;
@@ -8,7 +11,7 @@ import org.ccem.otus.service.extraction.factories.SurveyActivityExtractionRecord
 import org.ccem.otus.service.extraction.preprocessing.ActivityPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 
-import java.util.*;
+import br.org.otus.api.Extractable;
 
 public class SurveyActivityExtraction implements Extractable {
 
@@ -16,28 +19,29 @@ public class SurveyActivityExtraction implements Extractable {
   private SurveyForm surveyForm;
   private SurveyActivityExtractionHeadersFactory headersFactory;
   private SurveyActivityExtractionRecordsFactory recordsFactory;
+  private List<ActivityPreProcessor> processors;
+  private Map<Long, String> fieldCenterByRecruitmentNumber;
 
-  private List<ActivityPreProcessor> processors = new ArrayList<>();
-
-  public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities) {
+  public SurveyActivityExtraction(SurveyForm surveyForm, List<SurveyActivity> surveyActivities, Map<Long, String> fieldCenterByRecruitmentNumber) {
+    this.processors = new ArrayList<>();
     this.surveyActivities = surveyActivities;
     this.surveyForm = surveyForm;
     this.headersFactory = new SurveyActivityExtractionHeadersFactory(this.surveyForm);
+    this.fieldCenterByRecruitmentNumber = fieldCenterByRecruitmentNumber;
   }
 
-  @Override
   public List<String> getHeaders() {
     return this.headersFactory.getHeaders();
   }
 
-  @Override
   public List<List<Object>> getValues() throws DataNotFoundException {
     List<List<Object>> values = new ArrayList<>();
 
     for (SurveyActivity surveyActivity : this.surveyActivities) {
-      this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());
       List<Object> resultInformation = new ArrayList<>();
-      this.recordsFactory.buildSurveyBasicInfo(surveyActivity);
+      String participantFieldCenter = getParticipantFieldCenterByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
+      this.recordsFactory = new SurveyActivityExtractionRecordsFactory(this.surveyForm, this.headersFactory.getHeaders());
+      this.recordsFactory.buildSurveyBasicInfo(surveyActivity, participantFieldCenter);
       this.recordsFactory.buildSurveyQuestionInfo(surveyActivity);
       for (ActivityPreProcessor preprocessor : this.processors) {
         try {
@@ -56,5 +60,8 @@ public class SurveyActivityExtraction implements Extractable {
     this.processors.add(activityPreProcessor);
   }
 
+  private String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return fieldCenterByRecruitmentNumber.get(recruitmentNumber);
+  }
 
 }

@@ -20,11 +20,7 @@ public class DataSourceServiceBean implements DataSourceService {
   @Inject
   private DataSourceDao dataSourceDao;
 
-
-  public DataSourceServiceBean() {
-  }
-
-  ;
+  public DataSourceServiceBean() { };
 
   @Override
   public void create(DataSource dataSource, HashSet<String> duplicatedElements) throws AlreadyExistException, ValidationException {

@@ -384,7 +384,6 @@ public class ReportServiceBeanTest {
     assertEquals(activityReportTemplates, reportServiceBean.getActivityReportList(ACRONYM));
   }
 
-
   @Test
   public void updateActivityReportMethod_should_update_activity_report() throws Exception {
     activityReportTemplate = new ActivityReportTemplate();

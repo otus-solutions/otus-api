@@ -129,4 +129,16 @@ public class ActivityFacadeTest {
     activityFacade.getActivityProgressExtraction(CENTER);
     verify(activityService, times(1)).getActivityProgressExtraction(CENTER);
   }
+
+  @Test
+  public void getParticipantFieldCenterByActivity_method_should_call_method_getParticipantFieldCenterByActivity_of_service() throws DataNotFoundException {
+    activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+    verify(activityService, times(1)).getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
+    when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
+    activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+  }
 }

@@ -96,4 +96,9 @@ public class ParticipantServiceBean implements ParticipantService {
     return participantDao.countParticipantActivities(acronymCenter);
   }
 
+  @Override
+  public String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return participantDao.getParticipantFieldCenterByRecruitmentNumber(recruitmentNumber);
+  }
+
 }

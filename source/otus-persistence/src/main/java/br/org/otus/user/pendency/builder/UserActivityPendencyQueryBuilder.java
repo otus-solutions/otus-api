@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class UserActivityPendencyQueryBuilder {
 
+  public static final String ACTIVITY_ID_FIELD = "activityId";
   public static final String FINALIZED_STATUS = "FINALIZED";
 
   private ArrayList<Bson> pipeline;
@@ -40,14 +41,14 @@ public class UserActivityPendencyQueryBuilder {
       "        $lookup: {\n" +
       "            from:\"activity\",\n" +
       "            let: {\n" +
-      "                activityId: \"$activityId\"\n" +
+      "              "+ACTIVITY_ID_FIELD+": \"$"+ACTIVITY_ID_FIELD+"\"\n" +
       "            },\n" +
       "            pipeline: [\n" +
       "                {\n" +
       "                    $match: {\n" +
       "                        $expr: {\n" +
       "                            $and: [\n" +
-      "                                { $eq: [\"$$activityId\", \"$_id\"] },\n" +
+      "                                { $eq: [\"$$"+ACTIVITY_ID_FIELD+"\", \"$_id\"] },\n" +
       "                                { $eq: [false, \"$isDiscarded\"] }" +
       "                                " + statusCondition +
       "                            ]\n" +

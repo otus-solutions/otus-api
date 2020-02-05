@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParticipantServiceBeanTest {
-  private static final long RECRUIMENT_NUMBER = 3051442;
+  private static final long RECRUITMENT_NUMBER = 3051442;
   private static final String PARTICIPANT_NAME = "Jose Otus";
   private static final String ACRONYM = "RS";
   private static final String EMAIL = "email@test.com";
@@ -50,7 +50,7 @@ public class ParticipantServiceBeanTest {
 
     setParticipants = Mockito.spy(new HashSet<>());
 
-    participant = new Participant(RECRUIMENT_NUMBER);
+    participant = new Participant(RECRUITMENT_NUMBER);
     participant.setName(PARTICIPANT_NAME);
     participant.setFieldCenter(fieldCenter);
 
@@ -83,20 +83,20 @@ public class ParticipantServiceBeanTest {
   @Test
   public void method_create_participant_should_insert_successfully_when_a_participant_with_given_rn_doesnt_exist() throws ValidationException {
     setParticipants.add(participant);
-    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(false);
+    when(participantDao.exists(RECRUITMENT_NUMBER)).thenReturn(false);
     participantServiceBean.create(setParticipants);
   }
 
   @Test
   public void method_create_participants_validate_recruitmentNumber_should_return_exception() {
     setParticipants.add(participant);
-    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
+    when(participantDao.exists(RECRUITMENT_NUMBER)).thenReturn(true);
     participantServiceBean.create(setParticipants);
   }
 
   @Test(expected = ValidationException.class)
   public void method_create_a_participant_validate_recruitmentNumber_should_return_exception() throws ValidationException, DataNotFoundException {
-    when(participantDao.exists(RECRUIMENT_NUMBER)).thenReturn(true);
+    when(participantDao.exists(RECRUITMENT_NUMBER)).thenReturn(true);
     assertNull(participantServiceBean.create(participant));
   }
 
@@ -110,21 +110,20 @@ public class ParticipantServiceBeanTest {
 
   @Test
   public void method_getByRecruitmentNumber_should_return_participant() throws DataNotFoundException {
-    when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
-    assertEquals(PARTICIPANT_NAME, participantServiceBean.getByRecruitmentNumber(RECRUIMENT_NUMBER).getName());
+    when(participantDao.findByRecruitmentNumber(RECRUITMENT_NUMBER)).thenReturn(participant);
+    assertEquals(PARTICIPANT_NAME, participantServiceBean.getByRecruitmentNumber(RECRUITMENT_NUMBER).getName());
   }
 
   @Test
   public void create_should_call_ask_for_recruitment_number_when_the_auto_generation_is_on() throws DataNotFoundException, ValidationException {
     when(projectConfigurationService.isRnProvided()).thenReturn(true);
-    when(recruitmentNumberService.get(ACRONYM)).thenReturn(RECRUIMENT_NUMBER);
+    when(recruitmentNumberService.get(ACRONYM)).thenReturn(RECRUITMENT_NUMBER);
 
     Participant result = participantServiceBean.create(this.participant);
 
     verify(recruitmentNumberService).get(this.participant.getFieldCenter().getAcronym());
-    assertEquals(result.getRecruitmentNumber(), (Long) RECRUIMENT_NUMBER);
+    assertEquals(result.getRecruitmentNumber(), (Long) RECRUITMENT_NUMBER);
   }
-
 
   @Test(expected = ValidationException.class)
   public void create_should_throw_error_when_rn_is_null_and_not_provided() throws DataNotFoundException, ValidationException {
@@ -132,7 +131,6 @@ public class ParticipantServiceBeanTest {
     participant.setRecruitmentNumber(null);
     doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(), null);
     participantServiceBean.create(this.participant);
-
   }
 
   @Test(expected = ValidationException.class)
@@ -141,14 +139,18 @@ public class ParticipantServiceBeanTest {
     participant.setRecruitmentNumber(null);
     doThrow(new ValidationException()).when(recruitmentNumberService).validate(this.participant.getFieldCenter(), null);
     participantServiceBean.create(this.participant);
-
   }
 
   @Test
   public void should_call_dao_for_the_list_of_rns() throws DataNotFoundException, ValidationException {
     participantServiceBean.listCenterRecruitmentNumbers(ACRONYM);
     Mockito.verify(participantDao, Mockito.times(1)).getRecruitmentNumbersByFieldCenter(ACRONYM);
+  }
 
+  @Test
+  public void getParticipantFieldCenterByRecruitmentNumber_method_should_call_method_getParticipantFieldCenterByRecruitmentNumber() throws DataNotFoundException {
+    participantServiceBean.getParticipantFieldCenterByRecruitmentNumber(RECRUITMENT_NUMBER);
+    Mockito.verify(participantDao, Mockito.times(1)).getParticipantFieldCenterByRecruitmentNumber(RECRUITMENT_NUMBER);
   }
 
   @Test

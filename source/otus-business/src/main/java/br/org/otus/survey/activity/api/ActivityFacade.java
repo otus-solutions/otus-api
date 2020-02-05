@@ -1,5 +1,6 @@
 package br.org.otus.survey.activity.api;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,16 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+  
+  public List<SurveyActivity> getExtraction(String acronym, Integer version) {
+    try {
+      return activityService.getExtraction(acronym, version);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (MemoryExcededException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 
   public String create(SurveyActivity surveyActivity) {
     try {
@@ -74,6 +85,14 @@ public class ActivityFacade {
   public LinkedList<ActivityProgressResultExtraction> getActivityProgressExtraction(String center) {
     try {
       return activityService.getActivityProgressExtraction(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+  
+  public HashMap<Long, String> getParticipantFieldCenterByActivity(String acronym, Integer version) {
+    try {
+      return activityService.getParticipantFieldCenterByActivity(acronym, version);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
