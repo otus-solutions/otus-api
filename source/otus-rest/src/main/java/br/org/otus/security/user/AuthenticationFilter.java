@@ -34,7 +34,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
       String token = AuthorizationHeaderReader.readToken(authorizationHeader);
       SignedJWT parsed = SignedJWT.parse(token);
       String mode = parsed.getJWTClaimsSet().getClaim("mode").toString();
-      if (mode.equals("user")) {
+      if (mode.equals("user")|| mode.equals("client")) {
         securityContextService.validateToken(token);
       } else if (mode.equals("participant")) {
         securityFacade.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
