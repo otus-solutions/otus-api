@@ -12,7 +12,6 @@
     <param-value>
       br.org.otus.response.exception.HttpResponseExceptionMapper,
       br.org.otus.security.user.AuthenticationFilter,
-      br.org.otus.security.participant.ParticipantAuthenticationFilter,
       br.org.otus.extraction.ExtractionAuthenticationFilter
     </param-value>
   </context-param>

@@ -87,7 +87,8 @@ public class SecurityServiceBean implements SecurityService {
         ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = new ParticipantSecurityAuthorizationDto();
 
         Equalizer.equalize(participant, participantSecurityAuthorizationDto);
-        String token = initializeToken(authenticationData);
+        byte[] secretKey = securityContextService.generateSecretKey();
+        String token = securityContextService.generateToken(authenticationData, secretKey);
         participantDao.addAuthToken(authenticationData.getUserEmail(), token);
         participantSecurityAuthorizationDto.setToken(token);
         return participantSecurityAuthorizationDto;
