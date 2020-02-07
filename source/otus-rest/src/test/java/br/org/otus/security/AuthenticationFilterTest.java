@@ -35,13 +35,6 @@ public class AuthenticationFilterTest {
     when(containerRequestContext.getHeaderString(anyString())).thenReturn(authorizationHeaderReader);
   }
 
-  @Test
-  public void method_filter_should_call_validateToken() throws IOException, TokenException {
-    authenticationFilter.filter(containerRequestContext);
-    verify(containerRequestContext).getHeaderString(anyString());
-    verify(securityContextService).validateToken(anyString());
-  }
-
   @Test(expected = Exception.class)
   public void method_filter_shoul_throw_exception() throws Exception {
     authenticationFilter.filter(containerRequestContextException);

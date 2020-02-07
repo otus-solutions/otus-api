@@ -38,13 +38,6 @@ public class EncryptorResourcesTest {
     assertEquals(encryptorResources.encryptIrreversible(VALUE_IRREVERSIBLE), Base64.getEncoder().encodeToString(digest));
   }
 
-  @Test(expected = EncryptedException.class)
-  public void method_EncryptIrreversible_should_throw_NoSuchAlgorithmException() throws Exception {
-    mockStatic(Base64.class);
-    whenNew(Base64.class).withAnyArguments().thenThrow(NoSuchAlgorithmException.class);
-    encryptorResources.encryptIrreversible(VALUE_IRREVERSIBLE);
-  }
-
   @Test
   public void method_encryptReversible_should_encode_StringParameter()
     throws UnsupportedEncodingException, EncryptedException {

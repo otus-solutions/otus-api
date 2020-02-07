@@ -30,10 +30,11 @@ public class FileUploaderResource {
     return new br.org.otus.rest.Response().buildSuccess(facade.upload(form, token)).toJson();
   }
 
-  @POST
+  @GET
   @Secured
+  @Path("/{id}")
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response getById(String oid) {
+  public Response getById(@PathParam("id") String oid) {
     ResponseBuilder builder = Response.ok(facade.getById(oid));
     builder.header("Content-Disposition", "attachment; filename=" + "anything");
     return builder.build();
