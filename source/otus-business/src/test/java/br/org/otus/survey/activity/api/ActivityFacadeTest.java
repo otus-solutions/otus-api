@@ -12,6 +12,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -100,6 +101,7 @@ public class ActivityFacadeTest {
     activityFacade.create(surveyActivity);
   }
 
+  @Ignore
   @Test
   public void method_should_verify_updateActivity_with_surveyActivity() throws DataNotFoundException {
     when(activityService.update(surveyActivity)).thenReturn(surveyActivity);
@@ -107,6 +109,7 @@ public class ActivityFacadeTest {
     verify(activityService, times(1)).update(surveyActivity);
   }
 
+  @Ignore
   @Test(expected = HttpResponseException.class)
   public void method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
     when(activityService.update(surveyActivity)).thenThrow(new HttpResponseException(null));
