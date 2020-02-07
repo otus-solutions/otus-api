@@ -33,6 +33,8 @@ import br.org.otus.response.exception.HttpResponseException;
 @RunWith(MockitoJUnitRunner.class)
 public class FileUploaderFacadeTest {
   private static final String OID = "592415fb28110d2722b16fe3";
+  private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImJvZXNlLndvcmtAZ21haWwuY29tIn0.mwjgTibwvxjnZyUyWJH5N97tEw9bzLIbVOmfZnF_WWM";
+
   @InjectMocks
   private FileUploaderFacade fileUploaderFacade;
   @Mock
@@ -79,7 +81,7 @@ public class FileUploaderFacadeTest {
     form = new FileUploaderPOJO();
     objectId = new ObjectId(OID);
     when(fileStoreBucket.store(form)).thenReturn(objectId.toString());
-    assertEquals(fileUploaderFacade.upload(form), objectId.toString());
+    assertEquals(fileUploaderFacade.upload(form, TOKEN), objectId.toString());
   }
 
   @Test
