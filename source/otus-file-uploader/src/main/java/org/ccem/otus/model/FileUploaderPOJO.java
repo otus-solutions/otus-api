@@ -58,6 +58,10 @@ public class FileUploaderPOJO {
     return size;
   }
 
+  public void setInterviewer(String interviewer) {
+    this.interviewer = interviewer;
+  }
+
   public String getInterviewer() {
     return interviewer;
   }

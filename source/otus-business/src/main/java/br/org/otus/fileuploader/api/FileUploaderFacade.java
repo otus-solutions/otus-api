@@ -3,13 +3,16 @@ package br.org.otus.fileuploader.api;
 import br.org.mongodb.gridfs.FileStoreBucket;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import com.nimbusds.jwt.SignedJWT;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FileUploaderPOJO;
+import org.ccem.otus.model.survey.activity.User;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class FileUploaderFacade {
@@ -36,7 +39,15 @@ public class FileUploaderFacade {
     }
   }
 
-  public String upload(FileUploaderPOJO form) {
+  public String upload(FileUploaderPOJO form, String token) {
+    try {
+      token = token.substring("Bearer".length()).trim();
+      SignedJWT parsed = SignedJWT.parse(token);
+      String email = parsed.getJWTClaimsSet().getClaim("iss").toString();
+      form.setInterviewer(email);
+    } catch ( ParseException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
     return fileStoreBucket.store(form);
   }
 
