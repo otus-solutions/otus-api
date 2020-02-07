@@ -17,10 +17,8 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import sun.misc.BASE64Encoder;
-
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({EncryptorResources.class, BASE64Encoder.class, Base64.class})
+@PrepareForTest({EncryptorResources.class, Base64.class})
 public class EncryptorResourcesTest {
   private static final String VALUE_IRREVERSIBLE = "Otus1234";
   private static final String VALUE_REVERSIBLE = "Otus1234";
@@ -37,13 +35,13 @@ public class EncryptorResourcesTest {
     throws NoSuchAlgorithmException, EncryptedException {
     messageDigest = MessageDigest.getInstance("SHA");
     digest = messageDigest.digest(VALUE_IRREVERSIBLE.getBytes());
-    assertEquals(encryptorResources.encryptIrreversible(VALUE_IRREVERSIBLE), new BASE64Encoder().encode(digest));
+    assertEquals(encryptorResources.encryptIrreversible(VALUE_IRREVERSIBLE), Base64.getEncoder().encodeToString(digest));
   }
 
   @Test(expected = EncryptedException.class)
   public void method_EncryptIrreversible_should_throw_NoSuchAlgorithmException() throws Exception {
-    mockStatic(BASE64Encoder.class);
-    whenNew(BASE64Encoder.class).withAnyArguments().thenThrow(NoSuchAlgorithmException.class);
+    mockStatic(Base64.class);
+    whenNew(Base64.class).withAnyArguments().thenThrow(NoSuchAlgorithmException.class);
     encryptorResources.encryptIrreversible(VALUE_IRREVERSIBLE);
   }
 

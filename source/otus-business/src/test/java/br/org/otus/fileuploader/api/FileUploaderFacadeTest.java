@@ -33,7 +33,7 @@ import br.org.otus.response.exception.HttpResponseException;
 @RunWith(MockitoJUnitRunner.class)
 public class FileUploaderFacadeTest {
   private static final String OID = "592415fb28110d2722b16fe3";
-  private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImJvZXNlLndvcmtAZ21haWwuY29tIn0.mwjgTibwvxjnZyUyWJH5N97tEw9bzLIbVOmfZnF_WWM";
+  private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoicGFydGljaXBhbnQiLCJpc3MiOiJib2VzZS53b3JrQGdtYWlsLmNvbSJ9.2yWrdhnF9P3sqDlq75Mlwz4mb7UvXRdpNi1IIxPfeQk";
 
   @InjectMocks
   private FileUploaderFacade fileUploaderFacade;

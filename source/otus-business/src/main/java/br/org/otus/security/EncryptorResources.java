@@ -1,7 +1,6 @@
 package br.org.otus.security;
 
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
-import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -15,7 +14,7 @@ public class EncryptorResources {
       MessageDigest messageDigest = MessageDigest.getInstance("SHA");
       byte[] digest = messageDigest.digest(value.getBytes());
 
-      return (new BASE64Encoder()).encode(digest);
+      return Base64.getEncoder().encodeToString(digest);
     } catch (NoSuchAlgorithmException exception) {
       throw new EncryptedException(exception);
     }
