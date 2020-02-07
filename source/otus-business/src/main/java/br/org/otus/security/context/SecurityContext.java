@@ -33,7 +33,6 @@ public class SecurityContext {
     return sessions.stream().filter(session -> session.getToken().equals(token)).findFirst().get();
   }
 
-
   public Boolean hasToken(String token) {
     return sessions.stream().anyMatch(session -> session.getToken().equals(token));
   }

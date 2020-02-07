@@ -87,6 +87,11 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
+  public Participant getByEmail(String email) throws DataNotFoundException {
+    return participantDao.fetchByEmail(email);
+  }
+
+  @Override
   public ObjectId findIdByRecruitmentNumber(Long rn) throws DataNotFoundException {
     return participantDao.findIdByRecruitmentNumber(rn);
   }

@@ -75,6 +75,10 @@ public class SurveyActivity {
     return fillContainer;
   }
 
+  public void setStatusHistory(List<ActivityStatus> statusHistory) {
+    this.statusHistory = statusHistory;
+  }
+
   public List<ActivityStatus> getStatusHistory() {
     return statusHistory;
   }

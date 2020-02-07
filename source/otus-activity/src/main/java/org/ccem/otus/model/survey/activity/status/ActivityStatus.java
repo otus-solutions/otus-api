@@ -25,6 +25,10 @@ public class ActivityStatus {
     return date;
   }
 
+  public void setUser(User user) {
+    this.user = user;
+  }
+
   public User getUser() {
     if (user != null) return user;
     throw new UserNotFoundException();

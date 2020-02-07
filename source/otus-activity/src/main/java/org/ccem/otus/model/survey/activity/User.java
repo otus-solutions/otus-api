@@ -7,6 +7,15 @@ public class User {
   private String phone;
   private String email;
 
+  public User() {}
+
+  public User(String name, String email, String surname, String phone) {
+    this.name = name;
+    this.email = email;
+    this.surname = surname;
+    this.phone = phone;
+  }
+
   public String getName() {
     return name;
   }

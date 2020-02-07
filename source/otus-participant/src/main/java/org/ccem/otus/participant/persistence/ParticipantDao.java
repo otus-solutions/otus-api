@@ -45,4 +45,5 @@ public interface ParticipantDao {
   Participant fetchByToken(String token) throws DataNotFoundException;
 
   void registerPassword(String email, String password) throws DataNotFoundException;
+
 }

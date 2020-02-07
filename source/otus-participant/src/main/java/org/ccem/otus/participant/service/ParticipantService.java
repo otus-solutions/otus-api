@@ -16,6 +16,8 @@ public interface ParticipantService {
 
   Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
+  Participant getByEmail(String email) throws DataNotFoundException;
+
   ObjectId findIdByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
   List<Participant> list(FieldCenter fieldCenter);

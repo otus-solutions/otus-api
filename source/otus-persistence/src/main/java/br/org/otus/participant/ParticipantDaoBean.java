@@ -186,7 +186,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
     return result.getObjectId("_id");
   }
-  
+
   @Override
   public String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
     Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
