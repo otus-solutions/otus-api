@@ -2,27 +2,31 @@ package br.org.otus.security.services;
 
 import br.org.otus.model.User;
 import br.org.otus.security.context.SessionIdentifier;
-import br.org.otus.security.dtos.AuthenticationData;
-import br.org.otus.security.dtos.JWTClaimSetBuilder;
-import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
+import br.org.otus.security.dtos.*;
 import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.persistence.UserDao;
 import br.org.tutty.Equalizer;
+import com.nimbusds.jose.JOSEException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import java.text.ParseException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
 
   @Inject
   private UserDao userDao;
+
+  @Inject
+  private ParticipantDao participantDao;
 
   @Inject
   private SystemConfigDaoBean systemConfigDao;
@@ -63,6 +67,45 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
+  public void validateToken(String token) throws TokenException {
+    try {
+      Participant participant = participantDao.fetchByToken(token);
+      if (participant.getEmail().isEmpty()) {
+        throw new TokenException();
+      }
+    } catch (DataNotFoundException e) {
+      throw new TokenException(e);
+    }
+  }
+
+  @Override
+  public ParticipantSecurityAuthorizationDto participantAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
+    try {
+      Participant participant = participantDao.fetchByEmail(authenticationData.getUserEmail());
+
+      if (participant.getPassword().equals(authenticationData.getKey())) {
+        ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = new ParticipantSecurityAuthorizationDto();
+
+        Equalizer.equalize(participant, participantSecurityAuthorizationDto);
+        byte[] secretKey = securityContextService.generateSecretKey();
+        String token = securityContextService.generateToken(authenticationData, secretKey);
+        participantDao.addAuthToken(authenticationData.getUserEmail(), token);
+        participantSecurityAuthorizationDto.setToken(token);
+        return participantSecurityAuthorizationDto;
+      } else {
+        throw new AuthenticationException();
+      }
+    } catch (DataNotFoundException e) {
+      throw new AuthenticationException();
+    }
+  }
+
+  @Override
+  public void invalidateParticipantAuthenticate(String email, String token) {
+    participantDao.removeAuthToken(email, token);
+  }
+
+  @Override
   public String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
     try {
       SystemConfig systemConfig = systemConfigDao.fetchSystemConfig();
@@ -90,18 +133,18 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
-    if(userDao.exists(requestData.getEmail())){
+    if (userDao.exists(requestData.getEmail())) {
       String token = buildToken(requestData);
       requestData.setToken(token);
       passwordResetContextService.registerToken(requestData);
       return token;
-    }else{
+    } else {
       throw new DataNotFoundException(new Throwable("User with email: {" + requestData.getEmail() + "} not found."));
     }
   }
 
   @Override
-  public String getRequestEmail (String token) throws DataNotFoundException {
+  public String getRequestEmail(String token) throws DataNotFoundException {
     return passwordResetContextService.getRequestEmail(token);
   }
 

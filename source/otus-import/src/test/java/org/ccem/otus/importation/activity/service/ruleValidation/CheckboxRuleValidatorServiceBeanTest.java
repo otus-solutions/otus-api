@@ -22,104 +22,104 @@ import static org.powermock.reflect.Whitebox.setInternalState;
 @RunWith(PowerMockRunner.class)
 public class CheckboxRuleValidatorServiceBeanTest {
 
-    private CheckboxRuleValidatorServiceBean checkboxRuleValidatorServiceBean = new CheckboxRuleValidatorServiceBean();
-    @Spy
-    private CheckboxAnswer answer = new CheckboxAnswer();
-    @Spy
-    private CheckboxAnswerOption checkboxAnswerOption = new CheckboxAnswerOption();
-    private List<CheckboxAnswerOption> checkboxAnswerValues = new ArrayList();
-    private Rule rule;
+  private CheckboxRuleValidatorServiceBean checkboxRuleValidatorServiceBean = new CheckboxRuleValidatorServiceBean();
+  @Spy
+  private CheckboxAnswer answer = new CheckboxAnswer();
+  @Spy
+  private CheckboxAnswerOption checkboxAnswerOption = new CheckboxAnswerOption();
+  private List<CheckboxAnswerOption> checkboxAnswerValues = new ArrayList();
+  private Rule rule;
 
-    @Before
-    public void setUp() throws Exception {
-        rule = new Rule();
-        rule.extents = "SurveyTemplateObject";
-        rule.objectType = "Rule";
-        rule.when = "TST1";
-        rule.isMetadata = false;
-        setInternalState(checkboxAnswerOption, "option", "B");
-        setInternalState(checkboxAnswerOption, "state", true);
-        checkboxAnswerValues.add(checkboxAnswerOption);
-        setInternalState(answer, "objectType", "AnswerFill");
-        setInternalState(answer, "type", "CheckboxQuestion");
-        setInternalState(answer, "value", checkboxAnswerValues);
-    }
+  @Before
+  public void setUp() throws Exception {
+    rule = new Rule();
+    rule.extents = "SurveyTemplateObject";
+    rule.objectType = "Rule";
+    rule.when = "TST1";
+    rule.isMetadata = false;
+    setInternalState(checkboxAnswerOption, "option", "B");
+    setInternalState(checkboxAnswerOption, "state", true);
+    checkboxAnswerValues.add(checkboxAnswerOption);
+    setInternalState(answer, "objectType", "AnswerFill");
+    setInternalState(answer, "type", "CheckboxQuestion");
+    setInternalState(answer, "value", checkboxAnswerValues);
+  }
 
-    @Test
-    public void run_method_should_deliver_positive_results_in_the_event_that_isEqual_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "equal";
-        rule.answer = "B";
-        assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
-        verify(checkboxAnswerOption, Mockito.times(1)).getOption();
-        verify(checkboxAnswerOption, Mockito.times(1)).getState();
-    }
+  @Test
+  public void run_method_should_deliver_positive_results_in_the_event_that_isEqual_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "equal";
+    rule.answer = "B";
+    assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
+    verify(checkboxAnswerOption, Mockito.times(1)).getOption();
+    verify(checkboxAnswerOption, Mockito.times(1)).getState();
+  }
 
-    @Test
-    public void run_method_should_deliver_negative_results_in_the_event_that_isEqual_not_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "equal";
-        rule.answer = "A";
-        assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_negative_results_in_the_event_that_isEqual_not_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "equal";
+    rule.answer = "A";
+    assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_positive_results_in_the_event_that_notEqual_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "notEqual";
-        rule.answer = "A";
-        assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_positive_results_in_the_event_that_notEqual_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "notEqual";
+    rule.answer = "A";
+    assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_negative_results_in_the_event_that_notEqual_not_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "notEqual";
-        rule.answer = "B";
-        assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_negative_results_in_the_event_that_notEqual_not_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "notEqual";
+    rule.answer = "B";
+    assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_positive_results_in_the_event_that_quantity_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "quantity";
-        rule.answer = String.valueOf(1);
-        assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_positive_results_in_the_event_that_quantity_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "quantity";
+    rule.answer = String.valueOf(1);
+    assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_negative_results_in_the_event_that_quantity__not_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "quantity";
-        rule.answer = String.valueOf(0);
-        assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_negative_results_in_the_event_that_quantity__not_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "quantity";
+    rule.answer = String.valueOf(0);
+    assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-        @Test
-    public void run_method_should_deliver_positive_results_in_the_event_that_minSelected_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "minSelected";
-        rule.answer = "1";
-        assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_positive_results_in_the_event_that_minSelected_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "minSelected";
+    rule.answer = "1";
+    assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_negative_results_in_the_event_that_minSelected_not_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "minSelected";
-        rule.answer = "2";
-        assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_negative_results_in_the_event_that_minSelected_not_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "minSelected";
+    rule.answer = "2";
+    assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_positive_results_in_the_event_that_maxSelected_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "maxSelected";
-        rule.answer = "1";
-        assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_positive_results_in_the_event_that_maxSelected_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "maxSelected";
+    rule.answer = "1";
+    assertTrue(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_should_deliver_negative_results_in_the_event_that_maxSelected_not_has_any_items_on_the_list() throws DataNotFoundException {
-        rule.operator = "maxSelected";
-        rule.answer = String.valueOf(0);
-        assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_should_deliver_negative_results_in_the_event_that_maxSelected_not_has_any_items_on_the_list() throws DataNotFoundException {
+    rule.operator = "maxSelected";
+    rule.answer = String.valueOf(0);
+    assertFalse(checkboxRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test(expected = DataNotFoundException.class)
-    public void run_method_with_invalidCase_should_throws_DataNotFoundException() throws DataNotFoundException {
-        rule.operator = "anything";
-        checkboxRuleValidatorServiceBean.run(rule, answer);
-    }
+  @Test(expected = DataNotFoundException.class)
+  public void run_method_with_invalidCase_should_throws_DataNotFoundException() throws DataNotFoundException {
+    rule.operator = "anything";
+    checkboxRuleValidatorServiceBean.run(rule, answer);
+  }
 }

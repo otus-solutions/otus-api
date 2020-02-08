@@ -6,24 +6,24 @@ import java.util.HashMap;
 
 public class DataSourceValuesMapping {
 
-    private HashMap<String,ValuesMapping> mappingList;
+  private HashMap<String, ValuesMapping> mappingList;
 
-    public class ValuesMapping {
-        private String dataSource;
-        private HashMap<String, String> hashMap;
-    }
+  public class ValuesMapping {
+    private String dataSource;
+    private HashMap<String, String> hashMap;
+  }
 
-    public String getExtractionValue(String dataSource,String value){
-        return mappingList.get(dataSource).hashMap.get(value);
-    }
+  public String getExtractionValue(String dataSource, String value) {
+    return mappingList.get(dataSource).hashMap.get(value);
+  }
 
-    public static DataSourceValuesMapping deserialize(String DataSource) {
-        GsonBuilder builder = DataSourceValuesMapping.getGsonBuilder();
-        return builder.create().fromJson(DataSource, DataSourceValuesMapping.class);
-    }
+  public static DataSourceValuesMapping deserialize(String DataSource) {
+    GsonBuilder builder = DataSourceValuesMapping.getGsonBuilder();
+    return builder.create().fromJson(DataSource, DataSourceValuesMapping.class);
+  }
 
-    private static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        return builder;
-    }
+  private static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    return builder;
+  }
 }

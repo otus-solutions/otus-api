@@ -36,7 +36,7 @@ public class TubeTest {
   private SimpleAliquot simpleAliquot;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     tube = Tube.deserialize(TUBE_JSON);
   }
 
@@ -61,27 +61,27 @@ public class TubeTest {
   }
 
   @Test
-  public void method_getGroupName_should_return_groupName(){
+  public void method_getGroupName_should_return_groupName() {
     assertEquals(GROUPNAME, tube.getGroupName());
   }
 
   @Test
-  public void method_getAliquots_should_return_aliquots(){
+  public void method_getAliquots_should_return_aliquots() {
     assertEquals(ALIQUOTS, tube.getAliquots());
   }
 
   @Test
-  public void method_getOrder_should_return_order(){
+  public void method_getOrder_should_return_order() {
     assertEquals(ORDER, tube.getOrder());
   }
 
   @Test
-  public void method_getTubeCollectionData_should_return_collectionData(){
+  public void method_getTubeCollectionData_should_return_collectionData() {
     assertEquals("TubeCollectionData", tube.getTubeCollectionData().getObjectType());
   }
 
   @Test
-  public void method_serialize_should_return_tubeJson(){
+  public void method_serialize_should_return_tubeJson() {
     assertEquals(Tube.serialize(tube), TUBE_JSON);
   }
 }

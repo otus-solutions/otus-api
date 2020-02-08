@@ -119,7 +119,7 @@ public class SurveyServiceBean implements SurveyService {
 
   @Override
   public void createSurveyJumpMap(SurveyForm surveyForm) {
-    SurveyJumpMap surveyJumpMap = surveyDao.createJumpMap(surveyForm.getSurveyTemplate().identity.acronym,surveyForm.getVersion());
+    SurveyJumpMap surveyJumpMap = surveyDao.createJumpMap(surveyForm.getSurveyTemplate().identity.acronym, surveyForm.getVersion());
     surveyJumpMap.setSurveyOid(surveyForm.getSurveyID());
     surveyJumpMap.setSurveyAcronym(surveyForm.getSurveyTemplate().identity.acronym);
     surveyJumpMap.setSurveyVersion(surveyForm.getVersion());

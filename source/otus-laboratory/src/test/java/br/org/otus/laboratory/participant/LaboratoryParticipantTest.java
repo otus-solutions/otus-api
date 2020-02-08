@@ -11,31 +11,31 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class LaboratoryParticipantTest {
 
-	private ParticipantLaboratory laboratoryParticipant;
+  private ParticipantLaboratory laboratoryParticipant;
 
-	@Before
-	public void setup() {
-		String json = ""
-				+ "{\"laboratory\":{"
-				+ "\"recruitment_number\":123456,"
-				+ "\"cq_group\":\"CQ_1\","
-				+ "\"tubes\":["
-				+ "{"
-				+ "\"code\":261116141,"
-				+ "\"type\":\"GEL\","
-				+ "\"aliquots\":[]"
-				+ "}],"
-				+ "\"exams\":[]"
-				+ "}}";
+  @Before
+  public void setup() {
+    String json = ""
+      + "{\"laboratory\":{"
+      + "\"recruitment_number\":123456,"
+      + "\"cq_group\":\"CQ_1\","
+      + "\"tubes\":["
+      + "{"
+      + "\"code\":261116141,"
+      + "\"type\":\"GEL\","
+      + "\"aliquots\":[]"
+      + "}],"
+      + "\"exams\":[]"
+      + "}}";
 
-		laboratoryParticipant = new Gson().fromJson(json, ParticipantLaboratory.class);
+    laboratoryParticipant = new Gson().fromJson(json, ParticipantLaboratory.class);
 
-	}
+  }
 
-	@Test
-	public void should_deserialize_for_TubeDefinition() {
-		Long recNumber = laboratoryParticipant.getRecruitmentNumber();
-		System.out.println(recNumber);
+  @Test
+  public void should_deserialize_for_TubeDefinition() {
+    Long recNumber = laboratoryParticipant.getRecruitmentNumber();
+    System.out.println(recNumber);
 //		assertThat(tubeDef.get(0).getName(), equalTo("GEL") );
-	}
+  }
 }

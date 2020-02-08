@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 
 import org.bson.Document;
 
 import com.google.gson.GsonBuilder;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RequestUtility {
 
@@ -17,7 +20,7 @@ public class RequestUtility {
     String response;
     InputStream responseStream = new BufferedInputStream(httpConn.getInputStream());
 
-    BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+    BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, UTF_8));
 
     String line = "";
     StringBuilder stringBuilder = new StringBuilder();
@@ -30,6 +33,20 @@ public class RequestUtility {
     response = stringBuilder.toString();
     httpConn.disconnect();
     return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, Document.class).get("data"));
+  }
+
+  public static Object getErrorContent(HttpURLConnection httpConn) throws IOException {
+    BufferedReader in = new BufferedReader(new InputStreamReader(httpConn.getErrorStream()));
+    StringBuilder response = new StringBuilder();
+    String currentLine;
+
+    while ((currentLine = in.readLine()) != null)
+      response.append(currentLine);
+
+    in.close();
+
+    String responseString = response.toString();
+    return new GsonBuilder().create().fromJson(responseString, Document.class).get("data");
   }
 
 }

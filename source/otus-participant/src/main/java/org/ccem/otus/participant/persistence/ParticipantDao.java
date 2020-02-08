@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -19,9 +20,15 @@ public interface ParticipantDao {
 
   Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
+  ObjectId findIdByRecruitmentNumber(Long rn) throws DataNotFoundException;
+
   ArrayList<Participant> findByFieldCenter(FieldCenter fieldCenter);
 
   Long countParticipantActivities(String centerAcronym) throws DataNotFoundException;
+
+  void addAuthToken(String email, String Token);
+
+  void removeAuthToken(String email, String Token);
 
   boolean exists(Long rn);
 
@@ -31,6 +38,12 @@ public interface ParticipantDao {
 
   AggregateIterable<Document> aggregate(List<Bson> query);
 
+  Participant fetchByEmail(String userEmail) throws DataNotFoundException;
+
   String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
+
+  Participant fetchByToken(String token) throws DataNotFoundException;
+
+  void registerPassword(String email, String password) throws DataNotFoundException;
 
 }

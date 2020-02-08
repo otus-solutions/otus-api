@@ -5,6 +5,6 @@ import org.ccem.otus.model.dataSources.exam.ExamDataSourceResult;
 
 public interface ExamDataSourceDao {
 
-	ExamDataSourceResult getResult(Long recruitmentNumber, ExamDataSource examDataSource);
+  ExamDataSourceResult getResult(Long recruitmentNumber, ExamDataSource examDataSource);
 
 }

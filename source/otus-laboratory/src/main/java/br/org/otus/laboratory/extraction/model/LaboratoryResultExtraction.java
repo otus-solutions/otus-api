@@ -53,7 +53,7 @@ public class LaboratoryResultExtraction {
   public String getAliquotName() {
     return aliquotName;
   }
-  
+
   public String getAliquotContainer() {
     return aliquotContainer;
   }

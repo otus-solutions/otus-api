@@ -13,23 +13,23 @@ import java.util.List;
 
 public class ActivityRevisionFacade {
 
-    @Inject
-    private ActivityRevisionService activityRevisionService;
+  @Inject
+  private ActivityRevisionService activityRevisionService;
 
-    @Inject
-    private UserFacade userFacade;
+  @Inject
+  private UserFacade userFacade;
 
-    public void create(String activityRevisionJson, String userEmail) {
-        User user = userFacade.fetchByEmail(userEmail);
-        activityRevisionService.create(activityRevisionJson, user);
+  public void create(String activityRevisionJson, String userEmail) {
+    User user = userFacade.fetchByEmail(userEmail);
+    activityRevisionService.create(activityRevisionJson, user);
+  }
+
+  public List<ActivityRevision> getActivityRevisions(String activityID) {
+    try {
+      return activityRevisionService.getActivityRevisions(activityID);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
-
-    public List<ActivityRevision> getActivityRevisions(String activityID) {
-        try {
-            return activityRevisionService.getActivityRevisions(activityID);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
-    }
+  }
 
 }

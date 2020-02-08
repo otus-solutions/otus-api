@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface AliquotService {
 
-    List<Aliquot> getAliquots();
+  List<Aliquot> getAliquots();
 
-	List<Aliquot> getAliquots(Long rn);
+  List<Aliquot> getAliquots(Long rn);
 
-	Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws ValidationException, DataNotFoundException;
+  Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws ValidationException, DataNotFoundException;
 
-	Aliquot find(String code) throws DataNotFoundException;
+  Aliquot find(String code) throws DataNotFoundException;
 
-	List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException;
-	
-	boolean exists(String code);
+  List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException;
 
-	List<Aliquot> getExamLotAliquots(ObjectId lotOId);
+  boolean exists(String code);
+
+  List<Aliquot> getExamLotAliquots(ObjectId lotOId);
 }

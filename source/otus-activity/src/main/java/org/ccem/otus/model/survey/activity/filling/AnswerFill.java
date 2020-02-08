@@ -5,19 +5,19 @@ import java.util.Map;
 
 public class AnswerFill {
 
-	private String objectType;
-	private String type;
+  private String objectType;
+  private String type;
 
-	public String getObjectType() {
-		return objectType;
-	}
+  public String getObjectType() {
+    return objectType;
+  }
 
-	public String getType() {
-		return type;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public Map<String, Object> getAnswerExtract(String questionID) {
-		return new LinkedHashMap<>();
-	}
+  public Map<String, Object> getAnswerExtract(String questionID) {
+    return new LinkedHashMap<>();
+  }
 
 }

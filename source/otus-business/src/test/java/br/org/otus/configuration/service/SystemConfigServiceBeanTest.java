@@ -28,57 +28,56 @@ import br.org.otus.user.api.UserFacade;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SystemConfigBuilder.class, TokenBuilder.class})
 public class SystemConfigServiceBeanTest {
-	private static final String PROJECT_TOKEN = "347bcf7e-dcb2-4768-82eb-ee95d893f4c0";
+  private static final String PROJECT_TOKEN = "347bcf7e-dcb2-4768-82eb-ee95d893f4c0";
 
-	
-	@InjectMocks
-	private SystemConfigServiceBean systemConfigServiceBean = PowerMockito.spy(new SystemConfigServiceBean());
-	@Mock
-	private OtusInitializationConfigDto initializationConfigDto;
-	@Mock
-	private SystemConfigDaoBean systemConfigDao;
-	@Mock
-	private UserFacade userFacade;
-	@Mock
-	private EmailNotifierService emailNotifierService;
-	@Mock
-	private SystemConfig systemConfig;
-	
 
-	@Before
-	public void setUp() {
-	}
+  @InjectMocks
+  private SystemConfigServiceBean systemConfigServiceBean = PowerMockito.spy(new SystemConfigServiceBean());
+  @Mock
+  private OtusInitializationConfigDto initializationConfigDto;
+  @Mock
+  private SystemConfigDaoBean systemConfigDao;
+  @Mock
+  private UserFacade userFacade;
+  @Mock
+  private EmailNotifierService emailNotifierService;
+  @Mock
+  private SystemConfig systemConfig;
 
-	@Test
-	public void method_InitConfiguration_should_check_evocation_of_persistBySystemConfigDao_and_createByUserFacade() throws EncryptedException, EmailNotificationException, AlreadyExistException {
-		when(systemConfigDao.isReady()).thenReturn(Boolean.FALSE);
-		mockStatic(SystemConfigBuilder.class);
-		when(SystemConfigBuilder.builSystemConfig(initializationConfigDto, PROJECT_TOKEN )).thenReturn(systemConfig);
-		systemConfigServiceBean.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
-		verify(systemConfigDao).persist(systemConfig);
-		verify(userFacade).create(initializationConfigDto);		
-	}
-	
-	@Test(expected = AlreadyExistException.class)
-	public void method_initConfiguration_should_throw_AlreadyExistException_when_isReady_valid() throws EncryptedException, EmailNotificationException, AlreadyExistException {
-		when(systemConfigDao.isReady()).thenReturn(Boolean.TRUE);
-		systemConfigServiceBean.initConfiguration(initializationConfigDto, PROJECT_TOKEN);				
-	}
 
-	@Test
-	public void method_verifyEmailService_check_evocation_of_sendSystemInstallationEmail_by_emailNotifierService() throws EmailNotificationException, EncryptedException {
-		systemConfigServiceBean.verifyEmailService(initializationConfigDto);
-		verify(emailNotifierService).sendSystemInstallationEmail(initializationConfigDto);
-	}
+  @Before
+  public void setUp() {
+  }
 
-	@Test
-	public void method_buildToken() {
-		mockStatic(TokenBuilder.class);
-		when(TokenBuilder.build()).thenReturn(PROJECT_TOKEN);
-		assertEquals(PROJECT_TOKEN, systemConfigServiceBean.buildToken());
-		
-	}
+  @Test
+  public void method_InitConfiguration_should_check_evocation_of_persistBySystemConfigDao_and_createByUserFacade() throws EncryptedException, EmailNotificationException, AlreadyExistException {
+    when(systemConfigDao.isReady()).thenReturn(Boolean.FALSE);
+    mockStatic(SystemConfigBuilder.class);
+    when(SystemConfigBuilder.builSystemConfig(initializationConfigDto, PROJECT_TOKEN)).thenReturn(systemConfig);
+    systemConfigServiceBean.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
+    verify(systemConfigDao).persist(systemConfig);
+    verify(userFacade).create(initializationConfigDto);
+  }
 
-	
+  @Test(expected = AlreadyExistException.class)
+  public void method_initConfiguration_should_throw_AlreadyExistException_when_isReady_valid() throws EncryptedException, EmailNotificationException, AlreadyExistException {
+    when(systemConfigDao.isReady()).thenReturn(Boolean.TRUE);
+    systemConfigServiceBean.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
+  }
+
+  @Test
+  public void method_verifyEmailService_check_evocation_of_sendSystemInstallationEmail_by_emailNotifierService() throws EmailNotificationException, EncryptedException {
+    systemConfigServiceBean.verifyEmailService(initializationConfigDto);
+    verify(emailNotifierService).sendSystemInstallationEmail(initializationConfigDto);
+  }
+
+  @Test
+  public void method_buildToken() {
+    mockStatic(TokenBuilder.class);
+    when(TokenBuilder.build()).thenReturn(PROJECT_TOKEN);
+    assertEquals(PROJECT_TOKEN, systemConfigServiceBean.buildToken());
+
+  }
+
 
 }

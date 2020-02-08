@@ -23,7 +23,7 @@ public interface SurveyService {
   SurveyForm get(String acronym, Integer version) throws DataNotFoundException;
 
   Boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto)
-      throws ValidationException, DataNotFoundException;
+    throws ValidationException, DataNotFoundException;
 
   Boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException;
 

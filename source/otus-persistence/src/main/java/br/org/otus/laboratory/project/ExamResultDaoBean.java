@@ -76,12 +76,12 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   public LinkedList<ParticipantExamUploadResultExtraction> getExamResultsExtractionValues() throws DataNotFoundException {
     LinkedList<ParticipantExamUploadResultExtraction> values = new LinkedList<>();
     List<Bson> query = new ExamResultQueryBuilder()
-        .getExamResultsWithAliquotValid()
-        .getSortingByExamName()
-        .getSortingByRecruitmentNumber()
-        .getGroupOfExamResultsToExtraction()
-        .getProjectionOfExamResultsToExtraction()
-        .build();
+      .getExamResultsWithAliquotValid()
+      .getSortingByExamName()
+      .getSortingByRecruitmentNumber()
+      .getGroupOfExamResultsToExtraction()
+      .getProjectionOfExamResultsToExtraction()
+      .build();
 
     try {
       AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);

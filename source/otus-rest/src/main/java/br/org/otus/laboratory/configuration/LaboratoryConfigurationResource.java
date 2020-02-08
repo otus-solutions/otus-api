@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("/laboratory-configuration")
 public class LaboratoryConfigurationResource {

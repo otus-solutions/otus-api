@@ -13,7 +13,7 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.SignupDataDto;
@@ -89,7 +89,7 @@ public class UserResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String requestRecovery(PasswordResetRequestDto requestData) {
-    Response response =  new Response();
+    Response response = new Response();
     userFacade.requestPasswordReset(requestData);
     return response.buildSuccess().toJson();
   }
@@ -97,8 +97,8 @@ public class UserResource {
   @GET
   @Path("/password-reset/validate/{token}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String validateToken (@PathParam("token") String token) {
-    Response response =  new Response();
+  public String validateToken(@PathParam("token") String token) {
+    Response response = new Response();
     userFacade.validatePasswordRecoveryRequest(token);
     return response.buildSuccess().toJson();
   }
@@ -108,7 +108,7 @@ public class UserResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updatePassword(PasswordResetDto resetData) {
-    Response response =  new Response();
+    Response response = new Response();
     userFacade.updateUserPassword(resetData);
     return response.buildSuccess().toJson();
   }

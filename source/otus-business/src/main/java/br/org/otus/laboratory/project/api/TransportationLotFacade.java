@@ -17,70 +17,70 @@ import br.org.otus.response.exception.HttpResponseException;
 
 public class TransportationLotFacade {
 
-	@Inject
-	private TransportationLotService transportationLotService;
-	@Inject
-	private AliquotService aliquotService;
+  @Inject
+  private TransportationLotService transportationLotService;
+  @Inject
+  private AliquotService aliquotService;
 
-	public TransportationLot create(TransportationLot transportationLot, String email) {
-		try {
-			return transportationLotService.create(transportationLot, email);
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(
-					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(
-					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-		}
-	}
+  public TransportationLot create(TransportationLot transportationLot, String email) {
+    try {
+      return transportationLotService.create(transportationLot, email);
+    } catch (ValidationException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(
+        ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(
+        ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    }
+  }
 
-	public List<TransportationLot> getLots() {
-		return transportationLotService.list();
-	}
+  public List<TransportationLot> getLots() {
+    return transportationLotService.list();
+  }
 
-	public TransportationLot update(TransportationLot transportationLot) {
-		try {
-			return transportationLotService.update(transportationLot);
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(
-					ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-		}
-	}
+  public TransportationLot update(TransportationLot transportationLot) {
+    try {
+      return transportationLotService.update(transportationLot);
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(
+        ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    }
+  }
 
-	public void delete(String id) {
-		try {
-			transportationLotService.delete(id);
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-	}
+  public void delete(String id) {
+    try {
+      transportationLotService.delete(id);
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 
-	public List<Aliquot> getAliquots() {
-			return aliquotService.getAliquots();
-	}
+  public List<Aliquot> getAliquots() {
+    return aliquotService.getAliquots();
+  }
 
-	public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
-		try {
-			return aliquotService.getAliquotsByPeriod(transportationAliquotFiltersDTO);
-		} catch (DataNotFoundException e) {
-			e.printStackTrace();
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-	}
+  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
+    try {
+      return aliquotService.getAliquotsByPeriod(transportationAliquotFiltersDTO);
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 
-	public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
-		try {
-			return aliquotService.getAliquot(transportationAliquotFiltersDTO);
-		} catch (DataNotFoundException | ValidationException e) {
-			throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-		}
-	}
+  public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
+    try {
+      return aliquotService.getAliquot(transportationAliquotFiltersDTO);
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
 }
 

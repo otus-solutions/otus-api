@@ -22,7 +22,7 @@ public class ExamUploadFacadeTest {
 
   @Test
   public void getExamResultsExtractionValues_should_call_getExamResultsExtractionValues_method()
-      throws DataNotFoundException {
+    throws DataNotFoundException {
     facade.getExamResultsExtractionValues();
     Mockito.verify(examUploadService, Mockito.times(1)).getExamResultsExtractionValues();
   }

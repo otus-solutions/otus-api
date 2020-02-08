@@ -7,22 +7,22 @@ import br.org.tutty.Equalizer;
 
 public class SystemConfigBuilder {
 
-    public static User buildInitialUser(OtusInitializationConfigDto otusInitializationConfigDto) {
-        User user = new User();
-        Equalizer.equalize(otusInitializationConfigDto.getUser(), user);
-        user.becomesAdm();
+  public static User buildInitialUser(OtusInitializationConfigDto otusInitializationConfigDto) {
+    User user = new User();
+    Equalizer.equalize(otusInitializationConfigDto.getUser(), user);
+    user.becomesAdm();
 
-        return user;
-    }
+    return user;
+  }
 
-    public static SystemConfig builSystemConfig(OtusInitializationConfigDto otusInitializationConfigDto, String projectToken) {
-        SystemConfig systemConfig = new SystemConfig();
+  public static SystemConfig builSystemConfig(OtusInitializationConfigDto otusInitializationConfigDto, String projectToken) {
+    SystemConfig systemConfig = new SystemConfig();
 
-        Equalizer.equalize(otusInitializationConfigDto.getProject(), systemConfig);
-        Equalizer.equalize(otusInitializationConfigDto.getDomainDto(), systemConfig);
-        Equalizer.equalize(otusInitializationConfigDto.getEmailSender(), systemConfig.getEmailSender());
-        systemConfig.setProjectToken(projectToken);
+    Equalizer.equalize(otusInitializationConfigDto.getProject(), systemConfig);
+    Equalizer.equalize(otusInitializationConfigDto.getDomainDto(), systemConfig);
+    Equalizer.equalize(otusInitializationConfigDto.getEmailSender(), systemConfig.getEmailSender());
+    systemConfig.setProjectToken(projectToken);
 
-        return systemConfig;
-    }
+    return systemConfig;
+  }
 }

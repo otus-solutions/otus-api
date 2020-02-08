@@ -13,25 +13,25 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ExamInapplicabilityDaoBean extends MongoGenericDao<Document> implements ExamInapplicabilityDao {
 
-    public static final String COLLECTION_NAME = "exam_inapplicability";
-    private static final String RECRUITMENT_NUMBER = "recruitmentNumber";
-    private static final String NAME = "name";
+  public static final String COLLECTION_NAME = "exam_inapplicability";
+  private static final String RECRUITMENT_NUMBER = "recruitmentNumber";
+  private static final String NAME = "name";
 
-    public ExamInapplicabilityDaoBean() {
-        super(COLLECTION_NAME, Document.class);
-    }
+  public ExamInapplicabilityDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
-    @Override
-    public void update(ExamInapplicability applicability) {
-        Document parsed = Document.parse(ExamInapplicability.serialize(applicability));
+  @Override
+  public void update(ExamInapplicability applicability) {
+    Document parsed = Document.parse(ExamInapplicability.serialize(applicability));
 
-        UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())),
-                new Document("$set", parsed), new UpdateOptions().upsert(true));
-    }
+    UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()), eq(NAME, applicability.getName())),
+      new Document("$set", parsed), new UpdateOptions().upsert(true));
+  }
 
-    @Override
-    public void delete(ExamInapplicability applicability) {
-        DeleteResult deleteResult = collection.deleteOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()),eq(NAME, applicability.getName())));
+  @Override
+  public void delete(ExamInapplicability applicability) {
+    DeleteResult deleteResult = collection.deleteOne(and(eq(RECRUITMENT_NUMBER, applicability.getRecruitmentNumber()), eq(NAME, applicability.getName())));
 
-    }
+  }
 }

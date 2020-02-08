@@ -11,25 +11,25 @@ import org.ccem.otus.model.ReportTemplate;
 
 public interface ReportDao {
 
-	ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException;
+  ActivityReportTemplate insertActivityReport(ActivityReportTemplate activityReportTemplate) throws ValidationException;
 
-	ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException;
+  ActivityReportTemplate getActivityReport(String acronym, Integer version) throws DataNotFoundException;
 
-	List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException;
+  List<ActivityReportTemplate> getActivityReportList(String acronym) throws DataNotFoundException;
 
-	void updateActivityReport(ObjectId reportId, ArrayList<Integer> versions) throws DataNotFoundException;
+  void updateActivityReport(ObjectId reportId, ArrayList<Integer> versions) throws DataNotFoundException;
 
-	ReportTemplate insert(ReportTemplate report);
+  ReportTemplate insert(ReportTemplate report);
 
-	ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException;
+  ReportTemplate findReport(ObjectId reportId) throws DataNotFoundException, ValidationException;
 
-	void deleteById(String id) throws DataNotFoundException;
+  void deleteById(String id) throws DataNotFoundException;
 
-	List<ReportTemplate> getAll() throws ValidationException;
+  List<ReportTemplate> getAll() throws ValidationException;
 
-	List<ReportTemplateDTO> getByCenter(String fieldCenter) throws ValidationException;
+  List<ReportTemplateDTO> getByCenter(String fieldCenter) throws ValidationException;
 
-	ReportTemplate getById(String id) throws DataNotFoundException, ValidationException;
+  ReportTemplate getById(String id) throws DataNotFoundException, ValidationException;
 
-	ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException;
+  ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException;
 }

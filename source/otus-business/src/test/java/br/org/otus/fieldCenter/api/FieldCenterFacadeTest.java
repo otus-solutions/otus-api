@@ -40,9 +40,9 @@ public class FieldCenterFacadeTest {
 
   @Test
   public void createMethod_should_evocate_create_of_fieldCenterService()
-      throws AlreadyExistException, ValidationException {
+    throws AlreadyExistException, ValidationException {
     fieldCenterFacade.create(fieldCenter);
-    verify(fieldCenterService , times(1)).create(fieldCenter);
+    verify(fieldCenterService, times(1)).create(fieldCenter);
   }
 
   @Test(expected = HttpResponseException.class)

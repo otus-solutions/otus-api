@@ -23,7 +23,7 @@ public class ActivityInfoTest {
   private String activityInfoJson;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     Whitebox.setInternalState(activityInfo, "recruitmentNumber", RECRUITMENT_NUMBER);
     Whitebox.setInternalState(activityInfo, "acronym", ACRONYM);
     Whitebox.setInternalState(activityInfo, "name", NAME);
@@ -34,7 +34,7 @@ public class ActivityInfoTest {
   }
 
   @Test
-  public void unitTest_for_invoke_getters(){
+  public void unitTest_for_invoke_getters() {
     assertEquals(RECRUITMENT_NUMBER, activityInfo.getRecruitmentNumber());
     assertEquals(ACRONYM, activityInfo.getAcronym());
     assertEquals(NAME, activityInfo.getName());

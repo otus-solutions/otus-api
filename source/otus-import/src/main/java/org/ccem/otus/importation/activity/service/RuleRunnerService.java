@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface RuleRunnerService {
 
-    boolean run(Rule rule, Optional<QuestionFill> ruleQuestionFill) throws DataNotFoundException;
+  boolean run(Rule rule, Optional<QuestionFill> ruleQuestionFill) throws DataNotFoundException;
 }

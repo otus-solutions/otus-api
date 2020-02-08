@@ -20,77 +20,77 @@ import br.org.otus.response.info.Validation;
 
 public class ParticipantLaboratoryFacade {
 
-    @Inject
-    private ParticipantLaboratoryService service;
+  @Inject
+  private ParticipantLaboratoryService service;
 
-    public Tube updateTubeCollectionData(Long rn, Tube tube) {
-        try {
-            return service.updateTubeCollectionData(rn, tube);
-        } catch (DataNotFoundException e) {
-            e.printStackTrace();
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public Tube updateTubeCollectionData(Long rn, Tube tube) {
+    try {
+      return service.updateTubeCollectionData(rn, tube);
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public ParticipantLaboratory getLaboratory(Long recruitmentNumber) {
-        try {
-            return service.getLaboratory(recruitmentNumber);
-        } catch (DataNotFoundException e) {
-            // e.printStackTrace();
-            // throw new
-            // HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-            return null;
-        }
+  public ParticipantLaboratory getLaboratory(Long recruitmentNumber) {
+    try {
+      return service.getLaboratory(recruitmentNumber);
+    } catch (DataNotFoundException e) {
+      // e.printStackTrace();
+      // throw new
+      // HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+      return null;
     }
+  }
 
-    public ParticipantLaboratory create(Long recruitmentNumber) {
-        try {
-            return service.create(recruitmentNumber);
-        } catch (DataNotFoundException e) {
-            e.printStackTrace();
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public ParticipantLaboratory create(Long recruitmentNumber) {
+    try {
+      return service.create(recruitmentNumber);
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public boolean hasLaboratory(Long recruitmentNumber) {
-        return service.hasLaboratory(recruitmentNumber);
-    }
+  public boolean hasLaboratory(Long recruitmentNumber) {
+    return service.hasLaboratory(recruitmentNumber);
+  }
 
-    public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
-        try {
-            return service.updateAliquots(updateAliquots);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        }
+  public ParticipantLaboratory updateAliquotList(UpdateAliquotsDTO updateAliquots) {
+    try {
+      return service.updateAliquots(updateAliquots);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public void deleteAliquot(String code) {
-        try {
-            service.deleteAliquot(code);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
-        } catch (ValidationException e) {
-            throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
-        }
+  public void deleteAliquot(String code) {
+    try {
+      service.deleteAliquot(code);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() {
-        try {
-            return service.getLaboratoryExtraction();
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
-        }
+  public LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() {
+    try {
+      return service.getLaboratoryExtraction();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
+  }
 
-    public String convertAliquotRole(Aliquot convertedAliquot) {
-        try {
-            return service.convertAliquotRole(convertedAliquot);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
-        }catch (ValidationException e) {
-            throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-        }
+  public String convertAliquotRole(Aliquot convertedAliquot) {
+    try {
+      return service.convertAliquotRole(convertedAliquot);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
+  }
 }

@@ -13,24 +13,24 @@ import java.util.List;
 
 public class ExamAdapter {
 
-    private ObjectId _id;
-    private ObjectId examSendingLotId;
-    private String objectType;
-    private String name;
-    private List<Observation> observations;
+  private ObjectId _id;
+  private ObjectId examSendingLotId;
+  private String objectType;
+  private String name;
+  private List<Observation> observations;
 
-    public static String serialize(ExamAdapter examAdapter) {
-        return getGsonBuilder().create().toJson(examAdapter);
-    }
+  public static String serialize(ExamAdapter examAdapter) {
+    return getGsonBuilder().create().toJson(examAdapter);
+  }
 
-    public static ExamAdapter deserialize(String examResultLotJson) {
-        return ExamAdapter.getGsonBuilder().create().fromJson(examResultLotJson, ExamAdapter.class);
-    }
+  public static ExamAdapter deserialize(String examResultLotJson) {
+    return ExamAdapter.getGsonBuilder().create().fromJson(examResultLotJson, ExamAdapter.class);
+  }
 
-    private static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-        return builder;
-    }
+  private static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return builder;
+  }
 
 }

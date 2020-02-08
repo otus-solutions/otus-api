@@ -12,8 +12,8 @@ public class ParticipantExamReportDto {
 
   public ParticipantExamReportDto(List<String> examNames) {
     participantExams = new ArrayList<>();
-    for (String exam : examNames){
-      participantExams.add(new ParticipantExam(exam,0));
+    for (String exam : examNames) {
+      participantExams.add(new ParticipantExam(exam, 0));
     }
   }
 

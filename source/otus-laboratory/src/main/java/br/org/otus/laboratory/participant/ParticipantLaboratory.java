@@ -75,23 +75,23 @@ public class ParticipantLaboratory {
     }
   }
 
-	public static String serialize(ParticipantLaboratory laboratory) {
-		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.create().toJson(laboratory);
-	}
+  public static String serialize(ParticipantLaboratory laboratory) {
+    GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+    return builder.create().toJson(laboratory);
+  }
 
-	public static ParticipantLaboratory deserialize(String laboratoryJson) {
-		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
-		builder.registerTypeAdapter(Long.class, new LongAdapter());
-		return builder.create().fromJson(laboratoryJson, ParticipantLaboratory.class);
-	}
+  public static ParticipantLaboratory deserialize(String laboratoryJson) {
+    GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+    builder.registerTypeAdapter(Long.class, new LongAdapter());
+    return builder.create().fromJson(laboratoryJson, ParticipantLaboratory.class);
+  }
 
-	public static GsonBuilder getGsonBuilder() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-		builder.serializeNulls();
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.serializeNulls();
 
-		return builder;
-	}
+    return builder;
+  }
 
 }

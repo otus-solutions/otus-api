@@ -20,45 +20,45 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultTubeGeneratorTest {
-	private static String GROUP_NAME_DEFAULT = "DEFAULT";
+  private static String GROUP_NAME_DEFAULT = "DEFAULT";
 
-	@InjectMocks
-	private DefaultTubeGenerator defaultTubeGenerator;
-	@Mock
-	private LaboratoryConfigurationService laboratoryConfigurationService;
-	@InjectMocks
-	private Participant participant;
+  @InjectMocks
+  private DefaultTubeGenerator defaultTubeGenerator;
+  @Mock
+  private LaboratoryConfigurationService laboratoryConfigurationService;
+  @InjectMocks
+  private Participant participant;
 
-	private Set<TubeDefinition> tubeDefinitions;
-	private CollectGroupDescriptor collectGroupDescriptor;
-	private TubeSeed tubeSeed;
+  private Set<TubeDefinition> tubeDefinitions;
+  private CollectGroupDescriptor collectGroupDescriptor;
+  private TubeSeed tubeSeed;
 
 
-	@Before
-	public void setUp() {
-		tubeDefinitions = new HashSet<TubeDefinition>();
-		tubeDefinitions.add(new TubeDefinition(1, "GEL", "POST_OVERLOAD"));
-		tubeDefinitions.add(new TubeDefinition(2, "FLORIDE", "POST_OVERLOAD"));
-		collectGroupDescriptor = new CollectGroupDescriptor(GROUP_NAME_DEFAULT, GROUP_NAME_DEFAULT, tubeDefinitions);
-		tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
-		PowerMockito.when(laboratoryConfigurationService.getDefaultTubeSet()).thenReturn(tubeDefinitions);
-	}
+  @Before
+  public void setUp() {
+    tubeDefinitions = new HashSet<TubeDefinition>();
+    tubeDefinitions.add(new TubeDefinition(1, "GEL", "POST_OVERLOAD"));
+    tubeDefinitions.add(new TubeDefinition(2, "FLORIDE", "POST_OVERLOAD"));
+    collectGroupDescriptor = new CollectGroupDescriptor(GROUP_NAME_DEFAULT, GROUP_NAME_DEFAULT, tubeDefinitions);
+    tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
+    PowerMockito.when(laboratoryConfigurationService.getDefaultTubeSet()).thenReturn(tubeDefinitions);
+  }
 
-	@Ignore
-	@Test
-	public void method_should_getTubeDefinitions() {
-		String expectTypeTubeGel = tubeDefinitions.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
-				.getType();
-		assertEquals(expectTypeTubeGel, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(0).getType());
-		String expectTypeTubeFloride = tubeDefinitions.stream().filter(t -> t.getType().equals("FLORIDE")).findFirst()
-				.get().getType();
-		assertEquals(expectTypeTubeFloride, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(1).getType());
-	}
+  @Ignore
+  @Test
+  public void method_should_getTubeDefinitions() {
+    String expectTypeTubeGel = tubeDefinitions.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
+      .getType();
+    assertEquals(expectTypeTubeGel, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(0).getType());
+    String expectTypeTubeFloride = tubeDefinitions.stream().filter(t -> t.getType().equals("FLORIDE")).findFirst()
+      .get().getType();
+    assertEquals(expectTypeTubeFloride, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(1).getType());
+  }
 
-	@Test
-	public void method_should_return_GROUP_NAME_DEFAULT() {
-		assertEquals(GROUP_NAME_DEFAULT,
-				defaultTubeGenerator.getTubeDefinitions(tubeSeed).stream().findAny().get().getGroup());
-	}
+  @Test
+  public void method_should_return_GROUP_NAME_DEFAULT() {
+    assertEquals(GROUP_NAME_DEFAULT,
+      defaultTubeGenerator.getTubeDefinitions(tubeSeed).stream().findAny().get().getGroup());
+  }
 
 }

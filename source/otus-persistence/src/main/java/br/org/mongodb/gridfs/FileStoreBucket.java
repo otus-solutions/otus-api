@@ -83,12 +83,12 @@ public class FileStoreBucket {
 
   private void buildMetadata(FileUploaderPOJO form) {
     gridFSUploadOptions.metadata(new Document("item_id", form.getItemId())
-        .append("recruitment_number", form.getRecruitmentNumber())
-        .append("sent_date", form.getSentDate())
-        .append("name", form.getName())
-        .append("type", form.getType())
-        .append("size", form.getSize())
-        .append("interviewer", form.getInterviewer()));
+      .append("recruitment_number", form.getRecruitmentNumber())
+      .append("sent_date", form.getSentDate())
+      .append("name", form.getName())
+      .append("type", form.getType())
+      .append("size", form.getSize())
+      .append("interviewer", form.getInterviewer()));
   }
 
   public List<FileDownload> fetchFiles(List<ObjectId> objectIds) throws DataNotFoundException {

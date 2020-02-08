@@ -24,7 +24,7 @@ import com.google.gson.GsonBuilder;
 import br.org.otus.permission.ActivityPermissionResource;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ActivityAccessPermission.class})
+@PrepareForTest({ActivityAccessPermission.class})
 public class ActivityAccessPermissionResourceTest {
   private static final String EXPECTED_RESPONSE = "{\"data\":true}";
   @InjectMocks
@@ -49,7 +49,7 @@ public class ActivityAccessPermissionResourceTest {
     setInternalState(activityAccessPermission, "exclusiveDisjunction", exclusiveDisjunction);
 
     mockStatic(ActivityAccessPermission.class);
-    permissionJson = ActivityAccessPermission.serialize(activityAccessPermission);    
+    permissionJson = ActivityAccessPermission.serialize(activityAccessPermission);
   }
 
   @Test

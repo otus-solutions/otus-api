@@ -26,13 +26,13 @@ public class LaboratoryExtractionTest {
   private LaboratoryExtractionRecordsFactory recordsFactory;
   @Mock
   private LinkedHashSet<String> headers;
-  
+
   @Before
   public void setup() {
     Whitebox.setInternalState(laboratoryExtraction, "headersFactory", headersFactory);
     Whitebox.setInternalState(laboratoryExtraction, "recordsFactory", recordsFactory);
   }
-  
+
   @Test
   public void getHeaders_method_should_call_getHeaders_method() {
     laboratoryExtraction.getHeaders();

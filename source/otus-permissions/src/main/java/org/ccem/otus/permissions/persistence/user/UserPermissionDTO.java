@@ -55,7 +55,7 @@ public class UserPermissionDTO {
       e.printStackTrace();
     }
     UserPermissionDTO userPermissionsDTO = UserPermissionDTO.getGsonBuilder().create()
-        .fromJson(String.valueOf(jsonObject), UserPermissionDTO.class);
+      .fromJson(String.valueOf(jsonObject), UserPermissionDTO.class);
     return userPermissionsDTO;
   }
 

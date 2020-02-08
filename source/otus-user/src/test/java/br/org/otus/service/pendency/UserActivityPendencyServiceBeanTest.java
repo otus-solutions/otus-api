@@ -43,7 +43,7 @@ public class UserActivityPendencyServiceBeanTest {
   private String userActivityPendencyJson;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     userActivityPendency = new UserActivityPendency();
     userActivityPendencyResponse = new UserActivityPendencyResponse();
     userActivityPendencyResponses = asList(userActivityPendencyResponse);
@@ -51,7 +51,7 @@ public class UserActivityPendencyServiceBeanTest {
   }
 
   @Test
-  public void createMethod_should_return_ID_in_success_case_persist(){
+  public void createMethod_should_return_ID_in_success_case_persist() {
     when(userActivityPendencyDao.create(userActivityPendency)).thenReturn(PENDENCY_OID);
     assertEquals(PENDENCY_OID, userActivityPendencyServiceBean.create(USER_EMAIL, userActivityPendency));
   }
@@ -62,7 +62,7 @@ public class UserActivityPendencyServiceBeanTest {
     verify(userActivityPendencyDao, times(1)).update(PENDENCY_OID, userActivityPendency);
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void updateMethod_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "update", PENDENCY_OID, userActivityPendency);
     userActivityPendencyServiceBean.update(PENDENCY_ID, userActivityPendency);
@@ -74,7 +74,7 @@ public class UserActivityPendencyServiceBeanTest {
     verify(userActivityPendencyDao, times(1)).delete(PENDENCY_OID);
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void deleteMethod_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "delete", PENDENCY_OID);
     userActivityPendencyServiceBean.delete(PENDENCY_ID);
@@ -87,7 +87,7 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendency, userActivityPendencyServiceBean.getByActivityId(ACTIVITY_ID));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void getActivityByIdMethod_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findByActivityOID", ACTIVITY_OID);
     userActivityPendencyServiceBean.getByActivityId(ACTIVITY_ID);
@@ -100,13 +100,13 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void listAllPendenciesToReceiver_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendenciesToReceiver", USER_EMAIL);
     userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL);
   }
 
-  @Test (expected = MemoryExcededException.class)
+  @Test(expected = MemoryExcededException.class)
   public void listAllPendenciesToReceiver_should_handle_MemoryExcededException() throws Exception {
     doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendenciesToReceiver", USER_EMAIL);
     userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL);
@@ -119,13 +119,13 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void listOpenedPendenciesToReceiver_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findOpenedPendenciesToReceiver", USER_EMAIL);
     userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
-  @Test (expected = MemoryExcededException.class)
+  @Test(expected = MemoryExcededException.class)
   public void listOpenedPendenciesToReceiver_should_handle_MemoryExcededException() throws Exception {
     doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findOpenedPendenciesToReceiver", USER_EMAIL);
     userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL);
@@ -138,13 +138,13 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void listDonePendenciesToReceiver_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findDonePendenciesToReceiver", USER_EMAIL);
     userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
-  @Test (expected = MemoryExcededException.class)
+  @Test(expected = MemoryExcededException.class)
   public void listDonePendenciesToReceiver_should_handle_MemoryExcededException() throws Exception {
     doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findDonePendenciesToReceiver", USER_EMAIL);
     userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL);
@@ -157,13 +157,13 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendenciesFromRequester(USER_EMAIL));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void listAllPendenciesFromRequester_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendenciesFromRequester", USER_EMAIL);
     userActivityPendencyServiceBean.listAllPendenciesFromRequester(USER_EMAIL);
   }
 
-  @Test (expected = MemoryExcededException.class)
+  @Test(expected = MemoryExcededException.class)
   public void listAllPendenciesFromRequester_should_handle_MemoryExcededException() throws Exception {
     doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendenciesFromRequester", USER_EMAIL);
     userActivityPendencyServiceBean.listAllPendenciesFromRequester(USER_EMAIL);
@@ -176,13 +176,13 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listOpenedPendenciesFromRequester(USER_EMAIL));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void listOpenedPendenciesFromRequester_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findOpenedPendenciesFromRequester", USER_EMAIL);
     userActivityPendencyServiceBean.listOpenedPendenciesFromRequester(USER_EMAIL);
   }
 
-  @Test (expected = MemoryExcededException.class)
+  @Test(expected = MemoryExcededException.class)
   public void listOpenedPendenciesFromRequester_should_handle_MemoryExcededException() throws Exception {
     doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findOpenedPendenciesFromRequester", USER_EMAIL);
     userActivityPendencyServiceBean.listOpenedPendenciesFromRequester(USER_EMAIL);
@@ -195,13 +195,13 @@ public class UserActivityPendencyServiceBeanTest {
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listDonePendenciesFromRequester(USER_EMAIL));
   }
 
-  @Test (expected = DataNotFoundException.class)
+  @Test(expected = DataNotFoundException.class)
   public void listDonePendenciesFromRequester_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findDonePendenciesFromRequester", USER_EMAIL);
     userActivityPendencyServiceBean.listDonePendenciesFromRequester(USER_EMAIL);
   }
 
-  @Test (expected = MemoryExcededException.class)
+  @Test(expected = MemoryExcededException.class)
   public void listDonePendenciesFromRequester_should_handle_MemoryExcededException() throws Exception {
     doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findDonePendenciesFromRequester", USER_EMAIL);
     userActivityPendencyServiceBean.listDonePendenciesFromRequester(USER_EMAIL);

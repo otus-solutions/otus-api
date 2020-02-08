@@ -13,20 +13,20 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityImportationResourceTest {
-    private static final String ACRONYM = "ACTA";
-    private static final int VERSION = 1;
-    private static final String IMPORT_ACTIVITY_JSON = "{\"objectType\" : \"Activity\",\"surveyForm\" : {\"sender\" : \"\"," +
-            "\"sendingDate\" :\"\",\"objectType\" : \"SurveyForm\",\"surveyFormType\" : \"FORM_INTERVIEW\"}}";
+  private static final String ACRONYM = "ACTA";
+  private static final int VERSION = 1;
+  private static final String IMPORT_ACTIVITY_JSON = "{\"objectType\" : \"Activity\",\"surveyForm\" : {\"sender\" : \"\"," +
+    "\"sendingDate\" :\"\",\"objectType\" : \"SurveyForm\",\"surveyFormType\" : \"FORM_INTERVIEW\"}}";
 
-    @InjectMocks
-    private ActivityImportationResource activityImportationResource;
+  @InjectMocks
+  private ActivityImportationResource activityImportationResource;
 
-    @Mock
-    private ActivityImportationFacade activityImportationFacade;
+  @Mock
+  private ActivityImportationFacade activityImportationFacade;
 
-    @Test
-    public void importActivities_method_should_invoke_importActivities_of_activityImportationFacade() {
-        activityImportationResource.importActivities(IMPORT_ACTIVITY_JSON,ACRONYM,VERSION);
-        verify(activityImportationFacade, times(1)).importActivities(Mockito.anyString(),Mockito.anyInt(),Mockito.anyObject());
-    }
+  @Test
+  public void importActivities_method_should_invoke_importActivities_of_activityImportationFacade() {
+    activityImportationResource.importActivities(IMPORT_ACTIVITY_JSON, ACRONYM, VERSION);
+    verify(activityImportationFacade, times(1)).importActivities(Mockito.anyString(), Mockito.anyInt(), Mockito.anyObject());
+  }
 }

@@ -7,13 +7,13 @@ import org.ccem.otus.participant.model.Participant;
 
 public class ParticipantCodecProvider implements CodecProvider {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
-		if (clazz == Participant.class) {
-			return (Codec<T>) new ParticipantCodec();
-		}
-		return null;
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
+    if (clazz == Participant.class) {
+      return (Codec<T>) new ParticipantCodec();
+    }
+    return null;
+  }
 
 }

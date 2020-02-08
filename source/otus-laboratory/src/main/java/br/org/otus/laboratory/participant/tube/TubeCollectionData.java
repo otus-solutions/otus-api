@@ -9,54 +9,54 @@ import java.time.LocalDateTime;
 
 public class TubeCollectionData {
 
-	private String objectType;
-	private boolean isCollected;
-	private String metadata;
-	private String operator;
-	private LocalDateTime time;
+  private String objectType;
+  private boolean isCollected;
+  private String metadata;
+  private String operator;
+  private LocalDateTime time;
 
-	public TubeCollectionData() {
-		this.objectType = "TubeCollectionData";
-		this.isCollected = false;
-		this.metadata = "";
-		this.operator = "";
-	}
-	
-	public String getObjectType() {
-		return objectType;
-	}
+  public TubeCollectionData() {
+    this.objectType = "TubeCollectionData";
+    this.isCollected = false;
+    this.metadata = "";
+    this.operator = "";
+  }
 
-	public boolean isCollected() {
-		return isCollected;
-	}
+  public String getObjectType() {
+    return objectType;
+  }
 
-	public String getMetadata() {
-		return metadata;
-	}
+  public boolean isCollected() {
+    return isCollected;
+  }
 
-	public String getOperatorEmail() {
-		return operator;
-	}
+  public String getMetadata() {
+    return metadata;
+  }
 
-	public LocalDateTime getTime() {
-		return time;
-	}
+  public String getOperatorEmail() {
+    return operator;
+  }
 
-	public static String serialize(TubeCollectionData tubeCollectionData) {
-		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.create().toJson(tubeCollectionData);
-	}
+  public LocalDateTime getTime() {
+    return time;
+  }
 
-	public static Tube deserialize(String tubeJson) {
-		GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
-		return builder.create().fromJson(tubeJson, Tube.class);
-	}
+  public static String serialize(TubeCollectionData tubeCollectionData) {
+    GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+    return builder.create().toJson(tubeCollectionData);
+  }
 
-	public static Gson getGsonBuilder() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-		builder.serializeNulls();
+  public static Tube deserialize(String tubeJson) {
+    GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+    return builder.create().fromJson(tubeJson, Tube.class);
+  }
 
-		return builder.create();
-	}
+  public static Gson getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.serializeNulls();
+
+    return builder.create();
+  }
 }

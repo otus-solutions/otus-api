@@ -5,5 +5,5 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 public interface AttachmentsExtractionDao {
 
-    AttachmentsReport fetchAttachmentsReport(String acronym, Integer version) throws DataNotFoundException;
+  AttachmentsReport fetchAttachmentsReport(String acronym, Integer version) throws DataNotFoundException;
 }

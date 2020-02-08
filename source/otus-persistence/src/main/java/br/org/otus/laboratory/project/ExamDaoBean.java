@@ -13,33 +13,34 @@ import java.util.List;
 
 public class ExamDaoBean extends MongoGenericDao<Document> implements ExamDao {
 
-    private static final String COLLECTION_NAME = "exam_result";
+  private static final String COLLECTION_NAME = "exam_result";
 
-    public ExamDaoBean() {
-        super(COLLECTION_NAME, Document.class);
-    }
+  public ExamDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
 
-    @Override
-    public ObjectId insert(Exam exam) {
-        ExamAdapter examAdapter = ExamAdapter.deserialize(Exam.serialize(exam));
+  @Override
+  public ObjectId insert(Exam exam) {
+    ExamAdapter examAdapter = ExamAdapter.deserialize(Exam.serialize(exam));
 
-        Document parsed = Document.parse(ExamAdapter.serialize(examAdapter));
+    Document parsed = Document.parse(ExamAdapter.serialize(examAdapter));
 
-        super.persist(parsed);
-        return (ObjectId)parsed.get( "_id" );
-    }
+    super.persist(parsed);
+    return (ObjectId) parsed.get("_id");
+  }
 
-    @Override
-    public List<ExamSendingLot> getAll() {
-        return null;
-    }
+  @Override
+  public List<ExamSendingLot> getAll() {
+    return null;
+  }
 
-    @Override
-    public ExamSendingLot getById(String id) throws DataNotFoundException {
-        return null;
-    }
+  @Override
+  public ExamSendingLot getById(String id) throws DataNotFoundException {
+    return null;
+  }
 
-    @Override
-    public void deleteById(String id) throws DataNotFoundException {}
+  @Override
+  public void deleteById(String id) throws DataNotFoundException {
+  }
 }

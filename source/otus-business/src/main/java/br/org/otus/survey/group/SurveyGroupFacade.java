@@ -14,57 +14,57 @@ import java.util.List;
 
 public class SurveyGroupFacade {
 
-    @Inject
-    private SurveyGroupService surveyGroupService;
+  @Inject
+  private SurveyGroupService surveyGroupService;
 
-    public List<SurveyGroup> getListOfSurveyGroups() {
-        return surveyGroupService.getListOfSurveyGroups();
+  public List<SurveyGroup> getListOfSurveyGroups() {
+    return surveyGroupService.getListOfSurveyGroups();
+  }
+
+  public String addNewSurveyGroup(String surveyGroupJson) {
+    try {
+      return surveyGroupService.addNewSurveyGroup(surveyGroupJson).toString();
+    } catch (ValidationException e) {
+      throw new HttpResponseException(
+        Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public String addNewSurveyGroup(String surveyGroupJson) {
-        try {
-            return surveyGroupService.addNewSurveyGroup(surveyGroupJson).toString();
-        } catch (ValidationException e) {
-            throw new HttpResponseException(
-                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        }
+  public String updateSurveyGroupAcronyms(String surveyGroupJson) {
+    try {
+      return surveyGroupService.updateSurveyGroupAcronyms(surveyGroupJson);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
+    } catch (ValidationException e) {
+      throw new HttpResponseException(
+        Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public String updateSurveyGroupAcronyms(String surveyGroupJson) {
-        try {
-            return surveyGroupService.updateSurveyGroupAcronyms(surveyGroupJson);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-
-        } catch (ValidationException e) {
-            throw new HttpResponseException(
-                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        }
-    }
-
-    public String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) {
-        try {
-            return surveyGroupService.updateSurveyGroupName(surveyGroupNameDto);
-        } catch (ValidationException e) {
-            throw new HttpResponseException(
-                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-
-        }
-    }
-
-    public void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) {
-        try {
-            surveyGroupService.deleteSurveyGroup(surveyGroupNameDto);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-
-        }
-    }
-
-    public List<SurveyGroup> getSurveyGroupsByUser(String userEmail) {
-        return surveyGroupService.getSurveyGroupsByUser(userEmail);
+  public String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) {
+    try {
+      return surveyGroupService.updateSurveyGroupName(surveyGroupNameDto);
+    } catch (ValidationException e) {
+      throw new HttpResponseException(
+        Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
 
     }
+  }
+
+  public void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) {
+    try {
+      surveyGroupService.deleteSurveyGroup(surveyGroupNameDto);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+
+    }
+  }
+
+  public List<SurveyGroup> getSurveyGroupsByUser(String userEmail) {
+    return surveyGroupService.getSurveyGroupsByUser(userEmail);
+
+  }
 }

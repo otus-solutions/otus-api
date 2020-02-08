@@ -28,13 +28,13 @@ public class ActivityProgressResultExtractionTest {
 
   @Test
   public void deserialize_method_should_return_elements_with_values_expected() {
-    this.result = ActivityProgressResultExtraction.deserialize("{\n" + 
-        "  \"rn\":5006259,\n" + 
-        "  \"status\"=\"FINALIZED\",\n" + 
-        "  \"acronym\":\"CSJ\",\n" + 
-        "  \"statusDate\":\"2018-10-15T11:40:05.282Z\",\n" + 
-        "  \"observation\":\"\"\n" + 
-        "}");
+    this.result = ActivityProgressResultExtraction.deserialize("{\n" +
+      "  \"rn\":5006259,\n" +
+      "  \"status\"=\"FINALIZED\",\n" +
+      "  \"acronym\":\"CSJ\",\n" +
+      "  \"statusDate\":\"2018-10-15T11:40:05.282Z\",\n" +
+      "  \"observation\":\"\"\n" +
+      "}");
 
     assertEquals("5006259", this.result.getRecruitmentNumber().toString());
     assertEquals("CSJ", this.result.getAcronym());

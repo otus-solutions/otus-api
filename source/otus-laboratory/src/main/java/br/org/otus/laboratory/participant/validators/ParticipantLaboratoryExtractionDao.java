@@ -6,6 +6,6 @@ import java.util.LinkedList;
 
 public interface ParticipantLaboratoryExtractionDao {
 
-    LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction();
+  LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction();
 
 }

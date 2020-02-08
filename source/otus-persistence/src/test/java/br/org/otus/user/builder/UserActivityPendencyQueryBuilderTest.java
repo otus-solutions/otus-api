@@ -14,12 +14,12 @@ public class UserActivityPendencyQueryBuilderTest {
   private static final String USER_EMAIL = "requester@otus.com";
 
   @Before
-  public void setUp(){
+  public void setUp() {
     builder = new UserActivityPendencyQueryBuilder();
   }
 
   @Test
-  public void getListAllPendenciesByUserQuery(){
+  public void getListAllPendenciesByUserQuery() {
     final String EXPECTED_QUERY = "[{" +
       "\"$lookup\":{" +
       "\"from\":\"activity\"," +
@@ -42,7 +42,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "{\"$match\":{" +
       "\"$expr\":{" +
       "\"$and\":[" +
-      "{\"$eq\":[\"$"+ USER_ROLE +"\",\"" + USER_EMAIL + "\"]}," +
+      "{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," +
       "{\"$gt\":[{\"$size\":\"$activityInfo\"},0.0]}" +
       "]}}}," +
       "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
@@ -51,7 +51,7 @@ public class UserActivityPendencyQueryBuilderTest {
   }
 
   @Test
-  public void getListOpenedPendenciesByUserQuery(){
+  public void getListOpenedPendenciesByUserQuery() {
     final String EXPECTED_QUERY = "[{" +
       "\"$lookup\":{" +
       "\"from\":\"activity\"," +
@@ -62,7 +62,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "\"$and\":[" +
       "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
       "{\"$eq\":[false,\"$isDiscarded\"]}" +
-      ",{\"$ne\":[\""+ UserActivityPendencyQueryBuilder.FINALIZED_STATUS +"\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}" +
+      ",{\"$ne\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}" +
       "]}}}," +
       "{\"$project\":{" +
       "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
@@ -75,7 +75,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "{\"$match\":{" +
       "\"$expr\":{" +
       "\"$and\":[" +
-      "{\"$eq\":[\"$"+ USER_ROLE +"\",\"" + USER_EMAIL + "\"]}," +
+      "{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," +
       "{\"$gt\":[{\"$size\":\"$activityInfo\"},0.0]}" +
       "]}}}," +
       "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
@@ -84,7 +84,7 @@ public class UserActivityPendencyQueryBuilderTest {
   }
 
   @Test
-  public void getListDonePendenciesByUserQuery(){
+  public void getListDonePendenciesByUserQuery() {
     final String EXPECTED_QUERY = "[{" +
       "\"$lookup\":{" +
       "\"from\":\"activity\"," +
@@ -95,7 +95,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "\"$and\":[" +
       "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
       "{\"$eq\":[false,\"$isDiscarded\"]}" +
-      ",{\"$eq\":[\""+ UserActivityPendencyQueryBuilder.FINALIZED_STATUS +"\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}" +
+      ",{\"$eq\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}" +
       "]}}}," +
       "{\"$project\":{" +
       "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
@@ -108,7 +108,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "{\"$match\":{" +
       "\"$expr\":{" +
       "\"$and\":[" +
-      "{\"$eq\":[\"$"+ USER_ROLE +"\",\"" + USER_EMAIL + "\"]}," +
+      "{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," +
       "{\"$gt\":[{\"$size\":\"$activityInfo\"},0.0]}" +
       "]}}}," +
       "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";

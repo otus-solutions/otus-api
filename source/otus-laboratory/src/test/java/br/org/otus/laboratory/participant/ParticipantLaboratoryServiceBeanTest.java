@@ -57,7 +57,7 @@ public class ParticipantLaboratoryServiceBeanTest {
   // TODO: This test needs to be refactored
 
   @InjectMocks
-  private ParticipantLaboratoryServiceBean participantLaboratoryServiceBean= PowerMockito.spy(new ParticipantLaboratoryServiceBean());
+  private ParticipantLaboratoryServiceBean participantLaboratoryServiceBean = PowerMockito.spy(new ParticipantLaboratoryServiceBean());
   @Mock
   private ParticipantDao participantDao;
   @Mock
@@ -151,26 +151,26 @@ public class ParticipantLaboratoryServiceBeanTest {
   @Test
   public void updateAliquots_method_should_call_method_validate() throws Exception {
     doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
-    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
+    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO, aliquotDao, participantLaboratory).thenReturn(aliquotUpdateValidator);
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
-    verify(aliquotUpdateValidator,times(1)).validate();
+    verify(aliquotUpdateValidator, times(1)).validate();
   }
 
   @Test
   public void updateAliquots_method_should_call_aliquotDao_executeFunction() throws Exception {
     doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
-    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
+    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO, aliquotDao, participantLaboratory).thenReturn(aliquotUpdateValidator);
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
     Thread.sleep(100);
-    verify(aliquotDao,times(1)).executeFunction("syncResults()");
+    verify(aliquotDao, times(1)).executeFunction("syncResults()");
   }
 
   @Test
   public void UpdateAliquots_method_when_executed_with_success_should_call_method_aliquotDao_persist() throws Exception {
     doReturn(participantLaboratory).when(participantLaboratoryServiceBean, "getLaboratory", RECRUIMENT_NUMBER);
-    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO,aliquotDao,participantLaboratory).thenReturn(aliquotUpdateValidator);
+    whenNew(AliquotUpdateValidator.class).withArguments(updateAliquotsDTO, aliquotDao, participantLaboratory).thenReturn(aliquotUpdateValidator);
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     participantLaboratoryServiceBean.updateAliquots(updateAliquotsDTO);
     verify(aliquotDao, times(1)).persist(any());
@@ -186,23 +186,23 @@ public class ParticipantLaboratoryServiceBeanTest {
   public void deleteAliquot_should_call_method_validate() throws Exception {
 
     AliquotDeletionValidator aliquotDeletionValidator = Mockito.mock(AliquotDeletionValidator.class);
-    whenNew(AliquotDeletionValidator.class).withArguments(ALIQUOT_CODE,aliquotDao, examUploader, examLotDao, transportationLotDao).thenReturn(aliquotDeletionValidator);
+    whenNew(AliquotDeletionValidator.class).withArguments(ALIQUOT_CODE, aliquotDao, examUploader, examLotDao, transportationLotDao).thenReturn(aliquotDeletionValidator);
 
     aliquotDeletionValidator.validate();
 
     verify(aliquotDeletionValidator, Mockito.times(1)).validate();
   }
-  
+
   @Test
   public void getLaboratoryExtraction_method_should_call_getLaboratoryExtraction_method() throws DataNotFoundException {
     participantLaboratoryServiceBean.getLaboratoryExtraction();
-    
+
     verify(participantLaboratoryExtractionDao).getLaboratoryExtraction();
   }
 
   @Test()
   public void convertAliquotRole_method_should_evoke_convert_of_aliquotDao() throws DataNotFoundException, ValidationException {
-    List<AliquotEvent>mockAliquotHistory = Arrays.asList(aliquotEvent);
+    List<AliquotEvent> mockAliquotHistory = Arrays.asList(aliquotEvent);
     when(convertedAliquot.getAliquotHistory()).thenReturn(mockAliquotHistory);
     participantLaboratoryServiceBean.convertAliquotRole(convertedAliquot);
     verify(aliquotDao, Mockito.times(1)).convertAliquotRole(convertedAliquot);

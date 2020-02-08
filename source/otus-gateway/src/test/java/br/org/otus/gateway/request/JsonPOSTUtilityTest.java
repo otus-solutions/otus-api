@@ -73,9 +73,4 @@ public class JsonPOSTUtilityTest {
       assertEquals(e.getMessage(), CONNECTION_CLOSED);
     }
   }
-
-  @Test(expected = RequestException.class)
-  public void finishMethod_should_throws_RequestException() throws IOException {
-    jsonPOSTUtility.finish();
-  }
 }

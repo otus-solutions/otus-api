@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ActivityProgressRecordsFactoryTest {
-  
+
   private static final Long RECRUITMENT_NUMBER = 1015533L;
   private static final String STATUS = "FINALIZED";
   private static final String ACRONYM = "CSJ";
@@ -21,12 +21,12 @@ public class ActivityProgressRecordsFactoryTest {
 
   @Before
   public void setup() {
-    ActivityProgressResultExtraction result = ActivityProgressResultExtraction.deserialize("{\n" + 
-      "  \"rn\":1015533,\n" + 
-      "  \"acronym\":\"CSJ\",\n" + 
-      "  \"status\"=\"FINALIZED\",\n" + 
-      "  \"statusDate\":\"2018-10-15T11:40:05.282Z\",\n" + 
-      "  \"observation\":\"\"\n" + 
+    ActivityProgressResultExtraction result = ActivityProgressResultExtraction.deserialize("{\n" +
+      "  \"rn\":1015533,\n" +
+      "  \"acronym\":\"CSJ\",\n" +
+      "  \"status\"=\"FINALIZED\",\n" +
+      "  \"statusDate\":\"2018-10-15T11:40:05.282Z\",\n" +
+      "  \"observation\":\"\"\n" +
       "}");
     this.records = new LinkedList<>();
     this.records.add(result);
@@ -36,9 +36,9 @@ public class ActivityProgressRecordsFactoryTest {
   @Test
   public void getRecords_method_should_contain_expected_values() {
     List<List<Object>> extraction = this.factory.getRecords();
-   
+
     List<Object> results = extraction.get(0);
-       
+
     Assert.assertEquals(RECRUITMENT_NUMBER.toString(), results.get(0));
     Assert.assertEquals(ACRONYM.toString(), results.get(1));
     Assert.assertEquals(STATUS, results.get(2));

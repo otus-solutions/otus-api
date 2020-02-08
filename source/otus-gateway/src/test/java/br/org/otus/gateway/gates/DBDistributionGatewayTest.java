@@ -24,7 +24,7 @@ import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ DBDistributionGatewayService.class })
+@PrepareForTest({DBDistributionGatewayService.class})
 public class DBDistributionGatewayTest {
   private static String INFO_VARIABLE_PARAMS = "{\"recruitmentNumber\": \"4107\",\"variables\":[{\"name\": \"tst1\",\"value\": \"Text\",\"sending\": \"1\"},{\"name\": \"tst1\",\"value\": \"Text\",\"sending\": \"2\"}]}";
   private static String CURRENT_VARIABLES_BY_MICROSERVICE = "{\"variables\":[{\"name\": \"var2\",\"sending\": \"1\"}]}";

@@ -19,7 +19,7 @@ public class UserDtoTest {
   private UserDto userDto;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     userDto = new UserDto();
     userDto.setName(NAME);
     userDto.setSurname(SURNAME);
@@ -37,22 +37,22 @@ public class UserDtoTest {
   }
 
   @Test
-  public void should_return_name(){
+  public void should_return_name() {
     assertEquals(NAME, userDto.getName());
   }
 
   @Test
-  public void should_return_surname(){
+  public void should_return_surname() {
     assertEquals(SURNAME, userDto.getSurname());
   }
 
   @Test
-  public void should_return_phone(){
+  public void should_return_phone() {
     assertEquals(PHONE, userDto.getPhone());
   }
 
   @Test
-  public void should_return_email(){
+  public void should_return_email() {
     assertEquals(EMAIL, userDto.getEmail());
   }
 }

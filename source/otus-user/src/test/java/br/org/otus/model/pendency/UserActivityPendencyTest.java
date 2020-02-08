@@ -27,7 +27,7 @@ public class UserActivityPendencyTest {
   private String userActivityPendencyJson;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     Whitebox.setInternalState(userActivityPendency, "_id", OID);
     Whitebox.setInternalState(userActivityPendency, "objectType", OBJECT_TYPE);
     Whitebox.setInternalState(userActivityPendency, "creationDate", CREATION_DATE);
@@ -40,7 +40,7 @@ public class UserActivityPendencyTest {
   }
 
   @Test
-  public void unitTest_for_invoke_getters(){
+  public void unitTest_for_invoke_getters() {
     assertEquals(OID, userActivityPendency.getId());
     assertEquals(OBJECT_TYPE, userActivityPendency.getObjectType());
     assertEquals(CREATION_DATE, userActivityPendency.getCreationDate());
@@ -51,13 +51,13 @@ public class UserActivityPendencyTest {
   }
 
   @Test
-  public void unitTest_for_setRequester(){
+  public void unitTest_for_setRequester() {
     userActivityPendency.setRequester(ANOTHER_USER_EMAIL);
     assertEquals(ANOTHER_USER_EMAIL, userActivityPendency.getRequester());
   }
 
   @Test
-  public void unitTest_for_setReceiver(){
+  public void unitTest_for_setReceiver() {
     userActivityPendency.setReceiver(ANOTHER_USER_EMAIL);
     assertEquals(ANOTHER_USER_EMAIL, userActivityPendency.getReceiver());
   }

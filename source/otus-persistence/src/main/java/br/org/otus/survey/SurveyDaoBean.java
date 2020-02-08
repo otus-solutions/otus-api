@@ -34,8 +34,8 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   @UserPermission
   public List<SurveyForm> findUndiscarded(List<String> permittedAcronyms, String userEmail) {
     ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
-    Document query = new Document("isDiscarded", false).append("surveyTemplate.identity.acronym",new Document("$in",permittedAcronyms));
-    collection.aggregate(Arrays.asList(new Document("$match",query))).forEach((Block<Document>) document -> {
+    Document query = new Document("isDiscarded", false).append("surveyTemplate.identity.acronym", new Document("$in", permittedAcronyms));
+    collection.aggregate(Arrays.asList(new Document("$match", query))).forEach((Block<Document>) document -> {
       surveys.add(SurveyForm.deserialize(document.toJson()));
     });
 
@@ -46,7 +46,7 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   public List<SurveyForm> findAllUndiscarded() {
     ArrayList<SurveyForm> surveys = new ArrayList<SurveyForm>();
     Document query = new Document("isDiscarded", false);
-    collection.aggregate(Arrays.asList(new Document("$match",query))).forEach((Block<Document>) document -> {
+    collection.aggregate(Arrays.asList(new Document("$match", query))).forEach((Block<Document>) document -> {
       surveys.add(SurveyForm.deserialize(document.toJson()));
     });
 
@@ -217,9 +217,9 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   public SurveyJumpMap createJumpMap(String acronym, Integer version) {
     SurveyJumpMap surveyJumpMap = new SurveyJumpMap();
 
-    Document first = super.aggregate(new SurveyJumpMapQueryBuilder().buildQuery(acronym,version)).first();
+    Document first = super.aggregate(new SurveyJumpMapQueryBuilder().buildQuery(acronym, version)).first();
 
-    if(first != null){
+    if (first != null) {
       surveyJumpMap = SurveyJumpMap.deserialize(first.toJson());
     }
 
@@ -231,10 +231,10 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
 
     UpdateResult updateResult = collection.updateOne(
       eq("_id", surveyID),
-        new Document("$set",
-          new Document("requiredExternalID", stateRequiredExternalID)));
+      new Document("$set",
+        new Document("requiredExternalID", stateRequiredExternalID)));
 
-    if(updateResult.getMatchedCount() == 0){
+    if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("survey not found");
     }
     return updateResult;

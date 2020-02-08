@@ -6,12 +6,12 @@ import org.ccem.otus.survey.form.SurveyFormType;
 
 public class UpdateSurveyFormTypeDto implements Dto {
 
-	public String acronym;
-	public SurveyFormType newSurveyFormType;
+  public String acronym;
+  public SurveyFormType newSurveyFormType;
 
-	@Override
-	public Boolean isValid() {
-		return (acronym != null && !acronym.isEmpty() &&
-				newSurveyFormType != null);
-	}
+  @Override
+  public Boolean isValid() {
+    return (acronym != null && !acronym.isEmpty() &&
+      newSurveyFormType != null);
+  }
 }

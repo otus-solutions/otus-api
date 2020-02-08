@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface ExamDao {
 
-    ObjectId insert(Exam exam);
+  ObjectId insert(Exam exam);
 
-    List<ExamSendingLot> getAll();
+  List<ExamSendingLot> getAll();
 
-    ExamSendingLot getById(String id) throws DataNotFoundException;
+  ExamSendingLot getById(String id) throws DataNotFoundException;
 
-    void deleteById(String id) throws DataNotFoundException;
+  void deleteById(String id) throws DataNotFoundException;
 
 }

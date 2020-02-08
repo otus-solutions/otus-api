@@ -17,7 +17,7 @@ public class DCMUltrasoundDataSourceResult {
 
   public static DCMUltrasoundDataSourceResult deserialize(String json) {
     DCMUltrasoundDataSourceResult result = DCMUltrasoundDataSourceResult.getGsonBuilder().create().fromJson(json,
-        DCMUltrasoundDataSourceResult.class);
+      DCMUltrasoundDataSourceResult.class);
     return result;
   }
 

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({JsonObject.class,JsonPrimitive.class,PermissionMapping.class})
+@PrepareForTest({JsonObject.class, JsonPrimitive.class, PermissionMapping.class})
 public class PermissionAdapterTest {
   private static final String EMAIL = "otus@gmail.com";
   private static final String OBJECT_TYPE = "SurveyGroupPermission";
@@ -55,13 +55,13 @@ public class PermissionAdapterTest {
   @Test
   public void method_deserialize_should_return_expected_values() {
     JsonElement jsonElement = new JsonObject();
-    ((JsonObject) jsonElement).addProperty("objectType","SurveyGroupPermission");
+    ((JsonObject) jsonElement).addProperty("objectType", "SurveyGroupPermission");
 
-    assertTrue(permissionAdapter.deserialize(jsonElement,typeOfSrc, new JsonDeserializationContextForTest()) instanceof Permission);
+    assertTrue(permissionAdapter.deserialize(jsonElement, typeOfSrc, new JsonDeserializationContextForTest()) instanceof Permission);
   }
 }
 
-class JsonDeserializationContextForTest implements  JsonDeserializationContext{
+class JsonDeserializationContextForTest implements JsonDeserializationContext {
   @Override
   public SurveyGroupPermission deserialize(JsonElement json, Type typeOfT) throws JsonParseException {
     return SurveyGroupPermission.getGsonBuilder().create().fromJson(json, SurveyGroupPermission.class);

@@ -8,5 +8,5 @@ import java.util.Set;
 
 public interface ParticipantImportService {
 
-    void importation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException;
+  void importation(Set<ParticipantImport> participantImports) throws ValidationException, DataNotFoundException;
 }

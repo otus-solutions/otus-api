@@ -7,8 +7,8 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class HttpResponseExceptionMapper implements ExceptionMapper<HttpResponseException> {
 
-    @Override
-    public Response toResponse(HttpResponseException e) {
-        return e.getResponseInfo().toResponse();
-    }
+  @Override
+  public Response toResponse(HttpResponseException e) {
+    return e.getResponseInfo().toResponse();
+  }
 }

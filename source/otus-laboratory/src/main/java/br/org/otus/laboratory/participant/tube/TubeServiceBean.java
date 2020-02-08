@@ -20,61 +20,61 @@ import java.util.function.Predicate;
 @Stateless
 public class TubeServiceBean implements TubeService {
 
-	@Inject
-	private LaboratoryConfigurationService laboratoryConfigurationService;
+  @Inject
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
-	@Inject
-	@DefaultGenerator
-	private TubeGenerator defaultTubeGenerator;
-	@Inject
-	@QualityControlGenerator
-	private TubeGenerator qualityControlTubeGenerator;
-	@Inject
-	@CenterGenerator
-	private TubeGenerator centerTubeGenerator;
+  @Inject
+  @DefaultGenerator
+  private TubeGenerator defaultTubeGenerator;
+  @Inject
+  @QualityControlGenerator
+  private TubeGenerator qualityControlTubeGenerator;
+  @Inject
+  @CenterGenerator
+  private TubeGenerator centerTubeGenerator;
 
-	@Override
-	public List<Tube> generateTubes(TubeSeed tubeSeed) {
-		List<Tube> tubes = new ArrayList<>();
-		tubes.addAll(defaultTubeGenerator.generateTubes(tubeSeed));
-		tubes.addAll(qualityControlTubeGenerator.generateTubes(tubeSeed));
-		tubes.addAll(centerTubeGenerator.generateTubes(tubeSeed));
-		reorderTubes(tubes, tubeSeed);
-		return tubes;
-	}
+  @Override
+  public List<Tube> generateTubes(TubeSeed tubeSeed) {
+    List<Tube> tubes = new ArrayList<>();
+    tubes.addAll(defaultTubeGenerator.generateTubes(tubeSeed));
+    tubes.addAll(qualityControlTubeGenerator.generateTubes(tubeSeed));
+    tubes.addAll(centerTubeGenerator.generateTubes(tubeSeed));
+    reorderTubes(tubes, tubeSeed);
+    return tubes;
+  }
 
-	private void reorderTubes(List<Tube> tubes, TubeSeed tubeSeed) {
-		String orderName = tubeSeed.getParticipantCollectGroupName();
-		List<LabelReference> order = laboratoryConfigurationService.getLabelOrderByName(orderName);
-		order.forEach(mergeReferenceOrderWithTube(tubes));
-		Collections.sort(tubes);
-	}
+  private void reorderTubes(List<Tube> tubes, TubeSeed tubeSeed) {
+    String orderName = tubeSeed.getParticipantCollectGroupName();
+    List<LabelReference> order = laboratoryConfigurationService.getLabelOrderByName(orderName);
+    order.forEach(mergeReferenceOrderWithTube(tubes));
+    Collections.sort(tubes);
+  }
 
-	private Consumer<LabelReference> mergeReferenceOrderWithTube(List<Tube> tubes) {
-		return new Consumer<LabelReference>() {
-			private AtomicInteger counter = new AtomicInteger();
+  private Consumer<LabelReference> mergeReferenceOrderWithTube(List<Tube> tubes) {
+    return new Consumer<LabelReference>() {
+      private AtomicInteger counter = new AtomicInteger();
 
-			@Override
-			public void accept(LabelReference reference) {
-				Tube selectedTube = tubes.stream().filter(filterByReference(reference)).findFirst().get();
-				selectedTube.setOrder(counter.incrementAndGet());
-			}
-		};
-	}
+      @Override
+      public void accept(LabelReference reference) {
+        Tube selectedTube = tubes.stream().filter(filterByReference(reference)).findFirst().get();
+        selectedTube.setOrder(counter.incrementAndGet());
+      }
+    };
+  }
 
-	private Predicate<Tube> filterByReference(LabelReference reference) {
-		return new Predicate<Tube>() {
+  private Predicate<Tube> filterByReference(LabelReference reference) {
+    return new Predicate<Tube>() {
 
-			@Override
-			public boolean test(Tube tube) {
-				boolean isSameGroup = tube.getGroupName().equals(reference.getGroupName());
-				boolean isSameType = tube.getType().equals(reference.getType());
-				boolean isSameMoment = tube.getMoment().equals(reference.getMoment());
-				boolean isNotOrdered = !tube.isOrdered();
+      @Override
+      public boolean test(Tube tube) {
+        boolean isSameGroup = tube.getGroupName().equals(reference.getGroupName());
+        boolean isSameType = tube.getType().equals(reference.getType());
+        boolean isSameMoment = tube.getMoment().equals(reference.getMoment());
+        boolean isNotOrdered = !tube.isOrdered();
 
-				return isSameGroup && isSameType && isSameMoment && isNotOrdered;
-			}
-		};
-	}
+        return isSameGroup && isSameType && isSameMoment && isNotOrdered;
+      }
+    };
+  }
 
 }

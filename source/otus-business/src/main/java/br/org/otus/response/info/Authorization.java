@@ -6,12 +6,12 @@ import javax.ws.rs.core.Response;
 
 public class Authorization extends ResponseInfo {
 
-    public Authorization() {
-        super(Response.Status.UNAUTHORIZED, "Authentication Invalid");
-    }
+  public Authorization() {
+    super(Response.Status.UNAUTHORIZED, "Authentication Invalid");
+  }
 
-    public static ResponseInfo build(){
-        return new Authorization();
-    }
+  public static ResponseInfo build() {
+    return new Authorization();
+  }
 }
 

@@ -6,46 +6,46 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import br.org.otus.user.dto.FieldCenterDTO;
 import br.org.tutty.Equalization;
 
-public class UserSecurityAuthorizationDto implements Dto{
+public class UserSecurityAuthorizationDto implements Dto {
 
-    @Equalization(name = "name")
-    private String name;
+  @Equalization(name = "name")
+  private String name;
 
-    @Equalization(name = "surname")
-    private String surname;
+  @Equalization(name = "surname")
+  private String surname;
 
-    private FieldCenterDTO fieldCenter;
+  private FieldCenterDTO fieldCenter;
 
-    @Equalization(name = "phone")
-    private String phone;
+  @Equalization(name = "phone")
+  private String phone;
 
-    @Equalization(name = "email")
-    private String email;
+  @Equalization(name = "email")
+  private String email;
 
-    @Equalization(name = "token")
-    private String token;
+  @Equalization(name = "token")
+  private String token;
 
-    @Equalization(name = "code")
-    private Integer code;
+  @Equalization(name = "code")
+  private Integer code;
 
-    @Override
-    public Boolean isValid() {
-        return Boolean.TRUE;
-    }
+  @Override
+  public Boolean isValid() {
+    return Boolean.TRUE;
+  }
 
-    public UserSecurityAuthorizationDto() {
-    	this.fieldCenter = new FieldCenterDTO();
-    }
+  public UserSecurityAuthorizationDto() {
+    this.fieldCenter = new FieldCenterDTO();
+  }
 
-    public FieldCenterDTO getFieldCenter() {
-		return fieldCenter;
-	}
+  public FieldCenterDTO getFieldCenter() {
+    return fieldCenter;
+  }
 
-    public void setFieldCenter(FieldCenterDTO fieldCenter) {
-		this.fieldCenter = fieldCenter;
-	}
+  public void setFieldCenter(FieldCenterDTO fieldCenter) {
+    this.fieldCenter = fieldCenter;
+  }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+  public void setToken(String token) {
+    this.token = token;
+  }
 }

@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.permission.ActivityAccessPermissionFacade;
 
 @Path("/permission")

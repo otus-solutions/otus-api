@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface MonitoringDao {
 
-    List<MonitoringDataSourceResult> get(List<Document> query) throws ValidationException;
+  List<MonitoringDataSourceResult> get(List<Document> query) throws ValidationException;
 
 }

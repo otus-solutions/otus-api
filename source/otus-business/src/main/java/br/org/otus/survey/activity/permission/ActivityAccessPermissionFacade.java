@@ -8,19 +8,19 @@ import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 
 public class ActivityAccessPermissionFacade {
-  
+
   @Inject
   private ActivityAccessPermissionService activityAccessPermissionService;
-  
-  public void create(ActivityAccessPermission permission) {    
-      activityAccessPermissionService.create(permission);  
+
+  public void create(ActivityAccessPermission permission) {
+    activityAccessPermissionService.create(permission);
   }
-  
+
   public List<ActivityAccessPermission> getAll() {
     return activityAccessPermissionService.list();
   }
-  
-  public void update(ActivityAccessPermission permission) {    
-      activityAccessPermissionService.update(permission);
-  }  
+
+  public void update(ActivityAccessPermission permission) {
+    activityAccessPermissionService.update(permission);
+  }
 }

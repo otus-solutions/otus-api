@@ -25,56 +25,56 @@ import br.org.otus.rest.Response;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DataSourceResource.class)
 public class DataSourceResourceTest {
-	@Mock
-	CsvToJson csvToJson;
-	@Mock
-	DataSourceFormPOJO form;
-	@InjectMocks
-	DataSourceResource dataSourceResource;
-	@Mock
-	DataSourceFacade dataSourceFacade;
+  @Mock
+  CsvToJson csvToJson;
+  @Mock
+  DataSourceFormPOJO form;
+  @InjectMocks
+  DataSourceResource dataSourceResource;
+  @Mock
+  DataSourceFacade dataSourceFacade;
 
-	private DataSource dataSource;
-	private List<DataSource> dataSourceList;
-	private String idValid;
+  private DataSource dataSource;
+  private List<DataSource> dataSourceList;
+  private String idValid;
 
-	@Before
-	public void setUp() {
-		dataSource = DataSource.deserialize(DataSourceFactory.create().toString());
-		dataSourceList = new ArrayList<>();
-		dataSourceList.add(dataSource);
-	}
+  @Before
+  public void setUp() {
+    dataSource = DataSource.deserialize(DataSourceFactory.create().toString());
+    dataSourceList = new ArrayList<>();
+    dataSourceList.add(dataSource);
+  }
 
-	@Test
-	public void method_create_should_return_reponse_buildSucess() throws Exception {
-		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
-		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
-		assertEquals(dataSourceResource.create(form), new Response().buildSuccess().toJson());
-		verify(dataSourceFacade).create(dataSource, csvToJson.getDuplicatedElements());
-	}
+  @Test
+  public void method_create_should_return_reponse_buildSucess() throws Exception {
+    whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
+    whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
+    assertEquals(dataSourceResource.create(form), new Response().buildSuccess().toJson());
+    verify(dataSourceFacade).create(dataSource, csvToJson.getDuplicatedElements());
+  }
 
-	@Test
-	public void method_update_should_return_reponse_buildSucess() throws Exception {
-		whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
-		whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
-		assertEquals(dataSourceResource.update(form), new Response().buildSuccess().toJson());
-		verify(dataSourceFacade).update(dataSource, csvToJson.getDuplicatedElements());
-	}
+  @Test
+  public void method_update_should_return_reponse_buildSucess() throws Exception {
+    whenNew(CsvToJson.class).withAnyArguments().thenReturn(csvToJson);
+    whenNew(DataSource.class).withAnyArguments().thenReturn(dataSource);
+    assertEquals(dataSourceResource.update(form), new Response().buildSuccess().toJson());
+    verify(dataSourceFacade).update(dataSource, csvToJson.getDuplicatedElements());
+  }
 
-	@Test
-	public void method_getAll_should_return_dataSourceList() {
-		when(dataSourceFacade.getAll()).thenReturn(dataSourceList);
-		assertEquals(new Response().buildSuccess(dataSourceFacade.getAll()).toJson(), dataSourceResource.getAll());
-		verify(dataSourceFacade, times(2)).getAll();
-	}
+  @Test
+  public void method_getAll_should_return_dataSourceList() {
+    when(dataSourceFacade.getAll()).thenReturn(dataSourceList);
+    assertEquals(new Response().buildSuccess(dataSourceFacade.getAll()).toJson(), dataSourceResource.getAll());
+    verify(dataSourceFacade, times(2)).getAll();
+  }
 
-	@Test
-	public void method_getByID_return_Response_fills_if_id_isValid() {
-		idValid = "medicamentos_contraceptivos_hormonais";
-		when(dataSourceFacade.getByID(idValid)).thenReturn(dataSource);
-		assertEquals(new Response().buildSuccess(dataSourceFacade.getByID(idValid)).toJson(),
-				dataSourceResource.getByID(idValid));
-		verify(dataSourceFacade, times(2)).getByID(idValid);
-	}
+  @Test
+  public void method_getByID_return_Response_fills_if_id_isValid() {
+    idValid = "medicamentos_contraceptivos_hormonais";
+    when(dataSourceFacade.getByID(idValid)).thenReturn(dataSource);
+    assertEquals(new Response().buildSuccess(dataSourceFacade.getByID(idValid)).toJson(),
+      dataSourceResource.getByID(idValid));
+    verify(dataSourceFacade, times(2)).getByID(idValid);
+  }
 
 }

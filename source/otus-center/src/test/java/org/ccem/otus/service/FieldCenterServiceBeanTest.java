@@ -19,7 +19,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ FieldCenterServiceBean.class })
+@PrepareForTest({FieldCenterServiceBean.class})
 public class FieldCenterServiceBeanTest {
   private static final Boolean POSITIVE_ANSWER = true;
   @InjectMocks
@@ -29,7 +29,7 @@ public class FieldCenterServiceBeanTest {
   @Mock
   private FieldCenter fieldCenter;
   @Mock
-  private FieldCenterValidator fieldCenterValidator;  
+  private FieldCenterValidator fieldCenterValidator;
 
   @Test
   public void createMethod_should_invoke_internal_methods() throws Exception {

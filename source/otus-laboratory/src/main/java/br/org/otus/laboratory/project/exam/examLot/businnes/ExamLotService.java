@@ -13,15 +13,15 @@ import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 
 public interface ExamLotService {
 
-	ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException;
+  ExamLot create(ExamLot examLot, String email) throws ValidationException, DataNotFoundException;
 
-	ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException;
+  ExamLot update(ExamLot examLot) throws DataNotFoundException, ValidationException;
 
-	List<ExamLot> list(String centerAcronym);
+  List<ExamLot> list(String centerAcronym);
 
-	void delete(String code) throws DataNotFoundException;
+  void delete(String code) throws DataNotFoundException;
 
-	HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
+  HashSet<Document> getAliquotsInfosInTransportationLots() throws DataNotFoundException;
 
-	Aliquot validateNewAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) throws DataNotFoundException, ValidationException;
+  Aliquot validateNewAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) throws DataNotFoundException, ValidationException;
 }

@@ -18,15 +18,15 @@ public class UnexpectedError extends ResponseInfo {
     super(Response.Status.INTERNAL_SERVER_ERROR, "Error: " + message, object);
   }
 
-  public static ResponseInfo build(){
+  public static ResponseInfo build() {
     return new UnexpectedError();
   }
 
-  public static ResponseInfo build(String message){
+  public static ResponseInfo build(String message) {
     return new UnexpectedError(message);
   }
 
-  public static ResponseInfo build(String message, Object object){
+  public static ResponseInfo build(String message, Object object) {
     return new UnexpectedError(message, object);
   }
 

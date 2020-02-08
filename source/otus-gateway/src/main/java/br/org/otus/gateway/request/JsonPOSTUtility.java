@@ -35,7 +35,9 @@ public class JsonPOSTUtility {
     if (status == HttpURLConnection.HTTP_OK) {
       response = RequestUtility.getString(httpConn);
     } else {
-      throw new RequestException(status);
+      String errorMessage = httpConn.getResponseMessage();
+      Object errorContent = RequestUtility.getErrorContent(httpConn);
+      throw new RequestException(status, errorMessage, errorContent);
     }
 
     return response;

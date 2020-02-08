@@ -35,7 +35,9 @@ public class SurveyActivity {
   private NavigationTracker navigationTracker;
   private String externalID;
 
-  public SurveyActivity() { this.isDiscarded = Boolean.FALSE; }
+  public SurveyActivity() {
+    this.isDiscarded = Boolean.FALSE;
+  }
 
   public void setIsDiscarded(Boolean isDiscarded) {
     this.isDiscarded = isDiscarded;
@@ -73,6 +75,10 @@ public class SurveyActivity {
     return fillContainer;
   }
 
+  public void setStatusHistory(List<ActivityStatus> statusHistory) {
+    this.statusHistory = statusHistory;
+  }
+
   public List<ActivityStatus> getStatusHistory() {
     return statusHistory;
   }
@@ -85,9 +91,13 @@ public class SurveyActivity {
     return navigationTracker;
   }
 
-  public String getExternalID() { return externalID;  }
+  public String getExternalID() {
+    return externalID;
+  }
 
-  public Boolean hasRequiredExternalID() { return this.getSurveyForm().getRequiredExternalID();  }
+  public Boolean hasRequiredExternalID() {
+    return this.getSurveyForm().getRequiredExternalID();
+  }
 
   public Optional<ActivityStatus> getCurrentStatus() {
     return this.statusHistory.stream().reduce((activityStatus, activityStatus2) -> activityStatus2);

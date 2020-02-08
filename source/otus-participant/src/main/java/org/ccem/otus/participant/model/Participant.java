@@ -1,7 +1,9 @@
 package org.ccem.otus.participant.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+import br.org.tutty.Equalization;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.utils.LongAdapter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
@@ -12,96 +14,114 @@ import com.google.gson.GsonBuilder;
 
 public class Participant {
 
-    private Long recruitmentNumber;
-    private String name;
-    private Sex sex;
-    private ImmutableDate birthdate;
-    private FieldCenter fieldCenter;
-    private Boolean late;
-    
+  @Equalization(name = "recruitmentNumber")
+  private Long recruitmentNumber;
+  @Equalization(name = "name")
+  private String name;
+  @Equalization(name = "sex")
+  private Sex sex;
+  @Equalization(name = "birthdate")
+  private ImmutableDate birthdate;
+  @Equalization(name = "fieldCenter")
+  private FieldCenter fieldCenter;
+  private Boolean late;
+  @Equalization(name = "email")
+  private String email;
+  @Equalization(name = "password")
+  private String password;
+  @Equalization(name = "tokenList")
+  private ArrayList<String> tokenList;
 
-	public Participant(Long recruitmentNumber) {
-		this.recruitmentNumber = recruitmentNumber;
-	}
+  public Participant(Long recruitmentNumber) {
+    this.recruitmentNumber = recruitmentNumber;
+  }
 
   public void setRecruitmentNumber(Long recruitmentNumber) {
     this.recruitmentNumber = recruitmentNumber;
   }
 
   public Long getRecruitmentNumber() {
-		return recruitmentNumber;
-	}
+    return recruitmentNumber;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getEmail() {
+    return this.email;
+  }
 
-	public FieldCenter getFieldCenter() {
-		return fieldCenter;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setFieldCenter(FieldCenter fieldCenter) {
-		this.fieldCenter = fieldCenter;
-	}
+  public FieldCenter getFieldCenter() {
+    return fieldCenter;
+  }
 
-	public Sex getSex() {
-		return sex;
-	}
+  public void setFieldCenter(FieldCenter fieldCenter) {
+    this.fieldCenter = fieldCenter;
+  }
 
-	public void setSex(Sex sex) {
-		this.sex = sex;
-	}
+  public Sex getSex() {
+    return sex;
+  }
 
-	public ImmutableDate getBirthdate() {
-		return birthdate;
-	}
+  public void setSex(Sex sex) {
+    this.sex = sex;
+  }
 
-	public void setBirthdate(ImmutableDate birthdate) {
-		this.birthdate = birthdate;
-	}
-	
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  public ImmutableDate getBirthdate() {
+    return birthdate;
+  }
 
-        Participant that = (Participant) o;
+  public void setBirthdate(ImmutableDate birthdate) {
+    this.birthdate = birthdate;
+  }
 
-        return recruitmentNumber != null ? recruitmentNumber.equals(that.recruitmentNumber) : that.recruitmentNumber == null;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    @Override
-    public int hashCode() {
-        return recruitmentNumber != null ? recruitmentNumber.hashCode() : 0;
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    public Boolean getLate() {
-      return late;
-    }
+    Participant that = (Participant) o;
 
-    public void setLate(Boolean late) {
-      this.late = late;
-    }
-    
-    public static String serialize(Participant participantJson) {
-      return Participant.getGsonBuilder().create().toJson(participantJson);
+    return recruitmentNumber != null ? recruitmentNumber.equals(that.recruitmentNumber) : that.recruitmentNumber == null;
+  }
+
+  @Override
+  public int hashCode() {
+    return recruitmentNumber != null ? recruitmentNumber.hashCode() : 0;
+  }
+
+  public Boolean getLate() {
+    return late;
+  }
+
+  public void setLate(Boolean late) {
+    this.late = late;
+  }
+
+  public static String serialize(Participant participantJson) {
+    return Participant.getGsonBuilder().create().toJson(participantJson);
   }
 
   public static Participant deserialize(String participantJson) {
     Participant participant = Participant.getGsonBuilder().create().fromJson(participantJson, Participant.class);
-      return participant;
+    return participant;
   }
-  
+
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     builder.registerTypeAdapter(Long.class, new LongAdapter());
     return builder;
-}
-   
+  }
+
 }

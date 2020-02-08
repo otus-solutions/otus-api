@@ -26,61 +26,61 @@ import br.org.tutty.Equalizer;
 @Stateless
 public class SignupServiceBean implements SignupService {
 
-    @Inject
-    private UserDao userDao;
+  @Inject
+  private UserDao userDao;
 
-    @Inject
-    private EmailNotifierService emailNotifierService;
+  @Inject
+  private EmailNotifierService emailNotifierService;
 
-    @Inject
-    private ManagementUserService managementUserService;
+  @Inject
+  private ManagementUserService managementUserService;
 
-    @Override
-    public void create(SignupDataDto signupDataDto) throws EmailNotificationException, DataNotFoundException, AlreadyExistException, ValidationException, EncryptedException {
-        if (signupDataDto.isValid()) {
-            if (managementUserService.isUnique(signupDataDto.getEmail())) {
-                    User user = new User();
-                    Equalizer.equalize(signupDataDto, user);
-                    Sender sender = emailNotifierService.getSender();
+  @Override
+  public void create(SignupDataDto signupDataDto) throws EmailNotificationException, DataNotFoundException, AlreadyExistException, ValidationException, EncryptedException {
+    if (signupDataDto.isValid()) {
+      if (managementUserService.isUnique(signupDataDto.getEmail())) {
+        User user = new User();
+        Equalizer.equalize(signupDataDto, user);
+        Sender sender = emailNotifierService.getSender();
 
-                    sendEmailToUser(user, sender);
-                    sendEmailToAdmin(sender, user);
-                    userDao.persist(user);
+        sendEmailToUser(user, sender);
+        sendEmailToAdmin(sender, user);
+        userDao.persist(user);
 
-            } else {
-                throw new AlreadyExistException();
-            }
-        } else {
-            throw new ValidationException();
-        }
+      } else {
+        throw new AlreadyExistException();
+      }
+    } else {
+      throw new ValidationException();
     }
+  }
 
-    @Override
-    public void create(OtusInitializationConfigDto initializationConfigDto) throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
-        if (initializationConfigDto.isValid()) {
-            if (managementUserService.isUnique(initializationConfigDto.getEmailSender().getEmail())) {
-                User user = SystemConfigBuilder.buildInitialUser(initializationConfigDto);
-                emailNotifierService.sendSystemInstallationEmail(initializationConfigDto);
-                userDao.persist(user);
+  @Override
+  public void create(OtusInitializationConfigDto initializationConfigDto) throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    if (initializationConfigDto.isValid()) {
+      if (managementUserService.isUnique(initializationConfigDto.getEmailSender().getEmail())) {
+        User user = SystemConfigBuilder.buildInitialUser(initializationConfigDto);
+        emailNotifierService.sendSystemInstallationEmail(initializationConfigDto);
+        userDao.persist(user);
 
-            } else {
-                throw new AlreadyExistException();
-            }
-        } else {
-            throw new ValidationException();
-        }
+      } else {
+        throw new AlreadyExistException();
+      }
+    } else {
+      throw new ValidationException();
     }
+  }
 
-    private void sendEmailToUser(User user, Sender sender) throws EmailNotificationException {
-        Recipient recipient = Recipient.createTO(user.getName(), user.getEmail());
-        NewUserGreetingsEmail email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
-        emailNotifierService.sendEmailSync(email);
-    }
+  private void sendEmailToUser(User user, Sender sender) throws EmailNotificationException {
+    Recipient recipient = Recipient.createTO(user.getName(), user.getEmail());
+    NewUserGreetingsEmail email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
+    emailNotifierService.sendEmailSync(email);
+  }
 
-    private void sendEmailToAdmin(Sender sender, User userToRegister) throws EmailNotificationException {
-        User systemAdministrator = userDao.findAdmin();
-        Recipient recipient = Recipient.createTO(systemAdministrator.getName(), systemAdministrator.getEmail());
-        NewUserNotificationEmail email = OtusEmailFactory.createNewUserNotificationEmail(sender, recipient, userToRegister);
-        emailNotifierService.sendEmailSync(email);
-    }
+  private void sendEmailToAdmin(Sender sender, User userToRegister) throws EmailNotificationException {
+    User systemAdministrator = userDao.findAdmin();
+    Recipient recipient = Recipient.createTO(systemAdministrator.getName(), systemAdministrator.getEmail());
+    NewUserNotificationEmail email = OtusEmailFactory.createNewUserNotificationEmail(sender, recipient, userToRegister);
+    emailNotifierService.sendEmailSync(email);
+  }
 }
