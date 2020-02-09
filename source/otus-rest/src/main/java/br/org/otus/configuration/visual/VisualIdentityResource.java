@@ -11,18 +11,18 @@ import br.org.otus.rest.Response;
 @Path("configuration/visual-identity")
 public class VisualIdentityResource {
 
-	// TODO: Visual Identity End-Point
+  // TODO: Visual Identity End-Point
 
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public String post(String json) {
-		return new Response().buildSuccess(true).toJson();
-	}
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  public String post(String json) {
+    return new Response().buildSuccess(true).toJson();
+  }
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String get() {
-		return new Response().buildSuccess(null).toJson();
-	}
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public String get() {
+    return new Response().buildSuccess(null).toJson();
+  }
 
 }

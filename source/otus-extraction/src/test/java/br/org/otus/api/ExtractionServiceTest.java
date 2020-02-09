@@ -77,13 +77,13 @@ public class ExtractionServiceTest {
 
   @Test
   public void getAttachmentsReport_should_call_the_method_fetchAttachmentsReport_of_attachmentsExtractionDao_and_getCsv_of_AttachmentsReport() throws DataNotFoundException {
-    Mockito.when(attachmentsExtractionDao.fetchAttachmentsReport(acronym,version)).thenReturn(attachmentsReport);
+    Mockito.when(attachmentsExtractionDao.fetchAttachmentsReport(acronym, version)).thenReturn(attachmentsReport);
     Mockito.when(attachmentsReport.getCsv()).thenReturn(extractionReturn);
-    ExtractionServiceMock.getAttachmentsReport(acronym,version);
+    ExtractionServiceMock.getAttachmentsReport(acronym, version);
     Mockito.verify(attachmentsExtractionDao, Mockito.times(1))
-            .fetchAttachmentsReport(acronym,version);
+      .fetchAttachmentsReport(acronym, version);
     Mockito.verify(attachmentsReport, Mockito.times(1))
-            .getCsv();
+      .getCsv();
   }
 
 }

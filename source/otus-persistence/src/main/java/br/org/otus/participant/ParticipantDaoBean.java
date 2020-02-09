@@ -8,8 +8,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -24,6 +26,12 @@ import br.org.mongodb.MongoGenericDao;
 public class ParticipantDaoBean extends MongoGenericDao<Document> implements ParticipantDao {
 
   private static final String COLLECTION_NAME = "participant";
+  private static final String TOKEN_LIST_FIELD = "tokenList";
+  private static final String EMAIL = "email";
+  private static final String PUSH = "$push";
+  private static final String PULL = "$pull";
+  private static final String SET = "$set";
+  private static final String PASSWORD = "password";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -36,6 +44,16 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   public void persist(Participant participant) {
     Document parsed = Document.parse(Participant.serialize(participant));
     this.collection.insertOne(parsed);
+  }
+
+  @Override
+  public void addAuthToken(String email, String Token) {
+    this.collection.updateOne(new Document(EMAIL, email), new Document(PUSH, new Document(TOKEN_LIST_FIELD, Token)));
+  }
+
+  @Override
+  public void removeAuthToken(String email, String Token) {
+    this.collection.updateOne(new Document(EMAIL, email), new Document(PULL, new Document(TOKEN_LIST_FIELD, Token)));
   }
 
   @Override
@@ -82,6 +100,32 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     }
 
     return rns;
+  }
+
+  @Override
+  public Participant fetchByEmail(String userEmail) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(EMAIL, userEmail)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant with email: {" + userEmail + "} not found."));
+    }
+    return Participant.deserialize(participantFound.toJson());
+  }
+
+  @Override
+  public Participant fetchByToken(String token) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(TOKEN_LIST_FIELD, token)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant token not found."));
+    }
+    return Participant.deserialize(participantFound.toJson());
+  }
+
+  @Override
+  public void registerPassword(String email, String password) throws DataNotFoundException {
+    UpdateResult updateResult = this.collection.updateOne(new Document(EMAIL, email), new Document(SET, new Document(PASSWORD, password)));
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException("Participant no found");
+    }
   }
 
   @Override
@@ -135,6 +179,12 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     String acronym = participant.getFieldCenter().getAcronym();
     participant.setFieldCenter(fieldCenterMap.get(acronym));
     return participant;
+  }
+
+  @Override
+  public ObjectId findIdByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+    return result.getObjectId("_id");
   }
 
   @Override

@@ -14,13 +14,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityAccessPermissionFacadeTest {
-  
+
   @InjectMocks
   private ActivityAccessPermissionFacade facade;
-  @Mock  
+  @Mock
   private ActivityAccessPermissionService activityAccessPermissionService;
   @Mock
-  private ActivityAccessPermission permission;  
+  private ActivityAccessPermission permission;
 
   @Test
   public void createMethod_should_invoke_create_of_activityAccessPermissionService() {

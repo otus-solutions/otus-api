@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ActivityRevisionService {
 
-    void create(String activityRevisionJson, User user);
+  void create(String activityRevisionJson, User user);
 
-    List<ActivityRevision> getActivityRevisions(String activityID) throws DataNotFoundException;
+  List<ActivityRevision> getActivityRevisions(String activityID) throws DataNotFoundException;
 }

@@ -14,12 +14,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(TokenBuilder.class)
 public class TokenBuilderTest {
-	private static String UUID_STRING = "45b07151-5824-4001-acb0-23981fad36aa";
+  private static String UUID_STRING = "45b07151-5824-4001-acb0-23981fad36aa";
 
-	@Test
-	public void method_build_should_return_token_generated() {
-		mockStatic(UUID.class);
-		Mockito.when(UUID.randomUUID().toString()).thenReturn(UUID_STRING);
-		assertEquals(UUID_STRING, TokenBuilder.build());
-	}
+  @Test
+  public void method_build_should_return_token_generated() {
+    mockStatic(UUID.class);
+    Mockito.when(UUID.randomUUID().toString()).thenReturn(UUID_STRING);
+    assertEquals(UUID_STRING, TokenBuilder.build());
+  }
 }

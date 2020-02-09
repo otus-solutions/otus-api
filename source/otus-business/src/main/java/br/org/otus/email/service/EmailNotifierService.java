@@ -9,12 +9,12 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public interface EmailNotifierService {
 
-    void sendSystemInstallationEmail(OtusInitializationConfigDto otusInitializationData) throws EmailNotificationException, EncryptedException;
+  void sendSystemInstallationEmail(OtusInitializationConfigDto otusInitializationData) throws EmailNotificationException, EncryptedException;
 
-	Sender getSender() throws EncryptedException, DataNotFoundException;
+  Sender getSender() throws EncryptedException, DataNotFoundException;
 
-	void sendEmail(OtusEmail email) throws EmailNotificationException;
+  void sendEmail(OtusEmail email) throws EmailNotificationException;
 
-    void sendEmailSync(OtusEmail email) throws EmailNotificationException;
+  void sendEmailSync(OtusEmail email) throws EmailNotificationException;
 
 }

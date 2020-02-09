@@ -22,71 +22,71 @@ import br.org.otus.response.exception.HttpResponseException;
 
 public class ExamLotFacade {
 
-    @Inject
-    private ExamLotService examLotService;
+  @Inject
+  private ExamLotService examLotService;
 
-    @Inject
-    private AliquotService aliquotService;
+  @Inject
+  private AliquotService aliquotService;
 
-    @Inject
-    private LaboratoryProjectService laboratoryProjectService;
+  @Inject
+  private LaboratoryProjectService laboratoryProjectService;
 
-    public ExamLot create(ExamLot examLot, String userEmail) {
-        try {
-            return examLotService.create(examLot, userEmail);
-        } catch (ValidationException e) {
-            throw new HttpResponseException(
-                    Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(
-                    ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        }
+  public ExamLot create(ExamLot examLot, String userEmail) {
+    try {
+      return examLotService.create(examLot, userEmail);
+    } catch (ValidationException e) {
+      throw new HttpResponseException(
+        Security.Validation.build(e.getCause().getMessage(), e.getData()));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(
+        ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public ExamLot update(ExamLot examLot) {
-        try {
-            return examLotService.update(examLot);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        } catch (ValidationException e) {
-            throw new HttpResponseException(
-                    ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
-        }
+  public ExamLot update(ExamLot examLot) {
+    try {
+      return examLotService.update(examLot);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(
+        ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public void delete(String code) {
-        try {
-            examLotService.delete(code);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public void delete(String code) {
+    try {
+      examLotService.delete(code);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public List<ExamLot> getLots(String centerAcronym) {
-        return examLotService.list(centerAcronym);
-    }
+  public List<ExamLot> getLots(String centerAcronym) {
+    return examLotService.list(centerAcronym);
+  }
 
-    public Aliquot getAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) {
-        try {
-            return examLotService.validateNewAliquot(examLotAliquotFilterDTO);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        } catch (ValidationException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(),e.getData()));
-        }
+  public Aliquot getAliquot(ExamLotAliquotFilterDTO examLotAliquotFilterDTO) {
+    try {
+      return examLotService.validateNewAliquot(examLotAliquotFilterDTO);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
+  }
 
-    public LinkedHashSet<AliquoteDescriptor> getAvailableExams(String center) {
-        try {
-            return laboratoryProjectService.getAvailableExams(center);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public LinkedHashSet<AliquoteDescriptor> getAvailableExams(String center) {
+    try {
+      return laboratoryProjectService.getAvailableExams(center);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
-    public List<Aliquot> getAliquots(String lotId) {
-        ObjectId lotOId = new ObjectId(lotId);
-        return aliquotService.getExamLotAliquots(lotOId);
-    }
+  public List<Aliquot> getAliquots(String lotId) {
+    ObjectId lotOId = new ObjectId(lotId);
+    return aliquotService.getExamLotAliquots(lotOId);
+  }
 
 }

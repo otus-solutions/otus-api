@@ -23,7 +23,7 @@ public class ManagementUserDtoTest {
   private ManagementUserDto managementUserDto;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     ips = Arrays.asList("143.54.220.56");
 
     managementUserDto = new ManagementUserDto();
@@ -38,12 +38,12 @@ public class ManagementUserDtoTest {
   }
 
   @Test
-  public void mustBeValidWhenAllFieldNotEmpty(){
+  public void mustBeValidWhenAllFieldNotEmpty() {
     assertTrue(managementUserDto.isValid());
   }
 
   @Test
-  public void mustBeInvalidWhenSomeFieldIsEmpty(){
+  public void mustBeInvalidWhenSomeFieldIsEmpty() {
     ManagementUserDto managementUserDto = new ManagementUserDto();
     managementUserDto.setExtraction(EXTRACTION);
     managementUserDto.setExtractionIps(new ArrayList<String>());
@@ -56,47 +56,47 @@ public class ManagementUserDtoTest {
   }
 
   @Test
-  public void shouldReturnAdminFlag(){
+  public void shouldReturnAdminFlag() {
     assertEquals(managementUserDto.getAdmin(), ADMIN_FLAG);
   }
 
   @Test
-  public void shouldReturnEmail(){
+  public void shouldReturnEmail() {
     assertEquals(managementUserDto.getEmail(), EMAIL);
   }
 
   @Test
-  public void shouldReturnExtractionIps(){
+  public void shouldReturnExtractionIps() {
     assertEquals(managementUserDto.getExtractionIps(), ips);
   }
 
   @Test
-  public void shouldReturnName(){
+  public void shouldReturnName() {
     assertEquals(managementUserDto.getName(), NAME);
   }
 
   @Test
-  public void shouldReturnEnable(){
+  public void shouldReturnEnable() {
     assertEquals(managementUserDto.getEnable(), ENABLE_FLAG);
   }
 
   @Test
-  public void shouldReturnPhone(){
+  public void shouldReturnPhone() {
     assertEquals(managementUserDto.getPhone(), PHONE);
   }
 
   @Test
-  public void shouldReturnExtraction(){
+  public void shouldReturnExtraction() {
     assertEquals(managementUserDto.getExtraction(), EXTRACTION);
   }
 
   @Test
-  public void shouldReturnSurname(){
+  public void shouldReturnSurname() {
     assertEquals(managementUserDto.getSurname(), SURNAME);
   }
 
   @Test
-  public void shouldReturnFieldCenter(){
+  public void shouldReturnFieldCenter() {
     FieldCenterDTO fieldCenter = new FieldCenterDTO();
     fieldCenter.acronym = "RS";
 

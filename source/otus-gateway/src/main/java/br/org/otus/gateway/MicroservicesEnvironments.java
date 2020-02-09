@@ -1,9 +1,10 @@
 package br.org.otus.gateway;
 
 public enum MicroservicesEnvironments {
-  
+
   DBDISTRIBUTION("DBDISTRIBUTION_HOST", "DBDISTRIBUTION_PORT"),
-  DCM("DCM_HOST", "DCM_PORT");
+  DCM("DCM_HOST", "DCM_PORT"),
+  OUTCOMES("OUTCOMES_HOST", "OUTCOMES_PORT");
 
   private String host;
   private String port;

@@ -13,7 +13,7 @@ import org.ccem.otus.validators.FieldCenterValidator;
 @Stateless
 public class FieldCenterServiceBean implements FieldCenterService {
   @Inject
-  private FieldCenterDao fieldCenterDao;  
+  private FieldCenterDao fieldCenterDao;
 
   @Override
   public void create(FieldCenter fieldCenter) throws ValidationException {

@@ -1,5 +1,6 @@
 package org.ccem.otus.participant.service;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -34,6 +35,7 @@ public class ParticipantServiceBean implements ParticipantService {
       } catch (ValidationException | DataNotFoundException e) {
         insertedParticipants.add(null);
       }
+
     });
   }
 
@@ -41,6 +43,12 @@ public class ParticipantServiceBean implements ParticipantService {
   public ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException {
     return participantDao.getRecruitmentNumbersByFieldCenter(center);
   }
+
+  @Override
+  public void registerPassword(String email, String password) throws DataNotFoundException {
+    participantDao.registerPassword(email, password);
+  }
+
 
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {
@@ -53,9 +61,9 @@ public class ParticipantServiceBean implements ParticipantService {
       return participant;
 
     } else {
-      recruitmentNumberService.validate(participant.getFieldCenter(),participant.getRecruitmentNumber());
+      recruitmentNumberService.validate(participant.getFieldCenter(), participant.getRecruitmentNumber());
 
-      if(participantDao.exists(participant.getRecruitmentNumber())){
+      if (participantDao.exists(participant.getRecruitmentNumber())) {
         String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} already exists.";
         throw new ValidationException(new Throwable(error));
       }
@@ -74,8 +82,18 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
-  public Participant getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    return participantDao.findByRecruitmentNumber(recruitmentNumber);
+  public Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException {
+    return participantDao.findByRecruitmentNumber(rn);
+  }
+
+  @Override
+  public Participant getByEmail(String email) throws DataNotFoundException {
+    return participantDao.fetchByEmail(email);
+  }
+
+  @Override
+  public ObjectId findIdByRecruitmentNumber(Long rn) throws DataNotFoundException {
+    return participantDao.findIdByRecruitmentNumber(rn);
   }
 
   @Override

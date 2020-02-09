@@ -9,22 +9,22 @@ import java.util.List;
 
 public class UpdateTubeCollectionDataDTO {
 
-    private List<Tube> tubes;
+  private List<Tube> tubes;
 
-    public List<Tube> getTubes() {
-        return tubes;
-    }
+  public List<Tube> getTubes() {
+    return tubes;
+  }
 
-    public static String serialize(UpdateTubeCollectionDataDTO updateTubeCollectionDataDTO) {
-        return UpdateTubeCollectionDataDTO.getGsonBuilder().create().toJson(updateTubeCollectionDataDTO);
-    }
+  public static String serialize(UpdateTubeCollectionDataDTO updateTubeCollectionDataDTO) {
+    return UpdateTubeCollectionDataDTO.getGsonBuilder().create().toJson(updateTubeCollectionDataDTO);
+  }
 
-    public static UpdateTubeCollectionDataDTO deserialize(String updateTubeCollectionDataDTO) {
-        return UpdateTubeCollectionDataDTO.getGsonBuilder().create().fromJson(updateTubeCollectionDataDTO, UpdateTubeCollectionDataDTO.class);
-    }
+  public static UpdateTubeCollectionDataDTO deserialize(String updateTubeCollectionDataDTO) {
+    return UpdateTubeCollectionDataDTO.getGsonBuilder().create().fromJson(updateTubeCollectionDataDTO, UpdateTubeCollectionDataDTO.class);
+  }
 
-    public static GsonBuilder getGsonBuilder() {
-        return new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-    }
+  public static GsonBuilder getGsonBuilder() {
+    return new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+  }
 
 }

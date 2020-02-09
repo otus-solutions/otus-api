@@ -5,46 +5,46 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class StaticVariableRequest {
-    private String name;
-    private String value;
-    private String sending;
+  private String name;
+  private String value;
+  private String sending;
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  public String getValue() {
+    return value;
+  }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    public String getSending() {
-        return sending;
-    }
+  public String getSending() {
+    return sending;
+  }
 
-    public void setSending(String sending) {
-        this.sending = sending;
-    }
+  public void setSending(String sending) {
+    this.sending = sending;
+  }
 
-     public static String serialize(StaticVariableRequest staticVariableRequest) {
-        return getGsonBuilder().create().toJson(staticVariableRequest);
-    }
+  public static String serialize(StaticVariableRequest staticVariableRequest) {
+    return getGsonBuilder().create().toJson(staticVariableRequest);
+  }
 
-    public static StaticVariableRequest deserialize(String variables) {
-        return StaticVariableRequest.getGsonBuilder().create().fromJson(variables, StaticVariableRequest.class);
-    }
+  public static StaticVariableRequest deserialize(String variables) {
+    return StaticVariableRequest.getGsonBuilder().create().fromJson(variables, StaticVariableRequest.class);
+  }
 
-    public static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
 
-        return builder;
-    }
+    return builder;
+  }
 }

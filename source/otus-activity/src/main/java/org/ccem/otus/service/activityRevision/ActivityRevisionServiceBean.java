@@ -12,22 +12,22 @@ import java.util.List;
 
 public class ActivityRevisionServiceBean implements ActivityRevisionService {
 
-    @Inject
-    private ActivityRevisionDao activityRevisionDao;
+  @Inject
+  private ActivityRevisionDao activityRevisionDao;
 
-    @Override
-    public List<ActivityRevision> getActivityRevisions(String activityID) throws DataNotFoundException {
-        ObjectId activityOid = new ObjectId(activityID);
-        return activityRevisionDao.findByActivityID(activityOid);
-    }
+  @Override
+  public List<ActivityRevision> getActivityRevisions(String activityID) throws DataNotFoundException {
+    ObjectId activityOid = new ObjectId(activityID);
+    return activityRevisionDao.findByActivityID(activityOid);
+  }
 
-    @Override
-    public void create(String activityRevisionJson, User user) {
-        ActivityRevision revision = ActivityRevision.deserialize(activityRevisionJson);
-        ActivityBasicUserFactory activityBasicUserFactory = new ActivityBasicUserFactory();
+  @Override
+  public void create(String activityRevisionJson, User user) {
+    ActivityRevision revision = ActivityRevision.deserialize(activityRevisionJson);
+    ActivityBasicUserFactory activityBasicUserFactory = new ActivityBasicUserFactory();
 
-        revision.setUser(activityBasicUserFactory.createRevisionUser(user));
+    revision.setUser(activityBasicUserFactory.createRevisionUser(user));
 
-        activityRevisionDao.persist(revision);
-    }
+    activityRevisionDao.persist(revision);
+  }
 }

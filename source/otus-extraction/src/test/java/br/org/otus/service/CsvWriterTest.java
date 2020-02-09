@@ -10,64 +10,64 @@ import org.hamcrest.CoreMatchers;
 
 public class CsvWriterTest {
 
-	private static final String RECORD = "id;name;age" + "\n" + "1;\"Emano;el\";23" + "\n";
+  private static final String RECORD = "id;name;age" + "\n" + "1;\"Emano;el\";23" + "\n";
 
-	private CsvWriter service;
+  private CsvWriter service;
 
-	private List<String> headers;
-	private List<List<Object>> values;
-	private List<Object> record;
+  private List<String> headers;
+  private List<List<Object>> values;
+  private List<Object> record;
 
-	@Before
-	public void setup() {
-		service = new CsvWriter();
-		headers = new ArrayList<String>();
-		headers.add("id");
-		headers.add("name");
-		headers.add("age");
+  @Before
+  public void setup() {
+    service = new CsvWriter();
+    headers = new ArrayList<String>();
+    headers.add("id");
+    headers.add("name");
+    headers.add("age");
 
-		record = new ArrayList<Object>();
-		record.add(1);
-		record.add("Emano;el");
-		record.add(23);
+    record = new ArrayList<Object>();
+    record.add(1);
+    record.add("Emano;el");
+    record.add(23);
 
-		values = new ArrayList<List<Object>>();
-		values.add(record);
-	}
+    values = new ArrayList<List<Object>>();
+    values.add(record);
+  }
 
-	@Test
-	public void should_return_an_array_of_bytes() {
-		service.write(this.headers, this.values);
+  @Test
+  public void should_return_an_array_of_bytes() {
+    service.write(this.headers, this.values);
 
-		Assert.assertTrue(service.getResult() instanceof byte[]);
-	}
+    Assert.assertTrue(service.getResult() instanceof byte[]);
+  }
 
-	@Test
-	public void should_return_result_containing_headers() {
-		service.write(this.headers, this.values);
-		String result = new String(service.getResult());
+  @Test
+  public void should_return_result_containing_headers() {
+    service.write(this.headers, this.values);
+    String result = new String(service.getResult());
 
-		Assert.assertThat(result, CoreMatchers.containsString("id"));
-		Assert.assertThat(result, CoreMatchers.containsString("name"));
-		Assert.assertThat(result, CoreMatchers.containsString("age"));
-	}
+    Assert.assertThat(result, CoreMatchers.containsString("id"));
+    Assert.assertThat(result, CoreMatchers.containsString("name"));
+    Assert.assertThat(result, CoreMatchers.containsString("age"));
+  }
 
-	@Test
-	public void should_return_result_containing_records() {
-		service.write(this.headers, this.values);
-		String result = new String(service.getResult());
+  @Test
+  public void should_return_result_containing_records() {
+    service.write(this.headers, this.values);
+    String result = new String(service.getResult());
 
-		Assert.assertThat(result, CoreMatchers.containsString("1"));
-		Assert.assertThat(result, CoreMatchers.containsString("Emano;el"));
-		Assert.assertThat(result, CoreMatchers.containsString("23"));
-	}
+    Assert.assertThat(result, CoreMatchers.containsString("1"));
+    Assert.assertThat(result, CoreMatchers.containsString("Emano;el"));
+    Assert.assertThat(result, CoreMatchers.containsString("23"));
+  }
 
-	@Test
-	public void should_return_the_result_as_the_record() {
-		service.write(this.headers, this.values);
-		String result = new String(service.getResult());
+  @Test
+  public void should_return_the_result_as_the_record() {
+    service.write(this.headers, this.values);
+    String result = new String(service.getResult());
 
-		Assert.assertEquals(RECORD, result);
-	}
+    Assert.assertEquals(RECORD, result);
+  }
 
 }

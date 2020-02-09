@@ -5,32 +5,32 @@ import com.google.gson.GsonBuilder;
 
 public class ParticipantQualityControl {
 
-	private Long recruitmentNumber;
-	private String code;
+  private Long recruitmentNumber;
+  private String code;
 
-	public ParticipantQualityControl(Long recruitmentNumber, String code) {
-		this.recruitmentNumber = recruitmentNumber;
-		this.code = code;
-	}
+  public ParticipantQualityControl(Long recruitmentNumber, String code) {
+    this.recruitmentNumber = recruitmentNumber;
+    this.code = code;
+  }
 
-	public Long getRecruitmentNumber() {
-		return recruitmentNumber;
-	}
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
+  }
 
-	public String getCode() {
-		return code;
-	}
+  public String getCode() {
+    return code;
+  }
 
-	public static ParticipantQualityControl deserialize(String qualityControlJson) {
-		Gson builder = ParticipantQualityControl.getGsonBuilder();
-		return builder.fromJson(qualityControlJson, ParticipantQualityControl.class);
-	}
+  public static ParticipantQualityControl deserialize(String qualityControlJson) {
+    Gson builder = ParticipantQualityControl.getGsonBuilder();
+    return builder.fromJson(qualityControlJson, ParticipantQualityControl.class);
+  }
 
-	public static Gson getGsonBuilder() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.disableHtmlEscaping();
+  public static Gson getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.disableHtmlEscaping();
 
-		return builder.create();
-	}
+    return builder.create();
+  }
 
 }

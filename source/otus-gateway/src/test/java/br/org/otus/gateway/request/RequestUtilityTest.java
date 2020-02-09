@@ -13,7 +13,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ RequestUtility.class })
+@PrepareForTest({RequestUtility.class})
 public class RequestUtilityTest {
 
   private static final String RESPONSE = "{data: \"OK\"}";

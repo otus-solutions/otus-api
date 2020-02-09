@@ -32,54 +32,56 @@ import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FileUploaderFacadeTest {
-	private static final String OID = "592415fb28110d2722b16fe3";
-	@InjectMocks
-	private FileUploaderFacade fileUploaderFacade;
-	@Mock
-	private FileStoreBucket fileStoreBucket;
-	@Mock
+  private static final String OID = "592415fb28110d2722b16fe3";
+  private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoicGFydGljaXBhbnQiLCJpc3MiOiJib2VzZS53b3JrQGdtYWlsLmNvbSJ9.2yWrdhnF9P3sqDlq75Mlwz4mb7UvXRdpNi1IIxPfeQk";
+
+  @InjectMocks
+  private FileUploaderFacade fileUploaderFacade;
+  @Mock
+  private FileStoreBucket fileStoreBucket;
+  @Mock
   private FileDownloadService fileDownloadService;
-	@Mock
-	private GridFSBucket fileStore;
-	@Mock
-	private InputStream stream;
-	@Mock
-	private Document firstGetMetadata;
-	@Mock
-	private FileUploaderPOJO form;
-	private ObjectId objectId;
+  @Mock
+  private GridFSBucket fileStore;
+  @Mock
+  private InputStream stream;
+  @Mock
+  private Document firstGetMetadata;
+  @Mock
+  private FileUploaderPOJO form;
+  private ObjectId objectId;
 
-	@Test
-	public void method_getById_should_return_stream() throws DataNotFoundException {
-		when(fileStoreBucket.download(OID)).thenReturn(stream);
-		assertTrue((fileUploaderFacade.getById(OID)) instanceof InputStream);
-	}
+  @Test
+  public void method_getById_should_return_stream() throws DataNotFoundException {
+    when(fileStoreBucket.download(OID)).thenReturn(stream);
+    assertTrue((fileUploaderFacade.getById(OID)) instanceof InputStream);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_getById_should_throw_DataNotFoundException() throws Exception {
-		when(fileStoreBucket.download(OID)).thenThrow(new DataNotFoundException(new Exception()));
-		fileUploaderFacade.getById(OID);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_getById_should_throw_DataNotFoundException() throws Exception {
+    when(fileStoreBucket.download(OID)).thenThrow(new DataNotFoundException(new Exception()));
+    fileUploaderFacade.getById(OID);
+  }
 
-	@Test
-	public void method_Delete_should_evocate_fileStoreBuckerDeleteMethod() throws DataNotFoundException {
-		when(fileStoreBucket.findMetadata(OID)).thenReturn(firstGetMetadata);
-		fileUploaderFacade.delete(OID);
-		verify(fileStoreBucket).delete(OID);
-	}
+  @Test
+  public void method_Delete_should_evocate_fileStoreBuckerDeleteMethod() throws DataNotFoundException {
+    when(fileStoreBucket.findMetadata(OID)).thenReturn(firstGetMetadata);
+    fileUploaderFacade.delete(OID);
+    verify(fileStoreBucket).delete(OID);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_delete_should_throw_DataNotFoundException() throws Exception {
-		doThrow(new DataNotFoundException(new Exception())).when(fileStoreBucket).delete(OID);
-		fileUploaderFacade.delete(OID);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_delete_should_throw_DataNotFoundException() throws Exception {
+    doThrow(new DataNotFoundException(new Exception())).when(fileStoreBucket).delete(OID);
+    fileUploaderFacade.delete(OID);
+  }
 
   @Test
   public void method_Upload_should_return_objectIdString() {
     form = new FileUploaderPOJO();
     objectId = new ObjectId(OID);
     when(fileStoreBucket.store(form)).thenReturn(objectId.toString());
-    assertEquals(fileUploaderFacade.upload(form), objectId.toString());
+    assertEquals(fileUploaderFacade.upload(form, TOKEN), objectId.toString());
   }
 
   @Test
@@ -92,7 +94,7 @@ public class FileUploaderFacadeTest {
     Mockito.verify(fileDownloadService).downloadFiles(objectIds);
   }
 
-  @Test (expected = HttpResponseException.class)
+  @Test(expected = HttpResponseException.class)
   public void method_download_files_should_handle_the_exceptions() throws DataNotFoundException, IOException, ValidationException {
     ArrayList<String> objectIds = new ArrayList<>();
 

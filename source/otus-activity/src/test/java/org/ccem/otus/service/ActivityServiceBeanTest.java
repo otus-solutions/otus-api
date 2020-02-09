@@ -146,7 +146,7 @@ public class ActivityServiceBeanTest {
   @Test(expected = DataNotFoundException.class)
   public void method_getActivity_should_throw_HttpResponseException() throws DataNotFoundException {
     doThrow(new DataNotFoundException(new Exception("method_RegisterProject_should_captured_DataNotFoundException"))).when(activityDao).getLastFinalizedActivity(ACRONYM, VERSION, CATEGORY_NAME,
-        RECRUIMENT_NUMBER);
+      RECRUIMENT_NUMBER);
     service.getActivity(ACRONYM, VERSION, CATEGORY_NAME, RECRUIMENT_NUMBER);
   }
 

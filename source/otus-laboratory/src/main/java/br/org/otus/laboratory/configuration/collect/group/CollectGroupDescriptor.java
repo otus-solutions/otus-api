@@ -6,28 +6,28 @@ import java.util.Set;
 
 public class CollectGroupDescriptor {
 
-	private String name;
-	private String type;
-	private Set<TubeDefinition> tubeSet;
+  private String name;
+  private String type;
+  private Set<TubeDefinition> tubeSet;
 
-	public CollectGroupDescriptor(String name, String type, Set<TubeDefinition> tubeSet) {
-		this.name = name;
-		this.type = type;
-		this.tubeSet = tubeSet;
+  public CollectGroupDescriptor(String name, String type, Set<TubeDefinition> tubeSet) {
+    this.name = name;
+    this.type = type;
+    this.tubeSet = tubeSet;
 
 
-	}
+  }
 
-	public String getName() {
-		return this.name;
-	}
+  public String getName() {
+    return this.name;
+  }
 
-	public String getType() {
-		return type;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public Set<TubeDefinition> getTubes() {
-		return tubeSet;
-	}
+  public Set<TubeDefinition> getTubes() {
+    return tubeSet;
+  }
 
 }

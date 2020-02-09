@@ -11,11 +11,11 @@ public class FieldCenterValidator {
   private static final String ACRONYM_VALUE = "acronym";
   private static final String CODE_VALUE = "code";
   private static final boolean STATE = false;
-  
+
   @Inject
   private FieldCenterDao fieldCenterDao;
   private FieldCenterValidationResult fieldCenterValidationResult;
-  
+
   public FieldCenterValidator(FieldCenterDao fieldCenterDao) {
     this.fieldCenterDao = fieldCenterDao;
     this.fieldCenterValidationResult = new FieldCenterValidationResult();
@@ -25,7 +25,7 @@ public class FieldCenterValidator {
     checkForFieldCenterExistent(fieldCenter);
     if (!fieldCenterValidationResult.isValid()) {
       throw new ValidationException(new Throwable(ATTRIBUTE_ALREADY_EXISTS_MESSAGE),
-          fieldCenterValidationResult);
+        fieldCenterValidationResult);
     }
   }
 

@@ -11,51 +11,51 @@ import java.util.Map;
 
 public class AnswerFillingDataSource extends ReportDataSource<QuestionFill> {
 
-    private AnswerFillingDataSourceFilters filters;
+  private AnswerFillingDataSourceFilters filters;
 
-    @Override
-    public void addResult(QuestionFill result) {
-        super.getResult().add(result);
+  @Override
+  public void addResult(QuestionFill result) {
+    super.getResult().add(result);
+  }
+
+  @Override
+  public ArrayList<Document> buildQuery(Long recruitmentNumber) {
+    return null;
+  }
+
+  public AnswerFillingDataSourceFilters getFilters() {
+    return filters;
+  }
+
+  public void fillResult(SurveyActivity activity) {
+    ArrayList<QuestionFill> result = null;
+
+    if (activity != null) {
+      result = getTemplateAndCustomIDS(activity);
     }
 
-    @Override
-    public ArrayList<Document> buildQuery(Long recruitmentNumber) {
-        return null;
+    setResult(result);
+  }
+
+  public ArrayList<QuestionFill> getResult() {
+    return super.getResult();
+  }
+
+  public void setResult(ArrayList<QuestionFill> result) {
+    super.setResult(result);
+  }
+
+  private ArrayList<QuestionFill> getTemplateAndCustomIDS(SurveyActivity activity) {
+    SurveyForm surveyForm = activity.getSurveyForm();
+
+    Map<String, String> templateToCustomIdMap = surveyForm.getSurveyTemplate().mapTemplateAndCustomIDS();
+
+    for (QuestionFill questionFill : activity.getFillContainer().getFillingList()) {
+      String questionID = questionFill.getQuestionID();
+      String customID = templateToCustomIdMap.get(questionID);
+      questionFill.setCustomID(customID);
     }
 
-    public AnswerFillingDataSourceFilters getFilters() {
-        return filters;
-    }
-
-    public void fillResult(SurveyActivity activity) {
-        ArrayList<QuestionFill> result = null;
-
-        if(activity != null) {
-            result = getTemplateAndCustomIDS(activity);
-        }
-
-        setResult(result);
-    }
-
-    public ArrayList<QuestionFill> getResult() {
-        return super.getResult();
-    }
-
-    public void setResult(ArrayList<QuestionFill> result) {
-        super.setResult(result);
-    }
-
-    private ArrayList<QuestionFill> getTemplateAndCustomIDS(SurveyActivity activity) {
-        SurveyForm surveyForm = activity.getSurveyForm();
-
-        Map<String, String> templateToCustomIdMap = surveyForm.getSurveyTemplate().mapTemplateAndCustomIDS();
-
-        for (QuestionFill questionFill : activity.getFillContainer().getFillingList()) {
-            String questionID = questionFill.getQuestionID();
-            String customID = templateToCustomIdMap.get(questionID);
-            questionFill.setCustomID(customID);
-        }
-
-        return (ArrayList<QuestionFill>) activity.getFillContainer().getFillingList();
-    }
+    return (ArrayList<QuestionFill>) activity.getFillContainer().getFillingList();
+  }
 }

@@ -49,11 +49,12 @@ public class MonitoringResourceTest {
     acronymsList = new ArrayList();
     monitoringDataSourceResults = new ArrayList();
 
-    MONITORING_CENTERS.setGoal(GOAL);;
+    MONITORING_CENTERS.setGoal(GOAL);
+    ;
     MONITORING_CENTERS.setName("Bahia");
     MONITORING_CENTERS.setBackgroundColor("rgba(255, 99, 132, 0.2)");
     MONITORING_CENTERS.setBorderColor("rgba(255, 99, 132, 1)");
-    
+
     acronymsList.add("ACTA");
     acronymsList.add("MONC");
     acronymsList.add("CISE");
@@ -71,19 +72,19 @@ public class MonitoringResourceTest {
   @Test
   public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() {
     monitoringResource.getParticipantExamsProgress(RN);
-    verify(monitoringFacade,times(1)).getParticipantExamsProgress(RN);
+    verify(monitoringFacade, times(1)).getParticipantExamsProgress(RN);
   }
 
   @Test
   public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() {
     monitoringResource.defineExamInapplicability(anyObject());
-    verify(monitoringFacade,times(1)).setExamApplicability(anyObject());
+    verify(monitoringFacade, times(1)).setExamApplicability(anyObject());
   }
 
   @Test
   public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() {
     monitoringResource.deleteExamInapplicability(anyObject());
-    verify(monitoringFacade,times(1)).deleteExamInapplicability(anyObject());
+    verify(monitoringFacade, times(1)).deleteExamInapplicability(anyObject());
   }
 
   @Test
@@ -91,7 +92,7 @@ public class MonitoringResourceTest {
     monitoringResource.listActivities();
     assertEquals(responseListAcronyms, monitoringResource.listActivities());
   }
-  
+
   @Test
   public void method_getMonitoring_should_return_MonitoringCenter_list() {
     assertEquals(responseMonitoringCenters, monitoringResource.getMonitoring());
@@ -138,14 +139,14 @@ public class MonitoringResourceTest {
     verify(monitoringFacade, times(1)).getDataByExam(CENTER);
   }
 
-    @Test
+  @Test
   public void getDataToCSVOfPendingResultsByAliquotsMethod_should_invoke_getDataToCSVOfPendingResultsByAliquots_of_facade_by_Monitoring() {
     monitoringResource.getDataToCSVOfPendingResultsByAliquots(CENTER);
     verify(monitoringFacade, times(1)).getDataToCSVOfPendingResultsByAliquots(CENTER);
   }
 
 
-    @Test
+  @Test
   public void getDataToCSVOfOrphansByExamMethod_should_invoke_getDataToCSVOfOrphansByExam_of_facade_by_Monitoring() {
     monitoringResource.getDataToCSVOfOrphansByExam();
     verify(monitoringFacade, times(1)).getDataToCSVOfOrphansByExam();

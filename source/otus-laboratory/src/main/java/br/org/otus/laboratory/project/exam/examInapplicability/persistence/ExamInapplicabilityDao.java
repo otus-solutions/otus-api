@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface ExamInapplicabilityDao {
 
-    void update(ExamInapplicability applicability);
+  void update(ExamInapplicability applicability);
 
-    void delete(ExamInapplicability applicability);
+  void delete(ExamInapplicability applicability);
 
-    AggregateIterable<Document> aggregate(List<Bson> query);
+  AggregateIterable<Document> aggregate(List<Bson> query);
 
-    FindIterable<Document> list();
+  FindIterable<Document> list();
 }

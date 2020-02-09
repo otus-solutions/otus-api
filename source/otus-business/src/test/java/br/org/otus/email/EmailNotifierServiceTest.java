@@ -32,91 +32,91 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ EmailNotifierServiceBean.class, GMailer.class, OtusEmailFactory.class, Recipient.class })
+@PrepareForTest({EmailNotifierServiceBean.class, GMailer.class, OtusEmailFactory.class, Recipient.class})
 public class EmailNotifierServiceTest {
-    private static String PASSWORD = "PASSWORD";
+  private static String PASSWORD = "PASSWORD";
 
-    @InjectMocks
-    private EmailNotifierServiceBean service;
+  @InjectMocks
+  private EmailNotifierServiceBean service;
 
-    @Mock
-    private SystemConfigDaoBean systemConfigDao;
-    @Mock
-    private BasicEmailSender emailSender;
-    @Mock
-    private EmailSenderDto emailSenderDto;
-    @Mock
-    private GMailer gmailer;
-    @Mock
-    private OtusEmail email;
-    @Mock
-    private TemplateReader templateReader;
-    @Mock
-    private Sender sender;
-    @Mock
-    private Recipient recipient;
-    @Mock
-    private SystemInstallationEmail installationEmail;
-    @Mock
-    private OtusInitializationConfigDto initializationData;
-    @Mock
-    private UserDto user;
+  @Mock
+  private SystemConfigDaoBean systemConfigDao;
+  @Mock
+  private BasicEmailSender emailSender;
+  @Mock
+  private EmailSenderDto emailSenderDto;
+  @Mock
+  private GMailer gmailer;
+  @Mock
+  private OtusEmail email;
+  @Mock
+  private TemplateReader templateReader;
+  @Mock
+  private Sender sender;
+  @Mock
+  private Recipient recipient;
+  @Mock
+  private SystemInstallationEmail installationEmail;
+  @Mock
+  private OtusInitializationConfigDto initializationData;
+  @Mock
+  private UserDto user;
 
-    @Before
-    public void setup() throws Exception {
-        when(initializationData.getUser()).thenReturn(user);
+  @Before
+  public void setup() throws Exception {
+    when(initializationData.getUser()).thenReturn(user);
 
-        mockStatic(GMailer.class);
-        when(GMailer.createTLSMailer()).thenReturn(gmailer);
+    mockStatic(GMailer.class);
+    when(GMailer.createTLSMailer()).thenReturn(gmailer);
 
-        whenNew(TemplateReader.class).withNoArguments().thenReturn(templateReader);
-    }
+    whenNew(TemplateReader.class).withNoArguments().thenReturn(templateReader);
+  }
 
-    @Test
-    public void getSender_method_should_return_the_system_email_sender() throws EmailNotificationException, EncryptedException, DataNotFoundException {
-        when(systemConfigDao.findEmailSender()).thenReturn(emailSender);
-        when(emailSender.getPassword()).thenReturn(PASSWORD);
+  @Test
+  public void getSender_method_should_return_the_system_email_sender() throws EmailNotificationException, EncryptedException, DataNotFoundException {
+    when(systemConfigDao.findEmailSender()).thenReturn(emailSender);
+    when(emailSender.getPassword()).thenReturn(PASSWORD);
 
-        Object sender = service.getSender();
+    Object sender = service.getSender();
 
-        assertThat(sender, instanceOf(Sender.class));
-    }
+    assertThat(sender, instanceOf(Sender.class));
+  }
 
-    @Test
-    public void sendEmail_method_should_configure_a_GMail_object() throws EmailNotificationException {
-        service.sendEmail(email);
+  @Test
+  public void sendEmail_method_should_configure_a_GMail_object() throws EmailNotificationException {
+    service.sendEmail(email);
 
-        verify(gmailer).setFrom(email.getFrom());
-        verify(gmailer).addRecipients(email.getRecipients());
-        verify(gmailer).setSubject(email.getSubject());
-        verify(gmailer).setContentType(email.getContentType());
-    }
+    verify(gmailer).setFrom(email.getFrom());
+    verify(gmailer).addRecipients(email.getRecipients());
+    verify(gmailer).setSubject(email.getSubject());
+    verify(gmailer).setContentType(email.getContentType());
+  }
 
-    @Test
-    public void sendEmail_method_should_send_an_email() throws EmailNotificationException, EmailCompositionException, MessagingException {
-        service.sendEmail(email);
+  @Test
+  public void sendEmail_method_should_send_an_email() throws EmailNotificationException, EmailCompositionException, MessagingException {
+    service.sendEmail(email);
 
-        verify(gmailer).send();
-    }
+    verify(gmailer).send();
+  }
 
-    @Test
-    public void sendSystemInstallationEmail_method_should_send_an_SystemInstallationEmail() throws Exception {
-        whenNew(BasicEmailSender.class).withNoArguments().thenReturn(emailSender);
-        when(emailSender.getPassword()).thenReturn(PASSWORD);
-        when(initializationData.getEmailSender()).thenReturn(emailSenderDto);
+  @Test
+  public void sendSystemInstallationEmail_method_should_send_an_SystemInstallationEmail() throws Exception {
+    whenNew(BasicEmailSender.class).withNoArguments().thenReturn(emailSender);
+    when(emailSender.getPassword()).thenReturn(PASSWORD);
+    when(initializationData.getEmailSender()).thenReturn(emailSenderDto);
 
-        whenNew(Sender.class).withArguments(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()).thenReturn(sender);
+    whenNew(Sender.class).withArguments(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()).thenReturn(sender);
 
-        mockStatic(Recipient.class);
-        when(Recipient.createTO(Mockito.anyString(), Mockito.anyString())).thenReturn(recipient);
+    mockStatic(Recipient.class);
+    when(Recipient.createTO(Mockito.anyString(), Mockito.anyString())).thenReturn(recipient);
 
-        mockStatic(OtusEmailFactory.class);
-        when(OtusEmailFactory.createSystemInstallationEmail(sender, recipient)).thenReturn(installationEmail);
+    mockStatic(OtusEmailFactory.class);
+    when(OtusEmailFactory.createSystemInstallationEmail(sender, recipient)).thenReturn(installationEmail);
 
-        service.sendSystemInstallationEmail(initializationData);
+    service.sendSystemInstallationEmail(initializationData);
 
-        verifyStatic();
-        OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
-    }
+    verifyStatic();
+    OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
+  }
 
 }

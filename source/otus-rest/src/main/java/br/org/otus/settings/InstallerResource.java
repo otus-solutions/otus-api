@@ -26,60 +26,60 @@ import br.org.otus.rest.Response;
 @Path("/installer")
 public class InstallerResource {
 
-	@Inject
-	private SystemConfigFacade systemConfigFacade;
+  @Inject
+  private SystemConfigFacade systemConfigFacade;
 
-	@GET
-	@Path("/ready")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String ready() {
-		Response response = new Response();
-		return response.buildSuccess(systemConfigFacade.isReady()).toJson();
-	}
+  @GET
+  @Path("/ready")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String ready() {
+    Response response = new Response();
+    return response.buildSuccess(systemConfigFacade.isReady()).toJson();
+  }
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String config(OtusInitializationConfigDto systemConfigDto, @Context HttpServletRequest request) {
-		try {
-			systemConfigDto.encrypt();
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String config(OtusInitializationConfigDto systemConfigDto, @Context HttpServletRequest request) {
+    try {
+      systemConfigDto.encrypt();
 
-			String token = systemConfigFacade.buildToken();
-			registerProjectOnDomain(systemConfigDto, request, token);
-			systemConfigFacade.initConfiguration(systemConfigDto, token);
-			return new Response().buildSuccess().toJson();
+      String token = systemConfigFacade.buildToken();
+      registerProjectOnDomain(systemConfigDto, request, token);
+      systemConfigFacade.initConfiguration(systemConfigDto, token);
+      return new Response().buildSuccess().toJson();
 
-		} catch (EncryptedException e) {
-			throw new HttpResponseException(Validation.build());
-		}
-	}
+    } catch (EncryptedException e) {
+      throw new HttpResponseException(Validation.build());
+    }
+  }
 
-	@POST
-	@Path("/validation/email")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String validationEmail(OtusInitializationConfigDto otusInitializationConfigDto) {
-		try {
-			Response response = new Response();
-			otusInitializationConfigDto.encrypt();
-			systemConfigFacade.validateEmailService(otusInitializationConfigDto);
-			return response.buildSuccess().toJson();
+  @POST
+  @Path("/validation/email")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String validationEmail(OtusInitializationConfigDto otusInitializationConfigDto) {
+    try {
+      Response response = new Response();
+      otusInitializationConfigDto.encrypt();
+      systemConfigFacade.validateEmailService(otusInitializationConfigDto);
+      return response.buildSuccess().toJson();
 
-		} catch (EncryptedException e) {
-			throw new HttpResponseException(Validation.build());
-		}
-	}
+    } catch (EncryptedException e) {
+      throw new HttpResponseException(Validation.build());
+    }
+  }
 
-	public void registerProjectOnDomain(OtusInitializationConfigDto initData, HttpServletRequest request, String projectToken) {
-		try {
-			DomainRegisterResource domainRegisterResource = new DomainRegisterResource(initData.getDomainDto().getDomainRestUrl());
-			DomainDto domainDto = new DomainDto();
-			domainDto.setDomainRestUrl(domainRegisterResource.DOMAIN_URL);
-			domainRegisterResource.registerProject(RequestUrlMapping.getUrl(request), initData.getProject().getProjectName(), projectToken);
+  public void registerProjectOnDomain(OtusInitializationConfigDto initData, HttpServletRequest request, String projectToken) {
+    try {
+      DomainRegisterResource domainRegisterResource = new DomainRegisterResource(initData.getDomainDto().getDomainRestUrl());
+      DomainDto domainDto = new DomainDto();
+      domainDto.setDomainRestUrl(domainRegisterResource.DOMAIN_URL);
+      domainRegisterResource.registerProject(RequestUrlMapping.getUrl(request), initData.getProject().getProjectName(), projectToken);
 
-		} catch (DomainConnectionError domainConnectionError) {
-			throw new HttpResponseException(CommunicationFail.build());
-		}
-	}
+    } catch (DomainConnectionError domainConnectionError) {
+      throw new HttpResponseException(CommunicationFail.build());
+    }
+  }
 
 }

@@ -2,7 +2,7 @@ package br.org.otus.user.dto;
 
 public class FieldCenterDTO {
 
-	public String acronym;
+  public String acronym;
 
   @Override
   public boolean equals(Object o) {

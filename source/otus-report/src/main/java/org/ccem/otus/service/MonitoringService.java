@@ -12,37 +12,37 @@ import java.util.List;
 
 public interface MonitoringService {
 
-    List<MonitoringDataSourceResult> get(String acronym) throws ValidationException;
+  List<MonitoringDataSourceResult> get(String acronym) throws ValidationException;
 
-    List<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException;
+  List<MonitoringCenter> getMonitoringCenter() throws DataNotFoundException;
 
-    ProgressReport getActivitiesProgress() throws DataNotFoundException;
+  ProgressReport getActivitiesProgress() throws DataNotFoundException;
 
-    ProgressReport getActivitiesProgress(String center) throws DataNotFoundException;
+  ProgressReport getActivitiesProgress(String center) throws DataNotFoundException;
 
-    ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
+  ArrayList<ParticipantActivityReportDto> getParticipantActivities(Long rn);
 
-    ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException;
+  ParticipantExamReportDto getParticipantExams(Long rn) throws DataNotFoundException;
 
-    void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
+  void setActivityApplicability(ActivityInapplicability applicability) throws DataNotFoundException;
 
-    void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;
+  void deleteActivityApplicability(Long rn, String acronym) throws DataNotFoundException;
 
-    void deleteExamInapplicability(ExamInapplicability applicability);
+  void deleteExamInapplicability(ExamInapplicability applicability);
 
-    void setExamInapplicability(ExamInapplicability applicability);
+  void setExamInapplicability(ExamInapplicability applicability);
 
-    LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException;
+  LaboratoryProgressDTO getDataOrphanByExams() throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException;
+  LaboratoryProgressDTO getDataQuantitativeByTypeOfAliquots(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException;
+  LaboratoryProgressDTO getDataOfPendingResultsByAliquot(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException;
+  LaboratoryProgressDTO getDataOfStorageByAliquot(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException;
+  LaboratoryProgressDTO getDataByExam(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException;
+  LaboratoryProgressDTO getDataToCSVOfPendingResultsByAliquots(String center) throws DataNotFoundException;
 
-    LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException;
+  LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException;
 }

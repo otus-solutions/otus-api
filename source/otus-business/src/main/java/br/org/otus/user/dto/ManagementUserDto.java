@@ -9,48 +9,48 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import br.org.tutty.Equalization;
 
 public class ManagementUserDto implements Dto {
-	@Equalization(name = "name")
-	public String name;
+  @Equalization(name = "name")
+  public String name;
 
-	@Equalization(name = "surname")
-	public String surname;
+  @Equalization(name = "surname")
+  public String surname;
 
-	@Equalization(name = "extraction")
-	public Boolean extraction;
+  @Equalization(name = "extraction")
+  public Boolean extraction;
 
-	@Equalization(name = "extraction_ips")
-	public List extractionIps;
+  @Equalization(name = "extraction_ips")
+  public List extractionIps;
 
-	@Equalization(name = "phone")
-	public String phone;
+  @Equalization(name = "phone")
+  public String phone;
 
-	public FieldCenterDTO fieldCenter;
+  public FieldCenterDTO fieldCenter;
 
-	@Equalization(name = "email")
-	public String email;
+  @Equalization(name = "email")
+  public String email;
 
-	@Equalization(name = "admin_flag")
-	public Boolean admin;
+  @Equalization(name = "admin_flag")
+  public Boolean admin;
 
-	@Equalization(name = "enable")
-	public Boolean enable;
+  @Equalization(name = "enable")
+  public Boolean enable;
 
-	public ManagementUserDto() {
-		this.fieldCenter = new FieldCenterDTO();
-	}
+  public ManagementUserDto() {
+    this.fieldCenter = new FieldCenterDTO();
+  }
 
-	public String getEmail() {
-		return email;
-	}
+  public String getEmail() {
+    return email;
+  }
 
-	public List<String> getExtractionIps() {
-		return extractionIps;
-	}
+  public List<String> getExtractionIps() {
+    return extractionIps;
+  }
 
-	@Override
-	public Boolean isValid() {
-		return (name != null && !name.isEmpty()) && (surname != null && !surname.isEmpty()) && (phone != null && !phone.isEmpty()) && (email != null && !email.isEmpty()) ? Boolean.TRUE : Boolean.FALSE;
-	}
+  @Override
+  public Boolean isValid() {
+    return (name != null && !name.isEmpty()) && (surname != null && !surname.isEmpty()) && (phone != null && !phone.isEmpty()) && (email != null && !email.isEmpty()) ? Boolean.TRUE : Boolean.FALSE;
+  }
 
   public String getName() {
     return name;

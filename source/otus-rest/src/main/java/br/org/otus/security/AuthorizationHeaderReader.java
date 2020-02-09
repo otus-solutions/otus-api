@@ -5,11 +5,11 @@ import br.org.otus.response.info.Validation;
 
 public class AuthorizationHeaderReader {
 
-	public static String readToken(String authorizationHeader) {
-		if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-			throw new HttpResponseException(Validation.build());
-		}
+  public static String readToken(String authorizationHeader) {
+    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+      throw new HttpResponseException(Validation.build());
+    }
 
-		return authorizationHeader.substring("Bearer".length()).trim();
-	}
+    return authorizationHeader.substring("Bearer".length()).trim();
+  }
 }

@@ -1,32 +1,32 @@
 package br.org.otus.domain.actions;
 
 public class UrlProvider {
-	public static final String DEFAULT_CONTEXT = "/otus-domain-rest";
-	public static final String DEFAULT_VERSION = "/v01";
+  public static final String DEFAULT_CONTEXT = "/otus-domain-rest";
+  public static final String DEFAULT_VERSION = "/v01";
 
-	private String url;
-	private String context;
-	private String version;
+  private String url;
+  private String context;
+  private String version;
 
-	public UrlProvider setUrl(String url) {
-		this.url = url;
+  public UrlProvider setUrl(String url) {
+    this.url = url;
 
-		return this;
-	}
+    return this;
+  }
 
-	public UrlProvider setContext(String context) {
-		this.context = context;
+  public UrlProvider setContext(String context) {
+    this.context = context;
 
-		return this;
-	}
+    return this;
+  }
 
-	public UrlProvider setVersion(String version) {
-		this.version = version;
+  public UrlProvider setVersion(String version) {
+    this.version = version;
 
-		return this;
-	}
+    return this;
+  }
 
-	public String getFullAddress() {
-		return url + context + version;
-	}
+  public String getFullAddress() {
+    return url + context + version;
+  }
 }

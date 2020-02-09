@@ -5,9 +5,9 @@ import org.ccem.otus.model.FileUploader;
 
 public interface FileUploaderService {
 
-	String upload(FileUploader file);
+  String upload(FileUploader file);
 
-	byte[] getById(String oid) throws DataNotFoundException;
+  byte[] getById(String oid) throws DataNotFoundException;
 
-	void delete(String oid) throws DataNotFoundException; 
+  void delete(String oid) throws DataNotFoundException;
 }

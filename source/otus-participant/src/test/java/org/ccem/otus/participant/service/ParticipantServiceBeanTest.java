@@ -28,6 +28,8 @@ public class ParticipantServiceBeanTest {
   private static final long RECRUITMENT_NUMBER = 3051442;
   private static final String PARTICIPANT_NAME = "Jose Otus";
   private static final String ACRONYM = "RS";
+  private static final String EMAIL = "email@test.com";
+  private static final String PASSWORD = "password";
   @InjectMocks
   ParticipantServiceBean participantServiceBean;
   @Mock
@@ -151,4 +153,9 @@ public class ParticipantServiceBeanTest {
     Mockito.verify(participantDao, Mockito.times(1)).getParticipantFieldCenterByRecruitmentNumber(RECRUITMENT_NUMBER);
   }
 
+  @Test
+  public void method_registerPassword_should_call_participantDao_registerPassword() throws DataNotFoundException {
+    participantServiceBean.registerPassword(EMAIL, PASSWORD);
+    verify(participantDao, times(1)).registerPassword(EMAIL, PASSWORD);
+  }
 }

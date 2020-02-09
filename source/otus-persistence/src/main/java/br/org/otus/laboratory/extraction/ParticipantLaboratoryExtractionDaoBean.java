@@ -33,7 +33,7 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
       Document tubeCodeDocument = aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getTubeCodesInAliquotQuery()).first();
       if (tubeCodeDocument != null) {
         notAliquotedTubesDocument = participantLaboratoryDao
-            .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery((ArrayList<String>) tubeCodeDocument.get("tubeCodes")));
+          .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery((ArrayList<String>) tubeCodeDocument.get("tubeCodes")));
       }
 
       return notAliquotedTubesDocument;

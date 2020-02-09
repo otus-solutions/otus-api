@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class TokenBuilder {
 
-    public static String build(){
-        return UUID.randomUUID().toString();
-    }
+  public static String build() {
+    return UUID.randomUUID().toString();
+  }
 }

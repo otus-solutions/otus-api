@@ -10,7 +10,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 public interface SignupService {
 
-    void create(SignupDataDto signupDataDto) throws AlreadyExistException, EncryptedException, EmailNotificationException, DataNotFoundException, ValidationException;
+  void create(SignupDataDto signupDataDto) throws AlreadyExistException, EncryptedException, EmailNotificationException, DataNotFoundException, ValidationException;
 
-    void create(OtusInitializationConfigDto initializationConfigDto) throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException;
+  void create(OtusInitializationConfigDto initializationConfigDto) throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException;
 }

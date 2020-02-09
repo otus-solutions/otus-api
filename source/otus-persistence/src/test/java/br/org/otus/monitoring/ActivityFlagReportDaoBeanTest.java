@@ -74,21 +74,21 @@ public class ActivityFlagReportDaoBeanTest {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
     when(result.first()).thenReturn(new Document());
-    activityFlagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY);
-    Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY);
+    activityFlagReportDaoBean.getActivitiesProgressReport(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY);
+    Mockito.verify(builder, Mockito.times(1)).getActivityStatusQuery(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY);
   }
 
   @Test(expected = DataNotFoundException.class)
   public void getActivitiesProgressReport_should_should_throws_DataNotFoundException() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
-    activityFlagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY);
+    activityFlagReportDaoBean.getActivitiesProgressReport(SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY);
   }
 
   @Test(expected = DataNotFoundException.class)
   public void getActivitiesProgressReport_by_center_should_throws_DataNotFoundException() throws DataNotFoundException {
     when(collection.aggregate(Matchers.anyList())).thenReturn(result);
     when(result.allowDiskUse(true)).thenReturn(result);
-    activityFlagReportDaoBean.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY);
+    activityFlagReportDaoBean.getActivitiesProgressReport(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY);
   }
 }

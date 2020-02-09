@@ -7,20 +7,20 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import br.org.otus.model.User;
 
 public interface UserDao {
-	
-    User fetchByEmail(String email) throws DataNotFoundException;
 
-    Boolean emailExists(String email);
+  User fetchByEmail(String email) throws DataNotFoundException;
 
-    User findAdmin();
+  Boolean emailExists(String email);
 
-    List<User> fetchAll();
+  User findAdmin();
 
-	void persist(User user);
-	
-	User update(User user);
+  List<User> fetchAll();
 
-    void updatePassword(String email, String password);
+  void persist(User user);
 
-    Boolean exists(String email);
+  User update(User user);
+
+  void updatePassword(String email, String password);
+
+  Boolean exists(String email);
 }

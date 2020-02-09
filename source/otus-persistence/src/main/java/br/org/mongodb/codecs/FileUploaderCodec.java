@@ -11,31 +11,31 @@ import org.ccem.otus.model.FileUploader;
 
 public class FileUploaderCodec implements Codec<FileUploader> {
 
-	@Override
-	public void encode(BsonWriter writer, FileUploader value, EncoderContext encoderContext) {
-		writer.writeStartDocument();
-		ObjectId objectId = new ObjectId();
-		value.setOid(objectId.toString());
+  @Override
+  public void encode(BsonWriter writer, FileUploader value, EncoderContext encoderContext) {
+    writer.writeStartDocument();
+    ObjectId objectId = new ObjectId();
+    value.setOid(objectId.toString());
 
-		writer.writeObjectId("_id", objectId);
-		writer.writeBinaryData("file", new BsonBinary(value.getFile()));
+    writer.writeObjectId("_id", objectId);
+    writer.writeBinaryData("file", new BsonBinary(value.getFile()));
 
-		writer.writeEndDocument();
-	}
+    writer.writeEndDocument();
+  }
 
-	@Override
-	public FileUploader decode(BsonReader reader, DecoderContext decoderContext) {
-		reader.readStartDocument();
-		String oid = reader.readObjectId().toString();
-		byte[] file = reader.readBinaryData("file").getData();
-		reader.readEndDocument();
+  @Override
+  public FileUploader decode(BsonReader reader, DecoderContext decoderContext) {
+    reader.readStartDocument();
+    String oid = reader.readObjectId().toString();
+    byte[] file = reader.readBinaryData("file").getData();
+    reader.readEndDocument();
 
-		return new FileUploader(oid, file);
-	}
+    return new FileUploader(oid, file);
+  }
 
-	@Override
-	public Class<FileUploader> getEncoderClass() {
-		return FileUploader.class;
-	}
+  @Override
+  public Class<FileUploader> getEncoderClass() {
+    return FileUploader.class;
+  }
 
 }

@@ -95,9 +95,9 @@ public class Aliquot extends SimpleAliquot {
 
   public ObjectId getExamLotId() {
     ObjectId lotId = null;
-    if(this.examLotData != null){
+    if (this.examLotData != null) {
       lotId = this.examLotData.id;
-    } else if(this.examLotId != null){
+    } else if (this.examLotId != null) {
       lotId = this.examLotId;
     }
     return lotId;

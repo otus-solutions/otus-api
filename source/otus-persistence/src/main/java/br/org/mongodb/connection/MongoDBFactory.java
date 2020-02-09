@@ -17,19 +17,19 @@ import java.util.Arrays;
 @Stateless
 public class MongoDBFactory extends ConnectionConfiguration {
 
-	@ApplicationScoped
-	@Produces
-	public MongoDatabase getMongoDB() {
-		MongoCredential credential = MongoCredential.createCredential(username, database, password.toCharArray());
+  @ApplicationScoped
+  @Produces
+  public MongoDatabase getMongoDB() {
+    MongoCredential credential = MongoCredential.createCredential(username, database, password.toCharArray());
 
-		CodecRegistry codecRegistry = CodecRegistries.fromRegistries(
-				CodecRegistries.fromProviders(new OtusCodecProvider()), MongoClient.getDefaultCodecRegistry());
+    CodecRegistry codecRegistry = CodecRegistries.fromRegistries(
+      CodecRegistries.fromProviders(new OtusCodecProvider()), MongoClient.getDefaultCodecRegistry());
 
-		MongoClientOptions options = MongoClientOptions.builder().codecRegistry(codecRegistry).build();
+    MongoClientOptions options = MongoClientOptions.builder().codecRegistry(codecRegistry).build();
 
-		ServerAddress serverAddress = new ServerAddress(host, port);
+    ServerAddress serverAddress = new ServerAddress(host, port);
 
-		return new MongoClient(serverAddress, Arrays.asList(credential), options).getDatabase(database);
-	}
+    return new MongoClient(serverAddress, Arrays.asList(credential), options).getDatabase(database);
+  }
 
 }

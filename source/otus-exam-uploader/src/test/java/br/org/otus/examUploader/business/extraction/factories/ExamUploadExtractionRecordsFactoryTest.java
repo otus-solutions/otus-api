@@ -61,7 +61,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
   public void getRecords_method_should_return_list_with_expected_values() {
     List<Observation> observations = new ArrayList<>();
     this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, ALIQUOT_CODE, RESULT_NAME, VALUE_1,
-        RELEASE_DATE, observations));
+      RELEASE_DATE, observations));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
     List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
 

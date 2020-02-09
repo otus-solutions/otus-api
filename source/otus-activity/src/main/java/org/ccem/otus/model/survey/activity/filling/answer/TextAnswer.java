@@ -8,18 +8,18 @@ import java.util.Map;
 
 public class TextAnswer extends AnswerFill {
 
-	private String value;
+  private String value;
 
-	public String getValue() {
-		return value;
-	}
+  public String getValue() {
+    return value;
+  }
 
-	@Override
-	public Map<String, Object> getAnswerExtract(String questionID) {
-		Map<String, Object> extraction = new LinkedHashMap<>();
-		extraction.put(questionID, ExtractionFill.escapeText(this.value));
-		return extraction;
-	}
+  @Override
+  public Map<String, Object> getAnswerExtract(String questionID) {
+    Map<String, Object> extraction = new LinkedHashMap<>();
+    extraction.put(questionID, ExtractionFill.escapeText(this.value));
+    return extraction;
+  }
 
 
 }

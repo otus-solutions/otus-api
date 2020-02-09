@@ -12,6 +12,7 @@ public class AuthenticationDto implements Dto, Encripting, AuthenticationData {
   public String userEmail;
   public String password;
   public String requestAddress;
+  public String mode;
 
   @Override
   public Boolean isValid() {
@@ -54,9 +55,10 @@ public class AuthenticationDto implements Dto, Encripting, AuthenticationData {
 
   @Override
   public JWTClaimsSet buildClaimSet() {
+    String mode = this.mode != null ? this.mode : MODE;
     JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
     builder.issuer(userEmail);
-    builder.claim("mode", MODE);
+    builder.claim("mode", mode);
     return builder.build();
   }
 }

@@ -33,7 +33,7 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   public void loadLaboratoryConfiguration() {
     this.laboratoryConfiguration = this.laboratoryConfigurationDao.find();
   }
-  
+
   @Override
   public Boolean getCheckingExist() {
     return this.laboratoryConfigurationDao.getCheckingExist();
@@ -82,14 +82,14 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   @Override
   public List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException {
     AliquotCenterDescriptors first = laboratoryConfiguration.getAliquotConfiguration().getAliquotCenterDescriptors().stream()
-        .filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center)).findFirst().orElseThrow(() -> new DataNotFoundException("FieldCenter not found"));
+      .filter(aliquotCenterDescriptor -> aliquotCenterDescriptor.getName().equals(center)).findFirst().orElseThrow(() -> new DataNotFoundException("FieldCenter not found"));
     return first.getAllCenterAliquots();
   }
 
   @Override
   public AliquoteDescriptor getAliquotDescriptorsByName(String name) throws DataNotFoundException {
     AliquoteDescriptor aliquotByName = getAliquotDescriptors().stream().filter(aliquoteDescriptor -> aliquoteDescriptor.getName().equals(name)).findFirst()
-        .orElseThrow(() -> new DataNotFoundException("Any descriptor found for \"" + name + "\""));
+      .orElseThrow(() -> new DataNotFoundException("Any descriptor found for \"" + name + "\""));
     return aliquotByName;
   }
 

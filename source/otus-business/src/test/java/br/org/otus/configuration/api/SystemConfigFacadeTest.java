@@ -22,82 +22,82 @@ import br.org.otus.response.exception.HttpResponseException;
 
 @RunWith(PowerMockRunner.class)
 public class SystemConfigFacadeTest {
-	private static final String PROJECT_TOKEN = "347bcf7e-dcb2-4768-82eb-ee95d893f4c0";
+  private static final String PROJECT_TOKEN = "347bcf7e-dcb2-4768-82eb-ee95d893f4c0";
 
-	private static final Boolean POSITIVE_ANSWER = true;
+  private static final Boolean POSITIVE_ANSWER = true;
 
-	@InjectMocks
-	private SystemConfigFacade systemConfigFacade;
-	@Mock
-	private SystemConfigService systemConfigService;
-	@Mock
-	private EmailNotifierService emailNotifierService;
-	@Mock
-	private OtusInitializationConfigDto initializationConfigDto;
-	@Mock
-	private OtusInitializationConfigDto otusInitializationConfigDto;
+  @InjectMocks
+  private SystemConfigFacade systemConfigFacade;
+  @Mock
+  private SystemConfigService systemConfigService;
+  @Mock
+  private EmailNotifierService emailNotifierService;
+  @Mock
+  private OtusInitializationConfigDto initializationConfigDto;
+  @Mock
+  private OtusInitializationConfigDto otusInitializationConfigDto;
 
-	@Test
-	public void method_initConfiguration_should_return_projectTokenString() {
-		assertEquals(PROJECT_TOKEN, systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN));
-	}
+  @Test
+  public void method_initConfiguration_should_return_projectTokenString() {
+    assertEquals(PROJECT_TOKEN, systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN));
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_initConfiguration_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-			throws EncryptedException, EmailNotificationException, AlreadyExistException {
-		doThrow(new EmailNotificationException()).when(systemConfigService).initConfiguration(initializationConfigDto,
-				PROJECT_TOKEN);
-		systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_initConfiguration_should_throw_HttpResponseException_if_caught_EmailNotificationException()
+    throws EncryptedException, EmailNotificationException, AlreadyExistException {
+    doThrow(new EmailNotificationException()).when(systemConfigService).initConfiguration(initializationConfigDto,
+      PROJECT_TOKEN);
+    systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_initConfiguration_should_throw_HttpResponseException_if_caught_EncryptedException()
-			throws EncryptedException, EmailNotificationException, AlreadyExistException {
-		doThrow(new EncryptedException()).when(systemConfigService).initConfiguration(initializationConfigDto,
-				PROJECT_TOKEN);
-		systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_initConfiguration_should_throw_HttpResponseException_if_caught_EncryptedException()
+    throws EncryptedException, EmailNotificationException, AlreadyExistException {
+    doThrow(new EncryptedException()).when(systemConfigService).initConfiguration(initializationConfigDto,
+      PROJECT_TOKEN);
+    systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_initConfiguration_should_throw_HttpResponseException_if_caught_AlreadyExistException()
-			throws EncryptedException, EmailNotificationException, AlreadyExistException {
-		doThrow(new AlreadyExistException()).when(systemConfigService).initConfiguration(initializationConfigDto,
-				PROJECT_TOKEN);
-		systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_initConfiguration_should_throw_HttpResponseException_if_caught_AlreadyExistException()
+    throws EncryptedException, EmailNotificationException, AlreadyExistException {
+    doThrow(new AlreadyExistException()).when(systemConfigService).initConfiguration(initializationConfigDto,
+      PROJECT_TOKEN);
+    systemConfigFacade.initConfiguration(initializationConfigDto, PROJECT_TOKEN);
+  }
 
-	@Test
-	public void method_validateEmailService_should_check_evocation_of_verifyEmailServiceMethod_by_systemConfigService()
-			throws EmailNotificationException, EncryptedException {
-		systemConfigFacade.validateEmailService(otusInitializationConfigDto);
-		verify(systemConfigService).verifyEmailService(otusInitializationConfigDto);
-	}
+  @Test
+  public void method_validateEmailService_should_check_evocation_of_verifyEmailServiceMethod_by_systemConfigService()
+    throws EmailNotificationException, EncryptedException {
+    systemConfigFacade.validateEmailService(otusInitializationConfigDto);
+    verify(systemConfigService).verifyEmailService(otusInitializationConfigDto);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_validateEmailService_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-			throws EmailNotificationException, EncryptedException {
-		doThrow(new EmailNotificationException()).when(systemConfigService)
-				.verifyEmailService(otusInitializationConfigDto);
-		systemConfigFacade.validateEmailService(otusInitializationConfigDto);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_validateEmailService_should_throw_HttpResponseException_if_caught_EmailNotificationException()
+    throws EmailNotificationException, EncryptedException {
+    doThrow(new EmailNotificationException()).when(systemConfigService)
+      .verifyEmailService(otusInitializationConfigDto);
+    systemConfigFacade.validateEmailService(otusInitializationConfigDto);
+  }
 
-	@Test(expected = HttpResponseException.class)
-	public void method_validateEmailService_should_throw_HttpResponseException_if_caught_EncryptedException()
-			throws EmailNotificationException, EncryptedException {
-		doThrow(new EncryptedException()).when(systemConfigService).verifyEmailService(otusInitializationConfigDto);
-		systemConfigFacade.validateEmailService(otusInitializationConfigDto);
-	}
+  @Test(expected = HttpResponseException.class)
+  public void method_validateEmailService_should_throw_HttpResponseException_if_caught_EncryptedException()
+    throws EmailNotificationException, EncryptedException {
+    doThrow(new EncryptedException()).when(systemConfigService).verifyEmailService(otusInitializationConfigDto);
+    systemConfigFacade.validateEmailService(otusInitializationConfigDto);
+  }
 
-	@Test
-	public void method_isReady_should_return_positive_answer() {
-		when(systemConfigService.isReady()).thenReturn(POSITIVE_ANSWER);
-		assertTrue(systemConfigFacade.isReady());
-	}
+  @Test
+  public void method_isReady_should_return_positive_answer() {
+    when(systemConfigService.isReady()).thenReturn(POSITIVE_ANSWER);
+    assertTrue(systemConfigFacade.isReady());
+  }
 
-	@Test
-	public void method_buildToken_should_return_tokenString() {
-		when(systemConfigService.buildToken()).thenReturn(PROJECT_TOKEN);
-		assertEquals(PROJECT_TOKEN, systemConfigFacade.buildToken());
-	}
+  @Test
+  public void method_buildToken_should_return_tokenString() {
+    when(systemConfigService.buildToken()).thenReturn(PROJECT_TOKEN);
+    assertEquals(PROJECT_TOKEN, systemConfigFacade.buildToken());
+  }
 
 }

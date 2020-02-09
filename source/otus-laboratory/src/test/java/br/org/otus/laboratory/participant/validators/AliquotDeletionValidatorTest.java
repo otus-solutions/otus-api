@@ -88,10 +88,10 @@ public class AliquotDeletionValidatorTest {
 
   @Test
   public void validate_should_return_validationException_when_contains_aliquot_in_exam_lot() throws ValidationException, DataNotFoundException {
-    aliquot = Aliquot.deserialize("{code:300000624, examLotId:"+ JSON.serialize(EXAM_LOT_ID)+"}");
-    Whitebox.setInternalState(aliquotDeletionValidatorInjected,"code", ALIQUOT_CODE);
-    Whitebox.setInternalState(aliquotDeletionValidatorInjected,"aliquotDao", aliquotDao);
-    Whitebox.setInternalState(aliquotDeletionValidatorInjected,"examLotDao", examLotDao);
+    aliquot = Aliquot.deserialize("{code:300000624, examLotId:" + JSON.serialize(EXAM_LOT_ID) + "}");
+    Whitebox.setInternalState(aliquotDeletionValidatorInjected, "code", ALIQUOT_CODE);
+    Whitebox.setInternalState(aliquotDeletionValidatorInjected, "aliquotDao", aliquotDao);
+    Whitebox.setInternalState(aliquotDeletionValidatorInjected, "examLotDao", examLotDao);
 
     when(aliquotDao.find(ALIQUOT_CODE)).thenReturn(aliquot);
     when(examLotDao.find(EXAM_LOT_ID)).thenReturn(examLot);
@@ -108,10 +108,10 @@ public class AliquotDeletionValidatorTest {
 
   @Test
   public void validate_should_return_validationException_when_contains_aliquot_in_transportation_lot() throws ValidationException, DataNotFoundException {
-    aliquot = Aliquot.deserialize("{code:300000624, transportationLotId:"+ JSON.serialize(TRANSPORTATION_LOT_ID)+"}");
-    Whitebox.setInternalState(aliquotDeletionValidatorInjected,"code", ALIQUOT_CODE);
-    Whitebox.setInternalState(aliquotDeletionValidatorInjected,"aliquotDao", aliquotDao);
-    Whitebox.setInternalState(aliquotDeletionValidatorInjected,"transportationLotDao", transportationLotDao);
+    aliquot = Aliquot.deserialize("{code:300000624, transportationLotId:" + JSON.serialize(TRANSPORTATION_LOT_ID) + "}");
+    Whitebox.setInternalState(aliquotDeletionValidatorInjected, "code", ALIQUOT_CODE);
+    Whitebox.setInternalState(aliquotDeletionValidatorInjected, "aliquotDao", aliquotDao);
+    Whitebox.setInternalState(aliquotDeletionValidatorInjected, "transportationLotDao", transportationLotDao);
     when(aliquotDao.find(ALIQUOT_CODE)).thenReturn(aliquot);
     when(transportationLotDao.find(any())).thenReturn(transportationLot);
     when(transportationLot.getCode()).thenReturn(LOT_CODE);

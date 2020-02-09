@@ -21,33 +21,33 @@ import br.org.owail.sender.email.Sender;
 
 @RunWith(PowerMockRunner.class)
 public class OtusSystemInstallationEmailTest {
-	private Sender sender;
-	private Recipient recipient;
+  private Sender sender;
+  private Recipient recipient;
 
-	@Before
-	public void setup() {
-		sender = new Sender(anyString(), anyString(), anyString());
-		recipient = Recipient.createTO("Recipient Name", "recipient@email.com");
-	}
+  @Before
+  public void setup() {
+    sender = new Sender(anyString(), anyString(), anyString());
+    recipient = Recipient.createTO("Recipient Name", "recipient@email.com");
+  }
 
-	@Test
-	public void createSystemInstallationEmail_method_should_return_an_instance_of_SystemInstallationEmail() {
-		Object email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
+  @Test
+  public void createSystemInstallationEmail_method_should_return_an_instance_of_SystemInstallationEmail() {
+    Object email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
 
-		assertThat(email, instanceOf(SystemInstallationEmail.class));
-	}
+    assertThat(email, instanceOf(SystemInstallationEmail.class));
+  }
 
-	@Test
-	public void createSystemInstallationEmail_method_should_return_an_email_with_recipient_defined() {
-		Email email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
+  @Test
+  public void createSystemInstallationEmail_method_should_return_an_email_with_recipient_defined() {
+    Email email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
 
-		assertThat(email.getRecipients(), not(empty()));
-	}
+    assertThat(email.getRecipients(), not(empty()));
+  }
 
-	@Test
-	public void createSystemInstallationEmail_method_should_return_an_email_with_from_defined() {
-		Email email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
+  @Test
+  public void createSystemInstallationEmail_method_should_return_an_email_with_from_defined() {
+    Email email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
 
-		assertThat(email.getFrom(), notNullValue());
-	}
+    assertThat(email.getFrom(), notNullValue());
+  }
 }

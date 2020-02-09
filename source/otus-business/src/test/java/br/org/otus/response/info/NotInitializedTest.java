@@ -9,8 +9,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class NotInitializedTest {
 
-	@Test
-	public void method_build_should_return_instanceOf_NotInitialized() {
-		assertTrue(NotInitialized.build() instanceof NotInitialized);
-	}
+  @Test
+  public void method_build_should_return_instanceOf_NotInitialized() {
+    assertTrue(NotInitialized.build() instanceof NotInitialized);
+  }
 }

@@ -31,7 +31,7 @@ import br.org.otus.participant.ParticipantResource;
 import br.org.otus.permission.ActivityPermissionResource;
 import br.org.otus.permission.UserPermissionResource;
 import br.org.otus.report.ReportResource;
-import br.org.otus.security.rest.AuthenticationResource;
+import br.org.otus.security.user.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;

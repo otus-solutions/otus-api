@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import javax.ws.rs.NameBinding;
 
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @NameBinding
 public @interface SecuredExtraction {

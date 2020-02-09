@@ -19,47 +19,47 @@ import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 
 @RunWith(PowerMockRunner.class)
 public class AnswerFillingDataSourceTest {
-    private QuestionFill questionFill;
+  private QuestionFill questionFill;
 
-    private  AnswerFillingDataSource answerFillingDataSourceAdd;
+  private AnswerFillingDataSource answerFillingDataSourceAdd;
 
-    private ArrayList<QuestionFill> result;
+  private ArrayList<QuestionFill> result;
 
-    @Mock
-    private AnswerFillingDataSourceFilters filters;
+  @Mock
+  private AnswerFillingDataSourceFilters filters;
 
-    @Mock
-    private SurveyActivity surveyActivity;
+  @Mock
+  private SurveyActivity surveyActivity;
 
-    @Before
-    public void setUp() throws Exception {
-        answerFillingDataSourceAdd = spy( new AnswerFillingDataSource());
-        questionFill = new QuestionFill();
-        surveyActivity = new SurveyActivity();
-        result = new ArrayList<QuestionFill>();
-    }
+  @Before
+  public void setUp() throws Exception {
+    answerFillingDataSourceAdd = spy(new AnswerFillingDataSource());
+    questionFill = new QuestionFill();
+    surveyActivity = new SurveyActivity();
+    result = new ArrayList<QuestionFill>();
+  }
 
-    @Test
-    public void method_addResult() throws Exception {
-       answerFillingDataSourceAdd.addResult(questionFill);
-       verifyPrivate(answerFillingDataSourceAdd, times(1)).invoke("addResult", questionFill);
-    }
+  @Test
+  public void method_addResult() throws Exception {
+    answerFillingDataSourceAdd.addResult(questionFill);
+    verifyPrivate(answerFillingDataSourceAdd, times(1)).invoke("addResult", questionFill);
+  }
 
-    @Test
-    public void method_getFilters() {
-        Whitebox.setInternalState(filters,"acronym","ACTA");
-        Whitebox.setInternalState(filters,"version",2);
-        Whitebox.setInternalState(filters,"category","C0");
+  @Test
+  public void method_getFilters() {
+    Whitebox.setInternalState(filters, "acronym", "ACTA");
+    Whitebox.setInternalState(filters, "version", 2);
+    Whitebox.setInternalState(filters, "category", "C0");
 
-        PowerMockito.when(answerFillingDataSourceAdd.getFilters()).thenReturn(filters);
+    PowerMockito.when(answerFillingDataSourceAdd.getFilters()).thenReturn(filters);
 
-        assertEquals(filters, answerFillingDataSourceAdd.getFilters());
-    }
+    assertEquals(filters, answerFillingDataSourceAdd.getFilters());
+  }
 
-    @Test
-    public void method_check_getResult_and_setResult() {
-        answerFillingDataSourceAdd.setResult(result);
-        assertEquals(result ,answerFillingDataSourceAdd.getResult());
-    }
+  @Test
+  public void method_check_getResult_and_setResult() {
+    answerFillingDataSourceAdd.setResult(result);
+    assertEquals(result, answerFillingDataSourceAdd.getResult());
+  }
 
 }

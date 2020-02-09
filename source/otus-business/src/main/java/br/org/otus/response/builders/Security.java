@@ -4,6 +4,6 @@ import br.org.otus.response.info.Authorization;
 import br.org.otus.response.info.Validation;
 
 public class Security {
-    public static Authorization Authorization;
-    public static Validation Validation;
+  public static Authorization Authorization;
+  public static Validation Validation;
 }

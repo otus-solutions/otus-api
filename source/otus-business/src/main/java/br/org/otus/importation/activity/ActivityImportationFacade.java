@@ -12,15 +12,15 @@ import java.util.List;
 
 public class ActivityImportationFacade {
 
-    @Inject
-    private ImportService importService;
+  @Inject
+  private ImportService importService;
 
-    public List<ActivityImportResultDTO> importActivities(String acronym, Integer version, ActivityImportDTO surveyActivities) {
-        try {
-            return importService.importActivities(acronym, version, surveyActivities);
-        } catch (DataNotFoundException e) {
-            throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
-        }
+  public List<ActivityImportResultDTO> importActivities(String acronym, Integer version, ActivityImportDTO surveyActivities) {
+    try {
+      return importService.importActivities(acronym, version, surveyActivities);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
 
 }

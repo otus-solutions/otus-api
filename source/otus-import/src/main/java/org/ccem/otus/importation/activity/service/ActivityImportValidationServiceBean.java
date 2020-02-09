@@ -32,170 +32,170 @@ import java.util.Optional;
 
 public class ActivityImportValidationServiceBean implements ActivityImportValidationService {
 
-    @Inject
-    private ParticipantDao participantDao;
-    @Inject
-    private UserDao userDao;
-    @Inject
-    private ActivityConfigurationDao activityConfigurationDao;
-    @Inject
-    private RuleRunnerService ruleRunnerService;
+  @Inject
+  private ParticipantDao participantDao;
+  @Inject
+  private UserDao userDao;
+  @Inject
+  private ActivityConfigurationDao activityConfigurationDao;
+  @Inject
+  private RuleRunnerService ruleRunnerService;
 
-    @Override
-    public ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap,SurveyActivity importActivity) throws DataNotFoundException {
-        ActivityImportResultDTO activityImportResultDTO = new ActivityImportResultDTO();
-        Participant found = validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
-        if (found != null){
-            importActivity.getParticipantData().setBirthdate(found.getBirthdate());
-            importActivity.getParticipantData().setName(found.getName());
-            importActivity.getParticipantData().setSex(found.getSex());
-            importActivity.getParticipantData().setLate(found.getLate());
-            importActivity.getParticipantData().setFieldCenter(found.getFieldCenter());
-        }
-        validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.CREATED)));
-        validateCategory(activityImportResultDTO, importActivity.getCategory());
-        if (importActivity.getMode().name().equals(String.valueOf(ActivityMode.PAPER))) {
-            validatePaperInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.INITIALIZED_OFFLINE)));
-        }
-
-        List<SurveyItem> itemContainer = importActivity.getSurveyForm().getSurveyTemplate().itemContainer;
-
-        int itemContainerSize = itemContainer.size();
-        for (int i = 0; i < itemContainerSize; i++){
-            SurveyItem surveyItem = itemContainer.get(i);
-            importActivity.getNavigationTracker().lastVisitedIndex = i;
-            String templateID = surveyItem.getTemplateID();
-            String questionType = surveyItem.objectType;
-            String validOrigin = surveyJumpMap.getValidOrigin(templateID);
-
-            Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
-            if (validOrigin != null){
-                NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
-                if (!validOrigin.equals("BEGIN NODE")){
-                    item.previous = validOrigin;
-                }
-                if(questionType.equals("TextItem") || questionType.equals("ImageItem")){
-                    item.state = String.valueOf(NavigationTrackingItemStatuses.VISITED);
-                    importActivity.getNavigationTracker().items.set(i,item);
-                    surveyJumpMap.validateDefaultJump(templateID);
-                } else {
-                    if (questionFill.isPresent()) {
-                        item.state = String.valueOf(NavigationTrackingItemStatuses.ANSWERED);
-                        importActivity.getNavigationTracker().items.set(i, item);
-                        ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
-                        boolean validAlternativeRoute = false;
-                        for (SurveyJumpMap.AlternativeDestination alternativeDestination : questionAlternativeRoutes) {
-                            if (routeIsValid(alternativeDestination, importActivity)) {
-                                surveyJumpMap.setValidJump(templateID, alternativeDestination.getDestination());
-                                validAlternativeRoute = true;
-                                break;
-                            }
-                        }
-                        if(!validAlternativeRoute){
-                            surveyJumpMap.validateDefaultJump(templateID);
-                        }
-                    } else {
-                        Map<String, GenericValidator> validators = ((Question) surveyItem).fillingRules.options.getValidators();
-                        Mandatory mandatory = (Mandatory) (validators.get("mandatory"));
-                        if(mandatory != null && !mandatory.data.reference) {
-                            item.state = String.valueOf(NavigationTrackingItemStatuses.IGNORED);
-                            importActivity.getNavigationTracker().items.set(i, item);
-                        } else {
-                            activityImportResultDTO.setFailImport();
-                            activityImportResultDTO.setQuestionFillError(templateID,true);
-                            break;
-                        }
-                    }
-                }
-            } else {
-                NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
-                if(questionFill.isPresent()){
-                    activityImportResultDTO.setFailImport();
-                    activityImportResultDTO.setQuestionFillError(templateID,false);
-                    break;
-                } else {
-                    item.state = String.valueOf(NavigationTrackingItemStatuses.SKIPPED);
-                    importActivity.getNavigationTracker().items.set(i,item);
-                }
-            }
-        }
-        activityImportResultDTO.setSurveyActivity(importActivity);
-        return activityImportResultDTO;
+  @Override
+  public ActivityImportResultDTO validateActivity(SurveyJumpMap surveyJumpMap, SurveyActivity importActivity) throws DataNotFoundException {
+    ActivityImportResultDTO activityImportResultDTO = new ActivityImportResultDTO();
+    Participant found = validateRecruitmentNumber(activityImportResultDTO, importActivity.getParticipantData().getRecruitmentNumber());
+    if (found != null) {
+      importActivity.getParticipantData().setBirthdate(found.getBirthdate());
+      importActivity.getParticipantData().setName(found.getName());
+      importActivity.getParticipantData().setSex(found.getSex());
+      importActivity.getParticipantData().setLate(found.getLate());
+      importActivity.getParticipantData().setFieldCenter(found.getFieldCenter());
+    }
+    validateInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.CREATED)));
+    validateCategory(activityImportResultDTO, importActivity.getCategory());
+    if (importActivity.getMode().name().equals(String.valueOf(ActivityMode.PAPER))) {
+      validatePaperInterviewer(activityImportResultDTO, importActivity.getLastStatusByName(String.valueOf(ActivityStatusOptions.INITIALIZED_OFFLINE)));
     }
 
-    private boolean routeIsValid(SurveyJumpMap.AlternativeDestination alternativeDestination, SurveyActivity importActivity) throws DataNotFoundException {
-        boolean routeIsValid = false;
-        for(RouteCondition routeCondition :alternativeDestination.getRouteConditions()){
-            boolean rulesHaveBeenMet = true;
-            for(Rule rule : routeCondition.rules){
-                Optional<QuestionFill> ruleQuestionFill = importActivity.getFillContainer().getQuestionFill(rule.when);
-                if (ruleQuestionFill.isPresent()){
-                    boolean ruleWasMet = ruleRunnerService.run(rule,ruleQuestionFill);
-                    if(!ruleWasMet){
-                        rulesHaveBeenMet = false;
-                        break;
-                    }
-                } else {
-                    rulesHaveBeenMet = false;
-                    break;
-                }
-            }
-            if (rulesHaveBeenMet){
-                routeIsValid = true;
+    List<SurveyItem> itemContainer = importActivity.getSurveyForm().getSurveyTemplate().itemContainer;
+
+    int itemContainerSize = itemContainer.size();
+    for (int i = 0; i < itemContainerSize; i++) {
+      SurveyItem surveyItem = itemContainer.get(i);
+      importActivity.getNavigationTracker().lastVisitedIndex = i;
+      String templateID = surveyItem.getTemplateID();
+      String questionType = surveyItem.objectType;
+      String validOrigin = surveyJumpMap.getValidOrigin(templateID);
+
+      Optional<QuestionFill> questionFill = importActivity.getFillContainer().getQuestionFill(templateID);
+      if (validOrigin != null) {
+        NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
+        if (!validOrigin.equals("BEGIN NODE")) {
+          item.previous = validOrigin;
+        }
+        if (questionType.equals("TextItem") || questionType.equals("ImageItem")) {
+          item.state = String.valueOf(NavigationTrackingItemStatuses.VISITED);
+          importActivity.getNavigationTracker().items.set(i, item);
+          surveyJumpMap.validateDefaultJump(templateID);
+        } else {
+          if (questionFill.isPresent()) {
+            item.state = String.valueOf(NavigationTrackingItemStatuses.ANSWERED);
+            importActivity.getNavigationTracker().items.set(i, item);
+            ArrayList<SurveyJumpMap.AlternativeDestination> questionAlternativeRoutes = surveyJumpMap.getQuestionAlternativeRoutes(templateID);
+            boolean validAlternativeRoute = false;
+            for (SurveyJumpMap.AlternativeDestination alternativeDestination : questionAlternativeRoutes) {
+              if (routeIsValid(alternativeDestination, importActivity)) {
+                surveyJumpMap.setValidJump(templateID, alternativeDestination.getDestination());
+                validAlternativeRoute = true;
                 break;
+              }
             }
-        }
-        return routeIsValid;
-    }
-
-    private void validateCategory(ActivityImportResultDTO activityImportResultDTO, ActivityCategory activityCategory) {
-        if(!activityConfigurationDao.categoryExists(activityCategory.getName())){
-            activityImportResultDTO.setCategoryValidationResult(activityCategory.getLabel(),false);
-            activityImportResultDTO.setFailImport();
-        } else {
-            activityImportResultDTO.setCategoryValidationResult(activityCategory.getLabel(),true);
-        }
-    }
-
-    private void validatePaperInterviewer(ActivityImportResultDTO activityImportResultDTO, @NotNull Optional<ActivityStatus> initializedOffline) {
-        if (initializedOffline.isPresent()) {
-            if (!userDao.exists(initializedOffline.get().getUser().getEmail())) {
-                activityImportResultDTO.setPaperInterviewerValidationResult(initializedOffline.get().getUser().getEmail(),false);
-                activityImportResultDTO.setFailImport();
+            if (!validAlternativeRoute) {
+              surveyJumpMap.validateDefaultJump(templateID);
+            }
+          } else {
+            Map<String, GenericValidator> validators = ((Question) surveyItem).fillingRules.options.getValidators();
+            Mandatory mandatory = (Mandatory) (validators.get("mandatory"));
+            if (mandatory != null && !mandatory.data.reference) {
+              item.state = String.valueOf(NavigationTrackingItemStatuses.IGNORED);
+              importActivity.getNavigationTracker().items.set(i, item);
             } else {
-                activityImportResultDTO.setPaperInterviewerValidationResult(initializedOffline.get().getUser().getEmail(),true);
+              activityImportResultDTO.setFailImport();
+              activityImportResultDTO.setQuestionFillError(templateID, true);
+              break;
             }
+          }
+        }
+      } else {
+        NavigationTrackingItem item = importActivity.getNavigationTracker().items.get(i);
+        if (questionFill.isPresent()) {
+          activityImportResultDTO.setFailImport();
+          activityImportResultDTO.setQuestionFillError(templateID, false);
+          break;
         } else {
-            activityImportResultDTO.setPaperInterviewerValidationResult("NOT_IDENTIFIED",false);
-            activityImportResultDTO.setFailImport();
+          item.state = String.valueOf(NavigationTrackingItemStatuses.SKIPPED);
+          importActivity.getNavigationTracker().items.set(i, item);
         }
+      }
     }
+    activityImportResultDTO.setSurveyActivity(importActivity);
+    return activityImportResultDTO;
+  }
 
-    private void validateInterviewer(ActivityImportResultDTO activityImportResultDTO, @NotNull Optional<ActivityStatus> created) {
-        if(created.isPresent()) {
-            if (!userDao.exists(created.get().getUser().getEmail())) {
-                activityImportResultDTO.setInterviewerValidationResult(created.get().getUser().getEmail(),false);
-                activityImportResultDTO.setFailImport();
-            } else {
-                activityImportResultDTO.setInterviewerValidationResult(created.get().getUser().getEmail(),true);
-            }
+  private boolean routeIsValid(SurveyJumpMap.AlternativeDestination alternativeDestination, SurveyActivity importActivity) throws DataNotFoundException {
+    boolean routeIsValid = false;
+    for (RouteCondition routeCondition : alternativeDestination.getRouteConditions()) {
+      boolean rulesHaveBeenMet = true;
+      for (Rule rule : routeCondition.rules) {
+        Optional<QuestionFill> ruleQuestionFill = importActivity.getFillContainer().getQuestionFill(rule.when);
+        if (ruleQuestionFill.isPresent()) {
+          boolean ruleWasMet = ruleRunnerService.run(rule, ruleQuestionFill);
+          if (!ruleWasMet) {
+            rulesHaveBeenMet = false;
+            break;
+          }
         } else {
-            activityImportResultDTO.setInterviewerValidationResult("NOT_IDENTIFIED",false);
-            activityImportResultDTO.setFailImport();
+          rulesHaveBeenMet = false;
+          break;
         }
+      }
+      if (rulesHaveBeenMet) {
+        routeIsValid = true;
+        break;
+      }
+    }
+    return routeIsValid;
+  }
+
+  private void validateCategory(ActivityImportResultDTO activityImportResultDTO, ActivityCategory activityCategory) {
+    if (!activityConfigurationDao.categoryExists(activityCategory.getName())) {
+      activityImportResultDTO.setCategoryValidationResult(activityCategory.getLabel(), false);
+      activityImportResultDTO.setFailImport();
+    } else {
+      activityImportResultDTO.setCategoryValidationResult(activityCategory.getLabel(), true);
+    }
+  }
+
+  private void validatePaperInterviewer(ActivityImportResultDTO activityImportResultDTO, @NotNull Optional<ActivityStatus> initializedOffline) {
+    if (initializedOffline.isPresent()) {
+      if (!userDao.exists(initializedOffline.get().getUser().getEmail())) {
+        activityImportResultDTO.setPaperInterviewerValidationResult(initializedOffline.get().getUser().getEmail(), false);
+        activityImportResultDTO.setFailImport();
+      } else {
+        activityImportResultDTO.setPaperInterviewerValidationResult(initializedOffline.get().getUser().getEmail(), true);
+      }
+    } else {
+      activityImportResultDTO.setPaperInterviewerValidationResult("NOT_IDENTIFIED", false);
+      activityImportResultDTO.setFailImport();
+    }
+  }
+
+  private void validateInterviewer(ActivityImportResultDTO activityImportResultDTO, @NotNull Optional<ActivityStatus> created) {
+    if (created.isPresent()) {
+      if (!userDao.exists(created.get().getUser().getEmail())) {
+        activityImportResultDTO.setInterviewerValidationResult(created.get().getUser().getEmail(), false);
+        activityImportResultDTO.setFailImport();
+      } else {
+        activityImportResultDTO.setInterviewerValidationResult(created.get().getUser().getEmail(), true);
+      }
+    } else {
+      activityImportResultDTO.setInterviewerValidationResult("NOT_IDENTIFIED", false);
+      activityImportResultDTO.setFailImport();
+    }
+  }
+
+  private Participant validateRecruitmentNumber(ActivityImportResultDTO activityImportResultDTO, Long recruitmentNumber) {
+    Participant participant = null;
+
+    try {
+      participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
+      activityImportResultDTO.setRecruitmentNumberValidationResult(recruitmentNumber, true);
+    } catch (DataNotFoundException e) {
+      activityImportResultDTO.setRecruitmentNumberValidationResult(recruitmentNumber, false);
+      activityImportResultDTO.setFailImport();
     }
 
-    private Participant validateRecruitmentNumber(ActivityImportResultDTO activityImportResultDTO, Long recruitmentNumber){
-        Participant participant = null;
-
-        try {
-            participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
-            activityImportResultDTO.setRecruitmentNumberValidationResult(recruitmentNumber,true);
-        } catch (DataNotFoundException e) {
-            activityImportResultDTO.setRecruitmentNumberValidationResult(recruitmentNumber,false);
-            activityImportResultDTO.setFailImport();
-        }
-
-        return participant;
-    }
+    return participant;
+  }
 }

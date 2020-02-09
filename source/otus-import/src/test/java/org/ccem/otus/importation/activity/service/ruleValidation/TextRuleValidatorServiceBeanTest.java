@@ -15,68 +15,68 @@ import static org.mockito.internal.util.reflection.Whitebox.setInternalState;
 
 @RunWith(PowerMockRunner.class)
 public class TextRuleValidatorServiceBeanTest {
-    private TextRuleValidatorServiceBean textRuleValidatorServiceBean = new TextRuleValidatorServiceBean();
-    @Spy
-    private TextAnswer answer = new TextAnswer();
-    private Rule rule;
+  private TextRuleValidatorServiceBean textRuleValidatorServiceBean = new TextRuleValidatorServiceBean();
+  @Spy
+  private TextAnswer answer = new TextAnswer();
+  private Rule rule;
 
-    @Before
-    public void setUp() throws Exception {
-        rule = new Rule();
-        rule.extents = "SurveyTemplateObject";
-        rule.objectType = "Rule";
-        rule.when = "TST1";
-        rule.isMetadata = false;
-        setInternalState(answer, "value", "Otus");
-        setInternalState(answer, "objectType", "AnswerFill");
-        setInternalState(answer, "type", "TextQuestion");
-    }
+  @Before
+  public void setUp() throws Exception {
+    rule = new Rule();
+    rule.extents = "SurveyTemplateObject";
+    rule.objectType = "Rule";
+    rule.when = "TST1";
+    rule.isMetadata = false;
+    setInternalState(answer, "value", "Otus");
+    setInternalState(answer, "objectType", "AnswerFill");
+    setInternalState(answer, "type", "TextQuestion");
+  }
 
-    @Test
-    public void run_method_with_equalCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "equal";
-        rule.answer = "Otus";
-        assertTrue(textRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_with_equalCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+    rule.operator = "equal";
+    rule.answer = "Otus";
+    assertTrue(textRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_with_equalCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "equal";
-        rule.answer = "otus";
-        assertFalse(textRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_with_equalCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+    rule.operator = "equal";
+    rule.answer = "otus";
+    assertFalse(textRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_with_notEqualCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "notEqual";
-        rule.answer = "otus";
-        assertTrue(textRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_with_notEqualCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+    rule.operator = "notEqual";
+    rule.answer = "otus";
+    assertTrue(textRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_with_notEqualCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "notEqual";
-        rule.answer = "Otus";
-        assertFalse(textRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_with_notEqualCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+    rule.operator = "notEqual";
+    rule.answer = "Otus";
+    assertFalse(textRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_with_containsCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "contains";
-        rule.answer = "Otu";
-        assertTrue(textRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_with_containsCase_should_validate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+    rule.operator = "contains";
+    rule.answer = "Otu";
+    assertTrue(textRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test
-    public void run_method_with_containsCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
-        rule.operator = "contains";
-        rule.answer = "otu";
-        assertFalse(textRuleValidatorServiceBean.run(rule, answer));
-    }
+  @Test
+  public void run_method_with_containsCase_should_invalidate_the_comparison_of_values_between_answer_and_rule() throws DataNotFoundException {
+    rule.operator = "contains";
+    rule.answer = "otu";
+    assertFalse(textRuleValidatorServiceBean.run(rule, answer));
+  }
 
-    @Test(expected = DataNotFoundException.class)
-    public void run_method_with_invalidCase_should_throws_DataNotFoundException() throws DataNotFoundException {
-        rule.operator = "anything";
-        textRuleValidatorServiceBean.run(rule, answer);
-    }
+  @Test(expected = DataNotFoundException.class)
+  public void run_method_with_invalidCase_should_throws_DataNotFoundException() throws DataNotFoundException {
+    rule.operator = "anything";
+    textRuleValidatorServiceBean.run(rule, answer);
+  }
 }

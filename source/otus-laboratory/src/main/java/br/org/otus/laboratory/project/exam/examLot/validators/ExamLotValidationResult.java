@@ -4,32 +4,32 @@ import java.util.ArrayList;
 
 public class ExamLotValidationResult {
 
-	private boolean isValid = true;
-	private ArrayList<String> value = new ArrayList<>();
-	private String errorCode;
+  private boolean isValid = true;
+  private ArrayList<String> value = new ArrayList<>();
+  private String errorCode;
 
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
+  public void setErrorCode(String errorCode) {
+    this.errorCode = errorCode;
+  }
 
-	public boolean isValid() {
-		return isValid;
-	}
+  public boolean isValid() {
+    return isValid;
+  }
 
-	public ArrayList<String> getValue() {
-		return value;
-	}
+  public ArrayList<String> getValue() {
+    return value;
+  }
 
-	public void setValid(boolean valid) {
+  public void setValid(boolean valid) {
 
-		isValid = valid;
-	}
+    isValid = valid;
+  }
 
-	public void setValue(ArrayList<String> value) {
-		this.value = value;
-	}
+  public void setValue(ArrayList<String> value) {
+    this.value = value;
+  }
 
-	public void pushConflict(String aliquotCode) {
-		this.value.add(aliquotCode);
-	}
+  public void pushConflict(String aliquotCode) {
+    this.value.add(aliquotCode);
+  }
 }

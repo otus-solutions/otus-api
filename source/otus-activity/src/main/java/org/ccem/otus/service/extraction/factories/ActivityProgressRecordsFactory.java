@@ -14,7 +14,7 @@ public class ActivityProgressRecordsFactory {
   public ActivityProgressRecordsFactory(LinkedList<ActivityProgressResultExtraction> records) {
     this.inputRecords = records;
     this.outputRecords = new LinkedList<>();
-    
+
     this.buildResultInformation();
   }
 

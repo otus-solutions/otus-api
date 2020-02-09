@@ -1,11 +1,11 @@
 package br.org.otus.survey.validators;
 
 public interface ValidatorResponse {
-    Boolean isValid();
+  Boolean isValid();
 
-    String getType();
+  String getType();
 
-    boolean equals(Object o);
+  boolean equals(Object o);
 
-    int hashCode();
+  int hashCode();
 }

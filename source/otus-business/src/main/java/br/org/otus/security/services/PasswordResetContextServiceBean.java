@@ -34,7 +34,7 @@ public class PasswordResetContextServiceBean implements PasswordResetContextServ
   }
 
   @Override
-  public String getRequestEmail (String token) throws DataNotFoundException {
+  public String getRequestEmail(String token) throws DataNotFoundException {
     return passwordResetControlDao.getRequestEmail(token);
   }
 }

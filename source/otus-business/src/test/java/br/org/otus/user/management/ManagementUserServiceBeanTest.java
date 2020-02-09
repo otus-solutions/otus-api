@@ -101,7 +101,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_enable_should_fetch_user_by_email()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
@@ -111,7 +111,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_enable_should_change_status_to_enable()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
@@ -121,7 +121,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_enable_should_update_user()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
@@ -144,7 +144,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_disable_should_fetch_user_by_email()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(user.isAdmin()).thenReturn(Boolean.FALSE);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
@@ -155,7 +155,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_disable_should_change_status_to_enable()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(user.isAdmin()).thenReturn(Boolean.FALSE);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
@@ -166,7 +166,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_disable_should_update_user()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(user.isAdmin()).thenReturn(Boolean.FALSE);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
@@ -190,7 +190,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_disable_should_verify_if_is_admin()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(user.isAdmin()).thenReturn(Boolean.TRUE);
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
@@ -202,14 +202,14 @@ public class ManagementUserServiceBeanTest {
 
   @Test(expected = ValidationException.class)
   public void method_enable_should_throw_ValidationException_when_dto_invalid()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
     managementUserServiceBean.enable(managementUserDto);
   }
 
   @Test(expected = ValidationException.class)
   public void method_disable_should_throw_ValidationException_when_dto_invalid()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
     managementUserServiceBean.disable(managementUserDto);
   }
@@ -225,7 +225,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_enableExtraction_should_change_status_to_enable()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
@@ -244,7 +244,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test(expected = ValidationException.class)
   public void method_enableExtraction_should_throw_ValidationException_when_dto_invalid()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
     managementUserServiceBean.enableExtraction(managementUserDto);
   }
@@ -260,7 +260,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test
   public void method_disableExtraction_should_change_status_to_disabled()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
     Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
@@ -279,7 +279,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test(expected = ValidationException.class)
   public void method_disableExtraction_should_throw_ValidationException_when_dto_invalid()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
     managementUserServiceBean.disableExtraction(managementUserDto);
   }
@@ -297,7 +297,7 @@ public class ManagementUserServiceBeanTest {
 
   @Test(expected = ValidationException.class)
   public void method_updateExtractionIps_should_throw_ValidationException_when_dto_invalid()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.FALSE);
     managementUserServiceBean.updateExtractionIps(managementUserDto);
   }
@@ -334,7 +334,7 @@ public class ManagementUserServiceBeanTest {
     when(requestData.getRedirectUrl()).thenReturn(PROJECT_REST_URL);
     when(requestData.getEmail()).thenReturn(EMAIL);
     when(emailNotifierService.getSender()).thenReturn(sender);
-    passwordResetEmail = new PasswordResetEmail(TOKEN,PROJECT_REST_URL);
+    passwordResetEmail = new PasswordResetEmail(TOKEN, PROJECT_REST_URL);
     passwordResetEmail.defineRecipient(EMAIL);
     passwordResetEmail.setFrom(sender);
     managementUserServiceBean.requestPasswordReset(requestData);

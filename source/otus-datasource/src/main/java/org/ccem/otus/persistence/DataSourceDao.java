@@ -11,13 +11,13 @@ import org.ccem.otus.utils.DataSourceValuesMapping;
 
 public interface DataSourceDao {
 
-	void persist(DataSource dataSource) throws AlreadyExistException;
+  void persist(DataSource dataSource) throws AlreadyExistException;
 
-	void update(DataSource dataSource) throws ValidationException, DataNotFoundException;
+  void update(DataSource dataSource) throws ValidationException, DataNotFoundException;
 
-	List<DataSource> find();
+  List<DataSource> find();
 
-	DataSource findByID(String id) throws DataNotFoundException;
+  DataSource findByID(String id) throws DataNotFoundException;
 
-    DataSourceValuesMapping getDataSourceMapping();
+  DataSourceValuesMapping getDataSourceMapping();
 }

@@ -17,30 +17,30 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ActivityRevisionDaoBean extends MongoGenericDao<Document> implements ActivityRevisionDao {
 
-    public static final String COLLECTION_NAME = "activity_revision";
-    public static final String ACTIVITY_ID = "activityID";
+  public static final String COLLECTION_NAME = "activity_revision";
+  public static final String ACTIVITY_ID = "activityID";
 
-    public ActivityRevisionDaoBean() {
-        super(COLLECTION_NAME, Document.class);
-    }
+  public ActivityRevisionDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
-    @Override
-    public List<ActivityRevision> findByActivityID(ObjectId activityID) throws DataNotFoundException {
-        ArrayList<ActivityRevision> activitiesRevision = new ArrayList<ActivityRevision>();
+  @Override
+  public List<ActivityRevision> findByActivityID(ObjectId activityID) throws DataNotFoundException {
+    ArrayList<ActivityRevision> activitiesRevision = new ArrayList<ActivityRevision>();
 
-        FindIterable<Document> result = collection.find(eq(ACTIVITY_ID, activityID));
+    FindIterable<Document> result = collection.find(eq(ACTIVITY_ID, activityID));
 
-        result.forEach((Block<Document>) document -> {
-            activitiesRevision.add(ActivityRevision.deserialize(document.toJson()));
-        });
+    result.forEach((Block<Document>) document -> {
+      activitiesRevision.add(ActivityRevision.deserialize(document.toJson()));
+    });
 
-        return activitiesRevision;
-    }
+    return activitiesRevision;
+  }
 
-    @Override
-    public void persist(ActivityRevision activityRevision) {
-        Document parsed = Document.parse(ActivityRevision.serialize(activityRevision));
+  @Override
+  public void persist(ActivityRevision activityRevision) {
+    Document parsed = Document.parse(ActivityRevision.serialize(activityRevision));
 
-        collection.insertOne(parsed);
-    }
+    collection.insertOne(parsed);
+  }
 }

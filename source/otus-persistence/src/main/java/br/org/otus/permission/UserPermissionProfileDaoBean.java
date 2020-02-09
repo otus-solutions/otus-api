@@ -31,11 +31,11 @@ public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> impl
   @Override
   public UserPermissionDTO getProfile(String profileName) throws DataNotFoundException {
     Document result = collection.find(new Document("name", profileName)).first();
-    
-    if(result == null) {
+
+    if (result == null) {
       throw new DataNotFoundException(new Throwable("Permission profile: {" + profileName + "} not found."));
     }
-    
+
     return UserPermissionDTO.deserialize(result.toJson());
   }
 
@@ -49,7 +49,7 @@ public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> impl
 
     Document first = collection.aggregate(pipeline).first();
 
-    if (first != null){
+    if (first != null) {
       return SurveyGroupPermission.deserialize(first.toJson());
     } else {
       return null;
@@ -60,9 +60,9 @@ public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> impl
   public void removeFromPermissionsProfile(String surveyGroupName) throws DataNotFoundException {
     UserPermissionDTO fullDTO = this.getProfile("DEFAULT");
     List<Permission> surveyGroupPermissionList = fullDTO.getPermissions()
-            .stream()
-            .filter(permission -> permission.getObjectType().equals("SurveyGroupPermission"))
-            .collect(Collectors.toList());
+      .stream()
+      .filter(permission -> permission.getObjectType().equals("SurveyGroupPermission"))
+      .collect(Collectors.toList());
     SurveyGroupPermission surveyGroupPermission = (SurveyGroupPermission) surveyGroupPermissionList.get(0);
     surveyGroupPermission.getGroups().remove(surveyGroupName);
     UserPermissionDTO newProfile = new UserPermissionDTO();
@@ -70,6 +70,6 @@ public class UserPermissionProfileDaoBean extends MongoGenericDao<Document> impl
     fullDTO.concatenatePermissions(newProfile);
     Document parsed = Document.parse(UserPermissionDTO.serialize(fullDTO));
     Document update = new Document("$set", new Document("permissions", parsed.get("permissions")));
-    collection.updateOne(new Document("name","DEFAULT"),update);
+    collection.updateOne(new Document("name", "DEFAULT"), update);
   }
 }

@@ -7,12 +7,12 @@ import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public interface SystemConfigService {
 
-	void initConfiguration(OtusInitializationConfigDto initializationConfigDto, String projectToken) throws EncryptedException, EmailNotificationException, AlreadyExistException;
+  void initConfiguration(OtusInitializationConfigDto initializationConfigDto, String projectToken) throws EncryptedException, EmailNotificationException, AlreadyExistException;
 
-	void verifyEmailService(OtusInitializationConfigDto initializationData) throws EmailNotificationException, EncryptedException;
+  void verifyEmailService(OtusInitializationConfigDto initializationData) throws EmailNotificationException, EncryptedException;
 
-	String buildToken();
+  String buildToken();
 
-	Boolean isReady();
+  Boolean isReady();
 
 }

@@ -6,6 +6,6 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 public interface ActivityPreProcessor {
 
-    SurveyActivityExtractionRecordsFactory process(SurveyForm surveyForm, SurveyActivityExtractionRecordsFactory recordsFactory) throws DataNotFoundException;
+  SurveyActivityExtractionRecordsFactory process(SurveyForm surveyForm, SurveyActivityExtractionRecordsFactory recordsFactory) throws DataNotFoundException;
 
 }

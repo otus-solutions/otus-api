@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -15,6 +16,10 @@ public interface ParticipantService {
 
   Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException;
 
+  Participant getByEmail(String email) throws DataNotFoundException;
+
+  ObjectId findIdByRecruitmentNumber(Long rn) throws DataNotFoundException;
+
   List<Participant> list(FieldCenter fieldCenter);
 
   Long getPartipantsActives(String acronymCenter) throws DataNotFoundException;
@@ -22,6 +27,8 @@ public interface ParticipantService {
   void create(Set<Participant> participants);
 
   ArrayList<Long> listCenterRecruitmentNumbers(String center) throws DataNotFoundException;
+
+  void registerPassword(String token, String Password) throws DataNotFoundException;
 
   String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
 

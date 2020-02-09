@@ -38,22 +38,22 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     Document SecondPartOfDTO = null;
 
     fullDTO = aliquotDaoAggregate(
-        new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsFirstPartialResultQuery(center));
+      new LaboratoryProgressQueryBuilder().getQuantitativeByTypeOfAliquotsFirstPartialResultQuery(center));
 
     Document fetchCenterAliquotCodesDocument = fetchAliquotCodes(center);
 
     if (fetchCenterAliquotCodesDocument != null) {
       Object aliquotCodes = fetchCenterAliquotCodesDocument.get("aliquotCodes");
       Document fetchAliquotCodesInExams = examResultDao
-          .aggregate(
-              new LaboratoryProgressQueryBuilder().getAliquotCodesInExamsQuery((ArrayList<String>) aliquotCodes))
-          .first();
+        .aggregate(
+          new LaboratoryProgressQueryBuilder().getAliquotCodesInExamsQuery((ArrayList<String>) aliquotCodes))
+        .first();
       if (fetchAliquotCodesInExams != null) {
         Object aliquotCodesInExam = fetchAliquotCodesInExams.get("aliquotCodes");
         SecondPartOfDTO = aliquotDao
-            .aggregate(new LaboratoryProgressQueryBuilder()
-                .getQuantitativeByTypeOfAliquotsSecondPartialResultQuery((ArrayList<String>) aliquotCodesInExam))
-            .first();
+          .aggregate(new LaboratoryProgressQueryBuilder()
+            .getQuantitativeByTypeOfAliquotsSecondPartialResultQuery((ArrayList<String>) aliquotCodesInExam))
+          .first();
       }
     }
 
@@ -72,77 +72,77 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     CompletableFuture<Document> aliquotsWithExams = this.fetchAliquotsWithExams();
 
     CompletableFuture<LaboratoryProgressDTO> greetingFuture = aliquotsWithExams
-        .thenApply(allAliquotsWithExamsDocument -> {
-          LaboratoryProgressDTO laboratoryProgressDTO = new LaboratoryProgressDTO();
-          LaboratoryProgressDTO laboratoryProgressPartialDTO = new LaboratoryProgressDTO();
+      .thenApply(allAliquotsWithExamsDocument -> {
+        LaboratoryProgressDTO laboratoryProgressDTO = new LaboratoryProgressDTO();
+        LaboratoryProgressDTO laboratoryProgressPartialDTO = new LaboratoryProgressDTO();
 
-          if (allAliquotsWithExamsDocument != null) {
+        if (allAliquotsWithExamsDocument != null) {
 
-            Object allAliquotCodesInExams = allAliquotsWithExamsDocument.get("aliquotCodes");
+          Object allAliquotCodesInExams = allAliquotsWithExamsDocument.get("aliquotCodes");
 
-            CompletableFuture<Document> firstPartialDTOFuture = CompletableFuture.supplyAsync(() -> aliquotDao
-                .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(
-                    (ArrayList<String>) allAliquotCodesInExams, center))
-                .first());
+          CompletableFuture<Document> firstPartialDTOFuture = CompletableFuture.supplyAsync(() -> aliquotDao
+            .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotFirstPartialResultQuery(
+              (ArrayList<String>) allAliquotCodesInExams, center))
+            .first());
 
-            CompletableFuture<Document> secondPartialDTOFuture = CompletableFuture.supplyAsync(() -> aliquotDao
-                .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery(
-                    (ArrayList<String>) allAliquotCodesInExams, center))
-                .first());
+          CompletableFuture<Document> secondPartialDTOFuture = CompletableFuture.supplyAsync(() -> aliquotDao
+            .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotSecondPartialResultQuery(
+              (ArrayList<String>) allAliquotCodesInExams, center))
+            .first());
 
-            Document firstPartOfDTO = null;
-            try {
-              firstPartOfDTO = firstPartialDTOFuture.get();
-            } catch (InterruptedException e) {
-              new Exception("Get data of pending results thread(firstPartialDTOFuture) was interrupted", e).printStackTrace();
-              Thread.currentThread().interrupt();
-            } catch (ExecutionException e) {
-              throw new IllegalStateException();
-            }
+          Document firstPartOfDTO = null;
+          try {
+            firstPartOfDTO = firstPartialDTOFuture.get();
+          } catch (InterruptedException e) {
+            new Exception("Get data of pending results thread(firstPartialDTOFuture) was interrupted", e).printStackTrace();
+            Thread.currentThread().interrupt();
+          } catch (ExecutionException e) {
+            throw new IllegalStateException();
+          }
 
-            if (firstPartOfDTO != null) {
-              laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(firstPartOfDTO.toJson());
-              laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
-            }
-
-            Document secondPartOfDTO = null;
-            try {
-              secondPartOfDTO = secondPartialDTOFuture.get();
-            } catch (InterruptedException e) {
-              new Exception("Get data of pending results thread(secondPartialDTOFuture) was interrupted", e).printStackTrace();
-              Thread.currentThread().interrupt();
-            } catch (ExecutionException e) {
-              throw new IllegalStateException();
-            }
-
-            if (firstPartOfDTO == null && secondPartOfDTO == null) {
-              throw new IllegalStateException();
-            }
-
-            if (secondPartOfDTO != null) {
-              laboratoryProgressPartialDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
-              if (firstPartOfDTO != null) {
-                laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
-              } else {
-                laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
-                laboratoryProgressDTO.fillEmptyWaitingToPendingResults();
-              }
-            }
-
-          } else {
-            Document pendingAliquots = aliquotDao
-                    .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotQuery(center)).first();
-
-            if (pendingAliquots == null){
-              throw new IllegalStateException();
-            }
-
-            laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(pendingAliquots.toJson());
+          if (firstPartOfDTO != null) {
+            laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(firstPartOfDTO.toJson());
             laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
           }
 
-          return laboratoryProgressDTO;
-        });
+          Document secondPartOfDTO = null;
+          try {
+            secondPartOfDTO = secondPartialDTOFuture.get();
+          } catch (InterruptedException e) {
+            new Exception("Get data of pending results thread(secondPartialDTOFuture) was interrupted", e).printStackTrace();
+            Thread.currentThread().interrupt();
+          } catch (ExecutionException e) {
+            throw new IllegalStateException();
+          }
+
+          if (firstPartOfDTO == null && secondPartOfDTO == null) {
+            throw new IllegalStateException();
+          }
+
+          if (secondPartOfDTO != null) {
+            laboratoryProgressPartialDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
+            if (firstPartOfDTO != null) {
+              laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
+            } else {
+              laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(secondPartOfDTO.toJson());
+              laboratoryProgressDTO.fillEmptyWaitingToPendingResults();
+            }
+          }
+
+        } else {
+          Document pendingAliquots = aliquotDao
+            .aggregate(new LaboratoryProgressQueryBuilder().getPendingResultsByAliquotQuery(center)).first();
+
+          if (pendingAliquots == null) {
+            throw new IllegalStateException();
+          }
+
+          laboratoryProgressDTO = LaboratoryProgressDTO.deserialize(pendingAliquots.toJson());
+          laboratoryProgressDTO.concatReceivedToPendingResults(laboratoryProgressPartialDTO);
+        }
+
+        return laboratoryProgressDTO;
+      });
 
     return getLaboratoryProgressDTO(greetingFuture);
   }
@@ -154,7 +154,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
     validateFirst(fetchAllAliquotCodes);
     Object aliquotCodes = fetchAllAliquotCodes.get("aliquotCodes");
     Document first1 = examResultDao
-        .aggregate(new LaboratoryProgressQueryBuilder().getDataByExamQuery((ArrayList<String>) aliquotCodes)).first();
+      .aggregate(new LaboratoryProgressQueryBuilder().getDataByExamQuery((ArrayList<String>) aliquotCodes)).first();
     validateFirst(first1);
     return LaboratoryProgressDTO.deserialize(first1.toJson());
 
@@ -179,7 +179,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
       }
 
       if (first == null) {
-          throw new IllegalStateException();
+        throw new IllegalStateException();
       }
       return LaboratoryProgressDTO.deserialize(first.toJson());
     });
@@ -189,7 +189,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
   @Nullable
   private LaboratoryProgressDTO getLaboratoryProgressDTO(CompletableFuture<LaboratoryProgressDTO> greetingFuture)
-      throws DataNotFoundException {
+    throws DataNotFoundException {
     LaboratoryProgressDTO laboratoryProgressDTO = null;
 
     try {
@@ -213,7 +213,7 @@ public class LaboratoryProgressDaoBean implements LaboratoryProgressDao {
 
   private CompletableFuture<Document> fetchAliquotsWithExams() {
     return CompletableFuture.supplyAsync(
-        () -> examResultDao.aggregate(new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery()).first());
+      () -> examResultDao.aggregate(new LaboratoryProgressQueryBuilder().fetchAllAliquotCodesInExamsQuery()).first());
   }
 
   private LaboratoryProgressDTO aliquotDaoAggregate(List<Bson> query) throws DataNotFoundException {

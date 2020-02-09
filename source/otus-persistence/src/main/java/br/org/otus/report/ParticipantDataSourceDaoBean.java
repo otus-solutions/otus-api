@@ -12,22 +12,22 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantDataSourceDaoBean extends MongoGenericDao<Document> implements ParticipantDataSourceDao {
 
-    private static final String COLLECTION_NAME = "participant";
+  private static final String COLLECTION_NAME = "participant";
 
-    public ParticipantDataSourceDaoBean() {
-        super(COLLECTION_NAME, Document.class);
+  public ParticipantDataSourceDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
+
+  @Override
+  public ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException {
+    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+
+    if (result == null) {
+      throw new DataNotFoundException(
+        new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
     }
 
-    @Override
-    public ParticipantDataSourceResult getResult(Long recruitmentNumber, ParticipantDataSource participantDataSource) throws DataNotFoundException{
-        Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
-
-        if (result == null) {
-            throw new DataNotFoundException(
-                    new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
-        }
-
-        return ParticipantDataSourceResult.deserialize(new JSONObject(result).toString());
-    }
+    return ParticipantDataSourceResult.deserialize(new JSONObject(result).toString());
+  }
 
 }

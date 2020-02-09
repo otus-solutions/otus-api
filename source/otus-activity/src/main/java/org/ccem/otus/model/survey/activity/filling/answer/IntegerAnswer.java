@@ -7,16 +7,16 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 
 public class IntegerAnswer extends AnswerFill {
 
-	private Long value;
+  private Long value;
 
-	public Long getValue() {
-		return value;
-	}
+  public Long getValue() {
+    return value;
+  }
 
-	@Override
-	public Map<String, Object> getAnswerExtract(String questionID) {
-		Map<String, Object> extraction = new LinkedHashMap<String, Object>();
-		extraction.put(questionID, this.getValue());
-		return extraction;
-	}
+  @Override
+  public Map<String, Object> getAnswerExtract(String questionID) {
+    Map<String, Object> extraction = new LinkedHashMap<String, Object>();
+    extraction.put(questionID, this.getValue());
+    return extraction;
+  }
 }

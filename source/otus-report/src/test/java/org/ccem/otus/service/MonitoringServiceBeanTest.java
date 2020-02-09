@@ -34,8 +34,8 @@ public class MonitoringServiceBeanTest {
   private static final Long RN = Long.valueOf(7016098);
   private static LinkedList<String> SURVEY_ACRONYM_LIST = new LinkedList<>();
   private static List<Bson> PIPELINE = new ArrayList<>();
-  private static Document ACTIVITY_INAPPLICABILITY_RESULT =  ParseQuery.toDocument("{_id: {}, AI: [{acronym: DSN, recruitmentNumber: 2000735}, {acronym: TSA, recruitmentNumber: 2000735}, {acronym: BIOC, recruitmentNumber: 2000735}, {acronym: CSP, recruitmentNumber: 3051442}, {acronym: CSJ, recruitmentNumber: 3019660}, {acronym: AMAC, recruitmentNumber: 1063154}, {acronym: CSP, recruitmentNumber: 2000735}, {acronym: ISG, recruitmentNumber: 2000735}]}");
-  private static Document ACTIVITIES_PROGRESS_REPORT_RESULT =  ParseQuery.toDocument("{_id: {}, index: [3019660, 3036402, 3004950, 3012464, 3051442], data: [[0.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, -1.0, null, null, null, null, null, null, null, null, 2.0, -1.0, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [1.0, null, null, 0.0, null, 2.0, null, null, 1.0, null, null, null, null, null, null, null, null, 2.0, -1.0, -1.0, null, -1.0, null, null, null, null, null, null, null, null, -1.0, -1.0, null, null, null, 2.0, -1.0, -1.0, null, -1.0, null, null, -1.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]]}");
+  private static Document ACTIVITY_INAPPLICABILITY_RESULT = ParseQuery.toDocument("{_id: {}, AI: [{acronym: DSN, recruitmentNumber: 2000735}, {acronym: TSA, recruitmentNumber: 2000735}, {acronym: BIOC, recruitmentNumber: 2000735}, {acronym: CSP, recruitmentNumber: 3051442}, {acronym: CSJ, recruitmentNumber: 3019660}, {acronym: AMAC, recruitmentNumber: 1063154}, {acronym: CSP, recruitmentNumber: 2000735}, {acronym: ISG, recruitmentNumber: 2000735}]}");
+  private static Document ACTIVITIES_PROGRESS_REPORT_RESULT = ParseQuery.toDocument("{_id: {}, index: [3019660, 3036402, 3004950, 3012464, 3051442], data: [[0.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, -1.0, null, null, null, null, null, null, null, null, 2.0, -1.0, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, 2.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [1.0, null, null, 0.0, null, 2.0, null, null, 1.0, null, null, null, null, null, null, null, null, 2.0, -1.0, -1.0, null, -1.0, null, null, null, null, null, null, null, null, -1.0, -1.0, null, null, null, 2.0, -1.0, -1.0, null, -1.0, null, null, -1.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]]}");
   private static final FieldCenter fieldCenter = new FieldCenter();
   private static final Long GOAL = (long) 3025L;
 
@@ -94,21 +94,21 @@ public class MonitoringServiceBeanTest {
   }
 
   @Test
-  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() throws DataNotFoundException{
+  public void method_getParticipantExams_should_call_examMonitoringDao_getParticipantExams() throws DataNotFoundException {
     monitoringServiceBean.getParticipantExams(RN);
-    verify(examMonitoringDao,times(1)).getParticipantExams(RN);
+    verify(examMonitoringDao, times(1)).getParticipantExams(RN);
   }
 
   @Test
   public void method_setExamInapplicability_should_call_examInapplicabilityDao_update() {
     monitoringServiceBean.setExamInapplicability(anyObject());
-    verify(examInapplicabilityDao,times(1)).update(anyObject());
+    verify(examInapplicabilityDao, times(1)).update(anyObject());
   }
 
   @Test
   public void method_deleteExamInapplicability_should_call_examInapplicabilityDao_delete() {
     monitoringServiceBean.deleteExamInapplicability(anyObject());
-    verify(examInapplicabilityDao,times(1)).delete(anyObject());
+    verify(examInapplicabilityDao, times(1)).delete(anyObject());
   }
 
   @Test
@@ -127,54 +127,54 @@ public class MonitoringServiceBeanTest {
     PIPELINE.add(ParseQuery.toDocument("{$group:{_id:\"\",participantAI:{$push:{rn:$_id,AI:\"$AI\"}}}}"));
     when(activityInapplicabilityDao.aggregate(PIPELINE)).thenReturn(result);
     when(result.first()).thenReturn(ACTIVITY_INAPPLICABILITY_RESULT);
-    when(activityFlagReportDao.getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY_RESULT)).thenReturn(ACTIVITIES_PROGRESS_REPORT_RESULT);
+    when(activityFlagReportDao.getActivitiesProgressReport(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY_RESULT)).thenReturn(ACTIVITIES_PROGRESS_REPORT_RESULT);
 
     monitoringServiceBean.getActivitiesProgress(CENTER);
 
-    verify(activityInapplicabilityDao,times(1)).aggregate(PIPELINE);
-    verify(activityFlagReportDao,times(1)).getActivitiesProgressReport(CENTER,SURVEY_ACRONYM_LIST,ACTIVITY_INAPPLICABILITY_RESULT);
+    verify(activityInapplicabilityDao, times(1)).aggregate(PIPELINE);
+    verify(activityFlagReportDao, times(1)).getActivitiesProgressReport(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY_RESULT);
   }
 
   @Test
   public void method_getDataOrphanByExams_should_call_laboratoryProgressDao_getDataOrphanByExams() throws DataNotFoundException {
     monitoringServiceBean.getDataOrphanByExams();
-    verify(laboratoryProgressDao,times(1)).getDataOrphanByExams();
+    verify(laboratoryProgressDao, times(1)).getDataOrphanByExams();
   }
 
   @Test
   public void method_getDataQuantitativeByTypeOfAliquots_should_call_laboratoryProgressDao_getDataQuantitativeByTypeOfAliquots() throws DataNotFoundException {
     monitoringServiceBean.getDataQuantitativeByTypeOfAliquots(CENTER);
-    verify(laboratoryProgressDao,times(1)).getDataQuantitativeByTypeOfAliquots(CENTER);
+    verify(laboratoryProgressDao, times(1)).getDataQuantitativeByTypeOfAliquots(CENTER);
   }
 
   @Test
   public void method_getDataOfPendingResultsByAliquot_should_call_laboratoryProgressDao_getDataOfPendingResultsByAliquot() throws DataNotFoundException {
     monitoringServiceBean.getDataOfPendingResultsByAliquot(CENTER);
-    verify(laboratoryProgressDao,times(1)).getDataOfPendingResultsByAliquot(CENTER);
+    verify(laboratoryProgressDao, times(1)).getDataOfPendingResultsByAliquot(CENTER);
   }
 
   @Test
   public void method_getDataOfStorageByAliquot_should_call_laboratoryProgressDao_getDataOfStorageByAliquot() throws DataNotFoundException {
     monitoringServiceBean.getDataOfStorageByAliquot(CENTER);
-    verify(laboratoryProgressDao,times(1)).getDataOfStorageByAliquot(CENTER);
+    verify(laboratoryProgressDao, times(1)).getDataOfStorageByAliquot(CENTER);
   }
 
   @Test
   public void method_getDataByExam_should_call_laboratoryProgressDao_getDataByExam() throws DataNotFoundException {
     monitoringServiceBean.getDataByExam(CENTER);
-    verify(laboratoryProgressDao,times(1)).getDataByExam(CENTER);
+    verify(laboratoryProgressDao, times(1)).getDataByExam(CENTER);
   }
 
   @Test
   public void method_getDataToCSVOfPendingResultsByAliquots_should_call_laboratoryProgressDao_getDataToCSVOfPendingResultsByAliquots() throws DataNotFoundException {
     monitoringServiceBean.getDataToCSVOfPendingResultsByAliquots(CENTER);
-    verify(laboratoryProgressDao,times(1)).getDataToCSVOfPendingResultsByAliquots(CENTER);
+    verify(laboratoryProgressDao, times(1)).getDataToCSVOfPendingResultsByAliquots(CENTER);
   }
 
   @Test
   public void method_getDataToCSVOfOrphansByExam_should_call_laboratoryProgressDao_getDataToCSVOfOrphansByExam() throws DataNotFoundException {
     monitoringServiceBean.getDataToCSVOfOrphansByExam();
-    verify(laboratoryProgressDao,times(1)).getDataToCSVOfOrphansByExam();
+    verify(laboratoryProgressDao, times(1)).getDataToCSVOfOrphansByExam();
   }
 
 }

@@ -58,7 +58,7 @@ import br.org.otus.gateway.resource.DBDistributionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ParticipantServiceBean.class, DCMGatewayService.class, Participant.class, ReportTemplate.class, GatewayResponse.class })
+@PrepareForTest({ParticipantServiceBean.class, DCMGatewayService.class, Participant.class, ReportTemplate.class, GatewayResponse.class})
 public class ReportServiceBeanTest {
   private static final String REPORT_UPDATE = "{\"data\":\"{\\\"template\\\" : \\\"\\u003cspan\\u003e\\u003c/span\\u003e\\\",\\\"label\\\": \\\"tiago\\\",\\\"fieldCenter\\\": [],\\\"dataSources\\\" : [{\\\"key\\\" : \\\"HS\\\",\\\"label\\\": \\\"tester\\\", \\\"dataSource\\\" : \\\"Participant\\\",\\\"filters\\\" : {\\\"statusHistory\\\" : {\\\"name\\\" : \\\"FINALIZED\\\",\\\"position\\\" : -1},\\\"acronym\\\" : \\\"TF\\\",\\\"category\\\" : \\\"C0\\\"}}]}\"}";
   private static final String ACRONYM = "ACTA";

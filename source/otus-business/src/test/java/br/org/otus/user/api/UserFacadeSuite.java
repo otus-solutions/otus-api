@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserFacadeAccessControlTest.class,
-        UserFacadeCreateTest.class
+  UserFacadeAccessControlTest.class,
+  UserFacadeCreateTest.class
 })
 public class UserFacadeSuite {
 }

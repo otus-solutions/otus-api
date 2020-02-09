@@ -67,14 +67,14 @@ public class UserFacadeTest {
 
   @Test
   public void createMethod_with_OtusInitializationConfigDto_should_check_evocation_of_createMethod_by_signupService()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
     userFacade.create(initializationConfigDto);
     verify(signupService).create(initializationConfigDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_OtusInitializationConfigDto_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
     doThrow(new EmailNotificationException()).when(signupService).create(initializationConfigDto);
     userFacade.create(initializationConfigDto);
 
@@ -82,7 +82,7 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_OtusInitializationConfigDto_should_throw_HttpResponseException_if_caught_EncryptedException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
     doThrow(new EncryptedException()).when(signupService).create(initializationConfigDto);
     userFacade.create(initializationConfigDto);
 
@@ -90,62 +90,62 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_OtusInitializationConfigDto_should_throw_HttpResponseException_if_caught_AlreadyExistException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
     doThrow(new AlreadyExistException()).when(signupService).create(initializationConfigDto);
     userFacade.create(initializationConfigDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_OtusInitializationConfigDto_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException {
     doThrow(new ValidationException()).when(signupService).create(initializationConfigDto);
     userFacade.create(initializationConfigDto);
   }
 
   @Test
   public void createMethod_with_SignupDataDto_should_check_evocation_of_createMethod_by_signupService()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
-      DataNotFoundException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
+    DataNotFoundException {
     userFacade.create(signupDataDto);
     verify(signupService).create(signupDataDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_SignupDataDto_should_throw_HttpResponseException_if_caught_EncryptedException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
-      DataNotFoundException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
+    DataNotFoundException {
     doThrow(new EncryptedException()).when(signupService).create(signupDataDto);
     userFacade.create(signupDataDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_SignupDataDto_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
-      DataNotFoundException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
+    DataNotFoundException {
     doThrow(new EmailNotificationException()).when(signupService).create(signupDataDto);
     userFacade.create(signupDataDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_SignupDataDto_should_throw_HttpResponseException_if_caught_AlreadyExistException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
-      DataNotFoundException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
+    DataNotFoundException {
     doThrow(new AlreadyExistException()).when(signupService).create(signupDataDto);
     userFacade.create(signupDataDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_SignupDataDto_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
-      DataNotFoundException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
+    DataNotFoundException {
     doThrow(new DataNotFoundException()).when(signupService).create(signupDataDto);
     userFacade.create(signupDataDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethod_with_SignupDataDto_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
-      DataNotFoundException {
+    throws AlreadyExistException, EmailNotificationException, EncryptedException, ValidationException,
+    DataNotFoundException {
     doThrow(new ValidationException()).when(signupService).create(signupDataDto);
     userFacade.create(signupDataDto);
   }
@@ -160,147 +160,147 @@ public class UserFacadeTest {
 
   @Test
   public void disableMethod_should_check_evocation_of_disableMethod_by_managementUserService()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.disable(managementUserDto);
     verify(managementUserService).disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableMethod_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new EmailNotificationException()).when(managementUserService).disable(managementUserDto);
     userFacade.disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableMethod_should_throw_HttpResponseException_if_caught_EncryptedException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new EncryptedException()).when(managementUserService).disable(managementUserDto);
     userFacade.disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).disable(managementUserDto);
     userFacade.disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).disable(managementUserDto);
     userFacade.disable(managementUserDto);
   }
 
   @Test
   public void enableMethod_should_check_evocation_of_enableMethod_by_managementUserService()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.enable(managementUserDto);
     verify(managementUserService).enable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableMethod_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new EmailNotificationException()).when(managementUserService).enable(managementUserDto);
     userFacade.enable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableMethod_should_throw_HttpResponseException_if_caught_EncryptedException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new EncryptedException()).when(managementUserService).enable(managementUserDto);
     userFacade.enable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).enable(managementUserDto);
     userFacade.enable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).enable(managementUserDto);
     userFacade.enable(managementUserDto);
   }
 
   @Test
   public void disableExtractionMethod_should_check_evocation_of_disableMethod_by_managementUserService()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.disableExtraction(managementUserDto);
     verify(managementUserService).disableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableExtractionMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).disableExtraction(managementUserDto);
     userFacade.disableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableExtractionMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).disableExtraction(managementUserDto);
     userFacade.disableExtraction(managementUserDto);
   }
 
   @Test
   public void enableExtractionMethod_should_check_evocation_of_enableMethod_by_managementUserService()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.enableExtraction(managementUserDto);
     verify(managementUserService).enableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableExtractionMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).enableExtraction(managementUserDto);
     userFacade.enableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableExtractionMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).enableExtraction(managementUserDto);
     userFacade.enableExtraction(managementUserDto);
   }
 
   @Test
   public void method_updateExtractionIps_should_check_evocation_of_updateExtractionIps_by_managementUserService()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.updateExtractionIps(managementUserDto);
     verify(managementUserService).updateExtractionIps(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void updateExtractionIpsMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).updateExtractionIps(managementUserDto);
     userFacade.updateExtractionIps(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void updateExtractionIpsMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).updateExtractionIps(managementUserDto);
     userFacade.updateExtractionIps(managementUserDto);
   }
 
   @Test
   public void getExtractionTokenMethod_should_check_evocation_of_getExtractionToken_by_extractionSecurityService()
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.getExtractionToken(EMAIL);
     verify(extractionSecurityService).getExtractionToken(EMAIL);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getExtractionTokenMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(extractionSecurityService).getExtractionToken(EMAIL);
     userFacade.getExtractionToken(EMAIL);
   }
@@ -313,7 +313,7 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void updateFieldCenterMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws DataNotFoundException {
+    throws DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).updateFieldCenter(managementUserDto);
     userFacade.updateFieldCenter(managementUserDto);
 
@@ -327,7 +327,7 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void fetchByEmailMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws DataNotFoundException {
+    throws DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).fetchByEmail(EMAIL);
     userFacade.fetchByEmail(EMAIL);
   }
@@ -341,21 +341,21 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void requestPasswordResetMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-      throws DataNotFoundException, EncryptedException, EmailNotificationException {
+    throws DataNotFoundException, EncryptedException, EmailNotificationException {
     doThrow(new DataNotFoundException()).when(managementUserService).requestPasswordReset(requestData);
     userFacade.requestPasswordReset(requestData);
   }
 
   @Test(expected = HttpResponseException.class)
   public void requestPasswordResetMethod_should_throw_HttpResponseException_if_caught_EncryptedExceptionException()
-      throws DataNotFoundException, EncryptedException, EmailNotificationException {
+    throws DataNotFoundException, EncryptedException, EmailNotificationException {
     doThrow(new EncryptedException()).when(managementUserService).requestPasswordReset(requestData);
     userFacade.requestPasswordReset(requestData);
   }
 
   @Test(expected = HttpResponseException.class)
   public void requestPasswordResetMethod_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-      throws DataNotFoundException, EncryptedException, EmailNotificationException {
+    throws DataNotFoundException, EncryptedException, EmailNotificationException {
     doThrow(new EmailNotificationException()).when(managementUserService).requestPasswordReset(requestData);
     userFacade.requestPasswordReset(requestData);
   }

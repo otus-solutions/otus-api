@@ -38,30 +38,30 @@ public class PasswordResetControlDaoBeanTest {
   private Document document;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     Mockito.when(mongoDatabase.getCollection(COLLECTION_NAME, MongoCollection.class)).thenReturn(collection);
   }
 
   @Test
-  public void should_call_register_token_into_database(){
+  public void should_call_register_token_into_database() {
     passwordResetControlDaoBean.registerToken(TOKEN, EMAIL);
     Mockito.verify(collection).insertOne(Mockito.anyObject());
   }
 
   @Test
-  public void should_call_remove_into_database(){
+  public void should_call_remove_into_database() {
     passwordResetControlDaoBean.removeRegister(TOKEN);
     Mockito.verify(collection).deleteOne(Mockito.anyObject());
   }
 
   @Test
-  public void should_call_remove_all_entries_into_database(){
+  public void should_call_remove_all_entries_into_database() {
     passwordResetControlDaoBean.removeAllRegisters(TOKEN);
     Mockito.verify(collection).deleteMany(Mockito.anyObject());
   }
 
   @Test
-  public void should_call_find_when_verify_existence_token_into_database(){
+  public void should_call_find_when_verify_existence_token_into_database() {
     Mockito.when(collection.find((Bson) Mockito.any())).thenReturn(documents);
     Mockito.when(documents.first()).thenReturn(document);
 
@@ -70,7 +70,7 @@ public class PasswordResetControlDaoBeanTest {
   }
 
   @Test
-  public void should_call_find_when_verify_existence_of_register_into_database(){
+  public void should_call_find_when_verify_existence_of_register_into_database() {
     Mockito.when(collection.find((Bson) Mockito.any())).thenReturn(documents);
     Mockito.when(documents.first()).thenReturn(document);
 

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doThrow;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ManagementUserDto.class })
+@PrepareForTest({ManagementUserDto.class})
 public class UserResourceTest {
 
   private static final String RESPONSE_VALID = "{\"data\":true}";
@@ -101,40 +101,40 @@ public class UserResourceTest {
     resource.enableUsers(managementUserDto);
     verify(userFacade, times(1)).enable(managementUserDto);
   }
-  
+
   @Test
   public void enableUsersMethod_should_return_validResponse() {
     assertEquals(RESPONSE_VALID, resource.enableUsers(managementUserDto));
   }
-  
+
   @Test
   public void requestRecoveryMethod_should_evoke_requestPasswordReset_of_UserFacade() {
     resource.requestRecovery(requestData);
     verify(userFacade, times(1)).requestPasswordReset(requestData);
   }
-  
+
   @Test
   public void requestRecoveryMethod_should_return_validResponse() {
     assertEquals(RESPONSE_VALID, resource.requestRecovery(requestData));
   }
-  
+
   @Test
   public void validateTokenMethod_should_evoke_validatePasswordRecoveryRequest_of_UserFacade() {
     resource.validateToken(TOKEN);
     verify(userFacade, times(1)).validatePasswordRecoveryRequest(TOKEN);
   }
-  
+
   @Test
   public void validateTokenMethod_should_return_validResponse() {
     assertEquals(RESPONSE_VALID, resource.validateToken(TOKEN));
   }
-  
+
   @Test
   public void updatePasswordMethod_should_evoke_updateUserPassword_of_UserFacade() {
     resource.updatePassword(resetData);
     verify(userFacade, times(1)).updateUserPassword(resetData);
   }
-  
+
   @Test
   public void updatePasswordMethod_should_return_validResponse() {
     assertEquals(RESPONSE_VALID, resource.updatePassword(resetData));

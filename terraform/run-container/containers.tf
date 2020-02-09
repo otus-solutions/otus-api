@@ -45,8 +45,8 @@ resource "docker_image" "otus-database" {
   name = "otus-database:${var.otus-database-version}"
 }
 
-resource "docker_network" "otus-api-network" {
-  name = "otus-api-network"
+variable "otus-api-network" {
+  default = "otus-api-network"
 }
 
 resource "docker_container" "otus-api" {
@@ -69,7 +69,7 @@ resource "docker_container" "otus-api" {
 	  external = "${var.otus-api-debug-port}"
   }
   networks_advanced {
-    name    = "${docker_network.otus-api-network.name}"
+    name    = "${var.otus-api-network}"
   }
 }
 
@@ -85,6 +85,6 @@ resource "docker_container" "otus-database" {
 	container_path = "/data/db"
   }
   networks_advanced {
-    name    = "${docker_network.otus-api-network.name}"
+    name    = "${var.otus-api-network}"
   }
 }

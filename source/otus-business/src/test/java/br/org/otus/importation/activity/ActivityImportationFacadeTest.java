@@ -14,29 +14,29 @@ import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityImportationFacadeTest {
-    private static final String ACRONYM = "ACTA";
-    private static final int VERSION = 2;
-    private static final String IMPORT_ACTIVITY_JSON = "{\"objectType\" : \"Activity\",\"surveyForm\" : {\"sender\" : \"\"," +
-            "\"sendingDate\" :\"\",\"objectType\" : \"SurveyForm\",\"surveyFormType\" : \"FORM_INTERVIEW\"}}";
-    @InjectMocks
-    private ActivityImportationFacade activityImportationFacade;
+  private static final String ACRONYM = "ACTA";
+  private static final int VERSION = 2;
+  private static final String IMPORT_ACTIVITY_JSON = "{\"objectType\" : \"Activity\",\"surveyForm\" : {\"sender\" : \"\"," +
+    "\"sendingDate\" :\"\",\"objectType\" : \"SurveyForm\",\"surveyFormType\" : \"FORM_INTERVIEW\"}}";
+  @InjectMocks
+  private ActivityImportationFacade activityImportationFacade;
 
-    @Mock
-    private ImportService importService;
-    @Mock
-    private ActivityImportDTO surveyActivities;
+  @Mock
+  private ImportService importService;
+  @Mock
+  private ActivityImportDTO surveyActivities;
 
-    private DataNotFoundException e = spy(new DataNotFoundException());
+  private DataNotFoundException e = spy(new DataNotFoundException());
 
-    @Test
-    public void importActivities_method_should_invoke_importActivities_of_ImportService() throws DataNotFoundException {
-        surveyActivities = ActivityImportDTO.deserialize(IMPORT_ACTIVITY_JSON);
-        activityImportationFacade.importActivities(ACRONYM,VERSION, surveyActivities);
-        verify(importService, times(1)).importActivities(ACRONYM,VERSION, surveyActivities);
-    }
+  @Test
+  public void importActivities_method_should_invoke_importActivities_of_ImportService() throws DataNotFoundException {
+    surveyActivities = ActivityImportDTO.deserialize(IMPORT_ACTIVITY_JSON);
+    activityImportationFacade.importActivities(ACRONYM, VERSION, surveyActivities);
+    verify(importService, times(1)).importActivities(ACRONYM, VERSION, surveyActivities);
+  }
 
-    @Test
-    public void importActivities_method_should_throw_DataNotFoundException() throws DataNotFoundException {
-        when(importService.importActivities(ACRONYM,VERSION, surveyActivities)).thenThrow(e);
-    }
+  @Test
+  public void importActivities_method_should_throw_DataNotFoundException() throws DataNotFoundException {
+    when(importService.importActivities(ACRONYM, VERSION, surveyActivities)).thenThrow(e);
+  }
 }

@@ -30,7 +30,7 @@ public class StaticVariableResourceTest {
   private StaticVariableRequestDTO staticVariableRequestDTO;
 
   @Test
-  public void method_listVariables_should_return_variablesJson(){
+  public void method_listVariables_should_return_variablesJson() {
     staticVariableRequestDTO = StaticVariableRequestDTO.deserialize(INFO_VARIABLE_PARAMS);
     when(staticVariableFacade.listVariables(INFO_VARIABLE_PARAMS)).thenReturn(staticVariableRequestDTO);
     String listVariablesExpected = new Response().buildSuccess(staticVariableRequestDTO).toJson();

@@ -1,7 +1,7 @@
 package br.org.otus.staticVariable;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -23,5 +23,5 @@ public class StaticVariableResource {
   public String listVariables(String variablesJson) {
     return new Response().buildSuccess(staticVariableFacade.listVariables(variablesJson)).toJson();
   }
-  
+
 }

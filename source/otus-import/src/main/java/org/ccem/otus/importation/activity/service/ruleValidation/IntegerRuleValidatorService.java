@@ -5,5 +5,5 @@ import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.survey.template.navigation.route.Rule;
 
 public interface IntegerRuleValidatorService {
-    boolean run(Rule rule, AnswerFill answer) throws DataNotFoundException;
+  boolean run(Rule rule, AnswerFill answer) throws DataNotFoundException;
 }

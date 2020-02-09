@@ -49,8 +49,8 @@ public class PasswordResetEmail extends Email implements OtusEmail {
     if (o == null || getClass() != o.getClass()) return false;
     PasswordResetEmail that = (PasswordResetEmail) o;
     return Objects.equals(TEMPLATE, that.TEMPLATE) &&
-            Objects.equals(SUBJECT, that.SUBJECT) &&
-            Objects.equals(dataMap, that.dataMap);
+      Objects.equals(SUBJECT, that.SUBJECT) &&
+      Objects.equals(dataMap, that.dataMap);
   }
 
   @Override

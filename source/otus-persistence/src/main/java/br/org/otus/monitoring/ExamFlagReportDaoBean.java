@@ -14,24 +14,24 @@ import java.util.List;
 
 public class ExamFlagReportDaoBean extends MongoGenericDao<Document> implements ExamFlagReportDao {
 
-    public static final String COLLECTION_NAME = "exam_result";
+  public static final String COLLECTION_NAME = "exam_result";
 
-    public ExamFlagReportDaoBean() {
-        super(COLLECTION_NAME, Document.class);
-    }
+  public ExamFlagReportDaoBean() {
+    super(COLLECTION_NAME, Document.class);
+  }
 
-    @Override
-    public Document getExamProgressReport(LinkedList<String> surveyAcronyms, ArrayList<Long> centerRns, List<Document> examInapplicabilities) throws DataNotFoundException {
-        List<Bson> query = new ExamFlagReportQueryBuilder().getExamResultsStatusQuery(surveyAcronyms, centerRns, examInapplicabilities);
-        return getDocument(query);
-    }
+  @Override
+  public Document getExamProgressReport(LinkedList<String> surveyAcronyms, ArrayList<Long> centerRns, List<Document> examInapplicabilities) throws DataNotFoundException {
+    List<Bson> query = new ExamFlagReportQueryBuilder().getExamResultsStatusQuery(surveyAcronyms, centerRns, examInapplicabilities);
+    return getDocument(query);
+  }
 
-    @NotNull
-    private Document getDocument(List<Bson> query) throws DataNotFoundException {
-        Document result = collection.aggregate(query).allowDiskUse(true).first();
-        if (result == null) {
-            throw new DataNotFoundException("There are no results");
-        }
-        return result;
+  @NotNull
+  private Document getDocument(List<Bson> query) throws DataNotFoundException {
+    Document result = collection.aggregate(query).allowDiskUse(true).first();
+    if (result == null) {
+      throw new DataNotFoundException("There are no results");
     }
+    return result;
+  }
 }

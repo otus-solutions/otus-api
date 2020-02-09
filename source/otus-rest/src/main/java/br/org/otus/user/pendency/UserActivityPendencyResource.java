@@ -13,7 +13,7 @@ import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.pendency.UserActivityPendencyFacade;
 
@@ -123,7 +123,7 @@ public class UserActivityPendencyResource {
   }
 
 
-  private String getUserEmail(HttpServletRequest request){
+  private String getUserEmail(HttpServletRequest request) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     return securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
   }

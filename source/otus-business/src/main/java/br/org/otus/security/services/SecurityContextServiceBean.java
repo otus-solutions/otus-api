@@ -21,62 +21,62 @@ import java.util.NoSuchElementException;
 @Stateless
 public class SecurityContextServiceBean implements SecurityContextService {
 
-    @Inject
-    private SecurityContext securityContext;
+  @Inject
+  private SecurityContext securityContext;
 
-    @Override
-    public String generateToken(JWTClaimSetBuilder claimSetBuilder, byte[] secretKey) throws TokenException {
-        try {
-            JWSSigner signer = new MACSigner(secretKey);
+  @Override
+  public String generateToken(JWTClaimSetBuilder claimSetBuilder, byte[] secretKey) throws TokenException {
+    try {
+      JWSSigner signer = new MACSigner(secretKey);
 
-            SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256),
-                    claimSetBuilder.buildClaimSet());
-            signedJWT.sign(signer);
+      SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256),
+        claimSetBuilder.buildClaimSet());
+      signedJWT.sign(signer);
 
-            return signedJWT.serialize();
-        } catch (JOSEException e) {
-            throw new TokenException(e);
-        }
+      return signedJWT.serialize();
+    } catch (JOSEException e) {
+      throw new TokenException(e);
     }
+  }
 
-    @Override
-    public byte[] generateSecretKey() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] sharedSecret = new byte[32];
-        secureRandom.nextBytes(sharedSecret);
+  @Override
+  public byte[] generateSecretKey() {
+    SecureRandom secureRandom = new SecureRandom();
+    byte[] sharedSecret = new byte[32];
+    secureRandom.nextBytes(sharedSecret);
 
-        return sharedSecret;
+    return sharedSecret;
+  }
+
+  @Override
+  public void addSession(SessionIdentifier sessionIdentifier) {
+    securityContext.addSession(sessionIdentifier);
+  }
+
+  @Override
+  public void removeToken(String token) {
+    securityContext.removeSession(token);
+  }
+
+  @Override
+  public void validateToken(String token) throws TokenException {
+    try {
+      if (securityContext.hasToken(token)) {
+        securityContext.verifySignature(token);
+      } else {
+        throw new TokenException(new DataNotFoundException());
+      }
+    } catch (ParseException | JOSEException e) {
+      throw new TokenException(e);
     }
+  }
 
-    @Override
-    public void addSession(SessionIdentifier sessionIdentifier) {
-        securityContext.addSession(sessionIdentifier);
+  @Override
+  public SessionIdentifier getSession(String token) {
+    try {
+      return securityContext.getSession(token);
+    } catch (NoSuchElementException e) {
+      return null;
     }
-
-    @Override
-    public void removeToken(String token) {
-        securityContext.removeSession(token);
-    }
-
-    @Override
-    public void validateToken(String token) throws TokenException {
-        try {
-            if (securityContext.hasToken(token)) {
-                securityContext.verifySignature(token);
-            } else {
-                throw new TokenException(new DataNotFoundException());
-            }
-        } catch (ParseException | JOSEException e) {
-            throw new TokenException(e);
-        }
-    }
-
-    @Override
-    public SessionIdentifier getSession(String token){
-        try{
-            return securityContext.getSession(token);
-        }catch (NoSuchElementException e){
-            return null;
-        }
-    }
+  }
 }

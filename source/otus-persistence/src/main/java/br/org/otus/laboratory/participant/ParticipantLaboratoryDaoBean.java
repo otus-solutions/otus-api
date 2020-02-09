@@ -59,7 +59,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   public Tube updateTubeCollectionData(long rn, Tube tube) throws DataNotFoundException {
     Document parsedCollectionData = Document.parse(TubeCollectionData.serialize(tube.getTubeCollectionData()));
     UpdateResult updateLabData = collection.updateOne(and(eq(RECRUITMENT_NUMBER, rn), eq("tubes.code", tube.getCode())), set("tubes.$.tubeCollectionData", parsedCollectionData),
-        new UpdateOptions().upsert(false));
+      new UpdateOptions().upsert(false));
 
     if (updateLabData.getMatchedCount() == 0) {
       throw new DataNotFoundException(new Throwable("Laboratory of Participant recruitment number: " + rn + " does not exists."));
@@ -70,7 +70,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
   public ParticipantLaboratory findParticipantLaboratory(String aliquotCode) throws DataNotFoundException {
     Document first = collection
-        .aggregate(Arrays.asList(Aggregates.lookup(COLLECTION_ALIQUOT, TUBES_ALIQUOTS_CODE, TUBES_ALIQUOTS_CODE, COLLECTION_ALIQUOT), Aggregates.match(eq(TUBES_ALIQUOTS_CODE, aliquotCode)))).first();
+      .aggregate(Arrays.asList(Aggregates.lookup(COLLECTION_ALIQUOT, TUBES_ALIQUOTS_CODE, TUBES_ALIQUOTS_CODE, COLLECTION_ALIQUOT), Aggregates.match(eq(TUBES_ALIQUOTS_CODE, aliquotCode)))).first();
     if (first == null) {
       throw new DataNotFoundException();
     }

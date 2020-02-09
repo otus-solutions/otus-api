@@ -18,14 +18,14 @@ class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionSer
   public List<ActivityAccessPermission> list() {
     return activityAccessPermissionDao.find();
   }
-  
+
   @Override
   public void create(ActivityAccessPermission activityAccessPermission) {
-    activityAccessPermissionDao.persist(activityAccessPermission);    
+    activityAccessPermissionDao.persist(activityAccessPermission);
   }
 
   @Override
   public void update(ActivityAccessPermission activityAccessPermission) {
-    activityAccessPermissionDao.update(activityAccessPermission);   
+    activityAccessPermissionDao.update(activityAccessPermission);
   }
 }

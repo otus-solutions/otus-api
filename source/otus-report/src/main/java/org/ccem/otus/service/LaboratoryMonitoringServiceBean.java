@@ -16,25 +16,25 @@ import java.util.List;
 @Stateless
 public class LaboratoryMonitoringServiceBean implements LaboratoryMonitoringService {
 
-    @Inject
-    private ExamFlagReportDao examFlagReportDao;
-    @Inject
-    private ExamInapplicabilityDao examInapplicabilityDao;
+  @Inject
+  private ExamFlagReportDao examFlagReportDao;
+  @Inject
+  private ExamInapplicabilityDao examInapplicabilityDao;
 
-    @Override
-    public ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException {
-        List<Document> examInapplicabilities = new ArrayList();
-        MongoCursor<Document> inapplicabilitiesCursor = examInapplicabilityDao.list().iterator();
-        while (inapplicabilitiesCursor.hasNext()){
-            examInapplicabilities.add(inapplicabilitiesCursor.next());
-        }
-        Document flagReportDocument = examFlagReportDao.getExamProgressReport(possibleExams, centerRns, examInapplicabilities);
-        return getProgressReport(possibleExams, flagReportDocument);
+  @Override
+  public ProgressReport getExamFlagReport(LinkedList<String> possibleExams, ArrayList<Long> centerRns) throws DataNotFoundException {
+    List<Document> examInapplicabilities = new ArrayList();
+    MongoCursor<Document> inapplicabilitiesCursor = examInapplicabilityDao.list().iterator();
+    while (inapplicabilitiesCursor.hasNext()) {
+      examInapplicabilities.add(inapplicabilitiesCursor.next());
     }
+    Document flagReportDocument = examFlagReportDao.getExamProgressReport(possibleExams, centerRns, examInapplicabilities);
+    return getProgressReport(possibleExams, flagReportDocument);
+  }
 
-    private ProgressReport getProgressReport(LinkedList<String> headers, Document flagReportDocument) {
-        ProgressReport progressReport = ProgressReport.deserialize(flagReportDocument.toJson());
-        progressReport.setColumns(headers);
-        return progressReport;
-    }
+  private ProgressReport getProgressReport(LinkedList<String> headers, Document flagReportDocument) {
+    ProgressReport progressReport = ProgressReport.deserialize(flagReportDocument.toJson());
+    progressReport.setColumns(headers);
+    return progressReport;
+  }
 }

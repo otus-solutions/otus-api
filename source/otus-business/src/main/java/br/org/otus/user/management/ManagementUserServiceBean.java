@@ -44,7 +44,7 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
   @Override
   public void enable(ManagementUserDto managementUserDto)
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
       user.enable();
@@ -62,7 +62,7 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
   @Override
   public void disable(ManagementUserDto managementUserDto)
-      throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
 
@@ -105,7 +105,7 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
   @Override
   public void updateExtractionIps(ManagementUserDto managementUserDto)
-      throws ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
       user.setExtractionIps(managementUserDto.extractionIps);
@@ -156,9 +156,9 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
   @Override
   public void requestPasswordReset(PasswordResetRequestDto requestData)
-      throws EncryptedException, DataNotFoundException, EmailNotificationException {
+    throws EncryptedException, DataNotFoundException, EmailNotificationException {
     PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(),
-        requestData.getRedirectUrl());
+      requestData.getRedirectUrl());
     passwordResetEmail.defineRecipient(requestData.getEmail());
     passwordResetEmail.setFrom(emailNotifierService.getSender());
     emailNotifierService.sendEmail(passwordResetEmail);

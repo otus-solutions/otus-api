@@ -56,7 +56,7 @@ public class ConfigurationDaoBeanTest {
   public void GetProjectConfigurationMethod_should_return_deserialize_projectConfiguration() throws Exception {
     when(collection.find(Mockito.any(Document.class))).thenReturn(findleInterable);
     when(findleInterable.first()).thenReturn(first);
-    
+
     assertTrue(ProjectConfiguration.class.isInstance(ProjectConfigurationDaoBean.getProjectConfiguration()));
   }
 

@@ -18,7 +18,7 @@ public class AliquotServiceBean implements AliquotService {
   private AliquotDao aliquotDao;
 
   @Override
-  public List<Aliquot> getAliquots(){
+  public List<Aliquot> getAliquots() {
     return aliquotDao.getAliquots();
   }
 
@@ -30,7 +30,7 @@ public class AliquotServiceBean implements AliquotService {
   @Override
   public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException, ValidationException {
     Aliquot aliquot = aliquotDao.getAliquot(transportationAliquotFiltersDTO);
-    if(aliquot.getTransportationLotId() != null)
+    if (aliquot.getTransportationLotId() != null)
       throw new ValidationException(new Throwable("There are aliquots in another lot."), transportationAliquotFiltersDTO.getCode());
     return aliquot;
   }
@@ -44,9 +44,9 @@ public class AliquotServiceBean implements AliquotService {
   public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException {
     return aliquotDao.getAliquotsByPeriod(transportationAliquotFiltersDTO);
   }
-  
+
   @Override
-  public boolean exists (String code) {
+  public boolean exists(String code) {
     return aliquotDao.exists(code);
   }
 

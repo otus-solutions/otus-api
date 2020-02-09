@@ -27,7 +27,7 @@ public class ProjectConfigurationResourceTest {
   public void getProjectConfigurationMethod_should_return_configurationResponse() {
     result = ProjectConfiguration.deserialize(CONFIGURATION_JSON);
     PowerMockito.when(projectConfigurationFacade.getProjectConfiguration()).thenReturn(result);
-   assertTrue(projectConfigurationResource.getProjectConfiguration().contains("Project Configuration"));
+    assertTrue(projectConfigurationResource.getProjectConfiguration().contains("Project Configuration"));
   }
 
   @Test

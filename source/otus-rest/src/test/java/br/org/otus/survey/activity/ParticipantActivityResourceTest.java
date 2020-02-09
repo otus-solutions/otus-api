@@ -11,7 +11,6 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
-import org.ccem.otus.model.survey.activity.variables.StaticVariableRequest;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.*;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AuthorizationHeaderReader.class)
 
-public class ActivityResourceTest {
+public class ParticipantActivityResourceTest {
   private static final long RECRUIMENT_NUMBER = 3051442;
   private static final String ID_SURVEY_ACITIVITY = "591a40807b65e4045b9011e7";
   private static final String ID_ACITIVITY = "5c41c6b316da48006573a169";
@@ -48,7 +47,7 @@ public class ActivityResourceTest {
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
 
   @InjectMocks
-  private ActivityResource activityResource;
+  private ParticipantActivityResource participantActivityResource;
   @Mock
   private SurveyActivity surveyActivity;
   @Mock
@@ -95,14 +94,14 @@ public class ActivityResourceTest {
     when(authenticationData.getUserEmail()).thenReturn(userEmail);
     when(activityFacade.list(RECRUIMENT_NUMBER, userEmail)).thenReturn(listSurveyActivity);
     String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
-    assertEquals(listSurveyActivityExpected, activityResource.getAll(request, RECRUIMENT_NUMBER));
+    assertEquals(listSurveyActivityExpected, participantActivityResource.getAll(request, RECRUIMENT_NUMBER));
   }
 
   @Test
   public void method_createActivity_should_return_ObjectResponse() {
     when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
     when(activityFacade.create(activityDeserialize)).thenReturn(ID_SURVEY_ACITIVITY);
-    assertEquals(ACTIVITY_EXPECTED, activityResource.createActivity(RECRUIMENT_NUMBER, jsonActivity));
+    assertEquals(ACTIVITY_EXPECTED, participantActivityResource.createActivity(RECRUIMENT_NUMBER, jsonActivity));
     verify(participantFacade).getByRecruitmentNumber(anyLong());
     verify(activityFacade).deserialize(anyString());
     verify(activityFacade).create(anyObject());
@@ -114,7 +113,7 @@ public class ActivityResourceTest {
     when(activityFacade.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
     when(activityService.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
     String responseExpected = new Response().buildSuccess(activityFacade.getByID(ID_SURVEY_ACITIVITY)).toSurveyJson();
-    assertEquals(responseExpected, activityResource.getByID(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY));
+    assertEquals(responseExpected, participantActivityResource.getByID(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY));
   }
 
   @Test
@@ -124,14 +123,14 @@ public class ActivityResourceTest {
     SurveyActivity deserializeActivityUpdate = activityFacade.updateActivity(activityFacade.deserialize(jsonActivity));
     SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate);
     String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
-    assertEquals(responseExpected, activityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
+    assertEquals(responseExpected, participantActivityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
     verify(participantFacade).getByRecruitmentNumber(anyLong());
   }
 
   @Test
   public void updateCheckerActivityMethod_should_return_responseBooleanData() {
     when(activityFacade.updateCheckerActivity(checkerUpdated)).thenReturn(Boolean.TRUE);
-    assertEquals(ACTIVITY_EXPECTED_BOOLEAN, activityResource.updateCheckerActivity(RECRUIMENT_NUMBER, checkerUpdated));
+    assertEquals(ACTIVITY_EXPECTED_BOOLEAN, participantActivityResource.updateCheckerActivity(RECRUIMENT_NUMBER, checkerUpdated));
   }
 
   @Test
@@ -143,14 +142,14 @@ public class ActivityResourceTest {
     when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
     when(authenticationData.getUserEmail()).thenReturn(userEmail);
     activityRevisionFacade.create(ACTIVITY_REVISION_JSON, userEmail);
-    assertEquals(ACTIVITY_REVISION_EXPECTED, activityResource.createActivityRevision(request,ACTIVITY_REVISION_JSON));
-    verify(activityRevisionFacade,times (2)).create(ACTIVITY_REVISION_JSON, userEmail);
+    assertEquals(ACTIVITY_REVISION_EXPECTED, participantActivityResource.createActivityRevision(request, ACTIVITY_REVISION_JSON));
+    verify(activityRevisionFacade, times(2)).create(ACTIVITY_REVISION_JSON, userEmail);
   }
 
   @Test
-  public void method_list_should_return_entire_getActivityRevisions_by_recruitment_number(){
+  public void method_list_should_return_entire_getActivityRevisions_by_recruitment_number() {
     when(activityRevisionFacade.getActivityRevisions(ID_ACITIVITY)).thenReturn(listActivityRevision);
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
-    assertEquals(listSurveyActivityExpected, activityResource.getActivityRevisions(request,ID_ACITIVITY));
+    assertEquals(listSurveyActivityExpected, participantActivityResource.getActivityRevisions(request, ID_ACITIVITY));
   }
 }

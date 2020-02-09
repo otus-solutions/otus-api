@@ -12,56 +12,55 @@ import java.util.List;
 @Stateless
 public class ActivityCategoryServiceBean implements ActivityCategoryService {
 
-    @Inject
-    ActivityConfigurationDao activityConfigurationDao;
+  @Inject
+  ActivityConfigurationDao activityConfigurationDao;
 
-    @Inject
-    ActivityDao activityDao;
+  @Inject
+  ActivityDao activityDao;
 
-    @Override
-    public List<ActivityCategory> list() {
-        return activityConfigurationDao.findNonDeleted();
+  @Override
+  public List<ActivityCategory> list() {
+    return activityConfigurationDao.findNonDeleted();
+  }
+
+  @Override
+  public ActivityCategory getByName(String name) throws DataNotFoundException {
+    return activityConfigurationDao.findByName(name);
+  }
+
+  @Override
+  public ActivityCategory create(ActivityCategory activityCategory) {
+    ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory();
+
+    if (lastInsertedCategory != null) activityCategory.setName(lastInsertedCategory.getName());
+    else {
+      activityCategory.setName();
+      activityCategory.setDefault(true);
     }
 
-    @Override
-    public ActivityCategory getByName(String name) throws DataNotFoundException {
-        return activityConfigurationDao.findByName(name);
+    return activityConfigurationDao.create(activityCategory);
+  }
+
+  @Override
+  public void delete(String name) throws DataNotFoundException {
+    if (activityDao.findByCategory(name).size() != 0) {
+      activityConfigurationDao.disable(name);
+    } else {
+      activityConfigurationDao.delete(name);
     }
 
-    @Override
-    public ActivityCategory create(ActivityCategory activityCategory) {
-        ActivityCategory lastInsertedCategory = activityConfigurationDao.getLastInsertedCategory();
+  }
 
-        if (lastInsertedCategory != null) activityCategory.setName(lastInsertedCategory.getName());
-        else {
-            activityCategory.setName();
-            activityCategory.setDefault(true);
-        }
+  @Override
+  public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
+    ActivityCategory update = activityConfigurationDao.update(activityCategory);
+    activityDao.updateCategory(activityCategory);
 
-        return activityConfigurationDao.create(activityCategory);
-    }
+    return update;
+  }
 
-    @Override
-    public void delete(String name) throws DataNotFoundException {
-        if (activityDao.findByCategory(name).size() != 0){
-            activityConfigurationDao.disable(name);
-        }
-        else {
-            activityConfigurationDao.delete(name);
-        }
-
-    }
-
-    @Override
-    public ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException {
-        ActivityCategory update = activityConfigurationDao.update(activityCategory);
-        activityDao.updateCategory(activityCategory);
-
-        return update;
-    }
-
-    @Override
-    public void setDefaultCategory(String name) throws DataNotFoundException {
-        activityConfigurationDao.setNewDefault(name);
-    }
+  @Override
+  public void setDefaultCategory(String name) throws DataNotFoundException {
+    activityConfigurationDao.setNewDefault(name);
+  }
 }

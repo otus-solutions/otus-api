@@ -11,15 +11,15 @@ import java.util.List;
 
 public interface SurveyGroupService {
 
-    List<SurveyGroup> getListOfSurveyGroups();
+  List<SurveyGroup> getListOfSurveyGroups();
 
-    ObjectId addNewSurveyGroup(String surveyGroup) throws ValidationException;
+  ObjectId addNewSurveyGroup(String surveyGroup) throws ValidationException;
 
-    String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) throws ValidationException, DataNotFoundException;
+  String updateSurveyGroupName(SurveyGroupNameDto surveyGroupNameDto) throws ValidationException, DataNotFoundException;
 
-    String updateSurveyGroupAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
+  String updateSurveyGroupAcronyms(String surveyGroupJson) throws DataNotFoundException, ValidationException;
 
-    void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) throws DataNotFoundException;
+  void deleteSurveyGroup(SurveyGroupNameDto surveyGroupNameDto) throws DataNotFoundException;
 
-    List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
+  List<SurveyGroup> getSurveyGroupsByUser(String userEmail);
 }

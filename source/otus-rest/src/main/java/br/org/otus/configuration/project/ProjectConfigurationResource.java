@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import br.org.otus.project.configuration.api.ProjectConfigurationFacade;
 import br.org.otus.rest.Response;
-import br.org.otus.security.Secured;
+import br.org.otus.security.user.Secured;
 
 @Path("/configuration/project")
 public class ProjectConfigurationResource {

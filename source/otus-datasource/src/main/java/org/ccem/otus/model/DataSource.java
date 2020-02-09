@@ -10,54 +10,54 @@ import java.util.Set;
 
 public class DataSource {
 
-	private String id;
-	private String name;
-	private JsonArray data;
+  private String id;
+  private String name;
+  private JsonArray data;
 
-	public DataSource(String id, String name, JsonArray data) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.data = data;
-	}
+  public DataSource(String id, String name, JsonArray data) {
+    super();
+    this.id = id;
+    this.name = name;
+    this.data = data;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public JsonArray getData() {
-		return data;
-	}
+  public JsonArray getData() {
+    return data;
+  }
 
-	public void setData(JsonArray data) {
-		this.data = data;
-	}
+  public void setData(JsonArray data) {
+    this.data = data;
+  }
 
-	public Set<DataSourceElement> getDataAsSet() {
-		Type type = new TypeToken<Set<DataSourceElement>>() {
-		}.getType();
+  public Set<DataSourceElement> getDataAsSet() {
+    Type type = new TypeToken<Set<DataSourceElement>>() {
+    }.getType();
 
-		Set<DataSourceElement> dataSourceElements = new Gson().fromJson(data, type);
+    Set<DataSourceElement> dataSourceElements = new Gson().fromJson(data, type);
 
-		return dataSourceElements;
-	}
+    return dataSourceElements;
+  }
 
-	public static DataSource deserialize(String dataSource) {
-		return getGsonBuilder().create().fromJson(dataSource, DataSource.class);
-	}
+  public static DataSource deserialize(String dataSource) {
+    return getGsonBuilder().create().fromJson(dataSource, DataSource.class);
+  }
 
-	public static String serialize(DataSource dataSource) {
-		return getGsonBuilder().create().toJson(dataSource);
-	}
+  public static String serialize(DataSource dataSource) {
+    return getGsonBuilder().create().toJson(dataSource);
+  }
 
-	public static GsonBuilder getGsonBuilder() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.disableHtmlEscaping();
-		return builder;
-	}
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.disableHtmlEscaping();
+    return builder;
+  }
 
 }

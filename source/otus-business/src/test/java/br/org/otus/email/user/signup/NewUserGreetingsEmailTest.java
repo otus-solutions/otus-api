@@ -13,16 +13,16 @@ import br.org.owail.sender.email.Recipient;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NewUserGreetingsEmailTest {
-	private static final String EMAIL = "otus@otus.com";
-	@Mock
-	private Recipient recipient;
-	private NewUserGreetingsEmail newUserGreetingsEmail;
+  private static final String EMAIL = "otus@otus.com";
+  @Mock
+  private Recipient recipient;
+  private NewUserGreetingsEmail newUserGreetingsEmail;
 
-	@Test
-	public void method_defineRecipient_should_evocate_addTORecipientMethod() {
-		newUserGreetingsEmail = spy(new NewUserGreetingsEmail(recipient));
-		newUserGreetingsEmail.defineRecipient(EMAIL);
-		verify(newUserGreetingsEmail).addTORecipient("recipient", EMAIL);
-	}
+  @Test
+  public void method_defineRecipient_should_evocate_addTORecipientMethod() {
+    newUserGreetingsEmail = spy(new NewUserGreetingsEmail(recipient));
+    newUserGreetingsEmail.defineRecipient(EMAIL);
+    verify(newUserGreetingsEmail).addTORecipient("recipient", EMAIL);
+  }
 
 }

@@ -2,35 +2,35 @@ package org.ccem.otus.model.survey.activity.filling.answer;
 
 public class FileAnswer {
 
-	private String objectType;
-	private String name;
-	private long size;
-	private String type;
-	private String sentDate;
-	private String oid;
+  private String objectType;
+  private String name;
+  private long size;
+  private String type;
+  private String sentDate;
+  private String oid;
 
-	public String getObjectType() {
-		return objectType;
-	}
+  public String getObjectType() {
+    return objectType;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public long getSize() {
-		return size;
-	}
+  public long getSize() {
+    return size;
+  }
 
-	public String getSentDate() {
-		return sentDate;
-	}
+  public String getSentDate() {
+    return sentDate;
+  }
 
-	public String getOid() {
-		return oid;
-	}
+  public String getOid() {
+    return oid;
+  }
 
-	public String getType() {
-		return type;
-	}
+  public String getType() {
+    return type;
+  }
 
 }

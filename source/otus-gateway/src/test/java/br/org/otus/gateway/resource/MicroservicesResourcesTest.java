@@ -13,7 +13,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import br.org.otus.gateway.MicroservicesEnvironments;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ MicroservicesResources.class })
+@PrepareForTest({MicroservicesResources.class})
 public class MicroservicesResourcesTest {
   private static final String HOST = "http://localhost:";
   private static final String PORT = "8081";

@@ -6,5 +6,5 @@ import org.ccem.otus.survey.form.SurveyForm;
 
 public interface SurveyValidatorService {
 
-    void validateSurvey(SurveyDao surveyDao, SurveyForm surveyForm) throws AlreadyExistException;
+  void validateSurvey(SurveyDao surveyDao, SurveyForm surveyForm) throws AlreadyExistException;
 }

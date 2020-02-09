@@ -18,7 +18,7 @@ public class PasswordResetRequestDtoTest {
   private PasswordResetRequestDto passwordResetRequestDto;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     passwordResetRequestDto = new PasswordResetRequestDto();
     passwordResetRequestDto.setToken(TOKEN);
     passwordResetRequestDto.setUserEmail(EMAIL);
@@ -26,12 +26,12 @@ public class PasswordResetRequestDtoTest {
   }
 
   @Test
-  public void isValid_should_return_positive_when_exist_email_field(){
+  public void isValid_should_return_positive_when_exist_email_field() {
     assertTrue(passwordResetRequestDto.isValid());
   }
 
   @Test
-  public void isValid_should_return_negative_when_not_exist_email_field(){
+  public void isValid_should_return_negative_when_not_exist_email_field() {
     passwordResetRequestDto.setUserEmail(null);
     assertFalse(passwordResetRequestDto.isValid());
   }
@@ -44,28 +44,28 @@ public class PasswordResetRequestDtoTest {
   }
 
   @Test
-  public void should_return_GsonBuilder(){
+  public void should_return_GsonBuilder() {
     assertNotNull(PasswordResetRequestDto.getGsonBuilder());
   }
 
   @Test
-  public void should_return_token(){
+  public void should_return_token() {
     assertEquals(TOKEN, passwordResetRequestDto.getToken());
   }
 
   @Test
-  public void should_return_url(){
+  public void should_return_url() {
     assertEquals(URL, passwordResetRequestDto.getRedirectUrl());
   }
 
   @Test
-  public void should_build_correct_instance_object(){
+  public void should_build_correct_instance_object() {
     String passwordResetRequestDtoToCompareJson = new Gson().toJson(passwordResetRequestDto);
     assertEquals(passwordResetRequestDto, PasswordResetRequestDto.deserialize(passwordResetRequestDtoToCompareJson));
   }
 
   @Test
-  public void should_correct_compare_instances(){
+  public void should_correct_compare_instances() {
     PasswordResetRequestDto passwordResetRequestDtoToCompare = new PasswordResetRequestDto();
     passwordResetRequestDtoToCompare.setUserEmail(EMAIL);
     passwordResetRequestDtoToCompare.setRedirectUrl(URL);
