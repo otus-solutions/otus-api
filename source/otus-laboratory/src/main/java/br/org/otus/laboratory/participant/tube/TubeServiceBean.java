@@ -44,7 +44,7 @@ public class TubeServiceBean implements TubeService {
   }
 
   private void reorderTubes(List<Tube> tubes, TubeSeed tubeSeed) {
-    String orderName = tubeSeed.getParticipantCollectGroupName();
+    String orderName = tubeSeed.getCollectGroupName();
     List<LabelReference> order = laboratoryConfigurationService.getLabelOrderByName(orderName);
     order.forEach(mergeReferenceOrderWithTube(tubes));
     Collections.sort(tubes);
