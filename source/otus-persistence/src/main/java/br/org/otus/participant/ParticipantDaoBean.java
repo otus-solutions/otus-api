@@ -1,13 +1,8 @@
 package br.org.otus.participant;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
+import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -18,16 +13,19 @@ import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import br.org.mongodb.MongoGenericDao;
+import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantDaoBean extends MongoGenericDao<Document> implements ParticipantDao {
 
   private static final String COLLECTION_NAME = "participant";
   private static final String TOKEN_LIST_FIELD = "tokenList";
   private static final String EMAIL = "email";
+  private static final String RN = "recruitmentNumber";
   private static final String PUSH = "$push";
   private static final String PULL = "$pull";
   private static final String SET = "$set";
@@ -44,6 +42,12 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   public void persist(Participant participant) {
     Document parsed = Document.parse(Participant.serialize(participant));
     this.collection.insertOne(parsed);
+  }
+
+  @Override
+  public void update(Participant participant) {
+    Document parsed = Document.parse(Participant.serialize(participant));
+    this.collection.updateOne(new Document(RN, participant.getRecruitmentNumber()), new Document(SET, parsed));
   }
 
   @Override

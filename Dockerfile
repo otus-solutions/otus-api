@@ -33,6 +33,8 @@ ENV OUTCOMES_PORT "8080"
 ENV DCM_HOST "dcm-service"
 ENV DCM_PORT "8080"
 
+ENV DEBUG_MODE "false"
+ENV JVM_MEMORY "3G"
 USER root
 
 ADD server/api/standalone-custom.xml /opt/jboss/wildfly/standalone/configuration/

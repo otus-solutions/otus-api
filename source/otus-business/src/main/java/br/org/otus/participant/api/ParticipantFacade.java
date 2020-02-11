@@ -1,12 +1,9 @@
 package br.org.otus.participant.api;
 
 import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.builders.Security;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
-import br.org.otus.response.info.UnexpectedError;
 import br.org.otus.response.info.Validation;
-import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.services.SecurityService;
 import br.org.otus.user.dto.PasswordResetDto;
 import org.bson.types.ObjectId;
@@ -65,6 +62,17 @@ public class ParticipantFacade {
       Participant participant = Participant.deserialize(participantJson);
       insertedParticipant = participantService.create(participant);
       return insertedParticipant;
+    } catch (ValidationException | DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public Participant update(String participantJson) {
+    Participant updatedParticipant = null;
+    try {
+      Participant participant = Participant.deserialize(participantJson);
+      updatedParticipant = participantService.update(participant);
+      return updatedParticipant;
     } catch (ValidationException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

@@ -73,6 +73,18 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
+  public Participant update(Participant participant) throws ValidationException, DataNotFoundException {
+      recruitmentNumberService.validate(participant.getFieldCenter(), participant.getRecruitmentNumber());
+      if (participantDao.exists(participant.getRecruitmentNumber())) {
+        participantDao.update(participant);
+      } else {
+        String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} not exists.";
+        throw new ValidationException(new Throwable(error));
+      }
+      return participant;
+  }
+
+  @Override
   public List<Participant> list(FieldCenter fieldCenter) {
     if (fieldCenter == null) {
       return participantDao.find();
