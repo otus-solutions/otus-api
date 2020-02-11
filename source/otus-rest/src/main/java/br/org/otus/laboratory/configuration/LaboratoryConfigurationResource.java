@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,8 +11,11 @@ import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 @Path("/laboratory-configuration")
 public class LaboratoryConfigurationResource {
@@ -34,6 +38,19 @@ public class LaboratoryConfigurationResource {
     LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
     LaboratoryConfigurationDTO laboratoryConfigurationDTO = new LaboratoryConfigurationDTO(laboratoryConfiguration);
     return new Response().buildSuccess(laboratoryConfigurationDTO).toJson();
+  }
+
+  @GET
+  @Path("/group-descriptors")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getGroupDescriptorNames() {
+    ArrayList<String> collectGroupDescriptorsName = null;
+    try {
+      collectGroupDescriptorsName = laboratoryConfigurationService.getGroupDescriptorNames();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
+    return new Response().buildSuccess(collectGroupDescriptorsName).toJson();
   }
 
   @GET

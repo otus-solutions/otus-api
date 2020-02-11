@@ -39,4 +39,5 @@ public interface LaboratoryConfigurationDao {
 
   AggregateIterable<Document> aggregate(List<Bson> query);
 
+  ArrayList<String> getGroupDescriptorNames() throws DataNotFoundException;
 }

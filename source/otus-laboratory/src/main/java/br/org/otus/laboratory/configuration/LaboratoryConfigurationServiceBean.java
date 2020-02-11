@@ -104,4 +104,8 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
     return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
   }
 
+  @Override
+  public ArrayList<String> getGroupDescriptorNames() throws DataNotFoundException {
+    return laboratoryConfigurationDao.getGroupDescriptorNames();
+  }
 }
