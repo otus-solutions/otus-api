@@ -1,15 +1,12 @@
-package unattached;
+package br.org.otus.laboratory.unattached.model;
 
-
-import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
-import br.org.otus.laboratory.participant.exam.Exam;
 import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.unattached.enums.UnattachedLaboratoryActions;
 import com.google.gson.GsonBuilder;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.utils.LongAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,13 +18,25 @@ public class UnattachedLaboratory{
   private String fieldCenterAcronym;
   private List<Tube> tubes;
   private Integer identification;
+  private ArrayList<UserAction> actionHistory;
+  private Boolean availableToAttache;
 
   public UnattachedLaboratory(Integer unattachedLaboratoryLastInsertion, String fieldCenterAcronym, String collectGroupName, List<Tube> tubes) {
     this.objectType = "UnattachedLaboratory";
+    this.availableToAttache = true;
+    this.actionHistory = new ArrayList<>();
     this.fieldCenterAcronym = fieldCenterAcronym;
     this.collectGroupName = collectGroupName;
     this.tubes = tubes;
     this.identification = unattachedLaboratoryLastInsertion;
+  }
+
+  public void addUserHistory(String userEmail, UnattachedLaboratoryActions action) {
+    this.actionHistory.add(new UserAction(action, userEmail));
+  }
+
+  public void disable() {
+    this.availableToAttache = false;
   }
 
   public String getObjectType() {
@@ -40,15 +49,6 @@ public class UnattachedLaboratory{
 
   public List<Tube> getTubes() {
     return tubes;
-  }
-
-  public List<SimpleAliquot> getAliquotsList() {
-    ArrayList<SimpleAliquot> aliquotsList = new ArrayList<SimpleAliquot>();
-    for (Tube tube : tubes) {
-      aliquotsList.addAll(tube.getAliquots());
-    }
-
-    return aliquotsList;
   }
 
   public static String serialize(UnattachedLaboratory laboratory) {
@@ -65,7 +65,7 @@ public class UnattachedLaboratory{
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-    builder.serializeNulls();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
 
     return builder;
   }
