@@ -50,7 +50,9 @@ public class ParticipantResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String create(@Context HttpServletRequest request, String participantJson) {
-    return new Response().buildSuccess(participantFacade.create(participantJson)).toJson(Participant.getGsonBuilder());
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    return new Response().buildSuccess(participantFacade.create(participantJson, userEmail)).toJson(Participant.getGsonBuilder());
   }
 
   @POST

@@ -114,9 +114,9 @@ public class ParticipantResourceTest {
 
   @Test
   public void method_create_should_returns_ParticipantInstance() throws Exception {
-    when(participantFacade.create(PARTICIPANT)).thenReturn(participant);
+    when(participantFacade.create(PARTICIPANT, USER_MAIL)).thenReturn(participant);
     assertTrue(participantResource.create(request, PARTICIPANT) instanceof String);
-    verify(participantFacade, times(1)).create(PARTICIPANT);
+    verify(participantFacade, times(1)).create(PARTICIPANT, USER_MAIL);
   }
 
   @Test

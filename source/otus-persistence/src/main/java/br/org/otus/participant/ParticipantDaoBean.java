@@ -15,6 +15,7 @@ import org.ccem.otus.persistence.FieldCenterDao;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public void persist(Participant participant) {
     Document parsed = Document.parse(Participant.serialize(participant));
+    parsed.append("created", new Date());
     this.collection.insertOne(parsed);
   }
 

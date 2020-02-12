@@ -49,7 +49,6 @@ public class ParticipantServiceBean implements ParticipantService {
     participantDao.registerPassword(email, password);
   }
 
-
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {
     if (projectConfigurationService.isRnProvided()) {

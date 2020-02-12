@@ -56,10 +56,11 @@ public class ParticipantFacade {
     }
   }
 
-  public Participant create(String participantJson) {
+  public Participant create(String participantJson, String userEmail) {
     Participant insertedParticipant = null;
     try {
       Participant participant = Participant.deserialize(participantJson);
+      participant.setRegisteredBy(userEmail);
       insertedParticipant = participantService.create(participant);
       return insertedParticipant;
     } catch (ValidationException | DataNotFoundException e) {
