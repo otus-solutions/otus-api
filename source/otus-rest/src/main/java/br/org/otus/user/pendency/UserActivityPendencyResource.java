@@ -64,7 +64,7 @@ public class UserActivityPendencyResource {
 
   @GET
   @Secured
-  @Path("/list") //TODO eh assim?
+  @Path("/list")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String listAllPendencies(String searchSettingsJson) {
