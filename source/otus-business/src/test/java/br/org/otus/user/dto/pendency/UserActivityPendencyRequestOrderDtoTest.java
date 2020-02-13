@@ -1,5 +1,6 @@
 package br.org.otus.user.dto.pendency;
 
+import br.org.otus.persistence.pendency.UserActivityPendencyRequestOrderDto;
 import org.junit.Before;
 import org.junit.Test;
 

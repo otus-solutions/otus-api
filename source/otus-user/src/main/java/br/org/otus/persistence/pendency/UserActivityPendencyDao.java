@@ -1,7 +1,6 @@
 package br.org.otus.persistence.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
-import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -18,6 +17,8 @@ public interface UserActivityPendencyDao {
   void delete(ObjectId oid) throws DataNotFoundException;
 
   UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException;
+
+  List<UserActivityPendencyResponse> getAllPendencies(UserActivityPendencyDto receiverUserEmail) throws DataNotFoundException, MemoryExcededException;
 
   List<UserActivityPendencyResponse> findAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException;
 

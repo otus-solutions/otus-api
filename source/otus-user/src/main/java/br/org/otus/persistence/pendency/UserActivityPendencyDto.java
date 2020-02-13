@@ -1,4 +1,4 @@
-package br.org.otus.user.dto.pendency;
+package br.org.otus.persistence.pendency;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
