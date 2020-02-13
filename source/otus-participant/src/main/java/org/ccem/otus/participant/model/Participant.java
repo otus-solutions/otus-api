@@ -30,7 +30,6 @@ public class Participant {
   private String password;
   @Equalization(name = "tokenList")
   private ArrayList<String> tokenList;
-  @Equalization(name = "registeredBy")
   private String registeredBy;
 
   public Participant(Long recruitmentNumber) {
