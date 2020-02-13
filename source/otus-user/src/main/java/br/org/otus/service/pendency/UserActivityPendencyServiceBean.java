@@ -3,6 +3,7 @@ package br.org.otus.service.pendency;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import br.org.otus.persistence.pendency.UserActivityPendencyDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -40,6 +41,11 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   @Override
   public UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException {
     return userActivityPendencyDao.findByActivityOID(new ObjectId(activityId));
+  }
+
+  @Override
+  public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException {
+    return userActivityPendencyDao.getAllPendencies(UserActivityPendencyDto.deserialize(searchSettingsJson));
   }
 
   @Override

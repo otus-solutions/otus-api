@@ -18,7 +18,7 @@ public interface UserActivityPendencyDao {
 
   UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException;
 
-  List<UserActivityPendencyResponse> getAllPendencies(UserActivityPendencyDto receiverUserEmail) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> getAllPendencies(UserActivityPendencyDto userActivityPendencyDto) throws DataNotFoundException, MemoryExcededException;
 
   List<UserActivityPendencyResponse> findAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException;
 

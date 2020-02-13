@@ -2,6 +2,7 @@ package br.org.otus.user.pendency;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
+import br.org.otus.persistence.pendency.UserActivityPendencyDto;
 import br.org.otus.user.pendency.builder.UserActivityPendencyQueryBuilder;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
@@ -69,6 +70,11 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
       throw new DataNotFoundException("No user activity pendency found for activityOID { " + activityOID + " }.");
     }
     return UserActivityPendency.deserialize(result.toJson());
+  }
+
+  @Override
+  public List<UserActivityPendencyResponse> getAllPendencies(UserActivityPendencyDto userActivityPendencyDto) throws DataNotFoundException, MemoryExcededException {
+    return new ArrayList<>();//TODO
   }
 
   @Override

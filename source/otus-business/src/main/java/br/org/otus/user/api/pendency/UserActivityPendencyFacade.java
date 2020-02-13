@@ -53,6 +53,14 @@ public class UserActivityPendencyFacade {
     }
   }
 
+  public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) {
+    try {
+      return userActivityPendencyService.listAllPendencies(searchSettingsJson);
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
   public List<UserActivityPendencyResponse> listAllPendenciesToReceiver(String receiverUserEmail) {
     try {
       return userActivityPendencyService.listAllPendenciesToReceiver(receiverUserEmail);
