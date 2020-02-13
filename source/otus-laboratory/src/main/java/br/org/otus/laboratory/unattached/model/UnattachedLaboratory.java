@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnattachedLaboratory{
+public class UnattachedLaboratory {
   private String objectType;
   private String collectGroupName;
   private String fieldCenterAcronym;
@@ -37,10 +37,15 @@ public class UnattachedLaboratory{
 
   public void disable() {
     this.availableToAttache = false;
+    this.tubes = null;
   }
 
   public String getObjectType() {
     return objectType;
+  }
+
+  public UserAction getLastHistory() {
+    return this.actionHistory.get(this.actionHistory.size() - 1);
   }
 
   public String getCollectGroupName() {
@@ -68,5 +73,17 @@ public class UnattachedLaboratory{
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
 
     return builder;
+  }
+
+  public String getFieldCenterAcronym() {
+    return fieldCenterAcronym;
+  }
+
+  public Integer getIdentification() {
+    return identification;
+  }
+
+  public Boolean getAvailableToAttache() {
+    return availableToAttache;
   }
 }

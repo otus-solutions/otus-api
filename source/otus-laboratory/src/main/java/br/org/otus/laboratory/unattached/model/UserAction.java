@@ -14,4 +14,16 @@ public class UserAction {
     this.action = action;
     this.userEmail = userEmail;
   }
+
+  public UnattachedLaboratoryActions getAction() {
+    return action;
+  }
+
+  public LocalDateTime getDate() {
+    return date;
+  }
+
+  public String getUserEmail() {
+    return userEmail;
+  }
 }

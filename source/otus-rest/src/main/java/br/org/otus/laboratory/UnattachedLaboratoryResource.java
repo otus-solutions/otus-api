@@ -30,7 +30,7 @@ public class UnattachedLaboratoryResource {
   @Secured
   @Path("/create/{acronym}/{descriptor}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String initialize(@Context HttpServletRequest request, @PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptor") String collectGroupDescriptorName) throws DataNotFoundException {
+  public String initialize(@Context HttpServletRequest request, @PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptor") String collectGroupDescriptorName){
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     User user = userFacade.fetchByEmail(userEmail);
@@ -42,8 +42,20 @@ public class UnattachedLaboratoryResource {
   @Secured
   @Path("/{acronym}/{descriptor}/{page}/{quantity}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getUnattached(@PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptor") String collectGroupDescriptorName, @PathParam("page") int page, @PathParam("quantity") int quantityByPage) throws DataNotFoundException {
+  public String getUnattached(@PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptor") String collectGroupDescriptorName, @PathParam("page") int page, @PathParam("quantity") int quantityByPage){
     ListUnattachedLaboratoryDTO listUnattachedLaboratoryDTO = unattachedLaboratoryFacade.find(fieldCenterAcronym, collectGroupDescriptorName, page, quantityByPage);
     return new Response().buildSuccess(listUnattachedLaboratoryDTO).toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/attache/{laboratoryIdentification}/{recruitmentNumber}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String attache(@Context HttpServletRequest request, @PathParam("laboratoryIdentification") int laboratoryIdentification, @PathParam("recruitmentNumber") Long recruitmentNumber){
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    User user = userFacade.fetchByEmail(userEmail);
+    unattachedLaboratoryFacade.attache(user.getEmail(), laboratoryIdentification, recruitmentNumber);
+    return new Response().buildSuccess().toJson();
   }
 }

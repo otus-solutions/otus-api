@@ -8,4 +8,8 @@ public interface UnattachedLaboratoryDao {
   void persist(UnattachedLaboratory unattachedLaboratory);
 
   ListUnattachedLaboratoryDTO find(String fieldCenterAcronym, String collectGroupDescriptorName, int page, int quantityByPage) throws DataNotFoundException;
+
+  UnattachedLaboratory find(int laboratoryIdentification) throws DataNotFoundException;
+
+  void update(Integer identification, UnattachedLaboratory unattachedLaboratory);
 }

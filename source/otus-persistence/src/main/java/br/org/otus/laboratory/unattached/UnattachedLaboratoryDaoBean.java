@@ -55,4 +55,19 @@ public class UnattachedLaboratoryDaoBean extends MongoGenericDao<Document> imple
     }
     return ListUnattachedLaboratoryDTO.deserialize(resultsDocument.toJson());
   }
+
+  @Override
+  public UnattachedLaboratory find(int laboratoryIdentification) throws DataNotFoundException {
+    Document resultsDocument = super.collection.find(new Document("identification", laboratoryIdentification)).first();
+    if (resultsDocument == null) {
+      throw new DataNotFoundException("There are no results");
+    }
+    return  UnattachedLaboratory.deserialize(resultsDocument.toJson());
+  }
+
+  @Override
+  public void update(Integer identification, UnattachedLaboratory unattachedLaboratory) {
+    Document parsed = Document.parse(UnattachedLaboratory.serialize(unattachedLaboratory));
+    super.collection.findOneAndReplace(new Document("identification", identification),parsed);
+  }
 }
