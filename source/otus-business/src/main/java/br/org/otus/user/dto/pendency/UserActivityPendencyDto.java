@@ -6,10 +6,10 @@ import org.ccem.otus.exceptions.Dto;
 
 public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
-  @SerializedName(value = "nPerPage", alternate = "numPerPage")
+  @SerializedName(value = "nPerPage")
   private int numberPerPage;
 
-  @SerializedName(value = "skipQuantity", alternate = "skip")
+  @SerializedName(value = "skip")
   private int skipQuantity;
 
   @SerializedName(value = "order")
