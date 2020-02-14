@@ -12,4 +12,6 @@ public interface UnattachedLaboratoryDao {
   UnattachedLaboratory find(int laboratoryIdentification) throws DataNotFoundException;
 
   void update(Integer identification, UnattachedLaboratory unattachedLaboratory);
+
+  UnattachedLaboratory findById(String laboratoryOid) throws DataNotFoundException;
 }

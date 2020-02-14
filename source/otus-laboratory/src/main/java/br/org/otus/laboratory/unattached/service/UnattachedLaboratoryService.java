@@ -12,4 +12,6 @@ public interface UnattachedLaboratoryService {
   ListUnattachedLaboratoryDTO find(String fieldCenterAcronym, String collectGroupDescriptorName, int page, int quantityByPage) throws DataNotFoundException;
 
   void attache(Long recruitmentNumber, String email, int laboratoryIdentification, String participantCollectGroupName, String participantFieldCenterAcronym) throws DataNotFoundException, ValidationException;
+
+  void discard(String userEmail, String laboratoryOid) throws DataNotFoundException;
 }

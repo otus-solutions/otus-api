@@ -3,6 +3,7 @@ package br.org.otus.laboratory.unattached.model;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.unattached.enums.UnattachedLaboratoryActions;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.utils.LongAdapter;
@@ -56,9 +57,14 @@ public class UnattachedLaboratory {
     return tubes;
   }
 
-  public static String serialize(UnattachedLaboratory laboratory) {
+  public static JsonElement serialize(UnattachedLaboratory unattachedLaboratory) {
     GsonBuilder builder = UnattachedLaboratory.getGsonBuilder();
-    return builder.create().toJson(laboratory);
+    return builder.create().toJsonTree(unattachedLaboratory);
+  }
+
+  public static String serializeToString(UnattachedLaboratory unattachedLaboratory) {
+    GsonBuilder builder = UnattachedLaboratory.getGsonBuilder();
+    return builder.create().toJson(unattachedLaboratory);
   }
 
   public static UnattachedLaboratory deserialize(String laboratoryJson) {
@@ -71,7 +77,6 @@ public class UnattachedLaboratory {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-
     return builder;
   }
 

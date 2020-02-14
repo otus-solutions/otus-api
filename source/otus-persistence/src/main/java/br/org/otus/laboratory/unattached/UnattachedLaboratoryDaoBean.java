@@ -5,6 +5,7 @@ import br.org.otus.laboratory.unattached.DTOs.ListUnattachedLaboratoryDTO;
 import br.org.otus.laboratory.unattached.model.UnattachedLaboratory;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.ParseQuery;
 
@@ -20,7 +21,7 @@ public class UnattachedLaboratoryDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public void persist(UnattachedLaboratory unattachedLaboratory) {
-    super.persist(UnattachedLaboratory.serialize(unattachedLaboratory));
+    super.persist(UnattachedLaboratory.serializeToString(unattachedLaboratory));
   }
 
   @Override
@@ -29,7 +30,8 @@ public class UnattachedLaboratoryDaoBean extends MongoGenericDao<Document> imple
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $match:{\n" +
       "            \"fieldCenterAcronym\":"+fieldCenterAcronym+",\n" +
-      "            \"collectGroupName\":"+collectGroupDescriptorName+"\n" +
+      "            \"collectGroupName\":"+collectGroupDescriptorName+",\n" +
+      "            \"availableToAttache\":true" +
       "        }\n" +
       "    }"));
     pipeline.add(ParseQuery.toDocument("{\n" +
@@ -60,14 +62,23 @@ public class UnattachedLaboratoryDaoBean extends MongoGenericDao<Document> imple
   public UnattachedLaboratory find(int laboratoryIdentification) throws DataNotFoundException {
     Document resultsDocument = super.collection.find(new Document("identification", laboratoryIdentification)).first();
     if (resultsDocument == null) {
-      throw new DataNotFoundException("There are no results");
+      throw new DataNotFoundException("Laboratory not found");
     }
     return  UnattachedLaboratory.deserialize(resultsDocument.toJson());
   }
 
   @Override
   public void update(Integer identification, UnattachedLaboratory unattachedLaboratory) {
-    Document parsed = Document.parse(UnattachedLaboratory.serialize(unattachedLaboratory));
+    Document parsed = Document.parse(UnattachedLaboratory.serializeToString(unattachedLaboratory));
     super.collection.findOneAndReplace(new Document("identification", identification),parsed);
+  }
+
+  @Override
+  public UnattachedLaboratory findById(String laboratoryOid) throws DataNotFoundException {
+    Document resultsDocument = super.collection.find(new Document("_id", new ObjectId(laboratoryOid))).first();
+    if (resultsDocument == null) {
+      throw new DataNotFoundException("Laboratory not found");
+    }
+    return  UnattachedLaboratory.deserialize(resultsDocument.toJson());
   }
 }

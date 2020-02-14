@@ -7,7 +7,6 @@ import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
 import br.org.otus.user.api.UserFacade;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +27,9 @@ public class UnattachedLaboratoryResource {
 
   @PUT
   @Secured
-  @Path("/create/{acronym}/{descriptor}")
+  @Path("/create/{acronym}/{descriptorName}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String initialize(@Context HttpServletRequest request, @PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptor") String collectGroupDescriptorName){
+  public String initialize(@Context HttpServletRequest request, @PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptorName") String collectGroupDescriptorName){
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     User user = userFacade.fetchByEmail(userEmail);
@@ -40,11 +39,11 @@ public class UnattachedLaboratoryResource {
 
   @GET
   @Secured
-  @Path("/{acronym}/{descriptor}/{page}/{quantity}")
+  @Path("/{acronym}/{descriptorName}/{page}/{quantity}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getUnattached(@PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptor") String collectGroupDescriptorName, @PathParam("page") int page, @PathParam("quantity") int quantityByPage){
+  public String getUnattached(@PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptorName") String collectGroupDescriptorName, @PathParam("page") int page, @PathParam("quantity") int quantityByPage){
     ListUnattachedLaboratoryDTO listUnattachedLaboratoryDTO = unattachedLaboratoryFacade.find(fieldCenterAcronym, collectGroupDescriptorName, page, quantityByPage);
-    return new Response().buildSuccess(listUnattachedLaboratoryDTO).toJson();
+    return new Response().buildSuccess(ListUnattachedLaboratoryDTO.serializeToJsonTree(listUnattachedLaboratoryDTO)).toJson();
   }
 
   @POST
@@ -56,6 +55,18 @@ public class UnattachedLaboratoryResource {
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     User user = userFacade.fetchByEmail(userEmail);
     unattachedLaboratoryFacade.attache(user.getEmail(), laboratoryIdentification, recruitmentNumber);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @DELETE
+  @Secured
+  @Path("/{laboratoryOid}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String discard(@Context HttpServletRequest request, @PathParam("laboratoryOid") String laboratoryOid){
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    User user = userFacade.fetchByEmail(userEmail);
+    unattachedLaboratoryFacade.discard(user.getEmail(), laboratoryOid);
     return new Response().buildSuccess().toJson();
   }
 }

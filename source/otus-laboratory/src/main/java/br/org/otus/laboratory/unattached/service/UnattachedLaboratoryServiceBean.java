@@ -68,4 +68,14 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
       }
     }
   }
+
+  @Override
+  public void discard(String userEmail, String laboratoryOid) throws DataNotFoundException {
+    UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryDao.findById(laboratoryOid);
+    if (unattachedLaboratory.getAvailableToAttache()){
+      unattachedLaboratory.disable();
+      unattachedLaboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.DISCARDED);
+      unattachedLaboratoryDao.update(unattachedLaboratory.getIdentification(), unattachedLaboratory);
+    }
+  }
 }

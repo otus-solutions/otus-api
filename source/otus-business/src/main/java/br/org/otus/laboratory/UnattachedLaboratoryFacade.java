@@ -66,4 +66,12 @@ public class UnattachedLaboratoryFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage(), e.getData()));
     }
   }
+
+  public void discard(String userEmail, String laboratoryOid) {
+    try {
+      unattachedLaboratoryService.discard(userEmail, laboratoryOid);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
 }
