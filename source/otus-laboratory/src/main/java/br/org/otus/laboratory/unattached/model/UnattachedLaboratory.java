@@ -32,6 +32,7 @@ public class UnattachedLaboratory {
     this.identification = unattachedLaboratoryLastInsertion;
   }
 
+
   public void addUserHistory(String userEmail, UnattachedLaboratoryActions action) {
     this.actionHistory.add(new UserAction(action, userEmail));
   }
@@ -57,10 +58,11 @@ public class UnattachedLaboratory {
     return tubes;
   }
 
-  public static JsonElement serialize(UnattachedLaboratory unattachedLaboratory) {
+  public static Object serializeToJsonTree(UnattachedLaboratory unattachedLaboratory) {
     GsonBuilder builder = UnattachedLaboratory.getGsonBuilder();
     return builder.create().toJsonTree(unattachedLaboratory);
   }
+
 
   public static String serializeToString(UnattachedLaboratory unattachedLaboratory) {
     GsonBuilder builder = UnattachedLaboratory.getGsonBuilder();

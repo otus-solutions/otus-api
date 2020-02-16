@@ -39,6 +39,4 @@ public interface LaboratoryConfigurationService {
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
   List<String> listPossibleExams(String center) throws DataNotFoundException;
-
-  ArrayList<String> getGroupDescriptorNames() throws DataNotFoundException;
 }

@@ -78,4 +78,10 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
       unattachedLaboratoryDao.update(unattachedLaboratory.getIdentification(), unattachedLaboratory);
     }
   }
+
+  @Override
+  public UnattachedLaboratory findById(String laboratoryOid) throws DataNotFoundException {
+    UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryDao.findById(laboratoryOid);
+    return unattachedLaboratory;
+  }
 }

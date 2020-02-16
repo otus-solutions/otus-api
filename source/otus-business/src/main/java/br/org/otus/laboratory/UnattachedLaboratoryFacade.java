@@ -5,6 +5,7 @@ import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.unattached.DTOs.ListUnattachedLaboratoryDTO;
+import br.org.otus.laboratory.unattached.model.UnattachedLaboratory;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -70,6 +71,14 @@ public class UnattachedLaboratoryFacade {
   public void discard(String userEmail, String laboratoryOid) {
     try {
       unattachedLaboratoryService.discard(userEmail, laboratoryOid);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public UnattachedLaboratory findById(String laboratoryOid) {
+    try {
+      return unattachedLaboratoryService.findById(laboratoryOid);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }

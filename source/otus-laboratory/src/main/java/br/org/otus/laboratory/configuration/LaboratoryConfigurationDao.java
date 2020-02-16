@@ -40,6 +40,4 @@ public interface LaboratoryConfigurationDao {
   List<String> getExamName(List<String> centerAliquots);
 
   AggregateIterable<Document> aggregate(List<Bson> query);
-
-  ArrayList<String> getGroupDescriptorNames() throws DataNotFoundException;
 }

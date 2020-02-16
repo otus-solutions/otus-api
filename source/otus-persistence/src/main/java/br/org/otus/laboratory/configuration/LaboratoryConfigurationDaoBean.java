@@ -85,34 +85,6 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-  public ArrayList<String> getGroupDescriptorNames() throws DataNotFoundException {
-
-    List<String> groupsDescriptorNames = null;
-
-    ArrayList<Bson> pipeline = new ArrayList<Bson>();
-    pipeline.add(parseQuery("{\n" +
-      "        $match: {\"objectType\":\"LaboratoryConfiguration\"}\n" +
-      "    }"));
-    pipeline.add(parseQuery("{\n" +
-      "        $replaceRoot: { newRoot: \"$collectGroupConfiguration\" }\n" +
-      "    }"));
-    pipeline.add(parseQuery("{\n" +
-      "        $unwind: \"$groupDescriptors\"\n" +
-      "    }"));
-    pipeline.add(parseQuery("{\n" +
-      "        $group: { _id: \"\", groupDescriptorNames:{$push: \"$groupDescriptors.name\"}}\n" +
-      "    }"));
-
-    Document resultsDocument = collection.aggregate(pipeline).first();
-
-    if (resultsDocument != null) {
-      return (ArrayList<String>) resultsDocument.get("groupDescriptorNames");
-    } else {
-      throw new DataNotFoundException(new Throwable("Group Descriptor configuration not found."));
-    }
-  }
-
-  @Override
   public List<String> getAliquotsExams(List<String> aliquots) {
     List<String> exams = null;
 

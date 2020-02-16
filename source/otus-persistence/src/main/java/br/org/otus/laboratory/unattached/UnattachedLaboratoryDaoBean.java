@@ -35,6 +35,11 @@ public class UnattachedLaboratoryDaoBean extends MongoGenericDao<Document> imple
       "        }\n" +
       "    }"));
     pipeline.add(ParseQuery.toDocument("{\n" +
+      "        $sort: {\n" +
+      "            \"identification\":-1\n" +
+      "        }\n" +
+      "    }"));
+    pipeline.add(ParseQuery.toDocument("{\n" +
       "        $skip: "+((page - 1) * quantityByPage)+"\n" +
       "    }"));
     pipeline.add(ParseQuery.toDocument("{\n" +

@@ -41,19 +41,6 @@ public class LaboratoryConfigurationResource {
   }
 
   @GET
-  @Path("/group-descriptors")
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String getGroupDescriptorNames() {
-    ArrayList<String> collectGroupDescriptorsName = null;
-    try {
-      collectGroupDescriptorsName = laboratoryConfigurationService.getGroupDescriptorNames();
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
-    }
-    return new Response().buildSuccess(collectGroupDescriptorsName).toJson();
-  }
-
-  @GET
   @Secured
   @Path("/aliquot-configuration")
   @Consumes(MediaType.APPLICATION_JSON)

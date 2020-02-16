@@ -1,6 +1,7 @@
 package br.org.otus.laboratory;
 
 import br.org.otus.laboratory.unattached.DTOs.ListUnattachedLaboratoryDTO;
+import br.org.otus.laboratory.unattached.model.UnattachedLaboratory;
 import br.org.otus.model.User;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
@@ -44,6 +45,15 @@ public class UnattachedLaboratoryResource {
   public String getUnattached(@PathParam("acronym") String fieldCenterAcronym, @PathParam("descriptorName") String collectGroupDescriptorName, @PathParam("page") int page, @PathParam("quantity") int quantityByPage){
     ListUnattachedLaboratoryDTO listUnattachedLaboratoryDTO = unattachedLaboratoryFacade.find(fieldCenterAcronym, collectGroupDescriptorName, page, quantityByPage);
     return new Response().buildSuccess(ListUnattachedLaboratoryDTO.serializeToJsonTree(listUnattachedLaboratoryDTO)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/{laboratoryOid}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getUnattached(@PathParam("laboratoryOid") String laboratoryOid){
+    UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryFacade.findById(laboratoryOid);
+    return new Response().buildSuccess(UnattachedLaboratory.serializeToJsonTree(unattachedLaboratory)).toJson();
   }
 
   @POST
