@@ -1,6 +1,6 @@
 package br.org.otus.user.dto.pendency;
 
-import br.org.otus.persistence.pendency.UserActivityPendencyDto;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,8 +50,8 @@ public class UserActivityPendencyDtoTest {
 
   @Test
   public void deserialize_results(){
-    assertEquals(QUANTITY_PER_PAGE, userActivityPendencyDto.getNumberPerPage());
-    assertEquals(SKIP_QUANTITY, userActivityPendencyDto.getSkipQuantity());
+    assertEquals(QUANTITY_PER_PAGE, userActivityPendencyDto.getCurrentQuantity());
+    assertEquals(SKIP_QUANTITY, userActivityPendencyDto.getQuantityToGet());
 
     assertEquals(RN_SORT_MODE, userActivityPendencyDto.getOrderDto().getRnSortMode());
     assertEquals(EXTERNAL_ID_SORT_MODE, userActivityPendencyDto.getOrderDto().getExternalIDSortMode());

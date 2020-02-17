@@ -2,7 +2,7 @@ package br.org.otus.user.pendency;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.model.pendency.UserActivityPendency;
-import br.org.otus.persistence.pendency.UserActivityPendencyDto;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import br.org.otus.user.pendency.builder.UserActivityPendencyQueryBuilder;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;

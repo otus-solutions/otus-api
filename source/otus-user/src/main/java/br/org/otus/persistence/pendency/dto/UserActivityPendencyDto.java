@@ -1,4 +1,4 @@
-package br.org.otus.persistence.pendency;
+package br.org.otus.persistence.pendency.dto;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
@@ -6,11 +6,11 @@ import org.ccem.otus.exceptions.Dto;
 
 public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
-  @SerializedName(value = "nPerPage")
-  private int numberPerPage;
+  @SerializedName(value = "currentQuantity")
+  private int currentQuantity;
 
-  @SerializedName(value = "skip")
-  private int skipQuantity;
+  @SerializedName(value = "quantityToGet")
+  private int quantityToGet;
 
   @SerializedName(value = "order")
   private UserActivityPendencyRequestOrderDto orderDto;
@@ -19,12 +19,12 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
   private UserActivityPendencyRequestFilterDto filterDto;
 
 
-  public int getNumberPerPage() {
-    return numberPerPage;
+  public int getCurrentQuantity() {
+    return currentQuantity;
   }
 
-  public int getSkipQuantity() {
-    return skipQuantity;
+  public int getQuantityToGet() {
+    return quantityToGet;
   }
 
   public UserActivityPendencyRequestOrderDto getOrderDto() {

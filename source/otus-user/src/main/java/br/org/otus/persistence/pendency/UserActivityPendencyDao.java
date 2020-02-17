@@ -2,6 +2,7 @@ package br.org.otus.persistence.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
