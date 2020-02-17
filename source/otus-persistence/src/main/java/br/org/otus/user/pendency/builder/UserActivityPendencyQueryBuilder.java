@@ -9,19 +9,22 @@ public class UserActivityPendencyQueryBuilder {
 
   public static final String ACTIVITY_ID_FIELD = "activityId";
   public static final String FINALIZED_STATUS = "FINALIZED";
+  public static final String NO_STATUS = "";
+
+  private static final String ACTIVITY_INFO = "activityInfo";
 
   private ArrayList<Bson> pipeline;
 
   public ArrayList<Bson> getListAllPendenciesByUserQuery(String userRole, String userEmail) {
-    return getListPendenciesByUserQuery(userRole, userEmail, "");
+    return getListPendenciesByUserQuery(userRole, userEmail, NO_STATUS);
   }
 
   public ArrayList<Bson> getListOpenedPendenciesByUserQuery(String userRole, String userEmail) {
-    return getListPendenciesByUserQuery(userRole, userEmail, getStatusCondition("ne"));
+    return getListPendenciesByUserQuery(userRole, userEmail, getOpenedStatusCondition());
   }
 
   public ArrayList<Bson> getListDonePendenciesByUserQuery(String userRole, String userEmail) {
-    return getListPendenciesByUserQuery(userRole, userEmail, getStatusCondition("eq"));
+    return getListPendenciesByUserQuery(userRole, userEmail, getDoneStatusCondition());
   }
 
   private ArrayList<Bson> getListPendenciesByUserQuery(String userRole, String userEmail, String statusCondition) {
@@ -32,11 +35,19 @@ public class UserActivityPendencyQueryBuilder {
     return pipeline;
   }
 
+  private String getOpenedStatusCondition(){
+    return getStatusCondition("ne");
+  }
+
+  private String getDoneStatusCondition(){
+    return getStatusCondition("eq");
+  }
+
   private String getStatusCondition(String operator) {
     return ",\n{ $" + operator + ": [\"" + FINALIZED_STATUS + "\", { $arrayElemAt: [ \"$statusHistory.name\", -1 ] } ] }";
   }
 
-  private void addLookupMatchingActivityPendency(String statusCondition) {
+  private void addLookupMatchingActivityPendency(String activityFilterExpressions) {
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $lookup: {\n" +
       "            from:\"activity\",\n" +
@@ -50,7 +61,7 @@ public class UserActivityPendencyQueryBuilder {
       "                            $and: [\n" +
       "                                { $eq: [\"$$"+ACTIVITY_ID_FIELD+"\", \"$_id\"] },\n" +
       "                                { $eq: [false, \"$isDiscarded\"] }" +
-      "                                " + statusCondition +
+      "                                " + activityFilterExpressions +
       "                            ]\n" +
       "                        }\n" +
       "                    }\n" +
