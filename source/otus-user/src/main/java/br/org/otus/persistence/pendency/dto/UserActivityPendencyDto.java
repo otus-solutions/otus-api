@@ -13,22 +13,19 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
   private int quantityToGet;
 
   @SerializedName(value = "order")
-  private UserActivityPendencyRequestOrderDto orderDto;
+  private SortingCriteria[] sortingCriteria;
 
   @SerializedName(value = "filter")
   private UserActivityPendencyRequestFilterDto filterDto;
-
 
   public int getCurrentQuantity() {
     return currentQuantity;
   }
 
-  public int getQuantityToGet() {
-    return quantityToGet;
-  }
+  public int getQuantityToGet() { return quantityToGet; }
 
-  public UserActivityPendencyRequestOrderDto getOrderDto() {
-    return orderDto;
+  public SortingCriteria[] getSortingCriteria() {
+    return sortingCriteria;
   }
 
   public UserActivityPendencyRequestFilterDto getFilterDto() {
