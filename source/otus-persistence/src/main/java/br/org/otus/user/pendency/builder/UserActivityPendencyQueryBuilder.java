@@ -76,7 +76,7 @@ public class UserActivityPendencyQueryBuilder {
       "                    }\n" +
       "                }\n" +
       "            ],\n" +
-      "            as:\"activityInfo\"\n" +
+      "            as:\""+ACTIVITY_INFO+"\"\n" +
       "        }\n" +
       "    }"));
   }
@@ -87,7 +87,7 @@ public class UserActivityPendencyQueryBuilder {
       "            $expr: { \n" +
       "                $and: [\n" +
       "                    { $eq: [ \"$" + userRole + "\", " + userEmail + " ] },\n" +
-      "                    { $gt: [ { $size: \"$activityInfo\"}, 0] }\n" +
+      "                    { $gt: [ { $size: \"$"+ACTIVITY_INFO+"\"}, 0] }\n" +
       "                ]\n" +
       "            }\n" +
       "        } \n" +
@@ -96,7 +96,7 @@ public class UserActivityPendencyQueryBuilder {
 
   private void addSelectedFieldsFromActivityLookupResult() {
     pipeline.add(ParseQuery.toDocument("{\n" +
-      "        $addFields: { 'activityInfo': { $arrayElemAt: [\"$activityInfo\", 0]} }\n" +
+      "        $addFields: { '"+ACTIVITY_INFO+"': { $arrayElemAt: [\"$"+ACTIVITY_INFO+"\", 0]} }\n" +
       "    }"));
   }
 
