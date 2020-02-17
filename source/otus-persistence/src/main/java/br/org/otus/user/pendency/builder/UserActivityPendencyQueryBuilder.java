@@ -86,12 +86,16 @@ public class UserActivityPendencyQueryBuilder {
       "        $match: {\n" +
       "            $expr: { \n" +
       "                $and: [\n" +
-      "                    { $eq: [ \"$" + userRole + "\", " + userEmail + " ] },\n" +
+      "                    " + getFilterExpressionByUser(userRole, userEmail) + ",\n" +
       "                    { $gt: [ { $size: \"$"+ACTIVITY_INFO+"\"}, 0] }\n" +
       "                ]\n" +
       "            }\n" +
       "        } \n" +
       "    }"));
+  }
+
+  private String getFilterExpressionByUser(String userRole, String userEmail){
+    return "{ $eq: [ \"$" + userRole + "\", " + userEmail + " ] }";
   }
 
   private void addSelectedFieldsFromActivityLookupResult() {
