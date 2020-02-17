@@ -47,7 +47,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "]}}}," +
       "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
     assertEquals(EXPECTED_QUERY,
-      new GsonBuilder().create().toJson(builder.getListAllPendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
+      new GsonBuilder().create().toJson(builder.getAllPendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
   }
 
   @Test
@@ -80,7 +80,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "]}}}," +
       "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
     assertEquals(EXPECTED_QUERY,
-      new GsonBuilder().create().toJson(builder.getListOpenedPendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
+      new GsonBuilder().create().toJson(builder.getOpenedPendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
   }
 
   @Test
@@ -113,7 +113,7 @@ public class UserActivityPendencyQueryBuilderTest {
       "]}}}," +
       "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
     assertEquals(EXPECTED_QUERY,
-      new GsonBuilder().create().toJson(builder.getListDonePendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
+      new GsonBuilder().create().toJson(builder.getDonePendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
   }
 
 }

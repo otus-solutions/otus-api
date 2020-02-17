@@ -15,19 +15,19 @@ public class UserActivityPendencyQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
-  public ArrayList<Bson> getListAllPendenciesByUserQuery(String userRole, String userEmail) {
-    return getListPendenciesByUserQuery(userRole, userEmail, NO_STATUS);
+  public ArrayList<Bson> getAllPendenciesByUserQuery(String userRole, String userEmail) {
+    return getPendenciesByUserQuery(userRole, userEmail, NO_STATUS);
   }
 
-  public ArrayList<Bson> getListOpenedPendenciesByUserQuery(String userRole, String userEmail) {
-    return getListPendenciesByUserQuery(userRole, userEmail, getOpenedStatusCondition());
+  public ArrayList<Bson> getOpenedPendenciesByUserQuery(String userRole, String userEmail) {
+    return getPendenciesByUserQuery(userRole, userEmail, getOpenedStatusCondition());
   }
 
-  public ArrayList<Bson> getListDonePendenciesByUserQuery(String userRole, String userEmail) {
-    return getListPendenciesByUserQuery(userRole, userEmail, getDoneStatusCondition());
+  public ArrayList<Bson> getDonePendenciesByUserQuery(String userRole, String userEmail) {
+    return getPendenciesByUserQuery(userRole, userEmail, getDoneStatusCondition());
   }
 
-  private ArrayList<Bson> getListPendenciesByUserQuery(String userRole, String userEmail, String statusCondition) {
+  private ArrayList<Bson> getPendenciesByUserQuery(String userRole, String userEmail, String statusCondition) {
     pipeline = new ArrayList<>();
     addLookupMatchingActivityPendency(statusCondition);
     addMatchByPendencyUser(userRole, userEmail);

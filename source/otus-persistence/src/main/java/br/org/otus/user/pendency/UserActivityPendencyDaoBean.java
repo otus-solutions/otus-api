@@ -79,32 +79,32 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public List<UserActivityPendencyResponse> findAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies((new UserActivityPendencyQueryBuilder()).getListAllPendenciesByUserQuery(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail));
+    return listPendencies((new UserActivityPendencyQueryBuilder()).getAllPendenciesByUserQuery(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail));
   }
 
   @Override
   public List<UserActivityPendencyResponse> findOpenedPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies((new UserActivityPendencyQueryBuilder()).getListOpenedPendenciesByUserQuery(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail));
+    return listPendencies((new UserActivityPendencyQueryBuilder()).getOpenedPendenciesByUserQuery(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail));
   }
 
   @Override
   public List<UserActivityPendencyResponse> findDonePendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies((new UserActivityPendencyQueryBuilder()).getListDonePendenciesByUserQuery(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail));
+    return listPendencies((new UserActivityPendencyQueryBuilder()).getDonePendenciesByUserQuery(RECEIVER_ATTRIBUTE_NAME, receiverUserEmail));
   }
 
   @Override
   public List<UserActivityPendencyResponse> findAllPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies((new UserActivityPendencyQueryBuilder()).getListAllPendenciesByUserQuery(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail));
+    return listPendencies((new UserActivityPendencyQueryBuilder()).getAllPendenciesByUserQuery(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail));
   }
 
   @Override
   public List<UserActivityPendencyResponse> findOpenedPendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies((new UserActivityPendencyQueryBuilder()).getListOpenedPendenciesByUserQuery(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail));
+    return listPendencies((new UserActivityPendencyQueryBuilder()).getOpenedPendenciesByUserQuery(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail));
   }
 
   @Override
   public List<UserActivityPendencyResponse> findDonePendenciesFromRequester(String requesterUserEmail) throws DataNotFoundException, MemoryExcededException {
-    return listPendencies((new UserActivityPendencyQueryBuilder()).getListDonePendenciesByUserQuery(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail));
+    return listPendencies((new UserActivityPendencyQueryBuilder()).getDonePendenciesByUserQuery(REQUESTER_ATTRIBUTE_NAME, requesterUserEmail));
   }
 
   private List<UserActivityPendencyResponse> listPendencies(ArrayList<Bson> pipelineQuery) throws DataNotFoundException, MemoryExcededException {
