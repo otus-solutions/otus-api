@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UnattachedLaboratory {
+  private ObjectId _id;
   private String objectType;
   private String collectGroupName;
   private String fieldCenterAcronym;

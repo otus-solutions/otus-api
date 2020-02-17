@@ -17,4 +17,6 @@ public interface UnattachedLaboratoryService {
   void discard(String userEmail, String laboratoryOid) throws DataNotFoundException;
 
   UnattachedLaboratory findById(String laboratoryOid) throws DataNotFoundException;
+
+  UnattachedLaboratory findByIdentification(int laboratoryIdentification) throws DataNotFoundException;
 }

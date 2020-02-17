@@ -83,4 +83,12 @@ public class UnattachedLaboratoryFacade {
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
+
+  public UnattachedLaboratory findByIdentification(int laboratoryIdentification) {
+    try {
+      return unattachedLaboratoryService.findByIdentification(laboratoryIdentification);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
 }

@@ -56,6 +56,15 @@ public class UnattachedLaboratoryResource {
     return new Response().buildSuccess(UnattachedLaboratory.serializeToJsonTree(unattachedLaboratory)).toJson();
   }
 
+  @GET
+  @Secured
+  @Path("/identification/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getUnattachedByIdentification(@PathParam("id") int laboratoryIdentification){
+    UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryFacade.findByIdentification(laboratoryIdentification);
+    return new Response().buildSuccess(UnattachedLaboratory.serializeToJsonTree(unattachedLaboratory)).toJson();
+  }
+
   @POST
   @Secured
   @Path("/attache/{laboratoryIdentification}/{recruitmentNumber}")
