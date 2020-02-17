@@ -44,7 +44,6 @@ public class UserActivityPendencyDtoTest {
   @Test
   public void userActivityPendencyDto_not_should_be_null(){
     assertNotNull(userActivityPendencyDto);
-    assertNotNull(userActivityPendencyDto.getOrderDto());
     assertNotNull(userActivityPendencyDto.getFilterDto());
   }
 
@@ -52,12 +51,6 @@ public class UserActivityPendencyDtoTest {
   public void deserialize_results(){
     assertEquals(QUANTITY_PER_PAGE, userActivityPendencyDto.getCurrentQuantity());
     assertEquals(SKIP_QUANTITY, userActivityPendencyDto.getQuantityToGet());
-
-    assertEquals(RN_SORT_MODE, userActivityPendencyDto.getOrderDto().getRnSortMode());
-    assertEquals(EXTERNAL_ID_SORT_MODE, userActivityPendencyDto.getOrderDto().getExternalIDSortMode());
-
-    assertEquals(FINALIZED, userActivityPendencyDto.getFilterDto().getFinalized());
-    assertEquals(RECEIVER, userActivityPendencyDto.getFilterDto().getReceiver());
   }
 
 }
