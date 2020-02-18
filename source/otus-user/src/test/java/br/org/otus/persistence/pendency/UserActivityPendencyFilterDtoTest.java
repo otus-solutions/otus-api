@@ -49,4 +49,9 @@ public class UserActivityPendencyFilterDtoTest {
   public void deserializeStaticMethod_should_convert_JsonString_to_objectModel(){
     assertTrue(UserActivityPendencyFilterDto.deserialize(userActivityPendencyFilterDtoJson) instanceof UserActivityPendencyFilterDto);
   }
+
+  @Test
+  public void isValid_method_should_return_TRUE(){
+    assertEquals(Boolean.TRUE, userActivityPendencyFilterDto.isValid());
+  }
 }
