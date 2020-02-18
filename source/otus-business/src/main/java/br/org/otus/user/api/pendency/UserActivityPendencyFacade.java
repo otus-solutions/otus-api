@@ -10,6 +10,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class UserActivityPendencyFacade {
 
@@ -56,7 +57,7 @@ public class UserActivityPendencyFacade {
   public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) {
     try {
       return userActivityPendencyService.listAllPendencies(searchSettingsJson);
-    } catch (DataNotFoundException | MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException | DataFormatException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }

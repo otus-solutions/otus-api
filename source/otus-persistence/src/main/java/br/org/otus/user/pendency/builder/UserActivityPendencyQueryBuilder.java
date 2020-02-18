@@ -9,6 +9,7 @@ import org.ccem.otus.service.ParseQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.DataFormatException;
 
 public class UserActivityPendencyQueryBuilder {
 
@@ -18,9 +19,14 @@ public class UserActivityPendencyQueryBuilder {
 
   private static final String ACTIVITY_INFO = "activityInfo";
 
+  private static final String ACTIVITY_NAME_FIELD = "surveyForm.name";
+  private static final String ACTIVITY_ACRONYM_FIELD = "surveyForm.acronym";
+  private static final String ACTIVITY_RN_FIELD = "participantData.recruitmentNumber";
+  private static final String ACTIVITY_EXTERNAL_ID_FIELD = "externalID";
+
   private ArrayList<Bson> pipeline;
 
-  public ArrayList<Bson> getAllPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) {
+  public ArrayList<Bson> getAllPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) throws DataFormatException {
     return getPendenciesWithFiltersQuery(userActivityPendencyDto);
   }
 
@@ -36,10 +42,10 @@ public class UserActivityPendencyQueryBuilder {
     return getPendenciesByUserQuery(userRole, userEmail, getDoneStatusCondition());
   }
 
-  private ArrayList<Bson> getPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) {
+  private ArrayList<Bson> getPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) throws DataFormatException {
     pipeline = new ArrayList<>();
-    addLookupMatchingActivityPendencyFilters(getStatusConditionFromDto(userActivityPendencyDto.getFilterDto().getStatus()));
-    addMatchByPendencyFilters(getActivityFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));
+    addLookupMatchingActivityPendencyFilters(getActivityFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));
+    addMatchByPendencyFilters(getPendencyFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));
     addSelectedFieldsFromActivityLookupResult();
     addSkip(userActivityPendencyDto.getCurrentQuantity());
     addLimit(userActivityPendencyDto.getQuantityToGet());
@@ -89,18 +95,18 @@ public class UserActivityPendencyQueryBuilder {
       "                    $match: {\n" +
       "                        $expr: {\n" +
       "                            $and: [\n" +
+      "                            " + activityFilterExpressions +
       "                                { $eq: [\"$$"+ACTIVITY_ID_FIELD+"\", \"$_id\"] },\n" +
       "                                { $eq: [false, \"$isDiscarded\"] }" +
-      "                                " + activityFilterExpressions +
       "                            ]\n" +
       "                        }\n" +
       "                    }\n" +
       "                },\n" +
       "                {\n" +
       "                    $project: {\n" +
-      "                        'recruitmentNumber': '$participantData.recruitmentNumber',\n" +
-      "                        'name': '$surveyForm.name',\n" +
-      "                        'acronym': '$surveyForm.acronym',\n" +
+      "                        'recruitmentNumber': '$" + ACTIVITY_RN_FIELD + "',\n" +
+      "                        'name': '$"+ACTIVITY_NAME_FIELD+"',\n" +
+      "                        'acronym': '$"+ACTIVITY_ACRONYM_FIELD+"',\n" +
       "                        'lastStatusName': { $arrayElemAt: [ \"$statusHistory.name\", -1 ] },\n" +
       "                        'externalID': 1\n" +
       "                    }\n" +
@@ -112,20 +118,16 @@ public class UserActivityPendencyQueryBuilder {
   }
 
   private void addMatchByPendencyFilters(String filterEquations) {
-    try {
-      pipeline.add(ParseQuery.toDocument("{ \n" +
-        "        $match: {\n" +
-        "            $expr: { \n" +
-        "               $and: [ \n" +
-//        "            " + filterEquations +
-        "                 { $gt: [ { $size: \"$" + ACTIVITY_INFO + "\"}, 0] }\n" +
-        "               ]\n" +
-        "            }\n" +
-        "        } \n" +
-        "    }"));
-    }catch (Exception e){
-      throw e;
-    }
+    pipeline.add(ParseQuery.toDocument("{ \n" +
+      "        $match: {\n" +
+      "            $expr: { \n" +
+      "               $and: [ \n" +
+      "            " + filterEquations +
+      "                 { $gt: [ { $size: \"$" + ACTIVITY_INFO + "\"}, 0] }\n" +
+      "               ]\n" +
+      "            }\n" +
+      "        } \n" +
+      "    }"));
   }
 
   private void addMatchByPendencyUser(String userRole, String userEmail) {
@@ -155,12 +157,27 @@ public class UserActivityPendencyQueryBuilder {
     if(userActivityPendencyRequestFilterDto==null){
       return "";
     }
-    String filterExpressions = "";
-    filterExpressions += getUserFilterFromDto("requester", userActivityPendencyRequestFilterDto.getRequesters());
-    filterExpressions += getUserFilterFromDto("receiver", userActivityPendencyRequestFilterDto.getReceivers());
-    filterExpressions += getActivityFilterFromDto("acronym", userActivityPendencyRequestFilterDto.getAcronym());
-    filterExpressions += getActivityFilterFromDto("recruitmentNumber", userActivityPendencyRequestFilterDto.getRn());
-    return filterExpressions;
+    return
+      getStatusConditionFromDto(userActivityPendencyRequestFilterDto.getStatus()) +
+        getActivityFilterFromDto(ACTIVITY_ACRONYM_FIELD, userActivityPendencyRequestFilterDto.getAcronym()) +
+        getActivityFilterFromDto(ACTIVITY_RN_FIELD, userActivityPendencyRequestFilterDto.getRn()) +
+        getActivityFilterFromDto(ACTIVITY_EXTERNAL_ID_FIELD, userActivityPendencyRequestFilterDto.getExternalID());
+  }
+  private String getActivityFilterFromDto(String activityField, Object filterValue){
+    try{
+      return "{ $eq: [ \"$"+activityField+"\", " + filterValue.toString() + "] },";
+    }catch (NullPointerException e){
+      return "";
+    }
+  }
+
+  private String getPendencyFilterExpressionsFromDto(UserActivityPendencyRequestFilterDto userActivityPendencyRequestFilterDto){
+    if(userActivityPendencyRequestFilterDto==null){
+      return "";
+    }
+    return
+      getUserFilterFromDto("requester", userActivityPendencyRequestFilterDto.getRequesters()) +
+      getUserFilterFromDto("receiver", userActivityPendencyRequestFilterDto.getReceivers());
   }
   private String getUserFilterFromDto(String userRole, String[] filterValues){
     try{
@@ -169,13 +186,7 @@ public class UserActivityPendencyQueryBuilder {
       return "";
     }
   }
-  private String getActivityFilterFromDto(String activityField, Object filterValue){
-    try{
-      return "{ $eq: [ \"$"+ACTIVITY_INFO+"."+activityField+"\": " + filterValue.toString() + " },";
-    }catch (NullPointerException e){
-      return "";
-    }
-  }
+
 
   private void addSkip(int quantityToSkip){
     pipeline.add(ParseQuery.toDocument("{ $skip: " +  quantityToSkip + " }"));
@@ -189,13 +200,21 @@ public class UserActivityPendencyQueryBuilder {
     if(sortingCriteria==null || sortingCriteria.length == 0){
       return;
     }
-    String criteriaStr = "";
-    for (SortingCriteria criteria: sortingCriteria) {
-      criteriaStr += criteria.getFieldName() + ": " + criteria.getMode() + ",";
+
+    Map<String, String> sortFieldNamesMap = new HashMap<>();
+    sortFieldNamesMap.put("status", ACTIVITY_INFO+".lastStatusName");
+    sortFieldNamesMap.put("acronym", ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
+    sortFieldNamesMap.put("rn", ACTIVITY_INFO+".recruitmentNumber");
+
+    int n = sortingCriteria.length;
+    String[] criteriaStr = new String[n];
+    for (int i = 0; i < n; i++) {
+      String fieldName = sortingCriteria[i].getFieldName();
+      criteriaStr[i] = "'" + (sortFieldNamesMap.get(fieldName)!=null? sortFieldNamesMap.get(fieldName) : fieldName) + "': " + sortingCriteria[i].getMode();
     }
-    pipeline.add(ParseQuery.toDocument("{\n" +
-      "        $sort: { " + criteriaStr + " }\n" +
-      "    }"));
+    pipeline.add(ParseQuery.toDocument("{ " +
+      "$sort: { " + String.join(", ", criteriaStr) + " } " +
+      "}"));
   }
 
 }

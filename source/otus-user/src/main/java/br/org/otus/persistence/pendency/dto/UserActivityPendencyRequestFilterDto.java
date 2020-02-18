@@ -17,6 +17,9 @@ public class UserActivityPendencyRequestFilterDto {
   @SerializedName(value = "rn")
   private Long rn;
 
+  @SerializedName(value = "externalID")
+  private String externalID;
+
   @SerializedName(value = "requester")
   private String[] requester;
 
@@ -27,6 +30,8 @@ public class UserActivityPendencyRequestFilterDto {
   public String getAcronym() { return acronym; }
 
   public Long getRn() { return rn; }
+
+  public String getExternalID() { return externalID; }
 
   public String getStatus() { return status; }
 

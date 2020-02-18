@@ -4,6 +4,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.exceptions.Dto;
 
+import java.util.zip.DataFormatException;
+
 public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
   @SerializedName(value = "currentQuantity")
@@ -13,7 +15,12 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
   private int quantityToGet;
 
   @SerializedName(value = "order")
-  private SortingCriteria[] sortingCriteria;
+  private String[] fieldsToOrder;
+
+  @SerializedName(value = "orderMode")
+  private int orderMode;
+
+  //private SortingCriteria[] sortingCriteria;
 
   @SerializedName(value = "filter")
   private UserActivityPendencyRequestFilterDto filterDto;
@@ -24,7 +31,15 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
   public int getQuantityToGet() { return quantityToGet; }
 
-  public SortingCriteria[] getSortingCriteria() {
+  public SortingCriteria[] getSortingCriteria() throws DataFormatException {
+    if(fieldsToOrder==null){
+      return null;
+    }
+    int n = fieldsToOrder.length;
+    SortingCriteria[] sortingCriteria = new SortingCriteria[n];
+    for (int i = 0; i < n; i++) {
+      sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], orderMode);
+    }
     return sortingCriteria;
   }
 

@@ -11,6 +11,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @Stateless
 public class UserActivityPendencyServiceBean implements UserActivityPendencyService {
@@ -44,7 +45,7 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   }
 
   @Override
-  public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException {
+  public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException, DataFormatException {
     return userActivityPendencyDao.getAllPendencies(UserActivityPendencyDto.deserialize(searchSettingsJson));
   }
 

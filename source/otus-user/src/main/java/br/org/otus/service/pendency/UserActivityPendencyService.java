@@ -8,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public interface UserActivityPendencyService {
 
@@ -19,7 +20,7 @@ public interface UserActivityPendencyService {
 
   UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException;
 
-  List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException;
+  List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException, DataFormatException;
 
   List<UserActivityPendencyResponse> listAllPendenciesToReceiver(String receiverEmail) throws DataNotFoundException, MemoryExcededException;
 
