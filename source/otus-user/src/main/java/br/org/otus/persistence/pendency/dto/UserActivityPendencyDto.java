@@ -29,15 +29,15 @@ public class UserActivityPendencyDto implements Dto {
 
   public String[] getFieldsToOrder() { return fieldsToOrder; }
 
-  public int getOrderMode() { return orderMode; }
+  public Integer getOrderMode() { return orderMode; }
 
   public SortingCriteria[] getSortingCriteria() throws DataFormatException {
-    if(fieldsToOrder==null){ //TODO test: 2 branch missed
+    if(fieldsToOrder==null){
       return null;
     }
     int n = fieldsToOrder.length;
     SortingCriteria[] sortingCriteria = new SortingCriteria[n];
-    for (int i = 0; i < n; i++) { //TODO test: 2 branch missed
+    for (int i = 0; i < n; i++) {
       sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], orderMode);
     }
     return sortingCriteria;
@@ -62,8 +62,9 @@ public class UserActivityPendencyDto implements Dto {
   @Override
   public Boolean isValid() {
     return
-      filterDto.isValid() && (
-        (fieldsToOrder==null && orderMode!=null) ||
+      (filterDto==null || filterDto.isValid()) &&
+      (
+        (fieldsToOrder==null && orderMode==null) ||
         (fieldsToOrder!=null && fieldsToOrder.length > 0 && orderMode!=null && (orderMode==1 || orderMode==-1))
       );
   }
