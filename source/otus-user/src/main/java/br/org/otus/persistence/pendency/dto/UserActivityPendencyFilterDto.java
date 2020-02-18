@@ -59,6 +59,6 @@ public class UserActivityPendencyFilterDto implements Dto {
 
   @Override
   public Boolean isValid() {
-    return null;
+    return Boolean.TRUE;
   }
 }
