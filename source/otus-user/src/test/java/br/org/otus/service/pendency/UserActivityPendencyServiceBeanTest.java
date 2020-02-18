@@ -4,6 +4,7 @@ import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -22,6 +23,7 @@ import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @RunWith(PowerMockRunner.class)
 public class UserActivityPendencyServiceBeanTest {
@@ -31,6 +33,7 @@ public class UserActivityPendencyServiceBeanTest {
   private static final ObjectId PENDENCY_OID = new ObjectId(PENDENCY_ID);
   private static final String ACTIVITY_ID = "5c7400d2d767afded0d84dcf";
   private static final ObjectId ACTIVITY_OID = new ObjectId(ACTIVITY_ID);
+  private static final String SEARCH_SETTINGS_JSON = "";
 
   @InjectMocks
   private UserActivityPendencyServiceBean userActivityPendencyServiceBean;
@@ -41,6 +44,7 @@ public class UserActivityPendencyServiceBeanTest {
   private UserActivityPendencyResponse userActivityPendencyResponse;
   private List<UserActivityPendencyResponse> userActivityPendencyResponses;
   private String userActivityPendencyJson;
+  private UserActivityPendencyDto userActivityPendencyDto;
 
   @Before
   public void setUp() {
@@ -48,6 +52,7 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyResponse = new UserActivityPendencyResponse();
     userActivityPendencyResponses = asList(userActivityPendencyResponse);
     userActivityPendencyJson = UserActivityPendency.serialize(userActivityPendency);
+    userActivityPendencyDto = new UserActivityPendencyDto();
   }
 
   @Test
@@ -91,6 +96,31 @@ public class UserActivityPendencyServiceBeanTest {
   public void getActivityByIdMethod_should_handle_DataNotFoundException() throws Exception {
     doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findByActivityOID", ACTIVITY_OID);
     userActivityPendencyServiceBean.getByActivityId(ACTIVITY_ID);
+  }
+
+  // list All with Filters
+  @Test
+  public void listAllPendencies_should_return_list_UserActivityPendency() throws Exception {
+    when(userActivityPendencyDao.findAllPendenciesToReceiver(SEARCH_SETTINGS_JSON)).thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendenciesToReceiver(SEARCH_SETTINGS_JSON));
+  }
+
+  @Test(expected = DataNotFoundException.class)
+  public void listAllPendencies_should_handle_DataNotFoundException() throws Exception {
+    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendencies", UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON));
+    userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = MemoryExcededException.class)
+  public void listAllPendencies_should_handle_MemoryExcededException() throws Exception {
+    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendencies", UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON));
+    userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = DataFormatException.class)
+  public void listAllPendencies_should_handle_DataFormatException() throws Exception {
+    doThrow(new DataFormatException()).when(userActivityPendencyDao, "findAllPendencies", UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON));
+    userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
   }
 
   // list All To Receiver
