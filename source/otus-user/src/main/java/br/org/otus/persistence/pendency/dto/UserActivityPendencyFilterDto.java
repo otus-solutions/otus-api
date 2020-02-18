@@ -3,7 +3,7 @@ package br.org.otus.persistence.pendency.dto;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-public class UserActivityPendencyRequestFilterDto {
+public class UserActivityPendencyFilterDto {
 
   public static final String FINALIZED_STATUS = "FINALIZED";
   public static final String NOT_FINALIZED_STATUS = "NOT_FINALIZED";
@@ -44,12 +44,12 @@ public class UserActivityPendencyRequestFilterDto {
   }
 
 
-  public static String serialize(UserActivityPendencyRequestFilterDto userActivityPendencyRequestFilterDto) {
-    return getGsonBuilder().create().toJson(userActivityPendencyRequestFilterDto);
+  public static String serialize(UserActivityPendencyFilterDto userActivityPendencyFilterDto) {
+    return getGsonBuilder().create().toJson(userActivityPendencyFilterDto);
   }
 
-  public static UserActivityPendencyRequestFilterDto deserialize(String orderRequestJson) {
-    return UserActivityPendencyRequestFilterDto.getGsonBuilder().create().fromJson(orderRequestJson, UserActivityPendencyRequestFilterDto.class);
+  public static UserActivityPendencyFilterDto deserialize(String orderRequestJson) {
+    return UserActivityPendencyFilterDto.getGsonBuilder().create().fromJson(orderRequestJson, UserActivityPendencyFilterDto.class);
   }
 
   public static GsonBuilder getGsonBuilder() {

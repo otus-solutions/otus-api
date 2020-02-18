@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserActivityPendencyRequesterFilterDtoTest {
+public class UserActivityPendencyFilterDtoTest {
 
   private final static Long RN = 123L;
   private final static Integer EXTERNAL_ID = 1;

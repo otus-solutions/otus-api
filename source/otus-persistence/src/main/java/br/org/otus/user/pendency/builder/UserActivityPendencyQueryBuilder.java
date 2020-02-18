@@ -2,7 +2,7 @@ package br.org.otus.user.pendency.builder;
 
 import br.org.otus.persistence.pendency.dto.SortingCriteria;
 import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyRequestFilterDto;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyFilterDto;
 import org.bson.conversions.Bson;
 import org.ccem.otus.service.ParseQuery;
 
@@ -66,8 +66,8 @@ public class UserActivityPendencyQueryBuilder {
       return NO_STATUS;
     }
     Map<String, String> statusMap = new HashMap<>();
-    statusMap.put(UserActivityPendencyRequestFilterDto.FINALIZED_STATUS, getDoneStatusCondition());
-    statusMap.put(UserActivityPendencyRequestFilterDto.NOT_FINALIZED_STATUS, getOpenedStatusCondition());
+    statusMap.put(UserActivityPendencyFilterDto.FINALIZED_STATUS, getDoneStatusCondition());
+    statusMap.put(UserActivityPendencyFilterDto.NOT_FINALIZED_STATUS, getOpenedStatusCondition());
     return statusMap.get(userActivityPendencyDtoStatus);
   }
 
@@ -153,15 +153,15 @@ public class UserActivityPendencyQueryBuilder {
       "    }"));
   }
 
-  private String getActivityFilterExpressionsFromDto(UserActivityPendencyRequestFilterDto userActivityPendencyRequestFilterDto){
-    if(userActivityPendencyRequestFilterDto==null){
+  private String getActivityFilterExpressionsFromDto(UserActivityPendencyFilterDto userActivityPendencyFilterDto){
+    if(userActivityPendencyFilterDto ==null){
       return "";
     }
     return
-      getStatusConditionFromDto(userActivityPendencyRequestFilterDto.getStatus()) +
-        getActivityFilterFromDto(ACTIVITY_ACRONYM_FIELD, userActivityPendencyRequestFilterDto.getAcronym()) +
-        getActivityFilterFromDto(ACTIVITY_RN_FIELD, userActivityPendencyRequestFilterDto.getRn()) +
-        getActivityFilterFromDto(ACTIVITY_EXTERNAL_ID_FIELD, userActivityPendencyRequestFilterDto.getExternalID());
+      getStatusConditionFromDto(userActivityPendencyFilterDto.getStatus()) +
+        getActivityFilterFromDto(ACTIVITY_ACRONYM_FIELD, userActivityPendencyFilterDto.getAcronym()) +
+        getActivityFilterFromDto(ACTIVITY_RN_FIELD, userActivityPendencyFilterDto.getRn()) +
+        getActivityFilterFromDto(ACTIVITY_EXTERNAL_ID_FIELD, userActivityPendencyFilterDto.getExternalID());
   }
   private String getActivityFilterFromDto(String activityField, Object filterValue){
     try{
@@ -171,13 +171,13 @@ public class UserActivityPendencyQueryBuilder {
     }
   }
 
-  private String getPendencyFilterExpressionsFromDto(UserActivityPendencyRequestFilterDto userActivityPendencyRequestFilterDto){
-    if(userActivityPendencyRequestFilterDto==null){
+  private String getPendencyFilterExpressionsFromDto(UserActivityPendencyFilterDto userActivityPendencyFilterDto){
+    if(userActivityPendencyFilterDto ==null){
       return "";
     }
     return
-      getUserFilterFromDto("requester", userActivityPendencyRequestFilterDto.getRequesters()) +
-      getUserFilterFromDto("receiver", userActivityPendencyRequestFilterDto.getReceivers());
+      getUserFilterFromDto("requester", userActivityPendencyFilterDto.getRequesters()) +
+      getUserFilterFromDto("receiver", userActivityPendencyFilterDto.getReceivers());
   }
   private String getUserFilterFromDto(String userRole, String[] filterValues){
     try{

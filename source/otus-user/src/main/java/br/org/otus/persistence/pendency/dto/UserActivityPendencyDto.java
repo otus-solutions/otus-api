@@ -23,7 +23,7 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
   //private SortingCriteria[] sortingCriteria;
 
   @SerializedName(value = "filter")
-  private UserActivityPendencyRequestFilterDto filterDto;
+  private UserActivityPendencyFilterDto filterDto;
 
   public int getCurrentQuantity() {
     return currentQuantity;
@@ -43,7 +43,7 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
     return sortingCriteria;
   }
 
-  public UserActivityPendencyRequestFilterDto getFilterDto() {
+  public UserActivityPendencyFilterDto getFilterDto() {
     return filterDto;
   }
 
