@@ -74,7 +74,7 @@ public class UserActivityPendencyDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public List<UserActivityPendencyResponse> getAllPendencies(UserActivityPendencyDto userActivityPendencyDto) throws DataNotFoundException, MemoryExcededException, DataFormatException {
+  public List<UserActivityPendencyResponse> findAllPendencies(UserActivityPendencyDto userActivityPendencyDto) throws DataNotFoundException, MemoryExcededException, DataFormatException {
     return listPendencies((new UserActivityPendencyQueryBuilder()).getAllPendenciesWithFiltersQuery(userActivityPendencyDto));
   }
 
