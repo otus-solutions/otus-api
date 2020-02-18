@@ -1,5 +1,6 @@
 package br.org.otus.outcomes;
 
+import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.RequestException;
@@ -9,12 +10,11 @@ import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.response.info.Validation;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.participant.model.Participant;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -30,6 +30,9 @@ public class FollowUpFacade {
   private SurveyFacade surveyFacade;
   @Inject
   private ActivityFacade activityFacade;
+
+  private static final String PARTICIPANT_NAME = "participant_name";
+  private static final String EVENT_NAME = "event_name";
 
   public Object createFollowUp(String FollowUpJson) {
     try {
@@ -109,19 +112,35 @@ public class FollowUpFacade {
   public Object startParticipantEvent(String rn, String eventJson) {
     try {
       ObjectId participantId = participantFacade.findIdByRecruitmentNumber(Long.parseLong(rn));
+      Participant participant = participantFacade.getByRecruitmentNumber(Long.parseLong(rn));
       ParticipantEventDTO participantEventDTO = ParticipantEventDTO.deserialize(eventJson);
 
       if (!participantEventDTO.isValid()) {
         return new DataFormatException();
       }
 
+      GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
 
-      GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), new GsonBuilder().create().toJson(participantEventDTO));
+      if (!gatewayResponse.getData().toString().isEmpty()) {
+        this.notificationEvent(participantEventDTO, participant);
+      }
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Object.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public void notificationEvent(ParticipantEventDTO participantEventDTO, Participant participant) throws MalformedURLException {
+    if (!participantEventDTO.objectType.contains("Follow")) {
+      GatewayResponse gatewayResponseNotification = new OutcomeGatewayService().getNotificationDataEvent(participantEventDTO._id);
+      CommunicationData communicationData = CommunicationData.deserialize(gatewayResponseNotification.getData().toString());
+      communicationData.setEmail(participant.getEmail());
+      communicationData.pushVariable(PARTICIPANT_NAME, participant.getName());
+      communicationData.pushVariable(EVENT_NAME, participantEventDTO.description);
+      GatewayResponse notification = new CommunicationGatewayService().sendMail(CommunicationData.serialize(communicationData));
+      System.err.println(notification.getData());
     }
   }
 
