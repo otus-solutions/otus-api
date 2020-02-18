@@ -101,8 +101,9 @@ public class UserActivityPendencyServiceBeanTest {
   // list All with Filters
   @Test
   public void listAllPendencies_should_return_list_UserActivityPendency() throws Exception {
-    when(userActivityPendencyDao.findAllPendenciesToReceiver(SEARCH_SETTINGS_JSON)).thenReturn(userActivityPendencyResponses);
-    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendenciesToReceiver(SEARCH_SETTINGS_JSON));
+    when(userActivityPendencyDao.findAllPendencies(UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON)))
+      .thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON));
   }
 
   @Test(expected = DataNotFoundException.class)
