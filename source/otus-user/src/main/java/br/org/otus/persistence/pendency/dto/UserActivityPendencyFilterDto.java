@@ -2,8 +2,9 @@ package br.org.otus.persistence.pendency.dto;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import org.ccem.otus.exceptions.Dto;
 
-public class UserActivityPendencyFilterDto {
+public class UserActivityPendencyFilterDto implements Dto {
 
   public static final String FINALIZED_STATUS = "FINALIZED";
   public static final String NOT_FINALIZED_STATUS = "NOT_FINALIZED";
@@ -54,5 +55,10 @@ public class UserActivityPendencyFilterDto {
 
   public static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
+  }
+
+  @Override
+  public Boolean isValid() {
+    return null;
   }
 }

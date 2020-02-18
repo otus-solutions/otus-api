@@ -6,7 +6,7 @@ import org.ccem.otus.exceptions.Dto;
 
 import java.util.zip.DataFormatException;
 
-public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
+public class UserActivityPendencyDto implements Dto {
 
   @SerializedName(value = "currentQuantity")
   private int currentQuantity;
@@ -18,16 +18,12 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
   private String[] fieldsToOrder;
 
   @SerializedName(value = "orderMode")
-  private int orderMode;
-
-  //private SortingCriteria[] sortingCriteria;
+  private Integer orderMode;
 
   @SerializedName(value = "filter")
   private UserActivityPendencyFilterDto filterDto;
 
-  public int getCurrentQuantity() {
-    return currentQuantity;
-  }
+  public int getCurrentQuantity() { return currentQuantity; }
 
   public int getQuantityToGet() { return quantityToGet; }
 
@@ -36,12 +32,12 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
   public int getOrderMode() { return orderMode; }
 
   public SortingCriteria[] getSortingCriteria() throws DataFormatException {
-    if(fieldsToOrder==null){
+    if(fieldsToOrder==null){ //TODO test: 2 branch missed
       return null;
     }
     int n = fieldsToOrder.length;
     SortingCriteria[] sortingCriteria = new SortingCriteria[n];
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) { //TODO test: 2 branch missed
       sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], orderMode);
     }
     return sortingCriteria;
@@ -49,11 +45,6 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
   public UserActivityPendencyFilterDto getFilterDto() {
     return filterDto;
-  }
-
-  @Override
-  public Boolean isValid() {
-    return Boolean.TRUE;
   }
 
   public static String serialize(UserActivityPendencyDto userActivityPendencyDto) {
@@ -66,5 +57,14 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
   public static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
+  }
+
+  @Override
+  public Boolean isValid() {
+    return
+      filterDto.isValid() && (
+        (fieldsToOrder==null && orderMode!=null) ||
+        (fieldsToOrder!=null && fieldsToOrder.length > 0 && orderMode!=null && (orderMode==1 || orderMode==-1))
+      );
   }
 }
