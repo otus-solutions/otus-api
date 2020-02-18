@@ -31,6 +31,10 @@ public class UserActivityPendencyDto implements Dto { //TODO pq implementar Dto?
 
   public int getQuantityToGet() { return quantityToGet; }
 
+  public String[] getFieldsToOrder() { return fieldsToOrder; }
+
+  public int getOrderMode() { return orderMode; }
+
   public SortingCriteria[] getSortingCriteria() throws DataFormatException {
     if(fieldsToOrder==null){
       return null;
