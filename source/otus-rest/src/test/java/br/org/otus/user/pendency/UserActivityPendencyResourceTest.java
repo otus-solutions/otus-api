@@ -17,9 +17,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -39,6 +37,7 @@ public class UserActivityPendencyResourceTest {
   private static final String NEW_PENDENCY_DATA = "";
   private static final String EXPECTED_EMPTY_RESPONSE = "{\"data\":true}";
   private static final String EXPECTED_CREATE_RESPONSE = "12355b8e415e9c6746ca2da1";
+  private static final String SEARCH_SETTINGS_JSON = "";
 
   @InjectMocks
   private UserActivityPendencyResource userActivityPendencyResource;
@@ -96,62 +95,84 @@ public class UserActivityPendencyResourceTest {
       userActivityPendencyResource.getByActivityId(ACTIVITY_ID));
   }
 
+  /*
+   * list to Receiver
+   */
   @Test
-  public void listAllPendenciesToReceiver_method_should_return_all_pendencies() {
+  public void listAllPendencies_method_should_return_all_pendencies(){
+    when(userActivityPendencyFacade.listAllPendencies(SEARCH_SETTINGS_JSON)).thenReturn(userActivityPendencyResponses);
+    assertEquals(encapsulateExpectedResponseList(), userActivityPendencyResource.listAllPendencies(SEARCH_SETTINGS_JSON));
+  }
+
+  /*
+   * list to Receiver
+   */
+  @Test
+  public void listAllPendenciesToReceiver_method_should_return_all_pendencies_to_receiver() {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponseList(),
       userActivityPendencyResource.listAllPendenciesToReceiver(request));
   }
 
   @Test
-  public void listOpenedPendenciesToReceiver_method_should_return_only_opened_pendencies() {
+  public void listOpenedPendenciesToReceiver_method_should_return_only_opened_pendencies_to_receiver() {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponseList(),
       userActivityPendencyResource.listOpenedPendenciesToReceiver(request));
   }
 
   @Test
-  public void listDonePendenciesToReceiver_method_should_return_only_done_pendencies() {
+  public void listDonePendenciesToReceiver_method_should_return_only_done_pendencies_to_receiver() {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponseList(),
       userActivityPendencyResource.listDonePendenciesToReceiver(request));
   }
 
+  /*
+   * list from Requester
+   */
   @Test
-  public void listAllPendenciesFromRequester_method_should_return_all_pendencies() {
+  public void listAllPendenciesFromRequester_method_should_return_all_pendencies_from_requester() {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponseList(),
       userActivityPendencyResource.listAllPendenciesFromRequester(request));
   }
 
   @Test
-  public void listOpenedPendenciesFromRequester_method_should_return_only_opened_pendencies() {
+  public void listOpenedPendenciesFromRequester_method_should_return_only_opened_pendencies_from_requester() {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponseList(),
       userActivityPendencyResource.listOpenedPendenciesFromRequester(request));
   }
 
   @Test
-  public void listDonePendenciesFromRequester_method_should_return_only_done_pendencies() {
+  public void listDonePendenciesFromRequester_method_should_return_only_done_pendencies_from_requester() {
     mockContextToSetUserEmail();
     when(userActivityPendencyFacade.listDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
     assertEquals(
-      encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]"),
+      encapsulateExpectedResponseList(),
       userActivityPendencyResource.listDonePendenciesFromRequester(request));
   }
 
+  /*
+   * Private Methods
+   */
   private String encapsulateExpectedResponse(String data) {
     return "{\"data\":" + data + "}";
+  }
+
+  private String encapsulateExpectedResponseList() {
+    return encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]");
   }
 
   private void mockContextToSetUserEmail() {
