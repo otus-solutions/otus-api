@@ -15,19 +15,23 @@ public class SortingCriteriaTest {
 
   private static final String FIELD_NAME = "rn";
   private static final int ASCENDING_ORDER_MODE = 1;
+  private static final int DESCENDING_ORDER_MODE = -1;
   private static final int INVALID_ORDER_MODE = 0;
 
   private SortingCriteria sortingCriteria;
 
-  @Before
-  public void setUp() throws DataFormatException {
+  @Test
+  public void check_getters_for_ascending_mode() throws DataFormatException {
     sortingCriteria = new SortingCriteria(FIELD_NAME, ASCENDING_ORDER_MODE);
+    assertEquals(FIELD_NAME, sortingCriteria.getFieldName());
+    assertEquals(ASCENDING_ORDER_MODE, sortingCriteria.getMode());
   }
 
   @Test
-  public void check_getters(){
+  public void check_getters_for_descending_mode() throws DataFormatException {
+    sortingCriteria = new SortingCriteria(FIELD_NAME, DESCENDING_ORDER_MODE);
     assertEquals(FIELD_NAME, sortingCriteria.getFieldName());
-    assertEquals(ASCENDING_ORDER_MODE, sortingCriteria.getMode());
+    assertEquals(DESCENDING_ORDER_MODE, sortingCriteria.getMode());
   }
 
   @Test(expected = DataFormatException.class)
