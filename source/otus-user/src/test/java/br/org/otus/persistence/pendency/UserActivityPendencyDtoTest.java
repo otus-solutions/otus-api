@@ -85,8 +85,7 @@ public class UserActivityPendencyDtoTest {
 
   @Test
   public void isValid_method_should_be_return_TRUE_if_only_filterDto_is_null(){
-    UserActivityPendencyFilterDto filterDtoNull = null;
-    Whitebox.setInternalState(userActivityPendencyDto, "filterDto", filterDtoNull);
+    Whitebox.setInternalState(userActivityPendencyDto, "filterDto", (UserActivityPendencyFilterDto) null);
     Boolean isValid = userActivityPendencyDto.isValid();
     Whitebox.setInternalState(userActivityPendencyDto, "filterDto", userActivityPendencyFilterDto);
     assertTrue(isValid);
@@ -101,9 +100,18 @@ public class UserActivityPendencyDtoTest {
   }
 
   @Test
+  public void isValid_method_should_be_return_TRUE_if_fieldsToOrder_and_orderMode_are_null(){
+    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", (Object[]) null);
+    Whitebox.setInternalState(userActivityPendencyDto, "orderMode", (Integer) null);
+    Boolean isValid = userActivityPendencyDto.isValid();
+    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", FIELDS_TO_ORDER);
+    Whitebox.setInternalState(userActivityPendencyDto, "orderMode", ASCENDING_ORDER_MODE);
+    assertTrue(isValid);
+  }
+
+  @Test
   public void isValid_method_should_be_return_FALSE_if_fieldsToOrder_null_and_orderMode_not_null(){
-    String[] fieldsToOrderAsNull = null;
-    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", fieldsToOrderAsNull);
+    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", (Object[]) null);
     Boolean isValid = userActivityPendencyDto.isValid();
     Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", FIELDS_TO_ORDER);
     assertFalse(isValid);
@@ -111,8 +119,7 @@ public class UserActivityPendencyDtoTest {
 
   @Test
   public void isValid_method_should_be_return_FALSE_if_fieldsToOrder_not_null_and_orderMode_null(){
-    Integer orderModeNull = null;
-    Whitebox.setInternalState(userActivityPendencyDto, "orderMode", orderModeNull);
+    Whitebox.setInternalState(userActivityPendencyDto, "orderMode", (Integer) null);
     Boolean isValid = userActivityPendencyDto.isValid();
     Whitebox.setInternalState(userActivityPendencyDto, "orderMode", ASCENDING_ORDER_MODE);
     assertFalse(isValid);
@@ -120,8 +127,7 @@ public class UserActivityPendencyDtoTest {
 
   @Test
   public void isValid_method_should_be_return_FALSE_if_nothing_about_order_is_null_and_fieldsToOrder_is_empty(){
-    String[] fieldsToOrderEmpty = new String[]{};
-    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", fieldsToOrderEmpty);
+    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", new String[]{});
     Boolean isValid = userActivityPendencyDto.isValid();
     Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", FIELDS_TO_ORDER);
     assertFalse(isValid);
