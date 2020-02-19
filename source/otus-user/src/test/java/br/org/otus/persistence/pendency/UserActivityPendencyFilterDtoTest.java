@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 public class UserActivityPendencyFilterDtoTest {
 
   private final static String STATUS = "FINALIZED";
+  private final static String INVALID_STATUS = "xxx";
   private final static String ACRONYM = "ABC";
   private final static Long RN = 1234567L;
   private final static String EXTERNAL_ID = "xwyz";
@@ -53,5 +54,21 @@ public class UserActivityPendencyFilterDtoTest {
   @Test
   public void isValid_method_should_return_TRUE(){
     assertEquals(Boolean.TRUE, userActivityPendencyFilterDto.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_TRUE_if_status_is_null(){
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "status", (String) null);
+    Boolean isValid = userActivityPendencyFilterDto.isValid();
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "status", STATUS);
+    assertTrue(isValid);
+  }
+
+  @Test
+  public void isValid_method_should_return_FALSE_if_status_is_not_null_and_invalid(){
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "status", INVALID_STATUS);
+    Boolean isValid = userActivityPendencyFilterDto.isValid();
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "status", STATUS);
+    assertFalse(isValid);
   }
 }
