@@ -14,13 +14,12 @@ public class UserActivityPendencyQueryBuilder {
   public static final String ACTIVITY_ID_FIELD = "activityId";
   public static final String FINALIZED_STATUS = "FINALIZED";
   public static final String NO_STATUS = "";
+  public static final String ACTIVITY_INFO = "activityInfo";
 
-  private static final String ACTIVITY_INFO = "activityInfo";
-
-  private static final String ACTIVITY_NAME_FIELD = "surveyForm.name";
-  private static final String ACTIVITY_ACRONYM_FIELD = "surveyForm.acronym";
-  private static final String ACTIVITY_RN_FIELD = "participantData.recruitmentNumber";
-  private static final String ACTIVITY_EXTERNAL_ID_FIELD = "externalID";
+  public static final String ACTIVITY_NAME_FIELD = "surveyForm.name";
+  public static final String ACTIVITY_ACRONYM_FIELD = "surveyForm.acronym";
+  public static final String ACTIVITY_RN_FIELD = "participantData.recruitmentNumber";
+  public static final String ACTIVITY_EXTERNAL_ID_FIELD = "externalID";
 
   private ArrayList<Bson> pipeline;
 
@@ -208,6 +207,7 @@ public class UserActivityPendencyQueryBuilder {
     // pendency fields
     sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.REQUESTER.getName(), UserActivityPendencyFilterFieldOptions.REQUESTER.getName());
     sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.RECEIVER.getName(), UserActivityPendencyFilterFieldOptions.RECEIVER.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.DUE_DATE.getName(), UserActivityPendencyFilterFieldOptions.DUE_DATE.getName());
 
     int n = sortingCriteria.length;
     String[] criteriaStr = new String[n];
