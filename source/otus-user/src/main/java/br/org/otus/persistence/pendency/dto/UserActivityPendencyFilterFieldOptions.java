@@ -6,6 +6,7 @@ public enum UserActivityPendencyFilterFieldOptions {
   ACRONYM("acronym"),
   RECRUITMENT_NUMBER("rn"),
   EXTERNAL_ID("externalID"),
+  DUE_DATE("dueDate"),
   REQUESTER("requester"),
   RECEIVER("receiver");
 
