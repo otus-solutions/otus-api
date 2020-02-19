@@ -6,9 +6,6 @@ import org.ccem.otus.exceptions.Dto;
 
 public class UserActivityPendencyFilterDto implements Dto {
 
-  public static final String FINALIZED_STATUS = "FINALIZED";
-  public static final String NOT_FINALIZED_STATUS = "NOT_FINALIZED";
-
   @SerializedName(value = "status")
   private String status;
 
@@ -28,13 +25,21 @@ public class UserActivityPendencyFilterDto implements Dto {
   private String[] receiver;
 
 
-  public String getAcronym() { return acronym; }
+  public String getAcronym() {
+    return acronym;
+  }
 
-  public Long getRn() { return rn; }
+  public Long getRn() {
+    return rn;
+  }
 
-  public String getExternalID() { return externalID; }
+  public String getExternalID() {
+    return externalID;
+  }
 
-  public String getStatus() { return status; }
+  public String getStatus() {
+    return status;
+  }
 
   public String[] getRequesters() {
     return requester;
@@ -59,6 +64,7 @@ public class UserActivityPendencyFilterDto implements Dto {
 
   @Override
   public Boolean isValid() {
-    return Boolean.TRUE;
+    return (getStatus() == null || UserActivityPendencyStatusFilterOptions.isValid(getStatus()));
   }
+
 }

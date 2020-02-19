@@ -1,8 +1,6 @@
 package br.org.otus.user.pendency.builder;
 
-import br.org.otus.persistence.pendency.dto.SortingCriteria;
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyFilterDto;
+import br.org.otus.persistence.pendency.dto.*;
 import org.bson.conversions.Bson;
 import org.ccem.otus.service.ParseQuery;
 
@@ -66,8 +64,8 @@ public class UserActivityPendencyQueryBuilder {
       return NO_STATUS;
     }
     Map<String, String> statusMap = new HashMap<>();
-    statusMap.put(UserActivityPendencyFilterDto.FINALIZED_STATUS, getDoneStatusCondition());
-    statusMap.put(UserActivityPendencyFilterDto.NOT_FINALIZED_STATUS, getOpenedStatusCondition());
+    statusMap.put(UserActivityPendencyStatusFilterOptions.FINALIZED.getValue(), getDoneStatusCondition());
+    statusMap.put(UserActivityPendencyStatusFilterOptions.NOT_FINALIZED.getValue(), getOpenedStatusCondition());
     return statusMap.get(userActivityPendencyDtoStatus);
   }
 
@@ -196,22 +194,27 @@ public class UserActivityPendencyQueryBuilder {
     pipeline.add(ParseQuery.toDocument("{ $limit: "+ quantityToGet +" }"));
   }
 
-  private void addSortingCriteria(SortingCriteria[] sortingCriteria){
+  private void addSortingCriteria(SortingCriteria[] sortingCriteria) {
     if(sortingCriteria==null || sortingCriteria.length == 0){
       return;
     }
 
     Map<String, String> sortFieldNamesMap = new HashMap<>();
-    sortFieldNamesMap.put("status", ACTIVITY_INFO+".lastStatusName");
-    sortFieldNamesMap.put("acronym", ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
-    sortFieldNamesMap.put("rn", ACTIVITY_INFO+".recruitmentNumber");
+    // activity fields
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.ACRONYM.getName(), ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.RECRUITMENT_NUMBER.getName(), ACTIVITY_INFO+".recruitmentNumber");
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.EXTERNAL_ID.getName(), ACTIVITY_INFO+".externalID");
+    // pendency fields
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.REQUESTER.getName(), UserActivityPendencyFilterFieldOptions.REQUESTER.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.RECEIVER.getName(), UserActivityPendencyFilterFieldOptions.RECEIVER.getName());
 
     int n = sortingCriteria.length;
     String[] criteriaStr = new String[n];
     for (int i = 0; i < n; i++) {
-      String fieldName = sortingCriteria[i].getFieldName();
-      criteriaStr[i] = "'" + (sortFieldNamesMap.get(fieldName)!=null? sortFieldNamesMap.get(fieldName) : fieldName) + "': " + sortingCriteria[i].getMode();
+      criteriaStr[i] = "'" + sortFieldNamesMap.get(sortingCriteria[i].getFieldName()) + "': " + sortingCriteria[i].getMode();
     }
+
     pipeline.add(ParseQuery.toDocument("{ " +
       "$sort: { " + String.join(", ", criteriaStr) + " } " +
       "}"));
