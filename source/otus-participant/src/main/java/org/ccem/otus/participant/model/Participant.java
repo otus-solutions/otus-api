@@ -61,7 +61,7 @@ public class Participant {
     return fieldCenter;
   }
 
-  public Boolean getIdentified() {
+  public Boolean isIdentified() {
     return identified;
   }
 

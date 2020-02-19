@@ -59,8 +59,12 @@ public class UnattachedLaboratoryFacade {
   public void attache(String email, int laboratoryIdentification, Long recruitmentNumber) {
     try {
       Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
-      CollectGroupDescriptor collectGroup = groupRaffle.perform(participant);
-      unattachedLaboratoryService.attache(recruitmentNumber, email, laboratoryIdentification, collectGroup.getName(), participant.getFieldCenter().getAcronym());
+      if (participant.isIdentified()){
+        CollectGroupDescriptor collectGroup = groupRaffle.perform(participant);
+        unattachedLaboratoryService.attache(recruitmentNumber, email, laboratoryIdentification, collectGroup.getName(), participant.getFieldCenter().getAcronym());
+      } else {
+        throw new HttpResponseException(Validation.build("Participant not identified"));
+      }
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage()));
     } catch (ValidationException e) {
