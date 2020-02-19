@@ -77,7 +77,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   public ParticipantLaboratory create(Long recruitmentNumber) throws DataNotFoundException {
     Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
     CollectGroupDescriptor collectGroup = groupRaffle.perform(participant);
-    List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(participant, collectGroup));
+    List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(participant.getFieldCenter(), collectGroup));
     ParticipantLaboratory laboratory = new ParticipantLaboratory(recruitmentNumber, collectGroup.getName(), tubes);
     participantLaboratoryDao.persist(laboratory);
     return laboratory;

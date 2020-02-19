@@ -103,5 +103,4 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
     ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(center);
     return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
   }
-
 }

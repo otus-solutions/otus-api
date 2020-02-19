@@ -1,33 +1,34 @@
 package br.org.otus.laboratory.configuration.collect.tube.generator;
 
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 
 public class TubeSeed {
 
-  private Participant participant;
+  private FieldCenter fieldCenter;
   private CollectGroupDescriptor collectGroupDescriptor;
   private int tubeCount;
 
-  private TubeSeed(Participant participant, CollectGroupDescriptor collGroupDescriptor, Integer tubeCount) {
-    this.participant = participant;
+  private TubeSeed(FieldCenter fieldCenter, CollectGroupDescriptor collGroupDescriptor, Integer tubeCount) {
+    this.fieldCenter = fieldCenter;
     this.collectGroupDescriptor = collGroupDescriptor;
     this.tubeCount = tubeCount;
   }
 
   public Integer getFieldCenterCode() {
-    return participant.getFieldCenter().getCode();
+    return fieldCenter.getCode();
   }
 
   public String getFieldCenterAcronym() {
-    return participant.getFieldCenter().getAcronym();
+    return fieldCenter.getAcronym();
   }
 
   public CollectGroupDescriptor getCollectGroupDescriptor() {
     return collectGroupDescriptor;
   }
 
-  public String getParticipantCollectGroupName() {
+  public String getCollectGroupName() {
     return getCollectGroupDescriptor().getName();
   }
 
@@ -39,8 +40,8 @@ public class TubeSeed {
     this.tubeCount = count;
   }
 
-  public static TubeSeed generate(Participant participant, CollectGroupDescriptor collectGroupDescriptor) {
-    return new TubeSeed(participant, collectGroupDescriptor, 0);
+  public static TubeSeed generate(FieldCenter fieldCenter, CollectGroupDescriptor collectGroupDescriptor) {
+    return new TubeSeed(fieldCenter, collectGroupDescriptor, 0);
   }
 
 }

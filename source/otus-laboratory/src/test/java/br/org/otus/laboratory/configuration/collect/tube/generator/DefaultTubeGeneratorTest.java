@@ -3,7 +3,7 @@ package br.org.otus.laboratory.configuration.collect.tube.generator;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
-import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.model.FieldCenter;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class DefaultTubeGeneratorTest {
   @Mock
   private LaboratoryConfigurationService laboratoryConfigurationService;
   @InjectMocks
-  private Participant participant;
+  private FieldCenter fieldCenter;
 
   private Set<TubeDefinition> tubeDefinitions;
   private CollectGroupDescriptor collectGroupDescriptor;
@@ -40,7 +40,7 @@ public class DefaultTubeGeneratorTest {
     tubeDefinitions.add(new TubeDefinition(1, "GEL", "POST_OVERLOAD"));
     tubeDefinitions.add(new TubeDefinition(2, "FLORIDE", "POST_OVERLOAD"));
     collectGroupDescriptor = new CollectGroupDescriptor(GROUP_NAME_DEFAULT, GROUP_NAME_DEFAULT, tubeDefinitions);
-    tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
+    tubeSeed = TubeSeed.generate(fieldCenter, collectGroupDescriptor);
     PowerMockito.when(laboratoryConfigurationService.getDefaultTubeSet()).thenReturn(tubeDefinitions);
   }
 

@@ -142,7 +142,7 @@ public class ParticipantLaboratoryServiceBeanTest {
   public void create_method_should_persist_laboratory() throws Exception {
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     when(groupRaffle.perform(participant)).thenReturn(collectGroup);
-    when(tubeService.generateTubes(TubeSeed.generate(participant, collectGroup))).thenReturn(participantLaboratory.getTubes());
+    when(tubeService.generateTubes(TubeSeed.generate(participant.getFieldCenter(), collectGroup))).thenReturn(participantLaboratory.getTubes());
     whenNew(ParticipantLaboratory.class).withAnyArguments().thenReturn(participantLaboratory);
     participantLaboratoryServiceBean.create(RECRUIMENT_NUMBER);
     verify(participantLaboratoryDao, Mockito.times(1)).persist(participantLaboratory);
