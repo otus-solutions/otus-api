@@ -54,17 +54,20 @@ public class UserActivityPendencyFilterDto implements Dto {
     return getGsonBuilder().create().toJson(userActivityPendencyFilterDto);
   }
 
-  public static UserActivityPendencyFilterDto deserialize(String orderRequestJson) {
-    return UserActivityPendencyFilterDto.getGsonBuilder().create().fromJson(orderRequestJson, UserActivityPendencyFilterDto.class);
+  public static UserActivityPendencyFilterDto deserialize(String filterRequestJson) {
+    return UserActivityPendencyFilterDto.getGsonBuilder().create().fromJson(filterRequestJson, UserActivityPendencyFilterDto.class);
   }
 
   public static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
   }
 
+
   @Override
   public Boolean isValid() {
-    return (getStatus() == null || UserActivityPendencyStatusFilterOptions.isValid(getStatus()));
+    return (getStatus() == null || UserActivityPendencyStatusFilterOptions.contains(getStatus())) &&
+      (requester!=null && requester.length == 0)  &&
+      (receiver!=null && receiver.length == 0);
   }
 
 }

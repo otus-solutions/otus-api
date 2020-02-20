@@ -18,7 +18,7 @@ public enum UserActivityPendencyStatusFilterOptions {
     return value;
   }
 
-  public static boolean isValid(String statusOption){
+  public static boolean contains(String statusOption){
     Map<String, UserActivityPendencyStatusFilterOptions> valuesMap = new HashMap<>();
     valuesMap.put(FINALIZED.getValue(), FINALIZED);
     valuesMap.put(NOT_FINALIZED.getValue(), NOT_FINALIZED);

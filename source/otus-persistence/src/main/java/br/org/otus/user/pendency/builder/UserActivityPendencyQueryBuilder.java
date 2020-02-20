@@ -46,7 +46,9 @@ public class UserActivityPendencyQueryBuilder {
     addSelectedFieldsFromActivityLookupResult();
     addSkip(userActivityPendencyDto.getCurrentQuantity());
     addLimit(userActivityPendencyDto.getQuantityToGet());
-    addSortingCriteria(userActivityPendencyDto.getSortingCriteria());
+    if(userActivityPendencyDto.getOrderDto() != null){
+      addSortingCriteria(userActivityPendencyDto.getOrderDto().getSortingCriteria());
+    }
     return pipeline;
   }
 
@@ -174,7 +176,7 @@ public class UserActivityPendencyQueryBuilder {
     }
     return
       getUserFilterFromDto("requester", userActivityPendencyFilterDto.getRequesters()) +
-      getUserFilterFromDto("receiver", userActivityPendencyFilterDto.getReceivers());
+        getUserFilterFromDto("receiver", userActivityPendencyFilterDto.getReceivers());
   }
   private String getUserFilterFromDto(String userRole, String[] filterValues){
     try{
@@ -193,21 +195,22 @@ public class UserActivityPendencyQueryBuilder {
     pipeline.add(ParseQuery.toDocument("{ $limit: "+ quantityToGet +" }"));
   }
 
-  private void addSortingCriteria(SortingCriteria[] sortingCriteria) {
-    if(sortingCriteria==null || sortingCriteria.length == 0){
-      return;
-    }
+  private void addSortingCriteria(SortingCriteria[] sortingCriteria){
+
+//    if(sortingCriteria==null || sortingCriteria.length == 0){
+//      return;
+//    }
 
     Map<String, String> sortFieldNamesMap = new HashMap<>();
     // activity fields
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.ACRONYM.getName(), ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.RECRUITMENT_NUMBER.getName(), ACTIVITY_INFO+".recruitmentNumber");
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.EXTERNAL_ID.getName(), ACTIVITY_INFO+".externalID");
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.ACRONYM.getName(), ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.RECRUITMENT_NUMBER.getName(), ACTIVITY_INFO+".recruitmentNumber");
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.EXTERNAL_ID.getName(), ACTIVITY_INFO+".externalID");
     // pendency fields
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.REQUESTER.getName(), UserActivityPendencyFieldFilterOptions.REQUESTER.getName());
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.RECEIVER.getName(), UserActivityPendencyFieldFilterOptions.RECEIVER.getName());
-    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.DUE_DATE.getName(), UserActivityPendencyFieldFilterOptions.DUE_DATE.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.REQUESTER.getName(), UserActivityPendencyFieldOrderingOptions.REQUESTER.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.RECEIVER.getName(), UserActivityPendencyFieldOrderingOptions.RECEIVER.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.DUE_DATE.getName(), UserActivityPendencyFieldOrderingOptions.DUE_DATE.getName());
 
     int n = sortingCriteria.length;
     String[] criteriaStr = new String[n];

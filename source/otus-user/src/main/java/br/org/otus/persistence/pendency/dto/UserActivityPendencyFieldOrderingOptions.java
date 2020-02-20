@@ -1,8 +1,6 @@
 package br.org.otus.persistence.pendency.dto;
 
-import java.util.Arrays;
-
-public enum UserActivityPendencyFieldFilterOptions {
+public enum UserActivityPendencyFieldOrderingOptions {
 
   STATUS("status"),
   ACRONYM("acronym"),
@@ -14,7 +12,7 @@ public enum UserActivityPendencyFieldFilterOptions {
 
   private String name;
 
-  UserActivityPendencyFieldFilterOptions(String name){
+  UserActivityPendencyFieldOrderingOptions(String name){
     this.name = name;
   }
 
@@ -22,12 +20,13 @@ public enum UserActivityPendencyFieldFilterOptions {
     return name;
   }
 
-  public static boolean contains(String filterOption){
-    for (UserActivityPendencyFieldFilterOptions option : UserActivityPendencyFieldFilterOptions.values()) {
-      if (option.name().equals(filterOption)) {
+  public static boolean contains(String orderingOption){
+    for (UserActivityPendencyFieldOrderingOptions option : UserActivityPendencyFieldOrderingOptions.values()) {
+      if (option.name().equals(orderingOption)) {
         return true;
       }
     }
     return false;
   }
+
 }

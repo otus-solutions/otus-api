@@ -4,8 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.exceptions.Dto;
 
-import java.util.zip.DataFormatException;
-
 public class UserActivityPendencyDto implements Dto {
 
   @SerializedName(value = "currentQuantity")
@@ -15,10 +13,7 @@ public class UserActivityPendencyDto implements Dto {
   private int quantityToGet;
 
   @SerializedName(value = "order")
-  private String[] fieldsToOrder;
-
-  @SerializedName(value = "orderMode")
-  private Integer orderMode;
+  private UserActivityPendencyOrderDto orderDto;
 
   @SerializedName(value = "filter")
   private UserActivityPendencyFilterDto filterDto;
@@ -27,21 +22,7 @@ public class UserActivityPendencyDto implements Dto {
 
   public int getQuantityToGet() { return quantityToGet; }
 
-  public String[] getFieldsToOrder() { return fieldsToOrder; }
-
-  public Integer getOrderMode() { return orderMode; }
-
-  public SortingCriteria[] getSortingCriteria() throws DataFormatException {
-    if(fieldsToOrder==null){
-      return null;
-    }
-    int n = fieldsToOrder.length;
-    SortingCriteria[] sortingCriteria = new SortingCriteria[n];
-    for (int i = 0; i < n; i++) {
-      sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], orderMode);
-    }
-    return sortingCriteria;
-  }
+  public UserActivityPendencyOrderDto getOrderDto() { return orderDto; }
 
   public UserActivityPendencyFilterDto getFilterDto() {
     return filterDto;
@@ -51,8 +32,8 @@ public class UserActivityPendencyDto implements Dto {
     return getGsonBuilder().create().toJson(userActivityPendencyDto);
   }
 
-  public static UserActivityPendencyDto deserialize(String orderRequestJson) {
-    return UserActivityPendencyDto.getGsonBuilder().create().fromJson(orderRequestJson, UserActivityPendencyDto.class);
+  public static UserActivityPendencyDto deserialize(String userActivityPendencyDtoJson) {
+    return UserActivityPendencyDto.getGsonBuilder().create().fromJson(userActivityPendencyDtoJson, UserActivityPendencyDto.class);
   }
 
   public static GsonBuilder getGsonBuilder() {
@@ -63,9 +44,6 @@ public class UserActivityPendencyDto implements Dto {
   public Boolean isValid() {
     return
       (filterDto==null || filterDto.isValid()) &&
-      (
-        (fieldsToOrder==null && orderMode==null) ||
-        (fieldsToOrder!=null && fieldsToOrder.length > 0 && orderMode!=null && (orderMode==1 || orderMode==-1))
-      );
+      (orderDto==null || orderDto.isValid());
   }
 }
