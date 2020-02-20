@@ -66,8 +66,14 @@ public class UserActivityPendencyFilterDto implements Dto {
   @Override
   public Boolean isValid() {
     return (getStatus() == null || UserActivityPendencyStatusFilterOptions.contains(getStatus())) &&
-      (requester!=null && requester.length == 0)  &&
-      (receiver!=null && receiver.length == 0);
+      arrayIsValid(requester) &&
+      arrayIsValid(receiver);
+  }
+  private boolean arrayIsValid(String[] array){
+    if(array == null){
+      return true;
+    }
+    return (array.length > 0);
   }
 
 }
