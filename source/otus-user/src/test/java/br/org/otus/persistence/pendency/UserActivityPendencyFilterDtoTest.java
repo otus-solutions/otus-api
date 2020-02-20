@@ -53,22 +53,31 @@ public class UserActivityPendencyFilterDtoTest {
 
   @Test
   public void isValid_method_should_return_TRUE(){
-    assertEquals(Boolean.TRUE, userActivityPendencyFilterDto.isValid());
+    assertTrue(userActivityPendencyFilterDto.isValid());
   }
 
   @Test
   public void isValid_method_should_return_TRUE_if_status_is_null(){
     Whitebox.setInternalState(userActivityPendencyFilterDto, "status", (String) null);
-    Boolean isValid = userActivityPendencyFilterDto.isValid();
-    Whitebox.setInternalState(userActivityPendencyFilterDto, "status", STATUS);
-    assertTrue(isValid);
+    assertTrue(userActivityPendencyFilterDto.isValid());
   }
 
   @Test
-  public void isValid_method_should_return_FALSE_if_status_is_not_null_and_invalid(){
+  public void isValid_method_should_return_FALSE_if_status_is_not_null_but_invalid(){
     Whitebox.setInternalState(userActivityPendencyFilterDto, "status", INVALID_STATUS);
-    Boolean isValid = userActivityPendencyFilterDto.isValid();
-    Whitebox.setInternalState(userActivityPendencyFilterDto, "status", STATUS);
-    assertFalse(isValid);
+    assertFalse(userActivityPendencyFilterDto.isValid());
   }
+
+  @Test
+  public void isValid_method_should_return_TRUE_if_requester_is_null(){
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "requester", (String[]) null);
+    assertTrue(userActivityPendencyFilterDto.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_TRUE_if_receiver_is_null(){
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "receiver", (String[]) null);
+    assertTrue(userActivityPendencyFilterDto.isValid());
+  }
+
 }
