@@ -24,7 +24,7 @@ public enum UserActivityPendencyFieldFilterOptions {
 
   public static boolean contains(String filterOption){
     for (UserActivityPendencyFieldFilterOptions option : UserActivityPendencyFieldFilterOptions.values()) {
-      if (option.name().equals(filterOption)) {
+      if (option.getName().equals(filterOption)) {
         return true;
       }
     }

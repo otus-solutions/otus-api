@@ -22,7 +22,7 @@ public enum UserActivityPendencyFieldOrderingOptions {
 
   public static boolean contains(String orderingOption){
     for (UserActivityPendencyFieldOrderingOptions option : UserActivityPendencyFieldOrderingOptions.values()) {
-      if (option.name().equals(orderingOption)) {
+      if (option.getName().equals(orderingOption)) {
         return true;
       }
     }
