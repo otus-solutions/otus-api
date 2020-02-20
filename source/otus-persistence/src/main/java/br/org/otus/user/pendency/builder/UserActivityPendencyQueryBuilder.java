@@ -7,7 +7,6 @@ import org.ccem.otus.service.ParseQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.DataFormatException;
 
 public class UserActivityPendencyQueryBuilder {
 
@@ -196,11 +195,6 @@ public class UserActivityPendencyQueryBuilder {
   }
 
   private void addSortingCriteria(SortingCriteria[] sortingCriteria){
-
-//    if(sortingCriteria==null || sortingCriteria.length == 0){
-//      return;
-//    }
-
     Map<String, String> sortFieldNamesMap = new HashMap<>();
     // activity fields
     sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");

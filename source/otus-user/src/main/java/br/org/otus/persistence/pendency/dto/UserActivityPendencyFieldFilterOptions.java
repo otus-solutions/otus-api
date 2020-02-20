@@ -1,7 +1,5 @@
 package br.org.otus.persistence.pendency.dto;
 
-import java.util.Arrays;
-
 public enum UserActivityPendencyFieldFilterOptions {
 
   STATUS("status"),
