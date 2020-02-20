@@ -1,6 +1,6 @@
 package br.org.otus.persistence.pendency.dto;
 
-public enum UserActivityPendencyFilterFieldOptions {
+public enum UserActivityPendencyFieldFilterOptions {
 
   STATUS("status"),
   ACRONYM("acronym"),
@@ -12,7 +12,7 @@ public enum UserActivityPendencyFilterFieldOptions {
 
   private String name;
 
-  UserActivityPendencyFilterFieldOptions(String name){
+  UserActivityPendencyFieldFilterOptions(String name){
     this.name = name;
   }
 

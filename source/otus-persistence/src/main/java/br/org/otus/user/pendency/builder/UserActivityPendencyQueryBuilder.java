@@ -200,14 +200,14 @@ public class UserActivityPendencyQueryBuilder {
 
     Map<String, String> sortFieldNamesMap = new HashMap<>();
     // activity fields
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.ACRONYM.getName(), ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.RECRUITMENT_NUMBER.getName(), ACTIVITY_INFO+".recruitmentNumber");
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.EXTERNAL_ID.getName(), ACTIVITY_INFO+".externalID");
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.ACRONYM.getName(), ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.RECRUITMENT_NUMBER.getName(), ACTIVITY_INFO+".recruitmentNumber");
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.EXTERNAL_ID.getName(), ACTIVITY_INFO+".externalID");
     // pendency fields
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.REQUESTER.getName(), UserActivityPendencyFilterFieldOptions.REQUESTER.getName());
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.RECEIVER.getName(), UserActivityPendencyFilterFieldOptions.RECEIVER.getName());
-    sortFieldNamesMap.put(UserActivityPendencyFilterFieldOptions.DUE_DATE.getName(), UserActivityPendencyFilterFieldOptions.DUE_DATE.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.REQUESTER.getName(), UserActivityPendencyFieldFilterOptions.REQUESTER.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.RECEIVER.getName(), UserActivityPendencyFieldFilterOptions.RECEIVER.getName());
+    sortFieldNamesMap.put(UserActivityPendencyFieldFilterOptions.DUE_DATE.getName(), UserActivityPendencyFieldFilterOptions.DUE_DATE.getName());
 
     int n = sortingCriteria.length;
     String[] criteriaStr = new String[n];
