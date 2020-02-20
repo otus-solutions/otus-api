@@ -62,7 +62,7 @@ public class UserActivityPendencyResource {
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
-  @GET
+  @POST
   @Secured
   @Path("/list")
   @Consumes(MediaType.APPLICATION_JSON)
