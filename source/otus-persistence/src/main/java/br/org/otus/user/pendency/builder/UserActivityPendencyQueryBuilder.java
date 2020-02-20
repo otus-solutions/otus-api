@@ -77,7 +77,7 @@ public class UserActivityPendencyQueryBuilder {
   }
 
   private String getStatusCondition(String operator) {
-    return ",\n{ $" + operator + ": [\"" + FINALIZED_STATUS + "\", { $arrayElemAt: [ \"$statusHistory.name\", -1 ] } ] }";
+    return "{ $" + operator + ": [\"" + FINALIZED_STATUS + "\", { $arrayElemAt: [ \"$statusHistory.name\", -1 ] } ] },";
   }
 
   private void addLookupMatchingActivityPendencyFilters(String activityFilterExpressions) {
