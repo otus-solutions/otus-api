@@ -23,7 +23,7 @@ public class UserActivityPendencyQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
-  public ArrayList<Bson> getAllPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) throws DataFormatException {
+  public ArrayList<Bson> getAllPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) {
     return getPendenciesWithFiltersQuery(userActivityPendencyDto);
   }
 
@@ -39,7 +39,7 @@ public class UserActivityPendencyQueryBuilder {
     return getPendenciesByUserQuery(userRole, userEmail, getDoneStatusCondition());
   }
 
-  private ArrayList<Bson> getPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) throws DataFormatException {
+  private ArrayList<Bson> getPendenciesWithFiltersQuery(UserActivityPendencyDto userActivityPendencyDto) {
     pipeline = new ArrayList<>();
     addLookupMatchingActivityPendencyFilters(getActivityFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));
     addMatchByPendencyFilters(getPendencyFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));

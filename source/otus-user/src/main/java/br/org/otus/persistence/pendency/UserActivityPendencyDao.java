@@ -20,7 +20,7 @@ public interface UserActivityPendencyDao {
 
   UserActivityPendency findByActivityOID(ObjectId activityOID) throws DataNotFoundException;
 
-  List<UserActivityPendencyResponse> findAllPendencies(UserActivityPendencyDto userActivityPendencyDto) throws DataNotFoundException, MemoryExcededException, DataFormatException;
+  List<UserActivityPendencyResponse> findAllPendencies(UserActivityPendencyDto userActivityPendencyDto) throws DataNotFoundException, MemoryExcededException;
 
   List<UserActivityPendencyResponse> findAllPendenciesToReceiver(String receiverUserEmail) throws DataNotFoundException, MemoryExcededException;
 

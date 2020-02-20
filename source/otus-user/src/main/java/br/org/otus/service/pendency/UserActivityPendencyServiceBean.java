@@ -46,7 +46,11 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
 
   @Override
   public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException, DataFormatException {
-    return userActivityPendencyDao.findAllPendencies(UserActivityPendencyDto.deserialize(searchSettingsJson));
+    UserActivityPendencyDto userActivityPendencyDto = UserActivityPendencyDto.deserialize(searchSettingsJson);
+    if(!userActivityPendencyDto.isValid()){
+      throw new DataFormatException("Received Json has invalid field(s).");
+    }
+    return userActivityPendencyDao.findAllPendencies(userActivityPendencyDto);
   }
 
   @Override

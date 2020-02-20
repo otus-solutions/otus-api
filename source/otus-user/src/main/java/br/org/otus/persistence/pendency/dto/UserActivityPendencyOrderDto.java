@@ -18,14 +18,17 @@ public class UserActivityPendencyOrderDto implements Dto {
 
   public Integer getOrderMode() { return mode; }
 
-  public SortingCriteria[] getSortingCriteria() throws DataFormatException {
+  public SortingCriteria[] getSortingCriteria() {
     if(fieldsToOrder==null){
       return null;
     }
     int n = fieldsToOrder.length;
     SortingCriteria[] sortingCriteria = new SortingCriteria[n];
     for (int i = 0; i < n; i++) {
-      sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], mode);
+      try{
+        sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], mode);
+      }
+      catch (DataFormatException e){} // Already handle by isValid method
     }
     return sortingCriteria;
   }
