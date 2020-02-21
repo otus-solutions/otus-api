@@ -1,4 +1,4 @@
-package br.org.otus.persistence.pendency;
+package br.org.otus.persistence.pendency.dto;
 
 import br.org.otus.persistence.pendency.dto.SortingCriteria;
 import br.org.otus.persistence.pendency.dto.UserActivityPendencyOrderDto;
