@@ -80,4 +80,16 @@ public class UserActivityPendencyFilterDtoTest {
     assertTrue(userActivityPendencyFilterDto.isValid());
   }
 
+  @Test
+  public void isValid_method_should_return_FALSE_if_requester_is_empty(){
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "requester", new String[]{});
+    assertFalse(userActivityPendencyFilterDto.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_FALSE_if_receiver_is_empty(){
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "receiver", new String[]{});
+    assertFalse(userActivityPendencyFilterDto.isValid());
+  }
+
 }
