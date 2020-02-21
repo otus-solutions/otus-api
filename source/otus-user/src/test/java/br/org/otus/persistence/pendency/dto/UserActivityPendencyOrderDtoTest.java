@@ -37,7 +37,7 @@ public class UserActivityPendencyOrderDtoTest {
   }
 
   @Test
-  public void getSortingCriteria_method_should_return_array_with_fieldsToOrder_and_orderMode() throws DataFormatException {
+  public void getSortingCriteria_method_should_return_array_with_fieldsToOrder_and_orderMode() {
     SortingCriteria[] sortingCriteria = userActivityPendencyOrderDto.getSortingCriteria();
     assertEquals(FIELDS_TO_ORDER.length, sortingCriteria.length);
     for (int i = 0; i < FIELDS_TO_ORDER.length; i++) {
@@ -47,7 +47,7 @@ public class UserActivityPendencyOrderDtoTest {
   }
 
   @Test
-  public void getSortingCriteria_method_should_return_null_in_case_fieldsToOrder_null() throws DataFormatException {
+  public void getSortingCriteria_method_should_return_null_in_case_fieldsToOrder_null() {
     Whitebox.setInternalState(userActivityPendencyOrderDto, FIELDS_TO_ORDER_FIELD_NAME, (String[]) null);
     assertNull(userActivityPendencyOrderDto.getSortingCriteria());
   }
