@@ -29,13 +29,6 @@ public class SortingCriteriaTest {
     assertEquals(ASCENDING_ORDER_MODE, sortingCriteria.getMode());
   }
 
-  //@Test
-  public void check_getters_for_descending_mode() {
-    Whitebox.setInternalState(sortingCriteria, DESCENDING_ORDER_MODE);
-    assertEquals(FIELD_NAME, sortingCriteria.getFieldName());
-    assertEquals(DESCENDING_ORDER_MODE, sortingCriteria.getMode());
-  }
-
   @Test
   public void isValid_method_should_return_TRUE_in_case_ascending_mode() {
     assertTrue(sortingCriteria.isValid());
