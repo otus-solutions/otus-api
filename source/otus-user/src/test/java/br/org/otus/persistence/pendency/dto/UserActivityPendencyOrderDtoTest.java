@@ -1,12 +1,8 @@
 package br.org.otus.persistence.pendency.dto;
 
-import br.org.otus.persistence.pendency.dto.SortingCriteria;
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyOrderDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
-
-import java.util.zip.DataFormatException;
 
 import static org.junit.Assert.*;
 

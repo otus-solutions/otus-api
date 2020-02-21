@@ -18,7 +18,6 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 import static com.mongodb.client.model.Filters.eq;
 

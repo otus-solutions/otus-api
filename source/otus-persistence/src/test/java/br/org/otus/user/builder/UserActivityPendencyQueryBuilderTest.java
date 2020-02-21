@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.zip.DataFormatException;
-
 import static org.junit.Assert.assertEquals;
 
 public class UserActivityPendencyQueryBuilderTest {

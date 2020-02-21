@@ -1,8 +1,5 @@
 package br.org.otus.persistence.pendency.dto;
 
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyFilterDto;
-import br.org.otus.persistence.pendency.dto.UserActivityPendencyOrderDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
