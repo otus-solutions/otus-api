@@ -2,8 +2,6 @@ package br.org.otus.persistence.pendency.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.zip.DataFormatException;
-
 public class SortingCriteria {
 
   @SerializedName("field")
@@ -12,10 +10,7 @@ public class SortingCriteria {
   @SerializedName("modeValue")
   private int mode;
 
-  public SortingCriteria(String fieldName, int modeValue) throws DataFormatException {
-    if(modeValue != 1 && modeValue != -1){
-      throw new DataFormatException("Sorting Criteria mode value invalid");
-    }
+  public SortingCriteria(String fieldName, int modeValue) {
     this.fieldName = fieldName;
     this.mode = modeValue;
   }
@@ -26,6 +21,10 @@ public class SortingCriteria {
 
   public int getMode() {
     return mode;
+  }
+
+  public boolean isValid(){
+    return (mode == 1 || mode == -1);
   }
 
 }

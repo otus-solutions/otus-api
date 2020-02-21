@@ -4,8 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.exceptions.Dto;
 
-import java.util.zip.DataFormatException;
-
 public class UserActivityPendencyOrderDto implements Dto {
 
   @SerializedName(value = "fields")
@@ -25,24 +23,9 @@ public class UserActivityPendencyOrderDto implements Dto {
     int n = fieldsToOrder.length;
     SortingCriteria[] sortingCriteria = new SortingCriteria[n];
     for (int i = 0; i < n; i++) {
-      try{
-        sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], mode);
-      }
-      catch (DataFormatException e){} // Already handle by isValid method
+      sortingCriteria[i] = new SortingCriteria(fieldsToOrder[i], mode);
     }
     return sortingCriteria;
-  }
-
-  public static String serialize(UserActivityPendencyOrderDto userActivityPendencyOrderDto) {
-    return getGsonBuilder().create().toJson(userActivityPendencyOrderDto);
-  }
-
-  public static UserActivityPendencyOrderDto deserialize(String orderRequestJson) {
-    return UserActivityPendencyOrderDto.getGsonBuilder().create().fromJson(orderRequestJson, UserActivityPendencyOrderDto.class);
-  }
-
-  public static GsonBuilder getGsonBuilder() {
-    return new GsonBuilder();
   }
 
   @Override
@@ -58,5 +41,17 @@ public class UserActivityPendencyOrderDto implements Dto {
       fieldsAreValid &= UserActivityPendencyFieldOrderingOptions.contains(field);
     }
     return fieldsAreValid;
+  }
+
+  public static String serialize(UserActivityPendencyOrderDto userActivityPendencyOrderDto) {
+    return getGsonBuilder().create().toJson(userActivityPendencyOrderDto);
+  }
+
+  public static UserActivityPendencyOrderDto deserialize(String orderRequestJson) {
+    return UserActivityPendencyOrderDto.getGsonBuilder().create().fromJson(orderRequestJson, UserActivityPendencyOrderDto.class);
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    return new GsonBuilder();
   }
 }

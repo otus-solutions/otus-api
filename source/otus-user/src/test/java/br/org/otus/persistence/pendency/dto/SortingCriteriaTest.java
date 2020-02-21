@@ -1,14 +1,12 @@
 package br.org.otus.persistence.pendency.dto;
 
-import br.org.otus.persistence.pendency.dto.SortingCriteria;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
-import java.util.zip.DataFormatException;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 public class SortingCriteriaTest {
@@ -20,22 +18,38 @@ public class SortingCriteriaTest {
 
   private SortingCriteria sortingCriteria;
 
-  @Test
-  public void check_getters_for_ascending_mode() throws DataFormatException {
+  @Before
+  public void setUp(){
     sortingCriteria = new SortingCriteria(FIELD_NAME, ASCENDING_ORDER_MODE);
+  }
+
+  @Test
+  public void check_getters_for_ascending_mode() {
     assertEquals(FIELD_NAME, sortingCriteria.getFieldName());
     assertEquals(ASCENDING_ORDER_MODE, sortingCriteria.getMode());
   }
 
-  @Test
-  public void check_getters_for_descending_mode() throws DataFormatException {
-    sortingCriteria = new SortingCriteria(FIELD_NAME, DESCENDING_ORDER_MODE);
+  //@Test
+  public void check_getters_for_descending_mode() {
+    Whitebox.setInternalState(sortingCriteria, DESCENDING_ORDER_MODE);
     assertEquals(FIELD_NAME, sortingCriteria.getFieldName());
     assertEquals(DESCENDING_ORDER_MODE, sortingCriteria.getMode());
   }
 
-  @Test(expected = DataFormatException.class)
-  public void constructor_not_should_accept_invalid_order_mode() throws DataFormatException {
-    new SortingCriteria(FIELD_NAME, INVALID_ORDER_MODE);
+  @Test
+  public void isValid_method_should_return_TRUE_in_case_ascending_mode() {
+    assertTrue(sortingCriteria.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_TRUE_in_case_descending_mode() {
+    Whitebox.setInternalState(sortingCriteria, DESCENDING_ORDER_MODE);
+    assertTrue(sortingCriteria.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_FALSE_for_invalid_mode_value() {
+    Whitebox.setInternalState(sortingCriteria, INVALID_ORDER_MODE);
+    assertFalse(sortingCriteria.isValid());
   }
 }
