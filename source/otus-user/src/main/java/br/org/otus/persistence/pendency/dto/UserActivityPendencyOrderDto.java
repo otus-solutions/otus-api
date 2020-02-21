@@ -55,7 +55,7 @@ public class UserActivityPendencyOrderDto implements Dto {
     }
     boolean fieldsAreValid = (fieldsToOrder.length > 0);
     for(String field : fieldsToOrder){
-      fieldsAreValid &= UserActivityPendencyFieldFilterOptions.contains(field);
+      fieldsAreValid &= UserActivityPendencyFieldOrderingOptions.contains(field);
     }
     return fieldsAreValid;
   }
