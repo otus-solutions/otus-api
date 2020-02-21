@@ -1,7 +1,6 @@
 package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
-import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
 import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
@@ -13,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static java.util.Arrays.asList;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.zip.DataFormatException;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({UserActivityPendencyDto.class})
 public class UserActivityPendencyServiceBeanTest {
 
   private static final String USER_EMAIL = "user@otus.com";
@@ -44,7 +46,6 @@ public class UserActivityPendencyServiceBeanTest {
   private UserActivityPendencyResponse userActivityPendencyResponse;
   private List<UserActivityPendencyResponse> userActivityPendencyResponses;
   private String userActivityPendencyJson;
-  private UserActivityPendencyDto userActivityPendencyDto;
 
   @Before
   public void setUp() {
@@ -52,7 +53,6 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyResponse = new UserActivityPendencyResponse();
     userActivityPendencyResponses = asList(userActivityPendencyResponse);
     userActivityPendencyJson = UserActivityPendency.serialize(userActivityPendency);
-    userActivityPendencyDto = new UserActivityPendencyDto();
   }
 
   @Test
@@ -99,28 +99,38 @@ public class UserActivityPendencyServiceBeanTest {
   }
 
   // list All with Filters
+  private UserActivityPendencyDto mockUserActivityPendencyDto(boolean dtoIsValid) throws Exception {
+    UserActivityPendencyDto userActivityPendencyDto = PowerMockito.spy(new UserActivityPendencyDto());
+    PowerMockito.mockStatic(UserActivityPendencyDto.class);
+    when(UserActivityPendencyDto.class, "deserialize", SEARCH_SETTINGS_JSON).thenReturn(userActivityPendencyDto);
+    when(userActivityPendencyDto.isValid()).thenReturn(dtoIsValid);
+    return userActivityPendencyDto;
+  }
+
   @Test
   public void listAllPendencies_should_return_list_UserActivityPendency() throws Exception {
-    when(userActivityPendencyDao.findAllPendencies(UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON)))
+    when(userActivityPendencyDao.findAllPendencies(mockUserActivityPendencyDto(true)))
       .thenReturn(userActivityPendencyResponses);
     assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON));
   }
 
   @Test(expected = DataNotFoundException.class)
   public void listAllPendencies_should_handle_DataNotFoundException() throws Exception {
-    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendencies", UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON));
+    UserActivityPendencyDto userActivityPendencyDto = mockUserActivityPendencyDto(true);
+    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendencies", userActivityPendencyDto);
     userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
   }
 
   @Test(expected = MemoryExcededException.class)
   public void listAllPendencies_should_handle_MemoryExcededException() throws Exception {
-    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendencies", UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON));
+    UserActivityPendencyDto userActivityPendencyDto = mockUserActivityPendencyDto(true);
+    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendencies", userActivityPendencyDto);
     userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
   }
 
   @Test(expected = DataFormatException.class)
   public void listAllPendencies_should_handle_DataFormatException() throws Exception {
-    doThrow(new DataFormatException()).when(userActivityPendencyDao, "findAllPendencies", UserActivityPendencyDto.deserialize(SEARCH_SETTINGS_JSON));
+    mockUserActivityPendencyDto(false);
     userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
   }
 
