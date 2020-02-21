@@ -2,6 +2,7 @@ package br.org.otus.user.builder;
 
 import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import br.org.otus.persistence.pendency.dto.UserActivityPendencyFilterDto;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyOrderDto;
 import br.org.otus.user.pendency.builder.UserActivityPendencyQueryBuilder;
 import com.google.gson.GsonBuilder;
 import org.junit.Before;
@@ -31,22 +32,26 @@ public class UserActivityPendencyQueryBuilderTest {
   }
 
   @Test
-  public void getAllPendencies() throws DataFormatException {
+  public void getAllPendencies() {
     final int CURRENT_QUANTITY = 100;
     final int QUANTITY_TO_GET = 50;
     final String[] FIELDS_TO_ORDER = new String[] { "rn", "dueDate" };
     final Integer ASCENDING_ORDER_MODE = 1;
     final String ACRONYM = "XXX";
-    UserActivityPendencyFilterDto userActivityPendencyFilterDto = new UserActivityPendencyFilterDto();
-    Whitebox.setInternalState(userActivityPendencyFilterDto, "acronym", ACRONYM);
-    Whitebox.setInternalState(userActivityPendencyFilterDto, "requester", new String[]{ USER_EMAIL });
+
+    UserActivityPendencyOrderDto orderDto = new UserActivityPendencyOrderDto();
+    Whitebox.setInternalState(orderDto, "fieldsToOrder", FIELDS_TO_ORDER);
+    Whitebox.setInternalState(orderDto, "mode", ASCENDING_ORDER_MODE);
+
+    UserActivityPendencyFilterDto filterDto = new UserActivityPendencyFilterDto();
+    Whitebox.setInternalState(filterDto, "acronym", ACRONYM);
+    Whitebox.setInternalState(filterDto, "requester", new String[]{ USER_EMAIL });
 
     UserActivityPendencyDto userActivityPendencyDto = new UserActivityPendencyDto();
     Whitebox.setInternalState(userActivityPendencyDto, "currentQuantity", CURRENT_QUANTITY);
     Whitebox.setInternalState(userActivityPendencyDto, "quantityToGet", QUANTITY_TO_GET);
-    Whitebox.setInternalState(userActivityPendencyDto, "fieldsToOrder", FIELDS_TO_ORDER);
-    Whitebox.setInternalState(userActivityPendencyDto, "orderMode", ASCENDING_ORDER_MODE);
-    Whitebox.setInternalState(userActivityPendencyDto, "filterDto", userActivityPendencyFilterDto);
+    Whitebox.setInternalState(userActivityPendencyDto, "orderDto", orderDto);
+    Whitebox.setInternalState(userActivityPendencyDto, "filterDto", filterDto);
 
     final String EXPECTED_QUERY = "[{" +
       "\"$lookup\":{" +
@@ -122,9 +127,9 @@ public class UserActivityPendencyQueryBuilderTest {
       "{\"$match\":{" +
       "\"$expr\":{" +
       "\"$and\":[" +
+      "{\"$ne\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}," +
       "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
-      "{\"$eq\":[false,\"$isDiscarded\"]}," +
-      "{\"$ne\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}" +
+      "{\"$eq\":[false,\"$isDiscarded\"]}" +
       "]}}}," +
       "{\"$project\":{" +
       "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
@@ -155,9 +160,9 @@ public class UserActivityPendencyQueryBuilderTest {
       "{\"$match\":{" +
       "\"$expr\":{" +
       "\"$and\":[" +
+      "{\"$eq\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}," +
       "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
       "{\"$eq\":[false,\"$isDiscarded\"]}" +
-      ",{\"$eq\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}" +
       "]}}}," +
       "{\"$project\":{" +
       "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
