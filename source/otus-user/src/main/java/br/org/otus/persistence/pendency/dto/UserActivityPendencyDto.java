@@ -4,6 +4,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.exceptions.Dto;
 
+import javax.inject.Inject;
+
 public class UserActivityPendencyDto implements Dto {
 
   @SerializedName(value = "currentQuantity")
@@ -12,9 +14,11 @@ public class UserActivityPendencyDto implements Dto {
   @SerializedName(value = "quantityToGet")
   private int quantityToGet;
 
+  @Inject
   @SerializedName(value = "order")
   private UserActivityPendencyOrderDto orderDto;
 
+  @Inject
   @SerializedName(value = "filter")
   private UserActivityPendencyFilterDto filterDto;
 
@@ -42,8 +46,16 @@ public class UserActivityPendencyDto implements Dto {
 
   @Override
   public Boolean isValid() {
-    return
-      (filterDto==null || filterDto.isValid()) &&
-      (orderDto==null || orderDto.isValid());
+    boolean validFilter = (filterDto == null);
+    if(filterDto != null){
+      validFilter = filterDto.isValid();
+    }
+
+    boolean validOrder = (orderDto == null);
+    if(orderDto != null){
+      validOrder = orderDto.isValid();
+    }
+
+    return (validFilter && validOrder);
   }
 }
