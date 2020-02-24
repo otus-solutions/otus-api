@@ -2,12 +2,7 @@ package br.org.otus.participant;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -55,7 +50,9 @@ public class ParticipantResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String create(@Context HttpServletRequest request, String participantJson) {
-    return new Response().buildSuccess(participantFacade.create(participantJson)).toJson(Participant.getGsonBuilder());
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    return new Response().buildSuccess(participantFacade.create(participantJson, userEmail)).toJson(Participant.getGsonBuilder());
   }
 
   @POST
@@ -65,5 +62,14 @@ public class ParticipantResource {
   public String registerPassword(PasswordResetDto resetData, @Context HttpServletRequest request) {
     participantFacade.registerPassword(resetData);
     return new Response().buildSuccess().toJson();
+  }
+
+  @PUT
+  @Path("/update")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String update(@Context HttpServletRequest request, String participantJson){
+    return new Response().buildSuccess(participantFacade.update(participantJson)).toJson(Participant.getGsonBuilder());
   }
 }

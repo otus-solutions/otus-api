@@ -188,6 +188,16 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
+  public Integer updateUnattachedLaboratoryLastInsertion() {
+    Document query = new Document("objectType", "LaboratoryConfiguration")
+      .append("codeConfiguration.unattachedLaboratoryLastInsertion", new Document("$exists", true));
+
+    Document updateLotCode = collection.findOneAndUpdate(query, new Document("$inc", new Document("codeConfiguration.unattachedLaboratoryLastInsertion", 1)),
+      new FindOneAndUpdateOptions().returnDocument(ReturnDocument.BEFORE));
+    return ((Document) updateLotCode.get("codeConfiguration")).getInteger("unattachedLaboratoryLastInsertion");
+  }
+
+  @Override
   public ArrayList listCenterAliquots(String center) throws DataNotFoundException {
     ArrayList<Bson> pipeline = new AliquotConfigurationQueryBuilder().getCenterAliquotsQuery(center);
     Document first = collection.aggregate(pipeline).first();

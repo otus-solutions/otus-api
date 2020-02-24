@@ -4,6 +4,7 @@ import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class QualityControlTubeGeneratorTest {
   @Mock
   private LaboratoryConfigurationService laboratoryConfigurationService;
   @InjectMocks
-  private Participant participant;
+  private FieldCenter fieldCenter;
   @InjectMocks
   private LaboratoryConfiguration laboratoryConfiguration;
   private CollectGroupDescriptor collectGroupDescriptor;
@@ -52,7 +53,7 @@ public class QualityControlTubeGeneratorTest {
     tubeSets.add(new TubeDefinition(2, "GEL", "POST_OVERLOAD"));
 
     collectGroupDescriptor = new CollectGroupDescriptor("DEFAULT", "DEFAULT", tubeSets);
-    tubeSeed = TubeSeed.generate(participant, collectGroupDescriptor);
+    tubeSeed = TubeSeed.generate(fieldCenter, collectGroupDescriptor);
 
     when(laboratoryConfigurationService.getTubeSetByGroupName(tubeSeed.getCollectGroupDescriptor().getName()))
       .thenReturn(tubeSets);

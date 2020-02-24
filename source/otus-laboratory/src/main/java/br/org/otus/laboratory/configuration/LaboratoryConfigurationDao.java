@@ -33,10 +33,11 @@ public interface LaboratoryConfigurationDao {
 
   Integer updateLastTubeInsertion(int newTubesQuantities);
 
+  Integer updateUnattachedLaboratoryLastInsertion();
+
   ArrayList listCenterAliquots(String center) throws DataNotFoundException;
 
   List<String> getExamName(List<String> centerAliquots);
 
   AggregateIterable<Document> aggregate(List<Bson> query);
-
 }

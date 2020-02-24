@@ -1,16 +1,15 @@
 package org.ccem.otus.participant.model;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
 import br.org.tutty.Equalization;
+import com.google.gson.GsonBuilder;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.utils.LongAdapter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 
-import com.google.gson.GsonBuilder;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Participant {
 
@@ -31,6 +30,7 @@ public class Participant {
   private String password;
   @Equalization(name = "tokenList")
   private ArrayList<String> tokenList;
+  private String registeredBy;
 
   public Participant(Long recruitmentNumber) {
     this.recruitmentNumber = recruitmentNumber;
@@ -82,6 +82,14 @@ public class Participant {
 
   public String getPassword() {
     return password;
+  }
+
+  public String getRegisteredBy() {
+    return registeredBy;
+  }
+
+  public void setRegisteredBy(String registeredBy) {
+    this.registeredBy = registeredBy;
   }
 
   @Override
