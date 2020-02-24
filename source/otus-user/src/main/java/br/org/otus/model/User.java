@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
 public class User {
+
+  private ObjectId _id;
 
   @Equalization(name = "uuid")
   private UUID uuid;
@@ -190,5 +193,13 @@ public class User {
 
   public static String serialize(User user) {
     return new GsonBuilder().create().toJson(user);
+  }
+
+  public void set_id(ObjectId id) {
+    this._id = id;
+  }
+
+  public ObjectId get_id() {
+    return _id;
   }
 }
