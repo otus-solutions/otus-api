@@ -5,6 +5,8 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
+import java.util.ArrayList;
+
 public class ParticipantEventDTO implements Dto {
 
   public String _id;
@@ -12,6 +14,7 @@ public class ParticipantEventDTO implements Dto {
   public String acronym;
   public String description;
   public String activityId;
+  public EmailNotification emailNotification;
 
   public String getObjectType() {
     this.updateObjectType();

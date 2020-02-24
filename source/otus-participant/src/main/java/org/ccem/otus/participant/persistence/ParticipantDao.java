@@ -16,6 +16,8 @@ public interface ParticipantDao {
 
   void persist(Participant participant);
 
+  void update(Participant participant);
+
   ArrayList<Participant> find();
 
   Participant findByRecruitmentNumber(Long rn) throws DataNotFoundException;

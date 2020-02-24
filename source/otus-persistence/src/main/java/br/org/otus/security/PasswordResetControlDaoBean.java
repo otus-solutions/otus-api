@@ -1,16 +1,11 @@
 package br.org.otus.security;
 
 import br.org.mongodb.MongoGenericDao;
-import com.mongodb.MongoCommandException;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class PasswordResetControlDaoBean extends MongoGenericDao<Document> implements PasswordResetControlDao {
 

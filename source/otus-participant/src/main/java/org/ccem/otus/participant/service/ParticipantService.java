@@ -1,18 +1,20 @@
 package org.ccem.otus.participant.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public interface ParticipantService {
 
   Participant create(Participant participant) throws ValidationException, DataNotFoundException;
+
+  Participant update(Participant participant) throws ValidationException, DataNotFoundException;
 
   Participant getByRecruitmentNumber(Long rn) throws DataNotFoundException;
 

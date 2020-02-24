@@ -49,7 +49,6 @@ public class ParticipantServiceBean implements ParticipantService {
     participantDao.registerPassword(email, password);
   }
 
-
   @Override
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {
     if (projectConfigurationService.isRnProvided()) {
@@ -70,6 +69,17 @@ public class ParticipantServiceBean implements ParticipantService {
       participantDao.persist(participant);
       return participant;
     }
+  }
+
+  @Override
+  public Participant update(Participant participant) throws ValidationException, DataNotFoundException {
+      if (participantDao.exists(participant.getRecruitmentNumber())) {
+        participantDao.update(participant);
+      } else {
+        String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} not exists.";
+        throw new ValidationException(new Throwable(error));
+      }
+      return participant;
   }
 
   @Override
