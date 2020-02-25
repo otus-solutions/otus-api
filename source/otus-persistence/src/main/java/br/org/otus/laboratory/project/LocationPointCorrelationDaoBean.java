@@ -8,6 +8,7 @@ import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
   public void create(ObjectId id) {
     Document userOnLocation = this.collection.find(eq("_id", id)).first();
     if (userOnLocation == null){
-      this.collection.insertOne(new Document("_id",id));
+      this.collection.insertOne(new Document("_id",id).append("users",new ArrayList<>()));
     }
   }
 
@@ -95,6 +96,66 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
       transportLocationPointListDTO = TransportLocationPointListDTO.deserialize(output.toJson());
     }
     return transportLocationPointListDTO;
+  }
+
+  @Override
+  public ArrayList<String> getUserLocationPointsList(ObjectId userId) throws DataNotFoundException {
+    ArrayList<Bson> pipeline = new ArrayList<Bson>();
+    pipeline.add(parseQuery("{\n" +
+      "      $unwind: \"$users\"  \n" +
+      "    }"));
+    pipeline.add(new Document("$match", new Document("users",userId)));
+    pipeline.add(parseQuery("{\n" +
+      "        $lookup: {\n" +
+      "         from: \"transport_location_point\",\n" +
+      "         localField: \"_id\",    \n" +
+      "         foreignField: \"_id\",  \n" +
+      "         as: \"locationData\"\n" +
+      "      }\n" +
+      "    }"));
+    pipeline.add(parseQuery("{\n" +
+      "        $project: {\n" +
+      "            name:{ $arrayElemAt: [\"$locationData.name\",0]}\n" +
+      "        }\n" +
+      "    }"));
+    pipeline.add(parseQuery(" {\n" +
+      "      $group: { _id: {}, locationPoints: {$push: \"$name\"}}  \n" +
+      "    }"));
+
+    Document output = collection.aggregate(pipeline).first();
+    if (output == null) {
+      throw new DataNotFoundException(new Throwable("Transport location point not found"));
+    }
+
+    return (ArrayList<String>) output.get("locationPoints");
+  }
+
+  @Override
+  public ArrayList<String> getLocationPointsList() throws DataNotFoundException {
+    ArrayList<Bson> pipeline = new ArrayList<Bson>();
+    pipeline.add(parseQuery("{\n" +
+      "        $lookup: {\n" +
+      "         from: \"transport_location_point\",\n" +
+      "         localField: \"_id\",    \n" +
+      "         foreignField: \"_id\",  \n" +
+      "         as: \"locationData\"\n" +
+      "      }\n" +
+      "    }"));
+    pipeline.add(parseQuery("{\n" +
+      "        $project: {\n" +
+      "            name:{ $arrayElemAt: [\"$locationData.name\",0]}\n" +
+      "        }\n" +
+      "    }"));
+    pipeline.add(parseQuery(" {\n" +
+      "      $group: { _id: {}, locationPoints: {$push: \"$name\"}}  \n" +
+      "    }"));
+
+    Document output = collection.aggregate(pipeline).first();
+    if (output == null) {
+      throw new DataNotFoundException(new Throwable("Transport location point not found"));
+    }
+
+    return (ArrayList<String>) output.get("locationPoints");
   }
 
   private Bson parseQuery(String stage) {

@@ -5,12 +5,17 @@ import br.org.otus.laboratory.project.transportation.TransportLocationPoint;
 import br.org.otus.laboratory.project.transportation.persistence.TransportLocationPointListDTO;
 import br.org.otus.model.User;
 import br.org.otus.rest.Response;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 
 @Path("/laboratory-project/transport-location-point")
 public class TransportLocationPointResource {
@@ -28,7 +33,6 @@ public class TransportLocationPointResource {
     TransportLocationPointListDTO transportLocationPointListDTO = transportLocationPointFacade.getLocationList();
     return new Response().buildSuccess(TransportLocationPointListDTO.serializeToJsonTree(transportLocationPointListDTO)).toJson();
   }
-
 
   @PUT
   @Secured
@@ -74,5 +78,24 @@ public class TransportLocationPointResource {
     User user = User.deserialize(userJson);
     transportLocationPointFacade.removeUser(locationPointId, user);
     return new Response().buildSuccess().toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/user-location-points")
+  public String getUserLocationPoint(@Context HttpServletRequest request) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    ArrayList<String> userLocationPointsList = transportLocationPointFacade.getUserLocationPointsList(userEmail);
+    return new Response().buildSuccess(userLocationPointsList).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/location-points")
+  public String getLocationPoints(@Context HttpServletRequest request) {
+    ArrayList<String> userLocationPointsList = transportLocationPointFacade.getLocationPointsList();
+    return new Response().buildSuccess(userLocationPointsList).toJson();
   }
 }
