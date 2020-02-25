@@ -1,7 +1,9 @@
 package br.org.otus.laboratory.project.transportation.business;
 
 import br.org.otus.laboratory.project.transportation.TransportLocationPoint;
+import br.org.otus.laboratory.project.transportation.persistence.LocationPointCorrelationDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportLocationPointDao;
+import br.org.otus.laboratory.project.transportation.persistence.TransportLocationPointListDTO;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -14,9 +16,13 @@ public class TransportLocationPointServiceBean implements TransportLocationPoint
   @Inject
   private TransportLocationPointDao transportLocationPointDao;
 
+  @Inject
+  private LocationPointCorrelationDao locationPointCorrelationDao;
+
   @Override
   public void create(TransportLocationPoint transportLocationPoint) {
     transportLocationPointDao.persist(transportLocationPoint);
+    locationPointCorrelationDao.create(transportLocationPoint.get_id());
   }
 
   @Override
@@ -31,7 +37,17 @@ public class TransportLocationPointServiceBean implements TransportLocationPoint
 
   @Override
   public void addUser(ObjectId userId, ObjectId locationPointId) {
+    locationPointCorrelationDao.addUser(userId,locationPointId);
+  }
 
+  @Override
+  public void removeUser(ObjectId userId, ObjectId locationPointId) {
+    locationPointCorrelationDao.removeUser(userId,locationPointId);
+  }
+
+  @Override
+  public TransportLocationPointListDTO getLocationList() {
+    return locationPointCorrelationDao.getLocationPointList();
   }
 
 }

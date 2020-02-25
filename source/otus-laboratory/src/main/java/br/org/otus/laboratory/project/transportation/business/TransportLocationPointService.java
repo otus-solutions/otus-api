@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project.transportation.business;
 
 import br.org.otus.laboratory.project.transportation.TransportLocationPoint;
+import br.org.otus.laboratory.project.transportation.persistence.TransportLocationPointListDTO;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -12,4 +13,8 @@ public interface TransportLocationPointService {
   void delete(String locationPointId) throws DataNotFoundException;
 
   void addUser(ObjectId userId, ObjectId locationPointId);
+
+  void removeUser(ObjectId userId, ObjectId locationPointId);
+
+  TransportLocationPointListDTO getLocationList();
 }

@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.api;
 
 import br.org.otus.laboratory.project.transportation.TransportLocationPoint;
 import br.org.otus.laboratory.project.transportation.business.TransportLocationPointService;
+import br.org.otus.laboratory.project.transportation.persistence.TransportLocationPointListDTO;
 import br.org.otus.model.User;
 import br.org.otus.persistence.UserDao;
 import br.org.otus.response.exception.HttpResponseException;
@@ -48,6 +49,16 @@ public class TransportLocationPointFacade {
   }
 
   public void removeUser(String locationPointId, User user) {
+    try {
+      User fullUser = userDao.fetchByEmail(user.getEmail());
+      transportLocationPointService.removeUser(fullUser.get_id(), new ObjectId(locationPointId));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public TransportLocationPointListDTO getLocationList() {
+    return transportLocationPointService.getLocationList();
   }
 }
 

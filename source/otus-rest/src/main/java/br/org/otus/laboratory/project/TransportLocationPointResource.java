@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project;
 
 import br.org.otus.laboratory.project.api.TransportLocationPointFacade;
 import br.org.otus.laboratory.project.transportation.TransportLocationPoint;
+import br.org.otus.laboratory.project.transportation.persistence.TransportLocationPointListDTO;
 import br.org.otus.model.User;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
@@ -19,6 +20,15 @@ public class TransportLocationPointResource {
 
   @Inject
   private SecurityContext securityContext;
+
+  @GET
+  @Secured
+  @Path("/configuration")
+  public String getConfiguration() {
+    TransportLocationPointListDTO transportLocationPointListDTO = transportLocationPointFacade.getLocationList();
+    return new Response().buildSuccess(TransportLocationPointListDTO.serializeToJsonTree(transportLocationPointListDTO)).toJson();
+  }
+
 
   @PUT
   @Secured
