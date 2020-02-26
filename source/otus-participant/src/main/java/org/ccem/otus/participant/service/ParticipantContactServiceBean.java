@@ -5,8 +5,10 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.ParticipantContact;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+@Stateless
 public class ParticipantContactServiceBean implements ParticipantContactService {
 
   @Inject
