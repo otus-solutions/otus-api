@@ -76,7 +76,7 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
       "           as: \"users\"\n" +
       "         }\n" +
       "    }"));
-    pipeline.add(parseQuery("{$unwind: {path:\"$users\",preserveNullAndEmptyArrays:true}"));
+    pipeline.add(parseQuery("{$unwind: {path:\"$users\",preserveNullAndEmptyArrays:true}}"));
     pipeline.add(parseQuery("{\n" +
       "        $group: { _id: \"$locationData\", users:{$push: \"$users.email\"} }\n" +
       "    }"));
