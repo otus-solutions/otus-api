@@ -70,7 +70,7 @@ public class TransportLocationPointResource {
     return new Response().buildSuccess().toJson();
   }
 
-  @DELETE
+  @POST
   @Secured
   @Path("/remove-user/{locationPointId}")
   @Consumes(MediaType.APPLICATION_JSON)
