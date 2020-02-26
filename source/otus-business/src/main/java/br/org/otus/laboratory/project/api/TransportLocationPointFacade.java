@@ -11,7 +11,6 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 public class TransportLocationPointFacade {
 
@@ -62,18 +61,18 @@ public class TransportLocationPointFacade {
     return transportLocationPointService.getLocationList();
   }
 
-  public ArrayList<String> getUserLocationPointsList(String userEmail) {
+  public TransportLocationPointListDTO getUserLocationPoints(String userEmail) {
     try {
       User fullUser = userDao.fetchByEmail(userEmail);
-      return transportLocationPointService.getUserLocationPointsList(fullUser.get_id());
+      return transportLocationPointService.getUserLocationPoints(fullUser.get_id());
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public ArrayList<String> getLocationPointsList() {
+  public TransportLocationPointListDTO getLocationPoints() {
     try {
-      return transportLocationPointService.getLocationPointsList();
+      return transportLocationPointService.getLocationPoints();
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }

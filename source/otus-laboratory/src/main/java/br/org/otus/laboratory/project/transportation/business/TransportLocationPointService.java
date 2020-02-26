@@ -5,8 +5,6 @@ import br.org.otus.laboratory.project.transportation.persistence.TransportLocati
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
-import java.util.ArrayList;
-
 public interface TransportLocationPointService {
   void create(TransportLocationPoint transportationLocationPoint);
 
@@ -20,7 +18,7 @@ public interface TransportLocationPointService {
 
   TransportLocationPointListDTO getLocationList();
 
-  ArrayList<String> getUserLocationPointsList(ObjectId userId) throws DataNotFoundException;
+  TransportLocationPointListDTO getUserLocationPoints(ObjectId userId) throws DataNotFoundException;
 
-  ArrayList<String> getLocationPointsList() throws DataNotFoundException;
+  TransportLocationPointListDTO getLocationPoints() throws DataNotFoundException;
 }

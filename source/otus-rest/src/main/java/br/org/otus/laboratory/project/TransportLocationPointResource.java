@@ -87,15 +87,15 @@ public class TransportLocationPointResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-    ArrayList<String> userLocationPointsList = transportLocationPointFacade.getUserLocationPointsList(userEmail);
-    return new Response().buildSuccess(userLocationPointsList).toJson();
+    TransportLocationPointListDTO userLocationPoints = transportLocationPointFacade.getUserLocationPoints(userEmail);
+    return new Response().buildSuccess(TransportLocationPointListDTO.serializeToJsonTree(userLocationPoints)).toJson();
   }
 
   @GET
   @Secured
   @Path("/location-points")
   public String getLocationPoints(@Context HttpServletRequest request) {
-    ArrayList<String> userLocationPointsList = transportLocationPointFacade.getLocationPointsList();
-    return new Response().buildSuccess(userLocationPointsList).toJson();
+    TransportLocationPointListDTO userLocationPoints = transportLocationPointFacade.getLocationPoints();
+    return new Response().buildSuccess(TransportLocationPointListDTO.serializeToJsonTree(userLocationPoints)).toJson();
   }
 }

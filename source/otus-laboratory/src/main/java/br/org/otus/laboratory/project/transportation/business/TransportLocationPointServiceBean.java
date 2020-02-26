@@ -9,7 +9,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 @Stateless
 public class TransportLocationPointServiceBean implements TransportLocationPointService {
@@ -52,13 +51,13 @@ public class TransportLocationPointServiceBean implements TransportLocationPoint
   }
 
   @Override
-  public ArrayList<String> getUserLocationPointsList(ObjectId userId) throws DataNotFoundException {
-    return locationPointCorrelationDao.getUserLocationPointsList(userId);
+  public TransportLocationPointListDTO getUserLocationPoints(ObjectId userId) throws DataNotFoundException {
+    return locationPointCorrelationDao.getUserLocationPoints(userId);
   }
 
   @Override
-  public ArrayList<String> getLocationPointsList() throws DataNotFoundException {
-    return locationPointCorrelationDao.getLocationPointsList();
+  public TransportLocationPointListDTO getLocationPoints() throws DataNotFoundException {
+    return locationPointCorrelationDao.getLocationPoints();
   }
 
 }

@@ -76,7 +76,7 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
       "           as: \"users\"\n" +
       "         }\n" +
       "    }"));
-    pipeline.add(parseQuery("{$unwind:{path:\"$users\",preserveNullAndEmptyArrays:true}}"));
+    pipeline.add(parseQuery("{$unwind: {path:\"$users\",preserveNullAndEmptyArrays:true}"));
     pipeline.add(parseQuery("{\n" +
       "        $group: { _id: \"$locationData\", users:{$push: \"$users.email\"} }\n" +
       "    }"));
@@ -99,40 +99,22 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
   }
 
   @Override
-  public ArrayList<String> getUserLocationPointsList(ObjectId userId) throws DataNotFoundException {
+  public TransportLocationPointListDTO getUserLocationPoints(ObjectId userId) throws DataNotFoundException {
     ArrayList<Bson> pipeline = new ArrayList<Bson>();
     pipeline.add(parseQuery("{\n" +
       "      $unwind: \"$users\"  \n" +
       "    }"));
     pipeline.add(new Document("$match", new Document("users",userId)));
-    pipeline.add(parseQuery("{\n" +
-      "        $lookup: {\n" +
-      "         from: \"transport_location_point\",\n" +
-      "         localField: \"_id\",    \n" +
-      "         foreignField: \"_id\",  \n" +
-      "         as: \"locationData\"\n" +
-      "      }\n" +
-      "    }"));
-    pipeline.add(parseQuery("{\n" +
-      "        $project: {\n" +
-      "            name:{ $arrayElemAt: [\"$locationData.name\",0]}\n" +
-      "        }\n" +
-      "    }"));
-    pipeline.add(parseQuery(" {\n" +
-      "      $group: { _id: {}, locationPoints: {$push: \"$name\"}}  \n" +
-      "    }"));
-
-    Document output = collection.aggregate(pipeline).first();
-    if (output == null) {
-      throw new DataNotFoundException(new Throwable("Transport location point not found"));
-    }
-
-    return (ArrayList<String>) output.get("locationPoints");
+    return getLocationPoints(pipeline);
   }
 
   @Override
-  public ArrayList<String> getLocationPointsList() throws DataNotFoundException {
+  public TransportLocationPointListDTO getLocationPoints() throws DataNotFoundException {
     ArrayList<Bson> pipeline = new ArrayList<Bson>();
+    return getLocationPoints(pipeline);
+  }
+
+  private TransportLocationPointListDTO getLocationPoints(ArrayList<Bson> pipeline) throws DataNotFoundException {
     pipeline.add(parseQuery("{\n" +
       "        $lookup: {\n" +
       "         from: \"transport_location_point\",\n" +
@@ -143,11 +125,13 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
       "    }"));
     pipeline.add(parseQuery("{\n" +
       "        $project: {\n" +
-      "            name:{ $arrayElemAt: [\"$locationData.name\",0]}\n" +
+      "            _id:{ $arrayElemAt: [\"$locationData._id\",0]},\n" +
+      "            name:{ $arrayElemAt: [\"$locationData.name\",0]},\n" +
+      "            users:[]\n" +
       "        }\n" +
       "    }"));
     pipeline.add(parseQuery(" {\n" +
-      "      $group: { _id: {}, locationPoints: {$push: \"$name\"}}  \n" +
+      "      $group: { _id: {}, transportLocationPoints: {$push: \"$$ROOT\"}}  \n" +
       "    }"));
 
     Document output = collection.aggregate(pipeline).first();
@@ -155,7 +139,7 @@ public class LocationPointCorrelationDaoBean extends MongoGenericDao<Document> i
       throw new DataNotFoundException(new Throwable("Transport location point not found"));
     }
 
-    return (ArrayList<String>) output.get("locationPoints");
+    return TransportLocationPointListDTO.deserialize(output.toJson());
   }
 
   private Bson parseQuery(String stage) {
