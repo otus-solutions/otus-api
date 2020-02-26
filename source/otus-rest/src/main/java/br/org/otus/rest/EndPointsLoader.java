@@ -18,6 +18,7 @@ import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.monitoring.MonitoringResource;
 import br.org.otus.outcomes.configuration.FollowUpConfiguration;
 import br.org.otus.outcomes.configuration.FollowUpEventConfiguration;
+import br.org.otus.participant.ParticipantContactResource;
 import br.org.otus.participant.ParticipantResource;
 import br.org.otus.permission.ActivityPermissionResource;
 import br.org.otus.permission.UserPermissionResource;
@@ -77,6 +78,9 @@ public class EndPointsLoader extends Application {
 
   @Inject
   private ParticipantResource participantResource;
+
+  @Inject
+  private ParticipantContactResource participantContactResource;
 
   @Inject
   private ActivityResource activityResource;
@@ -192,6 +196,7 @@ public class EndPointsLoader extends Application {
     resources.add(visualIdentityResource);
     resources.add(participantImportationResource);
     resources.add(participantResource);
+    resources.add(participantContactResource);
     resources.add(followUpConfigurationResource);
     resources.add(followUpEventConfiguration);
     resources.add(activityResource);
