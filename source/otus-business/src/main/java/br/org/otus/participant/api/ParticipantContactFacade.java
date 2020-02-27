@@ -9,6 +9,7 @@ import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 import org.ccem.otus.participant.service.ParticipantContactService;
 
 import javax.inject.Inject;
+import java.util.zip.DataFormatException;
 
 public class ParticipantContactFacade {
 
@@ -32,7 +33,7 @@ public class ParticipantContactFacade {
     try{
       participantContactService.updateMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException e){
+    catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }

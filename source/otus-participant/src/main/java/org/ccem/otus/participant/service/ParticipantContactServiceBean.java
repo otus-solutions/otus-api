@@ -27,8 +27,9 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-
+  public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.updateMainContact(participantContactDto);
   }
 
   @Override
