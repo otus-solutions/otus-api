@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
+import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -38,11 +39,36 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
+  public void updateMainContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
+  public void addSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
+  public void updateSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
+  public void swapMainContactWithSecondary(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
   public void delete(ObjectId participantContactOID) throws DataNotFoundException {
     DeleteResult deleteResult = collection.deleteOne(eq(ID_FIELD_NAME, participantContactOID));
     if(deleteResult.getDeletedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactOID.toString() + " } was not found");
     }
+  }
+
+  @Override
+  public void deleteSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
   }
 
   @Override
@@ -54,5 +80,10 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     catch (NullPointerException e){
       throw new DataNotFoundException("No participant contact found for OID {" + participantContactOID.toString() + "}");
     }
+  }
+
+  @Override
+  public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) throws DataNotFoundException {
+    return null;
   }
 }

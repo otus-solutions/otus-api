@@ -4,9 +4,11 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
+import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.zip.DataFormatException;
 
 @Stateless
 public class ParticipantContactServiceBean implements ParticipantContactService {
@@ -25,12 +27,48 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
+  public void updateMainContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
+  public void addSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
+  public void updateSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
+  public void swapMainContactWithSecondary(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
   public void delete(ObjectId participantContactOID) throws DataNotFoundException {
     participantContactDao.delete(participantContactOID);
   }
 
   @Override
+  public void deleteSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+
+  }
+
+  @Override
   public ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException {
     return participantContactDao.get(participantContactOID);
+  }
+
+  @Override
+  public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) throws DataNotFoundException {
+    return null;
+  }
+
+  private void validateDto(ParticipantContactDto participantContactDto) throws DataFormatException {
+    if(!participantContactDto.isValid()){
+      throw new DataFormatException("ParticipantContactDto is invalid");
+    }
   }
 }
