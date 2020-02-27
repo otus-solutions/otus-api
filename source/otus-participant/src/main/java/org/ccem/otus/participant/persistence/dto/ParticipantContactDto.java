@@ -1,13 +1,13 @@
 package org.ccem.otus.participant.persistence.dto;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
 
 public class ParticipantContactDto {
 
   private Long recruitmentNumber;
   private String type;
-  private String newValue;
-  private String valueSwapWith;
+  private ParticipantContactItem newValue;
   private int indexAtContactArray;
 
   public Long getRecruitmentNumber() {
@@ -18,12 +18,8 @@ public class ParticipantContactDto {
     return type;
   }
 
-  public String getNewValue() {
+  public ParticipantContactItem getNewValue() {
     return newValue;
-  }
-
-  public String getValueSwapWith() {
-    return valueSwapWith;
   }
 
   public int getIndexAtContactArray() {
