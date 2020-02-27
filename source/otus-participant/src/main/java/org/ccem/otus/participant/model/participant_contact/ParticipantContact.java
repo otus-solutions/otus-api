@@ -6,39 +6,41 @@ import org.ccem.otus.survey.template.utils.adapters.ObjectIdToStringAdapter;
 
 public class ParticipantContact {
 
+  private ObjectId _id;
+  private String objectType;
   private Long recruitmentNumber;
-  private String mainEmail;
-  private String mainAddress;
-  private String mainPhoneNumber;
-  private String[] otherEmails;
-  private String[] otherAddresses;
-  private String[] otherPhoneNumbers;
+  private ParticipantContactItem mainEmail;
+  private ParticipantContactItem mainAddress;
+  private ParticipantContactItem mainPhoneNumber;
+  private ParticipantContactItem[] otherEmails;
+  private ParticipantContactItem[] otherAddresses;
+  private ParticipantContactItem[] otherPhoneNumbers;
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
   }
 
-  public String getMainEmail() {
+  public ParticipantContactItem getMainEmail() {
     return mainEmail;
   }
 
-  public String getMainAddress() {
+  public ParticipantContactItem getMainAddress() {
     return mainAddress;
   }
 
-  public String getMainPhoneNumber() {
+  public ParticipantContactItem getMainPhoneNumber() {
     return mainPhoneNumber;
   }
 
-  public String[] getOtherEmails() {
+  public ParticipantContactItem[] getOtherEmails() {
     return otherEmails;
   }
 
-  public String[] getOtherAddresses() {
+  public ParticipantContactItem[] getOtherAddresses() {
     return otherAddresses;
   }
 
-  public String[] getOtherPhoneNumbers() {
+  public ParticipantContactItem[] getOtherPhoneNumbers() {
     return otherPhoneNumbers;
   }
 
