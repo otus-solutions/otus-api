@@ -6,7 +6,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -33,7 +33,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
       Document.parse(ParticipantContact.serialize(participantContact))
     );
     if(update.getMatchedCount() == 0){
-      throw new DataNotFoundException("Participant contact with id { " + participantContactOID.toString() + "was not found");
+      throw new DataNotFoundException("Participant contact with id { " + participantContactOID.toString() + " } was not found");
     }
   }
 
@@ -41,7 +41,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   public void delete(ObjectId participantContactOID) throws DataNotFoundException {
     DeleteResult deleteResult = collection.deleteOne(eq(ID_FIELD_NAME, participantContactOID));
     if(deleteResult.getDeletedCount() == 0){
-      throw new DataNotFoundException("Participant contact with id { " + participantContactOID.toString() + "was not found");
+      throw new DataNotFoundException("Participant contact with id { " + participantContactOID.toString() + " } was not found");
     }
   }
 

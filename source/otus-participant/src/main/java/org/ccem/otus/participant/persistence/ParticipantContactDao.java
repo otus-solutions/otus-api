@@ -2,7 +2,7 @@ package org.ccem.otus.participant.persistence;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 
 public interface ParticipantContactDao {
 

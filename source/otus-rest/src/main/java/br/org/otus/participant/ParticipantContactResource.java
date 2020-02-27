@@ -2,7 +2,7 @@ package br.org.otus.participant;
 
 import br.org.otus.participant.api.ParticipantContactFacade;
 import br.org.otus.rest.Response;
-import org.ccem.otus.participant.model.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

@@ -1,4 +1,4 @@
-package org.ccem.otus.participant.model;
+package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
