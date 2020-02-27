@@ -57,7 +57,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
       new Document("$set", new Document(fieldToUpdate, newValue))
     );
     if(updateResult.getMatchedCount() == 0){
-      new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
+      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
   }
 
