@@ -19,6 +19,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class ParticipantContactDaoBean extends MongoGenericDao<Document> implements ParticipantContactDao {
 
   private static final String COLLECTION_NAME = "participant_contact";
+  private static final String RECRUITMENT_NUMBER_FIELD_NAME = "recruitmentNumber";
 
   private static final String MAIN_FIELD_PREFIX = "main";
   private static final String SECONDARY_FIELD_PREFIX = "other";
@@ -101,8 +102,14 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) throws DataNotFoundException {
-    return null;
+  public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    Document result = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)).first();
+    try{
+      return ParticipantContact.deserialize(result.toJson());
+    }
+    catch (NullPointerException e){
+      throw new DataNotFoundException("No participant contact found with recruitment number {" + recruitmentNumber.toString() + "}");
+    }
   }
 
 
