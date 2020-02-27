@@ -2,7 +2,8 @@ package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
-import org.ccem.otus.survey.template.utils.adapters.ObjectIdToStringAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class ParticipantContact {
 
@@ -15,6 +16,14 @@ public class ParticipantContact {
   private ParticipantContactItem[] otherEmails;
   private ParticipantContactItem[] otherAddresses;
   private ParticipantContactItem[] otherPhoneNumbers;
+
+  public ObjectId getObjectId() {
+    return _id;
+  }
+
+  public String getObjectType() {
+    return objectType;
+  }
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
@@ -57,7 +66,9 @@ public class ParticipantContact {
   }
 
   public static GsonBuilder getGsonBuilder(){
-    return new GsonBuilder();
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return builder;
   }
 
   public static GsonBuilder getFrontGsonBuilder() {
