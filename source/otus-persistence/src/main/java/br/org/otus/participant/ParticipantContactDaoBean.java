@@ -7,14 +7,24 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
+import org.ccem.otus.participant.persistence.dto.ParticipantContactTypeOptions;
+
+import java.util.HashMap;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantContactDaoBean extends MongoGenericDao<Document> implements ParticipantContactDao {
 
   private static final String COLLECTION_NAME = "participant_contact";
+
+  private static final String MAIN_FIELD_PREFIX = "main";
+  private static final String SECONDARY_FIELD_PREFIX = "other";
+  private static final String EMAIL_FIELD_SUFFIX = "Email";
+  private static final String ADDRESS_FIELD_SUFFIX = "Address";
+  private static final String PHONE_NUMBER_FIELD_SUFFIX = "PhoneNumber";
 
   public ParticipantContactDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -40,7 +50,15 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-
+    String fieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
+    String newValue = ParticipantContactItem.serialize(participantContactDto.getNewParticipantContactItemValue());
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
+      new Document("$set", new Document(fieldToUpdate, newValue))
+    );
+    if(updateResult.getMatchedCount() == 0){
+      new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
+    }
   }
 
   @Override
@@ -86,4 +104,26 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) throws DataNotFoundException {
     return null;
   }
+
+
+  private String extractMainFieldNameFromDtoType(String dtoType){
+    return MAIN_FIELD_PREFIX + getFieldNameSuffixFromDtoType(dtoType);
+  }
+
+  private String extractSecondaryFieldNameFromDtoType(String dtoType){
+    String fieldNameSuffix = getFieldNameSuffixFromDtoType(dtoType);
+    return SECONDARY_FIELD_PREFIX + fieldNameSuffix + (fieldNameSuffix.equals(ADDRESS_FIELD_SUFFIX) ? "es" : "s");
+  }
+
+  private String getFieldNameSuffixFromDtoType(String dtoType){
+    HashMap<String, String> map = new HashMap<String, String>(){
+      {
+        put(ParticipantContactTypeOptions.EMAIL.getValue(), EMAIL_FIELD_SUFFIX);
+        put(ParticipantContactTypeOptions.ADDRESS.getValue(), ADDRESS_FIELD_SUFFIX);
+        put(ParticipantContactTypeOptions.PHONE.getValue(), PHONE_NUMBER_FIELD_SUFFIX);
+      }
+    };
+    return map.get(dtoType);
+  }
+
 }
