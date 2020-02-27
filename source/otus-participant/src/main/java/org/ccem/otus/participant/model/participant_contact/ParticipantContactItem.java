@@ -22,4 +22,8 @@ public class ParticipantContactItem {
   public static ParticipantContactItem deserialize(String participantContactItemJson){
     return (new GsonBuilder()).create().fromJson(participantContactItemJson, ParticipantContactItem.class);
   }
+
+  public boolean isValid(){
+    return (contactValue.length() > 0);
+  }
 }
