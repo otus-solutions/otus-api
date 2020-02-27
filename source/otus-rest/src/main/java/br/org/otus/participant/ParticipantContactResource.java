@@ -23,11 +23,11 @@ public class ParticipantContactResource {
   }
 
   @PUT
-  @Path("/{id}")
+  @Path("/update")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String update(@PathParam("id") String participantContactID, String participantContactJson) {
-    participantContactFacade.update(participantContactID, participantContactJson);
+  public String update(String participantContactJson) {
+    participantContactFacade.update(participantContactJson);
     return (new Response()).buildSuccess().toJson();
   }
 

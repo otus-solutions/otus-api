@@ -9,7 +9,7 @@ public interface ParticipantContactDao {
 
   ObjectId create(ParticipantContact participantContact);
 
-  void update(ObjectId participantContactOID, ParticipantContact participantContact) throws DataNotFoundException;
+  void update(ParticipantContact participantContact) throws DataNotFoundException;
 
   void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
