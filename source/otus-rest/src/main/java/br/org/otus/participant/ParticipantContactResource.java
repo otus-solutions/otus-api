@@ -32,38 +32,38 @@ public class ParticipantContactResource {
   }
 
   @PUT
-  @Path("/update-main/{id}")
+  @Path("/update-main")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String updateMainContact(@PathParam("id") String participantContactID, String participantContactDtoJson) {
-    participantContactFacade.updateMainContact(participantContactID, participantContactDtoJson);
+  public String updateMainContact(String participantContactDtoJson) {
+    participantContactFacade.updateMainContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 
   @PUT
-  @Path("/add/{id}")
+  @Path("/add-secondary")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String addSecondaryContact(@PathParam("id") String participantContactID, String participantContactDtoJson) {
-    participantContactFacade.addSecondaryContact(participantContactID, participantContactDtoJson);
+  public String addSecondaryContact(String participantContactDtoJson) {
+    participantContactFacade.addSecondaryContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 
   @PUT
-  @Path("/update/{id}")
+  @Path("/update-secondary")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String updateSecondaryContact(@PathParam("id") String participantContactID, String participantContactDtoJson) {
-    participantContactFacade.updateSecondaryContact(participantContactID, participantContactDtoJson);
+  public String updateSecondaryContact(String participantContactDtoJson) {
+    participantContactFacade.updateSecondaryContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 
   @PUT
-  @Path("/swap/{id}")
+  @Path("/swap")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String swapMainContactWithSecondary(@PathParam("id") String participantContactID, String participantContactDtoJson) {
-    participantContactFacade.swapMainContactWithSecondary(participantContactID, participantContactDtoJson);
+  public String swapMainContactWithSecondary(String participantContactDtoJson) {
+    participantContactFacade.swapMainContactWithSecondary(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 
@@ -76,11 +76,11 @@ public class ParticipantContactResource {
   }
 
   @DELETE
-  @Path("/secondary/{id}")
+  @Path("/secondary")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteSecondaryContact(@PathParam("id") String participantContactID, String participantContactDtoJson) {
-    participantContactFacade.deleteSecondaryContact(participantContactID, participantContactDtoJson);
+  public String deleteSecondaryContact(String participantContactDtoJson) {
+    participantContactFacade.deleteSecondaryContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 

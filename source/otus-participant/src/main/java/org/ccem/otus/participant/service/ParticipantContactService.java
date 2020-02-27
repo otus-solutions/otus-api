@@ -11,17 +11,17 @@ public interface ParticipantContactService {
 
   void update(ObjectId participantContactOID, ParticipantContact participantContact) throws DataNotFoundException;
 
-  void updateMainContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
-  void addSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
-  void updateSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
-  void swapMainContactWithSecondary(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
-  void deleteSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException;
 

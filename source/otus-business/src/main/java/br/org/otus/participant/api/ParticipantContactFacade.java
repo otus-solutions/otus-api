@@ -28,36 +28,36 @@ public class ParticipantContactFacade {
     }
   }
 
-  public void updateMainContact(String participantContactID, String participantContactDtoJson) {
+  public void updateMainContact(String participantContactDtoJson) {
     try{
-      participantContactService.updateMainContact(new ObjectId(participantContactID), ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.updateMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public void addSecondaryContact(String participantContactID, String participantContactDtoJson) {
+  public void addSecondaryContact(String participantContactDtoJson) {
     try{
-      participantContactService.addSecondaryContact(new ObjectId(participantContactID), ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.addSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public void updateSecondaryContact(String participantContactID, String participantContactDtoJson) {
+  public void updateSecondaryContact(String participantContactDtoJson) {
     try{
-      participantContactService.updateSecondaryContact(new ObjectId(participantContactID), ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.updateSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public void swapMainContactWithSecondary(String participantContactID, String participantContactDtoJson) {
+  public void swapMainContactWithSecondary(String participantContactDtoJson) {
     try{
-      participantContactService.swapMainContactWithSecondary(new ObjectId(participantContactID), ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.swapMainContactWithSecondary(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
@@ -73,9 +73,9 @@ public class ParticipantContactFacade {
     }
   }
 
-  public void deleteSecondaryContact(String participantContactID, String participantContactDtoJson) {
+  public void deleteSecondaryContact(String participantContactDtoJson) {
     try{
-      participantContactService.deleteSecondaryContact(new ObjectId(participantContactID), ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.deleteSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));

@@ -27,22 +27,22 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void updateMainContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
 
   }
 
   @Override
-  public void addSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
 
   }
 
   @Override
-  public void updateSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
 
   }
 
   @Override
-  public void swapMainContactWithSecondary(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException {
 
   }
 
@@ -52,7 +52,7 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void deleteSecondaryContact(ObjectId participantContactOID, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
 
   }
 
