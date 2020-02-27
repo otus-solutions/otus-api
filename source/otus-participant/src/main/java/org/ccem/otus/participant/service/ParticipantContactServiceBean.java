@@ -63,8 +63,8 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) throws DataNotFoundException {
-    return null;
+  public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return participantContactDao.getByRecruitmentNumber(recruitmentNumber);
   }
 
   private void validateDto(ParticipantContactDto participantContactDto) throws DataFormatException {

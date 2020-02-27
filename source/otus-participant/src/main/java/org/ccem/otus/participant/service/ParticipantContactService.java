@@ -27,5 +27,5 @@ public interface ParticipantContactService {
 
   ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException;
 
-  ParticipantContact getByRecruitmentNumber(String recruitmentNumber) throws DataNotFoundException;
+  ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
 }

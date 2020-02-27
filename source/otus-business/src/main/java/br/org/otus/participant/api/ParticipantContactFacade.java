@@ -94,9 +94,9 @@ public class ParticipantContactFacade {
 
   public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) {
     try{
-      return participantContactService.getByRecruitmentNumber(recruitmentNumber);
+      return participantContactService.getByRecruitmentNumber(Long.parseLong(recruitmentNumber));
     }
-    catch (DataNotFoundException e){
+    catch (DataNotFoundException | NumberFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
