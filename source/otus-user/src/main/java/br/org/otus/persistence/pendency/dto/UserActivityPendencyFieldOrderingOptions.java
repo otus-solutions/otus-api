@@ -1,5 +1,7 @@
 package br.org.otus.persistence.pendency.dto;
 
+import java.util.Arrays;
+
 public enum UserActivityPendencyFieldOrderingOptions {
 
   STATUS("status"),
@@ -21,12 +23,9 @@ public enum UserActivityPendencyFieldOrderingOptions {
   }
 
   public static boolean contains(String orderingOption){
-    for (UserActivityPendencyFieldOrderingOptions option : UserActivityPendencyFieldOrderingOptions.values()) {
-      if (option.getName().equals(orderingOption)) {
-        return true;
-      }
-    }
-    return false;
+    return Arrays.asList(UserActivityPendencyFieldOrderingOptions.values()).stream()
+      .map(UserActivityPendencyFieldOrderingOptions::getName)
+      .anyMatch(orderingOption::equals);
   }
 
 }

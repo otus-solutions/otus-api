@@ -52,10 +52,6 @@ public class ActivityInfoTest {
     assertTrue(activityInfo.deserialize(activityInfoJson) instanceof ActivityInfo);
   }
 
-  /*
-   * Method equals
-   */
-
   @Test
   public void objectModel_equals_himself(){
     assertTrue(activityInfo.equals(activityInfo));

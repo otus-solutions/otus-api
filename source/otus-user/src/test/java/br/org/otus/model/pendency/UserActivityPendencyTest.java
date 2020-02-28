@@ -78,9 +78,6 @@ public class UserActivityPendencyTest {
     assertTrue(UserActivityPendency.getFrontGsonBuilder() instanceof GsonBuilder);
   }
 
-  /*
-   * Method equals
-   */
 
   @Test
   public void objectModel_equals_himself(){
