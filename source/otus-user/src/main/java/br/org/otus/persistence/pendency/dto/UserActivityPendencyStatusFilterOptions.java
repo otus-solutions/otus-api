@@ -1,10 +1,8 @@
 package br.org.otus.persistence.pendency.dto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum UserActivityPendencyStatusFilterOptions {
 
+  ALL("ALL"),
   FINALIZED("FINALIZED"),
   NOT_FINALIZED("NOT_FINALIZED");
 
@@ -19,9 +17,11 @@ public enum UserActivityPendencyStatusFilterOptions {
   }
 
   public static boolean contains(String statusOption){
-    Map<String, UserActivityPendencyStatusFilterOptions> valuesMap = new HashMap<>();
-    valuesMap.put(FINALIZED.getValue(), FINALIZED);
-    valuesMap.put(NOT_FINALIZED.getValue(), NOT_FINALIZED);
-    return (valuesMap.get(statusOption) != null);
+    for (UserActivityPendencyStatusFilterOptions option: UserActivityPendencyStatusFilterOptions.values()) {
+      if(option.getValue().equals(statusOption)){
+        return true;
+      }
+    }
+    return false;
   }
 }

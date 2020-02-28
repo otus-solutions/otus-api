@@ -66,6 +66,7 @@ public class UserActivityPendencyQueryBuilder {
     Map<String, String> statusMap = new HashMap<>();
     statusMap.put(UserActivityPendencyStatusFilterOptions.FINALIZED.getValue(), getDoneStatusCondition());
     statusMap.put(UserActivityPendencyStatusFilterOptions.NOT_FINALIZED.getValue(), getOpenedStatusCondition());
+    statusMap.put(UserActivityPendencyStatusFilterOptions.ALL.getValue(), "");
     return statusMap.get(userActivityPendencyDtoStatus);
   }
 
