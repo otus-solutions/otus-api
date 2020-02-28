@@ -3,8 +3,10 @@ package br.org.otus.laboratory.project.transportation.business;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import br.org.otus.laboratory.project.transportation.validators.TransportationLotValidator;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -24,20 +26,29 @@ public class TransportationLotServiceBean implements TransportationLotService {
   private LaboratoryConfigurationDao laboratoryConfigurationDao;
   @Inject
   private AliquotDao aliquotDao;
+  @Inject
+  private MaterialTrackingDao materialTrackingDao;
 
   @Override
-  public TransportationLot create(TransportationLot transportationLot, String email) throws ValidationException, DataNotFoundException {
+  public TransportationLot create(TransportationLot transportationLot, String userEmail, ObjectId userId) throws ValidationException, DataNotFoundException {
     _validateLot(transportationLot);
-    transportationLot.setOperator(email);
+
+    transportationLot.setOperator(userEmail);
     transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation(transportationLotDao.getLastTransportationLotCode()));
 
     ArrayList<String> aliquotCodeList = transportationLot.getAliquotCodeList();
 
     ObjectId transportationLotId = transportationLotDao.persist(transportationLot);
-
+    transportationLot.setLotId(transportationLotId);
     if (!aliquotCodeList.isEmpty()) {
       aliquotDao.addToTransportationLot(aliquotCodeList, transportationLotId);
     }
+
+    materialTrackingDao.updatePrevious(aliquotCodeList);
+
+    ArrayList<Document> trails = aliquotDao.buildTrails(aliquotCodeList,userId,transportationLot);
+
+    materialTrackingDao.insert(trails);
     return transportationLot;
   }
 
@@ -51,8 +62,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
   }
 
   @Override
-  public List<TransportationLot> list() {
-    return transportationLotDao.find();
+  public List<TransportationLot> list(String locationPointId) {
+    return transportationLotDao.findByLocationPoint(locationPointId);
   }
 
   @Override

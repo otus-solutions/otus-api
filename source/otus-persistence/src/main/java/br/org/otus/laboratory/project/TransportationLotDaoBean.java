@@ -31,11 +31,11 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   }
 
   @Override
-  public List<TransportationLot> find() {
+  public List<TransportationLot> findByLocationPoint(String locationPointId) {
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
 
     AggregateIterable output = collection
-      .aggregate(Arrays.asList(Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")));
+      .aggregate(Arrays.asList(Aggregates.match(new Document("locationPointId",new ObjectId(locationPointId))),Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")));
     for (Object result : output) {
       Document document = (Document) result;
       transportationLots.add(TransportationLot.deserialize(document.toJson()));

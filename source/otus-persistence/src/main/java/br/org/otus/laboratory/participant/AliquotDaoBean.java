@@ -3,6 +3,7 @@ package br.org.otus.laboratory.participant;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.google.gson.GsonBuilder;
 import com.mongodb.Block;
@@ -123,7 +124,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
   }
 
   @Override
-  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) {
+  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPoint, List<String> aliquotsInLocationPoint) {
     List<Aliquot> aliquots = new ArrayList<>();
 
     ArrayList<String> roles = new ArrayList<>();
@@ -137,13 +138,19 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
       and(
         gte("aliquotCollectionData.processing", transportationAliquotFiltersDTO.getInitialDate()),
         lte("aliquotCollectionData.processing", transportationAliquotFiltersDTO.getFinalDate()),
-        eq("fieldCenter.acronym", transportationAliquotFiltersDTO.getFieldCenter()),
-        eq("transportationLotId", null),
+        or(
+          eq("locationPoint", new ObjectId(locationPoint)),
+          in("code",aliquotsInLocationPoint)
+          ),
         in("role", roles)
       )
     );
 
-    result.forEach((Block<Document>) document -> aliquots.add(Aliquot.deserialize(document.toJson())));
+    result.forEach((Block<Document>) document -> {
+      Aliquot aliquot = Aliquot.deserialize(document.toJson());
+      aliquots.add(aliquot);
+    });
+
     return aliquots;
   }
 
@@ -184,4 +191,28 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     if (result.getMatchedCount() < 1) throw new DataNotFoundException(new Throwable("aliquot not found"));
     return String.valueOf(result.getModifiedCount());
   }
+
+  @Override
+  public ArrayList<Document> buildTrails(ArrayList<String> aliquotCodeList, ObjectId userId, TransportationLot transportationLot) {
+    ArrayList<Document> trails = null;
+
+    Document first = collection.aggregate(Arrays.asList(
+      new Document("$match", new Document("code",new Document("$in",aliquotCodeList))),
+      new Document("$addFields",new Document("isCurrentLocation",true)),
+      new Document("$project",new Document("_id",0)
+        .append("materialCode","$code")
+        .append("operator",userId)
+        .append("operationDate",transportationLot.getShipmentDate().toString())
+        .append("locationPoint",transportationLot.getDestinationLocationPoint())
+        .append("isCurrentLocation","$isCurrentLocation")
+        .append("transportationLotId",transportationLot.getLotId())),
+      new Document("$group", new Document("_id","").append("trails",new Document("$push","$$ROOT")))
+    )).first();
+
+    if (first != null){
+      trails = (ArrayList<Document>) first.get("trails");
+    }
+    return trails;
+  }
+
 }

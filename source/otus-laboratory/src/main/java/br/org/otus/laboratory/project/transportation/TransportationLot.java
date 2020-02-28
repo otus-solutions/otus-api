@@ -24,6 +24,8 @@ public class TransportationLot {
   private String operator;
   private ArrayList<Aliquot> aliquotList;
   private ArrayList<AliquotInfo> aliquotsInfo;
+  private ObjectId originLocationPoint;
+  private ObjectId destinationLocationPoint;
   private FieldCenter fieldCenter;
 
   public TransportationLot() {
@@ -117,5 +119,17 @@ public class TransportationLot {
 
   public ObjectId getLotId() {
     return _id;
+  }
+
+  public ObjectId getOriginLocationPoint() {
+    return originLocationPoint;
+  }
+
+  public ObjectId getDestinationLocationPoint() {
+    return destinationLocationPoint;
+  }
+
+  public void setLotId(ObjectId _id) {
+    this._id = _id;
   }
 }

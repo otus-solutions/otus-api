@@ -29,9 +29,9 @@ public class TransportationResource {
 
   @GET
   @Secured
-  @Path("/lots")
-  public String getLots() {
-    List<TransportationLot> lots = transportationLotFacade.getLots();
+  @Path("/lots/{locationPointId}")
+  public String getLots(@PathParam("locationPointId") String locationPointId) {
+    List<TransportationLot> lots = transportationLotFacade.getLots(locationPointId);
     GsonBuilder builder = TransportationLot.getGsonBuilder();
     return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
   }
@@ -67,11 +67,11 @@ public class TransportationResource {
 
   @POST
   @Secured
-  @Path("/aliquots")
-  public String getAliquotsByPeriod(@Context HttpServletRequest request, String filterAliquotJson) throws JSONException {
+  @Path("/aliquots/{locationPointId}")
+  public String getAliquotsByPeriod(@Context HttpServletRequest request, @PathParam("locationPointId") String locationPointId, String filterAliquotJson) throws JSONException {
 
     TransportationAliquotFiltersDTO transportationAliquotFiltersDTO = TransportationAliquotFiltersDTO.deserialize(filterAliquotJson);
-    List<Aliquot> aliquots = transportationLotFacade.getAliquotsByPeriod(transportationAliquotFiltersDTO);
+    List<Aliquot> aliquots = transportationLotFacade.getAliquotsByPeriod(transportationAliquotFiltersDTO, locationPointId);
     GsonBuilder builder = Aliquot.getGsonBuilder();
 
     return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
@@ -79,22 +79,13 @@ public class TransportationResource {
 
   @POST
   @Secured
-  @Path("/aliquot")
-  public String getAliquot(@Context HttpServletRequest request, String filterAliquotJson) {
+  @Path("/aliquot/{locationPointId}")
+  public String getAliquot(@Context HttpServletRequest request, @PathParam("locationPointId") String locationPointId, String filterAliquotJson) {
 
     TransportationAliquotFiltersDTO transportationAliquotFiltersDTO = TransportationAliquotFiltersDTO.deserialize(filterAliquotJson);
-    Aliquot aliquot = transportationLotFacade.getAliquot(transportationAliquotFiltersDTO);
+    Aliquot aliquot = transportationLotFacade.getAliquot(transportationAliquotFiltersDTO, locationPointId);
     GsonBuilder builder = Aliquot.getGsonBuilder();
 
     return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
-  }
-
-  @GET
-  @Secured
-  @Path("/aliquots")
-  public String getAliquots() {
-    List<Aliquot> aliquots = transportationLotFacade.getAliquots();
-    GsonBuilder builder = TransportationLot.getGsonBuilder();
-    return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
   }
 }
