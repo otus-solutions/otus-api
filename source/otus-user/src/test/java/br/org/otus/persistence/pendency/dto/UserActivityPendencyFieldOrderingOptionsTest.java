@@ -19,13 +19,8 @@ public class UserActivityPendencyFieldOrderingOptionsTest {
   }
 
   @Test
-  public void contains_static_method_should_return_FALE_for_invalid_value(){
+  public void contains_static_method_should_return_FALSE_for_invalid_value(){
     assertFalse(UserActivityPendencyFieldOrderingOptions.contains(""));
-  }
-
-  @Test
-  public void contains_static_method_should_return_FALE_for_null(){
-    assertFalse(UserActivityPendencyFieldOrderingOptions.contains(null));
   }
 
 }
