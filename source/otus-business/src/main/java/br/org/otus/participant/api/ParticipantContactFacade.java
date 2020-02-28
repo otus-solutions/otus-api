@@ -78,7 +78,7 @@ public class ParticipantContactFacade {
     try{
       participantContactService.deleteSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException e){
+    catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }

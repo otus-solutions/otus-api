@@ -55,8 +55,9 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-
+  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.deleteSecondaryContact(participantContactDto);
   }
 
   @Override

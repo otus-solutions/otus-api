@@ -23,7 +23,7 @@ public interface ParticipantContactService {
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
-  void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException;
 

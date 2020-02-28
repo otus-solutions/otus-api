@@ -103,7 +103,15 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-
+    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
+      new Document("$pull",
+        new Document(fieldToUpdate, participantContactDto.getNewParticipantContactItemValue().getContactValueAttribute()))
+    );
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
+    }
   }
 
   @Override
