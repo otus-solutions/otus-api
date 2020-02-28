@@ -2,6 +2,8 @@ package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.HashMap;
+
 public class ParticipantContactItem {
 
   private String contactValue;
@@ -15,6 +17,15 @@ public class ParticipantContactItem {
     return observation;
   }
 
+  public HashMap<String, Object> getAllMyAttributes(){
+    return new HashMap<String, Object>(){
+      {
+        put("contactValue", getContactValue());
+        put("observation", getObservation());
+      }
+    };
+  }
+
   public static String serialize(ParticipantContactItem participantContactItem){
     return (new GsonBuilder()).create().toJson(participantContactItem);
   }
@@ -24,6 +35,6 @@ public class ParticipantContactItem {
   }
 
   public boolean isValid(){
-    return (contactValue.length() > 0);
+    return (getContactValue() != null && getContactValue().length() > 0);
   }
 }

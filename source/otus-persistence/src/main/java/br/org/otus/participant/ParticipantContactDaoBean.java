@@ -52,11 +52,11 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   @Override
   public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
     String fieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
-    String newValue = ParticipantContactItem.serialize(participantContactDto.getNewParticipantContactItemValue());
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$set", new Document(fieldToUpdate, newValue))
-    );
+      new Document("$set",
+        new Document(fieldToUpdate, participantContactDto.getNewParticipantContactItemValue().getAllMyAttributes())
+      ));
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
@@ -65,10 +65,10 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   @Override
   public void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
     String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
-    String newValue = ParticipantContactItem.serialize(participantContactDto.getNewParticipantContactItemValue());
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$addToSet", new Document(fieldToUpdate, newValue))
+      new Document("$addToSet",
+        new Document(fieldToUpdate, participantContactDto.getNewParticipantContactItemValue().getAllMyAttributes()))
     );
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
