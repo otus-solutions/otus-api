@@ -51,7 +51,7 @@ public class ParticipantContactFacade {
     try{
       participantContactService.updateSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException e){
+    catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
