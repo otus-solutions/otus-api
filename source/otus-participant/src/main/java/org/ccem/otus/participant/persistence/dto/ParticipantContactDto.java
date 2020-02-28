@@ -11,8 +11,11 @@ public class ParticipantContactDto implements Dto {
   private String _id;
   private String type;
 
-  @SerializedName("newValue")
-  private ParticipantContactItem newParticipantContactItemValue;
+  @SerializedName("contactItem")
+  private ParticipantContactItem participantContactItem;
+
+  @SerializedName("contactItemToSwapWithMain")
+  private ParticipantContactItem participantContactItemToSwapWithMainItem;
 
   @SerializedName("index")
   private Integer indexAtContactArray;
@@ -29,8 +32,12 @@ public class ParticipantContactDto implements Dto {
     return type;
   }
 
-  public ParticipantContactItem getNewParticipantContactItemValue() {
-    return newParticipantContactItemValue;
+  public ParticipantContactItem getParticipantContactItem() {
+    return participantContactItem;
+  }
+
+  public ParticipantContactItem getParticipantContactItemToSwapWithMainItem() {
+    return participantContactItemToSwapWithMainItem;
   }
 
   public Integer getIndexAtContactArray() {
@@ -50,7 +57,7 @@ public class ParticipantContactDto implements Dto {
     try{
       new ObjectId(getIdStr());
       return ParticipantContactTypeOptions.contains(getType()) &&
-        newParticipantContactItemValue.isValid() &&
+        participantContactItem.isValid() &&
         (indexAtContactArray==null || indexAtContactArray >= 0);
     }
     catch (Exception e){
