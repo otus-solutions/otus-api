@@ -26,6 +26,14 @@ public class ParticipantContactItem {
     };
   }
 
+  public HashMap<String, Object> getContactValueAttribute(){
+    return new HashMap<String, Object>(){
+      {
+        put("contactValue", getContactValue());
+      }
+    };
+  }
+
   public static String serialize(ParticipantContactItem participantContactItem){
     return (new GsonBuilder()).create().toJson(participantContactItem);
   }
