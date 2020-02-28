@@ -15,7 +15,7 @@ public interface ParticipantContactService {
 
   void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
