@@ -17,7 +17,7 @@ public class ParticipantContactDto implements Dto {
   @SerializedName("contactItemToSwapWithMain")
   private ParticipantContactItem participantContactItemToSwapWithMainItem;
 
-  @SerializedName("index")
+  @SerializedName("secondaryIndex")
   private Integer indexAtContactArray;
 
   public String getIdStr() {
