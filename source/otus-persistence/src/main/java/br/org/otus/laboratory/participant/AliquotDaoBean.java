@@ -155,7 +155,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
   }
 
   @Override
-  public void addToTransportationLot(ArrayList<String> codeList, ObjectId transportationLotId) throws DataNotFoundException {
+  public void  addToTransportationLot(ArrayList<String> codeList, ObjectId transportationLotId) throws DataNotFoundException {
     Document query = new Document("code", new Document("$in", codeList));
     UpdateResult updateManyResult = collection.updateMany(query, new Document("$set", new Document("transportationLotId", transportationLotId)));
 
