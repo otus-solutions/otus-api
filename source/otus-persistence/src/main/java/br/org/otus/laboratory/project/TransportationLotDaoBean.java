@@ -35,7 +35,14 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
 
     AggregateIterable output = collection
-      .aggregate(Arrays.asList(Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId))),Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")));
+      .aggregate(
+        Arrays.asList(
+          Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId))),
+          Aggregates.lookup("transport_material_correlation", "_id", "_id", "aliquotsCorrelation"),
+          Aggregates.lookup("aliquot",Arrays.asList(
+            Aggregates.match(new Document("$expr", new Document("$and", Arrays.asList(new Document("$in", Arrays.asList("$code",  "$$aliquotCodeList"))))))
+          ),"aliquotList"))
+      );
     for (Object result : output) {
       Document document = (Document) result;
       transportationLots.add(TransportationLot.deserialize(document.toJson()));
