@@ -18,6 +18,9 @@ public class UserActivityPendencyFilterDto implements Dto {
   @SerializedName(value = "externalID")
   private String externalID;
 
+  @SerializedName(value = "dueDate")
+  private String dueDate;
+
   @SerializedName(value = "requester")
   private String[] requester;
 
@@ -35,6 +38,10 @@ public class UserActivityPendencyFilterDto implements Dto {
 
   public String getExternalID() {
     return externalID;
+  }
+
+  public String getDueDate() {
+    return dueDate;
   }
 
   public String getStatus() {

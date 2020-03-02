@@ -14,6 +14,7 @@ public class UserActivityPendencyFilterDtoTest {
   private final static String ACRONYM = "ABC";
   private final static Long RN = 1234567L;
   private final static String EXTERNAL_ID = "xwyz";
+  private final static String DUE_DATE = "1900-01-01T00:00:00.000Z";
   private final static String[] REQUESTER = new String[]{"requester1@otus.com", "requester2@otus.com"};
   private final static String[] RECEIVER = new String[]{"receiver1@otus.com", "receiver2@otus.com"};
 
@@ -26,6 +27,7 @@ public class UserActivityPendencyFilterDtoTest {
     Whitebox.setInternalState(userActivityPendencyFilterDto, "acronym", ACRONYM);
     Whitebox.setInternalState(userActivityPendencyFilterDto, "rn", RN);
     Whitebox.setInternalState(userActivityPendencyFilterDto, "externalID", EXTERNAL_ID);
+    Whitebox.setInternalState(userActivityPendencyFilterDto, "dueDate", DUE_DATE);
     Whitebox.setInternalState(userActivityPendencyFilterDto, "requester", REQUESTER);
     Whitebox.setInternalState(userActivityPendencyFilterDto, "receiver", RECEIVER);
     userActivityPendencyFilterDtoJson = UserActivityPendencyFilterDto.serialize(userActivityPendencyFilterDto);
@@ -37,6 +39,7 @@ public class UserActivityPendencyFilterDtoTest {
     assertEquals(ACRONYM, userActivityPendencyFilterDto.getAcronym());
     assertEquals(RN, userActivityPendencyFilterDto.getRn());
     assertEquals(EXTERNAL_ID, userActivityPendencyFilterDto.getExternalID());
+    assertEquals(DUE_DATE, userActivityPendencyFilterDto.getDueDate());
     assertArrayEquals(REQUESTER, userActivityPendencyFilterDto.getRequesters());
     assertArrayEquals(RECEIVER, userActivityPendencyFilterDto.getReceivers());
   }
