@@ -97,8 +97,10 @@ public class TransportationLotFacade {
   public Tube getTube(String locationPointId, String tubeCode) {
     try {
       return participantLaboratoryService.getTube(locationPointId, tubeCode);
-    } catch (DataNotFoundException | ValidationException e) {
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(),e.getData()));
     }
   }
 }

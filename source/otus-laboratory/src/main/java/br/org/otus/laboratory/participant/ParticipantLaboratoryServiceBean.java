@@ -7,6 +7,9 @@ import java.util.concurrent.CompletableFuture;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
@@ -53,6 +56,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   private ExamUploader examUploader;
   @Inject
   private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
+  @Inject
+  private MaterialTrackingDao materialTrackingDao;
 
   @Override
   public boolean hasLaboratory(Long recruitmentNumber) {
@@ -138,7 +143,14 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public Tube getTube(String locationPointId, String tubeCode) throws DataNotFoundException, ValidationException {
+    MaterialTrail materialTrail = materialTrackingDao.getCurrent(tubeCode);
+    ObjectId tubeOriginLocationPointId = participantLaboratoryDao.getTubeLocationPoint(tubeCode);
     Tube tube = participantLaboratoryDao.getTube(tubeCode);
-    return null;
+    if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
+      throw new ValidationException(new Throwable("tube is not in transportation lot origin location point"));
+    } else if (materialTrail == null && !tubeOriginLocationPointId.equals(new ObjectId(locationPointId))){
+      throw new ValidationException(new Throwable("tube is not in transportation lot origin location point"));
+    }
+    return tube;
   }
 }

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.client.AggregateIterable;
@@ -34,4 +35,6 @@ public interface ParticipantLaboratoryDao {
   AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
 
   Tube getTube(String tubeCode) throws DataNotFoundException;
+
+  ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException;
 }

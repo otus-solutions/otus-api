@@ -90,11 +90,11 @@ public class TransportationResource {
     return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
   }
 
-  @POST
+  @GET
   @Secured
   @Path("/tube/{locationPointId}/{tubeCode}")
   public String getTube(@PathParam("locationPointId") String locationPointId, @PathParam("tubeCode") String tubeCode) {
     Tube tube = transportationLotFacade.getTube(locationPointId, tubeCode);
-    return new Response().buildSuccess().toJson();
+    return new Response().buildSuccess(tube).toJson();
   }
 }

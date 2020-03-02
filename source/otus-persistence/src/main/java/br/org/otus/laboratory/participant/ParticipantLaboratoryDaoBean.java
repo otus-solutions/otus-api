@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.Block;
@@ -24,6 +25,7 @@ import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
+import org.ccem.otus.service.ParseQuery;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
   private static final String COLLECTION_NAME = "participant_laboratory";
@@ -112,7 +114,39 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
 
   @Override
   public Tube getTube(String tubeCode) throws DataNotFoundException {
-    return null;
+    Document first = collection.aggregate(Arrays.asList(
+      ParseQuery.toDocument("{ \n" +
+        "        $match: {\n" +
+        "            \"tubes.code\":'" + tubeCode + "'" +
+        "        }\n" +
+        "    }"),
+      ParseQuery.toDocument("{\n" +
+        "        $unwind: \"$tubes\"\n" +
+        "    }"),
+      ParseQuery.toDocument("{ \n" +
+        "        $match: {\n" +
+        "            \"tubes.code\":\"311344264\"\n" +
+        "        }\n" +
+        "    }"),
+      ParseQuery.toDocument("{\n" +
+        "        $replaceRoot: { newRoot: \"$tubes\" }\n" +
+        "    }")
+    )).first();
+
+    if (first == null) {
+      throw new DataNotFoundException();
+    }
+
+    return Tube.deserialize(first.toJson());
+  }
+
+  @Override
+  public ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException {
+    Document locationPoint = collection.find(eq("tubes.code", tubeCode)).projection(new Document("locationPoint", 1)).first();
+    if (locationPoint == null) {
+      throw new DataNotFoundException();
+    }
+    return (ObjectId) locationPoint.get("locationPoint");
   }
 
 }
