@@ -38,7 +38,7 @@ public class AliquotServiceBean implements AliquotService {
     MaterialTrail materialTrail = materialTrackingDao.getCurrent(transportationAliquotFiltersDTO.getCode());
     if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
       throw new ValidationException(new Throwable("Aliquot is not in transportation lot origin location point"), MaterialTrail.serializeToJsonString(materialTrail));
-    } else if (!aliquot.getLocationPoint().equals(new ObjectId(locationPointId))){
+    } else if (materialTrail == null && !aliquot.getLocationPoint().equals(new ObjectId(locationPointId))){
       throw new ValidationException(new Throwable("Aliquot is not in transportation lot origin location point"), Aliquot.serialize(aliquot));
     }
     return aliquot;
