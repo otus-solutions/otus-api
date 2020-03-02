@@ -10,6 +10,12 @@ import java.util.Map;
 
 public class UserActivityPendencyQueryBuilder {
 
+  public static final String REQUESTER_FIELD_NAME = "requester";
+  public static final String RECEIVER_FIELD_NAME = "receiver";
+  public static final String DUE_DATE_FIELD_NAME = "dueDate";
+  private static final String DATE_TIME_SEPARATOR = "T";
+  private static final int DATE_END_INDEX = 10;
+
   public static final String ACTIVITY_ID_FIELD = "activityId";
   public static final String FINALIZED_STATUS = "FINALIZED";
   public static final String NO_STATUS = "";
@@ -121,7 +127,7 @@ public class UserActivityPendencyQueryBuilder {
       "        $match: {\n" +
       "            $expr: { \n" +
       "               $and: [ \n" +
-      "            " + filterEquations +
+      "             " + filterEquations +
       "                 { $gt: [ { $size: \"$" + ACTIVITY_INFO + "\"}, 0] }\n" +
       "               ]\n" +
       "            }\n" +
@@ -175,12 +181,20 @@ public class UserActivityPendencyQueryBuilder {
       return "";
     }
     return
-      getUserFilterFromDto("requester", userActivityPendencyFilterDto.getRequesters()) +
-        getUserFilterFromDto("receiver", userActivityPendencyFilterDto.getReceivers());
+      getDueDateFilterFromDto(userActivityPendencyFilterDto.getDueDate()) +
+      getUserFilterFromDto(REQUESTER_FIELD_NAME, userActivityPendencyFilterDto.getRequesters()) +
+      getUserFilterFromDto(RECEIVER_FIELD_NAME, userActivityPendencyFilterDto.getReceivers());
   }
   private String getUserFilterFromDto(String userRole, String[] filterValues){
     try{
       return "{ $in: [ \"$"+userRole+"\", [ \"" + String.join("\", \"", filterValues) + "\" ] ] },";
+    }catch (NullPointerException e){
+      return "";
+    }
+  }
+  private String getDueDateFilterFromDto(String dueDate){
+    try{
+      return "{ $eq: [\"" + dueDate.split(DATE_TIME_SEPARATOR)[0] + "\", { $substrBytes: [\"$"+DUE_DATE_FIELD_NAME+"\", 0, "+DATE_END_INDEX+"] } ] },";
     }catch (NullPointerException e){
       return "";
     }
