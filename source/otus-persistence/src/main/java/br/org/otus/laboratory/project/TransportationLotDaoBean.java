@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import com.mongodb.client.model.Variable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -20,6 +21,7 @@ import com.mongodb.client.result.UpdateResult;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import org.ccem.otus.service.ParseQuery;
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
 
@@ -39,9 +41,25 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
         Arrays.asList(
           Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId))),
           Aggregates.lookup("transport_material_correlation", "_id", "_id", "aliquotsCorrelation"),
-          Aggregates.lookup("aliquot",Arrays.asList(
-            Aggregates.match(new Document("$expr", new Document("$and", Arrays.asList(new Document("$in", Arrays.asList("$code",  "$$aliquotCodeList"))))))
-          ),"aliquotList"))
+          ParseQuery.toDocument("{\n" +
+            "      $lookup:\n" +
+            "         {\n" +
+            "           from: \"aliquot\",\n" +
+            "           let: { aliquotCodeList: {$arrayElemAt: [\"$aliquotsCorrelation.aliquotCodeList\",0]}},\n" +
+            "           pipeline: [\n" +
+            "              { $match:\n" +
+            "                 { $expr:\n" +
+            "                    { $and:\n" +
+            "                       [\n" +
+            "                         { $in: [ \"$code\",  \"$$aliquotCodeList\" ] }\n" +
+            "                       ]\n" +
+            "                    }\n" +
+            "                 }\n" +
+            "              }\n" +
+            "           ],\n" +
+            "           as: \"aliquotList\"\n" +
+            "         }\n" +
+            "    }")
       );
     for (Object result : output) {
       Document document = (Document) result;
