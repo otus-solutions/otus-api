@@ -87,8 +87,10 @@ public class TransportationLotFacade {
   public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) {
     try {
       return aliquotService.getAliquot(transportationAliquotFiltersDTO, locationPointId);
-    } catch (DataNotFoundException | ValidationException e) {
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage(), e.getData()));
     }
   }
 
