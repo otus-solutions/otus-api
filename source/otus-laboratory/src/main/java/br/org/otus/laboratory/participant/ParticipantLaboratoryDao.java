@@ -32,4 +32,6 @@ public interface ParticipantLaboratoryDao {
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtractionByParticipant();
 
   AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline);
+
+  Tube getTube(String tubeCode) throws DataNotFoundException
 }

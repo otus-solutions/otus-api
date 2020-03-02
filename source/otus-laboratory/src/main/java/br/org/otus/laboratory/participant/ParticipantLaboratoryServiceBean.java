@@ -135,4 +135,10 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     }
     return aliquotDao.convertAliquotRole(convertedAliquot);
   }
+
+  @Override
+  public Tube getTube(String locationPointId, String tubeCode) throws DataNotFoundException, ValidationException {
+    Tube tube = participantLaboratoryDao.getTube(tubeCode);
+    return null;
+  }
 }

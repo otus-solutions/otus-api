@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
@@ -87,5 +88,13 @@ public class TransportationResource {
     GsonBuilder builder = Aliquot.getGsonBuilder();
 
     return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/tube/{locationPointId}/{tubeCode}")
+  public String getTube(@PathParam("locationPointId") String locationPointId, @PathParam("tubeCode") String tubeCode) {
+    Tube tube = transportationLotFacade.getTube(locationPointId, tubeCode);
+    return new Response().buildSuccess().toJson();
   }
 }

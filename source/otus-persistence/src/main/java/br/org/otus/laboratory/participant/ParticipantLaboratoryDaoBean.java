@@ -110,4 +110,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     return collection.aggregate(pipeline).allowDiskUse(true);
   }
 
+  @Override
+  public Tube getTube(String tubeCode) throws DataNotFoundException {
+    return null;
+  }
+
 }

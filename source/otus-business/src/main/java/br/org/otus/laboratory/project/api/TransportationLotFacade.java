@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import br.org.otus.model.User;
 import br.org.otus.persistence.UserDao;
@@ -19,6 +21,8 @@ import br.org.otus.response.exception.HttpResponseException;
 
 public class TransportationLotFacade {
 
+  @Inject
+  private ParticipantLaboratoryService participantLaboratoryService;
   @Inject
   private TransportationLotService transportationLotService;
   @Inject
@@ -83,6 +87,14 @@ public class TransportationLotFacade {
   public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) {
     try {
       return aliquotService.getAliquot(transportationAliquotFiltersDTO, locationPointId);
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public Tube getTube(String locationPointId, String tubeCode) {
+    try {
+      return participantLaboratoryService.getTube(locationPointId, tubeCode);
     } catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
