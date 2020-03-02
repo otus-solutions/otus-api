@@ -59,7 +59,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
             "           ],\n" +
             "           as: \"aliquotList\"\n" +
             "         }\n" +
-            "    }")
+            "    }"))
       );
     for (Object result : output) {
       Document document = (Document) result;
