@@ -125,7 +125,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
         "    }"),
       ParseQuery.toDocument("{ \n" +
         "        $match: {\n" +
-        "            \"tubes.code\":" + tubeCode + "'" +
+        "            \"tubes.code\":'" + tubeCode + "'" +
         "        }\n" +
         "    }"),
       ParseQuery.toDocument("{\n" +
