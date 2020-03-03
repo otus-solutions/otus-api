@@ -203,7 +203,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
       new Document("$project",new Document("_id",0)
         .append("materialCode","$code")
         .append("operator",userId)
-        .append("operationDate",new Date())
+        .append("operationDate",new Document("$toDate",transportationLot.getShipmentDate()))
         .append("locationPoint",transportationLot.getDestinationLocationPoint())
         .append("isCurrentLocation","$isCurrentLocation")
         .append("transportationLotId",transportationLot.getLotId())),

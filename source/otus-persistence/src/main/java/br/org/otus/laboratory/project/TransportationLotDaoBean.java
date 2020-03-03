@@ -53,6 +53,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   public ObjectId persist(TransportationLot transportationLot) {
     Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
     parsed.remove("aliquotList");
+    parsed.remove("tubeList");
     parsed.remove("_id");
     super.persist(parsed);
     return (ObjectId) parsed.get("_id");
@@ -73,6 +74,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
     Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
     parsed.remove("aliquotList");
+    parsed.remove("tubeList");
     parsed.remove("_id");
     UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
       new Document("$set", parsed));
