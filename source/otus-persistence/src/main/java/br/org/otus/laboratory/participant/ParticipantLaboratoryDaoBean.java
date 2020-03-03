@@ -125,7 +125,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
         "    }"),
       ParseQuery.toDocument("{ \n" +
         "        $match: {\n" +
-        "            \"tubes.code\":\"311344264\"\n" +
+        "            \"tubes.code\":" + tubeCode + "'" +
         "        }\n" +
         "    }"),
       ParseQuery.toDocument("{\n" +
@@ -134,7 +134,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     )).first();
 
     if (first == null) {
-      throw new DataNotFoundException();
+      throw new DataNotFoundException("Tube not Found");
     }
 
     return Tube.deserialize(first.toJson());
