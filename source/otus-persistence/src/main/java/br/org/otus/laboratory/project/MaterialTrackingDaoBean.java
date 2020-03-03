@@ -125,6 +125,7 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
   @Override
   public void insert(MaterialTrail materialTrail) {
     Document parsed = Document.parse(MaterialTrail.serializeToJsonString(materialTrail));
+    parsed.remove("_id");
     super.persist(parsed);
   }
 }
