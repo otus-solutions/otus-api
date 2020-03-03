@@ -61,6 +61,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
     }
 
     materialTrackingDao.updatePrevious(aliquotCodeList);
+    materialTrackingDao.updatePrevious(tubeCodeList);
 
     ArrayList<Document> trails = aliquotDao.buildTrails(aliquotCodeList,userId,transportationLot);
     if(trails != null){
@@ -89,6 +90,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
     newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentAliquotCodeList));
 
     rollBackMaterial(transportationLot, removedMaterialCodes);
+    materialTrackingDao.updatePrevious(newMaterialCodes);
     createNewTrails(userId, transportationLot, newMaterialCodes);
 
     TransportationLot oldTransportationLot = transportationLotDao.findByCode(transportationLot.getCode());
