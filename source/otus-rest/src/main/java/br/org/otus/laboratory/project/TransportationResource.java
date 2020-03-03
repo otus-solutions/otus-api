@@ -52,9 +52,12 @@ public class TransportationResource {
   @PUT
   @Secured
   @Path("/lot")
-  public String update(String transportationLotJson) {
+  public String update(@Context HttpServletRequest request, String transportationLotJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
     TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
-    TransportationLot updatedLot = transportationLotFacade.update(transportationLot);
+    TransportationLot updatedLot = transportationLotFacade.update(transportationLot,userEmail);
     return new Response().buildSuccess(TransportationLot.serialize(updatedLot)).toJson();
   }
 
@@ -95,6 +98,6 @@ public class TransportationResource {
   @Path("/tube/{locationPointId}/{tubeCode}")
   public String getTube(@PathParam("locationPointId") String locationPointId, @PathParam("tubeCode") String tubeCode) {
     Tube tube = transportationLotFacade.getTube(locationPointId, tubeCode);
-    return new Response().buildSuccess(tube).toJson();
+    return new Response().buildSuccess(Tube.serializeToJsonTree(tube)).toJson();
   }
 }
