@@ -13,6 +13,7 @@ import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
 
 import java.util.HashMap;
+import java.util.zip.DataFormatException;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -89,23 +90,18 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     ParticipantContact participantContact = get(participantContactDto.getObjectId());
-
     String mainFieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
-    ParticipantContactItem mainContactValue = participantContact.getMainParticipantContactItemByType(participantContactDto.getType());
-
     String secondaryFieldToUpdate = extractSecondaryFieldNameWithIndexFromDto(participantContactDto);
-    int secondaryContactIndex = participantContactDto.getSecondaryContactIndex();
-    ParticipantContactItem secondaryContactValue = participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType())[secondaryContactIndex];
 
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
       new Document("$set",
         new HashMap<String, Object>() {
           {
-            put(mainFieldToUpdate, secondaryContactValue.getAllMyAttributes());
-            put(secondaryFieldToUpdate, mainContactValue.getAllMyAttributes());
+            put(mainFieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getAllMyAttributes());
+            put(secondaryFieldToUpdate, participantContact.getMainParticipantContactItemByType(participantContactDto.getType()).getAllMyAttributes());
           }
         }
       )
@@ -125,13 +121,16 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    ParticipantContact participantContact = get(participantContactDto.getObjectId());
     String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
+
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
       new Document("$pull",
-        new Document(fieldToUpdate, participantContactDto.getParticipantContactItem().getContactValueAttribute()))
+        new Document(fieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getContactValueAttribute()))
     );
+
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
@@ -182,6 +181,20 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
       }
     };
     return map.get(dtoType);
+  }
+
+  private ParticipantContactItem getSecondaryParticipantContactItemFromDto(ParticipantContact participantContact, ParticipantContactDto participantContactDto) throws DataFormatException {
+    int secondaryContactIndex = -1;
+    try{
+      secondaryContactIndex = participantContactDto.getSecondaryContactIndex();
+      return participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType())[secondaryContactIndex];
+    }
+    catch (NullPointerException e){
+      throw new DataFormatException("There is no index inside secondary " + participantContactDto.getType() + " request");
+    }
+    catch (IndexOutOfBoundsException e){
+      throw new DataFormatException("Participant contact with id { " + participantContactDto.getIdStr() + " } does not have secondary " + participantContactDto.getType() + " with index " + secondaryContactIndex);
+    }
   }
 
 }

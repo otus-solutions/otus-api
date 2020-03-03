@@ -45,7 +45,7 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     participantContactDao.swapMainContactWithSecondary(participantContactDto);
   }
 

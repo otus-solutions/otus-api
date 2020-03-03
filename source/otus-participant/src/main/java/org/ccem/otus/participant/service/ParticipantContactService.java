@@ -19,7 +19,7 @@ public interface ParticipantContactService {
 
   void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
