@@ -5,6 +5,8 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
+import java.util.HashMap;
+
 public class ParticipantContact {
 
   private ObjectId _id;
@@ -13,9 +15,9 @@ public class ParticipantContact {
   private ParticipantContactItem mainEmail;
   private ParticipantContactItem mainAddress;
   private ParticipantContactItem mainPhoneNumber;
-  private ParticipantContactItem[] otherEmails;
-  private ParticipantContactItem[] otherAddresses;
-  private ParticipantContactItem[] otherPhoneNumbers;
+  private ParticipantContactItem[] secondaryEmails;
+  private ParticipantContactItem[] secondaryAddresses;
+  private ParticipantContactItem[] secondaryPhoneNumbers;
 
   public ObjectId getObjectId() {
     return _id;
@@ -41,20 +43,38 @@ public class ParticipantContact {
     return mainPhoneNumber;
   }
 
-  public ParticipantContactItem[] getOtherEmails() {
-    return otherEmails;
+  public ParticipantContactItem[] getSecondaryEmails() {
+    return secondaryEmails;
   }
 
-  public ParticipantContactItem[] getOtherAddresses() {
-    return otherAddresses;
+  public ParticipantContactItem[] getSecondaryAddresses() {
+    return secondaryAddresses;
   }
 
-  public ParticipantContactItem[] getOtherPhoneNumbers() {
-    return otherPhoneNumbers;
+  public ParticipantContactItem[] getSecondaryPhoneNumbers() {
+    return secondaryPhoneNumbers;
   }
 
-  public boolean hasAllMainValues(){
-    return (mainEmail!=null && mainAddress!=null && mainPhoneNumber!=null);
+  public ParticipantContactItem getMainParticipantContactItemByType(String participantContactType){
+    return
+      (new HashMap<String, ParticipantContactItem>(){
+      {
+        put(ParticipantContactTypeOptions.EMAIL.getValue(), getMainEmail());
+        put(ParticipantContactTypeOptions.ADDRESS.getValue(), getMainAddress());
+        put(ParticipantContactTypeOptions.PHONE.getValue(), getMainPhoneNumber());
+      }
+    }).get(participantContactType);
+  }
+
+  public ParticipantContactItem[] getSecondaryParticipantContactsItemByType(String participantContactType){
+    return
+      (new HashMap<String, ParticipantContactItem[]>(){
+      {
+        put(ParticipantContactTypeOptions.EMAIL.getValue(), getSecondaryEmails());
+        put(ParticipantContactTypeOptions.ADDRESS.getValue(), getSecondaryAddresses());
+        put(ParticipantContactTypeOptions.PHONE.getValue(), getSecondaryPhoneNumbers());
+      }
+    }).get(participantContactType);
   }
 
   public static String serialize(ParticipantContact participantContact){
@@ -77,4 +97,7 @@ public class ParticipantContact {
     return builder;
   }
 
+  public boolean hasAllMainValues(){
+    return (mainEmail!=null && mainAddress!=null && mainPhoneNumber!=null);
+  }
 }

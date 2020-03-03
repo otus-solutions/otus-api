@@ -5,20 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
 
 public class ParticipantContactDto implements Dto {
 
   private String _id;
   private String type;
-
-  @SerializedName("contactItem")
   private ParticipantContactItem participantContactItem;
-
-  @SerializedName("contactItemToSwapWithMain")
-  private ParticipantContactItem participantContactItemToSwapWithMainItem;
-
-  @SerializedName("secondaryIndex")
-  private Integer indexAtContactArray;
+  private Integer secondaryContactIndex;
 
   public String getIdStr() {
     return _id;
@@ -36,12 +30,8 @@ public class ParticipantContactDto implements Dto {
     return participantContactItem;
   }
 
-  public ParticipantContactItem getParticipantContactItemToSwapWithMainItem() {
-    return participantContactItemToSwapWithMainItem;
-  }
-
-  public Integer getIndexAtContactArray() {
-    return indexAtContactArray;
+  public Integer getSecondaryContactIndex() {
+    return secondaryContactIndex;
   }
 
   public static String serialize(ParticipantContactDto participantContactDto){
@@ -58,7 +48,7 @@ public class ParticipantContactDto implements Dto {
       new ObjectId(getIdStr());
       return ParticipantContactTypeOptions.contains(getType()) &&
         participantContactItem.isValid() &&
-        (indexAtContactArray==null || indexAtContactArray >= 0);
+        (secondaryContactIndex ==null || secondaryContactIndex >= 0);
     }
     catch (Exception e){
       return false;

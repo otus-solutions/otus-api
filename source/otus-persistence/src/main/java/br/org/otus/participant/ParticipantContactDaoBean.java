@@ -7,9 +7,10 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
-import org.ccem.otus.participant.persistence.dto.ParticipantContactTypeOptions;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
 
 import java.util.HashMap;
 
@@ -21,7 +22,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   private static final String RECRUITMENT_NUMBER_FIELD_NAME = "recruitmentNumber";
 
   private static final String MAIN_FIELD_PREFIX = "main";
-  private static final String SECONDARY_FIELD_PREFIX = "other";
+  private static final String SECONDARY_FIELD_PREFIX = "secondary";
   private static final String EMAIL_FIELD_SUFFIX = "Email";
   private static final String ADDRESS_FIELD_SUFFIX = "Address";
   private static final String PHONE_NUMBER_FIELD_SUFFIX = "PhoneNumber";
@@ -76,7 +77,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-    String fieldToUpdate = extractSecondaryFieldNameWithIndexFromDtoType(participantContactDto);
+    String fieldToUpdate = extractSecondaryFieldNameWithIndexFromDto(participantContactDto);
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
       new Document("$set",
@@ -89,19 +90,27 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+    ParticipantContact participantContact = get(participantContactDto.getObjectId());
+
     String mainFieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
-    String secondaryFieldToUpdate = extractSecondaryFieldNameWithIndexFromDtoType(participantContactDto);
+    ParticipantContactItem mainContactValue = participantContact.getMainParticipantContactItemByType(participantContactDto.getType());
+
+    String secondaryFieldToUpdate = extractSecondaryFieldNameWithIndexFromDto(participantContactDto);
+    int secondaryContactIndex = participantContactDto.getSecondaryContactIndex();
+    ParticipantContactItem secondaryContactValue = participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType())[secondaryContactIndex];
+
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
       new Document("$set",
-        new Document(new HashMap<String, Object>(){
+        new HashMap<String, Object>() {
           {
-            put(mainFieldToUpdate, participantContactDto.getParticipantContactItemToSwapWithMainItem().getAllMyAttributes());
-            put(secondaryFieldToUpdate, participantContactDto.getParticipantContactItem().getAllMyAttributes());
+            put(mainFieldToUpdate, secondaryContactValue.getAllMyAttributes());
+            put(secondaryFieldToUpdate, mainContactValue.getAllMyAttributes());
           }
-        })
+        }
       )
     );
+
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
@@ -160,8 +169,8 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     return SECONDARY_FIELD_PREFIX + fieldNameSuffix + (fieldNameSuffix.equals(ADDRESS_FIELD_SUFFIX) ? "es" : "s");
   }
 
-  private String extractSecondaryFieldNameWithIndexFromDtoType(ParticipantContactDto participantContactDto){
-    return extractSecondaryFieldNameFromDtoType(participantContactDto.getType()) + "." + participantContactDto.getIndexAtContactArray().toString();
+  private String extractSecondaryFieldNameWithIndexFromDto(ParticipantContactDto participantContactDto){
+    return extractSecondaryFieldNameFromDtoType(participantContactDto.getType()) + "." + participantContactDto.getSecondaryContactIndex().toString();
   }
 
   private String getFieldNameSuffixFromDtoType(String dtoType){
