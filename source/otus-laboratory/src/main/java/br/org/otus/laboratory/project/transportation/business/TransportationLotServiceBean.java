@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.transportation.business;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.TransportMaterialCorrelation;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
@@ -42,9 +43,11 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
     ArrayList<String> aliquotCodeList = transportationLot.getAliquotCodeList();
 
+    ArrayList<String> tubeCodeList = transportationLot.getTubeCodeList();
+
     ObjectId transportationLotId = transportationLotDao.persist(transportationLot);
 
-    TransportMaterialCorrelation transportMaterialCorrelation = new TransportMaterialCorrelation(transportationLotId, aliquotCodeList);
+    TransportMaterialCorrelation transportMaterialCorrelation = new TransportMaterialCorrelation(transportationLotId, aliquotCodeList, tubeCodeList);
     transportMaterialCorrelationDao.persist(transportMaterialCorrelation);
 
     transportationLot.setLotId(transportationLotId);
@@ -55,30 +58,59 @@ public class TransportationLotServiceBean implements TransportationLotService {
     materialTrackingDao.updatePrevious(aliquotCodeList);
 
     ArrayList<Document> trails = aliquotDao.buildTrails(aliquotCodeList,userId,transportationLot);
+    if(trails != null){
+      materialTrackingDao.insert(trails);
+    }
 
-    materialTrackingDao.insert(trails);
+    tubeCodeList.forEach(tubeCode -> {
+      MaterialTrail materialTrail = new MaterialTrail(userId,tubeCode,transportationLot);
+      materialTrackingDao.insert(materialTrail);
+    });
+
     return transportationLot;
   }
 
   @Override
-  public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException {
+  public TransportationLot update(TransportationLot transportationLot, ObjectId userId) throws DataNotFoundException, ValidationException {
     _validateLot(transportationLot);
-    ArrayList<String> newAliquotCodeList = transportationLot.getAliquotCodeList();
+    ArrayList<String> currentAliquotCodeList = transportationLot.getAliquotCodeList();
+    ArrayList<String> currentTubeCodeList = transportationLot.getTubeCodeList();
     TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(transportationLot.getLotId());
-    ArrayList<String> removedAliquotCodes = transportMaterialCorrelation.getRemoved(newAliquotCodeList);
-    if(removedAliquotCodes != null){
-      ArrayList<String> materialsToRollBack = materialTrackingDao.verifyNeedToRollback(removedAliquotCodes,transportationLot.getLotId());
+
+    ArrayList<String> removedMaterialCodes = transportMaterialCorrelation.getRemovedAliquots(currentAliquotCodeList);
+    removedMaterialCodes.addAll(transportMaterialCorrelation.getRemovedTubes(currentTubeCodeList));
+
+    ArrayList<String> newMaterialCodes = transportMaterialCorrelation.getNewAliquots(currentAliquotCodeList);
+    newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentAliquotCodeList));
+
+    rollBackMaterial(transportationLot, removedMaterialCodes);
+    createNewTrails(userId, transportationLot, newMaterialCodes);
+
+    TransportationLot oldTransportationLot = transportationLotDao.findByCode(transportationLot.getCode());
+    aliquotDao.updateTransportationLotId(currentAliquotCodeList, oldTransportationLot.getLotId());
+    TransportationLot updateResult = transportationLotDao.update(transportationLot);
+    transportMaterialCorrelationDao.update(transportationLot.getLotId(), currentAliquotCodeList);
+    return updateResult;
+  }
+
+  private void createNewTrails(ObjectId userId, TransportationLot transportationLot, ArrayList<String> newMaterialCodes) {
+    if(newMaterialCodes != null){
+      newMaterialCodes.forEach(materialCode -> {
+        MaterialTrail materialTrail = new MaterialTrail(userId,materialCode,transportationLot);
+        materialTrackingDao.insert(materialTrail);
+      });
+    }
+  }
+
+  private void rollBackMaterial(TransportationLot transportationLot, ArrayList<String> removedMaterialCodes) {
+    if(removedMaterialCodes != null){
+      ArrayList<String> aliquotsToRollBack = materialTrackingDao.verifyNeedToRollback(removedMaterialCodes,transportationLot.getLotId());
       materialTrackingDao.removeTransportation(transportationLot.getLotId());
-      if (materialsToRollBack.size() > 0){
-        ArrayList<ObjectId> TrailsToActivate = materialTrackingDao.getLastTrailsToRollBack(materialsToRollBack);
+      if (aliquotsToRollBack.size() > 0){
+        ArrayList<ObjectId> TrailsToActivate = materialTrackingDao.getLastTrailsToRollBack(aliquotsToRollBack);
         materialTrackingDao.activateTrails(TrailsToActivate);
       }
     }
-    TransportationLot oldTransportationLot = transportationLotDao.findByCode(transportationLot.getCode());
-    aliquotDao.updateTransportationLotId(newAliquotCodeList, oldTransportationLot.getLotId());
-    TransportationLot updateResult = transportationLotDao.update(transportationLot);
-    transportMaterialCorrelationDao.update(transportationLot.getLotId(), newAliquotCodeList);
-    return updateResult;
   }
 
   @Override

@@ -49,9 +49,10 @@ public class TransportationLotFacade {
     return transportationLotService.list(locationPointId);
   }
 
-  public TransportationLot update(TransportationLot transportationLot) {
+  public TransportationLot update(TransportationLot transportationLot, String userEmail) {
     try {
-      return transportationLotService.update(transportationLot);
+      User user = userDao.fetchByEmail(userEmail);
+      return transportationLotService.update(transportationLot,user.get_id());
     } catch (DataNotFoundException e) {
       e.printStackTrace();
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));

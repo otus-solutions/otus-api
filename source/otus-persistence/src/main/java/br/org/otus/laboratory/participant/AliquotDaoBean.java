@@ -18,6 +18,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
@@ -202,7 +203,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
       new Document("$project",new Document("_id",0)
         .append("materialCode","$code")
         .append("operator",userId)
-        .append("operationDate",transportationLot.getShipmentDate().toString())
+        .append("operationDate",new Date())
         .append("locationPoint",transportationLot.getDestinationLocationPoint())
         .append("isCurrentLocation","$isCurrentLocation")
         .append("transportationLotId",transportationLot.getLotId())),

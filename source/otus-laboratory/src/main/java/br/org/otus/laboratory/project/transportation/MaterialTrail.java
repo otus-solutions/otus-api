@@ -8,15 +8,25 @@ import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class MaterialTrail {
   private ObjectId _id;
   private String materialCode;
   private ObjectId operator;
-  private LocalDateTime operationDate;
+  private Date operationDate;
   private ObjectId locationPoint;
   private Boolean isCurrentLocation;
   private ObjectId transportationLotId;
+
+  public MaterialTrail(ObjectId operator,String materialCode, TransportationLot transportationLot) {
+    this.isCurrentLocation = true;
+    this.operationDate = new Date();
+    this.operator = operator;
+    this.materialCode = materialCode;
+    this.locationPoint = transportationLot.getDestinationLocationPoint();
+    this.transportationLotId = transportationLot.getLotId();
+  }
 
   public ObjectId get_id() {
     return _id;
@@ -30,7 +40,7 @@ public class MaterialTrail {
     return operator;
   }
 
-  public LocalDateTime getOperationDate() {
+  public Date getOperationDate() {
     return operationDate;
   }
 

@@ -11,7 +11,7 @@ public interface TransportationLotService {
 
   TransportationLot create(TransportationLot transportationLot, String userEmail, ObjectId userId) throws ValidationException, DataNotFoundException;
 
-  TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException, ValidationException;
+  TransportationLot update(TransportationLot transportationLot, ObjectId userId) throws DataNotFoundException, ValidationException;
 
   List<TransportationLot> list(String locationPointId);
 
