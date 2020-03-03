@@ -73,6 +73,16 @@ public class TransportationLot {
     return codeList;
   }
 
+  public ArrayList<String> getTubeCodeList() {
+    ArrayList<String> codeList = new ArrayList<>();
+    if (tubeList != null) {
+      tubeList.forEach(tube -> {
+        codeList.add(tube.getCode());
+      });
+    }
+    return codeList;
+  }
+
   public void setOperator(String operator) {
     this.operator = operator;
   }
@@ -135,13 +145,11 @@ public class TransportationLot {
     this._id = _id;
   }
 
-  public ArrayList<String> getTubeCodeList() {
-    ArrayList<String> codeList = new ArrayList<>();
-    if (tubeList != null) {
-      tubeList.forEach(tube -> {
-        codeList.add(tube.getCode());
-      });
-    }
-    return codeList;
+  public void setAliquotList(ArrayList<Aliquot> aliquotList) {
+    this.aliquotList = aliquotList;
+  }
+
+  public void setTubeList(ArrayList<Tube> tubeList) {
+    this.tubeList = tubeList;
   }
 }

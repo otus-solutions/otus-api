@@ -39,27 +39,8 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
     AggregateIterable output = collection
       .aggregate(
         Arrays.asList(
-          Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId))),
-          Aggregates.lookup("transport_material_correlation", "_id", "_id", "aliquotsCorrelation"),
-          ParseQuery.toDocument("{\n" +
-            "      $lookup:\n" +
-            "         {\n" +
-            "           from: \"aliquot\",\n" +
-            "           let: { aliquotCodeList: {$arrayElemAt: [\"$aliquotsCorrelation.aliquotCodeList\",0]}},\n" +
-            "           pipeline: [\n" +
-            "              { $match:\n" +
-            "                 { $expr:\n" +
-            "                    { $and:\n" +
-            "                       [\n" +
-            "                         { $in: [ \"$code\",  \"$$aliquotCodeList\" ] }\n" +
-            "                       ]\n" +
-            "                    }\n" +
-            "                 }\n" +
-            "              }\n" +
-            "           ],\n" +
-            "           as: \"aliquotList\"\n" +
-            "         }\n" +
-            "    }"))
+          Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId)))
+        )
       );
     for (Object result : output) {
       Document document = (Document) result;

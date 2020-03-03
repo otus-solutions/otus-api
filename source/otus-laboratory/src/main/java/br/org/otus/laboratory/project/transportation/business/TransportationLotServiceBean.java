@@ -1,7 +1,10 @@
 package br.org.otus.laboratory.project.transportation.business;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.TransportMaterialCorrelation;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
@@ -33,6 +36,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
   private MaterialTrackingDao materialTrackingDao;
   @Inject
   private TransportMaterialCorrelationDao transportMaterialCorrelationDao;
+  @Inject
+  private ParticipantLaboratoryDao participantLaboratoryDao;
 
   @Override
   public TransportationLot create(TransportationLot transportationLot, String userEmail, ObjectId userId) throws ValidationException, DataNotFoundException {
@@ -115,7 +120,15 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
   @Override
   public List<TransportationLot> list(String locationPointId) {
-    return transportationLotDao.findByLocationPoint(locationPointId);
+    List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoint(locationPointId);
+    transportationLots.forEach(lot -> {
+      TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(lot.getLotId());
+      ArrayList<Aliquot> aliquots = aliquotDao.getAliquots(transportMaterialCorrelation.getAliquotCodeList());
+      ArrayList<Tube> tubes = participantLaboratoryDao.getTubes(transportMaterialCorrelation.getTubeCodeList());
+      lot.setAliquotList(aliquots);
+      lot.setTubeList(tubes);
+    });
+    return transportationLots;
   }
 
   @Override

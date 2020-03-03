@@ -24,11 +24,8 @@ public class TransportMaterialCorrelationDaoBean extends MongoGenericDao<Documen
   }
 
   @Override
-  public TransportMaterialCorrelation get(ObjectId lotId) throws DataNotFoundException {
+  public TransportMaterialCorrelation get(ObjectId lotId){
     Document found = collection.find(new Document("_id", lotId)).first();
-    if (found == null){
-      throw new DataNotFoundException(new Throwable("Transport material correlation not found"));
-    }
     return TransportMaterialCorrelation.deserialize(found.toJson());
   }
 

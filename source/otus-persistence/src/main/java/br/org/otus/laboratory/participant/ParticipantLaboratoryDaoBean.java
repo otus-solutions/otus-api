@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -147,6 +149,31 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
       throw new DataNotFoundException();
     }
     return (ObjectId) locationPoint.get("locationPoint");
+  }
+
+  @Override
+  public ArrayList<Tube> getTubes(ArrayList<String> tubeCodeList) {
+    ArrayList<Tube> tubes = new ArrayList<>();
+    MongoCursor<Document> cursor = collection.aggregate(Arrays.asList(
+      new Document("$match",new Document("tubes.code",new Document("$in",tubeCodeList))),
+      ParseQuery.toDocument("{\n" +
+        "        $unwind: \"$tubes\"\n" +
+        "    }"),
+      new Document("$match",new Document("tubes.code",new Document("$in",tubeCodeList))),
+      ParseQuery.toDocument("{\n" +
+        "        $replaceRoot: { newRoot: \"$tubes\" }\n" +
+        "    }")
+    )).iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        tubes.add(Tube.deserialize(cursor.next().toJson()));
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return tubes;
   }
 
 }

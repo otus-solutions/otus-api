@@ -216,4 +216,20 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     return trails;
   }
 
+  @Override
+  public ArrayList<Aliquot> getAliquots(ArrayList<String> aliquotCodeList) {
+    MongoCursor<Document> cursor = collection.find(in("code", aliquotCodeList)).iterator();
+    ArrayList<Aliquot> aliquots = new ArrayList<>();
+
+    try {
+      while (cursor.hasNext()) {
+        aliquots.add(Aliquot.deserialize(cursor.next().toJson()));
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return aliquots;
+  }
+
 }

@@ -20,6 +20,14 @@ public class TransportMaterialCorrelation {
     this.tubeCodeList = tubeCodeList;
   }
 
+  public ArrayList<String> getAliquotCodeList() {
+    return aliquotCodeList;
+  }
+
+  public ArrayList<String> getTubeCodeList() {
+    return tubeCodeList;
+  }
+
   public static String serializeToJsonString(TransportMaterialCorrelation transportMaterialCorrelation) {
     Gson builder = getGsonBuilder().create();
     return builder.toJson(transportMaterialCorrelation);

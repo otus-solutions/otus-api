@@ -45,4 +45,6 @@ public interface AliquotDao {
   String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException;
 
   ArrayList<Document> buildTrails(ArrayList<String> aliquotCodeList, ObjectId userId, TransportationLot transportationLot);
+
+  ArrayList<Aliquot> getAliquots(ArrayList<String> aliquotCodeList);
 }
