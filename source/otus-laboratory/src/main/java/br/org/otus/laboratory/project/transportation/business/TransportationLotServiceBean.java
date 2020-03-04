@@ -83,7 +83,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
     removedMaterialCodes.addAll(transportMaterialCorrelation.getRemovedTubes(currentTubeCodeList));
 
     ArrayList<String> newMaterialCodes = transportMaterialCorrelation.getNewAliquots(currentAliquotCodeList);
-    newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentAliquotCodeList));
+    newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentTubeCodeList));
 
     rollBackMaterial(transportationLot, removedMaterialCodes);
     materialTrackingDao.updatePrevious(newMaterialCodes);
