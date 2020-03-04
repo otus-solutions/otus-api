@@ -22,8 +22,9 @@ public class FieldCenterFacade {
 
   public void create(FieldCenter fieldCenter) {
     try {
-      fieldCenterService.create(fieldCenter);
       TransportLocationPoint transportLocationPoint = new TransportLocationPoint(fieldCenter.getName());
+      fieldCenter.setLocationPoint(transportLocationPoint.get_id());
+      fieldCenterService.create(fieldCenter);
       transportLocationPointService.create(transportLocationPoint);
     } catch (ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage(), e.getData()));

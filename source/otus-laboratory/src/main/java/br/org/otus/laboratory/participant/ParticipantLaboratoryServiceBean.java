@@ -12,6 +12,7 @@ import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackin
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
@@ -32,6 +33,7 @@ import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValida
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import org.ccem.otus.persistence.FieldCenterDao;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
@@ -58,6 +60,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
   @Inject
   private MaterialTrackingDao materialTrackingDao;
+  @Inject
+  private FieldCenterDao fieldCenterDao;
 
   @Override
   public boolean hasLaboratory(Long recruitmentNumber) {
@@ -83,7 +87,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
     CollectGroupDescriptor collectGroup = groupRaffle.perform(participant);
     List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(participant.getFieldCenter(), collectGroup));
-    ParticipantLaboratory laboratory = new ParticipantLaboratory(recruitmentNumber, collectGroup.getName(), tubes);
+    FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
+    ParticipantLaboratory laboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, collectGroup.getName(), tubes);
     participantLaboratoryDao.persist(laboratory);
     return laboratory;
   }
