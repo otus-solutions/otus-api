@@ -10,5 +10,5 @@ public interface TransportMaterialCorrelationDao {
 
   TransportMaterialCorrelation get(ObjectId lotId);
 
-  void update(ObjectId lotId, ArrayList<String> newAliquotCodeList);
+  void update(ObjectId lotId, ArrayList<String> newAliquotCodeList, ArrayList<String> newTubeCodeList);
 }

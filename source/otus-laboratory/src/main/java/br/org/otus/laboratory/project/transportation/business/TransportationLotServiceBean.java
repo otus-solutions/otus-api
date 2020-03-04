@@ -92,7 +92,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
     TransportationLot oldTransportationLot = transportationLotDao.findByCode(transportationLot.getCode());
     aliquotDao.updateTransportationLotId(currentAliquotCodeList, oldTransportationLot.getLotId());
     TransportationLot updateResult = transportationLotDao.update(transportationLot);
-    transportMaterialCorrelationDao.update(transportationLot.getLotId(), currentAliquotCodeList);
+    transportMaterialCorrelationDao.update(transportationLot.getLotId(), currentAliquotCodeList, currentTubeCodeList);
     return updateResult;
   }
 

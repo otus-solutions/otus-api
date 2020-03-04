@@ -30,7 +30,7 @@ public class TransportMaterialCorrelationDaoBean extends MongoGenericDao<Documen
   }
 
   @Override
-  public void update(ObjectId lotId, ArrayList<String> newAliquotCodeList) {
-   collection.updateOne(new Document("_id",lotId),new Document("$set", new Document("aliquotCodeList", newAliquotCodeList)));
+  public void update(ObjectId lotId, ArrayList<String> newAliquotCodeList, ArrayList<String> newTubeCodeList) {
+   collection.updateOne(new Document("_id",lotId),new Document("$set", new Document("aliquotCodeList", newAliquotCodeList).append("tubeCodeList",newTubeCodeList)));
   }
 }
