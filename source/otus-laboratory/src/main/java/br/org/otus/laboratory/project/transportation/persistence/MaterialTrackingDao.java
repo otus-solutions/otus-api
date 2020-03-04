@@ -28,4 +28,6 @@ public interface MaterialTrackingDao {
   ArrayList<String> verifyNeedToRollback(ObjectId lotId);
 
   void insert(MaterialTrail materialTrail);
+
+  List<String> verifyIfAliquotsAreInOrigin(List<String> aliquotsOfLocationPoint, String locationPointId);
 }

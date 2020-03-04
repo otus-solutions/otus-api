@@ -18,7 +18,6 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
@@ -125,7 +124,7 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
   }
 
   @Override
-  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPoint, List<String> aliquotsInLocationPoint) {
+  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPoint, List<String> aliquotsInLocationPoint, List<String> aliquotsNotInOrigin) {
     List<Aliquot> aliquots = new ArrayList<>();
 
     ArrayList<String> roles = new ArrayList<>();
@@ -140,7 +139,10 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
         gte("aliquotCollectionData.processing", transportationAliquotFiltersDTO.getInitialDate()),
         lte("aliquotCollectionData.processing", transportationAliquotFiltersDTO.getFinalDate()),
         or(
-          eq("locationPoint", new ObjectId(locationPoint)),
+          and(
+            eq("locationPoint", new ObjectId(locationPoint)),
+            nin("code",aliquotsNotInOrigin)
+          ),
           in("code",aliquotsInLocationPoint)
           ),
         in("role", roles)
@@ -230,6 +232,21 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
     }
 
     return aliquots;
+  }
+
+  @Override
+  public List<String> getAliquotsByOrigin(String locationPointId) {
+    ArrayList<String> aliquotCodes = new ArrayList<>();
+
+    Document first = collection.aggregate(Arrays.asList(
+      new Document("$match", new Document("locationPoint",new ObjectId(locationPointId))),
+      new Document("$group", new Document("_id","").append("materialCodes",new Document("$push","$code")))
+    )).first();
+
+    if (first != null){
+      aliquotCodes = (ArrayList<String>) first.get("materialCodes");
+    }
+    return aliquotCodes;
   }
 
 }

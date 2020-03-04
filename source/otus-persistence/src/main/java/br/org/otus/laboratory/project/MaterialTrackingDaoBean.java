@@ -128,4 +128,23 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
     parsed.remove("_id");
     super.persist(parsed);
   }
+
+  @Override
+  public List<String> verifyIfAliquotsAreInOrigin(List<String> aliquotsOfLocationPoint, String locationPointId) {
+    ArrayList<String> materialCodes = new ArrayList<>();
+    Document first = collection.aggregate(Arrays.asList(
+      new Document("$match",
+        new Document("materialCode", new Document("$in", aliquotsOfLocationPoint))
+          .append("isCurrentLocation", true)
+          .append("locationPoint",new Document("$ne", new ObjectId(locationPointId)))
+      ),
+      new Document("$group",
+        new Document("_id","").append("materialCodes",new Document("$push","$materialCode")))
+    )).first();
+
+    if (first != null) {
+      materialCodes = (ArrayList<String>) first.get("materialCodes");
+    }
+    return  materialCodes;
+  }
 }

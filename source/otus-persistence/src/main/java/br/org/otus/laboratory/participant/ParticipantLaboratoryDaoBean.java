@@ -146,7 +146,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   public ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException {
     Document locationPoint = collection.find(eq("tubes.code", tubeCode)).projection(new Document("locationPoint", 1)).first();
     if (locationPoint == null) {
-      throw new DataNotFoundException();
+      throw new DataNotFoundException("Tube origin location not found");
     }
     return (ObjectId) locationPoint.get("locationPoint");
   }

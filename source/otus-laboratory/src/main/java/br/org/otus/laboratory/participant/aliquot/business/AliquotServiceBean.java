@@ -51,9 +51,10 @@ public class AliquotServiceBean implements AliquotService {
 
   @Override
   public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) throws DataNotFoundException {
+    List<String> aliquotsOfLocationPoint = aliquotDao.getAliquotsByOrigin(locationPointId);
+    List<String> aliquotsNotInOrigin = materialTrackingDao.verifyIfAliquotsAreInOrigin(aliquotsOfLocationPoint, locationPointId);
     List<String> aliquotsInLocationPoint = materialTrackingDao.getAliquotsInLocation(locationPointId);
-    List<Aliquot> aliquotsByPeriod = aliquotDao.getAliquotsByPeriod(transportationAliquotFiltersDTO, locationPointId, aliquotsInLocationPoint);
-    return aliquotsByPeriod;
+    return aliquotDao.getAliquotsByPeriod(transportationAliquotFiltersDTO, locationPointId, aliquotsInLocationPoint, aliquotsNotInOrigin);
   }
 
   @Override
