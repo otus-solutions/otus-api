@@ -11,7 +11,6 @@ import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportMaterialCorrelationDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import br.org.otus.laboratory.project.transportation.validators.TransportationLotValidator;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -41,8 +40,6 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
   @Override
   public TransportationLot create(TransportationLot transportationLot, String userEmail, ObjectId userId) throws ValidationException, DataNotFoundException {
-    _validateLot(transportationLot);
-
     transportationLot.setOperator(userEmail);
     transportationLot.setCode(laboratoryConfigurationDao.createNewLotCodeForTransportation(transportationLotDao.getLastTransportationLotCode()));
 
@@ -78,7 +75,6 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
   @Override
   public TransportationLot update(TransportationLot transportationLot, ObjectId userId) throws DataNotFoundException, ValidationException {
-    _validateLot(transportationLot);
     ArrayList<String> currentAliquotCodeList = transportationLot.getAliquotCodeList();
     ArrayList<String> currentTubeCodeList = transportationLot.getTubeCodeList();
     TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(transportationLot.getLotId());
@@ -150,10 +146,5 @@ public class TransportationLotServiceBean implements TransportationLotService {
       materialTrackingDao.activateTrails(TrailsToActivate);
     }
     transportationLotDao.delete(code);
-  }
-
-  private void _validateLot(TransportationLot transportationLot) throws ValidationException {
-    TransportationLotValidator transportationLotValidator = new TransportationLotValidator(transportationLotDao, transportationLot);
-    transportationLotValidator.validate();
   }
 }
