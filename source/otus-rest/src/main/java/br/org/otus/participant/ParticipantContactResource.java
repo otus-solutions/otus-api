@@ -94,9 +94,9 @@ public class ParticipantContactResource {
   }
 
   @GET
-  @Path("/nr/{nr}")
+  @Path("/rn/{rn}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getByRecruitmentNumber(@PathParam("nr") String recruitmentNumber) {
+  public String getByRecruitmentNumber(@PathParam("rn") String recruitmentNumber) {
     ParticipantContact participantContact = participantContactFacade.getByRecruitmentNumber(recruitmentNumber);
     return (new Response()).buildSuccess(participantContact)
       .toJson(ParticipantContact.getFrontGsonBuilder());
