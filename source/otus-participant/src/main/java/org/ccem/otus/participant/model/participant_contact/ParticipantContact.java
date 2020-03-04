@@ -59,9 +59,9 @@ public class ParticipantContact {
     return
       (new HashMap<String, ParticipantContactItem>(){
       {
-        put(ParticipantContactTypeOptions.EMAIL.getValue(), getMainEmail());
-        put(ParticipantContactTypeOptions.ADDRESS.getValue(), getMainAddress());
-        put(ParticipantContactTypeOptions.PHONE.getValue(), getMainPhoneNumber());
+        put(ParticipantContactTypeOptions.EMAIL.getName(), getMainEmail());
+        put(ParticipantContactTypeOptions.ADDRESS.getName(), getMainAddress());
+        put(ParticipantContactTypeOptions.PHONE.getName(), getMainPhoneNumber());
       }
     }).get(participantContactType);
   }
@@ -70,9 +70,9 @@ public class ParticipantContact {
     return
       (new HashMap<String, ParticipantContactItem[]>(){
       {
-        put(ParticipantContactTypeOptions.EMAIL.getValue(), getSecondaryEmails());
-        put(ParticipantContactTypeOptions.ADDRESS.getValue(), getSecondaryAddresses());
-        put(ParticipantContactTypeOptions.PHONE.getValue(), getSecondaryPhoneNumbers());
+        put(ParticipantContactTypeOptions.EMAIL.getName(), getSecondaryEmails());
+        put(ParticipantContactTypeOptions.ADDRESS.getName(), getSecondaryAddresses());
+        put(ParticipantContactTypeOptions.PHONE.getName(), getSecondaryPhoneNumbers());
       }
     }).get(participantContactType);
   }
@@ -95,9 +95,5 @@ public class ParticipantContact {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
-  }
-
-  public boolean hasAllMainValues(){
-    return (mainEmail!=null && mainAddress!=null && mainPhoneNumber!=null);
   }
 }

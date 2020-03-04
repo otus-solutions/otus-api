@@ -175,9 +175,9 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   private String getFieldNameSuffixFromDtoType(String dtoType){
     HashMap<String, String> map = new HashMap<String, String>(){
       {
-        put(ParticipantContactTypeOptions.EMAIL.getValue(), EMAIL_FIELD_SUFFIX);
-        put(ParticipantContactTypeOptions.ADDRESS.getValue(), ADDRESS_FIELD_SUFFIX);
-        put(ParticipantContactTypeOptions.PHONE.getValue(), PHONE_NUMBER_FIELD_SUFFIX);
+        put(ParticipantContactTypeOptions.EMAIL.getName(), EMAIL_FIELD_SUFFIX);
+        put(ParticipantContactTypeOptions.ADDRESS.getName(), ADDRESS_FIELD_SUFFIX);
+        put(ParticipantContactTypeOptions.PHONE.getName(), PHONE_NUMBER_FIELD_SUFFIX);
       }
     };
     return map.get(dtoType);

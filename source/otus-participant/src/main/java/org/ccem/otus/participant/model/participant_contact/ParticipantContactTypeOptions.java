@@ -8,19 +8,19 @@ public enum ParticipantContactTypeOptions {
   ADDRESS("ADDRESS"),
   PHONE("PHONE");
 
-  private String value;
+  private String name;
 
-  ParticipantContactTypeOptions(String value){
-    this.value = value;
+  ParticipantContactTypeOptions(String name){
+    this.name = name;
   }
 
-  public String getValue() {
-    return value;
+  public String getName() {
+    return name;
   }
 
   public static boolean contains(String otherValue){
     return Arrays.asList(ParticipantContactTypeOptions.values()).stream()
-      .map(ParticipantContactTypeOptions::getValue)
+      .map(ParticipantContactTypeOptions::getName)
       .anyMatch(otherValue::equals);
   }
 
