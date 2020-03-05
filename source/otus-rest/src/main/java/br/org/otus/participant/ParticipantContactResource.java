@@ -23,15 +23,6 @@ public class ParticipantContactResource {
   }
 
   @PUT
-  @Path("/update")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public String update(String participantContactJson) {
-    participantContactFacade.update(participantContactJson);
-    return (new Response()).buildSuccess().toJson();
-  }
-
-  @PUT
   @Path("/update-main")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)

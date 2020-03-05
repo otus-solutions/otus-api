@@ -43,12 +43,6 @@ public class ParticipantContactResourceTest {
   }
 
   @Test
-  public void update_method_should_update_participantContact_by_participantContactFacade() {
-    participantContactResource.update(participantContactJson);
-    verify(participantContactFacade, times(1)).update(participantContactJson);
-  }
-
-  @Test
   public void updateMainContact_method_should_updateMainContact_participantContact_by_participantContactFacade() {
     participantContactResource.updateMainContact(participantContactJson);
     verify(participantContactFacade, times(1)).updateMainContact(participantContactJson);

@@ -40,17 +40,6 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void update(ParticipantContact participantContact) throws DataNotFoundException {
-    UpdateResult update = collection.updateOne(
-      eq(ID_FIELD_NAME, participantContact.getObjectId()),
-      Document.parse(ParticipantContact.serialize(participantContact))
-    );
-    if(update.getMatchedCount() == 0){
-      throw new DataNotFoundException("Participant contact with id { " + participantContact.getObjectId().toString() + " } was not found");
-    }
-  }
-
-  @Override
   public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
     String fieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
     UpdateResult updateResult = collection.updateOne(

@@ -43,12 +43,6 @@ public class ParticipantContactServiceBeanTest {
     assertEquals(PARTICIPANT_CONTACT_OID, participantContactServiceBean.create(participantContact));
   }
 
-  @Test
-  public void update_method_should_invoke_update_from_participantContactDao() throws DataNotFoundException {
-    participantContactServiceBean.update(participantContact);
-    verify(participantContactDao, times(1)).update(participantContact);
-  }
-
   @Test(expected = DataFormatException.class)
   public void updateMainContact_method_should_throw_DataFormatException_in_case_invalid_participantContactDto() throws Exception {
     doReturn(false).when(participantContactDto).isValid();

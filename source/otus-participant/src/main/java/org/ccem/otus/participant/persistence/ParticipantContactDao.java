@@ -11,8 +11,6 @@ public interface ParticipantContactDao {
 
   ObjectId create(ParticipantContact participantContact);
 
-  void update(ParticipantContact participantContact) throws DataNotFoundException;
-
   void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;

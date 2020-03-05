@@ -49,18 +49,6 @@ public class ParticipantContactFacadeTest {
   }
 
   @Test
-  public void update_method_should_invoke_update_from_participantContactService() throws Exception {
-    participantContactFacade.update(participantContactJson);
-    verify(participantContactService, times(1)).update(Mockito.any());
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void update_method_should_handle_DataNotFoundException() throws Exception {
-    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "update", Mockito.any());
-    participantContactFacade.update(participantContactJson);
-  }
-
-  @Test
   public void updateMainContact_method_should_invoke_updateMainContact_from_participantContactService() throws Exception {
     participantContactFacade.updateMainContact(participantContactJson);
     verify(participantContactService, times(1)).updateMainContact(Mockito.any());

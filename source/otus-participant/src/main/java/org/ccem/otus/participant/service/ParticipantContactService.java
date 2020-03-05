@@ -11,8 +11,6 @@ public interface ParticipantContactService {
 
   ObjectId create(ParticipantContact participantContact);
 
-  void update(ParticipantContact participantContact) throws DataNotFoundException;
-
   void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;

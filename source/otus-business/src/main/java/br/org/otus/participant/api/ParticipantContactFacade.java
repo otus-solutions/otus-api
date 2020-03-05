@@ -20,15 +20,6 @@ public class ParticipantContactFacade {
     return participantContactService.create(ParticipantContact.deserialize(participantContactJson)).toString();
   }
 
-  public void update(String participantContactJson) {
-    try{
-      participantContactService.update(ParticipantContact.deserialize(participantContactJson));
-    }
-    catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
-
   public void updateMainContact(String participantContactDtoJson) {
     try{
       participantContactService.updateMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
