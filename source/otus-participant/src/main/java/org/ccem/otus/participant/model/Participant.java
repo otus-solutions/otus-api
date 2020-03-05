@@ -31,6 +31,7 @@ public class Participant {
   @Equalization(name = "tokenList")
   private ArrayList<String> tokenList;
   private String registeredBy;
+  private Boolean identified;
 
   public Participant(Long recruitmentNumber) {
     this.recruitmentNumber = recruitmentNumber;
@@ -58,6 +59,10 @@ public class Participant {
 
   public FieldCenter getFieldCenter() {
     return fieldCenter;
+  }
+
+  public Boolean isIdentified() {
+    return identified;
   }
 
   public void setFieldCenter(FieldCenter fieldCenter) {
@@ -131,5 +136,4 @@ public class Participant {
     builder.registerTypeAdapter(Long.class, new LongAdapter());
     return builder;
   }
-
 }
