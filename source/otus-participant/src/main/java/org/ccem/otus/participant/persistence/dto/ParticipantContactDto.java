@@ -44,8 +44,8 @@ public class ParticipantContactDto implements Dto {
 
   @Override
   public Boolean isValid() {
-    new ObjectId(getIdStr());
-    return ParticipantContactTypeOptions.contains(getType()) &&
+    return ObjectId.isValid(getIdStr()) &&
+      ParticipantContactTypeOptions.contains(getType()) &&
       (participantContactItem==null || participantContactItem.isValid()) &&
       (secondaryContactIndex ==null || secondaryContactIndex >= 0);
   }

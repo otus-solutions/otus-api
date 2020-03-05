@@ -64,9 +64,15 @@ public class ParticipantContactDtoTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void isValid_method_should_throw_exception_if_ID_is_not_a_ObjectId_String(){
-    Whitebox.setInternalState(participantContactDto, "_id", INVALID_STRING_VALUE_FOR_FIELD);
+  public void isValid_method_should_throw_exception_if_ID_is_null(){
+    Whitebox.setInternalState(participantContactDto, "_id", (String)null);
     participantContactDto.isValid();
+  }
+
+  @Test
+  public void isValid_method_should_throw_exception_if_ID_is_not_a_hexString(){
+    Whitebox.setInternalState(participantContactDto, "_id", INVALID_STRING_VALUE_FOR_FIELD);
+    assertFalse(participantContactDto.isValid());
   }
 
   @Test
