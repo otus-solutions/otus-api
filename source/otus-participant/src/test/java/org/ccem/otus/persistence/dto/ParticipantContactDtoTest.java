@@ -7,9 +7,12 @@ import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 import static org.junit.Assert.*;
 
@@ -19,17 +22,20 @@ public class ParticipantContactDtoTest {
   private static final String ID = "5e13997795818e14a91a5268";
   private static final String TYPE = ParticipantContactTypeOptions.EMAIL.getName();
   private static final String INVALID_STRING_VALUE_FOR_FIELD = "abc";
-  private static final ParticipantContactItem participantContactItem = new ParticipantContactItem();
-  private static final Integer secondaryContactIndex = 0;
+  private static final Integer SECONDARY_CONTACT_INDEX = 0;
+  private static final Integer INVALID_SECONDARY_CONTACT_INDEX = -1;
 
-  private ParticipantContactDto participantContactDto = new ParticipantContactDto();
+  @InjectMocks
+  private ParticipantContactDto participantContactDto = PowerMockito.spy(new ParticipantContactDto());
+  @Mock
+  private ParticipantContactItem participantContactItem = PowerMockito.spy(new ParticipantContactItem());
 
   @Before
   public void setUp(){
     Whitebox.setInternalState(participantContactDto, "_id", ID);
     Whitebox.setInternalState(participantContactDto, "type", TYPE);
     Whitebox.setInternalState(participantContactDto, "participantContactItem", participantContactItem);
-    Whitebox.setInternalState(participantContactDto, "secondaryContactIndex", secondaryContactIndex);
+    Whitebox.setInternalState(participantContactDto, "secondaryContactIndex", SECONDARY_CONTACT_INDEX);
   }
 
   @Test
@@ -38,23 +44,22 @@ public class ParticipantContactDtoTest {
     assertEquals(new ObjectId(ID), participantContactDto.getObjectId());
     assertEquals(TYPE, participantContactDto.getType());
     assertEquals(participantContactItem, participantContactDto.getParticipantContactItem());
-    assertEquals(secondaryContactIndex, participantContactDto.getSecondaryContactIndex());
+    assertEquals(SECONDARY_CONTACT_INDEX, participantContactDto.getSecondaryContactIndex());
   }
 
   @Test
   public void serialize_static_method_should_convert_objectModel_to_JsonString(){
-    assertTrue(ParticipantContactDto.serialize(participantContactDto) instanceof String);
+    assertTrue(ParticipantContactDto.serialize(new ParticipantContactDto()) instanceof String);
   }
 
   @Test
   public void deserialize_static_method_should_convert_JsonString_to_objectModel(){
-    String participantContactDtoJson = ParticipantContactDto.serialize(participantContactDto);
-    assertTrue(ParticipantContactDto.deserialize(participantContactDtoJson) instanceof ParticipantContactDto);
+    assertTrue(ParticipantContactDto.deserialize("{}") instanceof ParticipantContactDto);
   }
 
   @Test
-  public void isValid_method_should_return_TRUE(){
-    //PowerMockito.when()
+  public void isValid_method_should_return_TRUE_in_case_valid_attributes() throws Exception {
+    when(participantContactItem, "isValid").thenReturn(true);
     assertTrue(participantContactDto.isValid());
   }
 
@@ -76,10 +81,22 @@ public class ParticipantContactDtoTest {
     assertTrue(participantContactDto.isValid());
   }
 
-  //@Test
-  public void isValid_method_should_return_FALSE_in_case_participantContactItem_invalid(){
-    Whitebox.setInternalState(participantContactDto, "participantContactItem", (ParticipantContactItem)null);
+  @Test
+  public void isValid_method_should_return_FALSE_in_case_invalid_participantContactItem(){
     assertFalse(participantContactDto.isValid());
   }
 
+  @Test
+  public void isValid_method_should_return_TRUE_in_case_null_secondaryContactIndex() throws Exception {
+    when(participantContactItem, "isValid").thenReturn(true);
+    Whitebox.setInternalState(participantContactDto, "secondaryContactIndex", (Integer)null);
+    assertTrue(participantContactDto.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_FALSE_in_case_invalid_secondaryContactIndex() throws Exception {
+    when(participantContactItem, "isValid").thenReturn(true);
+    Whitebox.setInternalState(participantContactDto, "secondaryContactIndex", INVALID_SECONDARY_CONTACT_INDEX);
+    assertFalse(participantContactDto.isValid());
+  }
 }

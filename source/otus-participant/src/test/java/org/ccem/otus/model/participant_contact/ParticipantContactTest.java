@@ -1,5 +1,6 @@
 package org.ccem.otus.model.participant_contact;
 
+import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
@@ -73,6 +74,11 @@ public class ParticipantContactTest {
   public void deserialize_static_method_should_convert_JsonString_to_objectModel(){
     String participantContactJson = ParticipantContact.serialize(participantContact);
     assertTrue(ParticipantContact.deserialize(participantContactJson) instanceof ParticipantContact);
+  }
+
+  @Test
+  public void getFrontGsonBuilder_static_method_return_GsonBuilder_instance(){
+    assertTrue(ParticipantContact.getFrontGsonBuilder() instanceof GsonBuilder);
   }
 
 }

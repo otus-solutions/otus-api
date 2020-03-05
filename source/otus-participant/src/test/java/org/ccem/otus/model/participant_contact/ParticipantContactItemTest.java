@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 public class ParticipantContactItemTest {
@@ -24,6 +26,16 @@ public class ParticipantContactItemTest {
   public void test_for_invoke_getters(){
     assertEquals(CONTACT_VALUE, participantContactItem.getContactValue());
     assertEquals(OBSERVATION, participantContactItem.getObservation());
+  }
+
+  @Test
+  public void getAllMyAttributes_should_return_HashMap_String_object_instance(){
+    assertEquals(CONTACT_VALUE, participantContactItem.getAllMyAttributes().get("contactValue"));
+  }
+
+  @Test
+  public void getContactValueAttribute_should_return_HashMap_String_object_instance(){
+    assertEquals(CONTACT_VALUE, participantContactItem.getContactValueAttribute().get("contactValue"));
   }
 
   @Test
