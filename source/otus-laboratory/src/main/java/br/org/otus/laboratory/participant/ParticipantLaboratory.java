@@ -15,6 +15,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.exam.Exam;
 import br.org.otus.laboratory.participant.tube.Tube;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class ParticipantLaboratory {
 
@@ -92,6 +93,7 @@ public class ParticipantLaboratory {
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     builder.serializeNulls();
 
     return builder;
