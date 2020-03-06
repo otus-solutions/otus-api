@@ -136,7 +136,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     )).first();
 
     if (first == null) {
-      throw new DataNotFoundException("Tube not Found");
+      throw new DataNotFoundException("Tube not found");
     }
 
     return Tube.deserialize(first.toJson());

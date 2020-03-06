@@ -152,11 +152,11 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     ObjectId tubeOriginLocationPointId = participantLaboratoryDao.getTubeLocationPoint(tubeCode);
     Tube tube = participantLaboratoryDao.getTube(tubeCode);
     if(!tube.getTubeCollectionData().isCollected()){
-      throw new ValidationException(new Throwable("tube is not Collected"));
+      throw new ValidationException(new Throwable("Tube is not collected"));
     } else if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
-      throw new ValidationException(new Throwable("tube is not in transportation lot origin location point"));
+      throw new ValidationException(new Throwable("Tube is not in transportation lot origin location point"));
     } else if (materialTrail == null && !tubeOriginLocationPointId.equals(new ObjectId(locationPointId))){
-      throw new ValidationException(new Throwable("tube is not in transportation lot origin location point"));
+      throw new ValidationException(new Throwable("Tube is not in transportation lot origin location point"));
     }
     return tube;
   }
