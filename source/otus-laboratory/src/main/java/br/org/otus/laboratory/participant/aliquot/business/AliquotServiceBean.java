@@ -15,6 +15,7 @@ import java.util.List;
 
 @Stateless
 public class AliquotServiceBean implements AliquotService {
+  private static final String ALIQUOT_NOT_IN_LOCATION = "Aliquot is not in transportation lot origin location point";
 
   @Inject
   private AliquotDao aliquotDao;
@@ -37,9 +38,9 @@ public class AliquotServiceBean implements AliquotService {
     Aliquot aliquot = aliquotDao.getAliquot(transportationAliquotFiltersDTO);
     MaterialTrail materialTrail = materialTrackingDao.getCurrent(transportationAliquotFiltersDTO.getCode());
     if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
-      throw new ValidationException(new Throwable("Aliquot is not in transportation lot origin location point"), MaterialTrail.serializeToJsonString(materialTrail));
+      throw new ValidationException(new Throwable(ALIQUOT_NOT_IN_LOCATION), MaterialTrail.serializeToJsonString(materialTrail));
     } else if (materialTrail == null && !aliquot.getLocationPoint().equals(new ObjectId(locationPointId))){
-      throw new ValidationException(new Throwable("Aliquot is not in transportation lot origin location point"), Aliquot.serialize(aliquot));
+      throw new ValidationException(new Throwable(ALIQUOT_NOT_IN_LOCATION), Aliquot.serialize(aliquot));
     }
     return aliquot;
   }

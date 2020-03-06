@@ -15,9 +15,9 @@ public interface MaterialTrackingDao {
 
   void insert(ArrayList<Document> trails);
 
-  void updatePrevious(ArrayList<String> aliquotCodeList);
+  void updatePrevious(List<String> aliquotCodeList);
 
-  ArrayList<String> verifyNeedToRollback(ArrayList<String> removedAliquotCodes, ObjectId transportationLotId);
+  ArrayList<String> verifyNeedToRollback(List<String> removedAliquotCodes, ObjectId transportationLotId);
 
   ArrayList<ObjectId> getLastTrailsToRollBack(ArrayList<String> materialsToRollBack);
 

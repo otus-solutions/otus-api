@@ -53,12 +53,12 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
   }
 
   @Override
-  public void updatePrevious(ArrayList<String> materialCodeList) {
+  public void updatePrevious(List<String> materialCodeList) {
     collection.updateMany(new Document("materialCode",new Document("$in",materialCodeList)), new Document("$set", new Document("isCurrentLocation", false)));
   }
 
   @Override
-  public ArrayList<String> verifyNeedToRollback(ArrayList<String> removedAliquotCodes, ObjectId transportationLotId) {
+  public ArrayList<String> verifyNeedToRollback(List<String> removedAliquotCodes, ObjectId transportationLotId) {
     ArrayList<String> materialCodeList = new ArrayList<>();
     Document first = collection.aggregate(Arrays.asList(
       new Document("$match",

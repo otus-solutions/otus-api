@@ -37,6 +37,8 @@ import org.ccem.otus.persistence.FieldCenterDao;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
+  private static final String TUBE_NOT_IN_LOCATION_POINT = "Tube is not in transportation lot origin location point";
+  private static final String TUBE_NOT_COLLECTED = "Tube is not collected";
 
   @Inject
   private ParticipantLaboratoryDao participantLaboratoryDao;
@@ -152,11 +154,11 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     ObjectId tubeOriginLocationPointId = participantLaboratoryDao.getTubeLocationPoint(tubeCode);
     Tube tube = participantLaboratoryDao.getTube(tubeCode);
     if(!tube.getTubeCollectionData().isCollected()){
-      throw new ValidationException(new Throwable("Tube is not collected"));
+      throw new ValidationException(new Throwable(TUBE_NOT_COLLECTED));
     } else if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
-      throw new ValidationException(new Throwable("Tube is not in transportation lot origin location point"));
+      throw new ValidationException(new Throwable(TUBE_NOT_IN_LOCATION_POINT));
     } else if (materialTrail == null && !tubeOriginLocationPointId.equals(new ObjectId(locationPointId))){
-      throw new ValidationException(new Throwable("Tube is not in transportation lot origin location point"));
+      throw new ValidationException(new Throwable(TUBE_NOT_IN_LOCATION_POINT));
     }
     return tube;
   }

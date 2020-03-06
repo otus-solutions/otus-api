@@ -79,10 +79,10 @@ public class TransportationLotServiceBean implements TransportationLotService {
     ArrayList<String> currentTubeCodeList = transportationLot.getTubeCodeList();
     TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(transportationLot.getLotId());
 
-    ArrayList<String> removedMaterialCodes = transportMaterialCorrelation.getRemovedAliquots(currentAliquotCodeList);
+    List<String> removedMaterialCodes = transportMaterialCorrelation.getRemovedAliquots(currentAliquotCodeList);
     removedMaterialCodes.addAll(transportMaterialCorrelation.getRemovedTubes(currentTubeCodeList));
 
-    ArrayList<String> newMaterialCodes = transportMaterialCorrelation.getNewAliquots(currentAliquotCodeList);
+    List<String> newMaterialCodes = transportMaterialCorrelation.getNewAliquots(currentAliquotCodeList);
     newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentTubeCodeList));
 
     rollBackMaterial(transportationLot, removedMaterialCodes);
@@ -96,7 +96,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
     return updateResult;
   }
 
-  private void createNewTrails(ObjectId userId, TransportationLot transportationLot, ArrayList<String> newMaterialCodes) {
+  private void createNewTrails(ObjectId userId, TransportationLot transportationLot, List<String> newMaterialCodes) {
     if(newMaterialCodes != null){
       newMaterialCodes.forEach(materialCode -> {
         MaterialTrail materialTrail = new MaterialTrail(userId,materialCode,transportationLot);
@@ -105,7 +105,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
     }
   }
 
-  private void rollBackMaterial(TransportationLot transportationLot, ArrayList<String> removedMaterialCodes) {
+  private void rollBackMaterial(TransportationLot transportationLot, List<String> removedMaterialCodes) {
     if(removedMaterialCodes != null){
       ArrayList<String> aliquotsToRollBack = materialTrackingDao.verifyNeedToRollback(removedMaterialCodes,transportationLot.getLotId());
       materialTrackingDao.removeTransportation(transportationLot.getLotId());

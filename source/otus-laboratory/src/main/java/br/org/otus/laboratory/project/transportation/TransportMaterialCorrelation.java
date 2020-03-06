@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TransportMaterialCorrelation {
 
@@ -45,47 +46,47 @@ public class TransportMaterialCorrelation {
     return builder;
   }
 
-  public ArrayList<String> getRemovedAliquots(ArrayList<String> newAliquotCodeList) {
-    ArrayList<String> removedList = new ArrayList<>();
+  public List<String> getRemovedAliquots(List<String> newAliquotCodeList) {
+    List<String> removedList = new ArrayList<>();
     this.aliquotCodeList.forEach(aliquotCode -> {
-      boolean removed = !newAliquotCodeList.contains(aliquotCode);
-      if (removed) {
+      if (isNotContains(newAliquotCodeList,aliquotCode)) {
         removedList.add(aliquotCode);
       }
     });
     return removedList;
   }
 
-  public ArrayList<String> getRemovedTubes(ArrayList<String> newTubeCodeList) {
-    ArrayList<String> removedList = new ArrayList<>();
+  public List<String> getRemovedTubes(List<String> newTubeCodeList) {
+    List<String> removedList = new ArrayList<>();
     this.tubeCodeList.forEach(tubeCode -> {
-      boolean removed = !newTubeCodeList.contains(tubeCode);
-      if (removed) {
+      if (isNotContains(newTubeCodeList,tubeCode)) {
         removedList.add(tubeCode);
       }
     });
     return removedList;
   }
 
-  public ArrayList<String> getNewAliquots(ArrayList<String> currentAliquotCodeList) {
-    ArrayList<String> newList = new ArrayList<>();
+  public List<String> getNewAliquots(List<String> currentAliquotCodeList) {
+    List<String> newList = new ArrayList<>();
     currentAliquotCodeList.forEach(aliquotCode -> {
-      boolean isNew = !this.aliquotCodeList.contains(aliquotCode);
-      if (isNew) {
+      if (isNotContains(this.aliquotCodeList,aliquotCode)) {
         newList.add(aliquotCode);
       }
     });
     return newList;
   }
 
-  public ArrayList<String> getNewTubes(ArrayList<String> currentTubeCodeList) {
-    ArrayList<String> newList = new ArrayList<>();
+  public List<String> getNewTubes(List<String> currentTubeCodeList) {
+    List<String> newList = new ArrayList<>();
     currentTubeCodeList.forEach(tubeCode -> {
-      boolean isNew = !this.tubeCodeList.contains(tubeCode);
-      if (isNew) {
+      if (isNotContains(this.tubeCodeList,tubeCode)) {
         newList.add(tubeCode);
       }
     });
     return newList;
+  }
+
+  private Boolean isNotContains(List codes,String code){
+    return !codes.contains(code);
   }
 }
