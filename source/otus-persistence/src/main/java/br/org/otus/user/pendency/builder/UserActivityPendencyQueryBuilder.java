@@ -49,11 +49,11 @@ public class UserActivityPendencyQueryBuilder {
     addLookupMatchingActivityPendencyFilters(getActivityFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));
     addMatchByPendencyFilters(getPendencyFilterExpressionsFromDto(userActivityPendencyDto.getFilterDto()));
     addSelectedFieldsFromActivityLookupResult();
-    addSkip(userActivityPendencyDto.getCurrentQuantity());
-    addLimit(userActivityPendencyDto.getQuantityToGet());
     if(userActivityPendencyDto.getOrderDto() != null){
       addSortingCriteria(userActivityPendencyDto.getOrderDto().getSortingCriteria());
     }
+	 addSkip(userActivityPendencyDto.getCurrentQuantity());
+    addLimit(userActivityPendencyDto.getQuantityToGet());
     return pipeline;
   }
 
