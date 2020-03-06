@@ -150,9 +150,9 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public Tube getTube(String locationPointId, String tubeCode) throws DataNotFoundException, ValidationException {
+    Tube tube = participantLaboratoryDao.getTube(tubeCode);
     MaterialTrail materialTrail = materialTrackingDao.getCurrent(tubeCode);
     ObjectId tubeOriginLocationPointId = participantLaboratoryDao.getTubeLocationPoint(tubeCode);
-    Tube tube = participantLaboratoryDao.getTube(tubeCode);
     if(!tube.getTubeCollectionData().isCollected()){
       throw new ValidationException(new Throwable(TUBE_NOT_COLLECTED));
     } else if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
