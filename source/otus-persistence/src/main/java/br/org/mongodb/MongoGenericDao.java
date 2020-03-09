@@ -14,6 +14,8 @@ import java.util.List;
 
 public abstract class MongoGenericDao<T> {
 
+  protected static final String ID_FIELD_NAME = "_id";
+
   @Inject
   protected MongoDatabase db;
   private String collectionName;
