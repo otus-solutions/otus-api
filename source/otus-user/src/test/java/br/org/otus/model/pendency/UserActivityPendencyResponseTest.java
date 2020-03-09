@@ -1,5 +1,6 @@
 package br.org.otus.model.pendency;
 
+import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,7 @@ public class UserActivityPendencyResponseTest {
     assertEquals(REQUESTER_EMAIL, userActivityPendencyResponse.getRequester());
     assertEquals(RECEIVER_EMAIL, userActivityPendencyResponse.getReceiver());
     assertEquals(ACTIVITY_OID, userActivityPendencyResponse.getActivityId());
+    assertEquals(activityInfo, userActivityPendencyResponse.getActivityInfo());
   }
 
   @Test
@@ -73,6 +75,11 @@ public class UserActivityPendencyResponseTest {
   @Test
   public void deserializeStaticMethod_shold_convert_JsonString_to_objectModel() {
     assertTrue(UserActivityPendencyResponse.deserialize(userActivityPendencyResponseJson) instanceof UserActivityPendencyResponse);
+  }
+
+  @Test
+  public void getFrontGsonBuilder_method_should_return_GsonBuild_instance(){
+    assertTrue(UserActivityPendencyResponse.getFrontGsonBuilder() instanceof GsonBuilder);
   }
 
 }

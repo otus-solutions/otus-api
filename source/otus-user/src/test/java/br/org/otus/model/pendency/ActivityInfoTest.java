@@ -6,8 +6,7 @@ import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityInfoTest {
@@ -51,6 +50,47 @@ public class ActivityInfoTest {
   @Test
   public void deserializeStaticMethod_shold_convert_JsonString_to_objectModel() {
     assertTrue(activityInfo.deserialize(activityInfoJson) instanceof ActivityInfo);
+  }
+
+  @Test
+  public void objectModel_equals_himself(){
+    assertTrue(activityInfo.equals(activityInfo));
+  }
+
+  @Test
+  public void equals_method_return_TRUE(){
+    assertTrue(activityInfo.equals(getOtherActivityInfo(RECRUITMENT_NUMBER, ACRONYM)));
+  }
+
+  @Test
+  public void objectModel_not_equals_null_object(){
+    assertFalse(activityInfo.equals(null));
+  }
+
+  @Test
+  public void objectModel_not_equals_another_object_of_different_class(){
+    assertFalse(activityInfo.equals(new Integer(0)));
+  }
+
+  @Test
+  public void equals_method_return_FALSE_in_case_different_recruitmentNumber(){
+    assertFalse(activityInfo.equals(getOtherActivityInfo(RECRUITMENT_NUMBER+1, ACRONYM)));
+  }
+
+  @Test
+  public void equals_method_return_FALSE_in_case_different_acronym(){
+    assertFalse(activityInfo.equals(getOtherActivityInfo(RECRUITMENT_NUMBER, ACRONYM+"X")));
+  }
+
+  private ActivityInfo getOtherActivityInfo(Long rn, String acronym){
+    ActivityInfo activityInfo2 = new ActivityInfo();
+    Whitebox.setInternalState(activityInfo2, "recruitmentNumber", rn);
+    Whitebox.setInternalState(activityInfo2, "acronym", acronym);
+    Whitebox.setInternalState(activityInfo2, "name", NAME);
+    Whitebox.setInternalState(activityInfo2, "lastStatusName", LAST_STATUS_NAME);
+    Whitebox.setInternalState(activityInfo2, "lastStatusDate", LAST_STATUS_DATE);
+    Whitebox.setInternalState(activityInfo2, "externalID", EXTERNAL_ID);
+    return activityInfo2;
   }
 
 }

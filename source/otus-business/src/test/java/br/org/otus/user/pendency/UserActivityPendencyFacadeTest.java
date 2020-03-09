@@ -18,6 +18,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -31,6 +32,7 @@ public class UserActivityPendencyFacadeTest {
   private static final String USER_EMAIL = "user@otus.com";
   private static final String PENDENCY_ID = "5e0658135b4ff40f8916d2b5";
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
+  private static final String SEARCH_SETTINGS_JSON = "";
 
   @InjectMocks
   private UserActivityPendencyFacade userActivityPendencyFacade;
@@ -100,8 +102,38 @@ public class UserActivityPendencyFacadeTest {
     userActivityPendencyFacade.getByActivityId("");
   }
 
+  /*
+   * list all
+   */
   @Test
-  public void listAllPendenciesToReceiverMethod_should_invoke_listAllPendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
+  public void listAllPendencies_method_should_invoke_listAllPendencies_from_userActivityPendencyService() throws DataFormatException, DataNotFoundException, MemoryExcededException {
+    userActivityPendencyFacade.listAllPendencies(SEARCH_SETTINGS_JSON);
+    verify(userActivityPendencyService, times(1)).listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void listAllPendencies_should_handle_DataNotFoundException() throws DataFormatException, DataNotFoundException, MemoryExcededException {
+    when(userActivityPendencyService.listAllPendencies(SEARCH_SETTINGS_JSON)).thenThrow(dataNotFoundException);
+    userActivityPendencyFacade.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void listAllPendencies_should_handle_MemoryExcededException() throws DataFormatException, DataNotFoundException, MemoryExcededException {
+    when(userActivityPendencyService.listAllPendencies(SEARCH_SETTINGS_JSON)).thenThrow(memoryExcededException);
+    userActivityPendencyFacade.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void listAllPendencies_should_handle_DataFormatException() throws DataFormatException, DataNotFoundException, MemoryExcededException {
+    when(userActivityPendencyService.listAllPendencies(SEARCH_SETTINGS_JSON)).thenThrow(new DataFormatException());
+    userActivityPendencyFacade.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  /*
+   * list all to Receiver
+   */
+  @Test
+  public void listAllPendenciesToReceiverMethod_should_invoke_listAllPendenciesToReceiver_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
     userActivityPendencyFacade.listAllPendenciesToReceiver(USER_EMAIL);
     verify(userActivityPendencyService, times(1)).listAllPendenciesToReceiver(USER_EMAIL);
   }
@@ -154,6 +186,9 @@ public class UserActivityPendencyFacadeTest {
     userActivityPendencyFacade.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
+  /*
+   * list all from Requester
+   */
   @Test
   public void listAllPendenciesFromRequesterMethod_should_invoke_listAllPendencies_from_userActivityPendencyService() throws DataNotFoundException, MemoryExcededException {
     userActivityPendencyFacade.listAllPendenciesFromRequester(USER_EMAIL);
