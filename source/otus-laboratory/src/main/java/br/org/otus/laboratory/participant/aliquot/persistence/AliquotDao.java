@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.participant.aliquot.persistence;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
@@ -19,7 +20,7 @@ public interface AliquotDao {
 
   List<Aliquot> list(Long recruitmentNumber);
 
-  List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO);
+  List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPoint, List<String> aliquotsInLocationPoint, List<String> aliquotsNotInOrigin);
 
   void updateExamLotId(ArrayList<String> codeList, ObjectId loId) throws DataNotFoundException;
 
@@ -42,4 +43,10 @@ public interface AliquotDao {
   void executeFunction(String function);
 
   String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException;
+
+  ArrayList<Document> buildTrails(ArrayList<String> aliquotCodeList, ObjectId userId, TransportationLot transportationLot);
+
+  ArrayList<Aliquot> getAliquots(ArrayList<String> aliquotCodeList);
+
+  List<String> getAliquotsByOrigin(String locationPointId);
 }

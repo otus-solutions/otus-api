@@ -27,4 +27,6 @@ public interface ParticipantLaboratoryService {
   LinkedList<LaboratoryRecordExtraction> getLaboratoryExtraction() throws DataNotFoundException;
 
   String convertAliquotRole(Aliquot convertedAliquot) throws DataNotFoundException, ValidationException;
+
+  Tube getTube(String locationPointId, String tubeCode) throws DataNotFoundException, ValidationException;
 }

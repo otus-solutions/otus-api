@@ -2,6 +2,8 @@ package br.org.otus.laboratory.participant.aliquot.business;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -13,9 +15,13 @@ import java.util.List;
 
 @Stateless
 public class AliquotServiceBean implements AliquotService {
+  private static final String ALIQUOT_NOT_IN_LOCATION = "Aliquot is not in transportation lot origin location point";
 
   @Inject
   private AliquotDao aliquotDao;
+
+  @Inject
+  private MaterialTrackingDao materialTrackingDao;
 
   @Override
   public List<Aliquot> getAliquots() {
@@ -28,10 +34,14 @@ public class AliquotServiceBean implements AliquotService {
   }
 
   @Override
-  public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException, ValidationException {
+  public Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) throws DataNotFoundException, ValidationException {
     Aliquot aliquot = aliquotDao.getAliquot(transportationAliquotFiltersDTO);
-    if (aliquot.getTransportationLotId() != null)
-      throw new ValidationException(new Throwable("There are aliquots in another lot."), transportationAliquotFiltersDTO.getCode());
+    MaterialTrail materialTrail = materialTrackingDao.getCurrent(transportationAliquotFiltersDTO.getCode());
+    if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
+      throw new ValidationException(new Throwable(ALIQUOT_NOT_IN_LOCATION), MaterialTrail.serializeToJsonString(materialTrail));
+    } else if (materialTrail == null && !aliquot.getLocationPoint().equals(new ObjectId(locationPointId))){
+      throw new ValidationException(new Throwable(ALIQUOT_NOT_IN_LOCATION), Aliquot.serialize(aliquot));
+    }
     return aliquot;
   }
 
@@ -41,8 +51,11 @@ public class AliquotServiceBean implements AliquotService {
   }
 
   @Override
-  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException {
-    return aliquotDao.getAliquotsByPeriod(transportationAliquotFiltersDTO);
+  public List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) throws DataNotFoundException {
+    List<String> aliquotsOfLocationPoint = aliquotDao.getAliquotsByOrigin(locationPointId);
+    List<String> aliquotsNotInOrigin = materialTrackingDao.verifyIfAliquotsAreInOrigin(aliquotsOfLocationPoint, locationPointId);
+    List<String> aliquotsInLocationPoint = materialTrackingDao.getAliquotsInLocation(locationPointId);
+    return aliquotDao.getAliquotsByPeriod(transportationAliquotFiltersDTO, locationPointId, aliquotsInLocationPoint, aliquotsNotInOrigin);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package org.ccem.otus.model;
 
 import com.google.gson.Gson;
+import org.bson.types.ObjectId;
 
 public class FieldCenter {
   private String name;
@@ -24,6 +25,8 @@ public class FieldCenter {
   private String backgroundColor;
 
   private String borderColor;
+
+  private ObjectId locationPoint;
 
   public Boolean isValid() {
     return !name.isEmpty() && !acronym.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
@@ -127,5 +130,13 @@ public class FieldCenter {
 
   public void setBorderColor(String borderColor) {
     this.borderColor = borderColor;
+  }
+
+  public void setLocationPoint(ObjectId locationPoint) {
+    this.locationPoint = locationPoint;
+  }
+
+  public ObjectId getLocationPoint() {
+    return locationPoint;
   }
 }

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import com.mongodb.client.model.Variable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -20,6 +21,7 @@ import com.mongodb.client.result.UpdateResult;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import org.ccem.otus.service.ParseQuery;
 
 public class TransportationLotDaoBean extends MongoGenericDao<Document> implements TransportationLotDao {
 
@@ -31,11 +33,15 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   }
 
   @Override
-  public List<TransportationLot> find() {
+  public List<TransportationLot> findByLocationPoint(String locationPointId) {
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
 
     AggregateIterable output = collection
-      .aggregate(Arrays.asList(Aggregates.lookup("aliquot", "_id", "transportationLotId", "aliquotList")));
+      .aggregate(
+        Arrays.asList(
+          Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId)))
+        )
+      );
     for (Object result : output) {
       Document document = (Document) result;
       transportationLots.add(TransportationLot.deserialize(document.toJson()));
@@ -47,6 +53,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   public ObjectId persist(TransportationLot transportationLot) {
     Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
     parsed.remove("aliquotList");
+    parsed.remove("tubeList");
     parsed.remove("_id");
     super.persist(parsed);
     return (ObjectId) parsed.get("_id");
@@ -67,6 +74,7 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   public TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException {
     Document parsed = Document.parse(TransportationLot.serialize(transportationLot));
     parsed.remove("aliquotList");
+    parsed.remove("tubeList");
     parsed.remove("_id");
     UpdateResult updateLotData = collection.updateOne(eq("code", transportationLot.getCode()),
       new Document("$set", parsed));

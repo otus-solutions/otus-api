@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
@@ -29,9 +30,9 @@ public class TransportationResource {
 
   @GET
   @Secured
-  @Path("/lots")
-  public String getLots() {
-    List<TransportationLot> lots = transportationLotFacade.getLots();
+  @Path("/lots/{locationPointId}")
+  public String getLots(@PathParam("locationPointId") String locationPointId) {
+    List<TransportationLot> lots = transportationLotFacade.getLots(locationPointId);
     GsonBuilder builder = TransportationLot.getGsonBuilder();
     return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
   }
@@ -51,9 +52,12 @@ public class TransportationResource {
   @PUT
   @Secured
   @Path("/lot")
-  public String update(String transportationLotJson) {
+  public String update(@Context HttpServletRequest request, String transportationLotJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
     TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
-    TransportationLot updatedLot = transportationLotFacade.update(transportationLot);
+    TransportationLot updatedLot = transportationLotFacade.update(transportationLot,userEmail);
     return new Response().buildSuccess(TransportationLot.serialize(updatedLot)).toJson();
   }
 
@@ -67,11 +71,11 @@ public class TransportationResource {
 
   @POST
   @Secured
-  @Path("/aliquots")
-  public String getAliquotsByPeriod(@Context HttpServletRequest request, String filterAliquotJson) throws JSONException {
+  @Path("/aliquots/{locationPointId}")
+  public String getAliquotsByPeriod(@Context HttpServletRequest request, @PathParam("locationPointId") String locationPointId, String filterAliquotJson) throws JSONException {
 
     TransportationAliquotFiltersDTO transportationAliquotFiltersDTO = TransportationAliquotFiltersDTO.deserialize(filterAliquotJson);
-    List<Aliquot> aliquots = transportationLotFacade.getAliquotsByPeriod(transportationAliquotFiltersDTO);
+    List<Aliquot> aliquots = transportationLotFacade.getAliquotsByPeriod(transportationAliquotFiltersDTO, locationPointId);
     GsonBuilder builder = Aliquot.getGsonBuilder();
 
     return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
@@ -79,11 +83,11 @@ public class TransportationResource {
 
   @POST
   @Secured
-  @Path("/aliquot")
-  public String getAliquot(@Context HttpServletRequest request, String filterAliquotJson) {
+  @Path("/aliquot/{locationPointId}")
+  public String getAliquot(@Context HttpServletRequest request, @PathParam("locationPointId") String locationPointId, String filterAliquotJson) {
 
     TransportationAliquotFiltersDTO transportationAliquotFiltersDTO = TransportationAliquotFiltersDTO.deserialize(filterAliquotJson);
-    Aliquot aliquot = transportationLotFacade.getAliquot(transportationAliquotFiltersDTO);
+    Aliquot aliquot = transportationLotFacade.getAliquot(transportationAliquotFiltersDTO, locationPointId);
     GsonBuilder builder = Aliquot.getGsonBuilder();
 
     return new Response().buildSuccess(builder.create().toJson(aliquot)).toJson();
@@ -91,10 +95,9 @@ public class TransportationResource {
 
   @GET
   @Secured
-  @Path("/aliquots")
-  public String getAliquots() {
-    List<Aliquot> aliquots = transportationLotFacade.getAliquots();
-    GsonBuilder builder = TransportationLot.getGsonBuilder();
-    return new Response().buildSuccess(builder.create().toJson(aliquots)).toJson();
+  @Path("/tube/{locationPointId}/{tubeCode}")
+  public String getTube(@PathParam("locationPointId") String locationPointId, @PathParam("tubeCode") String tubeCode) {
+    Tube tube = transportationLotFacade.getTube(locationPointId, tubeCode);
+    return new Response().buildSuccess(Tube.serializeToJsonTree(tube)).toJson();
   }
 }

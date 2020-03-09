@@ -1,23 +1,23 @@
 package br.org.otus.fieldCenter.api;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
+import br.org.otus.laboratory.project.transportation.business.TransportLocationPointService;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.service.FieldCenterService;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import br.org.otus.response.exception.HttpResponseException;
+import org.powermock.api.mockito.PowerMockito;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FieldCenterFacadeTest {
@@ -28,7 +28,11 @@ public class FieldCenterFacadeTest {
   private FieldCenterFacade fieldCenterFacade;
   @Mock
   private FieldCenterService fieldCenterService;
+  @Mock
+  private TransportLocationPointService transportLocationPointService;
+
   private FieldCenter fieldCenter;
+
 
   @Before
   public void setUp() {
@@ -40,9 +44,10 @@ public class FieldCenterFacadeTest {
 
   @Test
   public void createMethod_should_evocate_create_of_fieldCenterService()
-    throws AlreadyExistException, ValidationException {
+    throws Exception {
     fieldCenterFacade.create(fieldCenter);
     verify(fieldCenterService, times(1)).create(fieldCenter);
+    verify(transportLocationPointService, times(1)).create(any());
   }
 
   @Test(expected = HttpResponseException.class)

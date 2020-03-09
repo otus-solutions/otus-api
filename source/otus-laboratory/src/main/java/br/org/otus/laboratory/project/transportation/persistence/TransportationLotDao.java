@@ -15,7 +15,7 @@ public interface TransportationLotDao {
 
   TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 
-  List<TransportationLot> find();
+  List<TransportationLot> findByLocationPoint(String locationPointId);
 
   void delete(String id) throws DataNotFoundException;
 
