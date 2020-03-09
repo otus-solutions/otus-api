@@ -2,15 +2,11 @@ package br.org.otus.outcomes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.survey.activity.variables.StaticVariableRequestDTO;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class CommunicationData {
   private ObjectId _id;

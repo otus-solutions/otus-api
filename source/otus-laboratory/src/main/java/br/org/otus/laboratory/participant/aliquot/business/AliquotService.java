@@ -14,11 +14,11 @@ public interface AliquotService {
 
   List<Aliquot> getAliquots(Long rn);
 
-  Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws ValidationException, DataNotFoundException;
+  Aliquot getAliquot(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) throws ValidationException, DataNotFoundException;
 
   Aliquot find(String code) throws DataNotFoundException;
 
-  List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO) throws DataNotFoundException;
+  List<Aliquot> getAliquotsByPeriod(TransportationAliquotFiltersDTO transportationAliquotFiltersDTO, String locationPointId) throws DataNotFoundException;
 
   boolean exists(String code);
 

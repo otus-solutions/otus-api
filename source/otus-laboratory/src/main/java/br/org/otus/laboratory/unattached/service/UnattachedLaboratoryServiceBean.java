@@ -14,6 +14,9 @@ import br.org.otus.laboratory.unattached.model.UnattachedLaboratory;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
+import org.ccem.otus.persistence.FieldCenterDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -28,6 +31,10 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
   private UnattachedLaboratoryDao unattachedLaboratoryDao;
   @Inject
   private ParticipantLaboratoryDao participantLaboratoryDao;
+  @Inject
+  private ParticipantDao participantDao;
+  @Inject
+  private FieldCenterDao fieldCenterDao;
 
   @Override
   public void create(String userEmail, Integer unattachedLaboratoryLastInsertion, CollectGroupDescriptor collectGroupDescriptor, FieldCenter fieldCenter) {
@@ -53,9 +60,10 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
         if (!unattachedLaboratory.getFieldCenterAcronym().equals(participantFieldCenterAcronym) || !unattachedLaboratory.getCollectGroupName().equals(participantCollectGroupName)) {
           throw new ValidationException(new Throwable("Invalid configuration"), new ValidationErrorResponseDTO(participantFieldCenterAcronym, unattachedLaboratory.getFieldCenterAcronym(), participantCollectGroupName, unattachedLaboratory.getCollectGroupName()));
         }
-        ParticipantLaboratory participantLaboratory = new ParticipantLaboratory(recruitmentNumber, participantCollectGroupName, unattachedLaboratory.getTubes());
+        Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
+        FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
+        ParticipantLaboratory participantLaboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, participantCollectGroupName, unattachedLaboratory.getTubes());
         participantLaboratoryDao.persist(participantLaboratory);
-
         unattachedLaboratory.disable();
         unattachedLaboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.ATTACHED);
         unattachedLaboratoryDao.update(unattachedLaboratory.getIdentification(), unattachedLaboratory);

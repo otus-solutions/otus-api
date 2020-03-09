@@ -1,8 +1,8 @@
 package br.org.otus.laboratory.participant.aliquot;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import com.google.gson.JsonElement;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -26,6 +26,7 @@ public class Aliquot extends SimpleAliquot {
   private Sex sex;
   private FieldCenter fieldCenter;
   private ImmutableDate birthdate;
+  private ObjectId locationPoint;
 
   public Aliquot() {
     super();
@@ -33,6 +34,10 @@ public class Aliquot extends SimpleAliquot {
 
   public Aliquot(SimpleAliquot simpleAliquot) {
     super(simpleAliquot.getObjectType(), simpleAliquot.getCode(), simpleAliquot.getName(), simpleAliquot.getContainer(), simpleAliquot.getRole(), simpleAliquot.getAliquotCollectionData());
+  }
+
+  public ObjectId getLocationPoint() {
+    return locationPoint;
   }
 
   private class ExamLotData {
@@ -119,6 +124,11 @@ public class Aliquot extends SimpleAliquot {
   public static String serialize(Aliquot aliquot) {
     Gson builder = getGsonBuilder().create();
     return builder.toJson(aliquot);
+  }
+
+  public static JsonElement serializeToJsonTree(Aliquot aliquot) {
+    Gson builder = getGsonBuilder().create();
+    return builder.toJsonTree(aliquot);
   }
 
   public static Aliquot deserialize(String aliquot) {

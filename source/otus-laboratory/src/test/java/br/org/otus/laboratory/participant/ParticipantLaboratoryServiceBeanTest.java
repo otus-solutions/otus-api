@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.participant;
 
 import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -18,8 +19,10 @@ import java.util.List;
 import br.org.otus.laboratory.participant.aliquot.AliquotEvent;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
+import org.ccem.otus.persistence.FieldCenterDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,6 +64,8 @@ public class ParticipantLaboratoryServiceBeanTest {
   @Mock
   private ParticipantDao participantDao;
   @Mock
+  private FieldCenterDao fieldCenterDao;
+  @Mock
   private Participant participant;
   @Mock
   private TubeService tubeService;
@@ -92,6 +97,8 @@ public class ParticipantLaboratoryServiceBeanTest {
   private Aliquot convertedAliquot;
   @Mock
   private AliquotEvent aliquotEvent;
+  @Mock
+  private FieldCenter fieldCenter;
 
   private static final long RECRUIMENT_NUMBER = 12345;
   private static final String ALIQUOT_CODE = "354005002";
@@ -143,6 +150,9 @@ public class ParticipantLaboratoryServiceBeanTest {
     when(participantDao.findByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     when(groupRaffle.perform(participant)).thenReturn(collectGroup);
     when(tubeService.generateTubes(TubeSeed.generate(participant.getFieldCenter(), collectGroup))).thenReturn(participantLaboratory.getTubes());
+    when(participant.getFieldCenter()).thenReturn(fieldCenter);
+    when(fieldCenter.getAcronym()).thenReturn("ACRONYM");
+    when(fieldCenterDao.fetchByAcronym("ACRONYM")).thenReturn(fieldCenter);
     whenNew(ParticipantLaboratory.class).withAnyArguments().thenReturn(participantLaboratory);
     participantLaboratoryServiceBean.create(RECRUIMENT_NUMBER);
     verify(participantLaboratoryDao, Mockito.times(1)).persist(participantLaboratory);

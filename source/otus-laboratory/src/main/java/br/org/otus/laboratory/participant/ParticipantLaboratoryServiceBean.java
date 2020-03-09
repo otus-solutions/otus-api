@@ -7,8 +7,12 @@ import java.util.concurrent.CompletableFuture;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 
@@ -29,9 +33,12 @@ import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValida
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import org.ccem.otus.persistence.FieldCenterDao;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
+  private static final String TUBE_NOT_IN_LOCATION_POINT = "Tube is not in transportation lot origin location point";
+  private static final String TUBE_NOT_COLLECTED = "Tube is not collected";
 
   @Inject
   private ParticipantLaboratoryDao participantLaboratoryDao;
@@ -53,6 +60,10 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   private ExamUploader examUploader;
   @Inject
   private ParticipantLaboratoryExtractionDao participantLaboratoryExtractionDao;
+  @Inject
+  private MaterialTrackingDao materialTrackingDao;
+  @Inject
+  private FieldCenterDao fieldCenterDao;
 
   @Override
   public boolean hasLaboratory(Long recruitmentNumber) {
@@ -78,7 +89,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
     CollectGroupDescriptor collectGroup = groupRaffle.perform(participant);
     List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(participant.getFieldCenter(), collectGroup));
-    ParticipantLaboratory laboratory = new ParticipantLaboratory(recruitmentNumber, collectGroup.getName(), tubes);
+    FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
+    ParticipantLaboratory laboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, collectGroup.getName(), tubes);
     participantLaboratoryDao.persist(laboratory);
     return laboratory;
   }
@@ -134,5 +146,20 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       throw new ValidationException(new Throwable("aliquotHistory invalid"));
     }
     return aliquotDao.convertAliquotRole(convertedAliquot);
+  }
+
+  @Override
+  public Tube getTube(String locationPointId, String tubeCode) throws DataNotFoundException, ValidationException {
+    Tube tube = participantLaboratoryDao.getTube(tubeCode);
+    MaterialTrail materialTrail = materialTrackingDao.getCurrent(tubeCode);
+    ObjectId tubeOriginLocationPointId = participantLaboratoryDao.getTubeLocationPoint(tubeCode);
+    if(!tube.getTubeCollectionData().isCollected()){
+      throw new ValidationException(new Throwable(TUBE_NOT_COLLECTED));
+    } else if (materialTrail != null && !materialTrail.getLocationPoint().equals(new ObjectId(locationPointId))){
+      throw new ValidationException(new Throwable(TUBE_NOT_IN_LOCATION_POINT));
+    } else if (materialTrail == null && !tubeOriginLocationPointId.equals(new ObjectId(locationPointId))){
+      throw new ValidationException(new Throwable(TUBE_NOT_IN_LOCATION_POINT));
+    }
+    return tube;
   }
 }

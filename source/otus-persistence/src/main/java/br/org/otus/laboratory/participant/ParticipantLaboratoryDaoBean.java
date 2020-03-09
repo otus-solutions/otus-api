@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import com.mongodb.Block;
@@ -24,6 +27,7 @@ import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
+import org.ccem.otus.service.ParseQuery;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
   private static final String COLLECTION_NAME = "participant_laboratory";
@@ -108,6 +112,68 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   @Override
   public AggregateIterable<Document> aggregate(ArrayList<Bson> pipeline) {
     return collection.aggregate(pipeline).allowDiskUse(true);
+  }
+
+  @Override
+  public Tube getTube(String tubeCode) throws DataNotFoundException {
+    Document first = collection.aggregate(Arrays.asList(
+      ParseQuery.toDocument("{ \n" +
+        "        $match: {\n" +
+        "            \"tubes.code\":'" + tubeCode + "'" +
+        "        }\n" +
+        "    }"),
+      ParseQuery.toDocument("{\n" +
+        "        $unwind: \"$tubes\"\n" +
+        "    }"),
+      ParseQuery.toDocument("{ \n" +
+        "        $match: {\n" +
+        "            \"tubes.code\":'" + tubeCode + "'" +
+        "        }\n" +
+        "    }"),
+      ParseQuery.toDocument("{\n" +
+        "        $replaceRoot: { newRoot: \"$tubes\" }\n" +
+        "    }")
+    )).first();
+
+    if (first == null) {
+      throw new DataNotFoundException("Tube not found");
+    }
+
+    return Tube.deserialize(first.toJson());
+  }
+
+  @Override
+  public ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException {
+    Document locationPoint = collection.find(eq("tubes.code", tubeCode)).projection(new Document("locationPoint", 1)).first();
+    if (locationPoint == null) {
+      throw new DataNotFoundException("Tube origin location not found");
+    }
+    return (ObjectId) locationPoint.get("locationPoint");
+  }
+
+  @Override
+  public ArrayList<Tube> getTubes(ArrayList<String> tubeCodeList) {
+    ArrayList<Tube> tubes = new ArrayList<>();
+    MongoCursor<Document> cursor = collection.aggregate(Arrays.asList(
+      new Document("$match",new Document("tubes.code",new Document("$in",tubeCodeList))),
+      ParseQuery.toDocument("{\n" +
+        "        $unwind: \"$tubes\"\n" +
+        "    }"),
+      new Document("$match",new Document("tubes.code",new Document("$in",tubeCodeList))),
+      ParseQuery.toDocument("{\n" +
+        "        $replaceRoot: { newRoot: \"$tubes\" }\n" +
+        "    }")
+    )).iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        tubes.add(Tube.deserialize(cursor.next().toJson()));
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return tubes;
   }
 
 }

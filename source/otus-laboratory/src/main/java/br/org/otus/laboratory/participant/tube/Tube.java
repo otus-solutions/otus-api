@@ -5,6 +5,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import java.time.LocalDateTime;
@@ -118,6 +119,11 @@ public class Tube implements Comparable<Tube> {
   public static String serialize(Tube tube) {
     GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
     return builder.create().toJson(tube);
+  }
+
+  public static JsonElement serializeToJsonTree(Tube tube) {
+    GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
+    return builder.create().toJsonTree(tube);
   }
 
   public static Tube deserialize(String tubeJson) {

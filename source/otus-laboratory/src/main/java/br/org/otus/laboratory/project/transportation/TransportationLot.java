@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project.transportation;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.tube.Tube;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -23,7 +24,11 @@ public class TransportationLot {
   private LocalDateTime processingDate;
   private String operator;
   private ArrayList<Aliquot> aliquotList;
+  private ArrayList<Tube> tubeList;
   private ArrayList<AliquotInfo> aliquotsInfo;
+  private ArrayList<TubeInfo> tubesInfo;
+  private ObjectId originLocationPoint;
+  private ObjectId destinationLocationPoint;
   private FieldCenter fieldCenter;
 
   public TransportationLot() {
@@ -66,7 +71,16 @@ public class TransportationLot {
       });
     }
     return codeList;
+  }
 
+  public ArrayList<String> getTubeCodeList() {
+    ArrayList<String> codeList = new ArrayList<>();
+    if (tubeList != null) {
+      tubeList.forEach(tube -> {
+        codeList.add(tube.getCode());
+      });
+    }
+    return codeList;
   }
 
   public void setOperator(String operator) {
@@ -117,5 +131,25 @@ public class TransportationLot {
 
   public ObjectId getLotId() {
     return _id;
+  }
+
+  public ObjectId getOriginLocationPoint() {
+    return originLocationPoint;
+  }
+
+  public ObjectId getDestinationLocationPoint() {
+    return destinationLocationPoint;
+  }
+
+  public void setLotId(ObjectId _id) {
+    this._id = _id;
+  }
+
+  public void setAliquotList(ArrayList<Aliquot> aliquotList) {
+    this.aliquotList = aliquotList;
+  }
+
+  public void setTubeList(ArrayList<Tube> tubeList) {
+    this.tubeList = tubeList;
   }
 }

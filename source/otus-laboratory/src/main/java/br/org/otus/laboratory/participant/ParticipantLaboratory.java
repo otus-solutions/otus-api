@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.utils.LongAdapter;
@@ -14,6 +15,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.exam.Exam;
 import br.org.otus.laboratory.participant.tube.Tube;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class ParticipantLaboratory {
 
@@ -22,13 +24,15 @@ public class ParticipantLaboratory {
   private String collectGroupName;
   private List<Tube> tubes;
   private List<Exam> exams;
+  private ObjectId locationPoint;
 
-  public ParticipantLaboratory(Long recruitmentNumber, String collectGroupName, List<Tube> tubes) {
+  public ParticipantLaboratory(ObjectId locationPoint, Long recruitmentNumber, String collectGroupName, List<Tube> tubes) {
     this.objectType = "ParticipantLaboratory";
     this.recruitmentNumber = recruitmentNumber;
     this.collectGroupName = collectGroupName;
     this.tubes = tubes;
     this.exams = new ArrayList<>();
+    this.locationPoint = locationPoint;
   }
 
   public Long getRecruitmentNumber() {
@@ -89,6 +93,7 @@ public class ParticipantLaboratory {
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     builder.serializeNulls();
 
     return builder;

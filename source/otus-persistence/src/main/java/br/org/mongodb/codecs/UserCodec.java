@@ -10,6 +10,7 @@ import org.bson.BsonWriter;
 import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 
 import br.org.otus.model.User;
@@ -60,7 +61,7 @@ public class UserCodec implements Codec<User> {
   public User decode(BsonReader reader, DecoderContext decoderContext) {
     reader.readStartDocument();
 
-    reader.readObjectId("_id");
+    ObjectId id = reader.readObjectId("_id");
     String password = reader.readString("password");
     String phone = reader.readString("phone");
     boolean enable = reader.readBoolean("enable");
@@ -104,6 +105,8 @@ public class UserCodec implements Codec<User> {
     User user = new User(UUID.fromString(uuid));
     user.setPassword(password);
     user.setPhone(phone);
+    user.set_id(id);
+
 
     if (adm == true) {
       user.becomesAdm();
