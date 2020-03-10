@@ -76,9 +76,9 @@ public class UserActivityPendencyQueryBuilderTest {
       "{\"$gt\":[{\"$size\":\"$"+ACTIVITY_INFO+"\"},0.0]}"+
       "]}}},{"+
       "\"$addFields\":{\""+ACTIVITY_INFO+"\":{\"$arrayElemAt\":[\"$"+ACTIVITY_INFO+"\",0.0]}}},"+
+      "{\"$sort\":{\""+ACTIVITY_INFO+".recruitmentNumber\":1.0,\"dueDate\":1.0}}," +
       "{\"$skip\":"+CURRENT_QUANTITY+".0},"+
-      "{\"$limit\":"+QUANTITY_TO_GET+".0},"+
-      "{\"$sort\":{\""+ACTIVITY_INFO+".recruitmentNumber\":1.0,\"dueDate\":1.0}}]";
+      "{\"$limit\":"+QUANTITY_TO_GET+".0}]";
     assertEquals(EXPECTED_QUERY,
       new GsonBuilder().create().toJson(builder.getAllPendenciesWithFiltersQuery(userActivityPendencyDto)));
   }
