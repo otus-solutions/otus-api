@@ -1,21 +1,19 @@
 package br.org.otus.laboratory.participant;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
-import org.ccem.otus.utils.LongAdapter;
-
-import com.google.gson.GsonBuilder;
-
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.exam.Exam;
 import br.org.otus.laboratory.participant.tube.Tube;
+import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.utils.LongAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParticipantLaboratory {
 
@@ -99,4 +97,7 @@ public class ParticipantLaboratory {
     return builder;
   }
 
+  public ObjectId getLocationPoint() {
+    return locationPoint;
+  }
 }

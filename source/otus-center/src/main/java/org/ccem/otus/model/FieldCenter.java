@@ -1,6 +1,8 @@
 package org.ccem.otus.model;
 
+import br.org.otus.utils.ObjectIdAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 
 public class FieldCenter {
@@ -40,12 +42,15 @@ public class FieldCenter {
     return new Gson().toJson(this);
   }
 
-  public static FieldCenter fromJson(String json) {
-    if (json != null) {
-      return new Gson().fromJson(json, FieldCenter.class);
-    } else {
-      return null;
-    }
+  public static FieldCenter deserialize(String fieldCenterJson) {
+    FieldCenter fieldCenter = FieldCenter.getGsonBuilder().create().fromJson(fieldCenterJson, FieldCenter.class);
+    return fieldCenter;
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return builder;
   }
 
   public String getName() {
