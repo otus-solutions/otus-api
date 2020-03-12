@@ -3,14 +3,10 @@ package br.org.otus.laboratory.project.exam.examLot.businnes;
 
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-
-import static org.mockito.Matchers.anyString;
-
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.exam.examLot.ExamLot;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotAliquotFilterDTO;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
-import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -25,6 +21,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
 
+import static org.mockito.Matchers.anyString;
 import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -64,7 +61,7 @@ public class ExamLotServiceBeanTest {
   private ExamLotAliquotFilterDTO examLotAliquotFilterDTO;
 
   @Mock
-  private FieldCenter fieldCenter = FieldCenter.fromJson("{acronym:\"teste\"}");
+  private FieldCenter fieldCenter = FieldCenter.deserialize("{acronym:\"teste\"}");
 
   @Test
   public void create_should_validate_lot() throws Exception {

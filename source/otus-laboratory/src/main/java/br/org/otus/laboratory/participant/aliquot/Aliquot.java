@@ -1,7 +1,7 @@
 package br.org.otus.laboratory.participant.aliquot;
 
-import java.time.LocalDateTime;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
@@ -10,11 +10,10 @@ import org.ccem.otus.participant.model.Sex;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.ccem.otus.utils.LongAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
+
+import java.time.LocalDateTime;
 
 public class Aliquot extends SimpleAliquot {
 
@@ -50,6 +49,10 @@ public class Aliquot extends SimpleAliquot {
     this.setBirthdate(participant.getBirthdate());
     this.setFieldCenter(participant.getFieldCenter());
     this.setSex(participant.getSex());
+  }
+
+  public void setLocationPoint(ObjectId locationPoint){
+    this.locationPoint = locationPoint;
   }
 
   public SimpleAliquot getSimpleAliquot() {
