@@ -1,7 +1,6 @@
 package br.org.otus.fieldCenter;
 
 import br.org.mongodb.MongoGenericDao;
-import com.google.gson.Gson;
 import com.mongodb.Block;
 import org.bson.Document;
 import org.ccem.otus.model.FieldCenter;
@@ -45,7 +44,7 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
   public FieldCenter fetchByCode(Integer code) {
     Document document = collection.find(eq("code", code)).first();
     if (document != null) {
-      return FieldCenter.fromJson(document.toJson());
+      return FieldCenter.deserialize(document.toJson());
     } else {
       return null;
     }
@@ -74,7 +73,7 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
   public FieldCenter fetchByAcronym(String acronym) {
     Document document = collection.find(eq("acronym", acronym)).first();
     if (document != null) {
-      return FieldCenter.fromJson(document.toJson());
+      return FieldCenter.deserialize(document.toJson());
     } else {
       return null;
     }
@@ -104,7 +103,7 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
   public ArrayList<FieldCenter> find() {
     ArrayList<FieldCenter> fieldCenters = new ArrayList<>();
     list().forEach((Block<Document>) document -> {
-      fieldCenters.add(new Gson().fromJson(document.toJson(), FieldCenter.class));
+      fieldCenters.add(FieldCenter.deserialize(document.toJson()));
     });
 
     return fieldCenters;
