@@ -1,21 +1,5 @@
 package br.org.otus.laboratory.participant;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import br.org.otus.laboratory.project.transportation.MaterialTrail;
-import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
-import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.FieldCenter;
-import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.participant.persistence.ParticipantDao;
-
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupRaffle;
 import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
@@ -32,8 +16,22 @@ import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryExtrac
 import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValidator;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Stateless
 public class ParticipantLaboratoryServiceBean implements ParticipantLaboratoryService {
@@ -113,6 +111,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       Aliquot aliquot = new Aliquot(simpleAliquot);
       aliquot.setTubeCode(updateTubeAliquotsDTO.getTubeCode());
       aliquot.setParticipatData(participant);
+      aliquot.setLocationPoint(participantLaboratory.getLocationPoint());
       aliquotDao.persist(aliquot);
     }));
 
