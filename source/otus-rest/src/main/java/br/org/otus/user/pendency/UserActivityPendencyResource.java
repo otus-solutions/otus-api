@@ -62,6 +62,17 @@ public class UserActivityPendencyResource {
       .toJson(UserActivityPendency.getFrontGsonBuilder());
   }
 
+  @POST
+  @Secured
+  @Path("/list")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String listAllPendencies(String searchSettingsJson) {
+    List<UserActivityPendencyResponse> userActivityPendencyList = userActivityPendencyFacade.listAllPendencies(searchSettingsJson);
+    return (new Response()).buildSuccess(userActivityPendencyList)
+      .toJson(UserActivityPendencyResponse.getFrontGsonBuilder());
+  }
+
   @GET
   @Secured
   @Path("/list/receiver")

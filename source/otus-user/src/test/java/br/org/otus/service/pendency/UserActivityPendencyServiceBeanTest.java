@@ -1,9 +1,9 @@
 package br.org.otus.service.pendency;
 
 import br.org.otus.model.pendency.UserActivityPendency;
-import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static java.util.Arrays.asList;
@@ -22,8 +24,10 @@ import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({UserActivityPendencyDto.class})
 public class UserActivityPendencyServiceBeanTest {
 
   private static final String USER_EMAIL = "user@otus.com";
@@ -31,6 +35,7 @@ public class UserActivityPendencyServiceBeanTest {
   private static final ObjectId PENDENCY_OID = new ObjectId(PENDENCY_ID);
   private static final String ACTIVITY_ID = "5c7400d2d767afded0d84dcf";
   private static final ObjectId ACTIVITY_OID = new ObjectId(ACTIVITY_ID);
+  private static final String SEARCH_SETTINGS_JSON = "";
 
   @InjectMocks
   private UserActivityPendencyServiceBean userActivityPendencyServiceBean;
@@ -93,7 +98,43 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.getByActivityId(ACTIVITY_ID);
   }
 
-  // list All To Receiver
+
+  private UserActivityPendencyDto mockUserActivityPendencyDto(boolean dtoIsValid) throws Exception {
+    UserActivityPendencyDto userActivityPendencyDto = PowerMockito.spy(new UserActivityPendencyDto());
+    PowerMockito.mockStatic(UserActivityPendencyDto.class);
+    when(UserActivityPendencyDto.class, "deserialize", SEARCH_SETTINGS_JSON).thenReturn(userActivityPendencyDto);
+    when(userActivityPendencyDto.isValid()).thenReturn(dtoIsValid);
+    return userActivityPendencyDto;
+  }
+
+  @Test
+  public void listAllPendencies_should_return_list_UserActivityPendency() throws Exception {
+    when(userActivityPendencyDao.findAllPendencies(mockUserActivityPendencyDto(true)))
+      .thenReturn(userActivityPendencyResponses);
+    assertEquals(userActivityPendencyResponses, userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON));
+  }
+
+  @Test(expected = DataNotFoundException.class)
+  public void listAllPendencies_should_handle_DataNotFoundException() throws Exception {
+    UserActivityPendencyDto userActivityPendencyDto = mockUserActivityPendencyDto(true);
+    doThrow(new DataNotFoundException()).when(userActivityPendencyDao, "findAllPendencies", userActivityPendencyDto);
+    userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = MemoryExcededException.class)
+  public void listAllPendencies_should_handle_MemoryExcededException() throws Exception {
+    UserActivityPendencyDto userActivityPendencyDto = mockUserActivityPendencyDto(true);
+    doThrow(new MemoryExcededException("")).when(userActivityPendencyDao, "findAllPendencies", userActivityPendencyDto);
+    userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+  @Test(expected = DataFormatException.class)
+  public void listAllPendencies_should_handle_DataFormatException() throws Exception {
+    mockUserActivityPendencyDto(false);
+    userActivityPendencyServiceBean.listAllPendencies(SEARCH_SETTINGS_JSON);
+  }
+
+
   @Test
   public void listAllPendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
     when(userActivityPendencyDao.findAllPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
@@ -112,7 +153,7 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.listAllPendenciesToReceiver(USER_EMAIL);
   }
 
-  // list Opened To Receiver
+
   @Test
   public void listOpenedPendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
     when(userActivityPendencyDao.findOpenedPendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
@@ -131,7 +172,7 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.listOpenedPendenciesToReceiver(USER_EMAIL);
   }
 
-  // list Done To Receiver
+
   @Test
   public void listDonePendenciesToReceiver_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
     when(userActivityPendencyDao.findDonePendenciesToReceiver(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
@@ -150,7 +191,7 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.listDonePendenciesToReceiver(USER_EMAIL);
   }
 
-  // list All To Requester
+
   @Test
   public void listAllPendenciesFromRequester_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
     when(userActivityPendencyDao.findAllPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
@@ -169,7 +210,7 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.listAllPendenciesFromRequester(USER_EMAIL);
   }
 
-  // list Opened To Requester
+
   @Test
   public void listOpenedPendenciesFromRequester_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
     when(userActivityPendencyDao.findOpenedPendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
@@ -188,7 +229,7 @@ public class UserActivityPendencyServiceBeanTest {
     userActivityPendencyServiceBean.listOpenedPendenciesFromRequester(USER_EMAIL);
   }
 
-  // list Done To Requester
+
   @Test
   public void listDonePendenciesFromRequester_should_return_list_UserActivityPendency() throws MemoryExcededException, DataNotFoundException {
     when(userActivityPendencyDao.findDonePendenciesFromRequester(USER_EMAIL)).thenReturn(userActivityPendencyResponses);
