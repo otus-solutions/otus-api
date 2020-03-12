@@ -38,6 +38,7 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
 
   @Override
   public void create(String userEmail, Integer unattachedLaboratoryLastInsertion, CollectGroupDescriptor collectGroupDescriptor, FieldCenter fieldCenter) {
+    collectGroupDescriptor.getTubes().clear();
     List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(fieldCenter, collectGroupDescriptor));
     UnattachedLaboratory laboratory = new UnattachedLaboratory(unattachedLaboratoryLastInsertion, fieldCenter.getAcronym(), collectGroupDescriptor.getName(), tubes);
     laboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.CREATED);
