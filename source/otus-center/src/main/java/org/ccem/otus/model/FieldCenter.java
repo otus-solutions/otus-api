@@ -1,9 +1,9 @@
 package org.ccem.otus.model;
 
-import br.org.otus.utils.ObjectIdAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 public class FieldCenter {
   private String name;
