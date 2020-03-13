@@ -12,12 +12,9 @@ public class ParticipantContact {
   private ObjectId _id;
   private String objectType;
   private Long recruitmentNumber;
-  private ParticipantContactItem mainEmail;
-  private ParticipantContactItem mainAddress;
-  private ParticipantContactItem mainPhoneNumber;
-  private ParticipantContactItem[] secondaryEmails;
-  private ParticipantContactItem[] secondaryAddresses;
-  private ParticipantContactItem[] secondaryPhoneNumbers;
+  private ParticipantContactItemSet emails;
+  private ParticipantContactItemSet addresses;
+  private ParticipantContactItemSet phoneNumbers;
 
   public ObjectId getObjectId() {
     return _id;
@@ -31,48 +28,36 @@ public class ParticipantContact {
     return recruitmentNumber;
   }
 
-  public ParticipantContactItem getMainEmail() {
-    return mainEmail;
+  public ParticipantContactItemSet getEmails() {
+    return emails;
   }
 
-  public ParticipantContactItem getMainAddress() {
-    return mainAddress;
+  public ParticipantContactItemSet getAddresses() {
+    return addresses;
   }
 
-  public ParticipantContactItem getMainPhoneNumber() {
-    return mainPhoneNumber;
-  }
-
-  public ParticipantContactItem[] getSecondaryEmails() {
-    return secondaryEmails;
-  }
-
-  public ParticipantContactItem[] getSecondaryAddresses() {
-    return secondaryAddresses;
-  }
-
-  public ParticipantContactItem[] getSecondaryPhoneNumbers() {
-    return secondaryPhoneNumbers;
+  public ParticipantContactItemSet getPhoneNumbers() {
+    return phoneNumbers;
   }
 
   public ParticipantContactItem getMainParticipantContactItemByType(String participantContactType){
     return
       (new HashMap<String, ParticipantContactItem>(){
       {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), getMainEmail());
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), getMainAddress());
-        put(ParticipantContactTypeOptions.PHONE.getName(), getMainPhoneNumber());
+        put(ParticipantContactTypeOptions.EMAIL.getName(), getEmails().getMain());
+        put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddresses().getMain());
+        put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumbers().getMain());
       }
     }).get(participantContactType);
   }
 
-  public ParticipantContactItem[] getSecondaryParticipantContactsItemByType(String participantContactType){
+  public ParticipantContactItemSet getSecondaryParticipantContactsItemByType(String participantContactType){
     return
-      (new HashMap<String, ParticipantContactItem[]>(){
+      (new HashMap<String, ParticipantContactItemSet>(){
       {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), getSecondaryEmails());
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), getSecondaryAddresses());
-        put(ParticipantContactTypeOptions.PHONE.getName(), getSecondaryPhoneNumbers());
+        put(ParticipantContactTypeOptions.EMAIL.getName(), getEmails());
+        put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddresses());
+        put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumbers());
       }
     }).get(participantContactType);
   }

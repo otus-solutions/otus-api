@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class ParticipantContactItem {
 
-  private String contactValue;
+  private ParticipantContactItemValue value;
   private String observation;
 
-  public String getContactValue() {
-    return contactValue;
+  public ParticipantContactItemValue getValue() {
+    return value;
   }
 
   public String getObservation() {
@@ -20,7 +20,7 @@ public class ParticipantContactItem {
   public HashMap<String, Object> getAllMyAttributes(){
     return new HashMap<String, Object>(){
       {
-        put("contactValue", getContactValue());
+        put("value", getValue());
         put("observation", getObservation());
       }
     };
@@ -29,7 +29,7 @@ public class ParticipantContactItem {
   public HashMap<String, Object> getContactValueAttribute(){
     return new HashMap<String, Object>(){
       {
-        put("contactValue", getContactValue());
+        put("value", getValue());
       }
     };
   }
@@ -43,6 +43,6 @@ public class ParticipantContactItem {
   }
 
   public boolean isValid(){
-    return (getContactValue() != null && getContactValue().length() > 0);
+    return (getValue() != null && getValue().isValid());
   }
 }

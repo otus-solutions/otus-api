@@ -24,7 +24,7 @@ public class ParticipantContactItemTest {
 
   @Test
   public void test_for_invoke_getters(){
-    assertEquals(CONTACT_VALUE, participantContactItem.getContactValue());
+    assertEquals(CONTACT_VALUE, participantContactItem.getValue());
     assertEquals(OBSERVATION, participantContactItem.getObservation());
   }
 
