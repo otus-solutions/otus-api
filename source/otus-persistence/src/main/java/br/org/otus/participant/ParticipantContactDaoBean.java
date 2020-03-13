@@ -158,7 +158,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   private String extractSecondaryFieldNameWithIndexFromDto(ParticipantContactDto participantContactDto){
-    return extractSecondaryFieldNameFromDtoType(participantContactDto.getType()) + "." + participantContactDto.getSecondaryContactIndex().toString();
+    return null;// extractSecondaryFieldNameFromDtoType(participantContactDto.getType()) + "." + participantContactDto.getSecondaryContactIndex().toString();
   }
 
   private String getFieldNameSuffixFromDtoType(String dtoType){
@@ -173,16 +173,15 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   private ParticipantContactItem getSecondaryParticipantContactItemFromDto(ParticipantContact participantContact, ParticipantContactDto participantContactDto) throws DataFormatException {
-    int secondaryContactIndex = -1;
     try{
-      secondaryContactIndex = participantContactDto.getSecondaryContactIndex();
-      return participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType())[secondaryContactIndex];
+      return participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType()).getNotMainItem(participantContactDto.getPosition());
     }
     catch (NullPointerException e){
       throw new DataFormatException("There is no index inside secondary " + participantContactDto.getType() + " request");
     }
     catch (IndexOutOfBoundsException e){
-      throw new DataFormatException("Participant contact with id { " + participantContactDto.getIdStr() + " } does not have secondary " + participantContactDto.getType() + " with index " + secondaryContactIndex);
+      throw new DataFormatException("Participant contact with id { " + participantContactDto.getIdStr() + " } does not have secondary " +
+        participantContactDto.getType() + " with position " + participantContactDto.getPosition());
     }
   }
 

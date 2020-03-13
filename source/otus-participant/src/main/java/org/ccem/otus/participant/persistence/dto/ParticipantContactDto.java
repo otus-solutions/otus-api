@@ -11,8 +11,8 @@ public class ParticipantContactDto implements Dto {
 
   private String _id;
   private String type;
+  private String position;
   private ParticipantContactItem participantContactItem;
-  private Integer secondaryContactIndex;
 
   public String getIdStr() {
     return _id;
@@ -26,12 +26,12 @@ public class ParticipantContactDto implements Dto {
     return type;
   }
 
-  public ParticipantContactItem getParticipantContactItem() {
-    return participantContactItem;
+  public String getPosition() {
+    return position;
   }
 
-  public Integer getSecondaryContactIndex() {
-    return secondaryContactIndex;
+  public ParticipantContactItem getParticipantContactItem() {
+    return participantContactItem;
   }
 
   public static String serialize(ParticipantContactDto participantContactDto){
@@ -46,7 +46,7 @@ public class ParticipantContactDto implements Dto {
   public Boolean isValid() {
     return ObjectId.isValid(getIdStr()) &&
       ParticipantContactTypeOptions.contains(getType()) &&
-      (participantContactItem==null || participantContactItem.isValid()) &&
-      (secondaryContactIndex ==null || secondaryContactIndex >= 0);
+      ParticipantContactTypeOptions.contains(getPosition()) &&
+      (participantContactItem ==null || participantContactItem.isValid());
   }
 }

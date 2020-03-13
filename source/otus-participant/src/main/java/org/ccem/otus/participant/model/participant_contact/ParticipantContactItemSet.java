@@ -32,14 +32,14 @@ public class ParticipantContactItemSet {
     return fifth;
   }
 
-  public ParticipantContactItem getNotMainItem(int position){
+  public ParticipantContactItem getNotMainItem(String position){
     return
-      (new HashMap<Integer, ParticipantContactItem>(){
+      (new HashMap<String, ParticipantContactItem>(){
         {
-          put(2, getSecond());
-          put(3, getThird());
-          put(4, getFourth());
-          put(5, getFifth());
+          put(ParticipantContactPositionOptions.SECOND.getName(), getSecond());
+          put(ParticipantContactPositionOptions.THIRD.getName(), getThird());
+          put(ParticipantContactPositionOptions.FOURTH.getName(), getFourth());
+          put(ParticipantContactPositionOptions.FIFTH.getName(), getFifth());
         }
       }).get(position);
   }
