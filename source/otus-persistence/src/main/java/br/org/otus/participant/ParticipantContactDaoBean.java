@@ -1,17 +1,17 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.participant.builder.ParticipantContactQueryBuilder;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
+import org.ccem.otus.participant.model.participant_contact.*;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
@@ -34,9 +34,8 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public ObjectId create(ParticipantContact participantContact) {
-    Document parsed = Document.parse(ParticipantContact.serialize(participantContact));
-    collection.insertOne(parsed);
-    return parsed.getObjectId(ID_FIELD_NAME);
+    collection.insertMany(new ParticipantContactQueryBuilder().participantContactToDocuments(participantContact));
+    return null;//TODO
   }
 
   @Override
@@ -90,7 +89,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
         new HashMap<String, Object>() {
           {
             put(mainFieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getAllMyAttributes());
-            put(secondaryFieldToUpdate, participantContact.getMainParticipantContactItemByType(participantContactDto.getType()).getAllMyAttributes());
+            put(secondaryFieldToUpdate, participantContact.getParticipantContactsItemByType(participantContactDto.getType()).getMain().getAllMyAttributes());
           }
         }
       )
@@ -174,7 +173,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   private ParticipantContactItem getSecondaryParticipantContactItemFromDto(ParticipantContact participantContact, ParticipantContactDto participantContactDto) throws DataFormatException {
     try{
-      return participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType()).getNotMainItem(participantContactDto.getPosition());
+      return participantContact.getParticipantContactsItemByType(participantContactDto.getType()).getNotMainItem(participantContactDto.getPosition());
     }
     catch (NullPointerException e){
       throw new DataFormatException("There is no index inside secondary " + participantContactDto.getType() + " request");
