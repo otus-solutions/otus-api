@@ -4,37 +4,37 @@ import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 
-public class ParticipantContactItemSet {
+public class ParticipantContactItemSet<T extends ParticipantContactItemValue> {
 
-  private ParticipantContactItem main;
-  private ParticipantContactItem second;
-  private ParticipantContactItem third;
-  private ParticipantContactItem fourth;
-  private ParticipantContactItem fifth;
+  private ParticipantContactItem<T> main;
+  private ParticipantContactItem<T> second;
+  private ParticipantContactItem<T> third;
+  private ParticipantContactItem<T> fourth;
+  private ParticipantContactItem<T> fifth;
 
-  public ParticipantContactItem getMain() {
+  public ParticipantContactItem<T> getMain() {
     return main;
   }
 
-  public ParticipantContactItem getSecond() {
+  public ParticipantContactItem<T> getSecond() {
     return second;
   }
 
-  public ParticipantContactItem getThird() {
+  public ParticipantContactItem<T> getThird() {
     return third;
   }
 
-  public ParticipantContactItem getFourth() {
+  public ParticipantContactItem<T> getFourth() {
     return fourth;
   }
 
-  public ParticipantContactItem getFifth() {
+  public ParticipantContactItem<T> getFifth() {
     return fifth;
   }
 
-  public ParticipantContactItem getNotMainItem(String position){
+  public ParticipantContactItem<T> getNotMainItem(String position){
     return
-      (new HashMap<String, ParticipantContactItem>(){
+      (new HashMap<String, ParticipantContactItem<T>>(){
         {
           put(ParticipantContactPositionOptions.SECOND.getName(), getSecond());
           put(ParticipantContactPositionOptions.THIRD.getName(), getThird());
@@ -44,11 +44,11 @@ public class ParticipantContactItemSet {
       }).get(position);
   }
 
-  public static String serialize(ParticipantContactItemSet participantContactItems){
-    return (new GsonBuilder()).create().toJson(participantContactItems);
-  }
-
-  public static ParticipantContactItemSet deserialize(String participantContactItemsJson){
-    return (new GsonBuilder()).create().fromJson(participantContactItemsJson, ParticipantContactItemSet.class);
-  }
+//  public static String serialize(ParticipantContactItemSet participantContactItems){
+//    return (new GsonBuilder()).create().toJson(participantContactItems);
+//  }
+//
+//  public static ParticipantContactItemSet deserialize(String participantContactItemsJson){
+//    return (new GsonBuilder()).create().fromJson(participantContactItemsJson, ParticipantContactItemSet.class);
+//  }
 }

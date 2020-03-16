@@ -4,12 +4,12 @@ import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 
-public class ParticipantContactItem {
+public class ParticipantContactItem<T extends ParticipantContactItemValue> {
 
-  private ParticipantContactItemValue value;
+  private T value;
   private String observation;
 
-  public ParticipantContactItemValue getValue() {
+  public T getValue() {
     return value;
   }
 
@@ -34,13 +34,13 @@ public class ParticipantContactItem {
     };
   }
 
-  public static String serialize(ParticipantContactItem participantContactItem){
-    return (new GsonBuilder()).create().toJson(participantContactItem);
-  }
-
-  public static ParticipantContactItem deserialize(String participantContactItemJson){
-    return (new GsonBuilder()).create().fromJson(participantContactItemJson, ParticipantContactItem.class);
-  }
+//  public static String serialize(ParticipantContactItem participantContactItem){
+//    return (new GsonBuilder()).create().toJson(participantContactItem);
+//  }
+//
+//  public static ParticipantContactItem deserialize(String participantContactItemJson){
+//    return (new GsonBuilder()).create().fromJson(participantContactItemJson, ParticipantContactItem.class);
+//  }
 
   public boolean isValid(){
     return (getValue() != null && getValue().isValid());

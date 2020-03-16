@@ -1,7 +1,7 @@
 package org.ccem.otus.participant.model.participant_contact;
 
-public interface ParticipantContactItemValue {
+public abstract class ParticipantContactItemValue {
 
-  Boolean isValid();
+  public abstract boolean isValid();
 
 }

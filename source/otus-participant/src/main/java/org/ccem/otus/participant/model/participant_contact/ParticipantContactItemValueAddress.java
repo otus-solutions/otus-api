@@ -2,7 +2,7 @@ package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
 
-public class ParticipantContactAddress implements ParticipantContactItemValue{
+public class ParticipantContactItemValueAddress extends ParticipantContactItemValue {
 
   private String postalCode;
   private String street;
@@ -40,16 +40,16 @@ public class ParticipantContactAddress implements ParticipantContactItemValue{
     return country;
   }
 
-  public static String serialize(ParticipantContactAddress participantContactItemAddress){
-    return (new GsonBuilder()).create().toJson(participantContactItemAddress);
-  }
-
-  public static ParticipantContactAddress deserialize(String participantContactItemAddressJson){
-    return (new GsonBuilder()).create().fromJson(participantContactItemAddressJson, ParticipantContactAddress.class);
-  }
+//  public static String serialize(ParticipantContactItemAddress participantContactItemAddress){
+//    return (new GsonBuilder()).create().toJson(participantContactItemAddress);
+//  }
+//
+//  public static ParticipantContactItemAddress deserialize(String participantContactItemAddressJson){
+//    return (new GsonBuilder()).create().fromJson(participantContactItemAddressJson, ParticipantContactItemAddress.class);
+//  }
 
   @Override
-  public Boolean isValid() {
-    return null;
+  public boolean isValid() {
+    return true;
   }
 }
