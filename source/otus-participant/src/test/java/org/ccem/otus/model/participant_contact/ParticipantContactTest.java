@@ -2,12 +2,11 @@ package org.ccem.otus.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
+import org.ccem.otus.participant.model.participant_contact.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
@@ -19,27 +18,85 @@ public class ParticipantContactTest {
   private static final ObjectId OID = new ObjectId("5e13997795818e14a91a5268");
   private static final String OBJECT_TYPE = "ParticipantContact";
   private static final Long RN = 1234567L;
-  private static final ParticipantContactItem mainEmail = new ParticipantContactItem();
-  private static final ParticipantContactItem mainAddress = new ParticipantContactItem();
-  private static final ParticipantContactItem mainPhoneNumber = new ParticipantContactItem();
-  private static final ParticipantContactItem[] secondaryEmails = new ParticipantContactItem[3];
-  private static final ParticipantContactItem[] secondaryAddresses = new ParticipantContactItem[3];
-  private static final ParticipantContactItem[] secondaryPhoneNumbers = new ParticipantContactItem[3];
+
   private static final String CONTACT_TYPE = ParticipantContactTypeOptions.EMAIL.getName();
 
   private ParticipantContact participantContact = new ParticipantContact();
+  private ParticipantContactItemSet<ParticipantContactItemValueString> emails = PowerMockito.spy(new ParticipantContactItemSet<>());
+  private ParticipantContactItemSet<ParticipantContactItemValueAddress> addresses = PowerMockito.spy(new ParticipantContactItemSet<>());
+  private ParticipantContactItemSet<ParticipantContactItemValueString> phoneNumbers = PowerMockito.spy(new ParticipantContactItemSet<>());
+
+  @Test
+  public void deserialize_static_method_(){
+
+    String participantContactJson = "{\n" +
+      "  \"objectType\": \"ParticipantContact\",\n" +
+      "  \"recruitmentNumber\": 1234567,\n" +
+      "  \"emails\": {\n" +
+      "    \"main\": {\n" +
+      "      \"value\": { \"value\": \"main.email@gmail.com\" },\n" +
+      "      \"observation\": \"personal\"\n" +
+      "    },\n" +
+      "    \"second\": {\n" +
+      "      \"value\": { \"value\": \"secondary0.email@gmail.com\" },\n" +
+      "      \"observation\": \"work\"\n" +
+      "    },\n" +
+      "    \"third\": {\n" +
+      "      \"value\": { \"value\": \"secondary1.email@gmail.com\" },\n" +
+      "      \"observation\": \"university\"\n" +
+      "    }\n" +
+      "  },\n" +
+      "  \"addresses\": {\n" +
+      "    \"main\": {\n" +
+      "      \"value\": {\n" +
+      "        \"postalCode\": \"90010-907\",\n" +
+      "        \"street\": \"Rua dos Bobos\",\n" +
+      "        \"streetNumber\": 0,\n" +
+      "        \"complements\": \"Feita com muito esmero!\",\n" +
+      "        \"neighbourhood\": \"Centro\",\n" +
+      "        \"city\": \"Porto Alegre\",\n" +
+      "        \"country\": \"Brasil\"\n" +
+      "      },\n" +
+      "      \"observations\": \"Casa\"\n" +
+      "    },\n" +
+      "    \"second:\": {\n" +
+      "      \"value\": {\n" +
+      "        \"postalCode\": \"90010-907\",\n" +
+      "        \"street\": \"Rua dos Bobos\",\n" +
+      "        \"streetNumber\": 0,\n" +
+      "        \"complements\": \"Feita com muito esmero!\",\n" +
+      "        \"neighbourhood\": \"Centro\",\n" +
+      "        \"city\": \"Porto Alegre\",\n" +
+      "        \"country\": \"Brasil\"\n" +
+      "      },\n" +
+      "      \"observations\": \"Casa da vizinha da minha tia.\"\n" +
+      "    }\n" +
+      "  },\n" +
+      "  \"phoneNumbers\": {\n" +
+      "    \"main\": {\n" +
+      "      \"value\": { \"value\": \"51123456789\" },\n" +
+      "      \"observation\": \"casa\"\n" +
+      "    },\n" +
+      "    \"second\": {\n" +
+      "      \"value\": { \"value\": \"51987654321\" },\n" +
+      "      \"observation\": \"celular\"\n" +
+      "    }\n" +
+      "  }\n" +
+      "}";
+
+    ParticipantContact result = ParticipantContact.deserialize(participantContactJson);
+
+    assertTrue(result instanceof ParticipantContact);
+  }
 
   @Before
   public void setUp(){
     Whitebox.setInternalState(participantContact, "_id", OID);
     Whitebox.setInternalState(participantContact, "objectType", OBJECT_TYPE);
     Whitebox.setInternalState(participantContact, "recruitmentNumber", RN);
-    Whitebox.setInternalState(participantContact, "mainEmail", mainEmail);
-    Whitebox.setInternalState(participantContact, "mainAddress", mainAddress);
-    Whitebox.setInternalState(participantContact, "mainPhoneNumber", mainPhoneNumber);
-    Whitebox.setInternalState(participantContact, "secondaryEmails", secondaryEmails);
-    Whitebox.setInternalState(participantContact, "secondaryAddresses", secondaryAddresses);
-    Whitebox.setInternalState(participantContact, "secondaryPhoneNumbers", secondaryPhoneNumbers);
+    Whitebox.setInternalState(participantContact, "emails", emails);
+    Whitebox.setInternalState(participantContact, "addresses", addresses);
+    Whitebox.setInternalState(participantContact, "phoneNumbers", phoneNumbers);
   }
 
   @Test
@@ -47,17 +104,14 @@ public class ParticipantContactTest {
     assertEquals(OID, participantContact.getObjectId());
     assertEquals(OBJECT_TYPE, participantContact.getObjectType());
     assertEquals(RN, participantContact.getRecruitmentNumber());
-
+    assertEquals(emails, participantContact.getEmails());
+    assertEquals(addresses, participantContact.getAddresses());
+    assertEquals(phoneNumbers, participantContact.getPhoneNumbers());
   }
 
   @Test
   public void getMainParticipantContactItemByType_method_should_return_hashMap_with_main_value(){
-    assertEquals(mainEmail, participantContact.getMainParticipantContactItemByType(CONTACT_TYPE));
-  }
-
-  @Test
-  public void getSecondaryParticipantContactsItemByType_method_should_return_hashMap_with_main_value(){
-    //assertArrayEquals(secondaryEmails, participantContact.getSecondaryParticipantContactsItemByType(CONTACT_TYPE));
+    assertEquals(emails, participantContact.getParticipantContactsItemByType(CONTACT_TYPE));
   }
 
   @Test
