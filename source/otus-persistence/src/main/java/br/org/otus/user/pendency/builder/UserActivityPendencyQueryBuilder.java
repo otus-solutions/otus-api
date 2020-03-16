@@ -52,7 +52,7 @@ public class UserActivityPendencyQueryBuilder {
     if(userActivityPendencyDto.getOrderDto() != null){
       addSortingCriteria(userActivityPendencyDto.getOrderDto().getSortingCriteria());
     }
-	 addSkip(userActivityPendencyDto.getCurrentQuantity());
+	  addSkip(userActivityPendencyDto.getCurrentQuantity());
     addLimit(userActivityPendencyDto.getQuantityToGet());
     return pipeline;
   }
@@ -164,13 +164,20 @@ public class UserActivityPendencyQueryBuilder {
     }
     return
       getStatusConditionFromDto(userActivityPendencyFilterDto.getStatus()) +
+        getActivityRnFilterFromDto(userActivityPendencyFilterDto.getRn()) +
         getActivityFilterFromDto(ACTIVITY_ACRONYM_FIELD, userActivityPendencyFilterDto.getAcronym()) +
-        getActivityFilterFromDto(ACTIVITY_RN_FIELD, userActivityPendencyFilterDto.getRn()) +
         getActivityFilterFromDto(ACTIVITY_EXTERNAL_ID_FIELD, userActivityPendencyFilterDto.getExternalID());
   }
   private String getActivityFilterFromDto(String activityField, Object filterValue){
     try{
-      return "{ $eq: [ \"$"+activityField+"\", " + filterValue.toString() + "] },";
+      return "{ $eq: [ \"$"+activityField+"\", \"" + filterValue.toString() + "\"] },";
+    }catch (NullPointerException e){
+      return "";
+    }
+  }
+  private String getActivityRnFilterFromDto(Long rn){
+    try{
+      return "{ $eq: [ \"$"+ACTIVITY_RN_FIELD+"\", " + rn.toString() + "] },";
     }catch (NullPointerException e){
       return "";
     }
@@ -213,7 +220,7 @@ public class UserActivityPendencyQueryBuilder {
     Map<String, String> sortFieldNamesMap = new HashMap<>();
     // activity fields
     sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.STATUS.getName(), ACTIVITY_INFO+".lastStatusName");
-    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.ACRONYM.getName(), ACTIVITY_INFO+"."+ACTIVITY_ACRONYM_FIELD);
+    sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.ACRONYM.getName(), ACTIVITY_INFO+".acronym");
     sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.RECRUITMENT_NUMBER.getName(), ACTIVITY_INFO+".recruitmentNumber");
     sortFieldNamesMap.put(UserActivityPendencyFieldOrderingOptions.EXTERNAL_ID.getName(), ACTIVITY_INFO+".externalID");
     // pendency fields
