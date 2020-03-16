@@ -32,6 +32,19 @@ public class ParticipantContactItemSet<T extends ParticipantContactItemValue> {
     return fifth;
   }
 
+  public ParticipantContactItem<T> getItemByPosition(String position){
+    return
+      (new HashMap<String, ParticipantContactItem<T>>(){
+        {
+          put(ParticipantContactPositionOptions.MAIN.getName(), getMain());
+          put(ParticipantContactPositionOptions.SECOND.getName(), getSecond());
+          put(ParticipantContactPositionOptions.THIRD.getName(), getThird());
+          put(ParticipantContactPositionOptions.FOURTH.getName(), getFourth());
+          put(ParticipantContactPositionOptions.FIFTH.getName(), getFifth());
+        }
+      }).get(position);
+  }
+
   public ParticipantContactItem<T> getNotMainItem(String position){
     return
       (new HashMap<String, ParticipantContactItem<T>>(){
