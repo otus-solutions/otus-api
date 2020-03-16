@@ -164,13 +164,20 @@ public class UserActivityPendencyQueryBuilder {
     }
     return
       getStatusConditionFromDto(userActivityPendencyFilterDto.getStatus()) +
+        getActivityRnFilterFromDto(userActivityPendencyFilterDto.getRn()) +
         getActivityFilterFromDto(ACTIVITY_ACRONYM_FIELD, userActivityPendencyFilterDto.getAcronym()) +
-        getActivityFilterFromDto(ACTIVITY_RN_FIELD, userActivityPendencyFilterDto.getRn()) +
         getActivityFilterFromDto(ACTIVITY_EXTERNAL_ID_FIELD, userActivityPendencyFilterDto.getExternalID());
   }
   private String getActivityFilterFromDto(String activityField, Object filterValue){
     try{
-      return "{ $eq: [ \"$"+activityField+"\", " + filterValue.toString() + "] },";
+      return "{ $eq: [ \"$"+activityField+"\", \"" + filterValue.toString() + "\"] },";
+    }catch (NullPointerException e){
+      return "";
+    }
+  }
+  private String getActivityRnFilterFromDto(Long rn){
+    try{
+      return "{ $eq: [ \"$"+ACTIVITY_RN_FIELD+"\", " + rn.toString() + "] },";
     }catch (NullPointerException e){
       return "";
     }
