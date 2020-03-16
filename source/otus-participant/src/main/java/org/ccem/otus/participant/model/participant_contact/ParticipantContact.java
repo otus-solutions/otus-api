@@ -40,26 +40,15 @@ public class ParticipantContact {
     return phoneNumbers;
   }
 
-  public ParticipantContactItem getMainParticipantContactItemByType(String participantContactType){
-    return
-      (new HashMap<String, ParticipantContactItem>(){
-      {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), getEmails().getMain());
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddresses().getMain());
-        put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumbers().getMain());
-      }
-    }).get(participantContactType);
-  }
-
-  public ParticipantContactItemSet getSecondaryParticipantContactsItemByType(String participantContactType){
+  public ParticipantContactItemSet getParticipantContactsItemByType(String participantContactType){
     return
       (new HashMap<String, ParticipantContactItemSet>(){
-      {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), getEmails());
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddresses());
-        put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumbers());
-      }
-    }).get(participantContactType);
+        {
+          put(ParticipantContactTypeOptions.EMAIL.getName(), getEmails());
+          put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddresses());
+          put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumbers());
+        }
+      }).get(participantContactType);
   }
 
   public static String serialize(ParticipantContact participantContact){
