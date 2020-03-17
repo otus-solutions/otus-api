@@ -157,6 +157,16 @@ public class ActivityConfigurationDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
+  public ActivityCategory getDefault() {
+    BasicDBObject query = new BasicDBObject();
+    query.put("objectType", "ActivityCategory");
+    query.put("isDefault", true);
+
+    Document first = collection.find(query).first();
+    return ActivityCategory.deserialize(first.toJson());
+  }
+
+  @Override
   public ActivityCategory getLastInsertedCategory() {
     BasicDBObject query = new BasicDBObject("objectType", "ActivityCategory");
 

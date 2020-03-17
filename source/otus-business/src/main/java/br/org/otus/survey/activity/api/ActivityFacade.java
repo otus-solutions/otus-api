@@ -1,6 +1,7 @@
 package br.org.otus.survey.activity.api;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,14 +11,17 @@ import javax.inject.Inject;
 
 import br.org.otus.user.management.ManagementUserService;
 import com.nimbusds.jwt.SignedJWT;
+import org.ccem.otus.importation.activity.ActivityImportDTO;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import com.google.gson.JsonSyntaxException;
@@ -36,6 +40,9 @@ public class ActivityFacade {
 
   @Inject
   private ManagementUserService managementUserService;
+
+  @Inject
+  private ActivityCategoryService activityCategoryService;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
@@ -153,4 +160,19 @@ public class ActivityFacade {
     }
   }
 
+  public void synchronize(long rn, ActivityImportDTO activityImportDTO) {
+    try {
+      Participant participant = participantService.getByRecruitmentNumber(rn);
+      participant.setTokenList(new ArrayList<>());
+      participant.setPassword(null);
+      ActivityCategory activityCategory = activityCategoryService.getDefault();
+      activityImportDTO.getActivityList().forEach(activity -> {
+        activity.setParticipantData(participant);
+        activity.setCategory(activityCategory);
+        activityService.create(activity);
+      });
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
 }

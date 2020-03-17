@@ -7,6 +7,7 @@ import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import br.org.otus.survey.activity.api.ActivityFacade;
+import org.ccem.otus.importation.activity.ActivityImportDTO;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import javax.inject.Inject;
@@ -46,6 +47,18 @@ public class ParticipantActivityResource {
     isValidRecruitmentNumber(rn);
     String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity));
     return new Response().buildSuccess(objectID).toJson();
+  }
+
+  @PUT
+  @Secured
+  @Path("offline")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String synchronizeOfflineActivities(@PathParam("rn") long rn, String surveyActivities) {
+    isValidRecruitmentNumber(rn);
+    ActivityImportDTO activityImportDTO = ActivityImportDTO.deserialize(surveyActivities);
+    activityFacade.synchronize(rn, activityImportDTO);
+    return new Response().buildSuccess().toJson();
   }
 
   @GET
