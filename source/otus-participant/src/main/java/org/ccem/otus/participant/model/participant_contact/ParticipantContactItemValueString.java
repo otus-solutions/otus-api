@@ -1,8 +1,8 @@
 package org.ccem.otus.participant.model.participant_contact;
 
-public class ParticipantContactItemValueString extends ParticipantContactItemValue {
+public abstract class ParticipantContactItemValueString extends ParticipantContactItemValue {
 
-  private String content;
+  protected String content;
 
   public String getContent() {
     return content;
