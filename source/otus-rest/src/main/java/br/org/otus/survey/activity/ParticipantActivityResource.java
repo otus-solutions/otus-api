@@ -52,7 +52,6 @@ public class ParticipantActivityResource {
   @PUT
   @Secured
   @Path("offline")
-  @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String synchronizeOfflineActivities(@PathParam("rn") long rn, String surveyActivities) {
     isValidRecruitmentNumber(rn);

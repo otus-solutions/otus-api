@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import br.org.otus.user.management.ManagementUserService;
 import com.nimbusds.jwt.SignedJWT;
 import org.ccem.otus.importation.activity.ActivityImportDTO;
+import org.ccem.otus.model.survey.activity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -172,7 +173,15 @@ public class ActivityFacade {
         activityService.create(activity);
       });
     } catch (DataNotFoundException e) {
-      e.printStackTrace();
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void save(String userEmail, OfflineActivityCollection offlineActivityCollection) {
+    try {
+      activityService.save(userEmail, offlineActivityCollection);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 }

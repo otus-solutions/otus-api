@@ -2,6 +2,7 @@ package org.ccem.otus.service;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.survey.activity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
@@ -20,7 +21,7 @@ public interface ActivityService {
   SurveyActivity getByID(String id) throws DataNotFoundException;
 
   List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
-  
+
   List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
 
   boolean updateCheckerActivity(String checkerUpdated) throws DataNotFoundException;
@@ -28,7 +29,8 @@ public interface ActivityService {
   SurveyActivity getActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException;
 
   LinkedList<ActivityProgressResultExtraction> getActivityProgressExtraction(String center) throws DataNotFoundException;
-  
+
   HashMap<Long, String> getParticipantFieldCenterByActivity(String acronym, Integer version) throws DataNotFoundException;
 
+  void save(String userEmail, OfflineActivityCollection offlineActivityCollection) throws DataNotFoundException;
 }
