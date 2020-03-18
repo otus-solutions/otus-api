@@ -12,9 +12,9 @@ public class ParticipantContact {
   private ObjectId _id;
   private String objectType;
   private Long recruitmentNumber;
-  private ParticipantContactItemSet<ParticipantContactItemValueString> emails;
-  private ParticipantContactItemSet<ParticipantContactItemValueAddress> addresses;
-  private ParticipantContactItemSet<ParticipantContactItemValueString> phoneNumbers;
+  private ParticipantContactItemSet<ParticipantContactItemValueEmail> email;
+  private ParticipantContactItemSet<ParticipantContactItemValueAddress> address;
+  private ParticipantContactItemSet<ParticipantContactItemValuePhoneNumber> phoneNumber;
 
   public ObjectId getObjectId() {
     return _id;
@@ -28,27 +28,33 @@ public class ParticipantContact {
     return recruitmentNumber;
   }
 
-  public ParticipantContactItemSet<ParticipantContactItemValueString> getEmails() {
-    return emails;
+  public ParticipantContactItemSet<ParticipantContactItemValueEmail> getEmail() {
+    return email;
   }
 
-  public ParticipantContactItemSet<ParticipantContactItemValueAddress> getAddresses() {
-    return addresses;
+  public ParticipantContactItemSet<ParticipantContactItemValueAddress> getAddress() {
+    return address;
   }
 
-  public ParticipantContactItemSet<ParticipantContactItemValueString> getPhoneNumbers() {
-    return phoneNumbers;
+  public ParticipantContactItemSet<ParticipantContactItemValuePhoneNumber> getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public ParticipantContactItemSet getParticipantContactsItemByType(ParticipantContactTypeOptions participantContactType){
+    HashMap<ParticipantContactTypeOptions, ParticipantContactItemSet> map = new HashMap<>();
+    map.put(ParticipantContactTypeOptions.EMAIL, getEmail());
+    map.put(ParticipantContactTypeOptions.ADDRESS, getAddress());
+    map.put(ParticipantContactTypeOptions.PHONE, getPhoneNumber());
+    return map.get(participantContactType);
   }
 
   public ParticipantContactItemSet getParticipantContactsItemByType(String participantContactType){
-    return
-      (new HashMap<String, ParticipantContactItemSet>(){
-        {
-          put(ParticipantContactTypeOptions.EMAIL.getName(), getEmails());
-          put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddresses());
-          put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumbers());
-        }
-      }).get(participantContactType);
+    //TODO check usefull
+    HashMap<String, ParticipantContactItemSet> map = new HashMap<>();
+    map.put(ParticipantContactTypeOptions.EMAIL.getName(), getEmail());
+    map.put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddress());
+    map.put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumber());
+    return map.get(participantContactType);
   }
 
   public static String serialize(ParticipantContact participantContact){
