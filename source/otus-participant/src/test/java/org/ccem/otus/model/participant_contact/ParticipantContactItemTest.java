@@ -1,7 +1,7 @@
 package org.ccem.otus.model.participant_contact;
 
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactItemValueString;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactItemValueEmail;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactItemValue;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class ParticipantContactItemTest {
   private static final String OBSERVATION = "obs";
 
   private ParticipantContactItem participantContactItem = new ParticipantContactItem();
-  private ParticipantContactItemValue participantContactItemValue = PowerMockito.spy(new ParticipantContactItemValueString());
+  private ParticipantContactItemValue participantContactItemValue = PowerMockito.spy(new ParticipantContactItemValueEmail());
 
   @Before
   public void setUp(){

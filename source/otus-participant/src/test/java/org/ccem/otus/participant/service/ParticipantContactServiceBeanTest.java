@@ -39,8 +39,8 @@ public class ParticipantContactServiceBeanTest {
 
   //@Test
   public void create_method_should_return_ObjectID_in_case_success_persist(){
-    when(participantContactDao.create(participantContact)).thenReturn(PARTICIPANT_CONTACT_OID);
-    assertEquals(PARTICIPANT_CONTACT_OID, participantContactServiceBean.create(participantContact));
+//    when(participantContactDao.create(participantContact)).thenReturn(PARTICIPANT_CONTACT_OID);
+//    assertEquals(PARTICIPANT_CONTACT_OID, participantContactServiceBean.create(participantContact));
   }
 
   //@Test(expected = DataFormatException.class)
