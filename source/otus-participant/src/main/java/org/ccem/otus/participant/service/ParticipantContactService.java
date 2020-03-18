@@ -9,7 +9,7 @@ import java.util.zip.DataFormatException;
 
 public interface ParticipantContactService {
 
-  ObjectId create(ParticipantContact participantContact);
+  void create(ParticipantContact participantContact);
 
   void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 

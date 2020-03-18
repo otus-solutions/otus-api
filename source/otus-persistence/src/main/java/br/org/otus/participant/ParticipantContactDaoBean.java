@@ -33,9 +33,8 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public ObjectId create(ParticipantContact participantContact) {
+  public void create(ParticipantContact participantContact) {
     collection.insertMany(new ParticipantContactQueryBuilder().participantContactToDocuments(participantContact));
-    return null;//TODO
   }
 
   @Override

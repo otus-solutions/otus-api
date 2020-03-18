@@ -18,8 +18,8 @@ public class ParticipantContactResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String create(String participantContactJson) {
-    String participantContactID = participantContactFacade.create(participantContactJson);
-    return (new Response()).buildSuccess(participantContactID).toJson();
+    participantContactFacade.create(participantContactJson);
+    return (new Response()).buildSuccess().toJson();
   }
 
   @PUT
