@@ -34,13 +34,13 @@ public class ParticipantContactItem<T extends ParticipantContactItemValue> {
     };
   }
 
-//  public static String serialize(ParticipantContactItem participantContactItem){
-//    return (new GsonBuilder()).create().toJson(participantContactItem);
-//  }
-//
-//  public static ParticipantContactItem deserialize(String participantContactItemJson){
-//    return (new GsonBuilder()).create().fromJson(participantContactItemJson, ParticipantContactItem.class);
-//  }
+  public static String serialize(ParticipantContactItem participantContactItem){
+    return (new GsonBuilder()).create().toJson(participantContactItem);
+  }
+
+  public static ParticipantContactItem deserialize(String participantContactItemJson){
+    return (new GsonBuilder()).create().fromJson(participantContactItemJson, ParticipantContactItem.class);
+  }
 
   public boolean isValid(){
     return (getValue() != null && getValue().isValid());
