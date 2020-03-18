@@ -12,6 +12,10 @@ public class ParticipantContactItemValueAddress extends ParticipantContactItemVa
   private String city;
   private String country;
 
+  public ParticipantContactItemValueAddress(){
+    objectType = "Address";
+  }
+
   public String getPostalCode() {
     return postalCode;
   }
@@ -40,16 +44,21 @@ public class ParticipantContactItemValueAddress extends ParticipantContactItemVa
     return country;
   }
 
-//  public static String serialize(ParticipantContactItemAddress participantContactItemAddress){
-//    return (new GsonBuilder()).create().toJson(participantContactItemAddress);
-//  }
-//
-//  public static ParticipantContactItemAddress deserialize(String participantContactItemAddressJson){
-//    return (new GsonBuilder()).create().fromJson(participantContactItemAddressJson, ParticipantContactItemAddress.class);
-//  }
+  public static String serialize(ParticipantContactItemValueAddress participantContactItemAddress){
+    return (new GsonBuilder()).create().toJson(participantContactItemAddress);
+  }
+
+  public static ParticipantContactItemValueAddress deserialize(String participantContactItemAddressJson){
+    return (new GsonBuilder()).create().fromJson(participantContactItemAddressJson, ParticipantContactItemValueAddress.class);
+  }
 
   @Override
   public boolean isValid() {
     return true;
+  }
+
+  @Override
+  public String toJson() {
+    return ParticipantContactItemValueAddress.serialize(this);
   }
 }
