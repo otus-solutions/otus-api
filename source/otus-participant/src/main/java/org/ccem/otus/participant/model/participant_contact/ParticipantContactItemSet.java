@@ -32,36 +32,31 @@ public class ParticipantContactItemSet<T extends ParticipantContactItemValue> {
     return fifth;
   }
 
-  public ParticipantContactItem<T> getItemByPosition(String position){
-    return
-      (new HashMap<String, ParticipantContactItem<T>>(){
-        {
-          put(ParticipantContactPositionOptions.MAIN.getName(), getMain());
-          put(ParticipantContactPositionOptions.SECOND.getName(), getSecond());
-          put(ParticipantContactPositionOptions.THIRD.getName(), getThird());
-          put(ParticipantContactPositionOptions.FOURTH.getName(), getFourth());
-          put(ParticipantContactPositionOptions.FIFTH.getName(), getFifth());
-        }
-      }).get(position);
+  public ParticipantContactItem<T> getItemByPosition(ParticipantContactPositionOptions position){
+    HashMap<ParticipantContactPositionOptions, ParticipantContactItem<T>> map = new HashMap<>();
+    map.put(ParticipantContactPositionOptions.MAIN, getMain());
+    map.put(ParticipantContactPositionOptions.SECOND, getSecond());
+    map.put(ParticipantContactPositionOptions.THIRD, getThird());
+    map.put(ParticipantContactPositionOptions.FOURTH, getFourth());
+    map.put(ParticipantContactPositionOptions.FIFTH, getFifth());
+    return map.get(position);
   }
 
   public ParticipantContactItem<T> getNotMainItem(String position){
-    return
-      (new HashMap<String, ParticipantContactItem<T>>(){
-        {
-          put(ParticipantContactPositionOptions.SECOND.getName(), getSecond());
-          put(ParticipantContactPositionOptions.THIRD.getName(), getThird());
-          put(ParticipantContactPositionOptions.FOURTH.getName(), getFourth());
-          put(ParticipantContactPositionOptions.FIFTH.getName(), getFifth());
-        }
-      }).get(position);
+    //TODO check usefull
+    HashMap<ParticipantContactPositionOptions, ParticipantContactItem<T>> map = new HashMap<>();
+    map.put(ParticipantContactPositionOptions.SECOND, getSecond());
+    map.put(ParticipantContactPositionOptions.THIRD, getThird());
+    map.put(ParticipantContactPositionOptions.FOURTH, getFourth());
+    map.put(ParticipantContactPositionOptions.FIFTH, getFifth());
+    return map.get(position);
   }
 
-//  public static String serialize(ParticipantContactItemSet participantContactItems){
-//    return (new GsonBuilder()).create().toJson(participantContactItems);
-//  }
-//
-//  public static ParticipantContactItemSet deserialize(String participantContactItemsJson){
-//    return (new GsonBuilder()).create().fromJson(participantContactItemsJson, ParticipantContactItemSet.class);
-//  }
+  public static String serialize(ParticipantContactItemSet participantContactItems){
+    return (new GsonBuilder()).create().toJson(participantContactItems);
+  }
+
+  public static ParticipantContactItemSet deserialize(String participantContactItemsJson){
+    return (new GsonBuilder()).create().fromJson(participantContactItemsJson, ParticipantContactItemSet.class);
+  }
 }
