@@ -2,8 +2,9 @@ package org.ccem.otus.service;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.model.survey.activity.OfflineActivityCollection;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import java.util.HashMap;
@@ -33,4 +34,6 @@ public interface ActivityService {
   HashMap<Long, String> getParticipantFieldCenterByActivity(String acronym, Integer version) throws DataNotFoundException;
 
   void save(String userEmail, OfflineActivityCollection offlineActivityCollection) throws DataNotFoundException;
+
+  OfflineActivityCollectionsDTO fetchOfflineActivityCollections(String userEmail) throws DataNotFoundException;
 }

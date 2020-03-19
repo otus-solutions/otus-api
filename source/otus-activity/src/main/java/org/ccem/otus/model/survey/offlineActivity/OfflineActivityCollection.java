@@ -1,14 +1,14 @@
-package org.ccem.otus.model.survey.activity;
+package org.ccem.otus.model.survey.offlineActivity;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.AnswerFill;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.GeoJson;
 import org.ccem.otus.utils.ObjectIdAdapter;
-import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.time.LocalDateTime;
 import java.util.List;
