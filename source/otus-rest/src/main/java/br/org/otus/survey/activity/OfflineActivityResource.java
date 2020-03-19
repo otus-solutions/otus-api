@@ -35,6 +35,7 @@ public class OfflineActivityResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     OfflineActivityCollection offlineActivityCollection = OfflineActivityCollection.deserialize(offlineActivityCollections);
+    offlineActivityCollection.setAvailableToSynchronize(true);
     activityFacade.save(userEmail, offlineActivityCollection);
     return new Response().buildSuccess().toJson();
   }
