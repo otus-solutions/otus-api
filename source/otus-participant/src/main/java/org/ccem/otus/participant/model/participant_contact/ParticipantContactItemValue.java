@@ -1,11 +1,15 @@
 package org.ccem.otus.participant.model.participant_contact;
 
+import com.google.gson.GsonBuilder;
+
 public abstract class ParticipantContactItemValue {
 
-  protected String objectType;
+  protected static GsonBuilder getGsonBuilder() {
+    return new GsonBuilder();
+  }
 
-  public String getObjectType() {
-    return objectType;
+  protected static GsonBuilder getFrontGsonBuilder() {
+    return new GsonBuilder();
   }
 
   public abstract boolean isValid();

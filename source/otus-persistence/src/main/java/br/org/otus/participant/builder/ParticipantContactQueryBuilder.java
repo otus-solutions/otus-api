@@ -6,9 +6,9 @@ import org.ccem.otus.participant.model.participant_contact.*;
 
 import java.util.ArrayList;
 
-public class ParticipantContactQueryBuilder {
+import static com.mongodb.client.model.Filters.eq;
 
-  public static final String OBJECT_TYPE = "ParticipantContact";
+public class ParticipantContactQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
@@ -29,12 +29,15 @@ public class ParticipantContactQueryBuilder {
   public Document participantContactItemToDocument(ParticipantContactItem participantContactItem, Long recruitmentNumber,
                                                     ParticipantContactTypeOptions contactType, ParticipantContactPositionOptions position){
       Document doc = new Document();
-      doc.put("objectType", OBJECT_TYPE);
       doc.put("recruitmentNumber", recruitmentNumber);
       doc.put("position", position.toString());
       doc.put(contactType.toString().toLowerCase(), Document.parse(participantContactItem.getValue().toJson()));
       doc.put("observation", participantContactItem.getObservation());
       return doc;
+  }
+
+  public void getByRecruitmentNumber(Long recruitmentNumber) {
+
   }
 
 

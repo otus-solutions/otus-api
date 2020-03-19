@@ -1,7 +1,5 @@
 package org.ccem.otus.participant.model.participant_contact;
 
-import com.google.gson.GsonBuilder;
-
 public class ParticipantContactItemValueAddress extends ParticipantContactItemValue {
 
   private String postalCode;
@@ -11,10 +9,6 @@ public class ParticipantContactItemValueAddress extends ParticipantContactItemVa
   private String neighbourhood;
   private String city;
   private String country;
-
-  public ParticipantContactItemValueAddress(){
-    objectType = "Address";
-  }
 
   public String getPostalCode() {
     return postalCode;
@@ -45,11 +39,11 @@ public class ParticipantContactItemValueAddress extends ParticipantContactItemVa
   }
 
   public static String serialize(ParticipantContactItemValueAddress participantContactItemAddress){
-    return (new GsonBuilder()).create().toJson(participantContactItemAddress);
+    return getGsonBuilder().create().toJson(participantContactItemAddress);
   }
 
   public static ParticipantContactItemValueAddress deserialize(String participantContactItemAddressJson){
-    return (new GsonBuilder()).create().fromJson(participantContactItemAddressJson, ParticipantContactItemValueAddress.class);
+    return getGsonBuilder().create().fromJson(participantContactItemAddressJson, ParticipantContactItemValueAddress.class);
   }
 
   @Override
