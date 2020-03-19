@@ -1,10 +1,12 @@
 package br.org.otus.survey.activity;
 
+import br.org.otus.model.User;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.api.ActivityFacade;
+import br.org.otus.user.api.UserFacade;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
 
@@ -20,6 +22,8 @@ public class OfflineActivityResource {
 
   @Inject
   private ActivityFacade activityFacade;
+  @Inject
+  private UserFacade userFacade;
   @Inject
   private SecurityContext securityContext;
 
@@ -44,5 +48,17 @@ public class OfflineActivityResource {
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     OfflineActivityCollectionsDTO offlineActivityCollectionsDTO = activityFacade.fetchOfflineActivityCollections(userEmail);
     return new Response().buildSuccess(OfflineActivityCollectionsDTO.serializeToJsonTree(offlineActivityCollectionsDTO)).toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("synchronize/{recruitmentNumber}/{offlineCollectionId}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String synchronizeOfflineActivities(@Context HttpServletRequest request, @PathParam("recruitmentNumber") long recruitmentNumber, @PathParam("offlineCollectionId") String offlineCollectionId) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    User user = userFacade.fetchByEmail(userEmail);
+    activityFacade.synchronize(recruitmentNumber, offlineCollectionId, user.get_id());
+    return new Response().buildSuccess().toJson();
   }
 }

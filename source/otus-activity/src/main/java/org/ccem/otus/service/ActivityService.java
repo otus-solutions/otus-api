@@ -36,4 +36,8 @@ public interface ActivityService {
   void save(String userEmail, OfflineActivityCollection offlineActivityCollection) throws DataNotFoundException;
 
   OfflineActivityCollectionsDTO fetchOfflineActivityCollections(String userEmail) throws DataNotFoundException;
+
+  OfflineActivityCollection fetchOfflineActivityCollection(String collectionId) throws DataNotFoundException;
+
+  void deactivateOfflineActivityCollection(String offlineCollectionId);
 }

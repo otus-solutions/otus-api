@@ -9,4 +9,8 @@ public interface OfflineActivityDao {
   void persist(OfflineActivityCollection offlineActivityCollection);
 
   OfflineActivityCollectionsDTO fetchByUserId(ObjectId id) throws DataNotFoundException;
+
+  OfflineActivityCollection fetchCollection(String collectionId) throws DataNotFoundException;
+
+  void deactivateOfflineActivityCollection(String offlineCollectionId);
 }

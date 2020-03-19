@@ -8,6 +8,7 @@ import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
 import org.ccem.otus.persistence.OfflineActivityDao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements OfflineActivityDao {
@@ -36,5 +37,26 @@ public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements
     }
 
     return OfflineActivityCollectionsDTO.deserialize(userOfflineCollections.toJson());
+  }
+
+  @Override
+  public OfflineActivityCollection fetchCollection(String collectionId) throws DataNotFoundException {
+    Document userOfflineCollections = collection.find(
+      new Document("_id", new ObjectId(collectionId))
+    ).first();
+
+    if (userOfflineCollections == null) {
+      throw new DataNotFoundException(new Throwable("Offline collection not found"));
+    }
+
+    return OfflineActivityCollection.deserialize(userOfflineCollections.toJson());
+  }
+
+  @Override
+  public void deactivateOfflineActivityCollection(String offlineCollectionId) {
+    collection.updateOne(
+      new Document("_id", new ObjectId(offlineCollectionId)),
+      new Document("$set",new Document("availableToSynchronize",false).append("activities", new ArrayList<>()))
+    );
   }
 }

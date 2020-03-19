@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 import br.org.otus.user.management.ManagementUserService;
 import com.nimbusds.jwt.SignedJWT;
-import org.ccem.otus.importation.activity.ActivityImportDTO;
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -162,17 +162,25 @@ public class ActivityFacade {
     }
   }
 
-  public void synchronize(long rn, ActivityImportDTO activityImportDTO) {
+  public void synchronize(long rn, String offlineCollectionId, ObjectId userId) {
     try {
       Participant participant = participantService.getByRecruitmentNumber(rn);
       participant.setTokenList(new ArrayList<>());
       participant.setPassword(null);
       ActivityCategory activityCategory = activityCategoryService.getDefault();
-      activityImportDTO.getActivityList().forEach(activity -> {
-        activity.setParticipantData(participant);
-        activity.setCategory(activityCategory);
-        activityService.create(activity);
-      });
+      OfflineActivityCollection offlineActivityCollection = activityService.fetchOfflineActivityCollection(offlineCollectionId);
+      if (!offlineActivityCollection.getAvailableToSynchronize()) {
+        throw new HttpResponseException(Validation.build("Offline collection is already synchronized"));
+      } else if(!offlineActivityCollection.getUserId().equals(userId)) {
+        throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
+      } else {
+        offlineActivityCollection.getActivities().forEach(activity -> {
+          activity.setParticipantData(participant);
+          activity.setCategory(activityCategory);
+          activityService.create(activity);
+        });
+        activityService.deactivateOfflineActivityCollection(offlineCollectionId);
+      }
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }

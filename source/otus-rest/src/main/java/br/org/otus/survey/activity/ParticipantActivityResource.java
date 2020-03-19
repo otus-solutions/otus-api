@@ -49,17 +49,6 @@ public class ParticipantActivityResource {
     return new Response().buildSuccess(objectID).toJson();
   }
 
-  @PUT
-  @Secured
-  @Path("offline")
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String synchronizeOfflineActivities(@PathParam("rn") long rn, String surveyActivities) {
-    isValidRecruitmentNumber(rn);
-    ActivityImportDTO activityImportDTO = ActivityImportDTO.deserialize(surveyActivities);
-    activityFacade.synchronize(rn, activityImportDTO);
-    return new Response().buildSuccess().toJson();
-  }
-
   @GET
   @Secured
   @Path("/{id}")

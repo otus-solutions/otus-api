@@ -172,4 +172,14 @@ public class ActivityServiceBean implements ActivityService {
     return offlineActivityDao.fetchByUserId(user.get_id());
   }
 
+  @Override
+  public OfflineActivityCollection fetchOfflineActivityCollection(String collectionId) throws DataNotFoundException {
+    return offlineActivityDao.fetchCollection(collectionId);
+  }
+
+  @Override
+  public void deactivateOfflineActivityCollection(String offlineCollectionId) {
+    offlineActivityDao.deactivateOfflineActivityCollection(offlineCollectionId);
+  }
+
 }

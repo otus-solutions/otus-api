@@ -20,6 +20,7 @@ public class OfflineActivityCollection {
   private LocalDateTime date;
   private List<SurveyActivity> activities;
   private GeoJson geoJson;
+  private Boolean availableToSynchronize;
 
 
   public String getObservation() {
@@ -60,5 +61,17 @@ public class OfflineActivityCollection {
 
   public void setUserId(ObjectId userId) {
     this.userId = userId;
+  }
+
+  public void setAvailableToSynchronize(Boolean availableToSynchronize) {
+    this.availableToSynchronize = availableToSynchronize;
+  }
+
+  public List<SurveyActivity> getActivities() {
+    return activities;
+  }
+
+  public Boolean getAvailableToSynchronize() {
+    return availableToSynchronize;
   }
 }
