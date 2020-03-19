@@ -16,8 +16,8 @@ public class ParticipantContactFacade {
   @Inject
   private ParticipantContactService participantContactService;
 
-  public void create(String participantContactJson){
-    participantContactService.create(ParticipantContact.deserialize(participantContactJson));
+  public String create(String participantContactJson){
+    return participantContactService.create(ParticipantContact.deserialize(participantContactJson)).toString();
   }
 
   public void updateMainContact(String participantContactDtoJson) {

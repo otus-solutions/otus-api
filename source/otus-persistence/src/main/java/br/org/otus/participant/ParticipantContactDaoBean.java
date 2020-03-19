@@ -2,11 +2,14 @@ package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.participant.builder.ParticipantContactQueryBuilder;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.model.participant_contact.*;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
@@ -33,8 +36,11 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void create(ParticipantContact participantContact) {
-    collection.insertMany(new ParticipantContactQueryBuilder().participantContactToDocuments(participantContact));
+  public ObjectId create(ParticipantContact participantContact) {
+    Document parsed = Document.parse(ParticipantContact.serialize(participantContact));
+    collection.insertOne(parsed);
+    return parsed.getObjectId(ID_FIELD_NAME);
+    //collection.insertMany(new ParticipantContactQueryBuilder().participantContactToDocuments(participantContact));
   }
 
   @Override
@@ -136,9 +142,14 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    Document result = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)).first();
+    FindIterable<Document> find = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber));
+    MongoCursor<Document> iterator = find.iterator();
+    while (iterator.hasNext()) {
+      Document document = iterator.next();
+      System.out.println("");
+    }
     try{
-      return ParticipantContact.deserialize(result.toJson());
+      return ParticipantContact.deserialize(find.first().toJson());
     }
     catch (NullPointerException e){
       throw new DataNotFoundException("No participant contact found with recruitment number {" + recruitmentNumber.toString() + "}");

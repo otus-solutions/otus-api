@@ -17,8 +17,8 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   private ParticipantContactDao participantContactDao;
 
   @Override
-  public void create(ParticipantContact participantContact) {
-    participantContactDao.create(participantContact);
+  public ObjectId create(ParticipantContact participantContact) {
+    return participantContactDao.create(participantContact);
   }
 
   @Override
