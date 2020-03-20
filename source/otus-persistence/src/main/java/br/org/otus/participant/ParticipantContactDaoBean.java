@@ -33,19 +33,19 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    checkDtoItemPositionExistence(participantContactDto);
+    checkDtoItemPositionExistenceForAdd(participantContactDto);
     updateEmail(participantContactDto);
   }
 
   @Override
   public void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    checkDtoItemPositionExistence(participantContactDto);
+    checkDtoItemPositionExistenceForAdd(participantContactDto);
     updateAddress(participantContactDto);
   }
 
   @Override
   public void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    checkDtoItemPositionExistence(participantContactDto);
+    checkDtoItemPositionExistenceForAdd(participantContactDto);
     updatePhoneNumber(participantContactDto);
   }
 
@@ -129,18 +129,41 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   @Override
   public void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-//    ParticipantContact participantContact = get(participantContactDto.getObjectId());
-//    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
-//
-//    UpdateResult updateResult = collection.updateOne(
-//      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-//      new Document("$pull",
-//        new Document(fieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getContactValueAttribute()))
-//    );
-//
-//    if(updateResult.getMatchedCount() == 0){
-//      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
-//    }
+    ParticipantContact participantContact = getParticipantContact(participantContactDto.getObjectId());
+    String contactType = participantContactDto.getType();
+
+    ParticipantContactPositionOptions lastItemPosition = participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getPositionOfLastItem();
+    int lastItemRanking = lastItemPosition.getRanking();
+    int itemRankingToDelete = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+    if(itemRankingToDelete > lastItemRanking){
+      throw new DataFormatException(String.format("Its not possible delete %s at %s position", contactType, participantContactDto.getPosition()));
+    }
+
+    for (int ranking = itemRankingToDelete+1; ranking <= lastItemRanking; ranking++) {
+      decreaseItemPosition(participantContact, contactType, ranking);
+    }
+
+    String fieldToDelete = contactType + "." + lastItemPosition.getName();
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
+      new Document("$unset", new Document(fieldToDelete, ""))
+    );
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
+    }
+  }
+
+  private void decreaseItemPosition(ParticipantContact participantContact, String contactType, int positionRanking){
+    String prevFieldToUpdate = contactType + "." + ParticipantContactPositionOptions.fromInt(positionRanking-1).getName();
+    String itemValueJson = ParticipantContactItem.serialize(participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getItemByPosition(ParticipantContactPositionOptions.fromInt(positionRanking)));
+    collection.updateOne(
+      eq(ID_FIELD_NAME, participantContact.getObjectId()),
+      new Document("$set", new Document(prevFieldToUpdate, Document.parse(itemValueJson))
+    ));
   }
 
   @Override
@@ -165,13 +188,13 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     }
   }
 
-  private void checkDtoItemPositionExistence(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+  private void checkDtoItemPositionExistenceForAdd(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
       .getParticipantContactItemSetByType(participantContactDto.getType())
       .getPositionOfLastItem().getRanking();
-    int newItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+    int dtoItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
 
-    if(newItemRanking <= lastItemRanking){
+    if(dtoItemRanking <= lastItemRanking){
       throw new DataFormatException(String.format("Its not possible add %s at %s position",
         participantContactDto.getType(), participantContactDto.getPosition()));
     }
