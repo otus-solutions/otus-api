@@ -1,8 +1,8 @@
 package org.ccem.otus.persistence.dto;
 
+import com.google.gson.internal.LinkedTreeMap;
 import org.bson.types.ObjectId;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
+import org.ccem.otus.participant.model.participant_contact.*;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,35 +16,78 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import static org.junit.Assert.*;
 
-//@RunWith(PowerMockRunner.class)
+@RunWith(PowerMockRunner.class)
 public class ParticipantContactDtoTest {
 
   private static final String ID = "5e13997795818e14a91a5268";
+  private static final String CONTACT_ITEM_VALUE = "{ \"content\" : \"email@otus\" }";
+  private static final String CONTACT_ITEM_OBSERVATION = "home";
   private static final String TYPE = ParticipantContactTypeOptions.EMAIL.getName();
-  private static final String INVALID_STRING_VALUE_FOR_FIELD = "abc";
-  private static final Integer SECONDARY_CONTACT_INDEX = 0;
-  private static final Integer INVALID_SECONDARY_CONTACT_INDEX = -1;
+  private static final String POSITION = ParticipantContactPositionOptions.SECOND.getName();
+  private static final String INVALID_STRING_VALUE_FOR_ANY_FIELD = "abc";
 
-  //@InjectMocks
+  @InjectMocks
   private ParticipantContactDto participantContactDto = PowerMockito.spy(new ParticipantContactDto());
-  //@Mock
+  @Mock
   private ParticipantContactItem participantContactItem = PowerMockito.spy(new ParticipantContactItem());
 
-  //@Before
+  @Before
   public void setUp(){
     Whitebox.setInternalState(participantContactDto, "_id", ID);
-    Whitebox.setInternalState(participantContactDto, "type", TYPE);
-    Whitebox.setInternalState(participantContactDto, "participantContactItem", participantContactItem);
-    Whitebox.setInternalState(participantContactDto, "secondaryContactIndex", SECONDARY_CONTACT_INDEX);
+    Whitebox.setInternalState(participantContactDto, "position",  POSITION);
+    Whitebox.setInternalState(participantContactDto, "contactItem", participantContactItem);
   }
 
-  //@Test
+  @Test
+  public void test(){
+    String json = "{\n" +
+      "\t\"_id\": \"5e73edc971d5c96bce618524\",\n" +
+      "\t\"position\": \"main\",\n" +
+      "\t\"contactItem\": {\n" +
+      "\t    \"value\": { \"content\": \"new main email\" },\n" +
+      "\t    \"observation\": \"new obs\"\n" +
+      "\t  }\n" +
+      "}";
+    ParticipantContactDto dto = ParticipantContactDto.deserialize(json);
+    ParticipantContactItem item = new ParticipantContactItem<Email>();
+    item.setValue(new Email());
+    item.setFromLinkedTreeMap(dto.getContactItem());
+    String itemJson = ParticipantContactItem.serialize(item);
+    assertTrue(dto instanceof ParticipantContactDto);
+  }
+
+  @Test
+  public void test_address(){
+    String json = "{\n" +
+      "\t\"_id\": \"5e73edc971d5c96bce618524\",\n" +
+      "\t\"position\": \"main\",\n" +
+      "\t\"contactItem\": {\n" +
+      "\t    \"value\": {\n" +
+      "\t        \"postalCode\": \"90010-907\",\n" +
+      "\t        \"street\": \"Rua dos Bobos\",\n" +
+      "\t        \"streetNumber\": 0,\n" +
+      "\t        \"complements\": \"Feita com muito esmero!\",\n" +
+      "\t        \"neighbourhood\": \"Centro\",\n" +
+      "\t        \"city\": \"Porto Alegre\",\n" +
+      "\t        \"country\": \"Brasil\"\n" +
+      "\t    },\n" +
+      "\t    \"observation\": \"new obs\"\n" +
+      "\t  }\n" +
+      "}";
+    ParticipantContactDto dto = ParticipantContactDto.deserialize(json);
+    ParticipantContactItem item = new ParticipantContactItem<Address>();
+    item.setValue(new Address());
+    item.setFromLinkedTreeMap(dto.getContactItem());
+    String itemJson = ParticipantContactItem.serialize(item);
+    assertTrue(dto instanceof ParticipantContactDto);
+  }
+
+  @Test
   public void test_for_invoke_getters(){
     assertEquals(ID, participantContactDto.getIdStr());
     assertEquals(new ObjectId(ID), participantContactDto.getObjectId());
-    assertEquals(TYPE, participantContactDto.getType());
-    assertEquals(participantContactItem, participantContactDto.getParticipantContactItem());
-    //assertEquals(SECONDARY_CONTACT_INDEX, participantContactDto.getSecondaryContactIndex());
+    assertEquals(POSITION, participantContactDto.getPosition());
+    //assertEquals(participantContactItem, participantContactDto.getContactItem());
   }
 
   //@Test
@@ -71,13 +114,13 @@ public class ParticipantContactDtoTest {
 
   //@Test
   public void isValid_method_should_throw_exception_if_ID_is_not_a_hexString(){
-    Whitebox.setInternalState(participantContactDto, "_id", INVALID_STRING_VALUE_FOR_FIELD);
+    Whitebox.setInternalState(participantContactDto, "_id", INVALID_STRING_VALUE_FOR_ANY_FIELD);
     assertFalse(participantContactDto.isValid());
   }
 
   //@Test
   public void isValid_method_should_return_FALSE_in_case_invalid_type(){
-    Whitebox.setInternalState(participantContactDto, "type", INVALID_STRING_VALUE_FOR_FIELD);
+    Whitebox.setInternalState(participantContactDto, "type", INVALID_STRING_VALUE_FOR_ANY_FIELD);
     assertFalse(participantContactDto.isValid());
   }
 
@@ -99,10 +142,4 @@ public class ParticipantContactDtoTest {
     assertTrue(participantContactDto.isValid());
   }
 
-  //@Test
-  public void isValid_method_should_return_FALSE_in_case_invalid_secondaryContactIndex() throws Exception {
-    when(participantContactItem, "isValid").thenReturn(true);
-    Whitebox.setInternalState(participantContactDto, "secondaryContactIndex", INVALID_SECONDARY_CONTACT_INDEX);
-    assertFalse(participantContactDto.isValid());
-  }
 }

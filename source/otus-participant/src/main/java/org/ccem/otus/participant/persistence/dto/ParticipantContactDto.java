@@ -1,18 +1,16 @@
 package org.ccem.otus.participant.persistence.dto;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.LinkedTreeMap;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.Dto;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
+import org.ccem.otus.participant.model.participant_contact.*;
 
 public class ParticipantContactDto implements Dto {
 
   private String _id;
-  private String type;
   private String position;
-  private ParticipantContactItem participantContactItem;
+  private Object contactItem;
 
   public String getIdStr() {
     return _id;
@@ -22,16 +20,19 @@ public class ParticipantContactDto implements Dto {
     return new ObjectId(_id);
   }
 
-  public String getType() {
-    return type;
-  }
-
   public String getPosition() {
     return position;
   }
 
-  public ParticipantContactItem getParticipantContactItem() {
-    return participantContactItem;
+  public LinkedTreeMap getContactItem() {
+    return (LinkedTreeMap)contactItem;
+  }
+
+  public String contactItemToJson() {
+    return "{\n" +
+      "    \"value\": "+ getContactItem().get("value") +",\n" +
+      "    \"observation\": \""+getContactItem().get("observation")+"\"\n" +
+      "  }";
   }
 
   public static String serialize(ParticipantContactDto participantContactDto){
@@ -45,8 +46,7 @@ public class ParticipantContactDto implements Dto {
   @Override
   public Boolean isValid() {
     return ObjectId.isValid(getIdStr()) &&
-      ParticipantContactTypeOptions.contains(getType()) &&
-      ParticipantContactTypeOptions.contains(getPosition()) &&
-      (participantContactItem ==null || participantContactItem.isValid());
+      ParticipantContactPositionOptions.contains(getPosition()) ;//&&
+      //(getContactItem()!=null && getContactItem().isValid());
   }
 }
