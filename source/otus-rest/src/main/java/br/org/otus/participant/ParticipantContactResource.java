@@ -80,7 +80,7 @@ public class ParticipantContactResource {
   @Path("/swap")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String swapMainContactWithSecondary(String participantContactDtoJson) {
+  public String swapMainContact(String participantContactDtoJson) {
     participantContactFacade.swapMainContactWithSecondary(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
@@ -94,7 +94,7 @@ public class ParticipantContactResource {
   }
 
   @DELETE
-  @Path("/secondary")
+  @Path("/non-main")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String deleteNonMainContact(String participantContactDtoJson) {
