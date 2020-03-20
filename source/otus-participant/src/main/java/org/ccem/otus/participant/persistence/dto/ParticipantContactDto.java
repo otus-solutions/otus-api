@@ -11,6 +11,7 @@ public class ParticipantContactDto implements Dto {
   private String _id;
   private String position;
   private Object contactItem;
+  private String type;
 
   public String getIdStr() {
     return _id;
@@ -26,6 +27,10 @@ public class ParticipantContactDto implements Dto {
 
   public LinkedTreeMap getContactItem() {
     return (LinkedTreeMap)contactItem;
+  }
+
+  public String getType() {
+    return type;
   }
 
   public String contactItemToJson() {
