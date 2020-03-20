@@ -12,9 +12,9 @@ public class ParticipantContact {
   private ObjectId _id;
   private String objectType;
   private Long recruitmentNumber;
-  private ParticipantContactItemSet<ParticipantContactItemValueEmail> email;
-  private ParticipantContactItemSet<ParticipantContactItemValueAddress> address;
-  private ParticipantContactItemSet<ParticipantContactItemValuePhoneNumber> phoneNumber;
+  private ParticipantContactItemSet<Email> email;
+  private ParticipantContactItemSet<Address> address;
+  private ParticipantContactItemSet<PhoneNumber> phoneNumber;
 
   public ObjectId getObjectId() {
     return _id;
@@ -28,15 +28,15 @@ public class ParticipantContact {
     return recruitmentNumber;
   }
 
-  public ParticipantContactItemSet<ParticipantContactItemValueEmail> getEmail() {
+  public ParticipantContactItemSet<Email> getEmail() {
     return email;
   }
 
-  public ParticipantContactItemSet<ParticipantContactItemValueAddress> getAddress() {
+  public ParticipantContactItemSet<Address> getAddress() {
     return address;
   }
 
-  public ParticipantContactItemSet<ParticipantContactItemValuePhoneNumber> getPhoneNumber() {
+  public ParticipantContactItemSet<PhoneNumber> getPhoneNumber() {
     return phoneNumber;
   }
 

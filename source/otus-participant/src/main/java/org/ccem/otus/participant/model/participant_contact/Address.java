@@ -1,6 +1,8 @@
 package org.ccem.otus.participant.model.participant_contact;
 
-public class ParticipantContactItemValueAddress extends ParticipantContactItemValue {
+import com.google.gson.internal.LinkedTreeMap;
+
+public class Address extends ParticipantContactItemValue {
 
   private String postalCode;
   private String street;
@@ -38,21 +40,32 @@ public class ParticipantContactItemValueAddress extends ParticipantContactItemVa
     return country;
   }
 
-  public static String serialize(ParticipantContactItemValueAddress participantContactItemAddress){
+  public static String serialize(Address participantContactItemAddress){
     return getGsonBuilder().create().toJson(participantContactItemAddress);
   }
 
-  public static ParticipantContactItemValueAddress deserialize(String participantContactItemAddressJson){
-    return getGsonBuilder().create().fromJson(participantContactItemAddressJson, ParticipantContactItemValueAddress.class);
+  public static Address deserialize(String participantContactItemAddressJson){
+    return getGsonBuilder().create().fromJson(participantContactItemAddressJson, Address.class);
   }
 
   @Override
   public boolean isValid() {
     return true;
+  }//TODO
+
+  @Override
+  public void setFromLinkedTreeMap(LinkedTreeMap map) {
+    postalCode = (String)map.get("postalCode");
+    street = (String)map.get("street");
+    streetNumber = ((Double) map.get("streetNumber")).intValue();
+    complements = (String)map.get("complements");
+    neighbourhood = (String)map.get("neighbourhood");
+    city = (String)map.get("city");
+    country = (String)map.get("country");
   }
 
   @Override
   public String toJson() {
-    return ParticipantContactItemValueAddress.serialize(this);
+    return Address.serialize(this);
   }
 }

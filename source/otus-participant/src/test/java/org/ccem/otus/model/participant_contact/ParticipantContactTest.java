@@ -23,7 +23,7 @@ public class ParticipantContactTest {
 
   private ParticipantContact participantContact = new ParticipantContact();
   private ParticipantContactItemSet<ParticipantContactItemValueString> emails = PowerMockito.spy(new ParticipantContactItemSet<>());
-  private ParticipantContactItemSet<ParticipantContactItemValueAddress> addresses = PowerMockito.spy(new ParticipantContactItemSet<>());
+  private ParticipantContactItemSet<Address> addresses = PowerMockito.spy(new ParticipantContactItemSet<>());
   private ParticipantContactItemSet<ParticipantContactItemValueString> phoneNumbers = PowerMockito.spy(new ParticipantContactItemSet<>());
 
   @Test
