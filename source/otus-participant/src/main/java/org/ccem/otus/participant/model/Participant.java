@@ -136,4 +136,12 @@ public class Participant {
     builder.registerTypeAdapter(Long.class, new LongAdapter());
     return builder;
   }
+
+  public void setTokenList(ArrayList<String> tokenList) {
+    this.tokenList = tokenList;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }

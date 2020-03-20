@@ -1,6 +1,7 @@
 package br.org.otus.survey.activity.api;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,14 +11,19 @@ import javax.inject.Inject;
 
 import br.org.otus.user.management.ManagementUserService;
 import com.nimbusds.jwt.SignedJWT;
+import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import com.google.gson.JsonSyntaxException;
@@ -36,6 +42,9 @@ public class ActivityFacade {
 
   @Inject
   private ManagementUserService managementUserService;
+
+  @Inject
+  private ActivityCategoryService activityCategoryService;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
@@ -153,4 +162,43 @@ public class ActivityFacade {
     }
   }
 
+  public void synchronize(long rn, String offlineCollectionId, ObjectId userId) {
+    try {
+      Participant participant = participantService.getByRecruitmentNumber(rn);
+      participant.setTokenList(new ArrayList<>());
+      participant.setPassword(null);
+      ActivityCategory activityCategory = activityCategoryService.getDefault();
+      OfflineActivityCollection offlineActivityCollection = activityService.fetchOfflineActivityCollection(offlineCollectionId);
+      if (!offlineActivityCollection.getAvailableToSynchronize()) {
+        throw new HttpResponseException(Validation.build("Offline collection is already synchronized"));
+      } else if(!offlineActivityCollection.getUserId().equals(userId)) {
+        throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
+      } else {
+        offlineActivityCollection.getActivities().forEach(activity -> {
+          activity.setParticipantData(participant);
+          activity.setCategory(activityCategory);
+          activityService.create(activity);
+        });
+        activityService.deactivateOfflineActivityCollection(offlineCollectionId);
+      }
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void save(String userEmail, OfflineActivityCollection offlineActivityCollection) {
+    try {
+      activityService.save(userEmail, offlineActivityCollection);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public OfflineActivityCollectionsDTO fetchOfflineActivityCollections(String userEmail) {
+    try {
+      return activityService.fetchOfflineActivityCollections(userEmail);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 }
