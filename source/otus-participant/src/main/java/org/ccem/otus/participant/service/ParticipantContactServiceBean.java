@@ -43,19 +43,19 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
 
   @Override
   public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDtoForAdd(participantContactDto);
+    validateDtoForNonMainContactMethod(participantContactDto);
     participantContactDao.addNonMainEmail(participantContactDto);
   }
 
   @Override
   public void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDtoForAdd(participantContactDto);
+    validateDtoForNonMainContactMethod(participantContactDto);
     participantContactDao.addNonMainAddress(participantContactDto);
   }
 
   @Override
   public void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDtoForAdd(participantContactDto);
+    validateDtoForNonMainContactMethod(participantContactDto);
     participantContactDao.addNonMainPhoneNumber(participantContactDto);
   }
 
@@ -72,7 +72,7 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
 
   @Override
   public void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
+    validateDtoForNonMainContactMethod(participantContactDto);
     participantContactDao.deleteNonMainContact(participantContactDto);
   }
 
@@ -92,9 +92,10 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
     }
   }
 
-  private void validateDtoForAdd(ParticipantContactDto participantContactDto) throws DataFormatException {
-    if(participantContactDto.getPosition().equals(ParticipantContactPositionOptions.MAIN.getName()) || !participantContactDto.isValid()){
-      throw new DataFormatException("ParticipantContactDto is invalid");
+  private void validateDtoForNonMainContactMethod(ParticipantContactDto participantContactDto) throws DataFormatException {
+    validateDto(participantContactDto);
+    if(participantContactDto.getPosition().equals(ParticipantContactPositionOptions.MAIN.getName())){
+      throw new DataFormatException("Its not possible execute this request for participantContact at main position.");
     }
   }
 }
