@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public enum ParticipantContactTypeOptions {
 
-  EMAIL("EMAIL"),
-  ADDRESS("ADDRESS"),
-  PHONE("PHONE");
+  EMAIL("email"),
+  ADDRESS("address"),
+  PHONE("phoneNumber");
 
   private String name;
 
@@ -22,6 +22,16 @@ public enum ParticipantContactTypeOptions {
     return Arrays.asList(ParticipantContactTypeOptions.values()).stream()
       .map(ParticipantContactTypeOptions::getName)
       .anyMatch(otherValue::equals);
+  }
+
+  public static ParticipantContactTypeOptions fromString(String value){
+    //TODO write loop like contains method
+    for (ParticipantContactTypeOptions option : ParticipantContactTypeOptions.values()) {
+      if(option.getName().equals(value)){
+        return option;
+      }
+    }
+    throw new IllegalArgumentException("String value " + value + " is not a ParticipantContactTypeOptions valid enum");
   }
 
 }

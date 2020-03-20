@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.HashMap;
 
@@ -15,6 +16,10 @@ public class ParticipantContactItem<T extends ParticipantContactItemValue> {
 
   public String getObservation() {
     return observation;
+  }
+
+  public void setValue(T value) {
+    this.value = value;
   }
 
   public HashMap<String, Object> getAllMyAttributes(){
@@ -32,6 +37,11 @@ public class ParticipantContactItem<T extends ParticipantContactItemValue> {
         put("value", getValue());
       }
     };
+  }
+
+  public void setFromLinkedTreeMap(LinkedTreeMap map) {
+    value.setFromLinkedTreeMap((LinkedTreeMap)map.get("value"));
+    observation = (String)map.get("observation");
   }
 
   public static String serialize(ParticipantContactItem participantContactItem){
