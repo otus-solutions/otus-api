@@ -1,22 +1,11 @@
 package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.List;
-import java.util.zip.DataFormatException;
-
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -45,10 +34,10 @@ public class ParticipantContactServiceBeanTest {
 
 
   //@Test
-  public void addNonMainContact_method_invoke_addNonMainContact_from_participantContactDto() throws Exception {
+  public void addNonMainEmail_method_invoke_addNonMainEmail_from_participantContactDto() throws Exception {
     doReturn(true).when(participantContactDto).isValid();
-    participantContactServiceBean.addNonMainContact(participantContactDto);
-    verify(participantContactDao, times(1)).addNonMainContact(participantContactDto);
+    participantContactServiceBean.addNonMainEmail(participantContactDto);
+    verify(participantContactDao, times(1)).addNonMainEmail(participantContactDto);
   }
 
   //@Test
@@ -73,13 +62,13 @@ public class ParticipantContactServiceBeanTest {
 
   //@Test
   public void get_method_invoke_get_from_participantContactDto() throws Exception {
-    participantContactServiceBean.get(PARTICIPANT_CONTACT_OID);
-    verify(participantContactDao, times(1)).get(PARTICIPANT_CONTACT_OID);
+    participantContactServiceBean.getParticipantContact(PARTICIPANT_CONTACT_OID);
+    verify(participantContactDao, times(1)).getParticipantContact(PARTICIPANT_CONTACT_OID);
   }
 
   //@Test
   public void getByRecruitmentNumber_method_invoke_getByRecruitmentNumber_from_participantContactDto() throws Exception {
-    participantContactServiceBean.getByRecruitmentNumber(RN);
-    verify(participantContactDao, times(1)).getByRecruitmentNumber(RN);
+    participantContactServiceBean.getParticipantContactByRecruitmentNumber(RN);
+    verify(participantContactDao, times(1)).getParticipantContactByRecruitmentNumber(RN);
   }
 }

@@ -49,9 +49,9 @@ public class ParticipantContactResourceTest {
 //  }
 //
 //  @Test
-//  public void addNonMainContact_method_should_addNonMainContact_participantContact_by_participantContactFacade() {
-//    participantContactResource.addNonMainContact(participantContactJson);
-//    verify(participantContactFacade, times(1)).addNonMainContact(participantContactJson);
+//  public void addNonMainEmail_method_should_addNonMainEmail_participantContact_by_participantContactFacade() {
+//    participantContactResource.addNonMainEmail(participantContactJson);
+//    verify(participantContactFacade, times(1)).addNonMainEmail(participantContactJson);
 //  }
 //
 //  @Test

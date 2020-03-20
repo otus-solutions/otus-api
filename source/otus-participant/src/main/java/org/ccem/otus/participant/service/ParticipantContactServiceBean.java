@@ -3,6 +3,7 @@ package org.ccem.otus.participant.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactPositionOptions;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
@@ -18,6 +19,7 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
 
   @Override
   public ObjectId create(ParticipantContact participantContact) {
+    //TODO check if main values are not null
     return participantContactDao.create(participantContact);
   }
 
@@ -40,9 +42,21 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void addNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.addNonMainContact(participantContactDto);
+  public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForAdd(participantContactDto);
+    participantContactDao.addNonMainEmail(participantContactDto);
+  }
+
+  @Override
+  public void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForAdd(participantContactDto);
+    participantContactDao.addNonMainAddress(participantContactDto);
+  }
+
+  @Override
+  public void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForAdd(participantContactDto);
+    participantContactDao.addNonMainPhoneNumber(participantContactDto);
   }
 
   @Override
@@ -63,17 +77,23 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException {
-    return participantContactDao.get(participantContactOID);
+  public ParticipantContact getParticipantContact(ObjectId participantContactOID) throws DataNotFoundException {
+    return participantContactDao.getParticipantContact(participantContactOID);
   }
 
   @Override
-  public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    return participantContactDao.getByRecruitmentNumber(recruitmentNumber);
+  public ParticipantContact getParticipantContactByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return participantContactDao.getParticipantContactByRecruitmentNumber(recruitmentNumber);
   }
 
   private void validateDto(ParticipantContactDto participantContactDto) throws DataFormatException {
     if(!participantContactDto.isValid()){
+      throw new DataFormatException("ParticipantContactDto is invalid");
+    }
+  }
+
+  private void validateDtoForAdd(ParticipantContactDto participantContactDto) throws DataFormatException {
+    if(participantContactDto.getPosition().equals(ParticipantContactPositionOptions.MAIN.getName()) || !participantContactDto.isValid()){
       throw new DataFormatException("ParticipantContactDto is invalid");
     }
   }

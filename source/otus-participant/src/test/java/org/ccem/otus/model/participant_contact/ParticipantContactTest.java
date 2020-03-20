@@ -30,7 +30,7 @@ public class ParticipantContactTest {
   public void deserialize_static_method(){
     String participantContactJson = "{\n" +
       "  \"objectType\": \"ParticipantContact\",\n" +
-      "  \"recruitmentNumber\": 1234567,\n" +
+      "  \"recruitmentNumber\": 999,\n" +
       "  \"email\": {\n" +
       "    \"main\": {\n" +
       "      \"value\": { \"content\": \"main.email@gmail.com\" },\n" +
@@ -56,7 +56,7 @@ public class ParticipantContactTest {
       "        \"city\": \"Porto Alegre\",\n" +
       "        \"country\": \"Brasil\"\n" +
       "      },\n" +
-      "      \"observations\": \"Casa\"\n" +
+      "      \"observation\": \"Casa\"\n" +
       "    },\n" +
       "    \"second:\": {\n" +
       "      \"value\": {\n" +
@@ -68,7 +68,7 @@ public class ParticipantContactTest {
       "        \"city\": \"Porto Alegre\",\n" +
       "        \"country\": \"Brasil\"\n" +
       "      },\n" +
-      "      \"observations\": \"Casa da vizinha da minha tia.\"\n" +
+      "      \"observation\": \"Casa da vizinha da minha tia.\"\n" +
       "    }\n" +
       "  },\n" +
       "  \"phoneNumber\": {\n" +
@@ -83,6 +83,9 @@ public class ParticipantContactTest {
       "  }\n" +
       "}";
     ParticipantContact result = ParticipantContact.deserialize(participantContactJson);
+    ParticipantContactPositionOptions lastEmail = result.getEmail().getPositionOfLastItem();
+    ParticipantContactPositionOptions lastAddress = result.getAddress().getPositionOfLastItem();
+    ParticipantContactPositionOptions lastPhone = result.getPhoneNumber().getPositionOfLastItem();
     assertTrue(result instanceof ParticipantContact);
   }
 

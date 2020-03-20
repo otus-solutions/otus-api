@@ -2,6 +2,7 @@ package br.org.otus.participant.api;
 
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
+import br.org.otus.response.info.Validation;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
@@ -24,8 +25,11 @@ public class ParticipantContactFacade {
     try{
       participantContactService.updateEmail(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException | DataFormatException e){
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -33,8 +37,11 @@ public class ParticipantContactFacade {
     try{
       participantContactService.updateAddress(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException | DataFormatException e){
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -42,17 +49,47 @@ public class ParticipantContactFacade {
     try{
       participantContactService.updatePhoneNumber(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException | DataFormatException e){
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
-  public void addNonMainContact(String participantContactDtoJson) {
+  public void addNonMainEmail(String participantContactDtoJson) {
     try{
-      participantContactService.addNonMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.addNonMainEmail(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException | DataFormatException e){
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void addNonMainAddress(String participantContactDtoJson) {
+    try{
+      participantContactService.addNonMainAddress(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void addNonMainPhoneNumber(String participantContactDtoJson) {
+    try{
+      participantContactService.addNonMainPhoneNumber(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -60,8 +97,11 @@ public class ParticipantContactFacade {
     try{
       participantContactService.swapMainContactWithSecondary(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
-    catch (DataNotFoundException | DataFormatException e){
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -83,21 +123,24 @@ public class ParticipantContactFacade {
     }
   }
 
-  public ParticipantContact get(String participantContactID) {
+  public ParticipantContact getParticipantContact(String participantContactID) {
     try{
-      return participantContactService.get(new ObjectId(participantContactID));
+      return participantContactService.getParticipantContact(new ObjectId(participantContactID));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public ParticipantContact getByRecruitmentNumber(String recruitmentNumber) {
+  public ParticipantContact getParticipantContactByRecruitmentNumber(String recruitmentNumber) {
     try{
-      return participantContactService.getByRecruitmentNumber(Long.parseLong(recruitmentNumber));
+      return participantContactService.getParticipantContactByRecruitmentNumber(Long.parseLong(recruitmentNumber));
     }
-    catch (DataNotFoundException | NumberFormatException e){
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (NumberFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 }

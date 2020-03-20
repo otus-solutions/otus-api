@@ -1,9 +1,6 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.participant.builder.ParticipantContactQueryBuilder;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -31,6 +28,36 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     Document parsed = Document.parse(ParticipantContact.serialize(participantContact));
     collection.insertOne(parsed);
     return parsed.getObjectId(ID_FIELD_NAME);
+  }
+
+  @Override
+  public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistence(participantContactDto);
+    updateEmail(participantContactDto);
+  }
+
+  @Override
+  public void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistence(participantContactDto);
+    updateAddress(participantContactDto);
+  }
+
+  @Override
+  public void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistence(participantContactDto);
+    updatePhoneNumber(participantContactDto);
+  }
+
+  private void checkDtoItemPositionExistence(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
+      .getParticipantContactItemSetByType(participantContactDto.getType())
+      .getPositionOfLastItem().getRanking();
+    int newItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+
+    if(newItemRanking <= lastItemRanking){
+      throw new DataFormatException(String.format("Its not possible add %s at %s position",
+        participantContactDto.getType(), participantContactDto.getPosition()));
+    }
   }
 
   @Override
@@ -67,18 +94,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     }
   }
 
-  @Override
-  public void addNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-//    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
-//    UpdateResult updateResult = collection.updateOne(
-//      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-//      new Document("$addToSet",
-//        new Document(fieldToUpdate, participantContactDto.getParticipantContactItem().getAllMyAttributes()))
-//    );
-//    if(updateResult.getMatchedCount() == 0){
-//      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
-//    }
-  }
+
 
   @Override
   public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
@@ -128,7 +144,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException {
+  public ParticipantContact getParticipantContact(ObjectId participantContactOID) throws DataNotFoundException {
     try{
       Document result = collection.find(eq(ID_FIELD_NAME, participantContactOID)).first();
       return ParticipantContact.deserialize(result.toJson());
@@ -139,7 +155,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+  public ParticipantContact getParticipantContactByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
     try{
       Document result = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)).first();
       return ParticipantContact.deserialize(result.toJson());

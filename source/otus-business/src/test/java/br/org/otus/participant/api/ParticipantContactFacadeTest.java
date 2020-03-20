@@ -61,15 +61,15 @@ public class ParticipantContactFacadeTest {
 //  }
 //
 //  @Test
-//  public void addNonMainContact_method_should_invoke_addNonMainContact_from_participantContactService() throws Exception {
-//    participantContactFacade.addNonMainContact(participantContactJson);
-//    verify(participantContactService, times(1)).addNonMainContact(Mockito.any());
+//  public void addNonMainEmail_method_should_invoke_addNonMainEmail_from_participantContactService() throws Exception {
+//    participantContactFacade.addNonMainEmail(participantContactJson);
+//    verify(participantContactService, times(1)).addNonMainEmail(Mockito.any());
 //  }
 //
 //  @Test(expected = HttpResponseException.class)
-//  public void addNonMainContact_method_should_handle_DataNotFoundException() throws Exception {
-//    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "addNonMainContact", Mockito.any());
-//    participantContactFacade.addNonMainContact(participantContactJson);
+//  public void addNonMainEmail_method_should_handle_DataNotFoundException() throws Exception {
+//    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "addNonMainEmail", Mockito.any());
+//    participantContactFacade.addNonMainEmail(participantContactJson);
 //  }
 //
 //  @Test
