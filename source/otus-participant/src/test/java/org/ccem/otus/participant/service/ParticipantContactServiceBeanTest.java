@@ -43,32 +43,12 @@ public class ParticipantContactServiceBeanTest {
 //    assertEquals(PARTICIPANT_CONTACT_OID, participantContactServiceBean.create(participantContact));
   }
 
-  //@Test(expected = DataFormatException.class)
-  public void updateMainContact_method_should_throw_DataFormatException_in_case_invalid_participantContactDto() throws Exception {
-    doReturn(false).when(participantContactDto).isValid();
-    participantContactServiceBean.updateMainContact(participantContactDto);
-    verify(participantContactDao, times(1)).updateMainContact(participantContactDto);
-  }
-
-  //@Test
-  public void updateMainContact_method_invoke_updateMainContact_from_participantContactDto() throws Exception {
-    doReturn(true).when(participantContactDto).isValid();
-    participantContactServiceBean.updateMainContact(participantContactDto);
-    verify(participantContactDao, times(1)).updateMainContact(participantContactDto);
-  }
 
   //@Test
   public void addSecondaryContact_method_invoke_addSecondaryContact_from_participantContactDto() throws Exception {
     doReturn(true).when(participantContactDto).isValid();
     participantContactServiceBean.addSecondaryContact(participantContactDto);
     verify(participantContactDao, times(1)).addSecondaryContact(participantContactDto);
-  }
-
-  //@Test
-  public void updateSecondaryContact_method_invoke_updateSecondaryContact_from_participantContactDto() throws Exception {
-    doReturn(true).when(participantContactDto).isValid();
-    participantContactServiceBean.updateSecondaryContact(participantContactDto);
-    verify(participantContactDao, times(1)).updateSecondaryContact(participantContactDto);
   }
 
   //@Test

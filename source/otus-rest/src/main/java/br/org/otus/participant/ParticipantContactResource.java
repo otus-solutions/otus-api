@@ -23,11 +23,29 @@ public class ParticipantContactResource {
   }
 
   @PUT
-  @Path("/update-main")
+  @Path("/update/email")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String updateMainContact(String participantContactDtoJson) {
-    participantContactFacade.updateMainContact(participantContactDtoJson);
+  public String updateEmail(String participantContactDtoJson) {
+    participantContactFacade.updateEmail(participantContactDtoJson);
+    return (new Response()).buildSuccess().toJson();
+  }
+
+  @PUT
+  @Path("/update/address")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateAddress(String participantContactDtoJson) {
+    participantContactFacade.updateAddress(participantContactDtoJson);
+    return (new Response()).buildSuccess().toJson();
+  }
+
+  @PUT
+  @Path("/update/phone-number")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updatePhoneNumber(String participantContactDtoJson) {
+    participantContactFacade.updatePhoneNumber(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 
@@ -37,15 +55,6 @@ public class ParticipantContactResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String addSecondaryContact(String participantContactDtoJson) {
     participantContactFacade.addSecondaryContact(participantContactDtoJson);
-    return (new Response()).buildSuccess().toJson();
-  }
-
-  @PUT
-  @Path("/update-secondary")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public String updateSecondaryContact(String participantContactDtoJson) {
-    participantContactFacade.updateSecondaryContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 

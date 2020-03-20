@@ -20,9 +20,27 @@ public class ParticipantContactFacade {
     return participantContactService.create(ParticipantContact.deserialize(participantContactJson)).toString();
   }
 
-  public void updateMainContact(String participantContactDtoJson) {
+  public void updateEmail(String participantContactDtoJson) {
     try{
-      participantContactService.updateMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.updateEmail(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException | DataFormatException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public void updateAddress(String participantContactDtoJson) {
+    try{
+      participantContactService.updateAddress(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException | DataFormatException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public void updatePhoneNumber(String participantContactDtoJson) {
+    try{
+      participantContactService.updatePhoneNumber(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
@@ -32,15 +50,6 @@ public class ParticipantContactFacade {
   public void addSecondaryContact(String participantContactDtoJson) {
     try{
       participantContactService.addSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
-    }
-    catch (DataNotFoundException | DataFormatException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
-
-  public void updateSecondaryContact(String participantContactDtoJson) {
-    try{
-      participantContactService.updateSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));

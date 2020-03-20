@@ -11,11 +11,13 @@ public interface ParticipantContactDao {
 
   ObjectId create(ParticipantContact participantContact);
 
-  void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+
+  void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+
+  void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
-
-  void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
