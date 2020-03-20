@@ -40,7 +40,7 @@ public class ParticipantContact {
     return phoneNumber;
   }
 
-  public ParticipantContactItemSet getParticipantContactsItemByType(ParticipantContactTypeOptions participantContactType){
+  public ParticipantContactItemSet getParticipantContactItemSetByType(ParticipantContactTypeOptions participantContactType){
     HashMap<ParticipantContactTypeOptions, ParticipantContactItemSet> map = new HashMap<>();
     map.put(ParticipantContactTypeOptions.EMAIL, getEmail());
     map.put(ParticipantContactTypeOptions.ADDRESS, getAddress());
@@ -48,7 +48,7 @@ public class ParticipantContact {
     return map.get(participantContactType);
   }
 
-  public ParticipantContactItemSet getParticipantContactsItemByType(String participantContactType){
+  public ParticipantContactItemSet getParticipantContactItemSetByType(String participantContactType){
     //TODO check usefull
     HashMap<String, ParticipantContactItemSet> map = new HashMap<>();
     map.put(ParticipantContactTypeOptions.EMAIL.getName(), getEmail());
