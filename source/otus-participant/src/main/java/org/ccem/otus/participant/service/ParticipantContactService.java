@@ -17,13 +17,13 @@ public interface ParticipantContactService {
 
   void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void addNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
-  void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException;
 

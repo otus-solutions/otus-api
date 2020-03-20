@@ -45,10 +45,10 @@ public class ParticipantContactServiceBeanTest {
 
 
   //@Test
-  public void addSecondaryContact_method_invoke_addSecondaryContact_from_participantContactDto() throws Exception {
+  public void addNonMainContact_method_invoke_addNonMainContact_from_participantContactDto() throws Exception {
     doReturn(true).when(participantContactDto).isValid();
-    participantContactServiceBean.addSecondaryContact(participantContactDto);
-    verify(participantContactDao, times(1)).addSecondaryContact(participantContactDto);
+    participantContactServiceBean.addNonMainContact(participantContactDto);
+    verify(participantContactDao, times(1)).addNonMainContact(participantContactDto);
   }
 
   //@Test
@@ -65,10 +65,10 @@ public class ParticipantContactServiceBeanTest {
   }
 
   //@Test
-  public void deleteSecondaryContact_method_invoke_deleteSecondaryContact_from_participantContactDto() throws Exception {
+  public void deleteNonMainContact_method_invoke_deleteNonMainContact_from_participantContactDto() throws Exception {
     doReturn(true).when(participantContactDto).isValid();
-    participantContactServiceBean.deleteSecondaryContact(participantContactDto);
-    verify(participantContactDao, times(1)).deleteSecondaryContact(participantContactDto);
+    participantContactServiceBean.deleteNonMainContact(participantContactDto);
+    verify(participantContactDao, times(1)).deleteNonMainContact(participantContactDto);
   }
 
   //@Test

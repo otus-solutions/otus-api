@@ -49,9 +49,9 @@ public class ParticipantContactResourceTest {
 //  }
 //
 //  @Test
-//  public void addSecondaryContact_method_should_addSecondaryContact_participantContact_by_participantContactFacade() {
-//    participantContactResource.addSecondaryContact(participantContactJson);
-//    verify(participantContactFacade, times(1)).addSecondaryContact(participantContactJson);
+//  public void addNonMainContact_method_should_addNonMainContact_participantContact_by_participantContactFacade() {
+//    participantContactResource.addNonMainContact(participantContactJson);
+//    verify(participantContactFacade, times(1)).addNonMainContact(participantContactJson);
 //  }
 //
 //  @Test
@@ -73,9 +73,9 @@ public class ParticipantContactResourceTest {
 //  }
 //
 //  @Test
-//  public void deleteSecondaryContact_method_should_deleteSecondaryContact_participantContact_by_participantContactFacade() {
-//    participantContactResource.deleteSecondaryContact(participantContactJson);
-//    verify(participantContactFacade, times(1)).deleteSecondaryContact(participantContactJson);
+//  public void deleteNonMainContact_method_should_deleteNonMainContact_participantContact_by_participantContactFacade() {
+//    participantContactResource.deleteNonMainContact(participantContactJson);
+//    verify(participantContactFacade, times(1)).deleteNonMainContact(participantContactJson);
 //  }
 //
 //  @Test

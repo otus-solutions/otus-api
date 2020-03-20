@@ -61,15 +61,15 @@ public class ParticipantContactFacadeTest {
 //  }
 //
 //  @Test
-//  public void addSecondaryContact_method_should_invoke_addSecondaryContact_from_participantContactService() throws Exception {
-//    participantContactFacade.addSecondaryContact(participantContactJson);
-//    verify(participantContactService, times(1)).addSecondaryContact(Mockito.any());
+//  public void addNonMainContact_method_should_invoke_addNonMainContact_from_participantContactService() throws Exception {
+//    participantContactFacade.addNonMainContact(participantContactJson);
+//    verify(participantContactService, times(1)).addNonMainContact(Mockito.any());
 //  }
 //
 //  @Test(expected = HttpResponseException.class)
-//  public void addSecondaryContact_method_should_handle_DataNotFoundException() throws Exception {
-//    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "addSecondaryContact", Mockito.any());
-//    participantContactFacade.addSecondaryContact(participantContactJson);
+//  public void addNonMainContact_method_should_handle_DataNotFoundException() throws Exception {
+//    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "addNonMainContact", Mockito.any());
+//    participantContactFacade.addNonMainContact(participantContactJson);
 //  }
 //
 //  @Test
@@ -109,15 +109,15 @@ public class ParticipantContactFacadeTest {
 //  }
 //
 //  @Test
-//  public void deleteSecondaryContact_method_should_invoke_deleteSecondaryContact_from_participantContactService() throws Exception {
-//    participantContactFacade.deleteSecondaryContact(participantContactJson);
-//    verify(participantContactService, times(1)).deleteSecondaryContact(Mockito.any());
+//  public void deleteNonMainContact_method_should_invoke_deleteNonMainContact_from_participantContactService() throws Exception {
+//    participantContactFacade.deleteNonMainContact(participantContactJson);
+//    verify(participantContactService, times(1)).deleteNonMainContact(Mockito.any());
 //  }
 //
 //  @Test(expected = HttpResponseException.class)
-//  public void deleteSecondaryContact_method_should_handle_DataNotFoundException() throws Exception {
-//    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "deleteSecondaryContact", Mockito.any());
-//    participantContactFacade.deleteSecondaryContact(participantContactJson);
+//  public void deleteNonMainContact_method_should_handle_DataNotFoundException() throws Exception {
+//    PowerMockito.doThrow(dataNotFoundException).when(participantContactService, "deleteNonMainContact", Mockito.any());
+//    participantContactFacade.deleteNonMainContact(participantContactJson);
 //  }
 //
 //  @Test

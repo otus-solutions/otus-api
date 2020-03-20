@@ -47,9 +47,9 @@ public class ParticipantContactFacade {
     }
   }
 
-  public void addSecondaryContact(String participantContactDtoJson) {
+  public void addNonMainContact(String participantContactDtoJson) {
     try{
-      participantContactService.addSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.addNonMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
@@ -74,9 +74,9 @@ public class ParticipantContactFacade {
     }
   }
 
-  public void deleteSecondaryContact(String participantContactDtoJson) {
+  public void deleteNonMainContact(String participantContactDtoJson) {
     try{
-      participantContactService.deleteSecondaryContact(ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.deleteNonMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException | DataFormatException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));

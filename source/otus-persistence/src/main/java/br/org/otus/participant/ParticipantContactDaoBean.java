@@ -68,7 +68,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void addNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
 //    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
 //    UpdateResult updateResult = collection.updateOne(
 //      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
@@ -112,7 +112,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+  public void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
 //    ParticipantContact participantContact = get(participantContactDto.getObjectId());
 //    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
 //

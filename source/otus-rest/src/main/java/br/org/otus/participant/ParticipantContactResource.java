@@ -53,8 +53,8 @@ public class ParticipantContactResource {
   @Path("/add-secondary")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String addSecondaryContact(String participantContactDtoJson) {
-    participantContactFacade.addSecondaryContact(participantContactDtoJson);
+  public String addNonMainContact(String participantContactDtoJson) {
+    participantContactFacade.addNonMainContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 
@@ -79,8 +79,8 @@ public class ParticipantContactResource {
   @Path("/secondary")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteSecondaryContact(String participantContactDtoJson) {
-    participantContactFacade.deleteSecondaryContact(participantContactDtoJson);
+  public String deleteNonMainContact(String participantContactDtoJson) {
+    participantContactFacade.deleteNonMainContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 

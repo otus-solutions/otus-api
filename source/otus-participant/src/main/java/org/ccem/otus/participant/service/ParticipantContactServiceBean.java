@@ -40,9 +40,9 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+  public void addNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     validateDto(participantContactDto);
-    participantContactDao.addSecondaryContact(participantContactDto);
+    participantContactDao.addNonMainContact(participantContactDto);
   }
 
   @Override
@@ -57,9 +57,9 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+  public void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     validateDto(participantContactDto);
-    participantContactDao.deleteSecondaryContact(participantContactDto);
+    participantContactDao.deleteNonMainContact(participantContactDto);
   }
 
   @Override
