@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 public enum ParticipantContactPositionOptions {
 
-  MAIN("EMAIL"),
-  SECOND("ADDRESS"),
-  THIRD("PHONE"),
-  FOURTH("FOURTH"),
-  FIFTH("FIFTH");
+  MAIN("main"),
+  SECOND("second"),
+  THIRD("third"),
+  FOURTH("fourth"),
+  FIFTH("fifth");
 
   private String name;
 
@@ -21,8 +21,8 @@ public enum ParticipantContactPositionOptions {
   }
 
   public static boolean contains(String otherValue){
-    return Arrays.asList(ParticipantContactTypeOptions.values()).stream()
-      .map(ParticipantContactTypeOptions::getName)
+    return Arrays.asList(ParticipantContactPositionOptions.values()).stream()
+      .map(ParticipantContactPositionOptions::getName)
       .anyMatch(otherValue::equals);
   }
 }
