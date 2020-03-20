@@ -39,6 +39,16 @@ public enum ParticipantContactPositionOptions {
         return option;
       }
     }
-    throw new IllegalArgumentException("String name " + name + " is not a ParticipantContactTypeOptions valid enum");
+    throw new IllegalArgumentException("The name " + name + " is not a ParticipantContactTypeOptions valid enum");
+  }
+
+  public static ParticipantContactPositionOptions fromInt(int ranking){
+    //TODO write loop like contains method
+    for (ParticipantContactPositionOptions option : ParticipantContactPositionOptions.values()) {
+      if(option.getRanking() == ranking){
+        return option;
+      }
+    }
+    throw new IllegalArgumentException("The value " + ranking + " is not a ParticipantContactTypeOptions valid enum");
   }
 }
