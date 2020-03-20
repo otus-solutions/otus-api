@@ -2,7 +2,10 @@ package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ParticipantContactItemSet<T extends ParticipantContactItemValue> {
 
@@ -42,14 +45,15 @@ public class ParticipantContactItemSet<T extends ParticipantContactItemValue> {
     return map.get(position);
   }
 
-  public ParticipantContactItem<T> getNotMainItem(String position){
-    //TODO check usefull
-    HashMap<ParticipantContactPositionOptions, ParticipantContactItem<T>> map = new HashMap<>();
-    map.put(ParticipantContactPositionOptions.SECOND, getSecond());
-    map.put(ParticipantContactPositionOptions.THIRD, getThird());
-    map.put(ParticipantContactPositionOptions.FOURTH, getFourth());
-    map.put(ParticipantContactPositionOptions.FIFTH, getFifth());
-    return map.get(position);
+  public ParticipantContactPositionOptions getPositionOfLastItem(){
+    ArrayList<ParticipantContactItem<T>> items =  new ArrayList<>(Arrays.asList(
+      getMain(), getSecond(), getThird(), getFourth(), getFifth()
+    ));
+    int i=4;
+    while(i > 0 && items.get(i) == null){
+      i--;
+    }
+    return ParticipantContactPositionOptions.values()[i];
   }
 
   public static String serialize(ParticipantContactItemSet participantContactItems){
