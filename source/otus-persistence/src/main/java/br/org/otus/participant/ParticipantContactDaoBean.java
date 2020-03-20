@@ -49,6 +49,18 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     updatePhoneNumber(participantContactDto);
   }
 
+  private void checkDtoItemPositionExistenceForAdd(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
+      .getParticipantContactItemSetByType(participantContactDto.getType())
+      .getPositionOfLastItem().getRanking();
+    int dtoItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+
+    if(dtoItemRanking <= lastItemRanking){
+      throw new DataFormatException(String.format("Its not possible add %s at %s position",
+        participantContactDto.getType(), participantContactDto.getPosition()));
+    }
+  }
+
   @Override
   public void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException {
     ParticipantContactItem item = new ParticipantContactItem<Email>();
@@ -75,9 +87,8 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     String fieldToUpdate = contactType.getName() + "." + participantContactDto.getPosition();
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$set",
-        new Document(fieldToUpdate, Document.parse(ParticipantContactItem.serialize(item)))
-      ));
+      new Document("$set", new Document(fieldToUpdate, Document.parse(ParticipantContactItem.serialize(item))))
+    );
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
@@ -104,15 +115,10 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$set",
-        new HashMap<String, Object>() {
-          {
-            put(mainFieldToUpdate, Document.parse(nonMainValueJson));
-            put(secondaryFieldToUpdate, Document.parse(mainValueJson));
-          }
-        }
-      )
-    );
+      new Document("$set", new HashMap<String, Object>() {{
+        put(mainFieldToUpdate, Document.parse(nonMainValueJson));
+        put(secondaryFieldToUpdate, Document.parse(mainValueJson));
+      }}));
 
     if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
@@ -185,18 +191,6 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     }
     catch (NullPointerException e){
       throw new DataNotFoundException("No participant contact found with recruitment number {" + recruitmentNumber.toString() + "}");
-    }
-  }
-
-  private void checkDtoItemPositionExistenceForAdd(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
-      .getParticipantContactItemSetByType(participantContactDto.getType())
-      .getPositionOfLastItem().getRanking();
-    int dtoItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
-
-    if(dtoItemRanking <= lastItemRanking){
-      throw new DataFormatException(String.format("Its not possible add %s at %s position",
-        participantContactDto.getType(), participantContactDto.getPosition()));
     }
   }
 
