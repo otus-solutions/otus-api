@@ -10,6 +10,7 @@ import org.ccem.otus.participant.model.participant_contact.*;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
+import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -48,18 +49,6 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     updatePhoneNumber(participantContactDto);
   }
 
-  private void checkDtoItemPositionExistence(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
-      .getParticipantContactItemSetByType(participantContactDto.getType())
-      .getPositionOfLastItem().getRanking();
-    int newItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
-
-    if(newItemRanking <= lastItemRanking){
-      throw new DataFormatException(String.format("Its not possible add %s at %s position",
-        participantContactDto.getType(), participantContactDto.getPosition()));
-    }
-  }
-
   @Override
   public void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException {
     ParticipantContactItem item = new ParticipantContactItem<Email>();
@@ -94,29 +83,40 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     }
   }
 
-
-
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-//    ParticipantContact participantContact = get(participantContactDto.getObjectId());
-//    String mainFieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
-//    String secondaryFieldToUpdate = extractSecondaryFieldNameWithIndexFromDto(participantContactDto);
-//
-//    UpdateResult updateResult = collection.updateOne(
-//      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-//      new Document("$set",
-//        new HashMap<String, Object>() {
-//          {
-//            put(mainFieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getAllMyAttributes());
-//            put(secondaryFieldToUpdate, participantContact.getParticipantContactsItemByType(participantContactDto.getType()).getMain().getAllMyAttributes());
-//          }
-//        }
-//      )
-//    );
-//
-//    if(updateResult.getMatchedCount() == 0){
-//      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
-//    }
+  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+    String contactType = participantContactDto.getType();
+    String mainFieldToUpdate = contactType + "." + ParticipantContactPositionOptions.MAIN.getName();
+    String secondaryFieldToUpdate = contactType + "." + participantContactDto.getPosition();
+
+    ParticipantContact participantContact = getParticipantContact(participantContactDto.getObjectId());
+    String mainValueJson = ParticipantContactItem.serialize(participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getMain());
+    String nonMainValueJson = ParticipantContactItem.serialize(participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getItemByPosition(ParticipantContactPositionOptions.fromString(participantContactDto.getPosition())));
+
+    if(nonMainValueJson.equals("null")){
+      throw new DataNotFoundException(String.format("Participant contact with id { %s } does not have %s %s",
+        participantContactDto.getIdStr(), participantContactDto.getPosition(), contactType));
+    }
+
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
+      new Document("$set",
+        new HashMap<String, Object>() {
+          {
+            put(mainFieldToUpdate, Document.parse(nonMainValueJson));
+            put(secondaryFieldToUpdate, Document.parse(mainValueJson));
+          }
+        }
+      )
+    );
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
+    }
   }
 
   @Override
@@ -165,5 +165,16 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     }
   }
 
+  private void checkDtoItemPositionExistence(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
+      .getParticipantContactItemSetByType(participantContactDto.getType())
+      .getPositionOfLastItem().getRanking();
+    int newItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+
+    if(newItemRanking <= lastItemRanking){
+      throw new DataFormatException(String.format("Its not possible add %s at %s position",
+        participantContactDto.getType(), participantContactDto.getPosition()));
+    }
+  }
 
 }

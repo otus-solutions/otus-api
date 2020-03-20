@@ -23,7 +23,7 @@ public interface ParticipantContactDao {
 
   void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
-  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
