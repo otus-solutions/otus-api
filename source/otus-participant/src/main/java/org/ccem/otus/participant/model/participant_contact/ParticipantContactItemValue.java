@@ -9,10 +9,6 @@ public abstract class ParticipantContactItemValue {
     return new GsonBuilder();
   }
 
-  protected static GsonBuilder getFrontGsonBuilder() {
-    return new GsonBuilder();
-  }
-
   public abstract boolean isValid();
 
   public abstract void setFromLinkedTreeMap(LinkedTreeMap map);
