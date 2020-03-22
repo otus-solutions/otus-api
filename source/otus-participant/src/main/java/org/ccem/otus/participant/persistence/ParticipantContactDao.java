@@ -17,11 +17,11 @@ public interface ParticipantContactDao {
 
   void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
