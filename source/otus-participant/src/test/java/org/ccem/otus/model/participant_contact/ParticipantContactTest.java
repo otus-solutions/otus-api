@@ -19,84 +19,19 @@ public class ParticipantContactTest {
   private static final String OBJECT_TYPE = "ParticipantContact";
   private static final Long RN = 1234567L;
 
-  private static final String CONTACT_TYPE = ParticipantContactTypeOptions.EMAIL.getName();
-
   private ParticipantContact participantContact = new ParticipantContact();
-  private ParticipantContactItemSet<ParticipantContactItemValueString> emails = PowerMockito.spy(new ParticipantContactItemSet<>());
-  private ParticipantContactItemSet<Address> addresses = PowerMockito.spy(new ParticipantContactItemSet<>());
-  private ParticipantContactItemSet<ParticipantContactItemValueString> phoneNumbers = PowerMockito.spy(new ParticipantContactItemSet<>());
-
-  @Test
-  public void deserialize_static_method(){
-    String participantContactJson = "{\n" +
-      "  \"objectType\": \"ParticipantContact\",\n" +
-      "  \"recruitmentNumber\": 999,\n" +
-      "  \"email\": {\n" +
-      "    \"main\": {\n" +
-      "      \"value\": { \"content\": \"main.email@gmail.com\" },\n" +
-      "      \"observation\": \"personal\"\n" +
-      "    },\n" +
-      "    \"second\": {\n" +
-      "      \"value\": { \"content\": \"secondary0.email@gmail.com\" },\n" +
-      "      \"observation\": \"work\"\n" +
-      "    },\n" +
-      "    \"third\": {\n" +
-      "      \"value\": { \"content\": \"secondary1.email@gmail.com\" },\n" +
-      "      \"observation\": \"university\"\n" +
-      "    }\n" +
-      "  },\n" +
-      "  \"address\": {\n" +
-      "    \"main\": {\n" +
-      "      \"value\": {\n" +
-      "        \"postalCode\": \"90010-907\",\n" +
-      "        \"street\": \"Rua dos Bobos\",\n" +
-      "        \"streetNumber\": 0,\n" +
-      "        \"complements\": \"Feita com muito esmero!\",\n" +
-      "        \"neighbourhood\": \"Centro\",\n" +
-      "        \"city\": \"Porto Alegre\",\n" +
-      "        \"country\": \"Brasil\"\n" +
-      "      },\n" +
-      "      \"observation\": \"Casa\"\n" +
-      "    },\n" +
-      "    \"second:\": {\n" +
-      "      \"value\": {\n" +
-      "        \"postalCode\": \"90010-907\",\n" +
-      "        \"street\": \"Rua dos Bobos\",\n" +
-      "        \"streetNumber\": 0,\n" +
-      "        \"complements\": \"Feita com muito esmero!\",\n" +
-      "        \"neighbourhood\": \"Centro\",\n" +
-      "        \"city\": \"Porto Alegre\",\n" +
-      "        \"country\": \"Brasil\"\n" +
-      "      },\n" +
-      "      \"observation\": \"Casa da vizinha da minha tia.\"\n" +
-      "    }\n" +
-      "  },\n" +
-      "  \"phoneNumber\": {\n" +
-      "    \"main\": {\n" +
-      "      \"value\": { \"content\":  \"51123456789\" },\n" +
-      "      \"observation\": \"casa\"\n" +
-      "    },\n" +
-      "    \"second\": {\n" +
-      "      \"value\": { \"content\":  \"51987654321\" },\n" +
-      "      \"observation\": \"celular\"\n" +
-      "    }\n" +
-      "  }\n" +
-      "}";
-    ParticipantContact result = ParticipantContact.deserialize(participantContactJson);
-    ParticipantContactPositionOptions lastEmail = result.getEmail().getPositionOfLastItem();
-    ParticipantContactPositionOptions lastAddress = result.getAddress().getPositionOfLastItem();
-    ParticipantContactPositionOptions lastPhone = result.getPhoneNumber().getPositionOfLastItem();
-    assertTrue(result instanceof ParticipantContact);
-  }
+  private ParticipantContactItemSet<Email> emailSet = PowerMockito.spy(new ParticipantContactItemSet<>());
+  private ParticipantContactItemSet<Address> addressSet = PowerMockito.spy(new ParticipantContactItemSet<>());
+  private ParticipantContactItemSet<PhoneNumber> phoneNumberSet = PowerMockito.spy(new ParticipantContactItemSet<>());
 
   @Before
   public void setUp(){
     Whitebox.setInternalState(participantContact, "_id", OID);
     Whitebox.setInternalState(participantContact, "objectType", OBJECT_TYPE);
     Whitebox.setInternalState(participantContact, "recruitmentNumber", RN);
-    Whitebox.setInternalState(participantContact, "email", emails);
-    Whitebox.setInternalState(participantContact, "address", addresses);
-    Whitebox.setInternalState(participantContact, "phoneNumber", phoneNumbers);
+    Whitebox.setInternalState(participantContact, "emailSet", emailSet);
+    Whitebox.setInternalState(participantContact, "addressSet", addressSet);
+    Whitebox.setInternalState(participantContact, "phoneNumberSet", phoneNumberSet);
   }
 
   @Test
@@ -104,14 +39,9 @@ public class ParticipantContactTest {
     assertEquals(OID, participantContact.getObjectId());
     assertEquals(OBJECT_TYPE, participantContact.getObjectType());
     assertEquals(RN, participantContact.getRecruitmentNumber());
-    assertEquals(emails, participantContact.getEmail());
-    assertEquals(addresses, participantContact.getAddress());
-    assertEquals(phoneNumbers, participantContact.getPhoneNumber());
-  }
-
-  @Test
-  public void getMainParticipantContactItemByType_method_should_return_hashMap_with_main_value(){
-    //assertEquals(emails, participantContact.getParticipantContactsItemByType(CONTACT_TYPE));
+    assertEquals(emailSet, participantContact.getEmailSet());
+    assertEquals(addressSet, participantContact.getAddressSet());
+    assertEquals(phoneNumberSet, participantContact.getPhoneNumberSet());
   }
 
   @Test
@@ -126,8 +56,49 @@ public class ParticipantContactTest {
   }
 
   @Test
-  public void getFrontGsonBuilder_static_method_return_GsonBuilder_instance(){
+  public void getFrontGsonBuilder_static_should_method_return_GsonBuilder_instance(){
     assertTrue(ParticipantContact.getFrontGsonBuilder() instanceof GsonBuilder);
+  }
+
+  @Test
+  public void getMainParticipantContactItemByType_method_should_return_main_email(){
+    assertEquals(emailSet,
+      participantContact.getParticipantContactItemSetByType(
+        ParticipantContactTypeOptions.EMAIL.getName()));
+  }
+
+  @Test
+  public void hasAllMainContacts_method_should_return_TRUE(){
+    Whitebox.setInternalState(emailSet, "main", new ParticipantContactItem<Email>());
+    Whitebox.setInternalState(addressSet, "main", new ParticipantContactItem<Address>());
+    Whitebox.setInternalState(phoneNumberSet, "main", new ParticipantContactItem<PhoneNumber>());
+    assertTrue(participantContact.hasAllMainContacts());
+  }
+
+  @Test
+  public void hasAllMainContacts_method_should_return_FALSE_in_case_any_itemSet_has_null_main_contact(){
+    assertFalse(participantContact.hasAllMainContacts());
+  }
+
+  @Test
+  public void hasAllMainContacts_method_should_return_FALSE_in_case_emailSet_be_null(){
+    Whitebox.setInternalState(participantContact, "emailSet", (ParticipantContactItemSet)null);
+    assertFalse(participantContact.hasAllMainContacts());
+  }
+
+  @Test
+  public void hasAllMainContacts_method_should_return_FALSE_in_case_addressSet_be_null(){
+    Whitebox.setInternalState(emailSet, "main", new ParticipantContactItem<Email>());
+    Whitebox.setInternalState(participantContact, "addressSet", (ParticipantContactItemSet)null);
+    assertFalse(participantContact.hasAllMainContacts());
+  }
+
+  @Test
+  public void hasAllMainContacts_method_should_return_FALSE_in_case_phoneNumberSet_be_null(){
+    Whitebox.setInternalState(emailSet, "main", new ParticipantContactItem<Email>());
+    Whitebox.setInternalState(addressSet, "main", new ParticipantContactItem<Address>());
+    Whitebox.setInternalState(participantContact, "phoneNumberSet", (ParticipantContactItemSet)null);
+    assertFalse(participantContact.hasAllMainContacts());
   }
 
 }

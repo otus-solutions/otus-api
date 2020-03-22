@@ -1,5 +1,6 @@
 package org.ccem.otus.model.participant_contact;
 
+import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
 import org.ccem.otus.participant.model.participant_contact.Email;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactItemValue;
@@ -16,12 +17,11 @@ public class ParticipantContactItemTest {
 
   private static final String OBSERVATION = "obs";
 
-  private ParticipantContactItem participantContactItem = new ParticipantContactItem();
+  private ParticipantContactItem<Email> participantContactItem = new ParticipantContactItem<>();
   private ParticipantContactItemValue participantContactItemValue = PowerMockito.spy(new Email());
 
   @Before
   public void setUp(){
-    Whitebox.setInternalState(participantContactItemValue, "value", "some string");
     Whitebox.setInternalState(participantContactItem, "value", participantContactItemValue);
     Whitebox.setInternalState(participantContactItem, "observation", OBSERVATION);
   }
@@ -33,29 +33,48 @@ public class ParticipantContactItemTest {
   }
 
   @Test
-  public void getAllMyAttributes_should_return_HashMap_String_object_instance(){
-    assertEquals(participantContactItemValue, participantContactItem.getAllMyAttributes().get("value"));
+  public void test_setValue_method(){
+    Email participantContactItemValue2 = new Email();
+    participantContactItem.setValue(participantContactItemValue2);
+    assertEquals(participantContactItemValue2, participantContactItem.getValue());
   }
 
   @Test
-  public void getContactValueAttribute_should_return_HashMap_String_object_instance(){
-    assertEquals(participantContactItemValue, participantContactItem.getContactValueAttribute().get("value"));
+  public void test_setFromLinkedTreeMap_method() throws Exception {
+    Email participantContactItemValue2 = new Email();
+    LinkedTreeMap<String, Object> valueMap = new LinkedTreeMap();
+    valueMap.put("content", participantContactItemValue2.getContent());
+    final String OBSERVATION2 = OBSERVATION+"2";
+
+    LinkedTreeMap<String, Object> map = new LinkedTreeMap();
+    map.put("value", valueMap);
+    map.put("observation", OBSERVATION2);
+
+    participantContactItem.setFromLinkedTreeMap(map);
+    //assertEquals(participantContactItemValue2, participantContactItem.getValue());//TODO
+    assertEquals(OBSERVATION2, participantContactItem.getObservation());
   }
 
-//  @Test
-//  public void serialize_static_method_should_convert_objectModel_to_JsonString(){
-//    assertTrue(ParticipantContactItem.serialize(participantContactItem) instanceof String);
-//  }
-//
-//  @Test
-//  public void deserialize_static_method_should_convert_JsonString_to_objectModel(){
-//    String participantContactItemJson = ParticipantContactItem.serialize(participantContactItem);
-//    assertTrue(ParticipantContactItem.deserialize(participantContactItemJson) instanceof ParticipantContactItem);
-//  }
+  @Test
+  public void serialize_static_method_should_convert_objectModel_to_JsonString(){
+    assertTrue(ParticipantContactItem.serialize(new ParticipantContactItem<Email>()) instanceof String);
+  }
+
+  @Test
+  public void deserialize_static_method_should_convert_JsonString_to_objectModel(){
+    String participantContactItemJson = ParticipantContactItem.serialize(new ParticipantContactItem<Email>());
+    assertTrue(ParticipantContactItem.deserialize(participantContactItemJson) instanceof ParticipantContactItem);
+  }
 
   @Test
   public void isValid_method_should_return_TRUE(){
     assertTrue(participantContactItem.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_FALSE_in_case_null_participantContactItemValue(){
+    Whitebox.setInternalState(participantContactItem, "value", (ParticipantContactItem<Email>)null);
+    assertFalse(participantContactItem.isValid());
   }
 
   @Test
