@@ -68,7 +68,13 @@ public class ParticipantContactItemTest {
 
   @Test
   public void isValid_method_should_return_TRUE(){
+    PowerMockito.when(participantContactItemValue.isValid()).thenReturn(true);
     assertTrue(participantContactItem.isValid());
+  }
+
+  @Test
+  public void isValid_method_should_return_FALSE(){
+    assertFalse(participantContactItem.isValid());
   }
 
   @Test
