@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
@@ -12,8 +13,11 @@ public class ParticipantContact {
   private ObjectId _id;
   private String objectType;
   private Long recruitmentNumber;
+  @SerializedName("email")
   private ParticipantContactItemSet<Email> emailSet;
+  @SerializedName("address")
   private ParticipantContactItemSet<Address> addressSet;
+  @SerializedName("phoneNumber")
   private ParticipantContactItemSet<PhoneNumber> phoneNumberSet;
 
   public ObjectId getObjectId() {
