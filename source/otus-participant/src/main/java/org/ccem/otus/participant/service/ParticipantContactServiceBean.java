@@ -26,24 +26,6 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.updateEmail(participantContactDto);
-  }
-
-  @Override
-  public void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.updateAddress(participantContactDto);
-  }
-
-  @Override
-  public void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.updatePhoneNumber(participantContactDto);
-  }
-
-  @Override
   public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     validateDtoForNonMainContactMethod(participantContactDto);
     participantContactDao.addNonMainEmail(participantContactDto);
@@ -62,9 +44,27 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+  public void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     validateDto(participantContactDto);
-    participantContactDao.swapMainContactWithSecondary(participantContactDto);
+    participantContactDao.updateEmail(participantContactDto);
+  }
+
+  @Override
+  public void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.updateAddress(participantContactDto);
+  }
+
+  @Override
+  public void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.updatePhoneNumber(participantContactDto);
+  }
+
+  @Override
+  public void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.swapMainContact(participantContactDto);
   }
 
   @Override

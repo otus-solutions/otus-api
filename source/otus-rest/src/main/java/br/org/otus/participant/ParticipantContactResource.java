@@ -81,7 +81,7 @@ public class ParticipantContactResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String swapMainContact(String participantContactDtoJson) {
-    participantContactFacade.swapMainContactWithSecondary(participantContactDtoJson);
+    participantContactFacade.swapMainContact(participantContactDtoJson);
     return (new Response()).buildSuccess().toJson();
   }
 

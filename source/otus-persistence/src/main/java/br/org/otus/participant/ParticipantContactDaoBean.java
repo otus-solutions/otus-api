@@ -95,7 +95,7 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+  public void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
     String contactType = participantContactDto.getType();
     String mainFieldToUpdate = contactType + "." + ParticipantContactPositionOptions.MAIN.getName();
     String secondaryFieldToUpdate = contactType + "." + participantContactDto.getPosition();

@@ -98,9 +98,9 @@ public class ParticipantContactFacade {
     }
   }
 
-  public void swapMainContactWithSecondary(String participantContactDtoJson) {
+  public void swapMainContact(String participantContactDtoJson) {
     try{
-      participantContactService.swapMainContactWithSecondary(ParticipantContactDto.deserialize(participantContactDtoJson));
+      participantContactService.swapMainContact(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
