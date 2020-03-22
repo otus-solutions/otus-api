@@ -18,8 +18,10 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   private ParticipantContactDao participantContactDao;
 
   @Override
-  public ObjectId create(ParticipantContact participantContact) {
-    //TODO check if main values are not null
+  public ObjectId create(ParticipantContact participantContact) throws DataFormatException {
+    if(!participantContact.hasAllMainContacts()){
+      throw new DataFormatException("ParticipantContact does not have all main contacts.");
+    }
     return participantContactDao.create(participantContact);
   }
 

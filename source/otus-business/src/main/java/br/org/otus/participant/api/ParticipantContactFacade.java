@@ -18,7 +18,12 @@ public class ParticipantContactFacade {
   private ParticipantContactService participantContactService;
 
   public String create(String participantContactJson){
-    return participantContactService.create(ParticipantContact.deserialize(participantContactJson)).toString();
+    try{
+      return participantContactService.create(ParticipantContact.deserialize(participantContactJson)).toString();
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
   }
 
   public void updateEmail(String participantContactDtoJson) {
