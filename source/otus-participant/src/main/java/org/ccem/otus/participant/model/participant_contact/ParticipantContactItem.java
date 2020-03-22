@@ -3,8 +3,6 @@ package org.ccem.otus.participant.model.participant_contact;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
-import java.util.HashMap;
-
 public class ParticipantContactItem<T extends ParticipantContactItemValue> {
 
   private T value;
@@ -20,23 +18,6 @@ public class ParticipantContactItem<T extends ParticipantContactItemValue> {
 
   public void setValue(T value) {
     this.value = value;
-  }
-
-  public HashMap<String, Object> getAllMyAttributes(){
-    return new HashMap<String, Object>(){
-      {
-        put("value", getValue());
-        put("observation", getObservation());
-      }
-    };
-  }
-
-  public HashMap<String, Object> getContactValueAttribute(){
-    return new HashMap<String, Object>(){
-      {
-        put("value", getValue());
-      }
-    };
   }
 
   public void setFromLinkedTreeMap(LinkedTreeMap map) {
