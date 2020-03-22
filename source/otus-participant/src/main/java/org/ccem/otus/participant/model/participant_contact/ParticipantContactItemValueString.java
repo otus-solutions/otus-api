@@ -16,7 +16,12 @@ public abstract class ParticipantContactItemValueString extends ParticipantConta
 
   @Override
   public boolean isValid() {
-    return true;
+    try {
+      return !getContent().isEmpty();
+    }
+    catch (NullPointerException e){
+      return false;
+    }
   }
 
   @Override
