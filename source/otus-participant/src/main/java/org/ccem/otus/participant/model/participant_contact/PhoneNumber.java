@@ -2,12 +2,12 @@ package org.ccem.otus.participant.model.participant_contact;
 
 public class PhoneNumber extends ParticipantContactItemValueString {
 
-  public static String serialize(PhoneNumber participantContactItems){
-    return getGsonBuilder().create().toJson(participantContactItems);
+  public static String serialize(PhoneNumber phoneNumber){
+    return getGsonBuilder().create().toJson(phoneNumber);
   }
 
-  public static PhoneNumber deserialize(String participantContactItemsJson){
-    return getGsonBuilder().create().fromJson(participantContactItemsJson, PhoneNumber.class);
+  public static PhoneNumber deserialize(String phoneNumberJson){
+    return getGsonBuilder().create().fromJson(phoneNumberJson, PhoneNumber.class);
   }
 
   @Override
