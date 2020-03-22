@@ -12,9 +12,9 @@ public class ParticipantContact {
   private ObjectId _id;
   private String objectType;
   private Long recruitmentNumber;
-  private ParticipantContactItemSet<Email> email;
-  private ParticipantContactItemSet<Address> address;
-  private ParticipantContactItemSet<PhoneNumber> phoneNumber;
+  private ParticipantContactItemSet<Email> emailSet;
+  private ParticipantContactItemSet<Address> addressSet;
+  private ParticipantContactItemSet<PhoneNumber> phoneNumberSet;
 
   public ObjectId getObjectId() {
     return _id;
@@ -28,33 +28,16 @@ public class ParticipantContact {
     return recruitmentNumber;
   }
 
-  public ParticipantContactItemSet<Email> getEmail() {
-    return email;
+  public ParticipantContactItemSet<Email> getEmailSet() {
+    return emailSet;
   }
 
-  public ParticipantContactItemSet<Address> getAddress() {
-    return address;
+  public ParticipantContactItemSet<Address> getAddressSet() {
+    return addressSet;
   }
 
-  public ParticipantContactItemSet<PhoneNumber> getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public ParticipantContactItemSet getParticipantContactItemSetByType(ParticipantContactTypeOptions participantContactType){
-    HashMap<ParticipantContactTypeOptions, ParticipantContactItemSet> map = new HashMap<>();
-    map.put(ParticipantContactTypeOptions.EMAIL, getEmail());
-    map.put(ParticipantContactTypeOptions.ADDRESS, getAddress());
-    map.put(ParticipantContactTypeOptions.PHONE, getPhoneNumber());
-    return map.get(participantContactType);
-  }
-
-  public ParticipantContactItemSet getParticipantContactItemSetByType(String participantContactType){
-    //TODO check usefull
-    HashMap<String, ParticipantContactItemSet> map = new HashMap<>();
-    map.put(ParticipantContactTypeOptions.EMAIL.getName(), getEmail());
-    map.put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddress());
-    map.put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumber());
-    return map.get(participantContactType);
+  public ParticipantContactItemSet<PhoneNumber> getPhoneNumberSet() {
+    return phoneNumberSet;
   }
 
   public static String serialize(ParticipantContact participantContact){
@@ -75,5 +58,27 @@ public class ParticipantContact {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
+  }
+
+  public ParticipantContactItemSet getParticipantContactItemSetByType(String participantContactType){
+    HashMap<String, ParticipantContactItemSet> map = new HashMap<>();
+    map.put(ParticipantContactTypeOptions.EMAIL.getName(), getEmailSet());
+    map.put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddressSet());
+    map.put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumberSet());
+    return map.get(participantContactType);
+  }
+
+  public boolean hasAllMainContacts(){
+    return itemSetExistAndHasMainContact(getEmailSet()) &&
+      itemSetExistAndHasMainContact(getAddressSet()) &&
+      itemSetExistAndHasMainContact(getPhoneNumberSet());
+  }
+  private boolean itemSetExistAndHasMainContact(ParticipantContactItemSet itemSet){
+    try{
+      return (itemSet.getMain() != null);
+    }
+    catch (NullPointerException e){
+      return false;
+    }
   }
 }
