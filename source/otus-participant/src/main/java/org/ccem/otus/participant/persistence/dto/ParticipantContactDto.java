@@ -33,13 +33,6 @@ public class ParticipantContactDto implements Dto {
     return type;
   }
 
-  public String contactItemToJson() {
-    return "{\n" +
-      "    \"value\": "+ getContactItem().get("value") +",\n" +
-      "    \"observation\": \""+getContactItem().get("observation")+"\"\n" +
-      "  }";
-  }
-
   public static String serialize(ParticipantContactDto participantContactDto){
     return (new GsonBuilder()).create().toJson(participantContactDto);
   }
@@ -51,7 +44,7 @@ public class ParticipantContactDto implements Dto {
   @Override
   public Boolean isValid() {
     return ObjectId.isValid(getIdStr()) &&
-      ParticipantContactPositionOptions.contains(getPosition()) ;//&&
-      //(getContactItem()!=null && getContactItem().isValid());
+      (getPosition() != null && ParticipantContactPositionOptions.contains(getPosition())) &&
+      (getType()==null || ParticipantContactTypeOptions.contains(getType()));
   }
 }
