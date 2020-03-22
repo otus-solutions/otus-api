@@ -186,13 +186,11 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   private void checkDtoItemPositionExistenceBeforeAdd(ParticipantContactDto participantContactDto, String contactType) throws DataNotFoundException, DataFormatException {
     int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
-      .getParticipantContactItemSetByType(participantContactDto.getType())
+      .getParticipantContactItemSetByType(contactType)
       .getPositionOfLastItem().getRanking();
-    int dtoItemRanking = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
-
-    if(dtoItemRanking <= lastItemRanking){
-      throw new DataFormatException(String.format("Its not possible add %s at %s position",
-        participantContactDto.getType(), participantContactDto.getPosition()));
+    int itemRankingToAdd = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+    if(itemRankingToAdd != lastItemRanking + 1){
+      throw new DataFormatException(String.format("Its not possible add %s at %s position", contactType, participantContactDto.getPosition()));
     }
   }
 
