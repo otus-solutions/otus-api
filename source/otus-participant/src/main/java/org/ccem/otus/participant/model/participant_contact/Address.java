@@ -50,8 +50,9 @@ public class Address extends ParticipantContactItemValue {
 
   @Override
   public boolean isValid() {
-    return true;
-  }//TODO
+    return (getStreet()!=null && getStreetNumber()!=null &&
+      getNeighbourhood()!=null && getCity()!=null && getCountry()!=null);
+  }
 
   @Override
   public void setFromLinkedTreeMap(LinkedTreeMap map) {
