@@ -26,42 +26,6 @@ public class ParticipantContactFacade {
     }
   }
 
-  public void updateEmail(String participantContactDtoJson) {
-    try{
-      participantContactService.updateEmail(ParticipantContactDto.deserialize(participantContactDtoJson));
-    }
-    catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-    catch (DataFormatException e){
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void updateAddress(String participantContactDtoJson) {
-    try{
-      participantContactService.updateAddress(ParticipantContactDto.deserialize(participantContactDtoJson));
-    }
-    catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-    catch (DataFormatException e){
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void updatePhoneNumber(String participantContactDtoJson) {
-    try{
-      participantContactService.updatePhoneNumber(ParticipantContactDto.deserialize(participantContactDtoJson));
-    }
-    catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-    catch (DataFormatException e){
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
   public void addNonMainEmail(String participantContactDtoJson) {
     try{
       participantContactService.addNonMainEmail(ParticipantContactDto.deserialize(participantContactDtoJson));
@@ -89,6 +53,42 @@ public class ParticipantContactFacade {
   public void addNonMainPhoneNumber(String participantContactDtoJson) {
     try{
       participantContactService.addNonMainPhoneNumber(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void updateEmail(String participantContactDtoJson) {
+    try{
+      participantContactService.updateEmail(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void updateAddress(String participantContactDtoJson) {
+    try{
+      participantContactService.updateAddress(ParticipantContactDto.deserialize(participantContactDtoJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch (DataFormatException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void updatePhoneNumber(String participantContactDtoJson) {
+    try{
+      participantContactService.updatePhoneNumber(ParticipantContactDto.deserialize(participantContactDtoJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
