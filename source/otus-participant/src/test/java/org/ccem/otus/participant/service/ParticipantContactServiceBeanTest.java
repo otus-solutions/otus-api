@@ -5,7 +5,6 @@ import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactPositionOptions;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

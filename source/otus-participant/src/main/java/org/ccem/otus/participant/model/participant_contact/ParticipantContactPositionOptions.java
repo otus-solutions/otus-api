@@ -33,7 +33,6 @@ public enum ParticipantContactPositionOptions {
   }
 
   public static ParticipantContactPositionOptions fromString(String name){
-    //TODO write loop like contains method
     for (ParticipantContactPositionOptions option : ParticipantContactPositionOptions.values()) {
       if(option.getName().equals(name)){
         return option;
@@ -43,7 +42,6 @@ public enum ParticipantContactPositionOptions {
   }
 
   public static ParticipantContactPositionOptions fromInt(int ranking){
-    //TODO write loop like contains method
     for (ParticipantContactPositionOptions option : ParticipantContactPositionOptions.values()) {
       if(option.getRanking() == ranking){
         return option;

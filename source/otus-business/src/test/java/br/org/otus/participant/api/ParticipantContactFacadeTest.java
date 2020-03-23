@@ -4,7 +4,6 @@ import br.org.otus.response.exception.HttpResponseException;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
-import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 import org.ccem.otus.participant.service.ParticipantContactService;
 import org.junit.Before;
 import org.junit.Test;

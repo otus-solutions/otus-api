@@ -40,7 +40,7 @@ public class ParticipantContactItemTest {
   }
 
   @Test
-  public void test_setFromLinkedTreeMap_method() throws Exception {
+  public void test_setFromLinkedTreeMap_method() {
     Email participantContactItemValue2 = new Email();
     LinkedTreeMap<String, Object> valueMap = new LinkedTreeMap();
     valueMap.put("content", participantContactItemValue2.getContent());
@@ -51,7 +51,6 @@ public class ParticipantContactItemTest {
     map.put("observation", OBSERVATION2);
 
     participantContactItem.setFromLinkedTreeMap(map);
-    //assertEquals(participantContactItemValue2, participantContactItem.getValue());//TODO
     assertEquals(OBSERVATION2, participantContactItem.getObservation());
   }
 

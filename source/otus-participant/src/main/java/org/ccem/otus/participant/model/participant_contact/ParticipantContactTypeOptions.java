@@ -25,7 +25,6 @@ public enum ParticipantContactTypeOptions {
   }
 
   public static ParticipantContactTypeOptions fromString(String value){
-    //TODO write loop like contains method
     for (ParticipantContactTypeOptions option : ParticipantContactTypeOptions.values()) {
       if(option.getName().equals(value)){
         return option;
