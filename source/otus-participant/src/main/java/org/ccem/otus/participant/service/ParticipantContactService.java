@@ -9,21 +9,27 @@ import java.util.zip.DataFormatException;
 
 public interface ParticipantContactService {
 
-  ObjectId create(ParticipantContact participantContact);
+  ObjectId create(ParticipantContact participantContact) throws DataFormatException;
 
-  void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+
+  void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+
+  void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+
+  void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
-  void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException;
+  ParticipantContact getParticipantContact(ObjectId participantContactOID) throws DataNotFoundException;
 
-  ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
+  ParticipantContact getParticipantContactByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
 }

@@ -3,6 +3,7 @@ package org.ccem.otus.participant.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
+import org.ccem.otus.participant.model.participant_contact.ParticipantContactPositionOptions;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
@@ -17,32 +18,53 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   private ParticipantContactDao participantContactDao;
 
   @Override
-  public ObjectId create(ParticipantContact participantContact) {
+  public ObjectId create(ParticipantContact participantContact) throws DataFormatException {
+    if(!participantContact.hasAllMainContacts()){
+      throw new DataFormatException("ParticipantContact does not have all main contacts.");
+    }
     return participantContactDao.create(participantContact);
   }
 
   @Override
-  public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.updateMainContact(participantContactDto);
+  public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForNonMainContactMethod(participantContactDto);
+    participantContactDao.addNonMainEmail(participantContactDto);
   }
 
   @Override
-  public void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.addSecondaryContact(participantContactDto);
+  public void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForNonMainContactMethod(participantContactDto);
+    participantContactDao.addNonMainAddress(participantContactDto);
   }
 
   @Override
-  public void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.updateSecondaryContact(participantContactDto);
+  public void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForNonMainContactMethod(participantContactDto);
+    participantContactDao.addNonMainPhoneNumber(participantContactDto);
   }
 
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+  public void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     validateDto(participantContactDto);
-    participantContactDao.swapMainContactWithSecondary(participantContactDto);
+    participantContactDao.updateEmail(participantContactDto);
+  }
+
+  @Override
+  public void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.updateAddress(participantContactDto);
+  }
+
+  @Override
+  public void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.updatePhoneNumber(participantContactDto);
+  }
+
+  @Override
+  public void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDto(participantContactDto);
+    participantContactDao.swapMainContact(participantContactDto);
   }
 
   @Override
@@ -51,24 +73,31 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   }
 
   @Override
-  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    validateDto(participantContactDto);
-    participantContactDao.deleteSecondaryContact(participantContactDto);
+  public void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    validateDtoForNonMainContactMethod(participantContactDto);
+    participantContactDao.deleteNonMainContact(participantContactDto);
   }
 
   @Override
-  public ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException {
-    return participantContactDao.get(participantContactOID);
+  public ParticipantContact getParticipantContact(ObjectId participantContactOID) throws DataNotFoundException {
+    return participantContactDao.getParticipantContact(participantContactOID);
   }
 
   @Override
-  public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    return participantContactDao.getByRecruitmentNumber(recruitmentNumber);
+  public ParticipantContact getParticipantContactByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
+    return participantContactDao.getParticipantContactByRecruitmentNumber(recruitmentNumber);
   }
 
   private void validateDto(ParticipantContactDto participantContactDto) throws DataFormatException {
     if(!participantContactDto.isValid()){
       throw new DataFormatException("ParticipantContactDto is invalid");
+    }
+  }
+
+  private void validateDtoForNonMainContactMethod(ParticipantContactDto participantContactDto) throws DataFormatException {
+    validateDto(participantContactDto);
+    if(participantContactDto.getPosition().equals(ParticipantContactPositionOptions.MAIN.getName())){
+      throw new DataFormatException("Its not possible execute this request for participantContact at main position.");
     }
   }
 }

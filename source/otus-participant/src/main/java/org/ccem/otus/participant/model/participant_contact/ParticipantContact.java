@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.model.participant_contact;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
@@ -12,12 +13,12 @@ public class ParticipantContact {
   private ObjectId _id;
   private String objectType;
   private Long recruitmentNumber;
-  private ParticipantContactItem mainEmail;
-  private ParticipantContactItem mainAddress;
-  private ParticipantContactItem mainPhoneNumber;
-  private ParticipantContactItem[] secondaryEmails;
-  private ParticipantContactItem[] secondaryAddresses;
-  private ParticipantContactItem[] secondaryPhoneNumbers;
+  @SerializedName("email")
+  private ParticipantContactItemSet<Email> emailSet;
+  @SerializedName("address")
+  private ParticipantContactItemSet<Address> addressSet;
+  @SerializedName("phoneNumber")
+  private ParticipantContactItemSet<PhoneNumber> phoneNumberSet;
 
   public ObjectId getObjectId() {
     return _id;
@@ -31,50 +32,16 @@ public class ParticipantContact {
     return recruitmentNumber;
   }
 
-  public ParticipantContactItem getMainEmail() {
-    return mainEmail;
+  public ParticipantContactItemSet<Email> getEmailSet() {
+    return emailSet;
   }
 
-  public ParticipantContactItem getMainAddress() {
-    return mainAddress;
+  public ParticipantContactItemSet<Address> getAddressSet() {
+    return addressSet;
   }
 
-  public ParticipantContactItem getMainPhoneNumber() {
-    return mainPhoneNumber;
-  }
-
-  public ParticipantContactItem[] getSecondaryEmails() {
-    return secondaryEmails;
-  }
-
-  public ParticipantContactItem[] getSecondaryAddresses() {
-    return secondaryAddresses;
-  }
-
-  public ParticipantContactItem[] getSecondaryPhoneNumbers() {
-    return secondaryPhoneNumbers;
-  }
-
-  public ParticipantContactItem getMainParticipantContactItemByType(String participantContactType){
-    return
-      (new HashMap<String, ParticipantContactItem>(){
-      {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), getMainEmail());
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), getMainAddress());
-        put(ParticipantContactTypeOptions.PHONE.getName(), getMainPhoneNumber());
-      }
-    }).get(participantContactType);
-  }
-
-  public ParticipantContactItem[] getSecondaryParticipantContactsItemByType(String participantContactType){
-    return
-      (new HashMap<String, ParticipantContactItem[]>(){
-      {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), getSecondaryEmails());
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), getSecondaryAddresses());
-        put(ParticipantContactTypeOptions.PHONE.getName(), getSecondaryPhoneNumbers());
-      }
-    }).get(participantContactType);
+  public ParticipantContactItemSet<PhoneNumber> getPhoneNumberSet() {
+    return phoneNumberSet;
   }
 
   public static String serialize(ParticipantContact participantContact){
@@ -95,5 +62,27 @@ public class ParticipantContact {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
+  }
+
+  public ParticipantContactItemSet getParticipantContactItemSetByType(String participantContactType){
+    HashMap<String, ParticipantContactItemSet> map = new HashMap<>();
+    map.put(ParticipantContactTypeOptions.EMAIL.getName(), getEmailSet());
+    map.put(ParticipantContactTypeOptions.ADDRESS.getName(), getAddressSet());
+    map.put(ParticipantContactTypeOptions.PHONE.getName(), getPhoneNumberSet());
+    return map.get(participantContactType);
+  }
+
+  public boolean hasAllMainContacts(){
+    return itemSetExistAndHasMainContact(getEmailSet()) &&
+      itemSetExistAndHasMainContact(getAddressSet()) &&
+      itemSetExistAndHasMainContact(getPhoneNumberSet());
+  }
+  private boolean itemSetExistAndHasMainContact(ParticipantContactItemSet itemSet){
+    try{
+      return (itemSet.getMain() != null);
+    }
+    catch (NullPointerException e){
+      return false;
+    }
   }
 }

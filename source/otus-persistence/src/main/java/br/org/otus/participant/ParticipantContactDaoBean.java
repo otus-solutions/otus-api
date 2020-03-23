@@ -6,11 +6,9 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactItem;
+import org.ccem.otus.participant.model.participant_contact.*;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactTypeOptions;
 
 import java.util.HashMap;
 import java.util.zip.DataFormatException;
@@ -21,12 +19,6 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
 
   private static final String COLLECTION_NAME = "participant_contact";
   private static final String RECRUITMENT_NUMBER_FIELD_NAME = "recruitmentNumber";
-
-  private static final String MAIN_FIELD_PREFIX = "main";
-  private static final String SECONDARY_FIELD_PREFIX = "secondary";
-  private static final String EMAIL_FIELD_SUFFIX = "Email";
-  private static final String ADDRESS_FIELD_SUFFIX = "Address";
-  private static final String PHONE_NUMBER_FIELD_SUFFIX = "PhoneNumber";
 
   public ParticipantContactDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -40,63 +32,68 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-    String fieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
-    UpdateResult updateResult = collection.updateOne(
-      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$set",
-        new Document(fieldToUpdate, participantContactDto.getParticipantContactItem().getAllMyAttributes())
-      ));
-    if(updateResult.getMatchedCount() == 0){
-      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
-    }
+  public void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistenceBeforeAdd(participantContactDto, ParticipantContactTypeOptions.EMAIL.getName());
+    setContact(ParticipantContactTypeOptions.EMAIL, getEmailItemValue(), participantContactDto);
   }
 
   @Override
-  public void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
-    UpdateResult updateResult = collection.updateOne(
-      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$addToSet",
-        new Document(fieldToUpdate, participantContactDto.getParticipantContactItem().getAllMyAttributes()))
-    );
-    if(updateResult.getMatchedCount() == 0){
-      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
-    }
+  public void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistenceBeforeAdd(participantContactDto, ParticipantContactTypeOptions.ADDRESS.getName());
+    setContact(ParticipantContactTypeOptions.ADDRESS, getAddressItemValue(), participantContactDto);
   }
 
   @Override
-  public void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
-    String fieldToUpdate = extractSecondaryFieldNameWithIndexFromDto(participantContactDto);
-    UpdateResult updateResult = collection.updateOne(
-      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$set",
-        new Document(fieldToUpdate, participantContactDto.getParticipantContactItem().getAllMyAttributes()))
-    );
-    if(updateResult.getMatchedCount() == 0){
-      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
-    }
+  public void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistenceBeforeAdd(participantContactDto, ParticipantContactTypeOptions.PHONE.getName());
+    setContact(ParticipantContactTypeOptions.PHONE, getPhoneNumberItemValue(), participantContactDto);
   }
 
   @Override
-  public void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    ParticipantContact participantContact = get(participantContactDto.getObjectId());
-    String mainFieldToUpdate = extractMainFieldNameFromDtoType(participantContactDto.getType());
-    String secondaryFieldToUpdate = extractSecondaryFieldNameWithIndexFromDto(participantContactDto);
+  public void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistenceBeforeUpdate(participantContactDto, ParticipantContactTypeOptions.EMAIL.getName());
+    setContact(ParticipantContactTypeOptions.EMAIL, getEmailItemValue(), participantContactDto);
+  }
+
+  @Override
+  public void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistenceBeforeUpdate(participantContactDto, ParticipantContactTypeOptions.ADDRESS.getName());
+    setContact(ParticipantContactTypeOptions.ADDRESS, getAddressItemValue(), participantContactDto);
+  }
+
+  @Override
+  public void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    checkDtoItemPositionExistenceBeforeUpdate(participantContactDto, ParticipantContactTypeOptions.PHONE.getName());
+    setContact(ParticipantContactTypeOptions.PHONE, getPhoneNumberItemValue(), participantContactDto);
+  }
+
+  @Override
+  public void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException {
+    String contactType = participantContactDto.getType();
+    String mainFieldToUpdate = contactType + "." + ParticipantContactPositionOptions.MAIN.getName();
+    String secondaryFieldToUpdate = contactType + "." + participantContactDto.getPosition();
+
+    ParticipantContact participantContact = getParticipantContact(participantContactDto.getObjectId());
+    String mainValueJson = ParticipantContactItem.serialize(participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getMain());
+    String nonMainValueJson = ParticipantContactItem.serialize(participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getItemByPosition(ParticipantContactPositionOptions.fromString(participantContactDto.getPosition())));
+
+    if(nonMainValueJson.equals("null")){
+      throw new DataNotFoundException(String.format("Participant contact with id { %s } does not have %s %s",
+        participantContactDto.getIdStr(), participantContactDto.getPosition(), contactType));
+    }
 
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$set",
-        new HashMap<String, Object>() {
-          {
-            put(mainFieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getAllMyAttributes());
-            put(secondaryFieldToUpdate, participantContact.getMainParticipantContactItemByType(participantContactDto.getType()).getAllMyAttributes());
-          }
-        }
-      )
-    );
+      new Document("$set", new HashMap<String, Object>() {{
+        put(mainFieldToUpdate, Document.parse(nonMainValueJson));
+        put(secondaryFieldToUpdate, Document.parse(mainValueJson));
+      }}));
 
-    if(updateResult.getMatchedCount() == 0){
+    if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
   }
@@ -110,25 +107,47 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
-    ParticipantContact participantContact = get(participantContactDto.getObjectId());
-    String fieldToUpdate = extractSecondaryFieldNameFromDtoType(participantContactDto.getType());
+  public void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
+    ParticipantContact participantContact = getParticipantContact(participantContactDto.getObjectId());
+    String contactType = participantContactDto.getType();
 
+    ParticipantContactPositionOptions lastItemPosition = participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getPositionOfLastItem();
+    int lastItemRanking = lastItemPosition.getRanking();
+    int itemRankingToDelete = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+    if(itemRankingToDelete > lastItemRanking){
+      throw new DataFormatException(String.format("Its not possible delete %s at %s position", contactType, participantContactDto.getPosition()));
+    }
+
+    for (int ranking = itemRankingToDelete+1; ranking <= lastItemRanking; ranking++) {
+      decreaseItemPosition(participantContact, contactType, ranking);
+    }
+
+    String fieldToDelete = contactType + "." + lastItemPosition.getName();
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
-      new Document("$pull",
-        new Document(fieldToUpdate, getSecondaryParticipantContactItemFromDto(participantContact, participantContactDto).getContactValueAttribute()))
+      new Document("$unset", new Document(fieldToDelete, ""))
     );
-
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
   }
+  private void decreaseItemPosition(ParticipantContact participantContact, String contactType, int positionRanking){
+    String prevFieldToUpdate = contactType + "." + ParticipantContactPositionOptions.fromInt(positionRanking-1).getName();
+    String itemValueJson = ParticipantContactItem.serialize(participantContact
+      .getParticipantContactItemSetByType(contactType)
+      .getItemByPosition(ParticipantContactPositionOptions.fromInt(positionRanking)));
+    collection.updateOne(
+      eq(ID_FIELD_NAME, participantContact.getObjectId()),
+      new Document("$set", new Document(prevFieldToUpdate, Document.parse(itemValueJson))
+    ));
+  }
 
   @Override
-  public ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException {
-    Document result = collection.find(eq(ID_FIELD_NAME, participantContactOID)).first();
+  public ParticipantContact getParticipantContact(ObjectId participantContactOID) throws DataNotFoundException {
     try{
+      Document result = collection.find(eq(ID_FIELD_NAME, participantContactOID)).first();
       return ParticipantContact.deserialize(result.toJson());
     }
     catch (NullPointerException e){
@@ -137,9 +156,9 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    Document result = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)).first();
+  public ParticipantContact getParticipantContactByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
     try{
+      Document result = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)).first();
       return ParticipantContact.deserialize(result.toJson());
     }
     catch (NullPointerException e){
@@ -147,42 +166,54 @@ public class ParticipantContactDaoBean extends MongoGenericDao<Document> impleme
     }
   }
 
-
-  private String extractMainFieldNameFromDtoType(String dtoType){
-    return MAIN_FIELD_PREFIX + getFieldNameSuffixFromDtoType(dtoType);
+  private ParticipantContactItem getEmailItemValue(){
+    ParticipantContactItem item = new ParticipantContactItem<Email>();
+    item.setValue(new Email());
+    return item;
   }
 
-  private String extractSecondaryFieldNameFromDtoType(String dtoType){
-    String fieldNameSuffix = getFieldNameSuffixFromDtoType(dtoType);
-    return SECONDARY_FIELD_PREFIX + fieldNameSuffix + (fieldNameSuffix.equals(ADDRESS_FIELD_SUFFIX) ? "es" : "s");
+  private ParticipantContactItem getAddressItemValue(){
+    ParticipantContactItem item = new ParticipantContactItem<Address>();
+    item.setValue(new Address());
+    return item;
   }
 
-  private String extractSecondaryFieldNameWithIndexFromDto(ParticipantContactDto participantContactDto){
-    return extractSecondaryFieldNameFromDtoType(participantContactDto.getType()) + "." + participantContactDto.getSecondaryContactIndex().toString();
+  private ParticipantContactItem getPhoneNumberItemValue(){
+    ParticipantContactItem item = new ParticipantContactItem<PhoneNumber>();
+    item.setValue(new PhoneNumber());
+    return item;
   }
 
-  private String getFieldNameSuffixFromDtoType(String dtoType){
-    HashMap<String, String> map = new HashMap<String, String>(){
-      {
-        put(ParticipantContactTypeOptions.EMAIL.getName(), EMAIL_FIELD_SUFFIX);
-        put(ParticipantContactTypeOptions.ADDRESS.getName(), ADDRESS_FIELD_SUFFIX);
-        put(ParticipantContactTypeOptions.PHONE.getName(), PHONE_NUMBER_FIELD_SUFFIX);
-      }
-    };
-    return map.get(dtoType);
-  }
-
-  private ParticipantContactItem getSecondaryParticipantContactItemFromDto(ParticipantContact participantContact, ParticipantContactDto participantContactDto) throws DataFormatException {
-    int secondaryContactIndex = -1;
-    try{
-      secondaryContactIndex = participantContactDto.getSecondaryContactIndex();
-      return participantContact.getSecondaryParticipantContactsItemByType(participantContactDto.getType())[secondaryContactIndex];
+  private void checkDtoItemPositionExistenceBeforeAdd(ParticipantContactDto participantContactDto, String contactType) throws DataNotFoundException, DataFormatException {
+    int lastItemRanking = getParticipantContact(participantContactDto.getObjectId())
+      .getParticipantContactItemSetByType(contactType)
+      .getPositionOfLastItem().getRanking();
+    int itemRankingToAdd = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+    if(itemRankingToAdd != lastItemRanking + 1){
+      throw new DataFormatException(String.format("Its not possible add %s at %s position", contactType, participantContactDto.getPosition()));
     }
-    catch (NullPointerException e){
-      throw new DataFormatException("There is no index inside secondary " + participantContactDto.getType() + " request");
+  }
+
+  private void checkDtoItemPositionExistenceBeforeUpdate(ParticipantContactDto participantContactDto, String contactType) throws DataFormatException, DataNotFoundException {
+    ParticipantContactPositionOptions lastItemPosition = getParticipantContact(participantContactDto.getObjectId())
+      .getParticipantContactItemSetByType(contactType)
+      .getPositionOfLastItem();
+    int lastItemRanking = lastItemPosition.getRanking();
+    int itemRankingToUpdate = ParticipantContactPositionOptions.fromString(participantContactDto.getPosition()).getRanking();
+    if(itemRankingToUpdate > lastItemRanking){
+      throw new DataFormatException(String.format("Its not possible update %s at %s position", contactType, participantContactDto.getPosition()));
     }
-    catch (IndexOutOfBoundsException e){
-      throw new DataFormatException("Participant contact with id { " + participantContactDto.getIdStr() + " } does not have secondary " + participantContactDto.getType() + " with index " + secondaryContactIndex);
+  }
+
+  private void setContact(ParticipantContactTypeOptions contactType, ParticipantContactItem item, ParticipantContactDto participantContactDto) throws DataNotFoundException {
+    item.setFromLinkedTreeMap(participantContactDto.getContactItem());
+    String fieldToUpdate = contactType.getName() + "." + participantContactDto.getPosition();
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, participantContactDto.getObjectId()),
+      new Document("$set", new Document(fieldToUpdate, Document.parse(ParticipantContactItem.serialize(item))))
+    );
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("Participant contact with id { " + participantContactDto.getIdStr() + " } was not found");
     }
   }
 

@@ -43,27 +43,46 @@ public class ParticipantContactResourceTest {
   }
 
   @Test
-  public void updateMainContact_method_should_updateMainContact_participantContact_by_participantContactFacade() {
-    participantContactResource.updateMainContact(participantContactJson);
-    verify(participantContactFacade, times(1)).updateMainContact(participantContactJson);
+  public void addNonMainEmail_method_should_addNonMainEmail_participantContact_by_participantContactFacade() {
+    participantContactResource.addNonMainEmail(participantContactJson);
+    verify(participantContactFacade, times(1)).addNonMainEmail(participantContactJson);
   }
 
   @Test
-  public void addSecondaryContact_method_should_addSecondaryContact_participantContact_by_participantContactFacade() {
-    participantContactResource.addSecondaryContact(participantContactJson);
-    verify(participantContactFacade, times(1)).addSecondaryContact(participantContactJson);
+  public void addNonMainAddress_method_should_addNonMainAddress_participantContact_by_participantContactFacade() {
+    participantContactResource.addNonMainAddress(participantContactJson);
+    verify(participantContactFacade, times(1)).addNonMainAddress(participantContactJson);
   }
 
   @Test
-  public void updateSecondaryContact_method_should_updateSecondaryContact_participantContact_by_participantContactFacade() {
-    participantContactResource.updateSecondaryContact(participantContactJson);
-    verify(participantContactFacade, times(1)).updateSecondaryContact(participantContactJson);
+  public void addNonMainPhoneNumber_method_should_addNonMainPhoneNumber_participantContact_by_participantContactFacade() {
+    participantContactResource.addNonMainPhoneNumber(participantContactJson);
+    verify(participantContactFacade, times(1)).addNonMainPhoneNumber(participantContactJson);
+  }
+
+
+  @Test
+  public void updateEmail_method_should_updateEmail_participantContact_by_participantContactFacade() {
+    participantContactResource.updateEmail(participantContactJson);
+    verify(participantContactFacade, times(1)).updateEmail(participantContactJson);
   }
 
   @Test
-  public void swapMainContactWithSecondary_method_should_swapMainContactWithSecondary_participantContact_by_participantContactFacade() {
-    participantContactResource.swapMainContactWithSecondary(participantContactJson);
-    verify(participantContactFacade, times(1)).swapMainContactWithSecondary(participantContactJson);
+  public void updateAddress_method_should_updateAddress_participantContact_by_participantContactFacade() {
+    participantContactResource.updateAddress(participantContactJson);
+    verify(participantContactFacade, times(1)).updateAddress(participantContactJson);
+  }
+
+  @Test
+  public void updatePhoneNumber_method_should_updatePhoneNumber_participantContact_by_participantContactFacade() {
+    participantContactResource.updatePhoneNumber(participantContactJson);
+    verify(participantContactFacade, times(1)).updatePhoneNumber(participantContactJson);
+  }
+
+  @Test
+  public void swapMainContact_method_should_swapMainContact_participantContact_by_participantContactFacade() {
+    participantContactResource.swapMainContact(participantContactJson);
+    verify(participantContactFacade, times(1)).swapMainContact(participantContactJson);
   }
 
   @Test
@@ -73,25 +92,25 @@ public class ParticipantContactResourceTest {
   }
 
   @Test
-  public void deleteSecondaryContact_method_should_deleteSecondaryContact_participantContact_by_participantContactFacade() {
-    participantContactResource.deleteSecondaryContact(participantContactJson);
-    verify(participantContactFacade, times(1)).deleteSecondaryContact(participantContactJson);
+  public void deleteNonMainContact_method_should_deleteNonMainContact_participantContact_by_participantContactFacade() {
+    participantContactResource.deleteNonMainContact(participantContactJson);
+    verify(participantContactFacade, times(1)).deleteNonMainContact(participantContactJson);
   }
 
   @Test
-  public void get_method_should_get_participantContact_by_participantContactFacade() {
-    when(participantContactFacade.get(PARTICIPANT_CONTACT_ID)).thenReturn(participantContact);
+  public void getParticipantContact_method_should_get_participantContact_by_participantContactFacade() {
+    when(participantContactFacade.getParticipantContact(PARTICIPANT_CONTACT_ID)).thenReturn(participantContact);
     assertEquals(
       encapsulateExpectedResponse(participantContactJson),
-      participantContactResource.get(PARTICIPANT_CONTACT_ID));
+      participantContactResource.getParticipantContact(PARTICIPANT_CONTACT_ID));
   }
 
   @Test
-  public void getByRecruitmentNumber_method_should_return_participantContact_by_RecruitmentNumber() {
-    when(participantContactFacade.getByRecruitmentNumber(RN.toString())).thenReturn(participantContact);
+  public void getParticipantContactByRecruitmentNumber_method_should_return_participantContact_by_RecruitmentNumber() {
+    when(participantContactFacade.getParticipantContactByRecruitmentNumber(RN.toString())).thenReturn(participantContact);
     assertEquals(
       encapsulateExpectedResponse(participantContactJson),
-      participantContactResource.getByRecruitmentNumber(RN.toString()));
+      participantContactResource.getParticipantContactByRecruitmentNumber(RN.toString()));
   }
 
   private String encapsulateExpectedResponse(String data) {

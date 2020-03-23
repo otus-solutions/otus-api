@@ -11,20 +11,26 @@ public interface ParticipantContactDao {
 
   ObjectId create(ParticipantContact participantContact);
 
-  void updateMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void addNonMainEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void addSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void addNonMainAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void updateSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
+  void addNonMainPhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  void swapMainContactWithSecondary(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void updateEmail(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+
+  void updateAddress(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+
+  void updatePhoneNumber(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+
+  void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException;
 
   void delete(ObjectId participantContactOID) throws DataNotFoundException;
 
-  void deleteSecondaryContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
+  void deleteNonMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException;
 
-  ParticipantContact get(ObjectId participantContactOID) throws DataNotFoundException;
+  ParticipantContact getParticipantContact(ObjectId participantContactOID) throws DataNotFoundException;
 
-  ParticipantContact getByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
+  ParticipantContact getParticipantContactByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
 
 }
