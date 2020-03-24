@@ -4,7 +4,6 @@ import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.participant.model.participant_contact.Address;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.*;
@@ -17,6 +16,7 @@ public class AddressTest {
   private static final String COMPLEMENTS = "apto 10";
   private static final String NEIGHBOURHOOD = "neighbourhood";
   private static final String CITY = "Rainbow City";
+  private static final String STATE = "RS";
   private static final String COUNTRY = "Brazil";
 
   private Address address = new Address();
@@ -29,6 +29,7 @@ public class AddressTest {
     Whitebox.setInternalState(address, "complements", COMPLEMENTS);
     Whitebox.setInternalState(address, "neighbourhood", NEIGHBOURHOOD);
     Whitebox.setInternalState(address, "city", CITY);
+    Whitebox.setInternalState(address, "state", STATE);
     Whitebox.setInternalState(address, "country", COUNTRY);
   }
 
@@ -40,6 +41,7 @@ public class AddressTest {
     assertEquals(COMPLEMENTS, address.getComplements());
     assertEquals(NEIGHBOURHOOD, address.getNeighbourhood());
     assertEquals(CITY, address.getCity());
+    assertEquals(STATE, address.getState());
     assertEquals(COUNTRY, address.getCountry());
   }
 
@@ -83,6 +85,12 @@ public class AddressTest {
   }
 
   @Test
+  public void isValid_method_should_return_FALSE_in_case_null_state(){
+    Whitebox.setInternalState(address, "state", (String)null);
+    assertFalse(address.isValid());
+  }
+
+  @Test
   public void isValid_method_should_return_FALSE_in_case_null_country(){
     Whitebox.setInternalState(address, "country", (String)null);
     assertFalse(address.isValid());
@@ -97,6 +105,7 @@ public class AddressTest {
     final String COMPLEMENTS_2 = COMPLEMENTS+"2";
     final String NEIGHBOURHOOD_2 = NEIGHBOURHOOD+"2";
     final String CITY_2 = CITY+"2";
+    final String STATE_2 = STATE+"2";
     final String COUNTRY_2 = COUNTRY+"2";
 
     LinkedTreeMap map = new LinkedTreeMap();
@@ -106,6 +115,7 @@ public class AddressTest {
     map.put("complements", COMPLEMENTS_2);
     map.put("neighbourhood", NEIGHBOURHOOD_2);
     map.put("city", CITY_2);
+    map.put("state", STATE_2);
     map.put("country", COUNTRY_2);
 
     address.setFromLinkedTreeMap(map);
@@ -116,8 +126,8 @@ public class AddressTest {
     assertEquals(COMPLEMENTS_2, address.getComplements());
     assertEquals(NEIGHBOURHOOD_2, address.getNeighbourhood());
     assertEquals(CITY_2, address.getCity());
+    assertEquals(STATE_2, address.getState());
     assertEquals(COUNTRY_2, address.getCountry());
   }
-
 
 }

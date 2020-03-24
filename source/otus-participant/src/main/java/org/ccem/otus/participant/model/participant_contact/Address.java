@@ -10,6 +10,7 @@ public class Address extends ParticipantContactItemValue {
   private String complements;
   private String neighbourhood;
   private String city;
+  private String state;
   private String country;
 
   public String getPostalCode() {
@@ -36,6 +37,8 @@ public class Address extends ParticipantContactItemValue {
     return city;
   }
 
+  public String getState() { return state; }
+
   public String getCountry() {
     return country;
   }
@@ -51,7 +54,7 @@ public class Address extends ParticipantContactItemValue {
   @Override
   public boolean isValid() {
     return (getStreet()!=null && getStreetNumber()!=null &&
-      getNeighbourhood()!=null && getCity()!=null && getCountry()!=null);
+      getNeighbourhood()!=null && getCity()!=null && getState()!=null && getCountry()!=null);
   }
 
   @Override
@@ -62,6 +65,7 @@ public class Address extends ParticipantContactItemValue {
     complements = (String)map.get("complements");
     neighbourhood = (String)map.get("neighbourhood");
     city = (String)map.get("city");
+    state = (String)map.get("state");
     country = (String)map.get("country");
   }
 
