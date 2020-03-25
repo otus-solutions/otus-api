@@ -15,6 +15,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
@@ -91,23 +92,25 @@ public class ActivityFacade {
     try {
       User statusHistoryUser;
       token = token.substring("Bearer".length()).trim();
-      SignedJWT parsed = SignedJWT.parse(token);
-      String mode = parsed.getJWTClaimsSet().getClaim("mode").toString();
-      String email = parsed.getJWTClaimsSet().getClaim("iss").toString();
+      SignedJWT signedJWT = SignedJWT.parse(token);
+      String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
+      String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
 
       if (mode.equals("user")) {
         br.org.otus.model.User user = managementUserService.fetchByEmail(email);
         statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
+        surveyActivity.getLastStatus().ifPresent(lastActivityStatus -> lastActivityStatus.setUser(statusHistoryUser));
       } else {
         Participant participant = participantService.getByEmail(email);
         statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
+        surveyActivity.setStatusHistory(surveyActivity.getStatusHistory().stream().map(activityStatus -> {
+          activityStatus.setUser(statusHistoryUser);
+          return activityStatus;
+        }).collect(Collectors.toList()));
+
+        surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
+
       }
-
-      surveyActivity.setStatusHistory(surveyActivity.getStatusHistory().stream().map(activityStatus -> {
-        activityStatus.setUser(statusHistoryUser);
-        return activityStatus;
-      }).collect(Collectors.toList()));
-
       return activityService.update(surveyActivity);
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
