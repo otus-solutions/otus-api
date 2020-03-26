@@ -1,22 +1,25 @@
 package br.org.otus.survey.activity.api;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.model.User;
+import br.org.otus.user.management.ManagementUserService;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.ActivityService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -26,12 +29,16 @@ import com.google.gson.Gson;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.services.SurveyService;
 
+import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ActivityFacade.class})
+@PrepareForTest({ActivityFacade.class, SignedJWT.class})
 public class ActivityFacadeTest {
   private static final long RECRUITMENT_NUMBER = 5112345;
   private static final String ACRONYM = "CISE";
-  private static final String TOKEN = "TOKEN";
+  private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvdHVzQGdtYWlsLmNvbSIsIm1vZGUiOiJ1c2VyIiwianRpIjoiYzc1ODIzNWMtYjQzMy00NDQ2LWFhMDMtYmU0NmI3ODU3NWEyIiwiaWF0IjoxNTg1MTc2NDg5LCJleHAiOjE1ODUxODAwODl9.wlSmhUXYW6Apqg5skGPLDGCyuA0sDYyVtZIBM8RxkLs";
+  private static final String TOKEN_BEARER = "Bearer " + TOKEN;
   private static final String SURVEY_ACTIVITY_EXCEPTION = "notExist";
   private static final String JSON = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
   private static final Integer VERSION = 1;
@@ -47,6 +54,8 @@ public class ActivityFacadeTest {
   ActivityFacade activityFacade;
   @Mock
   private SurveyActivity surveyActivity;
+  @Mock
+  private ManagementUserService managementUserService;
   @Mock
   private SurveyService surveyService;
   private SurveyActivity surveyActivityFull;
@@ -101,13 +110,25 @@ public class ActivityFacadeTest {
     activityFacade.create(surveyActivity);
   }
 
-  @Ignore
-  @Test
-  public void method_should_verify_updateActivity_with_surveyActivity() throws DataNotFoundException {
-    when(activityService.update(surveyActivity)).thenReturn(surveyActivity);
-    activityFacade.updateActivity(surveyActivity,TOKEN);
-    verify(activityService, times(1)).update(surveyActivity);
-  }
+@Test
+public void method_updateActivity_should_update_the_last_status_user_when_mode_is_user() throws Exception {
+  String statusHistory = "[{\"objectType\":\"ActivityStatus\",\"name\":\"CREATED\",\"date\":\"2017-04-12T10:35:11.971Z\",\"user\":{\"name\":\"Fulano\",\"surname\":\"Detal\",\"phone\":\"5199999999\",\"email\":\"fulano@yahoo.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"OPENED\",\"date\":\"2017-04-12T11:16:08.584Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"Aparecida\",\"phone\":\"5199999999\",\"email\":\"maria@gmail.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_ONLINE\",\"date\":\"2017-04-12T11:16:59.154Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"da Graça\",\"phone\":\"5199999999\",\"email\":\"dagraca@gmail.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"FINALIZED\",\"date\":\"2017-04-12T11:28:05.250Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"Aparecida\",\"phone\":\"5199999999\",\"email\":\"maria@gmail.com\"}}]";
+  SurveyActivity act = SurveyActivity.deserialize("{\"statusHistory\":" + statusHistory + "}");
+  br.org.otus.model.User user = new User();
+  user.setEmail(USER_EMAIL);
+
+  when(managementUserService.fetchByEmail(USER_EMAIL)).thenReturn(user);
+
+  SignedJWT signedJWT = spy(SignedJWT.parse(TOKEN));
+  mockStatic(SignedJWT.class);
+
+  JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+  PowerMockito.when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
+
+  activityFacade.updateActivity(act,TOKEN_BEARER);
+  Assert.assertEquals(act.getLastStatus().get().getUser().getEmail(), USER_EMAIL);
+
+}
 
   @Ignore
   @Test(expected = HttpResponseException.class)
