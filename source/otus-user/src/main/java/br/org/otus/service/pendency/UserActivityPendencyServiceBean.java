@@ -3,6 +3,7 @@ package br.org.otus.service.pendency;
 import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.persistence.pendency.UserActivityPendencyDao;
+import br.org.otus.persistence.pendency.dto.UserActivityPendencyDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
@@ -10,6 +11,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @Stateless
 public class UserActivityPendencyServiceBean implements UserActivityPendencyService {
@@ -40,6 +42,15 @@ public class UserActivityPendencyServiceBean implements UserActivityPendencyServ
   @Override
   public UserActivityPendency getByActivityId(String activityId) throws DataNotFoundException {
     return userActivityPendencyDao.findByActivityOID(new ObjectId(activityId));
+  }
+
+  @Override
+  public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) throws DataNotFoundException, MemoryExcededException, DataFormatException {
+    UserActivityPendencyDto userActivityPendencyDto = UserActivityPendencyDto.deserialize(searchSettingsJson);
+    if(!userActivityPendencyDto.isValid()){
+      throw new DataFormatException("Received Json has invalid field(s).");
+    }
+    return userActivityPendencyDao.findAllPendencies(userActivityPendencyDto);
   }
 
   @Override

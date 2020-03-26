@@ -4,12 +4,14 @@ import br.org.otus.model.pendency.UserActivityPendency;
 import br.org.otus.model.pendency.UserActivityPendencyResponse;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
+import br.org.otus.response.info.Validation;
 import br.org.otus.service.pendency.UserActivityPendencyService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class UserActivityPendencyFacade {
 
@@ -50,6 +52,16 @@ public class UserActivityPendencyFacade {
       return userActivityPendencyService.getByActivityId(activityId);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<UserActivityPendencyResponse> listAllPendencies(String searchSettingsJson) {
+    try {
+      return userActivityPendencyService.listAllPendencies(searchSettingsJson);
+    } catch (DataNotFoundException | MemoryExcededException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    } catch (DataFormatException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 

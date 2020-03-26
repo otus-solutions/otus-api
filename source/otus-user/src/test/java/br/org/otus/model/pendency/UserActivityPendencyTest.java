@@ -1,5 +1,6 @@
 package br.org.otus.model.pendency;
 
+import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,13 +8,13 @@ import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 public class UserActivityPendencyTest {
 
   private static final ObjectId OID = new ObjectId("5e13997795818e14a91a5268");
+  private static final ObjectId OTHER_OID = new ObjectId("5e13997795818e14a91a5267");
   private static final String OBJECT_TYPE = "userActivityPendency";
   private static final String CREATION_DATE = "2019-12-30T19:31:08.570Z";
   private static final String DUE_DATE = "2019-11-20T19:31:08.570Z";
@@ -70,6 +71,44 @@ public class UserActivityPendencyTest {
   @Test
   public void deserializeStaticMethod_shold_convert_JsonString_to_objectModel() {
     assertTrue(UserActivityPendency.deserialize(userActivityPendencyJson) instanceof UserActivityPendency);
+  }
+
+  @Test
+  public void getFrontGsonBuilder_method_should_return_GsonBuild_instance(){
+    assertTrue(UserActivityPendency.getFrontGsonBuilder() instanceof GsonBuilder);
+  }
+
+
+  @Test
+  public void objectModel_equals_himself(){
+    assertTrue(userActivityPendency.equals(userActivityPendency));
+  }
+
+  @Test
+  public void equals_method_return_TRUE(){
+    assertTrue(userActivityPendency.equals(getUserActivityPendency(OID)));
+  }
+
+  @Test
+  public void objectModel_not_equals_null_object(){
+    assertFalse(userActivityPendency.equals(null));
+  }
+
+  @Test
+  public void objectModel_not_equals_another_object_of_different_class(){
+    assertFalse(userActivityPendency.equals(new Integer(0)));
+  }
+
+  @Test
+  public void equals_method_return_FALSE_in_case_different_id(){
+    assertFalse(userActivityPendency.equals(getUserActivityPendency(OTHER_OID)));
+  }
+
+
+  private UserActivityPendency getUserActivityPendency(ObjectId oid){
+    UserActivityPendency userActivityPendency2 = new UserActivityPendency();
+    Whitebox.setInternalState(userActivityPendency2, "_id", oid);
+    return userActivityPendency2;
   }
 
 }
