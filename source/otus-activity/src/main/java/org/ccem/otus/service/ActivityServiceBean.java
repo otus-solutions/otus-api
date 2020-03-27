@@ -178,8 +178,8 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public void deactivateOfflineActivityCollection(String offlineCollectionId) {
-    offlineActivityDao.deactivateOfflineActivityCollection(offlineCollectionId);
+  public void deactivateOfflineActivityCollection(String offlineCollectionId, List<ObjectId> createdActivityIds) {
+    offlineActivityDao.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
   }
 
 }

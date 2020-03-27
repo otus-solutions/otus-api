@@ -174,12 +174,14 @@ public class ActivityFacade {
       } else if(!offlineActivityCollection.getUserId().equals(userId)) {
         throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
       } else {
+        List<ObjectId> createdActivityIds = new ArrayList<>();
         offlineActivityCollection.getActivities().forEach(activity -> {
           activity.setParticipantData(participant);
           activity.setCategory(activityCategory);
-          activityService.create(activity);
+          String createdId = activityService.create(activity);
+          createdActivityIds.add(new ObjectId(createdId));
         });
-        activityService.deactivateOfflineActivityCollection(offlineCollectionId);
+        activityService.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
       }
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
