@@ -100,7 +100,6 @@ public class ActivityFacade {
       if (mode.equals("user")) {
         br.org.otus.model.User user = managementUserService.fetchByEmail(email);
         statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
-//        surveyActivity.getLastStatus().ifPresent(lastActivityStatus -> lastActivityStatus.setUser(statusHistoryUser));
 
         List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
         int size = statusHistory.size();
