@@ -16,6 +16,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
@@ -99,7 +100,19 @@ public class ActivityFacade {
       if (mode.equals("user")) {
         br.org.otus.model.User user = managementUserService.fetchByEmail(email);
         statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
-        surveyActivity.getLastStatus().ifPresent(lastActivityStatus -> lastActivityStatus.setUser(statusHistoryUser));
+//        surveyActivity.getLastStatus().ifPresent(lastActivityStatus -> lastActivityStatus.setUser(statusHistoryUser));
+
+        List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
+        int size = statusHistory.size();
+        for (int i = size - 1; i != 0; i--) {
+          ActivityStatus activityStatus = statusHistory.get(i);
+          try {
+            activityStatus.getUser();
+            break;
+          } catch (UserNotFoundException e) {
+            activityStatus.setUser(statusHistoryUser);
+          }
+        }
       } else {
         Participant participant = participantService.getByEmail(email);
         statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
@@ -109,7 +122,6 @@ public class ActivityFacade {
         }).collect(Collectors.toList()));
 
         surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
-
       }
       return activityService.update(surveyActivity);
     } catch (DataNotFoundException | ParseException e) {
