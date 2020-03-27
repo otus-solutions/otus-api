@@ -116,7 +116,8 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   SurveyActivity act = SurveyActivity.deserialize("{\"statusHistory\":" + statusHistory + "}");
   br.org.otus.model.User user = new User();
   user.setEmail(USER_EMAIL);
-
+  act.getStatusHistory().get(2).setUser(null);
+  act.getStatusHistory().get(3).setUser(null);
   when(managementUserService.fetchByEmail(USER_EMAIL)).thenReturn(user);
 
   SignedJWT signedJWT = spy(SignedJWT.parse(TOKEN));
@@ -126,7 +127,9 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   PowerMockito.when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
 
   activityFacade.updateActivity(act,TOKEN_BEARER);
-  Assert.assertEquals(act.getLastStatus().get().getUser().getEmail(), USER_EMAIL);
+  Assert.assertNotEquals(act.getStatusHistory().get(1).getUser().getEmail(), USER_EMAIL);
+  Assert.assertEquals(act.getStatusHistory().get(2).getUser().getEmail(), USER_EMAIL);
+  Assert.assertEquals(act.getStatusHistory().get(3).getUser().getEmail(), USER_EMAIL);
 
 }
 
