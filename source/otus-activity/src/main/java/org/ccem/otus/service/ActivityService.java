@@ -1,5 +1,6 @@
 package org.ccem.otus.service;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
@@ -39,5 +40,5 @@ public interface ActivityService {
 
   OfflineActivityCollection fetchOfflineActivityCollection(String collectionId) throws DataNotFoundException;
 
-  void deactivateOfflineActivityCollection(String offlineCollectionId);
+  void deactivateOfflineActivityCollection(String offlineCollectionId, List<ObjectId> createdActivityIds);
 }

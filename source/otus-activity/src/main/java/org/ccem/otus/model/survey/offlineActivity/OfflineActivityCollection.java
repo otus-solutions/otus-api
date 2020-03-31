@@ -19,6 +19,7 @@ public class OfflineActivityCollection {
   private ObjectId userId;
   private LocalDateTime date;
   private List<SurveyActivity> activities;
+  private List<ObjectId> createdActivityIds;
   private GeoJson geoJson;
   private Boolean availableToSynchronize;
 

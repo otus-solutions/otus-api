@@ -10,6 +10,7 @@ import org.ccem.otus.persistence.OfflineActivityDao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements OfflineActivityDao {
   public static final String COLLECTION_NAME = "offline_activity_collection";
@@ -28,7 +29,7 @@ public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements
   @Override
   public OfflineActivityCollectionsDTO fetchByUserId(ObjectId userId) throws DataNotFoundException {
     Document userOfflineCollections = collection.aggregate(Arrays.asList(
-      new Document("$match", new Document("userId", userId)),
+      new Document("$match", new Document("userId", userId).append("availableToSynchronize",true)),
       new Document("$group", new Document("_id","").append("offlineActivityCollections",new Document("$push","$$ROOT")))
     )).first();
 
@@ -53,10 +54,10 @@ public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public void deactivateOfflineActivityCollection(String offlineCollectionId) {
+  public void deactivateOfflineActivityCollection(String offlineCollectionId, List<ObjectId> createdActivityIds) {
     collection.updateOne(
       new Document("_id", new ObjectId(offlineCollectionId)),
-      new Document("$set",new Document("availableToSynchronize",false).append("activities", new ArrayList<>()))
+      new Document("$set",new Document("availableToSynchronize",false).append("activities", new ArrayList<>()).append("createdActivityIds",createdActivityIds))
     );
   }
 }
