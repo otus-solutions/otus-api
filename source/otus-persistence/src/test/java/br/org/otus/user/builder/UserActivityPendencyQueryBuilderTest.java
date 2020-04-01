@@ -21,6 +21,8 @@ public class UserActivityPendencyQueryBuilderTest {
   private static final String ACTIVITY_NAME_FIELD = UserActivityPendencyQueryBuilder.ACTIVITY_NAME_FIELD;
   private static final String ACTIVITY_ACRONYM_FIELD = UserActivityPendencyQueryBuilder.ACTIVITY_ACRONYM_FIELD;
   private static final String ACTIVITY_RN_FIELD = UserActivityPendencyQueryBuilder.ACTIVITY_RN_FIELD;
+  private static final String FINALIZED_STATUS = UserActivityPendencyQueryBuilder.FINALIZED_STATUS;
+  private static final String NO_EXTERNAL_ID = UserActivityPendencyQueryBuilder.NO_EXTERNAL_ID;
 
   private UserActivityPendencyQueryBuilder builder = null;
 
@@ -51,134 +53,94 @@ public class UserActivityPendencyQueryBuilderTest {
     Whitebox.setInternalState(userActivityPendencyDto, "orderDto", orderDto);
     Whitebox.setInternalState(userActivityPendencyDto, "filterDto", filterDto);
 
-    final String EXPECTED_QUERY = "[{" +
-      "\"$lookup\":{" +
-      "\"from\":\"activity\"," +
-      "\"let\":{\"" + ACTIVITY_ID_FIELD+"\":\"$"+ACTIVITY_ID_FIELD+"\"}," +
-      "\"pipeline\":[{" +
-      "\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$eq\":[\"$"+ACTIVITY_ACRONYM_FIELD+"\",\""+ ACRONYM +"\"]}," +
-      "{\"$eq\":[\"$$"+ACTIVITY_ID_FIELD+"\",\"$_id\"]}," +
-      "{\"$eq\":[false,\"$isDiscarded\"]}]}}}," +
-      "{\"$project\":{" +
-      "\"recruitmentNumber\":\"$" + ACTIVITY_RN_FIELD + "\"," +
-      "\"name\":\"$"+ACTIVITY_NAME_FIELD+"\"," +
-      "\"acronym\":\"$"+ACTIVITY_ACRONYM_FIELD+"\"," +
-      "\"lastStatusName\":{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}," +
-      "\"externalID\":1.0}}],"+
-      "\"as\":\""+ACTIVITY_INFO+"\"}},"+
-      "{\"$match\":{"+
-      "\"$expr\":{"+
-      "\"$and\":["+
-      "{\"$in\":[\"$" + USER_ROLE + "\",[\"" + USER_EMAIL + "\"]]}," +
-      "{\"$gt\":[{\"$size\":\"$"+ACTIVITY_INFO+"\"},0.0]}"+
-      "]}}},{"+
-      "\"$addFields\":{\""+ACTIVITY_INFO+"\":{\"$arrayElemAt\":[\"$"+ACTIVITY_INFO+"\",0.0]}}},"+
+    final String EXPECTED_QUERY = "[" +
+      getLookupPipeline("{\"$eq\":[\"$"+ACTIVITY_ACRONYM_FIELD+"\",\""+ ACRONYM +"\"]},") +
+      getProjectPipeline() +
+      getPendencyFilterPipeline("{\"$in\":[\"$" + USER_ROLE + "\",[\"" + USER_EMAIL + "\"]]},") +
+      addSelectedFieldsFromActivityLookupResult() + "," +
       "{\"$sort\":{\""+ACTIVITY_INFO+".recruitmentNumber\":1.0,\"dueDate\":1.0}}," +
       "{\"$skip\":"+CURRENT_QUANTITY+".0},"+
-      "{\"$limit\":"+QUANTITY_TO_GET+".0}]";
+      "{\"$limit\":"+QUANTITY_TO_GET+".0}" +
+      "]";
+
     assertEquals(EXPECTED_QUERY,
       new GsonBuilder().create().toJson(builder.getAllPendenciesWithFiltersQuery(userActivityPendencyDto)));
   }
 
   @Test
   public void getAllPendenciesByUserQuery() {
-    final String EXPECTED_QUERY = "[{" +
-      "\"$lookup\":{" +
-      "\"from\":\"activity\"," +
-      "\"let\":{\"activityId\":\"$activityId\"}," +
-      "\"pipeline\":[" +
-      "{\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
-      "{\"$eq\":[false,\"$isDiscarded\"]}" +
-      "]}}}," +
-      "{\"$project\":{" +
-      "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
-      "\"name\":\"$surveyForm.name\"," +
-      "\"acronym\":\"$surveyForm.acronym\"," +
-      "\"lastStatusName\":{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}," +
-      "\"externalID\":1.0" +
-      "}}]," +
-      "\"as\":\"activityInfo\"}}," +
-      "{\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," +
-      "{\"$gt\":[{\"$size\":\"$activityInfo\"},0.0]}" +
-      "]}}}," +
-      "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
+    final String EXPECTED_QUERY = "[" +
+      getLookupPipeline("") +
+      getProjectPipeline() +
+      getPendencyFilterPipeline("{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]},") +
+      addSelectedFieldsFromActivityLookupResult() +
+      "]";
+
     assertEquals(EXPECTED_QUERY,
       new GsonBuilder().create().toJson(builder.getAllPendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
   }
 
   @Test
   public void getOpenedPendenciesByUserQuery() {
-    final String EXPECTED_QUERY = "[{" +
-      "\"$lookup\":{" +
-      "\"from\":\"activity\"," +
-      "\"let\":{\"activityId\":\"$activityId\"}," +
-      "\"pipeline\":[" +
-      "{\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$ne\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}," +
-      "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
-      "{\"$eq\":[false,\"$isDiscarded\"]}" +
-      "]}}}," +
-      "{\"$project\":{" +
-      "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
-      "\"name\":\"$surveyForm.name\"," +
-      "\"acronym\":\"$surveyForm.acronym\"," +
-      "\"lastStatusName\":{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}," +
-      "\"externalID\":1.0" +
-      "}}]," +
-      "\"as\":\"activityInfo\"}}," +
-      "{\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," +
-      "{\"$gt\":[{\"$size\":\"$activityInfo\"},0.0]}" +
-      "]}}}," +
-      "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
+    final String EXPECTED_QUERY = "[" +
+      getLookupPipeline("{\"$ne\":[\"" + FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]},") +
+      getProjectPipeline() +
+      getPendencyFilterPipeline("{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," ) +
+      addSelectedFieldsFromActivityLookupResult() +
+      "]";
     assertEquals(EXPECTED_QUERY,
       new GsonBuilder().create().toJson(builder.getOpenedPendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
   }
 
   @Test
   public void getDonePendenciesByUserQuery() {
-    final String EXPECTED_QUERY = "[{" +
-      "\"$lookup\":{" +
-      "\"from\":\"activity\"," +
-      "\"let\":{\"activityId\":\"$activityId\"}," +
-      "\"pipeline\":[" +
-      "{\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$eq\":[\"" + UserActivityPendencyQueryBuilder.FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]}," +
-      "{\"$eq\":[\"$$activityId\",\"$_id\"]}," +
-      "{\"$eq\":[false,\"$isDiscarded\"]}" +
-      "]}}}," +
-      "{\"$project\":{" +
-      "\"recruitmentNumber\":\"$participantData.recruitmentNumber\"," +
-      "\"name\":\"$surveyForm.name\"," +
-      "\"acronym\":\"$surveyForm.acronym\"," +
-      "\"lastStatusName\":{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}," +
-      "\"externalID\":1.0" +
-      "}}]," +
-      "\"as\":\"activityInfo\"}}," +
-      "{\"$match\":{" +
-      "\"$expr\":{" +
-      "\"$and\":[" +
-      "{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," +
-      "{\"$gt\":[{\"$size\":\"$activityInfo\"},0.0]}" +
-      "]}}}," +
-      "{\"$addFields\":{\"activityInfo\":{\"$arrayElemAt\":[\"$activityInfo\",0.0]}}}]";
+    final String EXPECTED_QUERY = "[" +
+      getLookupPipeline("{\"$eq\":[\"" + FINALIZED_STATUS + "\",{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}]},") +
+      getProjectPipeline() +
+      getPendencyFilterPipeline("{\"$eq\":[\"$" + USER_ROLE + "\",\"" + USER_EMAIL + "\"]}," ) +
+      addSelectedFieldsFromActivityLookupResult() +
+      "]";
     assertEquals(EXPECTED_QUERY,
       new GsonBuilder().create().toJson(builder.getDonePendenciesByUserQuery(USER_ROLE, USER_EMAIL)));
+  }
+
+
+  private  String getLookupPipeline(String activityFilterEquations){
+    return
+      "{\"$lookup\":{" +
+        "\"from\":\"activity\"," +
+        "\"let\":{\"" + ACTIVITY_ID_FIELD+"\":\"$"+ACTIVITY_ID_FIELD+"\"}," +
+        "\"pipeline\":[{" +
+        "\"$match\":{" +
+        "\"$expr\":{" +
+        "\"$and\":[" +
+        activityFilterEquations +
+        "{\"$eq\":[\"$$"+ACTIVITY_ID_FIELD+"\",\"$_id\"]}," +
+        "{\"$eq\":[false,\"$isDiscarded\"]}]}}},";
+  }
+
+  private String getProjectPipeline(){
+    return "{\"$project\":{" +
+      "\"recruitmentNumber\":\"$" + ACTIVITY_RN_FIELD + "\"," +
+      "\"name\":\"$"+ACTIVITY_NAME_FIELD+"\"," +
+      "\"acronym\":\"$"+ACTIVITY_ACRONYM_FIELD+"\"," +
+      "\"lastStatusName\":{\"$arrayElemAt\":[\"$statusHistory.name\",-1.0]}," +
+      "\"externalID\":{\"$ifNull\":[\"$externalID\",\""+NO_EXTERNAL_ID+"\"]}}}]," +
+      "\"as\":\""+ACTIVITY_INFO+"\"}},";
+  }
+
+  private String getPendencyFilterPipeline(String pendencyFilterEquations){
+    return
+      "{\"$match\":{"+
+        "\"$expr\":{"+
+        "\"$and\":["+
+        pendencyFilterEquations +
+        "{\"$gt\":[{\"$size\":\"$"+ACTIVITY_INFO+"\"},0.0]}"+
+        "]}}},";
+  }
+
+  private String addSelectedFieldsFromActivityLookupResult(){
+    return "{\"$addFields\":{\""+ACTIVITY_INFO+"\":{\"$arrayElemAt\":[\"$"+ACTIVITY_INFO+"\",0.0]}}}";
   }
 
 }
