@@ -19,7 +19,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
-import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
@@ -196,7 +196,7 @@ public class ActivityFacade {
     }
   }
 
-  public OfflineActivityCollectionsDTO fetchOfflineActivityCollections(String userEmail) {
+  public OfflineActivityCollectionGroupsDTO fetchOfflineActivityCollections(String userEmail) {
     try {
       return activityService.fetchOfflineActivityCollections(userEmail);
     } catch (DataNotFoundException e) {

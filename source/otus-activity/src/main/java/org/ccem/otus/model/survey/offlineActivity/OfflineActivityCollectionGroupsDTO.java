@@ -12,16 +12,16 @@ import org.ccem.otus.utils.ObjectIdAdapter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class OfflineActivityCollectionsDTO {
-  List<OfflineActivityCollection> offlineActivityCollections;
+public class OfflineActivityCollectionGroupsDTO {
+  private List<OfflineActivityCollectionGroup> offlineActivityCollectionGroups;
 
-  public static OfflineActivityCollectionsDTO deserialize(String offlineActivityCollectionsDTO) {
+  public static OfflineActivityCollectionGroupsDTO deserialize(String offlineActivityCollectionsDTO) {
     GsonBuilder builder = getGsonBuilder();
-    return builder.create().fromJson(offlineActivityCollectionsDTO, OfflineActivityCollectionsDTO.class);
+    return builder.create().fromJson(offlineActivityCollectionsDTO, OfflineActivityCollectionGroupsDTO.class);
   }
 
-  public static JsonElement serializeToJsonTree(OfflineActivityCollectionsDTO offlineActivityCollectionsDTO) {
-    return getGsonBuilder().create().toJsonTree(offlineActivityCollectionsDTO);
+  public static JsonElement serializeToJsonTree(OfflineActivityCollectionGroupsDTO offlineActivityCollectionGroupsDTO) {
+    return getGsonBuilder().create().toJsonTree(offlineActivityCollectionGroupsDTO);
   }
 
   public static GsonBuilder getGsonBuilder() {
@@ -33,5 +33,10 @@ public class OfflineActivityCollectionsDTO {
     builder.serializeNulls();
 
     return builder;
+  }
+
+  private class OfflineActivityCollectionGroup {
+    private String groupObservation;
+    private List<OfflineActivityCollection> offlineActivityCollections;
   }
 }
