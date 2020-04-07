@@ -5,7 +5,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
-import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.persistence.OfflineActivityDao;
 
 import java.util.ArrayList;
@@ -27,17 +27,20 @@ public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public OfflineActivityCollectionsDTO fetchByUserId(ObjectId userId) throws DataNotFoundException {
+  public OfflineActivityCollectionGroupsDTO fetchByUserId(ObjectId userId) throws DataNotFoundException {
     Document userOfflineCollections = collection.aggregate(Arrays.asList(
       new Document("$match", new Document("userId", userId).append("availableToSynchronize",true)),
-      new Document("$group", new Document("_id","").append("offlineActivityCollections",new Document("$push","$$ROOT")))
+      new Document("$group", new Document("_id",new Document("groupId","$groupId").append("groupObservation","$groupObservation"))
+        .append("collections",new Document("$push","$$ROOT"))),
+      new Document("$group", new Document("_id","")
+        .append("offlineActivityCollectionGroups",new Document("$push",new Document("groupObservation","$_id.groupObservation").append("offlineActivityCollections","$collections"))))
     )).first();
 
     if (userOfflineCollections == null) {
       throw new DataNotFoundException(new Throwable("User do not have any offline collection"));
     }
 
-    return OfflineActivityCollectionsDTO.deserialize(userOfflineCollections.toJson());
+    return OfflineActivityCollectionGroupsDTO.deserialize(userOfflineCollections.toJson());
   }
 
   @Override

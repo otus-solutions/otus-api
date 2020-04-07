@@ -8,7 +8,7 @@ import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.user.api.UserFacade;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
-import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -47,8 +47,8 @@ public class OfflineActivityResource {
   public String fetchOfflineCollections(@Context HttpServletRequest request) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    OfflineActivityCollectionsDTO offlineActivityCollectionsDTO = activityFacade.fetchOfflineActivityCollections(userEmail);
-    return new Response().buildSuccess(OfflineActivityCollectionsDTO.serializeToJsonTree(offlineActivityCollectionsDTO)).toJson();
+    OfflineActivityCollectionGroupsDTO offlineActivityCollectionsDTO = activityFacade.fetchOfflineActivityCollections(userEmail);
+    return new Response().buildSuccess(OfflineActivityCollectionGroupsDTO.serializeToJsonTree(offlineActivityCollectionsDTO)).toJson();
   }
 
   @POST

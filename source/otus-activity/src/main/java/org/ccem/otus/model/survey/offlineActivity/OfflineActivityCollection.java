@@ -22,6 +22,8 @@ public class OfflineActivityCollection {
   private List<ObjectId> createdActivityIds;
   private GeoJson geoJson;
   private Boolean availableToSynchronize;
+  private ObjectId groupId;
+  private String groupObservation;
 
 
   public String getObservation() {

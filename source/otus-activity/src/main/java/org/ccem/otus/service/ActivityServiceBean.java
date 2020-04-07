@@ -17,7 +17,7 @@ import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
-import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionsDTO;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.ActivityExtractionDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
@@ -167,7 +167,7 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public OfflineActivityCollectionsDTO fetchOfflineActivityCollections(String userEmail) throws DataNotFoundException {
+  public OfflineActivityCollectionGroupsDTO fetchOfflineActivityCollections(String userEmail) throws DataNotFoundException {
     User user = userDao.fetchByEmail(userEmail);
     return offlineActivityDao.fetchByUserId(user.get_id());
   }
