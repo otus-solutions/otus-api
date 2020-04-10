@@ -36,7 +36,7 @@ public class OfflineActivityCollectionGroupsDTO {
   }
 
   private class OfflineActivityCollectionGroup {
-    private String groupObservation;
+    private String observation;
     private List<OfflineActivityCollection> collections;
   }
 }
