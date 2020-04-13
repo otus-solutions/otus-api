@@ -33,7 +33,7 @@ public class OfflineActivityDaoBean extends MongoGenericDao<Document> implements
       new Document("$group", new Document("_id",new Document("groupId","$groupId").append("groupObservation","$groupObservation"))
         .append("collections",new Document("$push","$$ROOT"))),
       new Document("$group", new Document("_id","")
-        .append("offlineActivityCollectionGroups",new Document("$push",new Document("groupObservation","$_id.groupObservation").append("offlineActivityCollections","$collections"))))
+        .append("offlineActivityCollectionGroups",new Document("$push",new Document("observation","$_id.groupObservation").append("collections","$collections"))))
     )).first();
 
     if (userOfflineCollections == null) {
