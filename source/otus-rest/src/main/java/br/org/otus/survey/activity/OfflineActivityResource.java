@@ -59,7 +59,7 @@ public class OfflineActivityResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     User user = userFacade.fetchByEmail(userEmail);
-    activityFacade.synchronize(recruitmentNumber, offlineCollectionId, user.get_id());
+    activityFacade.synchronize(recruitmentNumber, offlineCollectionId, user);
     return new Response().buildSuccess().toJson();
   }
 }

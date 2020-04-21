@@ -162,8 +162,9 @@ public class ActivityFacade {
     }
   }
 
-  public void synchronize(long rn, String offlineCollectionId, ObjectId userId) {
+  public void synchronize(long rn, String offlineCollectionId, br.org.otus.model.User user) {
     try {
+      User statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
       Participant participant = participantService.getByRecruitmentNumber(rn);
       participant.setTokenList(new ArrayList<>());
       participant.setPassword(null);
@@ -171,13 +172,17 @@ public class ActivityFacade {
       OfflineActivityCollection offlineActivityCollection = activityService.fetchOfflineActivityCollection(offlineCollectionId);
       if (!offlineActivityCollection.getAvailableToSynchronize()) {
         throw new HttpResponseException(Validation.build("Offline collection is already synchronized"));
-      } else if(!offlineActivityCollection.getUserId().equals(userId)) {
+      } else if(!offlineActivityCollection.getUserId().equals(user.get_id())) {
         throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
       } else {
         List<ObjectId> createdActivityIds = new ArrayList<>();
         offlineActivityCollection.getActivities().forEach(activity -> {
           activity.setParticipantData(participant);
           activity.setCategory(activityCategory);
+          activity.setStatusHistory(activity.getStatusHistory().stream().map(activityStatus -> {
+            activityStatus.setUser(statusHistoryUser);
+            return activityStatus;
+          }).collect(Collectors.toList()));
           String createdId = activityService.create(activity);
           createdActivityIds.add(new ObjectId(createdId));
         });
