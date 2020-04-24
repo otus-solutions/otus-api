@@ -48,6 +48,14 @@ public class SecurityFacade {
     }
   }
 
+  public void requestParticipantPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
+    try {
+      securityService.getParticipantPasswordResetToken(passwordResetRequestDto);
+    } catch (TokenException | DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
   public void validatePasswordResetRequest(String token) {
     try {
       securityService.validatePasswordReset(token);
