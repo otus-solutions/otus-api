@@ -1,24 +1,21 @@
 package br.org.otus.survey.activity.api;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
+import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
-import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
@@ -26,11 +23,13 @@ import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
-import com.google.gson.JsonSyntaxException;
-
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.info.Validation;
+import javax.inject.Inject;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ActivityFacade {
 
@@ -100,23 +99,35 @@ public class ActivityFacade {
     try {
       User statusHistoryUser;
       token = token.substring("Bearer".length()).trim();
-      SignedJWT parsed = SignedJWT.parse(token);
-      String mode = parsed.getJWTClaimsSet().getClaim("mode").toString();
-      String email = parsed.getJWTClaimsSet().getClaim("iss").toString();
+      SignedJWT signedJWT = SignedJWT.parse(token);
+      String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
+      String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
 
       if (mode.equals("user")) {
         br.org.otus.model.User user = managementUserService.fetchByEmail(email);
         statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
+
+        List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
+        int size = statusHistory.size();
+        for (int i = size - 1; i != 0; i--) {
+          ActivityStatus activityStatus = statusHistory.get(i);
+          try {
+            activityStatus.getUser();
+            break;
+          } catch (UserNotFoundException e) {
+            activityStatus.setUser(statusHistoryUser);
+          }
+        }
       } else {
         Participant participant = participantService.getByEmail(email);
         statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
+        surveyActivity.setStatusHistory(surveyActivity.getStatusHistory().stream().map(activityStatus -> {
+          activityStatus.setUser(statusHistoryUser);
+          return activityStatus;
+        }).collect(Collectors.toList()));
+
+        surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
       }
-
-      surveyActivity.setStatusHistory(surveyActivity.getStatusHistory().stream().map(activityStatus -> {
-        activityStatus.setUser(statusHistoryUser);
-        return activityStatus;
-      }).collect(Collectors.toList()));
-
       return activityService.update(surveyActivity);
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));

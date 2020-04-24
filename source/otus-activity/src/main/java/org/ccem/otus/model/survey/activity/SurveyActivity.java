@@ -109,6 +109,11 @@ public class SurveyActivity {
       .reduce((activityStatus, activityStatus2) -> activityStatus2);
   }
 
+  public Optional<ActivityStatus> getLastStatus() {
+    return statusHistory.stream()
+      .reduce((activityStatus, activityStatus2) -> activityStatus2);
+  }
+
   public Optional<Interview> getLastInterview() {
     return this.interviews.stream().reduce((interview, interview2) -> interview2);
 
