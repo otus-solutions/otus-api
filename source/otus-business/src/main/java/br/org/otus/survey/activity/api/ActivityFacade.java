@@ -1,32 +1,35 @@
 package br.org.otus.survey.activity.api;
 
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
+import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
-import org.ccem.otus.model.survey.activity.User;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.User;
+import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
-import com.google.gson.JsonSyntaxException;
-
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.info.Validation;
+import javax.inject.Inject;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ActivityFacade {
 
@@ -38,6 +41,9 @@ public class ActivityFacade {
 
   @Inject
   private ManagementUserService managementUserService;
+
+  @Inject
+  private ActivityCategoryService activityCategoryService;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
@@ -167,4 +173,50 @@ public class ActivityFacade {
     }
   }
 
+  public void synchronize(long rn, String offlineCollectionId, br.org.otus.model.User user) {
+    try {
+      User statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
+      Participant participant = participantService.getByRecruitmentNumber(rn);
+      participant.setTokenList(new ArrayList<>());
+      participant.setPassword(null);
+      ActivityCategory activityCategory = activityCategoryService.getDefault();
+      OfflineActivityCollection offlineActivityCollection = activityService.fetchOfflineActivityCollection(offlineCollectionId);
+      if (!offlineActivityCollection.getAvailableToSynchronize()) {
+        throw new HttpResponseException(Validation.build("Offline collection is already synchronized"));
+      } else if(!offlineActivityCollection.getUserId().equals(user.get_id())) {
+        throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
+      } else {
+        List<ObjectId> createdActivityIds = new ArrayList<>();
+        offlineActivityCollection.getActivities().forEach(activity -> {
+          activity.setParticipantData(participant);
+          activity.setCategory(activityCategory);
+          activity.setStatusHistory(activity.getStatusHistory().stream().map(activityStatus -> {
+            activityStatus.setUser(statusHistoryUser);
+            return activityStatus;
+          }).collect(Collectors.toList()));
+          String createdId = activityService.create(activity);
+          createdActivityIds.add(new ObjectId(createdId));
+        });
+        activityService.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
+      }
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void save(String userEmail, OfflineActivityCollection offlineActivityCollection) {
+    try {
+      activityService.save(userEmail, offlineActivityCollection);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public OfflineActivityCollectionGroupsDTO fetchOfflineActivityCollections(String userEmail) {
+    try {
+      return activityService.fetchOfflineActivityCollections(userEmail);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 }

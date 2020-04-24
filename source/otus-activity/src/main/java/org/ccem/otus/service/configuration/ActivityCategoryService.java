@@ -18,4 +18,6 @@ public interface ActivityCategoryService {
   ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
   void setDefaultCategory(String name) throws DataNotFoundException;
+
+  ActivityCategory getDefault();
 }
