@@ -9,7 +9,6 @@ import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.security.services.SecurityService;
 import br.org.otus.user.dto.PasswordResetDto;
-import br.org.otus.user.management.ManagementUserService;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -20,6 +19,7 @@ import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 
 import javax.inject.Inject;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +119,7 @@ public class ParticipantFacade {
     try {
       managementParticipantService.requestPasswordReset(requestData);
     }
-    catch (EncryptedException | DataNotFoundException | EmailNotificationException e) {
+    catch (EncryptedException | DataNotFoundException | EmailNotificationException | MalformedURLException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
 
