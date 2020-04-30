@@ -8,6 +8,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationDao;
+import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -47,6 +51,12 @@ public class ExamUploadServiceBean implements ExamUploadService {
   @Inject
   private ExamResultDao examResultDAO;
 
+  @Inject
+  private ParticipantLaboratoryDao participantLaboratoryDao;
+
+  @Inject
+  private LaboratoryConfigurationDao laboratoryConfigurationDao;
+
   @Override
   public String create(ExamUploadDTO examUploadDTO, String userEmail) throws DataNotFoundException, ValidationException {
     ExamSendingLot examSendingLot = examUploadDTO.getExamSendingLot();
@@ -77,6 +87,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
 
     return lotId.toString();
   }
+
 
   @Override
   public List<ExamSendingLot> list() {
@@ -109,26 +120,56 @@ public class ExamUploadServiceBean implements ExamUploadService {
    * @throws ValidationException
    */
   @Override
-  public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws DataNotFoundException, ValidationException {
+  public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws ValidationException, DataNotFoundException {
+    LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationDao.find();
+    Integer tubeToken = laboratoryConfiguration.getCodeConfiguration().getTubeToken();
+    List<ExamResult> aliquotExamResults = new ArrayList<>();
+    List<ExamResult> tubeExamResults = new ArrayList<>();
+    List<String> tubeCodes = new ArrayList<>();
+
+    for (ExamResult examResult : examResults) {
+      String materialCode = examResult.getCode();
+      char[] ch = new char[1];
+      materialCode.getChars(2,3,ch,0);
+      String materialToken = new String(ch);
+      if (materialToken.equals(tubeToken.toString())){
+        tubeCodes.add(materialCode);
+        tubeExamResults.add(examResult);
+      } else {
+        aliquotExamResults.add(examResult);
+      }
+    }
+
+    ArrayList<ResponseAliquot> invalid = new ArrayList<>();
+    MutableBoolean materialNotFound = new MutableBoolean(false);
+    MutableBoolean materialDoesNotMatchExam = new MutableBoolean(false);;
+
+    validateAliquotExamResults(aliquotExamResults, invalid, materialNotFound, materialDoesNotMatchExam);
+
+    if (materialDoesNotMatchExam.getValue()) {
+      throw new ValidationException(new Throwable(ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE), invalid);
+    } else if (materialNotFound.getValue() && !forcedSave) {
+      throw new ValidationException(new Throwable(ALIQUOT_NOT_FOUND_MESSAGE), invalid);
+    }
+  }
+
+  private void validateAliquotExamResults(List<ExamResult> aliquotExamResults, ArrayList<ResponseAliquot> invalid, MutableBoolean materialNotFound, MutableBoolean materialDoesNotMatchExam) throws DataNotFoundException {
     List<Aliquot> allAliquots = aliquotDao.getAliquots();
     HashMap<String, Aliquot> hmap = new HashMap<>();
-    ArrayList<ResponseAliquot> invalid = new ArrayList<>();
-    Boolean aliquotNotFound = false;
-    Boolean aliquotDoesNotMatchExam = false;
 
     for (Aliquot aliquot : allAliquots) {
       hmap.putIfAbsent(aliquot.getCode(), aliquot);
     }
 
     AliquotExamCorrelation aliquotExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
-    for (ExamResult examResult : examResults) {
-      examResult.setAliquotValid(true);
-      String aliquotCode = examResult.getAliquotCode();
+    for (ExamResult examResult : aliquotExamResults) {
+      examResult.setIsValid(true);
+      String aliquotCode = examResult.getCode();
       Aliquot found = hmap.get(aliquotCode);
       if (found == null) {
         addInvalidResult(invalid, aliquotCode, ALIQUOT_NOT_FOUND_MESSAGE, new ArrayList(), examResult);
-        aliquotNotFound = true;
-        examResult.setAliquotValid(false);
+        materialNotFound.setValue(true);
+        examResult.setIsValid(false);
       } else {
         ArrayList possibleExams = (ArrayList) aliquotExamCorrelation.getHashMap().get(found.getName());
         examResult.setRecruitmentNumber(found.getRecruitmentNumber());
@@ -136,17 +177,15 @@ public class ExamUploadServiceBean implements ExamUploadService {
         examResult.setSex(found.getSex());
         if (!possibleExams.contains(examResult.getExamName())) {
           addInvalidResult(invalid, aliquotCode, ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE, possibleExams, examResult);
-          aliquotDoesNotMatchExam = true;
-          examResult.setAliquotValid(false);
+          materialDoesNotMatchExam.setValue(true);
+          examResult.setIsValid(false);
         }
       }
     }
+  }
 
-    if (aliquotDoesNotMatchExam) {
-      throw new ValidationException(new Throwable(ALIQUOT_DOES_NOT_MATCH_EXAM_MESSAGE), invalid);
-    } else if (aliquotNotFound && !forcedSave) {
-      throw new ValidationException(new Throwable(ALIQUOT_NOT_FOUND_MESSAGE), invalid);
-    }
+  private void validateTubeExamResult(){
+
   }
 
   @Override

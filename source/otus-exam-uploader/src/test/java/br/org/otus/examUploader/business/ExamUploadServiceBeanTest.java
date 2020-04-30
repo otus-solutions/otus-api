@@ -137,7 +137,7 @@ public class ExamUploadServiceBeanTest {
 
     IntStream.range(1, 2).forEach(counter -> {
       ExamResult examResult = new ExamResult();
-      examResult.setAliquotCode(String.valueOf(counter));
+      examResult.setCode(String.valueOf(counter));
       examResult.setExamName("URÉIA - SANGUE");
       resultsToVerify.add(examResult);
     });
@@ -161,7 +161,7 @@ public class ExamUploadServiceBeanTest {
     List<ExamResult> resultsToVerify = new ArrayList<>();
 
     ExamResult examResult = new ExamResult();
-    examResult.setAliquotCode("a");
+    examResult.setCode("a");
 
     resultsToVerify.add(examResult);
 
@@ -175,7 +175,7 @@ public class ExamUploadServiceBeanTest {
     List<ExamResult> resultsToVerify = new ArrayList<>();
 
     ExamResult examResult = new ExamResult();
-    examResult.setAliquotCode("a");
+    examResult.setCode("a");
 
     resultsToVerify.add(examResult);
 
@@ -203,7 +203,7 @@ public class ExamUploadServiceBeanTest {
     IntStream.range(1, 2).forEach(counter -> {
       ExamResult examResult = new ExamResult();
       examResult.setExamName("URÉIA - SANGUE CEENTRAL");
-      examResult.setAliquotCode(String.valueOf(counter));
+      examResult.setCode(String.valueOf(counter));
       resultsToVerify.add(examResult);
     });
 
