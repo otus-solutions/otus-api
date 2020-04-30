@@ -21,7 +21,7 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
       participantCommunicationDataDto.setEmail(requestData.getEmail());
       participantCommunicationDataDto.setId(ParticipantDefinitions.TEMPLATE_RESET_PASSWD_PARTICIPANT_ID.getValue());
       participantCommunicationDataDto.pushVariable("token", requestData.getToken());
-      participantCommunicationDataDto.pushVariable("host", isValidURL(requestData.getRedirectUrl()).getPath());
+      participantCommunicationDataDto.pushVariable("host", String.valueOf(isValidURL(requestData.getRedirectUrl())));
       new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));
 
     }catch(MalformedURLException | RequestException e){

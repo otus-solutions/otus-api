@@ -156,7 +156,6 @@ public class SecurityServiceBean implements SecurityService {
     }
   }
 
-
   @Override
   public String getRequestEmail(String token) throws DataNotFoundException {
     return passwordResetContextService.getRequestEmail(token);
