@@ -119,7 +119,7 @@ public class ParticipantFacade {
     try {
       managementParticipantService.requestPasswordReset(requestData);
     }
-    catch (EncryptedException | DataNotFoundException | EmailNotificationException | MalformedURLException e) {
+    catch (EmailNotificationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
 

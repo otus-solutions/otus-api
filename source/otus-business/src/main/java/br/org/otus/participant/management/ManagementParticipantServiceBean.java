@@ -1,27 +1,35 @@
 package br.org.otus.participant.management;
 
-import br.org.otus.email.user.management.PasswordResetEmail;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
+import br.org.otus.gateway.response.exception.RequestException;
+import br.org.otus.participant.enums.ParticipantDefinitions;
 import br.org.otus.security.dtos.ParticipantCommunicationDataDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ManagementParticipantServiceBean implements ManagementParticipantService {
 
   @Override
   public void requestPasswordReset(PasswordResetRequestDto requestData)
-    throws EncryptedException, DataNotFoundException, MalformedURLException {
+    throws EmailNotificationException {
 
-    ParticipantCommunicationDataDto participantCommunicationDataDto = new ParticipantCommunicationDataDto();
-    participantCommunicationDataDto.setEmail(requestData.getEmail());
-    participantCommunicationDataDto.setId("5ea88862ae51d800083aeba7");
-    participantCommunicationDataDto.pushVariable("token", requestData.getToken());
-    participantCommunicationDataDto.pushVariable("host", requestData.getRedirectUrl());
+    try {
+      ParticipantCommunicationDataDto participantCommunicationDataDto = new ParticipantCommunicationDataDto();
+      participantCommunicationDataDto.setEmail(requestData.getEmail());
+      participantCommunicationDataDto.setId(ParticipantDefinitions.TEMPLATE_RESET_PASSWD_PARTICIPANT_ID.getValue());
+      participantCommunicationDataDto.pushVariable("token", requestData.getToken());
+      participantCommunicationDataDto.pushVariable("host", isValidURL(requestData.getRedirectUrl()).getPath());
+      new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));
 
-    new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));
+    }catch(MalformedURLException | RequestException e){
+      throw new EmailNotificationException(e);
+    }
   }
 
+  private URL isValidURL(String redirectUrl) throws MalformedURLException {
+    return new URL(redirectUrl);
+  }
 }
