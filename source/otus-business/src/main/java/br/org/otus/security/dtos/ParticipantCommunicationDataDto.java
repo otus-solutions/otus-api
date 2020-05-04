@@ -1,13 +1,10 @@
 package br.org.otus.security.dtos;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class ParticipantCommunicationDataDto {
   private String _id;
@@ -18,11 +15,6 @@ public class ParticipantCommunicationDataDto {
     variables = new LinkedHashMap<String, String>();
     variables.put("token", "");
     variables.put("host", "");
-  }
-
-  public String toJson() {
-    Gson gson = new Gson();
-    return gson.toJson(this);
   }
 
   public static ParticipantCommunicationDataDto deserialize(String json) {

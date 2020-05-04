@@ -15,7 +15,6 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
   @Override
   public void requestPasswordReset(PasswordResetRequestDto requestData)
     throws EmailNotificationException {
-
     try {
       ParticipantCommunicationDataDto participantCommunicationDataDto = new ParticipantCommunicationDataDto();
       participantCommunicationDataDto.setEmail(requestData.getEmail());
