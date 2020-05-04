@@ -22,7 +22,7 @@ public interface SecurityService {
 
   String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
 
-  void getParticipantPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
+  void registerParticipantPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
 
   String getRequestEmail(String token) throws DataNotFoundException;
 

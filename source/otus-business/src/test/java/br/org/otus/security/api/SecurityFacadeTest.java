@@ -167,13 +167,13 @@ public class SecurityFacadeTest {
   @Test
   public void method_requestParticipantPasswordReset_should_evoke_getParticipantPasswordResetToken_by_securityService() throws TokenException, DataNotFoundException {
     securityFacade.requestParticipantPasswordReset(passwordResetRequestDto);
-    Mockito.verify(securityService, Mockito.times(1)).getParticipantPasswordResetToken(passwordResetRequestDto);
+    Mockito.verify(securityService, Mockito.times(1)).registerParticipantPasswordResetToken(passwordResetRequestDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void method_requestParticipantPasswordReset_should_catch_exception() throws TokenException, DataNotFoundException {
     Throwable mockTokenException = spy(new TokenException());
-    Mockito.doThrow( mockTokenException).when(securityService).getParticipantPasswordResetToken(passwordResetRequestDto);
+    Mockito.doThrow( mockTokenException).when(securityService).registerParticipantPasswordResetToken(passwordResetRequestDto);
     when(mockTokenException.getCause()).thenReturn(mockTokenException);
     when(mockTokenException.getMessage()).thenReturn("expectedFail");
 
