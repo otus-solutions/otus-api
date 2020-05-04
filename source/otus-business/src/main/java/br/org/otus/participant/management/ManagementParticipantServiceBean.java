@@ -23,7 +23,7 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
       participantCommunicationDataDto.pushVariable("host", String.valueOf(isValidURL(requestData.getRedirectUrl())));
       new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));
 
-    }catch(MalformedURLException | RequestException e){
+    } catch (MalformedURLException | RequestException e) {
       throw new EmailNotificationException(e);
     }
   }
