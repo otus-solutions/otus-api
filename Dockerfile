@@ -17,6 +17,7 @@ ENV DCM_HOST "dcm-service"
 ENV DCM_PORT "8080"
 ENV COMMUNICATION_HOST "communication-service"
 ENV COMMUNICATION_PORT "8080"
+ENV APP_URL "https://otus.hmg.ccem.ufrgs.br/otus-app/index.html#/"
 
 ENV DEBUG_MODE "false"
 ENV JVM_MEMORY "3G"

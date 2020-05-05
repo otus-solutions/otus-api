@@ -113,6 +113,7 @@ public class ParticipantFacade {
   }
 
   public void requestPasswordReset(PasswordResetRequestDto requestData) {
+    requestData.setRedirectUrl(System.getenv("APP_URL"));
     securityFacade.removePasswordResetRequests(requestData.getEmail());
     securityFacade.requestParticipantPasswordReset(requestData);
 
