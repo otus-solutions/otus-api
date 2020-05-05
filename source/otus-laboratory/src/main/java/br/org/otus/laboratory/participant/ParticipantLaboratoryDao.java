@@ -1,8 +1,11 @@
 package br.org.otus.laboratory.participant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
+import br.org.otus.laboratory.project.exam.utils.ExamResultTube;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -39,4 +42,6 @@ public interface ParticipantLaboratoryDao {
   ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException;
 
   ArrayList<Tube> getTubes(ArrayList<String> tubeCodeList);
+
+  HashMap<String, ExamResultTube> getTubesParticipantData(List<String> tubeCodes);
 }
