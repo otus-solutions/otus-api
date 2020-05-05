@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface AliquotDao {
@@ -49,4 +50,6 @@ public interface AliquotDao {
   ArrayList<Aliquot> getAliquots(ArrayList<String> aliquotCodeList);
 
   List<String> getAliquotsByOrigin(String locationPointId);
+
+  HashMap<String, Aliquot> getExamAliquotsHashMap(List<String> aliquotCodes);
 }

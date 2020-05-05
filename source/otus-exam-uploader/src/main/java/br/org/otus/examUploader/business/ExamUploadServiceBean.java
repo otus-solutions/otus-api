@@ -133,6 +133,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
     List<ExamResult> aliquotExamResults = new ArrayList<>();
     List<ExamResult> tubeExamResults = new ArrayList<>();
     List<String> tubeCodes = new ArrayList<>();
+    List<String> aliquotCodes = new ArrayList<>();
 
     for (ExamResult examResult : examResults) {
       String materialCode = examResult.getCode();
@@ -143,6 +144,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
         tubeCodes.add(materialCode);
         tubeExamResults.add(examResult);
       } else {
+        aliquotCodes.add(materialCode);
         aliquotExamResults.add(examResult);
       }
     }
@@ -151,7 +153,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
     MutableBoolean materialNotFound = new MutableBoolean(false);
     MutableBoolean materialDoesNotMatchExam = new MutableBoolean(false);;
 
-    validateAliquotExamResults(aliquotExamResults, invalid, materialNotFound, materialDoesNotMatchExam, materialExamCorrelation);
+    validateAliquotExamResults(aliquotExamResults, aliquotCodes, invalid, materialNotFound, materialDoesNotMatchExam, materialExamCorrelation);
     validateTubeExamResult(tubeExamResults, tubeCodes, invalid, materialNotFound, materialDoesNotMatchExam, materialExamCorrelation);
 
     if (materialDoesNotMatchExam.getValue()) {
@@ -161,14 +163,8 @@ public class ExamUploadServiceBean implements ExamUploadService {
     }
   }
 
-  private void validateAliquotExamResults(List<ExamResult> aliquotExamResults, ArrayList<ResponseMaterial> invalid, MutableBoolean materialNotFound, MutableBoolean materialDoesNotMatchExam, AliquotExamCorrelation materialExamCorrelation) throws DataNotFoundException {
-    List<Aliquot> allAliquots = aliquotDao.getAliquots();
-    HashMap<String, Aliquot> hmap = new HashMap<>();
-
-    for (Aliquot aliquot : allAliquots) {
-      hmap.putIfAbsent(aliquot.getCode(), aliquot);
-    }
-
+  private void validateAliquotExamResults(List<ExamResult> aliquotExamResults, List<String> aliquotCodes, ArrayList<ResponseMaterial> invalid, MutableBoolean materialNotFound, MutableBoolean materialDoesNotMatchExam, AliquotExamCorrelation materialExamCorrelation) throws DataNotFoundException {
+    HashMap<String, Aliquot> hmap = aliquotDao.getExamAliquotsHashMap(aliquotCodes);
 
     for (ExamResult examResult : aliquotExamResults) {
       examResult.setIsValid(true);
