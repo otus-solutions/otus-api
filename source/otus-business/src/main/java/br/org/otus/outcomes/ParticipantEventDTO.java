@@ -11,10 +11,19 @@ public class ParticipantEventDTO implements Dto {
 
   public String _id;
   public String objectType;
+  public String name;
   public String acronym;
-  public String description;
   public String activityId;
+  public String description;
   public EmailNotification emailNotification;
+
+  public ParticipantEventDTO(String acronym, String activityId) {
+    this.objectType = "ParticipantActivityAutoFillEvent"; //todo check object types
+    this.name = acronym;
+    this.acronym = acronym;
+    this.description = acronym; //todo: check what fix description to use
+    this.activityId = activityId;
+  }
 
   public String getObjectType() {
     this.updateObjectType();
@@ -27,6 +36,11 @@ public class ParticipantEventDTO implements Dto {
 
   public String getActivityId() {
     return this.activityId;
+  }
+
+
+  public static String serialize (ParticipantEventDTO participantEventDTO) {
+    return getGsonBuilder().create().toJson(participantEventDTO);
   }
 
   public static ParticipantEventDTO deserialize(String participantEventJson) {

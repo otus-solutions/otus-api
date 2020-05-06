@@ -1,11 +1,11 @@
 package br.org.otus.survey.activity.api;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
 import br.org.otus.model.User;
+import br.org.otus.outcomes.FollowUpFacade;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
+import com.google.gson.Gson;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -19,15 +19,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.google.gson.Gson;
-
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.survey.services.SurveyService;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -53,11 +50,14 @@ public class ActivityFacadeTest {
   @InjectMocks
   ActivityFacade activityFacade;
   @Mock
+  private FollowUpFacade followUpFacade;
+  @Mock
   private SurveyActivity surveyActivity;
   @Mock
   private ManagementUserService managementUserService;
   @Mock
   private SurveyService surveyService;
+
   private SurveyActivity surveyActivityFull;
 //TODO test for use gatewayfacade private GatewayFacade gatewayFacade;
 
@@ -168,5 +168,27 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
     when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+  }
+
+  @Test
+  public void method_should_create_participant_event_when_the_check_returns_true() {
+    when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
+    when(followUpFacade.checkForParticipantEventCreation(surveyActivity)).thenReturn(true);
+
+    activityFacade.create(surveyActivity);
+    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity);
+  }
+
+  @Test
+  public void method_should_verify_create_for_follow_up_with_surveyActivity() {
+    when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
+    activityFacade.createFollowUp(surveyActivity);
+    verify(activityService, times(1)).create(surveyActivity);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void createFollowUpMethodTest_should_trigger_requiredExternalID_validation() {
+    PowerMockito.when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
+    activityFacade.createFollowUp(surveyActivity);
   }
 }

@@ -1,4 +1,4 @@
-package br.org.otus.outcomes;
+package br.org.otus.communication;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,7 +8,7 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class CommunicationData {
+public class FollowUpCommunicationData {
   private ObjectId _id;
   private String email;
   private LinkedHashMap<String, String> variables;
@@ -23,13 +23,13 @@ public class CommunicationData {
     return gson.toJson(this);
   }
 
-  public static CommunicationData deserialize(String json) {
-    CommunicationData emailNotification = CommunicationData.getGsonBuilder().create().fromJson(json, CommunicationData.class);
+  public static FollowUpCommunicationData deserialize(String json) {
+    FollowUpCommunicationData emailNotification = FollowUpCommunicationData.getGsonBuilder().create().fromJson(json, FollowUpCommunicationData.class);
     return emailNotification;
   }
 
-  public static String serialize(CommunicationData communicationData) {
-    return CommunicationData.getGsonBuilder().create().toJson(communicationData);
+  public static String serialize(FollowUpCommunicationData followUpCommunicationData) {
+    return FollowUpCommunicationData.getGsonBuilder().create().toJson(followUpCommunicationData);
   }
 
   public static GsonBuilder getGsonBuilder() {

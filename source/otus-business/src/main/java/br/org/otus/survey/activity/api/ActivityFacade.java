@@ -1,5 +1,6 @@
 package br.org.otus.survey.activity.api;
 
+import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
@@ -45,6 +46,9 @@ public class ActivityFacade {
   @Inject
   private ActivityCategoryService activityCategoryService;
 
+  @Inject
+  private FollowUpFacade followUpFacade;
+
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
   }
@@ -80,7 +84,15 @@ public class ActivityFacade {
   public String create(SurveyActivity surveyActivity) {
     try {
       isMissingRequiredExternalID(surveyActivity);
-      return activityService.create(surveyActivity);
+      String activityId = activityService.create(surveyActivity);
+
+      surveyActivity.setActivityID(new ObjectId(activityId));
+      boolean demandsParticipantEvent = followUpFacade.checkForParticipantEventCreation(surveyActivity);
+      if (demandsParticipantEvent) {
+        followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
+      }
+
+      return activityId;
 
     } catch (ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
@@ -183,7 +195,7 @@ public class ActivityFacade {
       OfflineActivityCollection offlineActivityCollection = activityService.fetchOfflineActivityCollection(offlineCollectionId);
       if (!offlineActivityCollection.getAvailableToSynchronize()) {
         throw new HttpResponseException(Validation.build("Offline collection is already synchronized"));
-      } else if(!offlineActivityCollection.getUserId().equals(user.get_id())) {
+      } else if (!offlineActivityCollection.getUserId().equals(user.get_id())) {
         throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
       } else {
         List<ObjectId> createdActivityIds = new ArrayList<>();
@@ -216,6 +228,16 @@ public class ActivityFacade {
     try {
       return activityService.fetchOfflineActivityCollections(userEmail);
     } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public String createFollowUp(SurveyActivity surveyActivity) {
+    try {
+      isMissingRequiredExternalID(surveyActivity);
+      return activityService.create(surveyActivity);
+
+    } catch (ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
