@@ -17,14 +17,15 @@ public class UserActivityPendencyQueryBuilder {
   private static final int DATE_END_INDEX = 10;
 
   public static final String ACTIVITY_ID_FIELD = "activityId";
-  public static final String FINALIZED_STATUS = "FINALIZED";
-  public static final String NO_STATUS = "";
   public static final String ACTIVITY_INFO = "activityInfo";
-
   public static final String ACTIVITY_NAME_FIELD = "surveyForm.name";
   public static final String ACTIVITY_ACRONYM_FIELD = "surveyForm.acronym";
   public static final String ACTIVITY_RN_FIELD = "participantData.recruitmentNumber";
   public static final String ACTIVITY_EXTERNAL_ID_FIELD = "externalID";
+
+  public static final String FINALIZED_STATUS = "FINALIZED";
+  public static final String NO_STATUS = "";
+  public static final String NO_EXTERNAL_ID = " ";
 
   private ArrayList<Bson> pipeline;
 
@@ -52,7 +53,7 @@ public class UserActivityPendencyQueryBuilder {
     if(userActivityPendencyDto.getOrderDto() != null){
       addSortingCriteria(userActivityPendencyDto.getOrderDto().getSortingCriteria());
     }
-	  addSkip(userActivityPendencyDto.getCurrentQuantity());
+    addSkip(userActivityPendencyDto.getCurrentQuantity());
     addLimit(userActivityPendencyDto.getQuantityToGet());
     return pipeline;
   }
@@ -113,7 +114,7 @@ public class UserActivityPendencyQueryBuilder {
       "                        'name': '$"+ACTIVITY_NAME_FIELD+"',\n" +
       "                        'acronym': '$"+ACTIVITY_ACRONYM_FIELD+"',\n" +
       "                        'lastStatusName': { $arrayElemAt: [ \"$statusHistory.name\", -1 ] },\n" +
-      "                        'externalID': 1\n" +
+      "                        'externalID': { $ifNull: [ \"$externalID\", \""+NO_EXTERNAL_ID+"\" ] }\n" +
       "                    }\n" +
       "                }\n" +
       "            ],\n" +

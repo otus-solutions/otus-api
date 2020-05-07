@@ -7,6 +7,7 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 import java.util.ArrayList;
 
 public class EmailNotification {
+
   private ObjectId _id;
   private ArrayList<String> variables;
 
@@ -20,6 +21,10 @@ public class EmailNotification {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
+  }
+
+  public ObjectId get_id() {
+    return _id;
   }
 
   public ArrayList<String> getVariables() {

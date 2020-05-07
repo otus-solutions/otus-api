@@ -26,4 +26,6 @@ public interface ActivityConfigurationDao {
   ActivityCategory update(ActivityCategory activityCategory) throws DataNotFoundException;
 
   void setNewDefault(String name) throws DataNotFoundException;
+
+  ActivityCategory getDefault();
 }

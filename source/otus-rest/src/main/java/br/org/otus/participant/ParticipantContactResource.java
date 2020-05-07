@@ -93,8 +93,8 @@ public class ParticipantContactResource {
     return (new Response()).buildSuccess().toJson();
   }
 
-  @DELETE
-  @Path("/non-main")
+  @POST
+  @Path("/delete-non-main")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String deleteNonMainContact(String participantContactDtoJson) {

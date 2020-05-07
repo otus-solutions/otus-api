@@ -122,8 +122,11 @@ public class FollowUpFacade {
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
 
       if (!gatewayResponse.getData().toString().isEmpty()) {
-        this.notificationEvent(participantEventDTO, participant);
+        if(!(participantEventDTO.emailNotification == null)) {
+          this.notificationEvent(participantEventDTO, participant);
+        }
       }
+
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Object.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
