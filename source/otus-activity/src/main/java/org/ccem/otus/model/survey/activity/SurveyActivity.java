@@ -151,4 +151,12 @@ public class SurveyActivity {
 
     return builder;
   }
+
+  public void setParticipantData(Participant participantData) {
+    this.participantData = participantData;
+  }
+
+  public void setCategory(ActivityCategory category) {
+    this.category = category;
+  }
 }

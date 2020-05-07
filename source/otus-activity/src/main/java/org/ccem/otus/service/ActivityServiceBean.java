@@ -8,15 +8,20 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.ActivityExtractionDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
+import org.ccem.otus.persistence.OfflineActivityDao;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 
@@ -31,6 +36,10 @@ public class ActivityServiceBean implements ActivityService {
   private ActivityProgressExtractionDao activityProgressExtractionDao;
   @Inject
   private ActivityExtractionDao activityExtractionDao;
+  @Inject
+  private OfflineActivityDao offlineActivityDao;
+  @Inject
+  private UserDao userDao;
 
   private boolean permissionStatus;
   private boolean userStatusHistory;
@@ -123,7 +132,7 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> get(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
     return activityDao.getUndiscarded(acronym, version);
   }
-  
+
   @Override
   public List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
     return activityDao.getExtraction(acronym, version);
@@ -148,6 +157,29 @@ public class ActivityServiceBean implements ActivityService {
   @Override
   public HashMap<Long, String> getParticipantFieldCenterByActivity(String acronym, Integer version) throws DataNotFoundException {
     return activityExtractionDao.getParticipantFieldCenter(acronym, version);
+  }
+
+  @Override
+  public void save(String userEmail, OfflineActivityCollection offlineActivityCollection) throws DataNotFoundException {
+    User user = userDao.fetchByEmail(userEmail);
+    offlineActivityCollection.setUserId(user.get_id());
+    offlineActivityDao.persist(offlineActivityCollection);
+  }
+
+  @Override
+  public OfflineActivityCollectionGroupsDTO fetchOfflineActivityCollections(String userEmail) throws DataNotFoundException {
+    User user = userDao.fetchByEmail(userEmail);
+    return offlineActivityDao.fetchByUserId(user.get_id());
+  }
+
+  @Override
+  public OfflineActivityCollection fetchOfflineActivityCollection(String collectionId) throws DataNotFoundException {
+    return offlineActivityDao.fetchCollection(collectionId);
+  }
+
+  @Override
+  public void deactivateOfflineActivityCollection(String offlineCollectionId, List<ObjectId> createdActivityIds) {
+    offlineActivityDao.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
   }
 
 }
