@@ -109,23 +109,17 @@ public class FollowUpFacade {
 
   public Object startParticipantEvent(String rn, String eventJson) {
     try {
-
-      //busca dados do participante
       ObjectId participantId = participantFacade.findIdByRecruitmentNumber(Long.parseLong(rn));
       Participant participant = participantFacade.getByRecruitmentNumber(Long.parseLong(rn));
 
-      //monta participant event dto
       ParticipantEventDTO participantEventDTO = ParticipantEventDTO.deserialize(eventJson);
 
       if (!participantEventDTO.isValid()) {
         return new DataFormatException();
       }
 
-      //start no gateway
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
 
-
-      //manda email
       if (!gatewayResponse.getData().toString().isEmpty()) {
         this.notificationEvent(participantEventDTO, participant);
       }
@@ -151,27 +145,25 @@ public class FollowUpFacade {
     }
   }
 
-  public boolean checkForParticipantEventCreation(SurveyActivity surveyActivity) {
-    return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
-  }
-
   public void createParticipantActivityAutoFillEvent(SurveyActivity surveyActivity) {
     Long rn = surveyActivity.getParticipantData().getRecruitmentNumber();
     ObjectId participantId = participantFacade.findIdByRecruitmentNumber(rn);
     Participant participant = participantFacade.getByRecruitmentNumber(rn);
 
-    ParticipantEventDTO participantEventDTO = new ParticipantEventDTO(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getActivityID().toString());
-
+    ParticipantEventDTO participantEventDTO = ParticipantEventDTO.createActivityAutoFillEvent(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getName(), surveyActivity.getActivityID().toString());
 
     try {
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), ParticipantEventDTO.serialize(participantEventDTO));
-//      sendAutoFillEmail(participant, surveyActivity);
+      if (!gatewayResponse.getData().toString().isEmpty()) {
+        sendAutoFillActivityNotificationEmail(participant, surveyActivity);
+      }
+
     } catch (MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public void sendAutoFillEmail (Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
+  private void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
     ActivitySendingCommunicationData activitySendingCommunicationData = new ActivitySendingCommunicationData();
     activitySendingCommunicationData.setEmail(participant.getEmail());
     activitySendingCommunicationData.pushVariable(PARTICIPANT_NAME, participant.getName());

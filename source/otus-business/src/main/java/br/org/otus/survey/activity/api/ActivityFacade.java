@@ -14,6 +14,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
@@ -87,7 +88,7 @@ public class ActivityFacade {
       String activityId = activityService.create(surveyActivity);
 
       surveyActivity.setActivityID(new ObjectId(activityId));
-      boolean demandsParticipantEvent = followUpFacade.checkForParticipantEventCreation(surveyActivity);
+      boolean demandsParticipantEvent = checkForParticipantEventCreation(surveyActivity);
       if (demandsParticipantEvent) {
         followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
       }
@@ -97,6 +98,10 @@ public class ActivityFacade {
     } catch (ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
+  }
+
+  private boolean checkForParticipantEventCreation(SurveyActivity surveyActivity) {
+    return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
   }
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity) {

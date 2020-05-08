@@ -15,7 +15,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.api.mockito.expectation.ConstructorExpectationSetup;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.net.MalformedURLException;
 
 @RunWith(PowerMockRunner.class)
 public class FollowUpFacadeTest {
@@ -40,41 +44,30 @@ public class FollowUpFacadeTest {
   @Mock
   private GatewayResponse gatewayResponse;
 
+
   @Before
   public void setUp() throws Exception {
 
   }
 
   @Test
-    public void checkForParticipantEventCreation_should_return_true_when_activity_is_autofill() {
-      Mockito.when(surveyActivity.getMode()).thenReturn(ActivityMode.AUTOFILL);
+  public void createParticipantActivityAutoFillEvent() throws MalformedURLException {
+    Mockito.when(participant.getRecruitmentNumber()).thenReturn(RN);
+    Mockito.when(surveyActivity.getParticipantData()).thenReturn(participant);
 
-      boolean result = followUpFacade.checkForParticipantEventCreation(surveyActivity);
-      Assert.assertTrue(result);
-    }
+    ObjectId objectId = new ObjectId();
+    Mockito.when(participantFacade.findIdByRecruitmentNumber(RN)).thenReturn(objectId);
+    Mockito.when(participantFacade.getByRecruitmentNumber(RN)).thenReturn(participant);
 
-    @Test
-    public void checkForParticipantEventCreation_should_return_false_when_activity_is_not_autofill() {
-      Mockito.when(surveyActivity.getMode()).thenReturn(ActivityMode.ONLINE);
+    Mockito.when(surveyActivity.getSurveyForm()).thenReturn(surveyForm);
+    Mockito.when(surveyActivity.getActivityID()).thenReturn(new ObjectId());
+    Mockito.when(surveyForm.getAcronym()).thenReturn(ACRONYM);
 
-      boolean result = followUpFacade.checkForParticipantEventCreation(surveyActivity);
-      Assert.assertFalse(result);
-    }
+    OutcomeGatewayService outcomeGatewayService = Mockito.mock(OutcomeGatewayService.class);
+//      Mockito.when(outcomeGatewayService.startParticipantEvent(Mockito.eq(objectId.toString()), Mockito.anyString())).thenReturn(null);
+//      Mockito.when(outcomeGatewayService.startParticipantEvent(Mockito.anyString(), Mockito.anyString())).thenReturn(null);
+//      Mockito.when(outcomeGatewayService.startParticipantEvent(Mockito.anyString(), {"objectType":"ParticipantActivityAutoFillEvent","name":"ACRONYM","acronym":"ACRONYM","activityId":"5eb4256816c30069eccb05ff","description":"ACRONYM"})).thenReturn(null);
 
-    @Test
-    public void createParticipantActivityAutoFillEvent() {
-      Mockito.when(participant.getRecruitmentNumber()).thenReturn(RN);
-      Mockito.when(surveyActivity.getParticipantData()).thenReturn(participant);
-
-      ObjectId objectId = new ObjectId();
-      Mockito.when(participantFacade.findIdByRecruitmentNumber(RN)).thenReturn(objectId);
-      Mockito.when(participantFacade.getByRecruitmentNumber(RN)).thenReturn(participant);
-
-      Mockito.when(surveyActivity.getSurveyForm()).thenReturn(surveyForm);
-      Mockito.when(surveyActivity.getActivityID()).thenReturn(new ObjectId());
-      Mockito.when(surveyForm.getAcronym()).thenReturn(ACRONYM);
-
-
-      followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
-    }
+    followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
+  }
 }

@@ -5,8 +5,6 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
-import java.util.ArrayList;
-
 public class ParticipantEventDTO implements Dto {
 
   public String _id;
@@ -17,27 +15,13 @@ public class ParticipantEventDTO implements Dto {
   public String description;
   public EmailNotification emailNotification;
 
-  public ParticipantEventDTO(String acronym, String activityId) {
-    this.objectType = "ParticipantActivityAutoFillEvent"; //todo check object types
-    this.name = acronym;
+  public ParticipantEventDTO(String acronym, String name, String description, String activityId) {
+    this.objectType = "ActivityAutoFillEvent";
     this.acronym = acronym;
-    this.description = acronym; //todo: check what fix description to use
+    this.name = name;
+    this.description = description;
     this.activityId = activityId;
   }
-
-  public String getObjectType() {
-    this.updateObjectType();
-    return this.objectType;
-  }
-
-  public void updateObjectType() {
-    this.objectType = "Participant".concat(this.objectType);
-  }
-
-  public String getActivityId() {
-    return this.activityId;
-  }
-
 
   public static String serialize (ParticipantEventDTO participantEventDTO) {
     return getGsonBuilder().create().toJson(participantEventDTO);
@@ -52,6 +36,10 @@ public class ParticipantEventDTO implements Dto {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
+  }
+
+  public static ParticipantEventDTO createActivityAutoFillEvent(String acronym, String name, String activityId) {
+    return new ParticipantEventDTO(acronym, name, "Questionário para preenchimento", activityId);
   }
 
   @Override
