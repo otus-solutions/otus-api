@@ -299,5 +299,10 @@
       <artifactId>resteasy-cdi</artifactId>
       <version>${resteasy.cdi.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${org.apache.commons.version}</version>
+    </dependency>
   </dependencies>
 </project>
