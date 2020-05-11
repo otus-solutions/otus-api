@@ -4,7 +4,6 @@ import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.*;
 import br.org.otus.security.services.SecurityService;
-import com.mongodb.MongoException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
@@ -43,6 +42,14 @@ public class SecurityFacade {
   public void requestPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
     try {
       securityService.getPasswordResetToken(passwordResetRequestDto);
+    } catch (TokenException | DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void requestParticipantPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
+    try {
+      securityService.registerParticipantPasswordResetToken(passwordResetRequestDto);
     } catch (TokenException | DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

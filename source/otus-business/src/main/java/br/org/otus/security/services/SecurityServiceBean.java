@@ -7,7 +7,6 @@ import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.persistence.UserDao;
 import br.org.tutty.Equalizer;
-import com.nimbusds.jose.JOSEException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
@@ -17,7 +16,6 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
-import java.text.ParseException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
@@ -140,6 +138,20 @@ public class SecurityServiceBean implements SecurityService {
       return token;
     } else {
       throw new DataNotFoundException(new Throwable("User with email: {" + requestData.getEmail() + "} not found."));
+    }
+  }
+
+  public void registerParticipantPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
+
+    try {
+      Participant participant = participantDao.fetchByEmail(requestData.getEmail());
+      if (participant instanceof Participant) {
+        String token = buildToken(requestData);
+        requestData.setToken(token);
+        passwordResetContextService.registerToken(requestData);
+      }
+    } catch (DataNotFoundException e) {
+      throw new DataNotFoundException(new Throwable("Participant with email: {" + requestData.getEmail() + "} not found."));
     }
   }
 
