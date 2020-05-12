@@ -166,7 +166,7 @@ public class FollowUpFacade {
   private void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
     ActivitySendingCommunicationData activitySendingCommunicationData = new ActivitySendingCommunicationData();
     activitySendingCommunicationData.setEmail(participant.getEmail());
-    activitySendingCommunicationData.pushVariable(PARTICIPANT_NAME, participant.getName());
+    activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
     activitySendingCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
     GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
     System.err.println(notification.getData());

@@ -70,7 +70,7 @@ public class FollowUpFacadeTest {
   }
 
   @Test
-//  @Ignore
+  @Ignore
   public void createParticipantActivityAutoFillEvent() throws Exception {
     followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
   }
