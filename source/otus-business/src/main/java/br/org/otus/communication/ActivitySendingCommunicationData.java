@@ -1,5 +1,6 @@
 package br.org.otus.communication;
 
+import br.org.otus.template.enums.TemplateEmailKey;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class ActivitySendingCommunicationData {
-  private ObjectId _id = new ObjectId("5ea88862ae51d800083aeba7");
+  private ObjectId _id = new ObjectId(TemplateEmailKey.TEMPLATE_ACTIVITY_SENDING_ID.getValue());
   private String email;
   private LinkedHashMap<String, String> variables;
 
