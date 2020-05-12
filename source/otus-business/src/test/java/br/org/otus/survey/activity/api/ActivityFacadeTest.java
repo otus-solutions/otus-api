@@ -8,6 +8,7 @@ import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.Gson;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
@@ -34,6 +35,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class ActivityFacadeTest {
   private static final long RECRUITMENT_NUMBER = 5112345;
   private static final String ACRONYM = "CISE";
+  private static final ObjectId OID = new ObjectId();
   private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvdHVzQGdtYWlsLmNvbSIsIm1vZGUiOiJ1c2VyIiwianRpIjoiYzc1ODIzNWMtYjQzMy00NDQ2LWFhMDMtYmU0NmI3ODU3NWEyIiwiaWF0IjoxNTg1MTc2NDg5LCJleHAiOjE1ODUxODAwODl9.wlSmhUXYW6Apqg5skGPLDGCyuA0sDYyVtZIBM8RxkLs";
   private static final String TOKEN_BEARER = "Bearer " + TOKEN;
   private static final String SURVEY_ACTIVITY_EXCEPTION = "notExist";
@@ -59,7 +61,6 @@ public class ActivityFacadeTest {
   private SurveyService surveyService;
 
   private SurveyActivity surveyActivityFull;
-//TODO test for use gatewayfacade private GatewayFacade gatewayFacade;
 
   @Before
   public void setUp() {
@@ -99,7 +100,7 @@ public class ActivityFacadeTest {
 
   @Test
   public void method_should_verify_create_with_surveyActivity() {
-    when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
+    when(activityService.create(surveyActivity)).thenReturn(OID.toString());
     activityFacade.create(surveyActivity);
     verify(activityService, times(1)).create(surveyActivity);
   }
@@ -168,15 +169,6 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
     when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
-  }
-
-  @Test
-  public void method_should_create_participant_event_when_the_check_returns_true() {
-    when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
-    when(followUpFacade.checkForParticipantEventCreation(surveyActivity)).thenReturn(true);
-
-    activityFacade.create(surveyActivity);
-    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity);
   }
 
   @Test
