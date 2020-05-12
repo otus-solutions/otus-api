@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -169,6 +170,15 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
     when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+  }
+
+  @Test
+  public void method_should_create_participant_event_when_surveyActivity_is_autofill() {
+    when(activityService.create(surveyActivity)).thenReturn(OID.toString());
+    when(surveyActivity.getMode()).thenReturn(ActivityMode.AUTOFILL);
+    activityFacade.create(surveyActivity);
+
+    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity);
   }
 
   @Test
