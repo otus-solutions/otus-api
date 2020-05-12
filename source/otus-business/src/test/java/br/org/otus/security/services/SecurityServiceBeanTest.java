@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
@@ -291,5 +292,23 @@ public class SecurityServiceBeanTest {
   public void method_invalidateParticipantAuthenticate_should_call_removeAuthToken() {
     securityServiceBean.invalidateParticipantAuthenticate(EMAIL, TOKEN);
     verify(participantDao, times(1)).removeAuthToken(EMAIL, TOKEN);
+  }
+
+  @Test
+  public void method_registerParticipantPasswordResetToken_should_evoke_token_registers() throws TokenException, DataNotFoundException {
+    PasswordResetRequestDto requestData = spy(new PasswordResetRequestDto());
+    requestData.setUserEmail("mock@email.com");
+    when(participantDao.fetchByEmail(requestData.getEmail())).thenReturn(participant);
+    securityServiceBean.registerParticipantPasswordResetToken(requestData);
+    verify(requestData, times(1)).setToken(Mockito.anyString());
+    verify(passwordResetContextService, times(1)).registerToken(requestData);
+  }
+
+  @Test(expected = DataNotFoundException.class)
+  public void method_registerParticipantPasswordResetToken_should_catch_DataNotFoundException() throws TokenException, DataNotFoundException {
+    PasswordResetRequestDto requestData = spy(new PasswordResetRequestDto());
+    requestData.setUserEmail("mock@email.com");
+    when(participantDao.fetchByEmail(requestData.getEmail())).thenThrow(DataNotFoundException.class);
+    securityServiceBean.registerParticipantPasswordResetToken(requestData);
   }
 }

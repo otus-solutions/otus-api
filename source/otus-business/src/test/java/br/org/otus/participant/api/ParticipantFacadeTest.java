@@ -1,28 +1,28 @@
 package br.org.otus.participant.api;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import br.org.otus.participant.management.ManagementParticipantService;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.security.api.SecurityFacade;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.security.services.SecurityService;
 import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.exception.ResponseInfo;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @PrepareForTest(ParticipantFacade.class)
@@ -32,6 +32,10 @@ public class ParticipantFacadeTest {
   private ParticipantFacade participantFacade;
   @Mock
   private ParticipantService participantService;
+  @Mock
+  private SecurityFacade securityFacade;
+  @Mock
+  private ManagementParticipantService managementParticipantService;
   @Mock
   private SecurityService securityService;
   @Mock
@@ -44,6 +48,9 @@ public class ParticipantFacadeTest {
   private DataNotFoundException e;
   @Mock
   private PasswordResetDto passwordResetDto = new PasswordResetDto();
+  private PasswordResetRequestDto passwordResetRequestDto = PowerMockito.spy(new PasswordResetRequestDto());
+  private EmailNotificationException emailNotificationException =  PowerMockito.spy(new EmailNotificationException());
+
 
   @Test
   public void method_getByRecruitmentNumber_should_return_participant() throws DataNotFoundException {
@@ -77,4 +84,18 @@ public class ParticipantFacadeTest {
     participantFacade.registerPassword(passwordResetDto);
   }
 
+  @Test
+  public void requestPasswordReset_method_should_evoke_3_call_methods() throws EmailNotificationException {
+    when(passwordResetRequestDto.getEmail()).thenReturn("otus@otus.com");
+    participantFacade.requestPasswordReset(passwordResetRequestDto);
+    verify(securityFacade, times(1)).removePasswordResetRequests(passwordResetRequestDto.getEmail());
+    verify(securityFacade, times(1)).requestParticipantPasswordReset(passwordResetRequestDto);
+    verify(managementParticipantService, times(1)).requestPasswordReset(passwordResetRequestDto);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void requestPasswordReset_method_should_catch_EmailNotificationException() throws Exception {
+    Mockito.doThrow(emailNotificationException).when(managementParticipantService).requestPasswordReset(passwordResetRequestDto);
+    participantFacade.requestPasswordReset(passwordResetRequestDto);
+  }
 }

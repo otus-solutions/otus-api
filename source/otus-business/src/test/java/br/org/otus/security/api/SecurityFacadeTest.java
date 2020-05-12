@@ -1,30 +1,26 @@
 package br.org.otus.security.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.security.dtos.AuthenticationDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
-import com.mongodb.MongoException;
+import br.org.otus.security.dtos.ProjectAuthenticationDto;
+import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
+import br.org.otus.security.services.SecurityService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.security.dtos.AuthenticationDto;
-import br.org.otus.security.dtos.ProjectAuthenticationDto;
-import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
-import br.org.otus.security.services.SecurityService;
-import org.powermock.api.mockito.PowerMockito;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
 public class SecurityFacadeTest {
   private static final String REQUEST_ADDRESS = "http://api.domain.dev.ccem.ufrgs.br:8080";
   private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
@@ -166,5 +162,21 @@ public class SecurityFacadeTest {
   public void method_invalidateParticipantAuthentication_should_call_securityService_invalidateParticipantAuthenticate() throws DataNotFoundException, TokenException, AuthenticationException {
     securityFacade.invalidateParticipantAuthentication("email", "token");
     verify(securityService, times(1)).invalidateParticipantAuthenticate("email", "token");
+  }
+
+  @Test
+  public void method_requestParticipantPasswordReset_should_evoke_getParticipantPasswordResetToken_by_securityService() throws TokenException, DataNotFoundException {
+    securityFacade.requestParticipantPasswordReset(passwordResetRequestDto);
+    Mockito.verify(securityService, Mockito.times(1)).registerParticipantPasswordResetToken(passwordResetRequestDto);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void method_requestParticipantPasswordReset_should_catch_exception() throws TokenException, DataNotFoundException {
+    Throwable mockTokenException = spy(new TokenException());
+    Mockito.doThrow( mockTokenException).when(securityService).registerParticipantPasswordResetToken(passwordResetRequestDto);
+    when(mockTokenException.getCause()).thenReturn(mockTokenException);
+    when(mockTokenException.getMessage()).thenReturn("expectedFail");
+
+    securityFacade.requestParticipantPasswordReset(passwordResetRequestDto);
   }
 }

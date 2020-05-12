@@ -73,7 +73,9 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
         ),
         or(
           in("surveyTemplate.itemContainer.customID", ids),
-          in("surveyTemplate.itemContainer.options.customOptionID", ids)
+          in("surveyTemplate.itemContainer.options.customOptionID", ids),
+          in("surveyTemplate.itemContainer.lines.gridTextList.customID", ids),
+          in("surveyTemplate.itemContainer.lines.gridIntegerList.customID", ids)
         )
         )
       )

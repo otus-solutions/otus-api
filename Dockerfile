@@ -17,6 +17,8 @@ ENV DCM_HOST "dcm-service"
 ENV DCM_PORT "8080"
 ENV COMMUNICATION_HOST "communication-service"
 ENV COMMUNICATION_PORT "8080"
+#fake value em ALL_URL for OA-182
+ENV APP_URL "https://otus.hmg.ccem.ufrgs.br/otus-app/#"
 
 ENV DEBUG_MODE "false"
 ENV JVM_MEMORY "3G"

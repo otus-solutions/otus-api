@@ -10,6 +10,8 @@ import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.response.info.Validation;
+import br.org.otus.survey.activity.api.ActivityFacade;
+import br.org.otus.survey.api.SurveyFacade;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
@@ -28,6 +30,10 @@ public class FollowUpFacade {
 
   @Inject
   private ParticipantFacade participantFacade;
+  @Inject
+  private SurveyFacade surveyFacade;
+  @Inject
+  private ActivityFacade activityFacade;
 
   private static final String PARTICIPANT_NAME = "participant_name";
   private static final String EVENT_NAME = "event_name";
@@ -121,7 +127,9 @@ public class FollowUpFacade {
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
 
       if (!gatewayResponse.getData().toString().isEmpty()) {
-        this.notificationEvent(participantEventDTO, participant);
+        if(!(participantEventDTO.emailNotification == null)) {
+          this.notificationEvent(participantEventDTO, participant);
+        }
       }
 
 
