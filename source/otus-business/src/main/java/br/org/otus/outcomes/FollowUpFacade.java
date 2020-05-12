@@ -10,14 +10,11 @@ import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.response.info.Validation;
-import br.org.otus.survey.activity.api.ActivityFacade;
-import br.org.otus.survey.api.SurveyFacade;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.participant.model.Participant;
 
 import javax.inject.Inject;
@@ -30,10 +27,6 @@ public class FollowUpFacade {
 
   @Inject
   private ParticipantFacade participantFacade;
-  @Inject
-  private SurveyFacade surveyFacade;
-  @Inject
-  private ActivityFacade activityFacade;
 
   private static final String PARTICIPANT_NAME = "participant_name";
   private static final String EVENT_NAME = "event_name";
