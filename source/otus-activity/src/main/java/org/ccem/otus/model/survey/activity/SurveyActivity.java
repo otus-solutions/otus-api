@@ -39,6 +39,10 @@ public class SurveyActivity {
     this.isDiscarded = Boolean.FALSE;
   }
 
+  public void setActivityID(ObjectId activityID) {
+    this.activityID = activityID;
+  }
+
   public void setIsDiscarded(Boolean isDiscarded) {
     this.isDiscarded = isDiscarded;
   }

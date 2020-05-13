@@ -1,16 +1,18 @@
 package br.org.otus.survey.activity.api;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
 import br.org.otus.model.User;
+import br.org.otus.outcomes.FollowUpFacade;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
+import com.google.gson.Gson;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,15 +21,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.google.gson.Gson;
-
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.survey.services.SurveyService;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -37,6 +36,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class ActivityFacadeTest {
   private static final long RECRUITMENT_NUMBER = 5112345;
   private static final String ACRONYM = "CISE";
+  private static final ObjectId OID = new ObjectId();
   private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvdHVzQGdtYWlsLmNvbSIsIm1vZGUiOiJ1c2VyIiwianRpIjoiYzc1ODIzNWMtYjQzMy00NDQ2LWFhMDMtYmU0NmI3ODU3NWEyIiwiaWF0IjoxNTg1MTc2NDg5LCJleHAiOjE1ODUxODAwODl9.wlSmhUXYW6Apqg5skGPLDGCyuA0sDYyVtZIBM8RxkLs";
   private static final String TOKEN_BEARER = "Bearer " + TOKEN;
   private static final String SURVEY_ACTIVITY_EXCEPTION = "notExist";
@@ -53,13 +53,15 @@ public class ActivityFacadeTest {
   @InjectMocks
   ActivityFacade activityFacade;
   @Mock
+  private FollowUpFacade followUpFacade;
+  @Mock
   private SurveyActivity surveyActivity;
   @Mock
   private ManagementUserService managementUserService;
   @Mock
   private SurveyService surveyService;
+
   private SurveyActivity surveyActivityFull;
-//TODO test for use gatewayfacade private GatewayFacade gatewayFacade;
 
   @Before
   public void setUp() {
@@ -99,7 +101,7 @@ public class ActivityFacadeTest {
 
   @Test
   public void method_should_verify_create_with_surveyActivity() {
-    when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
+    when(activityService.create(surveyActivity)).thenReturn(OID.toString());
     activityFacade.create(surveyActivity);
     verify(activityService, times(1)).create(surveyActivity);
   }
@@ -168,5 +170,27 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
     when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
+  }
+
+  @Test
+  public void method_should_create_participant_event_when_surveyActivity_is_autofill() {
+    when(activityService.create(surveyActivity)).thenReturn(OID.toString());
+    when(surveyActivity.getMode()).thenReturn(ActivityMode.AUTOFILL);
+    activityFacade.create(surveyActivity);
+
+    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity);
+  }
+
+  @Test
+  public void method_should_verify_create_for_follow_up_with_surveyActivity() {
+    when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
+    activityFacade.createFollowUp(surveyActivity);
+    verify(activityService, times(1)).create(surveyActivity);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void createFollowUpMethodTest_should_trigger_requiredExternalID_validation() {
+    PowerMockito.when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
+    activityFacade.createFollowUp(surveyActivity);
   }
 }

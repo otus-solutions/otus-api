@@ -1,5 +1,7 @@
 package br.org.otus.outcomes;
 
+import br.org.otus.communication.ActivitySendingCommunicationData;
+import br.org.otus.communication.FollowUpCommunicationData;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
@@ -8,12 +10,11 @@ import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.response.info.Validation;
-import br.org.otus.survey.activity.api.ActivityFacade;
-import br.org.otus.survey.api.SurveyFacade;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
 
 import javax.inject.Inject;
@@ -26,10 +27,6 @@ public class FollowUpFacade {
 
   @Inject
   private ParticipantFacade participantFacade;
-  @Inject
-  private SurveyFacade surveyFacade;
-  @Inject
-  private ActivityFacade activityFacade;
 
   private static final String PARTICIPANT_NAME = "participant_name";
   private static final String EVENT_NAME = "event_name";
@@ -113,6 +110,7 @@ public class FollowUpFacade {
     try {
       ObjectId participantId = participantFacade.findIdByRecruitmentNumber(Long.parseLong(rn));
       Participant participant = participantFacade.getByRecruitmentNumber(Long.parseLong(rn));
+
       ParticipantEventDTO participantEventDTO = ParticipantEventDTO.deserialize(eventJson);
 
       if (!participantEventDTO.isValid()) {
@@ -127,6 +125,7 @@ public class FollowUpFacade {
         }
       }
 
+
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Object.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
@@ -138,14 +137,42 @@ public class FollowUpFacade {
   public void notificationEvent(ParticipantEventDTO participantEventDTO, Participant participant) throws MalformedURLException {
     if (!participantEventDTO.objectType.contains("Follow")) {
       GatewayResponse gatewayResponseNotification = new OutcomeGatewayService().getNotificationDataEvent(participantEventDTO._id);
-      CommunicationData communicationData = CommunicationData.deserialize(gatewayResponseNotification.getData().toString());
-      communicationData.setEmail(participant.getEmail());
-      communicationData.pushVariable(PARTICIPANT_NAME, participant.getName());
-      communicationData.pushVariable(EVENT_NAME, participantEventDTO.description);
-      GatewayResponse notification = new CommunicationGatewayService().sendMail(CommunicationData.serialize(communicationData));
+      FollowUpCommunicationData followUpCommunicationData = FollowUpCommunicationData.deserialize(gatewayResponseNotification.getData().toString());
+      followUpCommunicationData.setEmail(participant.getEmail());
+      followUpCommunicationData.pushVariable(PARTICIPANT_NAME, participant.getName());
+      followUpCommunicationData.pushVariable(EVENT_NAME, participantEventDTO.description);
+      GatewayResponse notification = new CommunicationGatewayService().sendMail(FollowUpCommunicationData.serialize(followUpCommunicationData));
       System.err.println(notification.getData());
     }
   }
+
+  public void createParticipantActivityAutoFillEvent(SurveyActivity surveyActivity) {
+    Long rn = surveyActivity.getParticipantData().getRecruitmentNumber();
+    ObjectId participantId = participantFacade.findIdByRecruitmentNumber(rn);
+    Participant participant = participantFacade.getByRecruitmentNumber(rn);
+
+    ParticipantEventDTO participantEventDTO = ParticipantEventDTO.createActivityAutoFillEvent(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getName(), surveyActivity.getActivityID().toString());
+
+    try {
+      GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), ParticipantEventDTO.serialize(participantEventDTO));
+      if (!gatewayResponse.getData().toString().isEmpty()) {
+        sendAutoFillActivityNotificationEmail(participant, surveyActivity);
+      }
+
+    } catch (MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  private void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
+    ActivitySendingCommunicationData activitySendingCommunicationData = new ActivitySendingCommunicationData();
+    activitySendingCommunicationData.setEmail(participant.getEmail());
+    activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
+    activitySendingCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
+    GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
+    System.err.println(notification.getData());
+  }
+
 
   public Object cancelParticipantEvent(String eventId) {
     try {
