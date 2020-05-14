@@ -7,6 +7,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.participant.model.Participant;
 
@@ -62,6 +63,16 @@ public class ParticipantResource {
   public String registerPassword(PasswordResetDto resetData, @Context HttpServletRequest request) {
     participantFacade.registerPassword(resetData);
     return new Response().buildSuccess().toJson();
+  }
+
+  @POST
+  @Path("/password-reset")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String requestRecovery(PasswordResetRequestDto requestData) {
+    Response response = new Response();
+    participantFacade.requestPasswordReset(requestData);
+    return response.buildSuccess().toJson();
   }
 
   @PUT
