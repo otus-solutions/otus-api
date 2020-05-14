@@ -156,6 +156,10 @@ public class ExamUploadServiceBean implements ExamUploadService {
     validateAliquotExamResults(aliquotExamResults, aliquotCodes, invalid, materialNotFound, materialDoesNotMatchExam, materialExamCorrelation);
     validateTubeExamResult(tubeExamResults, tubeCodes, invalid, materialNotFound, materialDoesNotMatchExam, materialExamCorrelation);
 
+    examResults = new ArrayList<>();
+    examResults.addAll(aliquotExamResults);
+    examResults.addAll(tubeExamResults);
+
     if (materialDoesNotMatchExam.getValue()) {
       throw new ValidationException(new Throwable(MATERIAL_DOES_NOT_MATCH_EXAM_MESSAGE), invalid);
     } else if (materialNotFound.getValue() && !forcedSave) {
