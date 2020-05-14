@@ -89,14 +89,14 @@ public class FieldCenterDaoBean extends MongoGenericDao<Document> implements Fie
    */
   @Override
   public void update(FieldCenter fieldCenter) {
-    Document document = Document.parse(fieldCenter.toJson());
+    Document document = Document.parse(FieldCenter.serialize(fieldCenter));
     document.remove("acronym");
     super.collection.updateOne(eq("acronym", fieldCenter.getAcronym()), new Document("$set", document));
   }
 
   @Override
   public void persist(FieldCenter fieldCenter) {
-    super.persist(fieldCenter.toJson());
+    super.persist(FieldCenter.serialize(fieldCenter));
   }
 
   @Override

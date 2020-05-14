@@ -38,8 +38,8 @@ public class FieldCenter {
     return acronym;
   }
 
-  public String toJson() {
-    return new Gson().toJson(this);
+  public static String serialize(FieldCenter fieldCenter) {
+    return getGsonBuilder().create().toJson(fieldCenter);
   }
 
   public static FieldCenter deserialize(String fieldCenterJson) {
