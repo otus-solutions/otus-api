@@ -2,15 +2,15 @@ package br.org.otus.examUploader.utils;
 
 import java.util.ArrayList;
 
-public class ResponseAliquot {
+public class ResponseMaterial {
 
-  public String aliquot;
+  public String material;
   public String message;
   public ArrayList<String> possibleExams;
   public String receivedExam;
 
-  public void setAliquot(String aliquot) {
-    this.aliquot = aliquot;
+  public void setMaterial(String material) {
+    this.material = material;
   }
 
   public void setMessage(String message) {
