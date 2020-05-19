@@ -81,5 +81,60 @@ public class CommunicationGatewayService {
     }
   }
 
+  public GatewayResponse messagePost(String message) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageCommunicationAddress();
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, message);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+   public GatewayResponse getMessageById(String id) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdCommunicationAddress(id);
+    try {
+      JsonGETUtility jsonPOST = new JsonGETUtility(requestURL);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse getAllMessage() throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getAllMessageCommunicationAddress();
+    try {
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+   public GatewayResponse updateMessage(String emailTemplate) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateMessageCommunicationAddress();
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.writeBody(emailTemplate);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse deleteMessage(String Id) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getDeleteMessageCommunicationAddress(Id);
+    try {
+      JsonDELETEUtility jsonDELETE = new JsonDELETEUtility(requestURL);
+      String response = jsonDELETE.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 
 }
