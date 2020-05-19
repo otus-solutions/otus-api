@@ -81,7 +81,7 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse messagePost(String message) throws MalformedURLException {
+  public GatewayResponse createMessage(String message) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getMessageCommunicationAddress();
     try {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, message);
@@ -92,7 +92,7 @@ public class CommunicationGatewayService {
     }
   }
 
-   public GatewayResponse getMessageById(String id) throws MalformedURLException {
+  public GatewayResponse getMessageById(String id) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getMessageByIdCommunicationAddress(id);
     try {
       JsonGETUtility jsonPOST = new JsonGETUtility(requestURL);
@@ -114,7 +114,7 @@ public class CommunicationGatewayService {
     }
   }
 
-   public GatewayResponse updateMessage(String emailTemplate) throws MalformedURLException {
+  public GatewayResponse updateMessage(String emailTemplate) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getUpdateMessageCommunicationAddress();
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
