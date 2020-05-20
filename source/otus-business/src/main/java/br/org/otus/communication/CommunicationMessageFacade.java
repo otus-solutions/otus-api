@@ -1,6 +1,7 @@
 package br.org.otus.communication;
 
 import br.org.otus.gateway.gates.CommunicationGatewayService;
+import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.response.exception.HttpResponseException;
@@ -26,4 +27,43 @@ public class CommunicationMessageFacade {
     }
   }
 
+  public Object updateMessage(String messageId, String message) {
+    try {
+      return new CommunicationGatewayService().updateMessage(messageId,message);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public Object getMessageById(String messageId) {
+    try {
+      return new CommunicationGatewayService().getMessageById(messageId);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public Object getAllMessage() {
+    try {
+      return new CommunicationGatewayService().getAllMessage();
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public Object deleteMessage(String messageId) {
+    try {
+      return new CommunicationGatewayService().deleteMessage(messageId);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
 }

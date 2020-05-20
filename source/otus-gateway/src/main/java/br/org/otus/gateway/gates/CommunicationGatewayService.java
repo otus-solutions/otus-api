@@ -114,11 +114,11 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse updateMessage(String emailTemplate) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getUpdateMessageCommunicationAddress();
+  public GatewayResponse updateMessage(String messageId, String message) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateMessageCommunicationAddress(messageId);
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
-      jsonPUT.writeBody(emailTemplate);
+      jsonPUT.writeBody(message);
       jsonPUT.finish();
       return new GatewayResponse().buildSuccess();
     } catch (IOException ex) {
