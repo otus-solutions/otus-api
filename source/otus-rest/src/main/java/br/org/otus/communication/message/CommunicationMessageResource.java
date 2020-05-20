@@ -23,7 +23,7 @@ public class CommunicationMessageResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String createIssue(String messageJson) {
     //TODO create DTO
-    return new Response().buildSuccess(communicationMessageFacade.createMessage(messageJson)).toJson();
+    return new Response().buildSuccess(communicationMessageFacade.createIssue(messageJson)).toJson();
   }
 
   @POST
@@ -40,8 +40,8 @@ public class CommunicationMessageResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String updateReopen(@PathParam("id") String id, String messageJson) {
-    return new Response().buildSuccess(communicationMessageFacade.updateMessage(id, messageJson)).toJson();
+  public String updateReopen(@PathParam("id") String id) {
+    return new Response().buildSuccess(communicationMessageFacade.updateReopen(id)).toJson();
   }
 
   @PUT
@@ -49,8 +49,8 @@ public class CommunicationMessageResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String updateClose(@PathParam("id") String id, String messageJson) {
-    return new Response().buildSuccess(communicationMessageFacade.updateMessage(id, messageJson)).toJson();
+  public String updateClose(@PathParam("id") String id) {
+    return new Response().buildSuccess(communicationMessageFacade.updateClose(id)).toJson();
   }
 
   @GET
@@ -65,8 +65,8 @@ public class CommunicationMessageResource {
   @Path("/issue/{id}/messages/{limit}")
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getMessageById(@PathParam("id") String id, @PathParam("id") String limit) {
-    return new Response().buildSuccess(communicationMessageFacade.getMessageById(id)).toJson();
+  public String getMessageByIdLimit(@PathParam("id") String id, @PathParam("limit") String limit) {
+    return new Response().buildSuccess(communicationMessageFacade.getMessageByIdLimit(id, limit)).toJson();
   }
 
   @GET
@@ -74,7 +74,7 @@ public class CommunicationMessageResource {
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   public String listIssue() {
-    return new Response().buildSuccess(communicationMessageFacade.getAllMessage()).toJson();
+    return new Response().buildSuccess(communicationMessageFacade.listIssue()).toJson();
   }
 
 }

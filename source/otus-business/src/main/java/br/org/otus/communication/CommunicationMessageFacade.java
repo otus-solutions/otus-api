@@ -15,6 +15,17 @@ import java.net.MalformedURLException;
 
 public class CommunicationMessageFacade {
 
+  public Object createIssue(String issueJson) {
+    try {
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueJson);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
   public Object createMessage(String MessageJson) {
     try {
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(MessageJson);
@@ -26,9 +37,9 @@ public class CommunicationMessageFacade {
     }
   }
 
-  public Object updateMessage(String messageId, String message) {
+  public Object updateReopen(String issueId) {
     try {
-      return new CommunicationGatewayService().updateMessage(messageId,message);
+      return new CommunicationGatewayService().updateReopen(issueId);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -36,9 +47,9 @@ public class CommunicationMessageFacade {
     }
   }
 
-  public Object getMessageById(String messageId) {
+  public Object updateClose(String issueId) {
     try {
-      return new CommunicationGatewayService().getMessageById(messageId);
+      return new CommunicationGatewayService().updateClose(issueId);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -46,9 +57,9 @@ public class CommunicationMessageFacade {
     }
   }
 
-  public Object getAllMessage() {
+  public Object getMessageById(String issueId) {
     try {
-      return new CommunicationGatewayService().getAllMessage();
+      return new CommunicationGatewayService().getMessageById(issueId);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -56,4 +67,23 @@ public class CommunicationMessageFacade {
     }
   }
 
+  public Object getMessageByIdLimit(String issueId, String limit) {
+    try {
+      return new CommunicationGatewayService().getMessageByIdLimit(issueId, limit);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public Object listIssue() {
+    try {
+      return new CommunicationGatewayService().listIssue();
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
 }
