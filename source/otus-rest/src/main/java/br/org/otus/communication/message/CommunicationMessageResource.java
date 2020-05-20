@@ -1,11 +1,16 @@
 package br.org.otus.communication.message;
 
 import br.org.otus.communication.CommunicationMessageFacade;
+import br.org.otus.security.AuthorizationHeaderReader;
+import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
 
 import javax.inject.Inject;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.rest.Response;
@@ -16,19 +21,25 @@ public class CommunicationMessageResource {
   @Inject
   private CommunicationMessageFacade communicationMessageFacade;
 
+  @Inject
+  private SecurityContext securityContext;
+
   @POST
-  @Path("/issue/create")
   @Secured
+  @Path("/issue/create")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createIssue(String messageJson) {
+  public String createIssue(@Context HttpServletRequest request, String messageJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
     //TODO create DTO
     return new Response().buildSuccess(communicationMessageFacade.createIssue(messageJson)).toJson();
   }
 
   @POST
-  @Path("/issue/message/")
   @Secured
+  @Path("/issue/message/")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createMessage(String messageJson) {
@@ -36,8 +47,8 @@ public class CommunicationMessageResource {
   }
 
   @PUT
-  @Path("/issue/{id}/reopen/")
   @Secured
+  @Path("/issue/{id}/reopen/")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateReopen(@PathParam("id") String id) {
@@ -45,8 +56,8 @@ public class CommunicationMessageResource {
   }
 
   @PUT
-  @Path("/issue/{id}/close")
   @Secured
+  @Path("/issue/{id}/close")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateClose(@PathParam("id") String id) {
@@ -54,27 +65,30 @@ public class CommunicationMessageResource {
   }
 
   @GET
-  @Path("/issue/{id}/messages")
   @Secured
+  @Path("/issue/{id}/messages")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getMessageById(@PathParam("id") String id) {
     return new Response().buildSuccess(communicationMessageFacade.getMessageById(id)).toJson();
   }
 
   @GET
-  @Path("/issue/{id}/messages/{limit}")
   @Secured
+  @Path("/issue/{id}/messages/{limit}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getMessageByIdLimit(@PathParam("id") String id, @PathParam("limit") String limit) {
     return new Response().buildSuccess(communicationMessageFacade.getMessageByIdLimit(id, limit)).toJson();
   }
 
   @GET
-  @Path("/issue/list")
   @Secured
+  @Path("/issue/list")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String listIssue() {
-    return new Response().buildSuccess(communicationMessageFacade.listIssue()).toJson();
+  public String listIssue(@Context HttpServletRequest request) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    return new Response().buildSuccess(communicationMessageFacade.listIssue(userEmail)).toJson();
   }
 
 }

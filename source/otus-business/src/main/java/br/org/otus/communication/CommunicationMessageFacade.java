@@ -77,9 +77,9 @@ public class CommunicationMessageFacade {
     }
   }
 
-  public Object listIssue() {
+  public Object listIssue(String userEmail) {
     try {
-      return new CommunicationGatewayService().listIssue();
+      return new CommunicationGatewayService().listIssue(userEmail);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
