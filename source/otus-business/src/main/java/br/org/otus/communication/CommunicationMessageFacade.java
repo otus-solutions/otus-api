@@ -1,7 +1,6 @@
 package br.org.otus.communication;
 
 import br.org.otus.gateway.gates.CommunicationGatewayService;
-import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.response.exception.HttpResponseException;
@@ -16,10 +15,10 @@ import java.net.MalformedURLException;
 
 public class CommunicationMessageFacade {
 
-  public Object createMessage(String MessageJson) {//TODO not return ID Message add void
+  public Object createMessage(String MessageJson) {
     try {
-      GatewayResponse messageId = new CommunicationGatewayService().createMessage(MessageJson);
-      return new GsonBuilder().create().fromJson((String) messageId.getData(), Document.class);//TODO return ID Message
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(MessageJson);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -57,13 +56,4 @@ public class CommunicationMessageFacade {
     }
   }
 
-  public Object deleteMessage(String messageId) {
-    try {
-      return new CommunicationGatewayService().deleteMessage(messageId);
-    } catch (JsonSyntaxException | MalformedURLException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (RequestException ex) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    }
-  }
 }

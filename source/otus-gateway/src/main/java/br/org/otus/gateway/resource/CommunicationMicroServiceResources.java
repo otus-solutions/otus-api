@@ -16,7 +16,6 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   private static final String FIND_MESSAGE_COMMUNICATION_RESOURCE = "/api/find-message-communication";
   private static final String GET_ALL_MESSAGE_COMMUNICATION_RESOURCE = "/api/get-all-message-communication";
   private static final String UPDATE_MESSAGE_COMMUNICATION_RESOURCE = "/api/update-message-communication";
-  private static final String DELETE_MESSAGE_COMMUNICATION_RESOURCE = "/api/delete-message-communication";
 
   public CommunicationMicroServiceResources() {
     super(MicroservicesEnvironments.COMMUNICATION_SERVICE);
@@ -60,10 +59,6 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
 
   public URL getUpdateMessageCommunicationAddress(String ID) throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_MESSAGE_COMMUNICATION_RESOURCE + "/" + ID);
-  }
-
-  public URL getDeleteMessageCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + DELETE_MESSAGE_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
 }

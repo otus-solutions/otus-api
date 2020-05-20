@@ -17,7 +17,17 @@ public class CommunicationMessageResource {
   private CommunicationMessageFacade communicationMessageFacade;
 
   @POST
-  @Path("/create-message")
+  @Path("/issue/create")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String createIssue(String messageJson) {
+    //TODO create DTO
+    return new Response().buildSuccess(communicationMessageFacade.createMessage(messageJson)).toJson();
+  }
+
+  @POST
+  @Path("/issue/message/")
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
@@ -26,16 +36,25 @@ public class CommunicationMessageResource {
   }
 
   @PUT
-  @Path("/update-message/{id}")
+  @Path("/issue/{id}/reopen/")
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String updateMessage(@PathParam("id") String id, String messageJson) {
+  public String updateReopen(@PathParam("id") String id, String messageJson) {
+    return new Response().buildSuccess(communicationMessageFacade.updateMessage(id, messageJson)).toJson();
+  }
+
+  @PUT
+  @Path("/issue/{id}/close")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String updateClose(@PathParam("id") String id, String messageJson) {
     return new Response().buildSuccess(communicationMessageFacade.updateMessage(id, messageJson)).toJson();
   }
 
   @GET
-  @Path("/find-message/{id}")
+  @Path("/issue/{id}/messages")
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   public String getMessageById(@PathParam("id") String id) {
@@ -43,19 +62,19 @@ public class CommunicationMessageResource {
   }
 
   @GET
-  @Path("/get-all-message")
+  @Path("/issue/{id}/messages/{limit}")
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getAllMessage() {
+  public String getMessageById(@PathParam("id") String id, @PathParam("id") String limit) {
+    return new Response().buildSuccess(communicationMessageFacade.getMessageById(id)).toJson();
+  }
+
+  @GET
+  @Path("/issue/list")
+  @Secured
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String listIssue() {
     return new Response().buildSuccess(communicationMessageFacade.getAllMessage()).toJson();
   }
 
-  @DELETE
-  @Path("/delete-message/{id}")
-  @Secured
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String deleteMessage(@PathParam("id") String id) {
-    return new Response().buildSuccess(communicationMessageFacade.deleteMessage(id)).toJson();
-  }
 }
