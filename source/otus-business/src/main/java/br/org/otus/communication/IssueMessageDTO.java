@@ -1,10 +1,8 @@
 package br.org.otus.communication;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 
 public class IssueMessageDTO {
-  @SerializedName("_id")
   private String objectType;
   private String emailReporter;
   private String title;
