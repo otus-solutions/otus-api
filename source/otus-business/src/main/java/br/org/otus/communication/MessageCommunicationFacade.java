@@ -26,9 +26,9 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object createMessage(String MessageJson) {
+  public Object createMessage(String id, String messageJson) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(MessageJson);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(id, messageJson);
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));

@@ -42,13 +42,13 @@ public class MessageCommunicationResource {
     return new Response().buildSuccess(messageCommunicationFacade.createIssue(issueMessageDTO.serialize(issueMessage))).toJson();
   }
 
-  @POST
+  @PUT
   @Secured
-  @Path("/issue/message/")
+  @Path("/issue/message/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createMessage(String messageJson) {
-    return new Response().buildSuccess(messageCommunicationFacade.createMessage(messageJson)).toJson();
+  public String createMessage(@PathParam("id") String id, String messageJson) {
+    return new Response().buildSuccess(messageCommunicationFacade.createMessage(id, messageJson)).toJson();
   }
 
   @PUT

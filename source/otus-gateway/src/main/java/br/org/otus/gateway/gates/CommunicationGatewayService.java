@@ -92,8 +92,8 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse createMessage(String message) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getMessageCommunicationAddress();
+  public GatewayResponse createMessage(String id, String message) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageCommunicationAddress(id);
     try {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, message);
       String response = jsonPOST.finish();
