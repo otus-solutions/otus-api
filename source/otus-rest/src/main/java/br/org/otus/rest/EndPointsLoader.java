@@ -1,6 +1,6 @@
 package br.org.otus.rest;
 
-import br.org.otus.communication.message.CommunicationMessageResource;
+import br.org.otus.communication.message.MessageCommunicationResource;
 import br.org.otus.configuration.datasource.DataSourceResource;
 import br.org.otus.configuration.project.ProjectConfigurationResource;
 import br.org.otus.configuration.publish.TemplateResource;
@@ -156,7 +156,7 @@ public class EndPointsLoader extends Application {
   private OfflineActivityResource offlineActivityResource;
 
   @Inject
-  private CommunicationMessageResource communicationMessageResource;
+  private MessageCommunicationResource messageCommunicationResource;
 
   @Override
   public Set<Class<?>> getClasses() {
@@ -196,7 +196,7 @@ public class EndPointsLoader extends Application {
     resources.add(SurveyGroupResource.class);
     resources.add(StaticVariableResource.class);
     resources.add(OfflineActivityResource.class);
-     resources.add(CommunicationMessageResource.class);
+     resources.add(MessageCommunicationResource.class);
 
     return resources;
   }
@@ -240,7 +240,7 @@ public class EndPointsLoader extends Application {
     resources.add(surveyGroupResource);
     resources.add(staticVariableResource);
     resources.add(offlineActivityResource);
-    resources.add(communicationMessageResource);
+    resources.add(messageCommunicationResource);
 
     return resources;
   }

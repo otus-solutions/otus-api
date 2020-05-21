@@ -13,7 +13,7 @@ import org.bson.Document;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 
-public class CommunicationMessageFacade {
+public class MessageCommunicationFacade {
 
   public Object createIssue(String issueJson) {
     try {
