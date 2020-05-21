@@ -37,7 +37,7 @@ public class MessageCommunicationResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(messageJson);
-    issueMessageDTO.setEmailReporter(userEmail);
+    issueMessage.setEmailReporter(userEmail);
 
     return new Response().buildSuccess(messageCommunicationFacade.createIssue(issueMessageDTO.serialize(issueMessage))).toJson();
   }
