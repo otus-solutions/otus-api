@@ -148,7 +148,7 @@ public class CommunicationGatewayService {
   }
 
   public GatewayResponse listIssue(String userEmail) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getlistIssueCommunicationAddress(userEmail);
+    URL requestURL = new CommunicationMicroServiceResources().getListIssueCommunicationAddress(userEmail);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();

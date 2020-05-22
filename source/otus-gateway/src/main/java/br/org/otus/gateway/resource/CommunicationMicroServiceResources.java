@@ -72,7 +72,7 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_ISSUE_CLOSE_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
-  public URL getlistIssueCommunicationAddress(String USER_EMAIL) throws MalformedURLException {
+  public URL getListIssueCommunicationAddress(String USER_EMAIL) throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + ISSUE_LIST_COMMUNICATION_RESOURCE+ "/" + USER_EMAIL);
   }
 }
