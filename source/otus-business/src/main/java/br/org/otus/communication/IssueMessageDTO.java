@@ -4,17 +4,21 @@ import com.google.gson.GsonBuilder;
 
 public class IssueMessageDTO {
   private String objectType;
-  private String emailReporter;
+  private String sender;
   private String title;
   private String message;
   private String creationDate;
   private String status;
 
-  public void setEmailReporter(String emailReporter) {
-    this.emailReporter = emailReporter;
+  public void setSender(String emailReporter) {
+    this.sender = emailReporter;
   }
 
-   public static String serialize(IssueMessageDTO issueMessageDTO) {
+  public String getSender() {
+    return sender;
+  }
+
+  public static String serialize(IssueMessageDTO issueMessageDTO) {
     return IssueMessageDTO.getGsonBuilder().create().toJson(issueMessageDTO);
   }
 

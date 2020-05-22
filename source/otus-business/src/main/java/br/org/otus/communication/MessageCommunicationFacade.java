@@ -22,7 +22,7 @@ public class MessageCommunicationFacade {
   public Object createIssue(String userEmail, String issueJson) {
     try {
       IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(issueJson);
-      issueMessage.setEmailReporter(userEmail);
+      issueMessage.setSender(userEmail);
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
