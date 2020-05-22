@@ -58,13 +58,13 @@ public class MessageCommunicationFacadeTest {
   @Ignore
   public void createIssue_method_should_() throws Exception {
     when(communicationGatewayService.createIssue(Mockito.any())).thenReturn(gatewayResponse);
-    assertEquals(messageJson, messageCommunicationFacade.createIssue(MESSAGE_JSON));
+    assertEquals(messageJson, messageCommunicationFacade.createIssue(EMAIL, MESSAGE_JSON));
   }
 
   @Test(expected = HttpResponseException.class)
   public void createIssue_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).createIssue(Mockito.any());
-    messageCommunicationFacade.createIssue(MESSAGE_JSON);
+    messageCommunicationFacade.createIssue(EMAIL, MESSAGE_JSON);
   }
 
   @Test(expected = HttpResponseException.class)

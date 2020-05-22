@@ -25,9 +25,6 @@ public class MessageCommunicationResource {
   @Inject
   private SecurityContext securityContext;
 
-  @Inject
-  private IssueMessageDTO issueMessageDTO;
-
   @POST
   @Secured
   @Path("/issue/create")
@@ -36,13 +33,11 @@ public class MessageCommunicationResource {
   public String createIssue(@Context HttpServletRequest request, String messageJson) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(messageJson);
-    issueMessage.setEmailReporter(userEmail);
 
-    return new Response().buildSuccess(messageCommunicationFacade.createIssue(issueMessageDTO.serialize(issueMessage))).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.createIssue(userEmail, messageJson)).toJson();
   }
 
-  @PUT
+  @POST
   @Secured
   @Path("/issue/message/{id}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -53,7 +48,7 @@ public class MessageCommunicationResource {
 
   @PUT
   @Secured
-  @Path("/issue/{id}/reopen/")
+  @Path("/issue/{id}/reopen")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateReopen(@PathParam("id") String id) {

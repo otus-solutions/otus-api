@@ -10,14 +10,20 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 
 public class MessageCommunicationFacade {
 
-  public Object createIssue(String issueJson) {
+  @Inject
+  private IssueMessageDTO issueMessageDTO;
+
+  public Object createIssue(String userEmail, String issueJson) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueJson);
+      IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(issueJson);
+      issueMessage.setEmailReporter(userEmail);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
