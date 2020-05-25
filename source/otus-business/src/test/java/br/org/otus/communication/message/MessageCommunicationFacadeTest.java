@@ -30,7 +30,7 @@ public class MessageCommunicationFacadeTest {
   private static final String EMAIL = "email@email.com";
   private static final String MESSAGE_JSON = "{\n" +
     "\"objectType\": \"Issue\",\n" +
-    "\"emailReporter\": \"email do token\",\n" +
+    "\"sender\": \"email do token\",\n" +
     "\"title\": \"Não consigo preencher a atividade TCLEC\",\n" +
     "\"message\": \"Quando tento responder uma pergunta, não consigo inserir a resposta\",\n" +
     "\"creationDate\": \"22/01/20\",\n" +

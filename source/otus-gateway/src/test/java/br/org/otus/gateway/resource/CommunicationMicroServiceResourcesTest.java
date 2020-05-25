@@ -23,19 +23,6 @@ public class CommunicationMicroServiceResourcesTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
   private static final String EMAIL = "email@email.com";
-  private static final String MESSAGE_ISSUE_JSON = "{\n" +
-    "\"objectType\": \"Issue\",\n" +
-    "\"emailReporter\": \"email do token\",\n" +
-    "\"title\": \"Não consigo preencher a atividade TCLEC\",\n" +
-    "\"message\": \"Quando tento responder uma pergunta, não consigo inserir a resposta\",\n" +
-    "\"creationDate\": \"22/01/20\",\n" +
-    "\"status\": \"OPEN\"\n" +
-    "}";
-  private static final String MESSAGE_JSON = "{\n" +
-    "\"text\": \"Segunda mensagem: não entendi sua pergunta\",\n" +
-    "\"sender\": \"email do token\",\n" +
-    "\"id\":\"9247c29478234234\"\n" +
-    "}";
 
   private CommunicationMicroServiceResources communicationMicroServiceResources;
   private MicroservicesEnvironments microservicesEnvironments;
@@ -89,8 +76,8 @@ public class CommunicationMicroServiceResourcesTest {
 
   @Test
   public void getListIssueCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issue-list/" + ID);
-    assertEquals(communicationMicroServiceResources.getListIssueCommunicationAddress(ID), url);
+    url = new URL("http://localhost:53004/api/issue-list/" + EMAIL);
+    assertEquals(communicationMicroServiceResources.getListIssueCommunicationAddress(EMAIL), url);
   }
 
 }
