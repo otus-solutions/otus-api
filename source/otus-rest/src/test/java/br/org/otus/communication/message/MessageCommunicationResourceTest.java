@@ -76,6 +76,13 @@ public class MessageCommunicationResourceTest {
     assertEquals(confirmed.toString(), messageCommunicationResource.createMessage(ID, MESSAGE_JSON));
   }
 
+
+  @Test
+  public void filter_method_should_call_Facade_method_filter() throws Exception {
+    when(messageCommunicationFacade.filter(Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.filter(Mockito.any()));
+  }
+
   @Test
   public void updateReopen_method_should_call_Facade_method_updateReopen() throws Exception {
     when(messageCommunicationFacade.updateReopen(Mockito.any())).thenReturn(returnData);

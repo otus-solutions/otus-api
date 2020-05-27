@@ -103,4 +103,10 @@ public class MessageCommunicationFacadeTest {
     messageCommunicationFacade.listIssue(EMAIL);
   }
 
+  @Test(expected = HttpResponseException.class)
+  public void filter_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).filter(Mockito.any());
+    messageCommunicationFacade.filter(Mockito.any());
+  }
+
 }

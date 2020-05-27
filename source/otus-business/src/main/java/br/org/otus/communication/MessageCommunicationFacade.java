@@ -43,6 +43,16 @@ public class MessageCommunicationFacade {
     }
   }
 
+  public Object filter(String filterJson) {
+    try {
+      return new CommunicationGatewayService().filter(filterJson);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
   public Object updateReopen(String issueId) {
     try {
       return new CommunicationGatewayService().updateReopen(issueId);
@@ -86,16 +96,6 @@ public class MessageCommunicationFacade {
   public Object listIssue(String userEmail) {
     try {
       return new CommunicationGatewayService().listIssue(userEmail);
-    } catch (JsonSyntaxException | MalformedURLException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (RequestException ex) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    }
-  }
-
-  public Object filter(String filterJson) {
-    try {
-      return new CommunicationGatewayService().filtere(filterJson);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {

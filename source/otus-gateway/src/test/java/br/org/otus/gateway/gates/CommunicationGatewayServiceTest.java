@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -113,6 +114,26 @@ public class CommunicationGatewayServiceTest {
   public void createMessage_method_should_throw_exception_for_IOException() throws Exception{
     PowerMockito.when(jsonPOSTUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
     communicationGatewayService.createMessage(ID, MESSAGE_JSON);
+  }
+
+  @Test
+  public void filter_method_should_call_service_communication_getFilterCommunicationAddress() throws Exception{
+    PowerMockito.when(communicationMicroServiceResources.getFilterCommunicationAddress()).thenReturn(requestURL);
+
+    PowerMockito.whenNew(JsonPOSTUtility.class).withAnyArguments().thenReturn(jsonPOSTUtility);
+    PowerMockito.when(jsonPOSTUtility.finish()).thenReturn(returnData);
+
+    gatewayResponse = (GatewayResponse) communicationGatewayService.filter(MESSAGE_JSON);
+
+    assertEquals(returnData,  gatewayResponse.getData());
+
+    verify(jsonPOSTUtility, times(1)).finish();
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void filter_method_should_throw_exception_for_IOException() throws Exception{
+    PowerMockito.when(jsonPOSTUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
+    communicationGatewayService.filter(MESSAGE_JSON);
   }
 
   @Test

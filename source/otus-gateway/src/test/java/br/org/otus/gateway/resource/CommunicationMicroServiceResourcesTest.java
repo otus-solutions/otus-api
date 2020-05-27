@@ -80,4 +80,9 @@ public class CommunicationMicroServiceResourcesTest {
     assertEquals(communicationMicroServiceResources.getListIssueCommunicationAddress(EMAIL), url);
   }
 
+  @Test
+  public void getFilterCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
+    url = new URL("http://localhost:53004/api/filter");
+    assertEquals(communicationMicroServiceResources.getFilterCommunicationAddress(), url);
+  }
 }
