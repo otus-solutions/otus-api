@@ -19,6 +19,7 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   private static final String UPDATE_ISSUE_REOPEN_COMMUNICATION_RESOURCE = "/api/update-issue-reopen-communication";
   private static final String UPDATE_ISSUE_CLOSE_COMMUNICATION_RESOURCE = "/api/update-issue-close-communication";
   private static final String ISSUE_LIST_COMMUNICATION_RESOURCE = "/api/issue-list";
+  private static final String FILTER_COMMUNICATION_RESOURCE = "/api/filter";
 
   public CommunicationMicroServiceResources() {
     super(MicroservicesEnvironments.COMMUNICATION_SERVICE);
@@ -74,5 +75,9 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
 
   public URL getListIssueCommunicationAddress(String USER_EMAIL) throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + ISSUE_LIST_COMMUNICATION_RESOURCE+ "/" + USER_EMAIL);
+  }
+
+  public URL getFilterCommunicationAddress() throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + FILTER_COMMUNICATION_RESOURCE);
   }
 }

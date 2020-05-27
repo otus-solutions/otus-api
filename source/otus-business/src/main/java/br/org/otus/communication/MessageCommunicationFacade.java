@@ -92,4 +92,14 @@ public class MessageCommunicationFacade {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
+
+  public Object filter(String filterJson) {
+    try {
+      return new CommunicationGatewayService().filtere(filterJson);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
 }

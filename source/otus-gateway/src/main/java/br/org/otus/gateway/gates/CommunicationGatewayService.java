@@ -103,6 +103,17 @@ public class CommunicationGatewayService {
     }
   }
 
+  public Object filtere(String filterJson) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getFilterCommunicationAddress();
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, filterJson);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
   public GatewayResponse updateReopen(String issueId) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getUpdateReopenCommunicationAddress(issueId);
     try {

@@ -46,6 +46,15 @@ public class MessageCommunicationResource {
     return new Response().buildSuccess(messageCommunicationFacade.createMessage(id, messageJson)).toJson();
   }
 
+  @POST
+  @Secured
+  @Path("/issue/filter")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String filter(String filterJson) {
+    return new Response().buildSuccess(messageCommunicationFacade.filter(filterJson)).toJson();
+  }
+
   @PUT
   @Secured
   @Path("/issue/{id}/reopen")
