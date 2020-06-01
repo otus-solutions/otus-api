@@ -9,19 +9,33 @@ import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.service.ParticipantService;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageCommunicationFacade {
 
   @Inject
   private IssueMessageDTO issueMessageDTO;
 
+  @Inject
+  private Participant participant;
+
+  @Inject
+  private ParticipantService participantService;
+
+  @Inject
+  private ParticipantFilterDTO participantFilterDTO;
+
   public Object createIssue(String userEmail, String issueJson) {
     try {
-      IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(issueJson);
+      IssueMessageDTO issueMessage = issueMessageDTO.deserialize(issueJson);
       issueMessage.setSender(userEmail);
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
@@ -45,7 +59,30 @@ public class MessageCommunicationFacade {
 
   public Object filter(String filterJson) {
     try {
-      return new CommunicationGatewayService().filter(filterJson);
+      List<ParticipantFilterDTO> filter = new ArrayList<>();
+      List<Object> arrayData = new ArrayList<>();
+      ParticipantFilterDTO participantFilter= new ParticipantFilterDTO();
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().filter(filterJson);
+      arrayData = (List<Object>) gatewayResponse.getData();
+
+      arrayData.forEach(issue -> {
+        IssueMessageDTO issueMessage = issueMessageDTO.deserialize((String) issue);
+        String email = issueMessage.getSender();
+        try {
+          participant = participantService.getByEmail(email);
+        } catch (DataNotFoundException e) {
+          new HttpResponseException(Validation.build(e.getCause().getMessage()));
+        }
+
+        participantFilter.setIssueMessageDTO(issueMessage);
+        participantFilter.setCenter(participant.getFieldCenter().getAcronym());
+        participantFilter.setName(participant.getName());
+        participantFilter.setRn(participant.getRecruitmentNumber());
+
+        filter.add(participantFilter);
+      });
+
+      return filter.toString();
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -75,7 +112,8 @@ public class MessageCommunicationFacade {
 
   public Object getMessageById(String issueId) {
     try {
-      return new CommunicationGatewayService().getMessageById(issueId);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageById(issueId);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -85,7 +123,8 @@ public class MessageCommunicationFacade {
 
   public Object getMessageByIdLimit(String issueId, String limit) {
     try {
-      return new CommunicationGatewayService().getMessageByIdLimit(issueId, limit);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIdLimit(issueId, limit);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -95,7 +134,8 @@ public class MessageCommunicationFacade {
 
   public Object listIssue(String userEmail) {
     try {
-      return new CommunicationGatewayService().listIssue(userEmail);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().listIssue(userEmail);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {

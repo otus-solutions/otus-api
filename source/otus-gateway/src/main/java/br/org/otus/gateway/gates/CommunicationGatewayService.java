@@ -103,7 +103,7 @@ public class CommunicationGatewayService {
     }
   }
 
-  public Object filter(String filterJson) throws MalformedURLException {
+  public GatewayResponse filter(String filterJson) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getFilterCommunicationAddress();
     try {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, filterJson);

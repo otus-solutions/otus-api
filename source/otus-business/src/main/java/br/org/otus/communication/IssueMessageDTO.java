@@ -10,8 +10,8 @@ public class IssueMessageDTO {
   private String creationDate;
   private String status;
 
-  public void setSender(String emailReporter) {
-    this.sender = emailReporter;
+  public void setSender(String sender) {
+    this.sender = sender;
   }
 
   public String getSender() {
