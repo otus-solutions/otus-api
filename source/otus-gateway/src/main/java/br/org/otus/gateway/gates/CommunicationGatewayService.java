@@ -136,6 +136,17 @@ public class CommunicationGatewayService {
     }
   }
 
+  public GatewayResponse updateFinalize(String issueId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateFinalizaCommunicationAddress(issueId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
   public GatewayResponse getMessageById(String issueId) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getMessageByIdCommunicationAddress(issueId);
     try {

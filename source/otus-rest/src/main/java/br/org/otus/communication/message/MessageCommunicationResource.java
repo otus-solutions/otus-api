@@ -1,6 +1,5 @@
 package br.org.otus.communication.message;
 
-import br.org.otus.communication.IssueMessageDTO;
 import br.org.otus.communication.MessageCommunicationFacade;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
@@ -71,6 +70,15 @@ public class MessageCommunicationResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateClose(@PathParam("id") String id) {
     return new Response().buildSuccess(messageCommunicationFacade.updateClose(id)).toJson();
+  }
+
+  @PUT
+  @Secured
+  @Path("/issue/{id}/finalize")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String updateFinalize(@PathParam("id") String id) {
+    return new Response().buildSuccess(messageCommunicationFacade.updateFinalize(id)).toJson();
   }
 
   @GET

@@ -13,11 +13,12 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   private static final String UPDATE_COMMUNICATION_RESOURCE = "/api/update-communication";
   private static final String DELETE_COMMUNICATION_RESOURCE = "/api/delete-communication";
   private static final String MESSAGE_COMMUNICATION_RESOURCE = "/api/message-communication";
-  private static final String FIND_LIST_MESSAGE_COMMUNICATION_RESOURCE = "/api/find-list-message-communication";
-  private static final String FIND_LIST_MESSAGE_LIMIT_COMMUNICATION_RESOURCE = "/api/find-list-message-limit-communication";
+  private static final String FIND_LIST_MESSAGE_COMMUNICATION_RESOURCE = "/api/list-message-communication";
+  private static final String FIND_LIST_MESSAGE_LIMIT_COMMUNICATION_RESOURCE = "/api/list-message-limit-communication";
   private static final String ISSUE_COMMUNICATION_RESOURCE = "/api/issue-create";
-  private static final String UPDATE_ISSUE_REOPEN_COMMUNICATION_RESOURCE = "/api/update-issue-reopen-communication";
-  private static final String UPDATE_ISSUE_CLOSE_COMMUNICATION_RESOURCE = "/api/update-issue-close-communication";
+  private static final String UPDATE_ISSUE_REOPEN_COMMUNICATION_RESOURCE = "/api/issue-reopen-communication";
+  private static final String UPDATE_ISSUE_CLOSE_COMMUNICATION_RESOURCE = "/api/issue-close-communication";
+  private static final String UPDATE_ISSUE_FINALIZE_COMMUNICATION_RESOURCE = "/api/issue-finalize-communication";
   private static final String ISSUE_LIST_COMMUNICATION_RESOURCE = "/api/issue-list";
   private static final String FILTER_COMMUNICATION_RESOURCE = "/api/filter";
 
@@ -73,8 +74,12 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_ISSUE_CLOSE_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
+  public URL getUpdateFinalizaCommunicationAddress(String ID) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_ISSUE_FINALIZE_COMMUNICATION_RESOURCE + "/" + ID);
+  }
+
   public URL getListIssueCommunicationAddress(String USER_EMAIL) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUE_LIST_COMMUNICATION_RESOURCE+ "/" + USER_EMAIL);
+    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUE_LIST_COMMUNICATION_RESOURCE + "/" + USER_EMAIL);
   }
 
   public URL getFilterCommunicationAddress() throws MalformedURLException {
