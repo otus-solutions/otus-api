@@ -1,5 +1,6 @@
-package br.org.otus.communication;
+package br.org.otus.communication.issuedto;
 
+import br.org.otus.communication.IssueMessageDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

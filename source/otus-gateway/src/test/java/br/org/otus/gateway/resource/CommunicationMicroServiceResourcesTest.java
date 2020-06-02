@@ -46,13 +46,13 @@ public class CommunicationMicroServiceResourcesTest {
 
   @Test
   public void getMessageByIdCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/find-list-message-communication/" + ID);
+    url = new URL("http://localhost:53004/api/list-message-communication/" + ID);
     assertEquals(communicationMicroServiceResources.getMessageByIdCommunicationAddress(ID), url);
   }
 
   @Test
   public void getMessageByIdLimitCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/find-list-message-limit-communication/" + ID + "/" + LIMIT);
+    url = new URL("http://localhost:53004/api/list-message-limit-communication/" + ID + "/" + LIMIT);
     assertEquals(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, LIMIT), url);
   }
 
@@ -64,14 +64,20 @@ public class CommunicationMicroServiceResourcesTest {
 
   @Test
   public void getUpdateReopenCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/update-issue-reopen-communication/" + ID);
+    url = new URL("http://localhost:53004/api/issue-reopen-communication/" + ID);
     assertEquals(communicationMicroServiceResources.getUpdateReopenCommunicationAddress(ID), url);
   }
 
   @Test
   public void getUpdateCloseCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/update-issue-close-communication/" + ID);
+    url = new URL("http://localhost:53004/api/issue-close-communication/" + ID);
     assertEquals(communicationMicroServiceResources.getUpdateCloseCommunicationAddress(ID), url);
+  }
+
+  @Test
+  public void getUpdateFinalizeCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
+    url = new URL("http://localhost:53004/api/issue-finalize-communication/" + ID);
+    assertEquals(communicationMicroServiceResources.getUpdateFinalizeCommunicationAddress(ID), url);
   }
 
   @Test

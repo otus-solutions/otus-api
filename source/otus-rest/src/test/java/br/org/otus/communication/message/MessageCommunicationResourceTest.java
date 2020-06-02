@@ -96,6 +96,12 @@ public class MessageCommunicationResourceTest {
   }
 
   @Test
+  public void updateFinalize_method_should_call_Facade_method_updateFinalize() throws Exception {
+    when(messageCommunicationFacade.updateFinalize(Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.updateFinalize(ID));
+  }
+
+  @Test
   public void getMessageById_method_should_call_Facade_method_getMessageById() throws Exception {
     when(messageCommunicationFacade.getMessageById(Mockito.any())).thenReturn(returnData);
     assertEquals(confirmed.toString(), messageCommunicationResource.getMessageById(ID));

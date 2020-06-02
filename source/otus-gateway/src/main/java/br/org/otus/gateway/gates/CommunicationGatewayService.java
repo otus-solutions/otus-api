@@ -137,7 +137,7 @@ public class CommunicationGatewayService {
   }
 
   public GatewayResponse updateFinalize(String issueId) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getUpdateFinalizaCommunicationAddress(issueId);
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateFinalizeCommunicationAddress(issueId);
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       jsonPUT.finish();

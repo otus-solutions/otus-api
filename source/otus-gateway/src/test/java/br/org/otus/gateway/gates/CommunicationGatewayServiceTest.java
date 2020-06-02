@@ -177,6 +177,26 @@ public class CommunicationGatewayServiceTest {
   }
 
   @Test
+  public void updateFinalize_method_should_call_service_communication_getFinalizeCloseCommunicationAddress() throws Exception{
+    PowerMockito.when(communicationMicroServiceResources.getUpdateFinalizeCommunicationAddress(ID)).thenReturn(requestURL);
+
+    PowerMockito.whenNew(JsonPUTRequestUtility.class).withAnyArguments().thenReturn(jsonPUTRequestUtility);
+    PowerMockito.when(jsonPUTRequestUtility.finish()).thenReturn(returnData);
+
+    gatewayResponse = communicationGatewayService.updateClose(ID);
+
+    assertEquals(confirmed,  gatewayResponse.getData());
+
+    verify(jsonPUTRequestUtility, times(1)).finish();
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void updateFinalize_method_should_throw_exception_for_IOException() throws Exception{
+    PowerMockito.when(jsonPUTRequestUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
+    communicationGatewayService.updateFinalize(ID);
+  }
+
+  @Test
   public void getMessageById_method_should_call_service_communication_getMessageByIdCommunicationAddress() throws Exception{
     PowerMockito.when(communicationMicroServiceResources.getMessageByIdCommunicationAddress(ID)).thenReturn(requestURL);
 

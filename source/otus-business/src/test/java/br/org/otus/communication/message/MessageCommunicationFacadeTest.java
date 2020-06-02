@@ -86,6 +86,12 @@ public class MessageCommunicationFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
+  public void updateFinalize_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).updateFinalize(Mockito.any());
+    messageCommunicationFacade.updateFinalize(ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
   public void getMessageById_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageById(Mockito.any());
     messageCommunicationFacade.getMessageById(ID);
