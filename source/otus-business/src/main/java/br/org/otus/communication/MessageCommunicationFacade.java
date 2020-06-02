@@ -9,7 +9,6 @@ import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 
@@ -17,15 +16,12 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MessageCommunicationFacade {
+  private Participant participant;
 
   @Inject
   private IssueMessageDTO issueMessageDTO;
-
-  @Inject
-  private Participant participant;
 
   @Inject
   private ParticipantService participantService;
@@ -59,30 +55,30 @@ public class MessageCommunicationFacade {
 
   public Object filter(String filterJson) {
     try {
-      List<ParticipantFilterDTO> filter = new ArrayList<>();
-      List<Object> arrayData = new ArrayList<>();
-      ParticipantFilterDTO participantFilter= new ParticipantFilterDTO();
+//      List<ParticipantFilterDTO> filter = new ArrayList<>(); //TODO review filter
+//      List<Object> arrayData = new ArrayList<>();
+//      ParticipantFilterDTO participantFilter= new ParticipantFilterDTO();
       GatewayResponse gatewayResponse = new CommunicationGatewayService().filter(filterJson);
-      arrayData = (List<Object>) gatewayResponse.getData();
+//      arrayData = (List<Object>) gatewayResponse.getData();
+//
+//      arrayData.forEach(issue -> {
+//        IssueMessageDTO issueMessage = issueMessageDTO.deserialize((String) issue);
+//        String email = issueMessage.getSender();
+//        try {
+//          participant = participantService.getByEmail(email);
+//        } catch (DataNotFoundException e) {
+//          new HttpResponseException(Validation.build(e.getCause().getMessage()));
+//        }
+//
+//        participantFilter.setIssueMessageDTO(issueMessage);
+//        participantFilter.setCenter(participant.getFieldCenter().getAcronym());
+//        participantFilter.setName(participant.getName());
+//        participantFilter.setRn(participant.getRecruitmentNumber());
+//
+//        filter.add(participantFilter);
+//      });
 
-      arrayData.forEach(issue -> {
-        IssueMessageDTO issueMessage = issueMessageDTO.deserialize((String) issue);
-        String email = issueMessage.getSender();
-        try {
-          participant = participantService.getByEmail(email);
-        } catch (DataNotFoundException e) {
-          new HttpResponseException(Validation.build(e.getCause().getMessage()));
-        }
-
-        participantFilter.setIssueMessageDTO(issueMessage);
-        participantFilter.setCenter(participant.getFieldCenter().getAcronym());
-        participantFilter.setName(participant.getName());
-        participantFilter.setRn(participant.getRecruitmentNumber());
-
-        filter.add(participantFilter);
-      });
-
-      return filter.toString();
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
