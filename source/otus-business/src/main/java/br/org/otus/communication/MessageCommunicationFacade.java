@@ -37,6 +37,9 @@ public class MessageCommunicationFacade {
   @Inject
   private ParticipantFilterDTO participantFilterDTO;
 
+  @Inject
+  private MessageDTO messageDTO;
+
   public Object createIssue(String userEmail, String issueJson) {
     try {
       IssueMessageDTO issueMessage = issueMessageDTO.deserialize(issueJson);
@@ -44,7 +47,7 @@ public class MessageCommunicationFacade {
         participant = participantService.getByEmail(userEmail);
         fieldCenter = fieldCenterService.fetchByAcronym(participant.getFieldCenter().getAcronym());
       } catch (DataNotFoundException e) {
-        new HttpResponseException(Validation.build(e.getCause().getMessage()));
+        throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
       }
       issueMessage.setSender(String.valueOf(participant.getId()));
       issueMessage.setGroup(String.valueOf(fieldCenter.getId()));
@@ -57,9 +60,16 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object createMessage(String id, String messageJson) {
+  public Object createMessage(String userEmail, String id, String messageJson) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(id, messageJson);
+      MessageDTO message = messageDTO.deserialize(messageJson);
+      try {
+        participant = participantService.getByEmail(userEmail);
+      } catch (DataNotFoundException e) {
+        throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      }
+      message.setSender(String.valueOf(participant.getId()));
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(id, messageDTO.serialize(message));
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));

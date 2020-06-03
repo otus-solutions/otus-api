@@ -72,8 +72,14 @@ public class MessageCommunicationResourceTest {
 
   @Test
   public void createMessage_method_should_call_Facade_method_createMessage() throws Exception {
-    when(messageCommunicationFacade.createMessage(Mockito.any(), Mockito.any())).thenReturn(returnData);
-    assertEquals(confirmed.toString(), messageCommunicationResource.createMessage(ID, MESSAGE_JSON));
+    when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(TOKEN);
+    mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.class, "readToken", TOKEN).thenReturn(AUTHORIZATION_HEADER_TOKEN);
+    when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(EMAIL);
+    when(messageCommunicationFacade.createMessage(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.createMessage(request, ID, MESSAGE_JSON));
   }
 
 

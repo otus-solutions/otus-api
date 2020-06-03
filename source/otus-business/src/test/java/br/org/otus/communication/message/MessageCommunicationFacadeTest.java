@@ -70,7 +70,7 @@ public class MessageCommunicationFacadeTest {
   @Test(expected = HttpResponseException.class)
   public void createMessage_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).createMessage(Mockito.any(), Mockito.any());
-    messageCommunicationFacade.createMessage(ID, messageJson);
+    messageCommunicationFacade.createMessage(EMAIL, ID, messageJson);
   }
 
   @Test(expected = HttpResponseException.class)

@@ -19,6 +19,14 @@ public class IssueMessageDTO {
     return sender;
   }
 
+  public String getGroup() {
+    return group;
+  }
+
+  public void setGroup(String group) {
+    this.group = group;
+  }
+
   public static String serialize(IssueMessageDTO issueMessageDTO) {
     return IssueMessageDTO.getGsonBuilder().create().toJson(issueMessageDTO);
   }
@@ -29,13 +37,5 @@ public class IssueMessageDTO {
 
   public static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
-  }
-
-  public String getGroup() {
-    return group;
-  }
-
-  public void setGroup(String group) {
-    this.group = group;
   }
 }

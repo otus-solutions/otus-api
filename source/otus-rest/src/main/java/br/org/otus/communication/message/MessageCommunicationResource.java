@@ -41,8 +41,11 @@ public class MessageCommunicationResource {
   @Path("/issue/message/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createMessage(@PathParam("id") String id, String messageJson) {
-    return new Response().buildSuccess(messageCommunicationFacade.createMessage(id, messageJson)).toJson();
+  public String createMessage(@Context HttpServletRequest request, @PathParam("id") String id, String messageJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    return new Response().buildSuccess(messageCommunicationFacade.createMessage(userEmail, id, messageJson)).toJson();
   }
 
   @POST
