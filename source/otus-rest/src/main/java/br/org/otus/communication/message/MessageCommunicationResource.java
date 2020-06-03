@@ -120,4 +120,12 @@ public class MessageCommunicationResource {
     return new Response().buildSuccess(messageCommunicationFacade.listIssue(userEmail)).toJson();
   }
 
+  @GET
+  @Secured
+  @Path("/issues/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getIssuesById(@PathParam("id") String id) {
+    return new Response().buildSuccess(messageCommunicationFacade.getIssueById(id)).toJson();
+  }
+
 }

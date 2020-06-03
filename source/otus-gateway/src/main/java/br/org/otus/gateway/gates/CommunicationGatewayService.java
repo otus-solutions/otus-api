@@ -179,4 +179,15 @@ public class CommunicationGatewayService {
       throw new ReadRequestException();
     }
   }
+
+  public GatewayResponse getIssueById(String id) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getIssueByIdCommunicationAddress(id);
+    try {
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 }
