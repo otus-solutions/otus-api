@@ -27,7 +27,7 @@ public class MessageCommunicationResource {
 
   @POST
   @Secured
-  @Path("/issue/create")
+  @Path("/issues")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createIssue(@Context HttpServletRequest request, String messageJson) {
@@ -39,7 +39,7 @@ public class MessageCommunicationResource {
 
   @POST
   @Secured
-  @Path("/issue/message/{id}")
+  @Path("/issues/{id}/messages")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createMessage(@Context HttpServletRequest request, @PathParam("id") String id, String messageJson) {
@@ -95,7 +95,7 @@ public class MessageCommunicationResource {
 
   @GET
   @Secured
-  @Path("/issue/{id}/messages")
+  @Path("/issues/{id}/messages")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getMessageById(@PathParam("id") String id) {
     return new Response().buildSuccess(messageCommunicationFacade.getMessageById(id)).toJson();
@@ -103,7 +103,7 @@ public class MessageCommunicationResource {
 
   @GET
   @Secured
-  @Path("/issue/{id}/messages/{limit}")
+  @Path("/issues/{id}/messages/{limit}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getMessageByIdLimit(@PathParam("id") String id, @PathParam("limit") String limit) {
     return new Response().buildSuccess(messageCommunicationFacade.getMessageByIdLimit(id, limit)).toJson();
@@ -111,7 +111,7 @@ public class MessageCommunicationResource {
 
   @GET
   @Secured
-  @Path("/issue/list")
+  @Path("/issues")
   @Consumes(MediaType.APPLICATION_JSON)
   public String listIssue(@Context HttpServletRequest request) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
