@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.rest.Response;
+import org.ccem.otus.participant.model.Participant;
 
 @Path("/project-communication")
 public class MessageCommunicationResource {
@@ -82,6 +83,14 @@ public class MessageCommunicationResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateFinalize(@PathParam("id") String id) {
     return new Response().buildSuccess(messageCommunicationFacade.updateFinalize(id)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/sender/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getSenderById(@PathParam("id") String id) {
+    return new Response().buildSuccess(messageCommunicationFacade.getSenderById(id)).toJson(Participant.getGsonBuilder());
   }
 
   @GET

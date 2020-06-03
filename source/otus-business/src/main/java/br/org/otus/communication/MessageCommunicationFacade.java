@@ -9,6 +9,7 @@ import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -171,6 +172,15 @@ public class MessageCommunicationFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public Object getSenderById(String id) {
+    try {
+      ObjectId objectId = new ObjectId(id);
+      return participantService.getId(objectId);
+    } catch (JsonSyntaxException | DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 }

@@ -31,6 +31,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   private static final String PULL = "$pull";
   private static final String SET = "$set";
   private static final String PASSWORD = "password";
+  private static final String ID = "_id";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -132,6 +133,15 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("Participant no found");
     }
+  }
+
+  @Override
+  public Participant getId(ObjectId id) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(ID, id)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
+    }
+    return Participant.deserialize(participantFound.toJson());
   }
 
   @Override

@@ -34,4 +34,5 @@ public interface ParticipantService {
 
   String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
 
+  Participant getId(ObjectId id) throws DataNotFoundException;
 }
