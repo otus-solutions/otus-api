@@ -10,8 +10,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
+import org.ccem.otus.service.FieldCenterService;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -21,11 +23,16 @@ import java.util.ArrayList;
 public class MessageCommunicationFacade {
   private Participant participant;
 
+  private FieldCenter fieldCenter;
+
   @Inject
   private IssueMessageDTO issueMessageDTO;
 
   @Inject
   private ParticipantService participantService;
+
+  @Inject
+  private FieldCenterService fieldCenterService;
 
   @Inject
   private ParticipantFilterDTO participantFilterDTO;
@@ -35,10 +42,12 @@ public class MessageCommunicationFacade {
       IssueMessageDTO issueMessage = issueMessageDTO.deserialize(issueJson);
       try {
         participant = participantService.getByEmail(userEmail);
+        fieldCenter = fieldCenterService.fetchByAcronym(participant.getFieldCenter().getAcronym());
       } catch (DataNotFoundException e) {
         new HttpResponseException(Validation.build(e.getCause().getMessage()));
       }
       issueMessage.setSender(String.valueOf(participant.getId()));
+      issueMessage.setGroup(String.valueOf(fieldCenter.getId()));
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {

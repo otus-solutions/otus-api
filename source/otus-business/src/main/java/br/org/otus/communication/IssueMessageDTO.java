@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 public class IssueMessageDTO {
   private String objectType;
   private String sender;
+  private String group;
   private String title;
   private String message;
   private String creationDate;
@@ -28,5 +29,13 @@ public class IssueMessageDTO {
 
   public static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
+  }
+
+  public String getGroup() {
+    return group;
+  }
+
+  public void setGroup(String group) {
+    this.group = group;
   }
 }
