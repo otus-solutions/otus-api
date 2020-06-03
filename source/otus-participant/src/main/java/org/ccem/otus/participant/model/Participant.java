@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class Participant {
 
+  private ObjectId _id;
   @Equalization(name = "recruitmentNumber")
   private Long recruitmentNumber;
   @Equalization(name = "name")
@@ -49,6 +50,10 @@ public class Participant {
 
   public String getName() {
     return name;
+  }
+
+  public ObjectId getId() {
+    return _id;
   }
 
   public String getEmail() {

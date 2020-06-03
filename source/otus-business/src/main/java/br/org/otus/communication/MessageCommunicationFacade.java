@@ -9,6 +9,7 @@ import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 
@@ -32,7 +33,12 @@ public class MessageCommunicationFacade {
   public Object createIssue(String userEmail, String issueJson) {
     try {
       IssueMessageDTO issueMessage = issueMessageDTO.deserialize(issueJson);
-      issueMessage.setSender(userEmail);
+      try {
+        participant = participantService.getByEmail(userEmail);
+      } catch (DataNotFoundException e) {
+        new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      }
+      issueMessage.setSender(String.valueOf(participant.getId()));
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
