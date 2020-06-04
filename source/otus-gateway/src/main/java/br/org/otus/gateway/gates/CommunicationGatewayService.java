@@ -190,4 +190,15 @@ public class CommunicationGatewayService {
       throw new ReadRequestException();
     }
   }
+
+  public GatewayResponse getIssueByRn(String issueId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getIssueByRnCommunicationAddress(issueId);
+    try {
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 }

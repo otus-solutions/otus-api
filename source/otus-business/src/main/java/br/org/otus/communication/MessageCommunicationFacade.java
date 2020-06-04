@@ -170,6 +170,13 @@ public class MessageCommunicationFacade {
   }
 
   public Object getIssuesByRn(String rn) {
-    return null;//TODO in progress
+    try {
+      participant = participantService.getByRecruitmentNumber(Long.valueOf(rn));
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssueByRn(String.valueOf(participant.getId()));
+
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
   }
 }

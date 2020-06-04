@@ -122,7 +122,7 @@ public class MessageCommunicationResource {
   @Path("/issues")
   @Consumes(MediaType.APPLICATION_JSON)
   public String listIssue(@Context HttpServletRequest request) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);//TODO resolver center and id
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
     return new Response().buildSuccess(messageCommunicationFacade.listIssue(userEmail)).toJson();
