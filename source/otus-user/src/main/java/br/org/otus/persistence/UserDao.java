@@ -2,6 +2,7 @@ package br.org.otus.persistence;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.model.User;
@@ -9,6 +10,8 @@ import br.org.otus.model.User;
 public interface UserDao {
 
   User fetchByEmail(String email) throws DataNotFoundException;
+
+  User getById(ObjectId userId) throws DataNotFoundException;
 
   Boolean emailExists(String email);
 
