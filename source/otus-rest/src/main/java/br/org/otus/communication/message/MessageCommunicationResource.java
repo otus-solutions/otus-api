@@ -51,7 +51,7 @@ public class MessageCommunicationResource {
 
   @POST
   @Secured
-  @Path("/issue/filter")
+  @Path("/issues/filter")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String filter(String filterJson) {
@@ -60,7 +60,7 @@ public class MessageCommunicationResource {
 
   @PUT
   @Secured
-  @Path("/issue/{id}/reopen")
+  @Path("/issues/{id}/reopen")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateReopen(@PathParam("id") String id) {
@@ -69,7 +69,7 @@ public class MessageCommunicationResource {
 
   @PUT
   @Secured
-  @Path("/issue/{id}/close")
+  @Path("/issues/{id}/close")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateClose(@PathParam("id") String id) {
@@ -78,7 +78,7 @@ public class MessageCommunicationResource {
 
   @PUT
   @Secured
-  @Path("/issue/{id}/finalize")
+  @Path("/issues/{id}/finalize")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String updateFinalize(@PathParam("id") String id) {
@@ -91,6 +91,14 @@ public class MessageCommunicationResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String getSenderById(@PathParam("id") String id) {
     return new Response().buildSuccess(messageCommunicationFacade.getSenderById(id)).toJson(Participant.getGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/issues/participant/{rn}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getIssuesByRn(@PathParam("rn") String rn) {
+    return new Response().buildSuccess(messageCommunicationFacade.getIssuesByRn(rn)).toJson(Participant.getGsonBuilder());
   }
 
   @GET
@@ -114,7 +122,7 @@ public class MessageCommunicationResource {
   @Path("/issues")
   @Consumes(MediaType.APPLICATION_JSON)
   public String listIssue(@Context HttpServletRequest request) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);//TODO resolver center and id
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
     return new Response().buildSuccess(messageCommunicationFacade.listIssue(userEmail)).toJson();

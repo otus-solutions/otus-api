@@ -78,7 +78,7 @@ public class CommunicationGatewayServiceTest {
 
   @Test
   public void createIssue_method_should_call_service_communication_getIssueCommunicationAddress() throws Exception{
-    PowerMockito.when(communicationMicroServiceResources.getIssueCommunicationAddress()).thenReturn(requestURL);
+    PowerMockito.when(communicationMicroServiceResources.getIssuesCommunicationAddress()).thenReturn(requestURL);
 
     PowerMockito.whenNew(JsonPOSTUtility.class).withAnyArguments().thenReturn(jsonPOSTUtility);
     PowerMockito.when(jsonPOSTUtility.finish()).thenReturn(returnData);

@@ -82,7 +82,7 @@ public class CommunicationGatewayService {
   }
 
   public GatewayResponse createIssue(String issue) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getIssueCommunicationAddress();
+    URL requestURL = new CommunicationMicroServiceResources().getIssuesCommunicationAddress();
     try {
       JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, issue);
       String response = jsonPOST.finish();
@@ -169,8 +169,8 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse listIssue(String userEmail) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getListIssueCommunicationAddress(userEmail);
+  public GatewayResponse listIssue(String id) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getListIssueCommunicationAddress(id);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();

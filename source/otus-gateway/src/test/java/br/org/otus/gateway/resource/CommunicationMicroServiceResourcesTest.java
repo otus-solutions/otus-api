@@ -59,7 +59,7 @@ public class CommunicationMicroServiceResourcesTest {
   @Test
   public void getIssueCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
     url = new URL("http://localhost:53004/api/issue-create");
-    assertEquals(communicationMicroServiceResources.getIssueCommunicationAddress(), url);
+    assertEquals(communicationMicroServiceResources.getIssuesCommunicationAddress(), url);
   }
 
   @Test

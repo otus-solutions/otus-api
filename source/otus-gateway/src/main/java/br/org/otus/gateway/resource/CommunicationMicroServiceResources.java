@@ -15,7 +15,7 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   private static final String MESSAGE_COMMUNICATION_RESOURCE = "/api/message-communication";
   private static final String FIND_LIST_MESSAGE_COMMUNICATION_RESOURCE = "/api/list-message-communication";
   private static final String FIND_LIST_MESSAGE_LIMIT_COMMUNICATION_RESOURCE = "/api/list-message-limit-communication";
-  private static final String ISSUE_COMMUNICATION_RESOURCE = "/api/issue-create";
+  private static final String ISSUES_COMMUNICATION_RESOURCE = "/api/issues";
   private static final String UPDATE_ISSUE_REOPEN_COMMUNICATION_RESOURCE = "/api/issue-reopen-communication";
   private static final String UPDATE_ISSUE_CLOSE_COMMUNICATION_RESOURCE = "/api/issue-close-communication";
   private static final String UPDATE_ISSUE_FINALIZE_COMMUNICATION_RESOURCE = "/api/issue-finalize-communication";
@@ -62,8 +62,8 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIST_MESSAGE_LIMIT_COMMUNICATION_RESOURCE + "/" + ID + "/" + LIMIT);
   }
 
-  public URL getIssueCommunicationAddress() throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUE_COMMUNICATION_RESOURCE);
+  public URL getIssuesCommunicationAddress() throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_COMMUNICATION_RESOURCE);
   }
 
   public URL getUpdateReopenCommunicationAddress(String ID) throws MalformedURLException {
