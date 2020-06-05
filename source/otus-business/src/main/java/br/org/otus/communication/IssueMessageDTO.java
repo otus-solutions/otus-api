@@ -7,7 +7,7 @@ public class IssueMessageDTO {
   private String sender;
   private String group;
   private String title;
-  private String message;
+  private String text;
   private String creationDate;
   private String status;
 
