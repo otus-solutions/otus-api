@@ -133,7 +133,7 @@ public class MessageCommunicationResource {
   @Path("/issues/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getIssuesById(@PathParam("id") String id) {
-    return new Response().buildSuccess(messageCommunicationFacade.getIssueById(id)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.getIssuesById(id)).toJson();
   }
 
 }

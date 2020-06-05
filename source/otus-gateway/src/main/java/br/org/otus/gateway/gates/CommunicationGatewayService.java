@@ -180,7 +180,7 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getIssueById(String id) throws MalformedURLException {
+  public GatewayResponse getIssuesById(String id) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getIssueByIdCommunicationAddress(id);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
@@ -191,7 +191,7 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getIssueByRn(String issueId) throws MalformedURLException {
+  public GatewayResponse getIssuesByRn(String issueId) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getIssueByRnCommunicationAddress(issueId);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);

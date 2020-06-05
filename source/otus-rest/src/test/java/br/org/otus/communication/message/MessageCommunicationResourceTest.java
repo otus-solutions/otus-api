@@ -131,4 +131,22 @@ public class MessageCommunicationResourceTest {
     assertEquals(confirmed.toString(), messageCommunicationResource.listIssue(request));
   }
 
+  @Test
+  public void getSenderById_method_should_call_Facade_method_getSenderById() throws Exception {
+    when(messageCommunicationFacade.getSenderById(Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.getSenderById(ID));
+  }
+
+  @Test
+  public void getIssuesByRn_method_should_call_Facade_method_getIssuesByRn() throws Exception {
+    when(messageCommunicationFacade.getIssuesByRn(Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.getIssuesByRn(ID));
+  }
+
+  @Test
+  public void getIssuesById_method_should_call_Facade_method_getIssuesById() throws Exception {
+    when(messageCommunicationFacade.getIssuesById(Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.getIssuesById(ID));
+  }
+
 }

@@ -88,7 +88,7 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   }
 
   public URL getIssueByIdCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_LIST_COMMUNICATION_RESOURCE + "/" + ID);
+    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
   public URL getIssueByRnCommunicationAddress(String ID) throws MalformedURLException {

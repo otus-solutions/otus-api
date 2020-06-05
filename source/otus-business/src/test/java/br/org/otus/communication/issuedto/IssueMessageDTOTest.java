@@ -13,9 +13,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(PowerMockRunner.class)
 public class IssueMessageDTOTest {
   private static final String EMAIL = "email@email.com";
+  private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String MESSAGE_JSON = "{\n" +
     "\"objectType\": \"Issue\",\n" +
-    "\"sender\": \"email do token\",\n" +
+    "\"sender\": \"5e0658135b4ff40f8916d2b5\",\n" +
+    "\"group\": \"5e0658135b4ff40f8916d2b5\",\n" +
     "\"title\": \"Não consigo preencher a atividade TCLEC\",\n" +
     "\"message\": \"Quando tento responder uma pergunta, não consigo inserir a resposta\",\n" +
     "\"creationDate\": \"22/01/20\",\n" +
@@ -30,19 +32,26 @@ public class IssueMessageDTOTest {
   }
 
   @Test
-  public void setSender_method_should() {
+  public void setSender_method_should_set_object() {
     IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(MESSAGE_JSON);
-    issueMessage.setSender(EMAIL);
-    assertEquals(EMAIL, issueMessage.getSender());
+    issueMessage.setSender(ID);
+    assertEquals(ID, issueMessage.getSender());
   }
 
   @Test
-  public void serialize_method_should() {
+  public void setGroup_method_should_set_object() {
+    IssueMessageDTO  issueMessage = issueMessageDTO.deserialize(MESSAGE_JSON);
+    issueMessage.setGroup(ID);
+    assertEquals(ID, issueMessage.getGroup());
+  }
+
+  @Test
+  public void serialize_method_should_string() {
     assertTrue(IssueMessageDTO.serialize(issueMessageDTO) instanceof String);
   }
 
   @Test
-  public void deserialize_method_should() {
+  public void deserialize_method_should_IssueMessageDTO() {
     assertTrue(IssueMessageDTO.deserialize(MESSAGE_JSON) instanceof IssueMessageDTO);
   }
 

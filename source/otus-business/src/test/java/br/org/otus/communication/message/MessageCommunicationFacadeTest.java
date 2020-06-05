@@ -6,6 +6,7 @@ import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.response.exception.HttpResponseException;
 import com.google.gson.JsonSyntaxException;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -61,13 +62,13 @@ public class MessageCommunicationFacadeTest {
     assertEquals(messageJson, messageCommunicationFacade.createIssue(EMAIL, MESSAGE_JSON));
   }
 
-  @Test(expected = HttpResponseException.class)
+  @Test(expected = Exception.class)
   public void createIssue_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).createIssue(Mockito.any());
     messageCommunicationFacade.createIssue(EMAIL, MESSAGE_JSON);
   }
 
-  @Test(expected = HttpResponseException.class)
+  @Test(expected = Exception.class)
   public void createMessage_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).createMessage(Mockito.any(), Mockito.any());
     messageCommunicationFacade.createMessage(EMAIL, ID, messageJson);
@@ -103,7 +104,7 @@ public class MessageCommunicationFacadeTest {
     messageCommunicationFacade.getMessageByIdLimit(ID, LIMIT);
   }
 
-  @Test(expected = HttpResponseException.class)
+  @Test(expected = Exception.class)
   public void listIssue_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).listIssue(Mockito.any());
     messageCommunicationFacade.listIssue(EMAIL);
@@ -113,6 +114,18 @@ public class MessageCommunicationFacadeTest {
   public void filter_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).filter(Mockito.any());
     messageCommunicationFacade.filter(Mockito.any());
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void  getIssueById_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getIssuesById(Mockito.any());
+    messageCommunicationFacade.getIssuesById(Mockito.any());
+  }
+
+  @Test(expected = Exception.class)
+  public void  getIssuesByRn_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, DataNotFoundException {
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getIssuesByRn(Mockito.any());
+    messageCommunicationFacade.getIssuesByRn(Mockito.any());
   }
 
 }
