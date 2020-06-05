@@ -153,8 +153,9 @@ public class MessageCommunicationFacade {
 
   public Object listIssue(String email) {
     try {
-      participant = participantService.getByEmail(email);
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().listIssue(String.valueOf(participant.getId()));
+      List<String> result = findByEmail(email);
+
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().listIssue(result.get(0));
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
