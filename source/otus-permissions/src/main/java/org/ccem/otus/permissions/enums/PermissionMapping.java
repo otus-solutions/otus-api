@@ -1,12 +1,13 @@
 package org.ccem.otus.permissions.enums;
 
-import org.ccem.otus.permissions.model.user.LaboratoryPermission;
-import org.ccem.otus.permissions.model.user.Permission;
-import org.ccem.otus.permissions.model.user.SurveyGroupPermission;
+import org.ccem.otus.permissions.model.user.*;
 
 public enum PermissionMapping {
   SURVEY_GROUP_PERMISSION(SurveyGroupPermission.class, "SurveyGroupPermission"),
-  LABORATORY_PERMISSION(LaboratoryPermission.class, "LaboratoryPermission");
+  LABORATORY_PERMISSION(LaboratoryPermission.class, "LaboratoryPermission"),
+  MONITORING_PERMISSION(MonitoringPermission.class, "MonitoringPermission"),
+  ACTIVITY_PERMISSION(ActivityPermission.class, "ActivityPermission"),
+  PARTICIPANT_PERMISSION(ParticipantPermission .class, "ParticipantPermission");
 
   private Class<? extends Permission> permission;
   private String Key;

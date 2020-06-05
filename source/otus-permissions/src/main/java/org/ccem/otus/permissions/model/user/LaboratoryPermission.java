@@ -3,7 +3,11 @@ package org.ccem.otus.permissions.model.user;
 import com.google.gson.GsonBuilder;
 
 public class LaboratoryPermission extends Permission {
-  private Boolean access;
+  private Boolean participantLaboratoryAccess;
+  private Boolean sampleTransportationAccess;
+  private Boolean examLotsAccess;
+  private Boolean examSendingAccess;
+  private Boolean unattachedLaboratoriesAccess;
 
   public static String serialize(Permission permission) {
     return LaboratoryPermission.getGsonBuilder().create().toJson(permission);
@@ -28,19 +32,43 @@ public class LaboratoryPermission extends Permission {
 
     LaboratoryPermission c = (LaboratoryPermission) o;
 
-    return getAccess() == c.getAccess();
+    return getExamLotsAccess() == c.getExamLotsAccess() &&
+      getParticipantLaboratoryAccess() == c.getParticipantLaboratoryAccess() &&
+      getExamSendingAccess() == c.getExamSendingAccess() &&
+      getSampleTransportationAccess() == c.getSampleTransportationAccess() &&
+      getUnattachedLaboratoriesAccess() == c.getUnattachedLaboratoriesAccess();
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((access == null) ? 0 : access.hashCode());
+    result = prime * result +
+      ((participantLaboratoryAccess == null) ? 0 : participantLaboratoryAccess.hashCode()) +
+      ((sampleTransportationAccess == null) ? 0 : sampleTransportationAccess.hashCode()) +
+      ((examLotsAccess == null) ? 0 : examLotsAccess.hashCode()) +
+      ((examSendingAccess == null) ? 0 : examSendingAccess.hashCode()) +
+      ((unattachedLaboratoriesAccess == null) ? 0 : unattachedLaboratoriesAccess.hashCode());
     return result;
   }
 
-  public Boolean getAccess() {
-    return access;
+  public Boolean getSampleTransportationAccess() {
+    return sampleTransportationAccess;
   }
 
+  public Boolean getExamLotsAccess() {
+    return examLotsAccess;
+  }
+
+  public Boolean getExamSendingAccess() {
+    return examSendingAccess;
+  }
+
+  public Boolean getUnattachedLaboratoriesAccess() {
+    return unattachedLaboratoriesAccess;
+  }
+
+  public Boolean getParticipantLaboratoryAccess() {
+    return participantLaboratoryAccess;
+  }
 }
