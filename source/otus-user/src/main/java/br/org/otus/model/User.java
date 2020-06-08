@@ -9,9 +9,10 @@ import java.util.UUID;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class User {
-
+  @Equalization(name = "_id")
   private ObjectId _id;
 
   @Equalization(name = "uuid")
@@ -201,5 +202,12 @@ public class User {
 
   public ObjectId get_id() {
     return _id;
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+
+    return builder;
   }
 }

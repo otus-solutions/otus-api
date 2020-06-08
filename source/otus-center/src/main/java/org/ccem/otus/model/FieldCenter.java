@@ -1,9 +1,8 @@
 package org.ccem.otus.model;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
-import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class FieldCenter {
   private ObjectId _id;
@@ -55,7 +54,7 @@ public class FieldCenter {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
   }
 

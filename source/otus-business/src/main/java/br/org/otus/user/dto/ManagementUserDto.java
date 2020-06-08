@@ -1,14 +1,16 @@
 package br.org.otus.user.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.Dto;
-import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 import br.org.tutty.Equalization;
 
 public class ManagementUserDto implements Dto {
+  @Equalization(name = "_id")
+  private ObjectId _id;
+
   @Equalization(name = "name")
   public String name;
 
@@ -114,5 +116,13 @@ public class ManagementUserDto implements Dto {
 
   public void setEnable(Boolean enable) {
     this.enable = enable;
+  }
+
+  public ObjectId getId() {
+    return _id;
+  }
+
+  public void setId(ObjectId _id) {
+    this._id = _id;
   }
 }

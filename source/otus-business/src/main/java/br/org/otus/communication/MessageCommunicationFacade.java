@@ -41,9 +41,6 @@ public class MessageCommunicationFacade {
   private FieldCenterService fieldCenterService;
 
   @Inject
-  private ParticipantFilterDTO participantFilterDTO;
-
-  @Inject
   private MessageDTO messageDTO;
 
   @Inject

@@ -87,7 +87,7 @@ public class MessageCommunicationResource {
 
   @GET
   @Secured
-  @Path("/sender/{id}")
+  @Path("/senders/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getSenderById(@PathParam("id") String id) {
     return new Response().buildSuccess(messageCommunicationFacade.getSenderById(id)).toJson(Participant.getGsonBuilder());
@@ -98,7 +98,7 @@ public class MessageCommunicationResource {
   @Path("/issues/participant/{rn}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getIssuesByRn(@PathParam("rn") String rn) {
-    return new Response().buildSuccess(messageCommunicationFacade.getIssuesByRn(rn)).toJson(Participant.getGsonBuilder());
+    return new Response().buildSuccess(messageCommunicationFacade.getIssuesByRn(rn)).toJson();
   }
 
   @GET
