@@ -7,12 +7,12 @@ public class MessageDTO {
   private String sender;
   private String issueId;
 
-  public String getTexte() {
+  public String getText() {
     return text;
   }
 
-  public void setTexte(String texte) {
-    this.text = texte;
+  public void setText(String text) {
+    this.text = text;
   }
 
   public String getSender() {

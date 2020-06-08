@@ -1,4 +1,4 @@
-package br.org.otus.communication.message;
+package br.org.otus.communication;
 
 import br.org.otus.communication.MessageCommunicationFacade;
 import br.org.otus.gateway.gates.CommunicationGatewayService;

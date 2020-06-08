@@ -1,5 +1,6 @@
-package br.org.otus.communication;
+package br.org.otus.communication.message;
 
+import br.org.otus.communication.MessageDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
