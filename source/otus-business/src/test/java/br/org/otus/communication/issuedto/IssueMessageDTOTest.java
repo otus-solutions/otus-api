@@ -19,7 +19,7 @@ public class IssueMessageDTOTest {
     "\"sender\": \"5e0658135b4ff40f8916d2b5\",\n" +
     "\"group\": \"5e0658135b4ff40f8916d2b5\",\n" +
     "\"title\": \"Não consigo preencher a atividade TCLEC\",\n" +
-    "\"message\": \"Quando tento responder uma pergunta, não consigo inserir a resposta\",\n" +
+    "\"text\": \"Quando tento responder uma pergunta, não consigo inserir a resposta\",\n" +
     "\"creationDate\": \"22/01/20\",\n" +
     "\"status\": \"OPEN\"\n" +
     "}";

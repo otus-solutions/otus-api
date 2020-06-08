@@ -3,16 +3,16 @@ package br.org.otus.communication;
 import com.google.gson.GsonBuilder;
 
 public class MessageDTO {
-  private String texte;
+  private String text;
   private String sender;
   private String issueId;
 
   public String getTexte() {
-    return texte;
+    return text;
   }
 
   public void setTexte(String texte) {
-    this.texte = texte;
+    this.text = texte;
   }
 
   public String getSender() {
