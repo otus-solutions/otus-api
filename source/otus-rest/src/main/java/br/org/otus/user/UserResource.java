@@ -49,7 +49,7 @@ public class UserResource {
   public String list() {
     Response response = new Response();
     List<ManagementUserDto> managementUserDtos = userFacade.list();
-    return response.buildSuccess(managementUserDtos).toJson(User.getGsonBuilder());
+    return response.buildSuccess(managementUserDtos).toJson();
   }
 
   @POST

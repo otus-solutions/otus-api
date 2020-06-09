@@ -8,7 +8,7 @@ import org.ccem.otus.exceptions.Dto;
 import br.org.tutty.Equalization;
 
 public class ManagementUserDto implements Dto {
-  @Equalization(name = "_id")
+
   private ObjectId _id;
 
   @Equalization(name = "name")
