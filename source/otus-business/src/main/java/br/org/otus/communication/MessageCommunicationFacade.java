@@ -186,7 +186,7 @@ public class MessageCommunicationFacade {
       participant = participantService.getByRecruitmentNumber(Long.valueOf(rn));
       GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssuesByRn(String.valueOf(participant.getId()));
 
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }

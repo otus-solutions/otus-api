@@ -9,8 +9,6 @@ import br.org.tutty.Equalization;
 
 public class ManagementUserDto implements Dto {
 
-  private ObjectId _id;
-
   @Equalization(name = "name")
   public String name;
 
@@ -118,11 +116,4 @@ public class ManagementUserDto implements Dto {
     this.enable = enable;
   }
 
-  public ObjectId getId() {
-    return _id;
-  }
-
-  public void setId(ObjectId _id) {
-    this._id = _id;
-  }
 }

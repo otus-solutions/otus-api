@@ -90,7 +90,7 @@ public class MessageCommunicationResource {
   @Path("/senders/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getSenderById(@PathParam("id") String id) {
-    return new Response().buildSuccess(messageCommunicationFacade.getSenderById(id)).toJson(Participant.getGsonBuilder());
+    return new Response().buildSuccess(messageCommunicationFacade.getSenderById(id)).toJsonWithStringOid();
   }
 
   @GET
