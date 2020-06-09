@@ -3,6 +3,7 @@ package br.org.otus.communication;
 import com.google.gson.GsonBuilder;
 
 public class MessageDTO {
+  public String _id;
   private String text;
   private String sender;
   private String issueId;

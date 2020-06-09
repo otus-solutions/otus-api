@@ -1,8 +1,10 @@
 package br.org.otus.communication;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.exceptions.Dto;
 
-public class IssueMessageDTO {
+public class IssueMessageDTO implements Dto {
+  public String _id;
   private String objectType;
   private String sender;
   private String group;
@@ -37,5 +39,10 @@ public class IssueMessageDTO {
 
   public static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
+  }
+
+  @Override
+  public Boolean isValid() {
+    return !objectType.isEmpty();
   }
 }
