@@ -29,7 +29,7 @@ public class ActivityPermission extends Permission {
 
     ActivityPermission c = (ActivityPermission) o;
 
-    return getParticipantActivityAccess() == c.getParticipantActivityAccess() && getOfflineActivitySincAccess() == getOfflineActivitySincAccess();
+    return getParticipantActivityAccess() == c.getParticipantActivityAccess() && getOfflineActivitySincAccess() == c.getOfflineActivitySincAccess();
   }
 
   @Override
