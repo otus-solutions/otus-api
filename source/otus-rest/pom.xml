@@ -177,6 +177,12 @@
       <version>${mongodb.bson.version}</version>
       <scope>provided</scope>
     </dependency>
+      <dependency>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>otus-gateway</artifactId>
+          <version>${project.parent.version}</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
   <build>
     <plugins>

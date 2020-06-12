@@ -11,6 +11,7 @@ import br.org.otus.persistence.UserDao;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
 import br.org.tutty.Equalizer;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -168,6 +169,11 @@ public class ManagementUserServiceBean implements ManagementUserService {
     passwordResetDto.encrypt();
     userDao.updatePassword(passwordResetDto.getEmail(), passwordResetDto.getPassword());
     securityFacade.removePasswordResetRequests(passwordResetDto.getEmail());
+  }
+
+  @Override
+  public User getById(ObjectId userId) throws DataNotFoundException {
+    return  userDao.getById(userId);
   }
 
 }

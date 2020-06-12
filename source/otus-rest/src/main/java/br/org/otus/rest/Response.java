@@ -1,9 +1,10 @@
 package br.org.otus.rest;
 
-import br.org.otus.examUploader.ExamResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class Response {
 
@@ -31,8 +32,10 @@ public class Response {
     return SurveyActivity.getGsonBuilder().create().toJson(this);
   }
 
-  public String toExamJson() {
-    return ExamResult.getGsonBuilder().create().toJson(this);
+  public String toJsonWithStringOid() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+    return builder.create().toJson(this);
   }
 
   public Response buildSuccess(Object data) {

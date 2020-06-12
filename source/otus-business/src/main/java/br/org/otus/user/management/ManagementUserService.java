@@ -4,6 +4,7 @@ import br.org.otus.model.User;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -32,8 +33,9 @@ public interface ManagementUserService {
 
   Boolean isUnique(String emailToVerify);
 
-  void requestPasswordReset(PasswordResetRequestDto requestData)
-    throws EncryptedException, DataNotFoundException, EmailNotificationException;
+  void requestPasswordReset(PasswordResetRequestDto requestData) throws EncryptedException, DataNotFoundException, EmailNotificationException;
 
   void updateUserPassword(PasswordResetDto passwordResetDto) throws EncryptedException;
+
+  User getById(ObjectId userId) throws DataNotFoundException;
 }
