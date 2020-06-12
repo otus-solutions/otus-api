@@ -180,7 +180,7 @@
       <dependency>
           <groupId>org.ccem.otus</groupId>
           <artifactId>otus-gateway</artifactId>
-          <version>1.34.0-SNAPSHOT</version>
+          <version>${project.parent.version}</version>
           <scope>test</scope>
       </dependency>
   </dependencies>
