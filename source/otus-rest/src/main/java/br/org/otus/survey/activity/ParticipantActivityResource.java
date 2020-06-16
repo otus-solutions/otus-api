@@ -8,6 +8,7 @@ import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.jboss.resteasy.annotations.Query;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +43,9 @@ public class ParticipantActivityResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createActivity(@PathParam("rn") long rn, String surveyActivity) {
+  public String createActivity(@PathParam("rn") long rn, @QueryParam("notify") @DefaultValue("true") boolean notify,  String surveyActivity) {
     isValidRecruitmentNumber(rn);
-    String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity));
+    String objectID = activityFacade.create(activityFacade.deserialize(surveyActivity), notify);
     return new Response().buildSuccess(objectID).toJson();
   }
 
