@@ -3,6 +3,7 @@ package br.org.otus.laboratory.participant;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.project.exam.utils.ExamResultTube;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import com.google.gson.GsonBuilder;
@@ -15,9 +16,11 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
@@ -247,6 +250,25 @@ public class AliquotDaoBean extends MongoGenericDao<Document> implements Aliquot
       aliquotCodes = (ArrayList<String>) first.get("materialCodes");
     }
     return aliquotCodes;
+  }
+
+  @Override
+  public HashMap<String, Aliquot> getExamAliquotsHashMap(List<String> aliquotCodes) {
+    HashMap<String, Aliquot> hmap = new HashMap<>();
+    MongoCursor<Document> cursor = collection.aggregate(Arrays.asList(
+      new Document("$match",new Document("code",new Document("$in",aliquotCodes)))
+    )).iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        Aliquot aliquot = Aliquot.deserialize(cursor.next().toJson());
+        hmap.putIfAbsent(aliquot.getCode(), aliquot);
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return hmap;
   }
 
 }

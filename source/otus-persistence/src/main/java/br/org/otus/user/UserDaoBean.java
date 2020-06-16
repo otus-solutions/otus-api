@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import br.org.otus.persistence.UserDao;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.persistence.FieldCenterDao;
@@ -23,6 +24,7 @@ public class UserDaoBean extends MongoGenericDao<User> implements UserDao {
   private FieldCenterDao fieldCenterDao;
   private static final String COLLECTION_NAME = "user";
   private static final String EMAIL = "email";
+  private static final String ID = "_id";
   private static final String ADM = "adm";
 
   public UserDaoBean() {
@@ -39,6 +41,16 @@ public class UserDaoBean extends MongoGenericDao<User> implements UserDao {
     User user = this.collection.find(eq(EMAIL, email)).first();
     if (user == null) {
       throw new DataNotFoundException(new Throwable("User with email: {" + email + "} not found."));
+    }
+    attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
+    return user;
+  }
+
+  @Override
+  public User getById(ObjectId userId) throws DataNotFoundException {
+    User user = this.collection.find(eq(ID, userId)).first();
+    if (user == null) {
+      throw new DataNotFoundException(new Throwable("User with id: {" + userId + "} not found."));
     }
     attachfieldCenter(user, fieldCenterDao.getFieldCentersMap());
     return user;
