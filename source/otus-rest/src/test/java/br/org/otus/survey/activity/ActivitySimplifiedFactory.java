@@ -2,7 +2,7 @@ package br.org.otus.survey.activity;
 
 import com.google.gson.JsonObject;
 
-public class ActivitySimplifiedFactory {
+public class  ActivitySimplifiedFactory {
 
   public static JsonObject create() {
     JsonObject activitySimplified = new JsonObject();

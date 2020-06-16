@@ -45,6 +45,7 @@ public class ActivityFacadeTest {
   private static final String USER_EMAIL = "otus@gmail.com";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
   private static final String CENTER = "RS";
+  private static final boolean NOTIFY = false;
 
   @Mock
   private SurveyActivity surveyActivityInvalid;
@@ -102,14 +103,15 @@ public class ActivityFacadeTest {
   @Test
   public void method_should_verify_create_with_surveyActivity() {
     when(activityService.create(surveyActivity)).thenReturn(OID.toString());
-    activityFacade.create(surveyActivity);
+
+    activityFacade.create(surveyActivity, NOTIFY);
     verify(activityService, times(1)).create(surveyActivity);
   }
 
   @Test(expected = HttpResponseException.class)
   public void createMethodTest_should_trigger_requiredExternalID_validation() {
     PowerMockito.when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
-    activityFacade.create(surveyActivity);
+    activityFacade.create(surveyActivity, NOTIFY);
   }
 
 @Test
@@ -176,9 +178,9 @@ public void method_updateActivity_should_update_the_last_status_user_when_mode_i
   public void method_should_create_participant_event_when_surveyActivity_is_autofill() {
     when(activityService.create(surveyActivity)).thenReturn(OID.toString());
     when(surveyActivity.getMode()).thenReturn(ActivityMode.AUTOFILL);
-    activityFacade.create(surveyActivity);
 
-    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity);
+    activityFacade.create(surveyActivity, NOTIFY);
+    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity, NOTIFY);
   }
 
   @Test
