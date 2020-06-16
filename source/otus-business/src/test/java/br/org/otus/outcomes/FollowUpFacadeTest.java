@@ -72,6 +72,6 @@ public class FollowUpFacadeTest {
   @Test
   @Ignore
   public void createParticipantActivityAutoFillEvent() throws Exception {
-    followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
+    followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, true);
   }
 }

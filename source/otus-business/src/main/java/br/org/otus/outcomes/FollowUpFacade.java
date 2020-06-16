@@ -146,7 +146,7 @@ public class FollowUpFacade {
     }
   }
 
-  public void createParticipantActivityAutoFillEvent(SurveyActivity surveyActivity) {
+  public void createParticipantActivityAutoFillEvent(SurveyActivity surveyActivity, boolean notify) {
     Long rn = surveyActivity.getParticipantData().getRecruitmentNumber();
     ObjectId participantId = participantFacade.findIdByRecruitmentNumber(rn);
     Participant participant = participantFacade.getByRecruitmentNumber(rn);
@@ -155,7 +155,7 @@ public class FollowUpFacade {
 
     try {
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), ParticipantEventDTO.serialize(participantEventDTO));
-      if (!gatewayResponse.getData().toString().isEmpty()) {
+      if (notify && !gatewayResponse.getData().toString().isEmpty()) {
         sendAutoFillActivityNotificationEmail(participant, surveyActivity);
       }
 

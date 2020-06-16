@@ -45,6 +45,8 @@ public class ParticipantActivityResourceTest {
   private static final String userEmail = "otus@otus.com";
   private static final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+  private static final boolean NOTIFY = false;
+
 
   @InjectMocks
   private ParticipantActivityResource participantActivityResource;
@@ -100,11 +102,11 @@ public class ParticipantActivityResourceTest {
   @Test
   public void method_createActivity_should_return_ObjectResponse() {
     when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
-    when(activityFacade.create(activityDeserialize)).thenReturn(ID_SURVEY_ACITIVITY);
-    assertEquals(ACTIVITY_EXPECTED, participantActivityResource.createActivity(RECRUIMENT_NUMBER, jsonActivity));
+    when(activityFacade.create(activityDeserialize, NOTIFY)).thenReturn(ID_SURVEY_ACITIVITY);
+    assertEquals(ACTIVITY_EXPECTED, participantActivityResource.createActivity(RECRUIMENT_NUMBER, NOTIFY, jsonActivity));
     verify(participantFacade).getByRecruitmentNumber(anyLong());
     verify(activityFacade).deserialize(anyString());
-    verify(activityFacade).create(anyObject());
+    verify(activityFacade).create(anyObject(), eq(NOTIFY));
   }
 
   @Test
