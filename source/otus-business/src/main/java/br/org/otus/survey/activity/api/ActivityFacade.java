@@ -82,7 +82,7 @@ public class ActivityFacade {
     }
   }
 
-  public String create(SurveyActivity surveyActivity) {
+  public String create(SurveyActivity surveyActivity, boolean notify) {
     try {
       isMissingRequiredExternalID(surveyActivity);
       String activityId = activityService.create(surveyActivity);
@@ -90,7 +90,7 @@ public class ActivityFacade {
       surveyActivity.setActivityID(new ObjectId(activityId));
       boolean demandsParticipantEvent = checkForParticipantEventCreation(surveyActivity);
       if (demandsParticipantEvent) {
-        followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity);
+        followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
       }
 
       return activityId;
