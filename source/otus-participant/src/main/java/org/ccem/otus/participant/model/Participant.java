@@ -2,7 +2,6 @@ package org.ccem.otus.participant.model;
 
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
-import org.bson.types.BSONTimestamp;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.utils.LongAdapter;
