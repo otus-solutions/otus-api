@@ -2,6 +2,7 @@ package org.ccem.otus.participant.model;
 
 import br.org.tutty.Equalization;
 import com.google.gson.GsonBuilder;
+import org.bson.types.BSONTimestamp;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.utils.LongAdapter;
@@ -55,9 +56,9 @@ public class Participant {
     return this.email;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+  public void setEmail(String email) { this.email = email.toLowerCase();}
+
+  public void setName(String name) { this.name = name; }
 
   public FieldCenter getFieldCenter() {
     return fieldCenter;
@@ -123,11 +124,13 @@ public class Participant {
   }
 
   public static String serialize(Participant participantJson) {
+    participantJson.setEmail(participantJson.getEmail());
     return Participant.getGsonBuilder().create().toJson(participantJson);
   }
 
   public static Participant deserialize(String participantJson) {
     Participant participant = Participant.getGsonBuilder().create().fromJson(participantJson, Participant.class);
+    participant.setEmail(participant.getEmail());
     return participant;
   }
 
