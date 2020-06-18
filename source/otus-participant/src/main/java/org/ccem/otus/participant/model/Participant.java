@@ -124,14 +124,18 @@ public class Participant {
   }
 
   public static String serialize(Participant participantJson) {
-    participantJson.setEmail(participantJson.getEmail());
+    emailToLowerCase(participantJson);
     return Participant.getGsonBuilder().create().toJson(participantJson);
   }
 
   public static Participant deserialize(String participantJson) {
     Participant participant = Participant.getGsonBuilder().create().fromJson(participantJson, Participant.class);
-    participant.setEmail(participant.getEmail());
+    emailToLowerCase(participant);
     return participant;
+  }
+
+  private static void emailToLowerCase(Participant participant){
+    if(participant.email != null) participant.setEmail(participant.getEmail());
   }
 
   public static GsonBuilder getGsonBuilder() {

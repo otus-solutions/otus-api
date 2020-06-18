@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 public class ParticipantTest {
-
   Participant participant = new Participant(5001007l);
   Participant participantRecruitmentNumberNull = new Participant(null);
   Participant participantThat = new Participant(1063154l);
@@ -66,5 +65,4 @@ public class ParticipantTest {
     String participantJson = "{\"email\": \"ABC@GMAIL.COM\"}";
     assertEquals(Participant.deserialize(participantJson).getEmail(), "abc@gmail.com");
   }
-
 }

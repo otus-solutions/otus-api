@@ -16,9 +16,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -39,7 +41,6 @@ public class UserCodecTest {
   private static final String FIELDCENTERACRONYM = "FC";
   private static final String IPFORTEST = "192.168.0.1";
   private User userSpy = spy(new User());
-
 
   @InjectMocks
   private UserCodec UserCodec;
@@ -94,6 +95,7 @@ public class UserCodecTest {
 
   @Test
   public void method_decode_should_evocate_functions_that_started_and_finished_BsonReaderDocument() throws Exception {
+    PowerMockito.when(reader.readString("email")).thenReturn(EMAIL);
     DecoderContext decoderContext = DecoderContext.builder().build();
     PowerMockito.when(reader.readString("uuid")).thenReturn(UUIDString);
     PowerMockito.when(reader.readBsonType()).thenReturn(BsonType.END_OF_DOCUMENT);

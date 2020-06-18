@@ -114,6 +114,8 @@ public class User {
     return email;
   }
 
+  public void setEmail(String email) { this.email = email.toLowerCase();}
+
   public String getPassword() {
     return password;
   }
@@ -154,11 +156,6 @@ public class User {
     this.code = code;
   }
 
-  public static User deserialize(String user) {
-    GsonBuilder builder = new GsonBuilder();
-    return builder.create().fromJson(user, User.class);
-  }
-
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
   }
@@ -179,10 +176,6 @@ public class User {
     this.phone = phone;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   public void setPassword(String password) {
     this.password = password;
   }
@@ -191,15 +184,27 @@ public class User {
     this.extractionToken = ExtractionToken;
   }
 
-  public static String serialize(User user) {
-    return new GsonBuilder().create().toJson(user);
-  }
-
   public void set_id(ObjectId id) {
     this._id = id;
   }
 
   public ObjectId get_id() {
     return _id;
+  }
+
+  public static User deserialize(String userJson) {
+    GsonBuilder builder = new GsonBuilder();
+    User user = builder.create().fromJson(userJson, User.class);
+    emailToLowerCase(user);
+    return user;
+  }
+
+  public static String serialize(User user) {
+    emailToLowerCase(user);
+    return new GsonBuilder().create().toJson(user);
+  }
+
+  private static void emailToLowerCase(User user){
+    if(user.email != null) user.setEmail(user.getEmail());
   }
 }
