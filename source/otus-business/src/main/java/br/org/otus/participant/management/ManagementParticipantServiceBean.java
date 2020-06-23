@@ -28,6 +28,16 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
     }
   }
 
+  @Override
+  public String requestPasswordResetLink(PasswordResetRequestDto requestData) throws MalformedURLException {
+    String resource = "/#/register-password/";
+    String url = String.valueOf(isValidURL(requestData.getRedirectUrl() + resource));
+    String token = requestData.getToken();
+
+    return url + token;
+  }
+
+
   private URL isValidURL(String redirectUrl) throws MalformedURLException {
     return new URL(redirectUrl);
   }

@@ -133,4 +133,11 @@ public class ParticipantResourceTest {
     participantResource.requestRecovery(requestData);
     verify(participantFacade, times(1)).requestPasswordReset(requestData);
   }
+
+  @Test
+  public void method_requestPasswordResetLink_should_evoke_requestPasswordResetLink_by_participantFacade(){
+    PasswordResetRequestDto requestData = new PasswordResetRequestDto();
+    participantResource.requestPasswordResetLink(requestData);
+    verify(participantFacade, times(1)).requestPasswordResetLink(requestData);
+  }
 }

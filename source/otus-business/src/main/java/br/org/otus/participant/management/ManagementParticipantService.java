@@ -8,4 +8,5 @@ import java.net.MalformedURLException;
 public interface ManagementParticipantService {
 
   void requestPasswordReset(PasswordResetRequestDto requestData) throws EmailNotificationException;
+  String requestPasswordResetLink(PasswordResetRequestDto requestData) throws MalformedURLException;
 }

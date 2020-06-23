@@ -119,10 +119,20 @@ public class ParticipantFacade {
 
     try {
       managementParticipantService.requestPasswordReset(requestData);
-    }
-    catch (EmailNotificationException e) {
+    } catch (EmailNotificationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
+  }
 
+  public String requestPasswordResetLink(PasswordResetRequestDto requestData) {
+    requestData.setRedirectUrl(System.getenv("APP_URL"));
+    securityFacade.removePasswordResetRequests(requestData.getEmail());
+    securityFacade.requestParticipantPasswordReset(requestData);
+
+    try {
+      return managementParticipantService.requestPasswordResetLink(requestData);
+    } catch (MalformedURLException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
   }
 }
