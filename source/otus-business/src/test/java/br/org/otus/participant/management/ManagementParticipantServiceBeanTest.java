@@ -4,6 +4,7 @@ import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.security.dtos.ParticipantCommunicationDataDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,8 @@ import static org.powermock.api.mockito.PowerMockito.spy;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ManagementParticipantServiceBean.class, ParticipantCommunicationDataDto.class})
 public class ManagementParticipantServiceBeanTest {
+
+  private static final String EXPECTED_LINK = "http://www.otus.com.br//#/register-password/1234567890";
 
   private ManagementParticipantServiceBean service = spy(new ManagementParticipantServiceBean());
   private PasswordResetRequestDto requestData = spy(new PasswordResetRequestDto());
@@ -53,5 +56,13 @@ public class ManagementParticipantServiceBeanTest {
   @Test(expected = EmailNotificationException.class)
   public void method_requestPasswordResetMethod_should_throw_EmailNotificationException() throws EmailNotificationException {
     service.requestPasswordReset(requestData);
+  }
+
+  @Test
+  public void requestPasswordResetLinkMethod_should_mount_ParticipantCommunicationDataDto_by_PasswordResetRequestDtoValues() throws Exception {
+    mockStatic(ParticipantCommunicationDataDto.class);
+    PowerMockito.whenNew(ParticipantCommunicationDataDto.class).withNoArguments().thenReturn(participantCommunicationDataDto);
+    Assert.assertEquals(service.requestPasswordResetLink(requestData), EXPECTED_LINK);
+
   }
 }
