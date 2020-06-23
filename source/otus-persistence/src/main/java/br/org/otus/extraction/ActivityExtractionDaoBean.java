@@ -48,7 +48,7 @@ public class ActivityExtractionDaoBean extends MongoGenericDao<Document> impleme
     MongoCursor<Document> iterator = results.iterator();
     while(iterator.hasNext()) {
       Document document = iterator.next();
-      fieldCenterByRecruitmentNumber.put((Long) document.get("_id"), document.getString("fieldCenter"));
+      fieldCenterByRecruitmentNumber.put(Long.valueOf(document.get("_id").toString()), document.getString("fieldCenter"));
     }
 
     return fieldCenterByRecruitmentNumber;
