@@ -1,8 +1,5 @@
 package br.org.mongodb.codecs;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-
 import br.org.otus.model.User;
 import org.bson.BsonInvalidOperationException;
 import org.bson.BsonReader;
@@ -23,6 +20,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ObjectId.class, User.class})
 public class UserCodecTest {
@@ -39,7 +39,6 @@ public class UserCodecTest {
   private static final String FIELDCENTERACRONYM = "FC";
   private static final String IPFORTEST = "192.168.0.1";
   private User userSpy = spy(new User());
-
 
   @InjectMocks
   private UserCodec UserCodec;
@@ -94,6 +93,7 @@ public class UserCodecTest {
 
   @Test
   public void method_decode_should_evocate_functions_that_started_and_finished_BsonReaderDocument() throws Exception {
+    PowerMockito.when(reader.readString("email")).thenReturn(EMAIL);
     DecoderContext decoderContext = DecoderContext.builder().build();
     PowerMockito.when(reader.readString("uuid")).thenReturn(UUIDString);
     PowerMockito.when(reader.readBsonType()).thenReturn(BsonType.END_OF_DOCUMENT);

@@ -21,6 +21,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
+import java.net.MalformedURLException;
+
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -50,6 +52,7 @@ public class ParticipantFacadeTest {
   private PasswordResetDto passwordResetDto = new PasswordResetDto();
   private PasswordResetRequestDto passwordResetRequestDto = PowerMockito.spy(new PasswordResetRequestDto());
   private EmailNotificationException emailNotificationException =  PowerMockito.spy(new EmailNotificationException());
+  private MalformedURLException malformedURLException =  PowerMockito.spy(new MalformedURLException());
 
 
   @Test
@@ -98,4 +101,22 @@ public class ParticipantFacadeTest {
     Mockito.doThrow(emailNotificationException).when(managementParticipantService).requestPasswordReset(passwordResetRequestDto);
     participantFacade.requestPasswordReset(passwordResetRequestDto);
   }
+
+  @Test
+  public void requestPasswordResetLink_method_should_evoke_3_call_methods() throws MalformedURLException {
+    when(passwordResetRequestDto.getEmail()).thenReturn("otus@otus.com");
+    participantFacade.requestPasswordResetLink(passwordResetRequestDto);
+    verify(securityFacade, times(1)).removePasswordResetRequests(passwordResetRequestDto.getEmail());
+    verify(securityFacade, times(1)).requestParticipantPasswordReset(passwordResetRequestDto);
+    verify(managementParticipantService, times(1)).requestPasswordResetLink(passwordResetRequestDto);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void requestPasswordResetLink_method_should_catch_EmailNotificationException() throws Exception {
+    Mockito.doThrow(malformedURLException).when(managementParticipantService).requestPasswordResetLink(passwordResetRequestDto);
+    participantFacade.requestPasswordResetLink(passwordResetRequestDto);
+  }
+
+
+
 }

@@ -75,6 +75,16 @@ public class ParticipantResource {
     return response.buildSuccess().toJson();
   }
 
+  @POST
+  @Path("/password-reset-link")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String requestPasswordResetLink(PasswordResetRequestDto requestData) {
+    Response response = new Response();
+    String link = participantFacade.requestPasswordResetLink(requestData);
+    return response.buildSuccess(link).toJson();
+  }
+
   @PUT
   @Path("/update")
   @Secured

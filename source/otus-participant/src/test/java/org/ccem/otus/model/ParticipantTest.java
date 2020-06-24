@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 public class ParticipantTest {
-
   Participant participant = new Participant(5001007l);
   Participant participantRecruitmentNumberNull = new Participant(null);
   Participant participantThat = new Participant(1063154l);
@@ -53,7 +52,17 @@ public class ParticipantTest {
   @Test
   public void method_hashCode_sould_not_codify_recruitmentNumber_is_null() {
     assertEquals(0, participantRecruitmentNumberNull.hashCode());
-
   }
 
+  @Test
+  public void should_check_if_there_is_lowerCaseTreatment_for_emailAttribute_by_serializeMethod(){
+    Participant participantWithEmail = Participant.deserialize("{\"email\": \"ABC@GMAIL.COM\"}");
+    assertEquals(Participant.serialize(participantWithEmail), "{\"email\":\"abc@gmail.com\"}");
+  }
+
+  @Test
+  public void should_check_if_there_is_lowerCaseTreatment_for_emailAttribute_by_deserializeMethod(){
+    String participantJson = "{\"email\": \"ABC@GMAIL.COM\"}";
+    assertEquals(Participant.deserialize(participantJson).getEmail(), "abc@gmail.com");
+  }
 }
