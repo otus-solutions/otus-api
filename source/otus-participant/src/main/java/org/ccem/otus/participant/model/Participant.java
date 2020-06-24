@@ -60,9 +60,9 @@ public class Participant {
     return this.email;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+  public void setEmail(String email) { this.email = email.toLowerCase();}
+
+  public void setName(String name) { this.name = name; }
 
   public FieldCenter getFieldCenter() {
     return fieldCenter;
@@ -128,12 +128,18 @@ public class Participant {
   }
 
   public static String serialize(Participant participantJson) {
+    emailToLowerCase(participantJson);
     return Participant.getGsonBuilder().create().toJson(participantJson);
   }
 
   public static Participant deserialize(String participantJson) {
     Participant participant = Participant.getGsonBuilder().create().fromJson(participantJson, Participant.class);
+    emailToLowerCase(participant);
     return participant;
+  }
+
+  private static void emailToLowerCase(Participant participant){
+    if(participant.email != null) participant.setEmail(participant.getEmail());
   }
 
   public static GsonBuilder getGsonBuilder() {
