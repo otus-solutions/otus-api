@@ -111,9 +111,9 @@ public class MessageCommunicationResource {
 
   @GET
   @Secured
-  @Path("/issues/{id}/messages/{skip}/{limit}")
+  @Path("/issues/{issueId}/messages/{skip}/{limit}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getMessageByIdLimit(@PathParam("id") String id, @PathParam("skip") String skip, @PathParam("limit") String limit) {
+  public String getMessageByIdLimit(@PathParam("issueId") String id, @PathParam("skip") String skip, @PathParam("limit") String limit) {
     return new Response().buildSuccess(messageCommunicationFacade.getMessageByIdLimit(id, skip, limit)).toJson();
   }
 
