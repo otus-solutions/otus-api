@@ -22,7 +22,23 @@ public class CommunicationMicroServiceResourcesTest {
   private static String PORT = "53004";
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
-  private static final String EMAIL = "email@email.com";
+  private static final String SKIP = "0";
+  private static final String FILTER = "{\n" +
+    "  \"currentQuantity\": 0,\n" +
+    "  \"quantityToGet\": 10,\n" +
+    "  \"order\": {\n" +
+    "    \"fields\": [\n" +
+    "      \"group\",\n" +
+    "      \"sender\",\n" +
+    "      \"creationDate\"\n" +
+    "    ],\n" +
+    "    \"mode\": -1 \n" +
+    "  },\n" +
+    "  \"filter\": {\n" +
+    "    \"sender\": \"5\",\n" +
+    "    \"group\": \"3\"\n" +
+    "  }\n" +
+    "}";
 
   private CommunicationMicroServiceResources communicationMicroServiceResources;
   private MicroservicesEnvironments microservicesEnvironments;
@@ -40,61 +56,61 @@ public class CommunicationMicroServiceResourcesTest {
 
   @Test
   public void getMessageCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/messages/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/messages/" + ID);
     assertEquals(communicationMicroServiceResources.getMessageCommunicationAddress(ID), url);
   }
 
   @Test
   public void getMessageByIdCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/list-messages/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/messages/" + ID);
     assertEquals(communicationMicroServiceResources.getMessageByIdCommunicationAddress(ID), url);
   }
 
   @Test
   public void getMessageByIdLimitCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/list-messages-limit/" + ID + "/" + LIMIT);
-    assertEquals(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, LIMIT), url);
+    url = new URL("http://localhost:53004/api/project-communication/messages/limit/" + ID+ "/" + SKIP + "/" + LIMIT);
+    assertEquals(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, SKIP, LIMIT), url);
   }
 
   @Test
   public void getIssueCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues");
+    url = new URL("http://localhost:53004/api/project-communication/issues");
     assertEquals(communicationMicroServiceResources.getIssuesCommunicationAddress(), url);
   }
 
   @Test
   public void getUpdateReopenCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues-reopen/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/issues-reopen/" + ID);
     assertEquals(communicationMicroServiceResources.getUpdateReopenCommunicationAddress(ID), url);
   }
 
   @Test
   public void getUpdateCloseCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues-close/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/issues-close/" + ID);
     assertEquals(communicationMicroServiceResources.getUpdateCloseCommunicationAddress(ID), url);
   }
 
   @Test
   public void getUpdateFinalizeCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues-finalize/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/issues-finalize/" + ID);
     assertEquals(communicationMicroServiceResources.getUpdateFinalizeCommunicationAddress(ID), url);
   }
 
   @Test
-  public void getListIssueCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues-list/" + ID);
-    assertEquals(communicationMicroServiceResources.getListIssueCommunicationAddress(ID), url);
-  }
-
-  @Test
   public void getIssueByIdCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/issues/" + ID);
     assertEquals(communicationMicroServiceResources.getIssueByIdCommunicationAddress(ID), url);
   }
 
   @Test
   public void getIssueByRnCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/issues-rn/" + ID);
+    url = new URL("http://localhost:53004/api/project-communication/issues/sender/" + ID);
     assertEquals(communicationMicroServiceResources.getIssueByRnCommunicationAddress(ID), url);
+  }
+
+  @Test
+  public void getIssueByFilterCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
+    url = new URL("http://localhost:53004/api/project-communication/issues/filter");
+    assertEquals(communicationMicroServiceResources.getFilterCommunicationAddress(), url);
   }
 }

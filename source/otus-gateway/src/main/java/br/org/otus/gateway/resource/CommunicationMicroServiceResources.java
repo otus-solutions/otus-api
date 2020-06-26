@@ -12,16 +12,15 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   private static final String GET_ALL_COMMUNICATION_RESOURCE = "/api/get-all-communication";
   private static final String UPDATE_COMMUNICATION_RESOURCE = "/api/update-communication";
   private static final String DELETE_COMMUNICATION_RESOURCE = "/api/delete-communication";
-  private static final String MESSAGES_COMMUNICATION_RESOURCE = "/api/messages";
-  private static final String FIND_LIST_MESSAGES_COMMUNICATION_RESOURCE = "/api/list-messages";
-  private static final String FIND_LIST_MESSAGES_LIMIT_COMMUNICATION_RESOURCE = "/api/list-messages-limit";
-  private static final String ISSUES_COMMUNICATION_RESOURCE = "/api/issues";
-  private static final String UPDATE_ISSUES_REOPEN_COMMUNICATION_RESOURCE = "/api/issues-reopen";
-  private static final String UPDATE_ISSUES_CLOSE_COMMUNICATION_RESOURCE = "/api/issues-close";
-  private static final String UPDATE_ISSUES_FINALIZE_COMMUNICATION_RESOURCE = "/api/issues-finalize";
-  private static final String ISSUES_LIST_COMMUNICATION_RESOURCE = "/api/issues-list";
-  private static final String ISSUES_RN_COMMUNICATION_RESOURCE = "/api/issues-rn";
-  private static final String FILTER_COMMUNICATION_RESOURCE = "/api/filter";
+
+  private static final String MESSAGES_COMMUNICATION_RESOURCE = "/api/project-communication/messages";
+  private static final String FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE = "/api/project-communication/messages/limit";
+  private static final String ISSUES_COMMUNICATION_RESOURCE = "/api/project-communication/issues";
+  private static final String UPDATE_ISSUES_REOPEN_COMMUNICATION_RESOURCE = "/api/project-communication/issues-reopen";
+  private static final String UPDATE_ISSUES_CLOSE_COMMUNICATION_RESOURCE = "/api/project-communication/issues-close";
+  private static final String UPDATE_ISSUES_FINALIZE_COMMUNICATION_RESOURCE = "/api/project-communication/issues-finalize";
+  private static final String ISSUES_SENDER_COMMUNICATION_RESOURCE = "/api/project-communication/issues/sender";
+  private static final String FILTER_COMMUNICATION_RESOURCE = "/api/project-communication/issues/filter";
 
   public CommunicationMicroServiceResources() {
     super(MicroservicesEnvironments.COMMUNICATION_SERVICE);
@@ -56,11 +55,11 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   }
 
   public URL getMessageByIdCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIST_MESSAGES_COMMUNICATION_RESOURCE + "/" + ID);
+    return new URL("http://" + this.HOST + ":" + this.PORT + MESSAGES_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
-  public URL getMessageByIdLimitCommunicationAddress(String ID, String LIMIT) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIST_MESSAGES_LIMIT_COMMUNICATION_RESOURCE + "/" + ID + "/" + LIMIT);
+  public URL getMessageByIdLimitCommunicationAddress(String ID, String SKIP, String LIMIT) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE + "/" + ID + "/" + SKIP + "/" + LIMIT);
   }
 
   public URL getIssuesCommunicationAddress() throws MalformedURLException {
@@ -79,10 +78,6 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_ISSUES_FINALIZE_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
-  public URL getListIssueCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_LIST_COMMUNICATION_RESOURCE + "/" + ID);
-  }
-
   public URL getFilterCommunicationAddress() throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + FILTER_COMMUNICATION_RESOURCE);
   }
@@ -92,6 +87,6 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   }
 
   public URL getIssueByRnCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_RN_COMMUNICATION_RESOURCE + "/" + ID);
+    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_SENDER_COMMUNICATION_RESOURCE + "/" + ID);
   }
 }

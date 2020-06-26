@@ -136,26 +136,12 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object getMessageByIdLimit(String issueId, String limit) {
+  public Object getMessageByIdLimit(String issueId, String skip, String limit) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIdLimit(issueId, limit);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIdLimit(issueId, skip, limit);
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (RequestException ex) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    }
-  }
-
-  public Object listIssue(String email) {
-    try {
-      List<String> result = findByEmail(email);
-
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().listIssue(result.get(0));
-
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
-    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
