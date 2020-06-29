@@ -10,7 +10,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(PowerMockRunner.class)
 public class MessageDTOTest {
-  private static final String EMAIL = "email@email.com";
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String MESSAGE_JSON = "{\n" +
     "\"text\": \"Segunda mensagem: não entendi sua pergunta\",\n" +
@@ -19,7 +18,6 @@ public class MessageDTOTest {
     "}\n";
 
   private MessageDTO messageDTO;
-
 
   @Test
   public void setSender_method_should_set_object() {

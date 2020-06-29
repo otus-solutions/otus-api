@@ -31,6 +31,7 @@ public class MessageCommunicationResourceTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
   private static final String EMAIL = "email@email.com";
+  private static final String SKIP = "0";
   private static final String MESSAGE_JSON = "{\n" +
     "\"objectType\": \"Issue\",\n" +
     "\"sender\": \"email do token\",\n" +
@@ -115,20 +116,8 @@ public class MessageCommunicationResourceTest {
 
   @Test
   public void getMessageByIdLimit_method_should_call_Facade_method_getMessageByIdLimit() throws Exception {
-    when(messageCommunicationFacade.getMessageByIdLimit(Mockito.any(), Mockito.any())).thenReturn(returnData);
-    assertEquals(confirmed.toString(), messageCommunicationResource.getMessageByIdLimit(ID,LIMIT));
-  }
-
-  @Test
-  public void listIssue_method_should_call_Facade_method_getMessageByIdLimit() throws Exception {
-    when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(TOKEN);
-    mockStatic(AuthorizationHeaderReader.class);
-    when(AuthorizationHeaderReader.class, "readToken", TOKEN).thenReturn(AUTHORIZATION_HEADER_TOKEN);
-    when(securityContext.getSession(AUTHORIZATION_HEADER_TOKEN)).thenReturn(sessionIdentifier);
-    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
-    when(authenticationData.getUserEmail()).thenReturn(EMAIL);
-    when(messageCommunicationFacade.listIssue(Mockito.any())).thenReturn(returnData);
-    assertEquals(confirmed.toString(), messageCommunicationResource.listIssue(request));
+    when(messageCommunicationFacade.getMessageByIdLimit(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.getMessageByIdLimit(ID, SKIP, LIMIT));
   }
 
   @Test

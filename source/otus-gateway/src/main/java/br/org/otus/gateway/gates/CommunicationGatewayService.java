@@ -158,19 +158,8 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getMessageByIdLimit(String issueId, String limit) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, limit);
-    try {
-      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
-      String response = jsonGET.finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException ex) {
-      throw new ReadRequestException();
-    }
-  }
-
-  public GatewayResponse listIssue(String id) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getListIssueCommunicationAddress(id);
+  public GatewayResponse getMessageByIdLimit(String issueId, String skip, String limit) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, skip, limit);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();

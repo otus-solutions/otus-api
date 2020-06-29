@@ -1,6 +1,5 @@
 package br.org.otus.communication;
 
-import br.org.otus.communication.MessageCommunicationFacade;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.RequestException;
@@ -29,7 +28,8 @@ public class MessageCommunicationFacadeTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
   private static final String EMAIL = "email@email.com";
-  private static final String MESSAGE_JSON = "{\n" +
+  private static final String SKIP = "0";
+  private static final String ISSUE_JSON = "{\n" +
     "\"objectType\": \"Issue\",\n" +
     "\"sender\": \"email do token\",\n" +
     "\"title\": \"Não consigo preencher a atividade TCLEC\",\n" +
@@ -59,13 +59,13 @@ public class MessageCommunicationFacadeTest {
   @Ignore
   public void createIssue_method_should_() throws Exception {
     when(communicationGatewayService.createIssue(Mockito.any())).thenReturn(gatewayResponse);
-    assertEquals(messageJson, messageCommunicationFacade.createIssue(EMAIL, MESSAGE_JSON));
+    assertEquals(messageJson, messageCommunicationFacade.createIssue(EMAIL, ISSUE_JSON));
   }
 
   @Test(expected = Exception.class)
   public void createIssue_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).createIssue(Mockito.any());
-    messageCommunicationFacade.createIssue(EMAIL, MESSAGE_JSON);
+    messageCommunicationFacade.createIssue(EMAIL, ISSUE_JSON);
   }
 
   @Test(expected = Exception.class)
@@ -100,14 +100,8 @@ public class MessageCommunicationFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void getMessageByIdLimit_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
-    PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageByIdLimit(Mockito.any(),Mockito.any());
-    messageCommunicationFacade.getMessageByIdLimit(ID, LIMIT);
-  }
-
-  @Test(expected = Exception.class)
-  public void listIssue_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
-    PowerMockito.doThrow(requestException).when(communicationGatewayService).listIssue(Mockito.any());
-    messageCommunicationFacade.listIssue(EMAIL);
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageByIdLimit(Mockito.any(),Mockito.any(),Mockito.any());
+    messageCommunicationFacade.getMessageByIdLimit(ID, SKIP, LIMIT);
   }
 
   @Test(expected = HttpResponseException.class)

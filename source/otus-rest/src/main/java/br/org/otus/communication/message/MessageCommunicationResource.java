@@ -111,21 +111,10 @@ public class MessageCommunicationResource {
 
   @GET
   @Secured
-  @Path("/issues/{id}/messages/{limit}")
+  @Path("/issues/{issueId}/messages/{skip}/{limit}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getMessageByIdLimit(@PathParam("id") String id, @PathParam("limit") String limit) {
-    return new Response().buildSuccess(messageCommunicationFacade.getMessageByIdLimit(id, limit)).toJson();
-  }
-
-  @GET
-  @Secured
-  @Path("/issues")
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String listIssue(@Context HttpServletRequest request) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-
-    return new Response().buildSuccess(messageCommunicationFacade.listIssue(email)).toJson();
+  public String getMessageByIdLimit(@PathParam("issueId") String id, @PathParam("skip") String skip, @PathParam("limit") String limit) {
+    return new Response().buildSuccess(messageCommunicationFacade.getMessageByIdLimit(id, skip, limit)).toJson();
   }
 
   @GET
