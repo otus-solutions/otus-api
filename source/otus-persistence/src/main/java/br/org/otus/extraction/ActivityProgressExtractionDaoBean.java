@@ -47,7 +47,7 @@ public class ActivityProgressExtractionDaoBean extends MongoGenericDao<Document>
 
     ArrayList<Long> rns = this.participantDao.getRecruitmentNumbersByFieldCenter(center);
 
-    List<Bson> queryToInapplicabilities = queryBuilder.getInapplicabilities();
+    List<Bson> queryToInapplicabilities = queryBuilder.getInapplicabilities(rns);
     AggregateIterable<Document> inapplicabilities = this.activityInapplicabilityDao.aggregate(queryToInapplicabilities).allowDiskUse(true);
 
     ArrayList<Bson> query = queryBuilder.getActivityStatusQueryToExtraction(center, rns, participantsByFieldCenter, acronyms, inapplicabilities);
