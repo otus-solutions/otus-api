@@ -105,7 +105,7 @@ public class CommunicationMicroServiceResourcesTest {
   @Test
   public void getIssueByRnCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
     url = new URL("http://localhost:53004/api/project-communication/issues/sender/" + ID);
-    assertEquals(communicationMicroServiceResources.getIssueByRnCommunicationAddress(ID), url);
+    assertEquals(communicationMicroServiceResources.getIssueBySenderIdCommunicationAddress(ID), url);
   }
 
   @Test

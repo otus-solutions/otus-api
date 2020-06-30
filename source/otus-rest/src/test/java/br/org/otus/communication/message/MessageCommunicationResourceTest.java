@@ -5,7 +5,6 @@ import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.dtos.AuthenticationData;
-import br.org.otus.gateway.response.exception.RequestException;
 import com.google.gson.JsonParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
@@ -110,13 +108,13 @@ public class MessageCommunicationResourceTest {
 
   @Test
   public void getMessageById_method_should_call_Facade_method_getMessageById() throws Exception {
-    when(messageCommunicationFacade.getMessageById(Mockito.any())).thenReturn(returnData);
+    when(messageCommunicationFacade.getMessageByIssueId(Mockito.any())).thenReturn(returnData);
     assertEquals(confirmed.toString(), messageCommunicationResource.getMessageById(ID));
   }
 
   @Test
   public void getMessageByIdLimit_method_should_call_Facade_method_getMessageByIdLimit() throws Exception {
-    when(messageCommunicationFacade.getMessageByIdLimit(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(returnData);
+    when(messageCommunicationFacade.getMessageByIssueIdLimit(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(returnData);
     assertEquals(confirmed.toString(), messageCommunicationResource.getMessageByIdLimit(ID, SKIP, LIMIT));
   }
 
@@ -127,14 +125,8 @@ public class MessageCommunicationResourceTest {
   }
 
   @Test
-  public void getIssuesByRn_method_should_call_Facade_method_getIssuesByRn() throws Exception {
-    when(messageCommunicationFacade.getIssuesByRn(Mockito.any())).thenReturn(returnData);
-    assertEquals(confirmed.toString(), messageCommunicationResource.getIssuesByRn(ID));
-  }
-
-  @Test
   public void getIssuesById_method_should_call_Facade_method_getIssuesById() throws Exception {
-    when(messageCommunicationFacade.getIssuesById(Mockito.any())).thenReturn(returnData);
+    when(messageCommunicationFacade.getIssueById(Mockito.any())).thenReturn(returnData);
     assertEquals(confirmed.toString(), messageCommunicationResource.getIssuesById(ID));
   }
 

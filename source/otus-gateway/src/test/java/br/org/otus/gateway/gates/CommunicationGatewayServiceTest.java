@@ -202,7 +202,7 @@ public class CommunicationGatewayServiceTest {
     PowerMockito.whenNew(JsonGETUtility.class).withAnyArguments().thenReturn(jsonGETUtility);
     PowerMockito.when(jsonGETUtility.finish()).thenReturn(returnData);
 
-    gatewayResponse = communicationGatewayService.getMessageById(ID);
+    gatewayResponse = communicationGatewayService.getMessageByIssueId(ID);
 
     assertEquals(returnData,  gatewayResponse.getData());
 
@@ -212,7 +212,7 @@ public class CommunicationGatewayServiceTest {
   @Test(expected = ReadRequestException.class)
   public void getMessageById_method_should_throw_exception_for_IOException() throws Exception{
     PowerMockito.when(jsonGETUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
-    communicationGatewayService.getMessageById(ID);
+    communicationGatewayService.getMessageByIssueId(ID);
   }
 
   @Test
@@ -242,7 +242,7 @@ public class CommunicationGatewayServiceTest {
     PowerMockito.whenNew(JsonGETUtility.class).withAnyArguments().thenReturn(jsonGETUtility);
     PowerMockito.when(jsonGETUtility.finish()).thenReturn(returnData);
 
-    gatewayResponse = communicationGatewayService.getIssuesById(ID);
+    gatewayResponse = communicationGatewayService.getIssueById(ID);
 
     assertEquals(returnData,  gatewayResponse.getData());
 
@@ -252,17 +252,17 @@ public class CommunicationGatewayServiceTest {
   @Test(expected = ReadRequestException.class)
   public void getIssueById_method_should_throw_exception_for_IOException() throws Exception{
     PowerMockito.when(jsonGETUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
-    communicationGatewayService.getIssuesById(ID);
+    communicationGatewayService.getIssueById(ID);
   }
 
   @Test
   public void getIssueByRn_method_should_call_service_communication_getIssueByRnCommunicationAddress() throws Exception{
-    PowerMockito.when(communicationMicroServiceResources.getIssueByRnCommunicationAddress(ID)).thenReturn(requestURL);
+    PowerMockito.when(communicationMicroServiceResources.getIssueBySenderIdCommunicationAddress(ID)).thenReturn(requestURL);
 
     PowerMockito.whenNew(JsonGETUtility.class).withAnyArguments().thenReturn(jsonGETUtility);
     PowerMockito.when(jsonGETUtility.finish()).thenReturn(returnData);
 
-    gatewayResponse = communicationGatewayService.getIssuesByRn(ID);
+    gatewayResponse = communicationGatewayService.getIssuesBySender(ID);
 
     assertEquals(returnData,  gatewayResponse.getData());
 
@@ -272,7 +272,7 @@ public class CommunicationGatewayServiceTest {
   @Test(expected = ReadRequestException.class)
   public void getIssueByRn_method_should_throw_exception_for_IOException() throws Exception{
     PowerMockito.when(jsonGETUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
-    communicationGatewayService.getIssuesByRn(ID);
+    communicationGatewayService.getIssuesBySender(ID);
   }
 
 }

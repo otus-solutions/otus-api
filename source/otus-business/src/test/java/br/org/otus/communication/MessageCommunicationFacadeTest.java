@@ -94,14 +94,14 @@ public class MessageCommunicationFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void getMessageById_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
-    PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageById(Mockito.any());
-    messageCommunicationFacade.getMessageById(ID);
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageByIssueId(Mockito.any());
+    messageCommunicationFacade.getMessageByIssueId(ID);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getMessageByIdLimit_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
     PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageByIdLimit(Mockito.any(),Mockito.any(),Mockito.any());
-    messageCommunicationFacade.getMessageByIdLimit(ID, SKIP, LIMIT);
+    messageCommunicationFacade.getMessageByIssueIdLimit(ID, SKIP, LIMIT);
   }
 
   @Test(expected = HttpResponseException.class)
@@ -112,14 +112,14 @@ public class MessageCommunicationFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void  getIssueById_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
-    PowerMockito.doThrow(requestException).when(communicationGatewayService).getIssuesById(Mockito.any());
-    messageCommunicationFacade.getIssuesById(Mockito.any());
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getIssueById(Mockito.any());
+    messageCommunicationFacade.getIssueById(Mockito.any());
   }
 
   @Test(expected = Exception.class)
   public void  getIssuesByRn_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, DataNotFoundException {
-    PowerMockito.doThrow(requestException).when(communicationGatewayService).getIssuesByRn(Mockito.any());
-    messageCommunicationFacade.getIssuesByRn(Mockito.any());
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getIssuesBySender(Mockito.any());
+    messageCommunicationFacade.getIssue(Mockito.any());
   }
 
 }

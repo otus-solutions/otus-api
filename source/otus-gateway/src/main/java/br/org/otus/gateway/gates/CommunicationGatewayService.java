@@ -81,6 +81,7 @@ public class CommunicationGatewayService {
     }
   }
 
+  //=================Project Communication
   public GatewayResponse createIssue(String issue) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getIssuesCommunicationAddress();
     try {
@@ -147,7 +148,7 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getMessageById(String issueId) throws MalformedURLException {
+  public GatewayResponse getMessageByIssueId(String issueId) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getMessageByIdCommunicationAddress(issueId);
     try {
       JsonGETUtility jsonGET  = new JsonGETUtility(requestURL);
@@ -169,7 +170,7 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getIssuesById(String id) throws MalformedURLException {
+  public GatewayResponse getIssueById(String id) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getIssueByIdCommunicationAddress(id);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
@@ -180,8 +181,8 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getIssuesByRn(String issueId) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getIssueByRnCommunicationAddress(issueId);
+  public GatewayResponse getIssuesBySender(String senderId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getIssueBySenderIdCommunicationAddress(senderId);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();

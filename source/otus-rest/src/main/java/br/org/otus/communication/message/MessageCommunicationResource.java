@@ -14,7 +14,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.rest.Response;
-import org.ccem.otus.participant.model.Participant;
 
 @Path("/project-communication")
 public class MessageCommunicationResource {
@@ -30,23 +29,23 @@ public class MessageCommunicationResource {
   @Path("/issues")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createIssue(@Context HttpServletRequest request, String messageJson) {
+  public String createIssue(@Context HttpServletRequest request, String issueJson) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-    return new Response().buildSuccess(messageCommunicationFacade.createIssue(email, messageJson)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.createIssue(email, issueJson)).toJson();
   }
 
-  @POST
+  @GET
   @Secured
-  @Path("/issues/{id}/messages")
+  @Path("/issues")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createMessage(@Context HttpServletRequest request, @PathParam("id") String id, String messageJson) {
+  public String fetchIssues(@Context HttpServletRequest request) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-    return new Response().buildSuccess(messageCommunicationFacade.createMessage(email, id, messageJson)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.getIssue(email)).toJson();
   }
 
   @POST
@@ -93,20 +92,24 @@ public class MessageCommunicationResource {
     return new Response().buildSuccess(messageCommunicationFacade.getSenderById(id)).toJsonWithStringOid();
   }
 
-  @GET
+  @POST
   @Secured
-  @Path("/issues/participant/{rn}")
+  @Path("/issues/{id}/messages")
+  @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getIssuesByRn(@PathParam("rn") String rn) {
-    return new Response().buildSuccess(messageCommunicationFacade.getIssuesByRn(rn)).toJson();
+  public String createMessage(@Context HttpServletRequest request, @PathParam("id") String id, String messageJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    return new Response().buildSuccess(messageCommunicationFacade.createMessage(email, id, messageJson)).toJson();
   }
 
   @GET
   @Secured
-  @Path("/issues/{id}/messages")
+  @Path("/issues/{issueId}/messages")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getMessageById(@PathParam("id") String id) {
-    return new Response().buildSuccess(messageCommunicationFacade.getMessageById(id)).toJson();
+  public String getMessageById(@PathParam("issueId") String id) {
+    return new Response().buildSuccess(messageCommunicationFacade.getMessageByIssueId(id)).toJson();
   }
 
   @GET
@@ -114,7 +117,7 @@ public class MessageCommunicationResource {
   @Path("/issues/{issueId}/messages/{skip}/{limit}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getMessageByIdLimit(@PathParam("issueId") String id, @PathParam("skip") String skip, @PathParam("limit") String limit) {
-    return new Response().buildSuccess(messageCommunicationFacade.getMessageByIdLimit(id, skip, limit)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.getMessageByIssueIdLimit(id, skip, limit)).toJson();
   }
 
   @GET
@@ -122,7 +125,7 @@ public class MessageCommunicationResource {
   @Path("/issues/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getIssuesById(@PathParam("id") String id) {
-    return new Response().buildSuccess(messageCommunicationFacade.getIssuesById(id)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.getIssueById(id)).toJson();
   }
 
 }

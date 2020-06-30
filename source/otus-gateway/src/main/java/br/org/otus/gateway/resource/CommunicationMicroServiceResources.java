@@ -13,14 +13,7 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
   private static final String UPDATE_COMMUNICATION_RESOURCE = "/api/update-communication";
   private static final String DELETE_COMMUNICATION_RESOURCE = "/api/delete-communication";
 
-  private static final String MESSAGES_COMMUNICATION_RESOURCE = "/api/project-communication/messages";
-  private static final String FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE = "/api/project-communication/messages/limit";
-  private static final String ISSUES_COMMUNICATION_RESOURCE = "/api/project-communication/issues";
-  private static final String UPDATE_ISSUES_REOPEN_COMMUNICATION_RESOURCE = "/api/project-communication/issues-reopen";
-  private static final String UPDATE_ISSUES_CLOSE_COMMUNICATION_RESOURCE = "/api/project-communication/issues-close";
-  private static final String UPDATE_ISSUES_FINALIZE_COMMUNICATION_RESOURCE = "/api/project-communication/issues-finalize";
-  private static final String ISSUES_SENDER_COMMUNICATION_RESOURCE = "/api/project-communication/issues/sender";
-  private static final String FILTER_COMMUNICATION_RESOURCE = "/api/project-communication/issues/filter";
+
 
   public CommunicationMicroServiceResources() {
     super(MicroservicesEnvironments.COMMUNICATION_SERVICE);
@@ -50,22 +43,34 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + DELETE_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
-  public URL getMessageCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + MESSAGES_COMMUNICATION_RESOURCE + "/" + ID);
-  }
 
-  public URL getMessageByIdCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + MESSAGES_COMMUNICATION_RESOURCE + "/" + ID);
-  }
 
-  public URL getMessageByIdLimitCommunicationAddress(String ID, String SKIP, String LIMIT) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE + "/" + ID + "/" + SKIP + "/" + LIMIT);
-  }
+  private static final String ISSUES_COMMUNICATION_RESOURCE = "/api/project-communication/issues";
+  private static final String FILTER_COMMUNICATION_RESOURCE = "/api/project-communication/issues/filter";
 
+  private static final String UPDATE_ISSUES_REOPEN_COMMUNICATION_RESOURCE = "/api/project-communication/issues-reopen";
+  private static final String UPDATE_ISSUES_CLOSE_COMMUNICATION_RESOURCE = "/api/project-communication/issues-close";
+  private static final String UPDATE_ISSUES_FINALIZE_COMMUNICATION_RESOURCE = "/api/project-communication/issues-finalize";
+
+  private static final String MESSAGES_COMMUNICATION_RESOURCE = "/api/project-communication/messages";
+  private static final String FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE = "/api/project-communication/messages/limit";
+
+  private static final String ISSUES_SENDER_COMMUNICATION_RESOURCE = "/api/project-communication/issues/sender";
+
+  //============ Issue
   public URL getIssuesCommunicationAddress() throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_COMMUNICATION_RESOURCE);
   }
 
+  public URL getIssueByIdCommunicationAddress(String ID) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_COMMUNICATION_RESOURCE + "/" + ID);
+  }
+
+  public URL getIssueBySenderIdCommunicationAddress(String ID) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_SENDER_COMMUNICATION_RESOURCE + "/" + ID);
+  }
+
+  //update issue
   public URL getUpdateReopenCommunicationAddress(String ID) throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_ISSUES_REOPEN_COMMUNICATION_RESOURCE + "/" + ID);
   }
@@ -78,15 +83,22 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + UPDATE_ISSUES_FINALIZE_COMMUNICATION_RESOURCE + "/" + ID);
   }
 
+  //filter issue
   public URL getFilterCommunicationAddress() throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + FILTER_COMMUNICATION_RESOURCE);
   }
 
-  public URL getIssueByIdCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_COMMUNICATION_RESOURCE + "/" + ID);
+  //============ Message
+
+  public URL getMessageCommunicationAddress(String issueId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + MESSAGES_COMMUNICATION_RESOURCE + "/" + issueId);
   }
 
-  public URL getIssueByRnCommunicationAddress(String ID) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + ISSUES_SENDER_COMMUNICATION_RESOURCE + "/" + ID);
+  public URL getMessageByIdCommunicationAddress(String issueId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + MESSAGES_COMMUNICATION_RESOURCE + "/" + issueId);
+  }
+
+  public URL getMessageByIdLimitCommunicationAddress(String issueId, String SKIP, String LIMIT) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE + "/" + issueId + "/" + SKIP + "/" + LIMIT);
   }
 }
