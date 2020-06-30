@@ -5,6 +5,7 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
@@ -140,6 +141,27 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
   public List<ReportTemplateDTO> getByCenter(String fieldCenter) throws ValidationException {
     ArrayList<ReportTemplateDTO> results = new ArrayList<>();
     MongoCursor iterator = collection.find(eq("fieldCenter", fieldCenter)).iterator();
+
+    while (iterator.hasNext()) {
+      Document next = (Document) iterator.next();
+      ReportTemplateDTO dto = new ReportTemplateDTO(ReportTemplate.deserializeWithoutValidation(next.toJson()));
+      results.add(dto);
+    }
+    iterator.close();
+
+    return results;
+  }
+
+  public List<ReportTemplateDTO> getByCenterPaginated(String fieldCenter, int page) throws ValidationException {
+    ArrayList<ReportTemplateDTO> results = new ArrayList<>();
+
+    BasicDBObject query = new BasicDBObject();
+    query.put("fieldCenter", fieldCenter);
+    query.put("isInApp", true);
+    int pageSize = 10;
+
+    MongoCursor iterator = collection.find(query)
+      .skip(pageSize * (page - 1)).limit(pageSize).iterator();
 
     while (iterator.hasNext()) {
       Document next = (Document) iterator.next();

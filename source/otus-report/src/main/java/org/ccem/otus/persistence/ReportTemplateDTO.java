@@ -11,5 +11,4 @@ public class ReportTemplateDTO {
     this._id = reportTemplate.getId();
     this.label = reportTemplate.getLabel();
   }
-
 }

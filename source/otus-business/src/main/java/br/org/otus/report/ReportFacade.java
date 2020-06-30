@@ -48,6 +48,13 @@ public class ReportFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+  public List<ReportTemplateDTO> getReportByParticipantPaginated(Long recruitmentNumber, int page) {
+    try {
+      return reportService.getReportByParticipantPaginated(recruitmentNumber, page);
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 
   public ReportTemplate create(String reportUploadJson, String userEmail) {
     ReportTemplate insertedReport;
