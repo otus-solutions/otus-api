@@ -204,7 +204,9 @@ public class ReportDaoBean extends MongoGenericDao<Document> implements ReportDa
   @Override
   public ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException {
 
-    UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()), new Document("$set", new Document("fieldCenter", reportTemplate.getFieldCenter())),
+    UpdateResult updateReportData = collection.updateOne(eq("_id", reportTemplate.getId()),
+      new Document("$set", new Document("fieldCenter", reportTemplate.getFieldCenter())
+        .append("isInApp", reportTemplate.getIsInApp())),
       new UpdateOptions().upsert(false));
 
     if (updateReportData.getMatchedCount() == 0) {
