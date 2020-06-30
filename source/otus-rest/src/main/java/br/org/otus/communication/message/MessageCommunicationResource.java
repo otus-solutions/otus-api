@@ -30,10 +30,9 @@ public class MessageCommunicationResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createIssue(@Context HttpServletRequest request, String issueJson) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-    return new Response().buildSuccess(messageCommunicationFacade.createIssue(email, issueJson)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.createIssue(token, issueJson)).toJson();
   }
 
   @GET
@@ -42,10 +41,9 @@ public class MessageCommunicationResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String fetchIssues(@Context HttpServletRequest request) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-    return new Response().buildSuccess(messageCommunicationFacade.getIssue(email)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.getIssue(token)).toJson();
   }
 
   @POST
@@ -98,10 +96,9 @@ public class MessageCommunicationResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createMessage(@Context HttpServletRequest request, @PathParam("id") String id, String messageJson) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-    return new Response().buildSuccess(messageCommunicationFacade.createMessage(email, id, messageJson)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.createMessage(token, id, messageJson)).toJson();
   }
 
   @GET

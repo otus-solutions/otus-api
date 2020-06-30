@@ -10,6 +10,7 @@ import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.nimbusds.jwt.SignedJWT;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -21,6 +22,7 @@ import org.ccem.otus.service.FieldCenterService;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +48,11 @@ public class MessageCommunicationFacade {
   @Inject
   private ManagementUserService managementUserService;
 
-  public Object createIssue(String email, String issueJson) {
+  public Object createIssue(String token, String issueJson) {
     try {
       IssueMessageDTO issueMessage = issueMessageDTO.deserialize(issueJson);
 
-      List<String> result = findByEmail(email);
+      List<String> result = findByEmail(getExtractToEmail(token));
 
       issueMessage.setSender(result.get(0));
       issueMessage.setGroup(result.get(1));
@@ -58,37 +60,38 @@ public class MessageCommunicationFacade {
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
-    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
+    } catch (ParseException | DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
 
-  public Object getIssue(String email) {
+  public Object getIssue(String token) {
     try {
-      participant = participantService.getByEmail(email);
+      participant = participantService.getByEmail(getExtractToEmail(token));
       //todo: or user
       GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssuesBySender(String.valueOf(participant.getId()));
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
-    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
+    } catch (ParseException | DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
 
-
-  public Object createMessage(String email, String id, String messageJson) {
+  public Object createMessage(String token, String id, String messageJson) {
     try {
       MessageDTO message = messageDTO.deserialize(messageJson);
 
-      List<String> result = findByEmail(email);
+      List<String> result = findByEmail(getExtractToEmail(token));
 
       message.setSender(result.get(0));
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(id, messageDTO.serialize(message));
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
-    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
+    } catch (ParseException | DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
@@ -212,5 +215,13 @@ public class MessageCommunicationFacade {
 
       return array;
     }
+  }
+
+  private String getExtractToEmail (String token)  throws ParseException {
+    SignedJWT signedJWT = SignedJWT.parse(token);
+    String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString(); //user ou participant
+    String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
+
+    return email;
   }
 }
