@@ -7,6 +7,7 @@ public class MessageDTO {
   private String text;
   private String sender;
   private String issueId;
+  private String creationDate;
 
   public String getText() {
     return text;
