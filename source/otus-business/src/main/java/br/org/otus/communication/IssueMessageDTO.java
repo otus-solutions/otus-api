@@ -39,7 +39,6 @@ public class IssueMessageDTO implements Dto {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.serializeNulls();
     return builder;
   }
 
