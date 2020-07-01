@@ -31,9 +31,8 @@ public class MessageCommunicationResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String createIssue(@Context HttpServletRequest request, String issueJson) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-    return new Response().buildSuccess(messageCommunicationFacade.createIssue(email, issueJson)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.createIssue(token, issueJson)).toJson();
   }
 
   @GET
@@ -43,9 +42,8 @@ public class MessageCommunicationResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String fetchIssues(@Context HttpServletRequest request) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String email = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
 
-    return new Response().buildSuccess(messageCommunicationFacade.getIssue(email)).toJson();
+    return new Response().buildSuccess(messageCommunicationFacade.getIssue(token)).toJson();
   }
 
   @POST
