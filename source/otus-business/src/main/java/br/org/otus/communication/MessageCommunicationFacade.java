@@ -165,7 +165,8 @@ public class MessageCommunicationFacade {
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+      if(ex.getErrorMessage().equals("Not Found")) return new GsonBuilder().create().fromJson("[]", ArrayList.class);
+      else throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
 
