@@ -30,7 +30,7 @@ public class MessageCommunicationResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String createIssue(@Context HttpServletRequest request, String issueJson) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
     return new Response().buildSuccess(messageCommunicationFacade.createIssue(token, issueJson)).toJson();
   }

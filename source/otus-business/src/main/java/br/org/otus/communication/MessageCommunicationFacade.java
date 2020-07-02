@@ -60,7 +60,7 @@ public class MessageCommunicationFacade {
 
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
 
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), String.class);
     } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -93,7 +93,7 @@ public class MessageCommunicationFacade {
       message.setSender(result.get(0));
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(id, messageDTO.serialize(message));
 
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), String.class);
     } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
@@ -226,15 +226,13 @@ public class MessageCommunicationFacade {
     }
   }
 
-  private String getTokenEmail(String bearerToken) throws ParseException {
-    String token = bearerToken.substring("Bearer".length()).trim();
+  private String getTokenEmail(String token) throws ParseException {
     SignedJWT signedJWT = SignedJWT.parse(token);
     String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
     return email;
   }
 
-  private String getTokenMode(String bearerToken) throws ParseException {
-    String token = bearerToken.substring("Bearer".length()).trim();
+  private String getTokenMode(String token) throws ParseException {
     SignedJWT signedJWT = SignedJWT.parse(token);
     String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
     return mode;
