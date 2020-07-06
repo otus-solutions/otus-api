@@ -31,6 +31,7 @@ public class CommunicationGatewayServiceTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
   private static final String SKIP = "0";
+  private static final String ORDER = "asc";
   private static final String MESSAGE_ISSUE_JSON = "{\n" +
     "\"objectType\": \"Issue\",\n" +
     "\"sender\": \"email do token\",\n" +
@@ -217,12 +218,12 @@ public class CommunicationGatewayServiceTest {
 
   @Test
   public void getMessageByIdLimit_method_should_call_service_communication_getMessageByIdLimitCommunicationAddress() throws Exception{
-    PowerMockito.when(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, SKIP, LIMIT)).thenReturn(requestURL);
+    PowerMockito.when(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, SKIP, LIMIT, ORDER)).thenReturn(requestURL);
 
     PowerMockito.whenNew(JsonGETUtility.class).withAnyArguments().thenReturn(jsonGETUtility);
     PowerMockito.when(jsonGETUtility.finish()).thenReturn(returnData);
 
-    gatewayResponse = communicationGatewayService.getMessageByIdLimit(ID, SKIP, LIMIT);
+    gatewayResponse = communicationGatewayService.getMessageByIdLimit(ID, SKIP, LIMIT, ORDER);
 
     assertEquals(returnData,  gatewayResponse.getData());
 
@@ -232,7 +233,7 @@ public class CommunicationGatewayServiceTest {
   @Test(expected = ReadRequestException.class)
   public void getMessageByIdLimit_method_should_throw_exception_for_IOException() throws Exception{
     PowerMockito.when(jsonGETUtility.finish()).thenThrow(new IOException(new Throwable("Message")));
-    communicationGatewayService.getMessageByIdLimit(ID, SKIP, LIMIT);
+    communicationGatewayService.getMessageByIdLimit(ID, SKIP, LIMIT, ORDER);
   }
 
   @Test

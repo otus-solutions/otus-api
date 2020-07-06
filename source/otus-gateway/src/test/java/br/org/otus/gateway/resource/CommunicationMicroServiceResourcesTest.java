@@ -23,6 +23,7 @@ public class CommunicationMicroServiceResourcesTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
   private static final String SKIP = "0";
+  private static final String ORDER = "asc";
   private static final String FILTER = "{\n" +
     "  \"currentQuantity\": 0,\n" +
     "  \"quantityToGet\": 10,\n" +
@@ -68,8 +69,8 @@ public class CommunicationMicroServiceResourcesTest {
 
   @Test
   public void getMessageByIdLimitCommunicationAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:53004/api/project-communication/messages/limit/" + ID+ "/" + SKIP + "/" + LIMIT);
-    assertEquals(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, SKIP, LIMIT), url);
+    url = new URL("http://localhost:53004/api/project-communication/messages/limit/" + ID+ "/" + SKIP + "/" + LIMIT + "/" + ORDER);
+    assertEquals(communicationMicroServiceResources.getMessageByIdLimitCommunicationAddress(ID, SKIP, LIMIT, ORDER), url);
   }
 
   @Test
