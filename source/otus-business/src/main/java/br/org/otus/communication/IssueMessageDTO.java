@@ -38,7 +38,8 @@ public class IssueMessageDTO implements Dto {
   }
 
   public static GsonBuilder getGsonBuilder() {
-    return new GsonBuilder();
+    GsonBuilder builder = new GsonBuilder();
+    return builder;
   }
 
   @Override

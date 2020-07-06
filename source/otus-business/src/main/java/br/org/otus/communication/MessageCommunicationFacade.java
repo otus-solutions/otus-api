@@ -10,9 +10,11 @@ import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.nimbusds.jwt.SignedJWT;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
@@ -21,6 +23,7 @@ import org.ccem.otus.service.FieldCenterService;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,39 +49,57 @@ public class MessageCommunicationFacade {
   @Inject
   private ManagementUserService managementUserService;
 
-  public Object createIssue(String email, String issueJson) {
+  public Object createIssue(String token, String issueJson) {
     try {
       IssueMessageDTO issueMessage = issueMessageDTO.deserialize(issueJson);
 
-      List<String> result = findByEmail(email);
+      List<String> result = findByToken(token);
 
       issueMessage.setSender(result.get(0));
       issueMessage.setGroup(result.get(1));
 
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createIssue(issueMessageDTO.serialize(issueMessage));
 
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), String.class);
     } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    } catch (ParseException | ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
-  public Object createMessage(String email, String id, String messageJson) {
+  public Object getIssue(String token) {
+    try {
+      List<String> result = findByToken(token);
+
+      final String senderId = result.get(0);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssuesBySender(String.valueOf(senderId));
+
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
+    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException | ParseException | ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+
+  public Object createMessage(String token, String id, String messageJson) {
     try {
       MessageDTO message = messageDTO.deserialize(messageJson);
 
-      List<String> result = findByEmail(email);
+      List<String> result = findByToken(token);
 
       message.setSender(result.get(0));
       GatewayResponse gatewayResponse = new CommunicationGatewayService().createMessage(id, messageDTO.serialize(message));
 
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), Document.class);
+      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), String.class);
     } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    } catch (ParseException | ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -124,9 +145,9 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object getMessageById(String issueId) {
+  public Object getMessageByIssueId(String issueId) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageById(issueId);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIssueId(issueId);
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
@@ -136,7 +157,7 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object getMessageByIdLimit(String issueId, String skip, String limit) {
+  public Object getMessageByIssueIdLimit(String issueId, String skip, String limit) {
     try {
       GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIdLimit(issueId, skip, limit);
 
@@ -144,11 +165,12 @@ public class MessageCommunicationFacade {
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+      if(ex.getErrorMessage().equals("Not Found")) return new GsonBuilder().create().fromJson("[]", ArrayList.class);
+      else throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
 
-  public Object getSenderById(String id)  {
+  public Object getSenderById(String id) {
     try {
       return findById(id);
     } catch (DataNotFoundException | JsonSyntaxException e) {
@@ -156,25 +178,14 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object getIssuesById(String id) {
+  public Object getIssueById(String id) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssuesById(id);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssueById(id);
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    }
-  }
-
-  public Object getIssuesByRn(String rn) {
-    try {
-      participant = participantService.getByRecruitmentNumber(Long.valueOf(rn));
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().getIssuesByRn(String.valueOf(participant.getId()));
-
-      return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
-    } catch (DataNotFoundException | JsonSyntaxException | MalformedURLException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -187,16 +198,12 @@ public class MessageCommunicationFacade {
     }
   }
 
-  private List findByEmail(String email) throws DataNotFoundException {
+  //todo: refactor
+  private List<String> findByToken(String token) throws DataNotFoundException, ValidationException, ParseException {
     List<String> array = new ArrayList<>();
-
-    try {
-      participant = participantService.getByEmail(email);
-      fieldCenter = fieldCenterService.fetchByAcronym(participant.getFieldCenter().getAcronym());
-      array.add(String.valueOf(participant.getId()));
-      array.add(String.valueOf(fieldCenter.getId()));
-      return array;
-    } catch (DataNotFoundException e) {
+    final String mode = getTokenMode(token);
+    final String email = getTokenEmail(token);
+    if (mode.equals("user")) {
       user = managementUserService.fetchByEmail(email);
 
       array.add(String.valueOf(user.get_id()));
@@ -208,6 +215,26 @@ public class MessageCommunicationFacade {
       }
 
       return array;
+    } else if (mode.equals("participant")) {
+      participant = participantService.getByEmail(email);
+      fieldCenter = fieldCenterService.fetchByAcronym(participant.getFieldCenter().getAcronym());
+      array.add(String.valueOf(participant.getId()));
+      array.add(String.valueOf(fieldCenter.getId()));
+      return array;
+    } else {
+      throw new ValidationException("Invalid Mode");
     }
+  }
+
+  private String getTokenEmail(String token) throws ParseException {
+    SignedJWT signedJWT = SignedJWT.parse(token);
+    String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
+    return email;
+  }
+
+  private String getTokenMode(String token) throws ParseException {
+    SignedJWT signedJWT = SignedJWT.parse(token);
+    String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
+    return mode;
   }
 }
