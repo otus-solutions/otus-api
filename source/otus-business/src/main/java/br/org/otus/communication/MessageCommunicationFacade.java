@@ -157,9 +157,9 @@ public class MessageCommunicationFacade {
     }
   }
 
-  public Object getMessageByIssueIdLimit(String issueId, String skip, String limit) {
+  public Object getMessageByIssueIdLimit(String issueId, String skip, String limit, String order) {
     try {
-      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIdLimit(issueId, skip, limit);
+      GatewayResponse gatewayResponse = new CommunicationGatewayService().getMessageByIdLimit(issueId, skip, limit, order);
 
       return new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
     } catch (JsonSyntaxException | MalformedURLException e) {

@@ -29,6 +29,7 @@ public class MessageCommunicationFacadeTest {
   private static final String LIMIT = "12";
   private static final String EMAIL = "email@email.com";
   private static final String SKIP = "0";
+  private static final String ORDER = "asc";
   private static final String ISSUE_JSON = "{\n" +
     "\"objectType\": \"Issue\",\n" +
     "\"sender\": \"email do token\",\n" +
@@ -100,8 +101,8 @@ public class MessageCommunicationFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void getMessageByIdLimit_method_should_DataFormatException() throws JsonSyntaxException, MalformedURLException, RequestException {
-    PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageByIdLimit(Mockito.any(),Mockito.any(),Mockito.any());
-    messageCommunicationFacade.getMessageByIssueIdLimit(ID, SKIP, LIMIT);
+    PowerMockito.doThrow(requestException).when(communicationGatewayService).getMessageByIdLimit(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any());
+    messageCommunicationFacade.getMessageByIssueIdLimit(ID, SKIP, LIMIT, ORDER);
   }
 
   @Test(expected = HttpResponseException.class)

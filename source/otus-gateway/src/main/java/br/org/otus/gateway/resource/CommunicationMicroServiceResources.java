@@ -93,7 +93,7 @@ public class CommunicationMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + MESSAGES_COMMUNICATION_RESOURCE + "/" + issueId);
   }
 
-  public URL getMessageByIdLimitCommunicationAddress(String issueId, String SKIP, String LIMIT) throws MalformedURLException {
-    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE + "/" + issueId + "/" + SKIP + "/" + LIMIT);
+  public URL getMessageByIdLimitCommunicationAddress(String issueId, String SKIP, String LIMIT, String order) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + FIND_LIMIT_MESSAGES_COMMUNICATION_RESOURCE + "/" + issueId + "/" + SKIP + "/" + LIMIT + "/" + order);
   }
 }

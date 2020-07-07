@@ -159,8 +159,8 @@ public class CommunicationGatewayService {
     }
   }
 
-  public GatewayResponse getMessageByIdLimit(String issueId, String skip, String limit) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, skip, limit);
+  public GatewayResponse getMessageByIdLimit(String issueId, String skip, String limit, String order) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, skip, limit,order);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();

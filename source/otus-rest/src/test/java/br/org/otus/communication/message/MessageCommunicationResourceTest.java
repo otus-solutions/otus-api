@@ -28,6 +28,7 @@ public class MessageCommunicationResourceTest {
   private static final String AUTHORIZATION_HEADER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6ImRpb2dvLnJvc2FzLmZlcnJlaXJhQGdtYWlsLmNvbSJ9.I5Ysne1C79cO5B_5hIQK9iBSnQ6M8msuyVHD4kdoFSo";
   private static final String ID = "5e0658135b4ff40f8916d2b5";
   private static final String LIMIT = "12";
+  private static final String ORDER = "asc";
   private static final String EMAIL = "email@email.com";
   private static final String SKIP = "0";
   private static final String MESSAGE_JSON = "{\n" +
@@ -114,8 +115,8 @@ public class MessageCommunicationResourceTest {
 
   @Test
   public void getMessageByIdLimit_method_should_call_Facade_method_getMessageByIdLimit() throws Exception {
-    when(messageCommunicationFacade.getMessageByIssueIdLimit(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(returnData);
-    assertEquals(confirmed.toString(), messageCommunicationResource.getMessageByIdLimit(ID, SKIP, LIMIT));
+    when(messageCommunicationFacade.getMessageByIssueIdLimit(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(returnData);
+    assertEquals(confirmed.toString(), messageCommunicationResource.getMessageByIdLimit(ID, SKIP, LIMIT, ORDER));
   }
 
   @Test
