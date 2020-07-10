@@ -30,9 +30,6 @@ import java.util.zip.DataFormatException;
 
 public class FollowUpFacade {
 
-//  @Inject
-//  private ReportService reportService;
-
   @Inject
   private ParticipantFacade participantFacade;
 
