@@ -11,6 +11,11 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.otus.gateway.gates.OutcomeGatewayService;
+import br.org.otus.gateway.gates.ReportGatewayService;
+import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.gateway.response.exception.RequestException;
+
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -52,6 +57,16 @@ public class ReportFacadeTest {
   private ReportServiceBean reportServiceBean;
   @Mock
   private String userEmail;
+
+
+  @Mock
+ private GatewayResponse gatewayResponse;
+
+  @Mock
+  private RequestException requestException;
+
+  @Mock
+  private ReportGatewayService reportGatewayService;
 
   private ActivityReportTemplate activityReportTemplate;
 

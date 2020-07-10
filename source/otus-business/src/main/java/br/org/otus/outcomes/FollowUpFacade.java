@@ -14,8 +14,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.persistence.ReportDao;
+import org.ccem.otus.service.ReportService;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -24,6 +29,9 @@ import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 
 public class FollowUpFacade {
+
+//  @Inject
+//  private ReportService reportService;
 
   @Inject
   private ParticipantFacade participantFacade;

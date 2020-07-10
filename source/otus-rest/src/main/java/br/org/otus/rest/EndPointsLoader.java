@@ -34,6 +34,7 @@ import br.org.otus.survey.activity.OfflineActivityResource;
 import br.org.otus.survey.activity.ParticipantActivityResource;
 import br.org.otus.survey.activity.configuration.ActivityConfigurationResource;
 import br.org.otus.survey.group.SurveyGroupResource;
+import br.org.otus.report.templateReport.configuration.TemplateReportConfiguration;
 import br.org.otus.user.UserResource;
 import br.org.otus.user.pendency.UserActivityPendencyResource;
 
@@ -96,6 +97,9 @@ public class EndPointsLoader extends Application {
 
   @Inject
   private ReportResource reportResource;
+
+  @Inject
+  private TemplateReportConfiguration templateReportConfiguration;
 
   @Inject
   private FollowUpConfiguration followUpConfigurationResource;
@@ -172,6 +176,7 @@ public class EndPointsLoader extends Application {
     resources.add(ReportResource.class);
     resources.add(ParticipantResource.class);
     resources.add(FollowUpConfiguration.class);
+    resources.add(TemplateReportConfiguration.class);
     resources.add(FollowUpEventConfiguration.class);
     resources.add(ActivityResource.class);
     resources.add(ParticipantActivityResource.class);
@@ -213,6 +218,7 @@ public class EndPointsLoader extends Application {
     resources.add(participantResource);
     resources.add(participantContactResource);
     resources.add(followUpConfigurationResource);
+    resources.add(templateReportConfiguration);
     resources.add(followUpEventConfiguration);
     resources.add(activityResource);
     resources.add(participantActivityResource);

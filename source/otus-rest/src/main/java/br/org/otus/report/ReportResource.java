@@ -7,6 +7,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 
@@ -14,7 +16,6 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
-import org.jboss.resteasy.annotations.Query;
 
 @Path("/report")
 public class ReportResource {

@@ -130,4 +130,5 @@ public class ReportFacade {
       throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
+
 }
