@@ -29,6 +29,8 @@ public interface ReportDao {
 
   List<ReportTemplateDTO> getByCenter(String fieldCenter) throws ValidationException;
 
+  List<ReportTemplateDTO> getByCenterPaginated(String fieldCenter, int page) throws ValidationException;
+
   ReportTemplate getById(String id) throws DataNotFoundException, ValidationException;
 
   ReportTemplate updateFieldCenters(ReportTemplate reportTemplate) throws DataNotFoundException;

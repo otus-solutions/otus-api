@@ -2,18 +2,13 @@ package br.org.otus.report;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.ActivityReportTemplate;
 import org.ccem.otus.model.ReportTemplate;
 
@@ -79,6 +74,13 @@ public class ReportResource {
   @Path("/participant/list/{recruitmentNumber}")
   public String listByParticipant(@PathParam("recruitmentNumber") Long recruitmentNumber) {
     return new Response().buildSuccess(reportFacade.getReportByParticipant(recruitmentNumber)).toSurveyJson();
+  }
+  @GET
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/participant/list/app/{recruitmentNumber}")
+  public String listByParticipantPaginated(@PathParam("recruitmentNumber") Long recruitmentNumber, @QueryParam("page") int page) {
+    return new Response().buildSuccess(reportFacade.getReportByParticipantPaginated(recruitmentNumber, page)).toSurveyJson();
   }
 
   @GET
