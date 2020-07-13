@@ -21,7 +21,7 @@ public class ExamResultQueryBuilder {
   }
 
   public ExamResultQueryBuilder getExamResultsWithAliquotValid() {
-    pipeline.add(this.parseQuery("{$match:{\"objectType\":\"ExamResults\",\"aliquotValid\":true}}"));
+    pipeline.add(this.parseQuery("{$match:{\"objectType\":\"ExamResults\",\"isValid\":true}}"));
 
     return this;
   }
@@ -45,7 +45,7 @@ public class ExamResultQueryBuilder {
       "      results:{\n" +
       "        $push:{\n" +
       "          \"recruitmentNumber\":\"$recruitmentNumber\",\n" +
-      "          \"aliquotCode\":\"$aliquotCode\",\n" +
+      "          \"code\":\"$code\",\n" +
       "          \"resultName\":\"$resultName\",\n" +
       "          \"value\":\"$value\",\n" +
       "          \"releaseDate\":\"$releaseDate\",\n" +

@@ -28,7 +28,7 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
   public static String EXAM_OID = "exam_oid";
   public static String OBJECT_TYPE = "objectType";
   public static String EXAM_RESULTS = "examResults";
-  public static String ALIQUOT_VALID = "aliquotValid";
+  public static String IS_VALID = "isValid";
   public static String COLLECTION_EXAM_RESULT = "exam_result";
   public static String RECRUITMENT_NUMBER = "recruitmentNumber";
   public static String EXAM_RESULTS_RECRUITMENT_NUMBER = "examResults.recruitmentNumber";
@@ -57,7 +57,7 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
       .append(LET, new Document(EXAM_OID, SIGN_ID))
       .append(PIPELINE, Arrays.asList(
         new Document(SIGN_MATCH, new Document(RECRUITMENT_NUMBER, recruitmentNumber)
-          .append(ALIQUOT_VALID, Boolean.TRUE)
+          .append(IS_VALID, Boolean.TRUE)
           .append(SIGN_EXPR, new Document(SIGN_EQ, Arrays.asList(SIGN_EXAM_ID, SIGN_EXAM_OID)))
         )
       ))
@@ -107,11 +107,11 @@ public class ExamDataSource extends ReportDataSource<ExamDataSourceResult> {
       .append("examSendingLotId", 1)
       .append("examId", 1)
       .append("objectType", 1)
-      .append("aliquotCode", 1)
+      .append("code", 1)
       .append("examName", 1)
       .append("resultName", 1)
       .append("value", 1)
-      .append("aliquotValid", 1)
+      .append("isValid", 1)
       .append("releaseDate", 1)
       .append("observations", 1)
       .append("recruitmentNumber", 1)

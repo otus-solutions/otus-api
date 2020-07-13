@@ -8,7 +8,7 @@
   <parent>
     <artifactId>otus-root</artifactId>
     <groupId>org.ccem.otus</groupId>
-    <version>1.33.2</version>
+    <version>1.34.0</version>
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
 

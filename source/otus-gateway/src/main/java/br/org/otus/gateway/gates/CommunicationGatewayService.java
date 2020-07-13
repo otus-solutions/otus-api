@@ -81,5 +81,114 @@ public class CommunicationGatewayService {
     }
   }
 
+  //=================Project Communication
+  public GatewayResponse createIssue(String issue) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getIssuesCommunicationAddress();
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, issue);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 
+  public GatewayResponse createMessage(String id, String message) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageCommunicationAddress(id);
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, message);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse filter(String filterJson) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getFilterCommunicationAddress();
+    try {
+      JsonPOSTUtility jsonPOST = new JsonPOSTUtility(requestURL, filterJson);
+      String response = jsonPOST.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse updateReopen(String issueId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateReopenCommunicationAddress(issueId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse updateClose(String issueId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateCloseCommunicationAddress(issueId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse updateFinalize(String issueId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getUpdateFinalizeCommunicationAddress(issueId);
+    try {
+      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+      jsonPUT.finish();
+      return new GatewayResponse().buildSuccess();
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse getMessageByIssueId(String issueId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdCommunicationAddress(issueId);
+    try {
+      JsonGETUtility jsonGET  = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse getMessageByIdLimit(String issueId, String skip, String limit, String order) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, skip, limit,order);
+    try {
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse getIssueById(String id) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getIssueByIdCommunicationAddress(id);
+    try {
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public GatewayResponse getIssuesBySender(String senderId) throws MalformedURLException {
+    URL requestURL = new CommunicationMicroServiceResources().getIssueBySenderIdCommunicationAddress(senderId);
+    try {
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
+      String response = jsonGET.finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException ex) {
+      throw new ReadRequestException();
+    }
+  }
 }

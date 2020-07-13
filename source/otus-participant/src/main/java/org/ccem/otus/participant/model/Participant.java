@@ -8,13 +8,14 @@ import org.ccem.otus.participant.utils.LongAdapter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
-import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Participant {
 
+  private ObjectId _id;
   @Equalization(name = "recruitmentNumber")
   private Long recruitmentNumber;
   @Equalization(name = "name")
@@ -49,6 +50,10 @@ public class Participant {
 
   public String getName() {
     return name;
+  }
+
+  public ObjectId getId() {
+    return _id;
   }
 
   public String getEmail() {
@@ -139,7 +144,7 @@ public class Participant {
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     builder.registerTypeAdapter(ImmutableDate.class, new ImmutableDateAdapter());
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     builder.registerTypeAdapter(Long.class, new LongAdapter());

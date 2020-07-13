@@ -12,4 +12,6 @@ public interface FieldCenterService {
   void update(FieldCenter fieldCenterUpdateDto) throws ValidationException;
 
   List<FieldCenter> list();
+
+  FieldCenter fetchByAcronym(String acronym);
 }

@@ -36,7 +36,7 @@ public class FieldCenterResource {
   public String list() {
     Response response = new Response();
     List<FieldCenter> fieldCenters = fieldCenterFacade.list();
-    return response.setData(fieldCenters).toJson();
+    return response.setData(fieldCenters).toJson(FieldCenter.getGsonBuilder());
   }
 
   @POST

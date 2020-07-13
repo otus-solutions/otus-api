@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.ccem.otus</groupId>
     <artifactId>otus-root</artifactId>
-    <version>1.33.2</version>
+    <version>1.34.0</version>
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
 
@@ -177,6 +177,12 @@
       <version>${mongodb.bson.version}</version>
       <scope>provided</scope>
     </dependency>
+      <dependency>
+          <groupId>org.ccem.otus</groupId>
+          <artifactId>otus-gateway</artifactId>
+          <version>${project.parent.version}</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
   <build>
     <plugins>

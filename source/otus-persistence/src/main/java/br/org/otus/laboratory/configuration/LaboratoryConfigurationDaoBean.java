@@ -63,7 +63,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     return AliquotExamCorrelation.deserialize(first.toJson());
   }
 
-  public List<String> getExamName(List<String> centerAliquots) {
+  public List<String>  getExamName(List<String> centerAliquots) {
     List<String> exams = null;
 
     ArrayList<Bson> pipeline = new ArrayList<Bson>();

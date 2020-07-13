@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ccem.otus</groupId>
   <artifactId>otus-root</artifactId>
-  <version>1.33.2</version>
+  <version>1.34.0</version>
   <packaging>pom</packaging>
   <name>otus-api</name>
 
@@ -32,6 +32,7 @@
     <restlet.json.version>1.0.11</restlet.json.version>
     <resteasy.jaxrs.version>3.6.1.Final</resteasy.jaxrs.version>
     <resteasy.cdi.version>3.6.1.Final</resteasy.cdi.version>
+    <org.apache.commons.version>3.1</org.apache.commons.version>
 
     <!-- External plugins -->
     <maven.war.version>2.6</maven.war.version>
