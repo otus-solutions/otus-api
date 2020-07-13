@@ -67,8 +67,8 @@ public class ExamResultDaoBean extends MongoGenericDao<Document> implements Exam
   }
 
   @Override
-  public Boolean checkIfThereInExamResultLot(String aliquotCode) {
-    Document document = collection.find(eq("aliquotCode", aliquotCode)).first();
+  public Boolean checkIfThereInExamResultLot(String code) {
+    Document document = collection.find(eq("code", code)).first();
     return document != null;
   }
 

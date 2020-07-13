@@ -52,11 +52,11 @@ public class ExamDataSourceResultTest {
     Whitebox.setInternalState(examResult, "examId", new ObjectId());
     Whitebox.setInternalState(examResult, "_id", new ObjectId());
     Whitebox.setInternalState(examResult, "objectType", EXAM_RESULTS);
-    Whitebox.setInternalState(examResult, "aliquotCode", ALIQUOT_CODE);
+    Whitebox.setInternalState(examResult, "code", ALIQUOT_CODE);
     Whitebox.setInternalState(examResult, "examName", EXAM_NAME);
     Whitebox.setInternalState(examResult, "resultName", RESULT_NAME);
     Whitebox.setInternalState(examResult, "value", VALUE);
-    Whitebox.setInternalState(examResult, "aliquotValid", true);
+    Whitebox.setInternalState(examResult, "isValid", true);
     Whitebox.setInternalState(examResult, "releaseDate", "2018-01-03T13:43:00.000Z");
     Whitebox.setInternalState(examResult, "recruitmentNumber", RECRUITMENT_NUMBER);
     Whitebox.setInternalState(examResult, "sex", Sex.M);
