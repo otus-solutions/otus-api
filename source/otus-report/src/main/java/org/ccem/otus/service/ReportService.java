@@ -17,6 +17,8 @@ public interface ReportService {
 
   List<ReportTemplateDTO> getReportByParticipant(Long recruitmentNumber) throws DataNotFoundException, ValidationException;
 
+  List<ReportTemplateDTO> getReportByParticipantPaginated(Long recruitmentNumber, int page) throws DataNotFoundException, ValidationException;
+
   ReportTemplate create(ReportTemplate reportTemplate);
 
   void delete(String id) throws DataNotFoundException;
