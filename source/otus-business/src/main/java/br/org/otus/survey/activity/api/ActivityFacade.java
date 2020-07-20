@@ -145,10 +145,21 @@ public class ActivityFacade {
 
         surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
       }
-      return activityService.update(surveyActivity);
+
+      final SurveyActivity updatedActivity = activityService.update(surveyActivity);
+
+      if (isBeingDiscarded(updatedActivity)) {
+        followUpFacade.cancelParticipantEventByAcitivityId(surveyActivity.getActivityID().toString());
+      }
+
+      return updatedActivity;
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
+  }
+
+  public boolean isBeingDiscarded(SurveyActivity activity) {
+    return activity.isDiscarded();
   }
 
   public boolean updateCheckerActivity(String checkerUpdated) {

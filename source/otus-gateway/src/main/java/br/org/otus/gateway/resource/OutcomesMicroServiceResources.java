@@ -17,6 +17,8 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
   private static final String CANCEL_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/cancel";
   private static final String ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/accomplished";
   private static final String NOTIFICATION_DATA_EVENT_RESOURCE = "/event/notification-data";
+  private static final String  DEACTIVATED_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/desactive";
+
   private static final String REPORT = "/report";
 
   public OutcomesMicroServiceResources() {
@@ -75,4 +77,7 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
     return new URL("http://" + this.HOST + ":" + this.PORT + NOTIFICATION_DATA_EVENT_RESOURCE + "/" + id);
   }
 
+  public URL cancelParticipantEventByAcitivityId(String activityID) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + DEACTIVATED_PARTICIPANT_EVENT_RESOURCE + "/" + activityID);
+  }
 }

@@ -125,7 +125,7 @@ public class FollowUpFacade {
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
 
       if (!gatewayResponse.getData().toString().isEmpty()) {
-        if(!(participantEventDTO.emailNotification == null)) {
+        if (!(participantEventDTO.emailNotification == null)) {
           this.notificationEvent(participantEventDTO, participant);
         }
       }
@@ -221,4 +221,13 @@ public class FollowUpFacade {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
+
+  public void cancelParticipantEventByAcitivityId(String activityID) {
+    try {
+      new OutcomeGatewayService().cancelParticipantEventByAcitivityId(activityID);
+    } catch (Exception e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 }
+
