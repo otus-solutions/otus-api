@@ -148,7 +148,7 @@ public class ActivityFacade {
 
       final SurveyActivity updatedActivity = activityService.update(surveyActivity);
 
-      if (isBeingDiscarded(updatedActivity)) {
+      if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name() == "AUTOFILL") {
         followUpFacade.cancelParticipantEventByAcitivityId(surveyActivity.getActivityID().toString());
       }
 
