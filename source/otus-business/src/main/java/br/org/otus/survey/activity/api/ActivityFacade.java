@@ -106,9 +106,7 @@ public class ActivityFacade {
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
     try {
-//      return activityService.update(surveyActivity);
       final SurveyActivity updatedActivity = activityService.update(surveyActivity);
-
       if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name() == "AUTOFILL") {
         followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
       }
@@ -153,13 +151,8 @@ public class ActivityFacade {
         surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
       }
 
-      final SurveyActivity updatedActivity = activityService.update(surveyActivity);
+      return activityService.update(surveyActivity);
 
-      if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name() == "AUTOFILL") {
-        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
-      }
-
-      return updatedActivity;
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
