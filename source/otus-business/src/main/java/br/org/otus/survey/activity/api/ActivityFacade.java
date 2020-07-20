@@ -106,7 +106,14 @@ public class ActivityFacade {
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
     try {
-      return activityService.update(surveyActivity);
+//      return activityService.update(surveyActivity);
+      final SurveyActivity updatedActivity = activityService.update(surveyActivity);
+
+      if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name() == "AUTOFILL") {
+        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+      }
+      return updatedActivity;
+
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
@@ -149,7 +156,7 @@ public class ActivityFacade {
       final SurveyActivity updatedActivity = activityService.update(surveyActivity);
 
       if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name() == "AUTOFILL") {
-        followUpFacade.cancelParticipantEventByAcitivityId(surveyActivity.getActivityID().toString());
+        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
       }
 
       return updatedActivity;

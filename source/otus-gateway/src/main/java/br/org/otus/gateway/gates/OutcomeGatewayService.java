@@ -156,8 +156,8 @@ public class OutcomeGatewayService {
     }
   }
 
-  public GatewayResponse cancelParticipantEventByAcitivityId(String activityID) throws MalformedURLException {
-    URL requestURL = new OutcomesMicroServiceResources().cancelParticipantEventByAcitivityId(activityID);
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException {
+    URL requestURL = new OutcomesMicroServiceResources().cancelParticipantEventByActivityId(activityID);
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
       jsonPUT.finish();

@@ -222,9 +222,9 @@ public class FollowUpFacade {
     }
   }
 
-  public void cancelParticipantEventByAcitivityId(String activityID) {
+  public void cancelParticipantEventByActivityId(String activityID) {
     try {
-      new OutcomeGatewayService().cancelParticipantEventByAcitivityId(activityID);
+      new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
     } catch (Exception e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
