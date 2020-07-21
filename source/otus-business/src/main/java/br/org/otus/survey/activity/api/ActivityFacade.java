@@ -1,5 +1,8 @@
 package br.org.otus.survey.activity.api;
 
+import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -26,6 +29,7 @@ import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import javax.inject.Inject;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,18 +108,33 @@ public class ActivityFacade {
     return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
   }
 
-  public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
-    try {
-      final SurveyActivity updatedActivity = activityService.update(surveyActivity);
-      if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name() == "AUTOFILL") {
-        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
-      }
-      return updatedActivity;
+  public SurveyActivity updateActivity(SurveyActivity surveyActivity) throws HttpResponseException {
 
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    try {
+      if (surveyActivity.getMode().name().equals("AUTOFILL")) {
+        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+//      followUpFacade.cancelParticipantEventByActivityId("5edfaa2b317fe15a86c317f8");
+      }
+      return activityService.update(surveyActivity);
+    } catch (ReadRequestException | MalformedURLException | RequestException | DataNotFoundException e) {
+          throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
+
+//TODO:Remover cópia da implementação inicial, quando terminar confecção do nova lógica acima
+
+//  public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
+//    try {
+//      final SurveyActivity updatedActivity = activityService.update(surveyActivity);
+//      if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name().equals("AUTOFILL")) {
+//        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+//      }
+//      return updatedActivity;
+//
+//    } catch (DataNotFoundException e) {
+//      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+//    }
+//  }
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) {
     try {

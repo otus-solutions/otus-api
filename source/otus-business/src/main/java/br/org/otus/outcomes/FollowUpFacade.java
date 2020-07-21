@@ -5,6 +5,7 @@ import br.org.otus.communication.FollowUpCommunicationData;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
@@ -14,13 +15,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import org.ccem.otus.model.ReportTemplate;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.persistence.ReportDao;
-import org.ccem.otus.service.ReportService;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -222,12 +218,8 @@ public class FollowUpFacade {
     }
   }
 
-  public void cancelParticipantEventByActivityId(String activityID) {
-    try {
-      new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
-    } catch (Exception e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    }
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException{
+    return new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
   }
 }
 

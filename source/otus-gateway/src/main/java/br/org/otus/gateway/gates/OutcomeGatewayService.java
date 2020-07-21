@@ -6,6 +6,7 @@ import br.org.otus.gateway.request.JsonPUTRequestUtility;
 import br.org.otus.gateway.resource.OutcomesMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.gateway.response.exception.RequestException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -21,6 +22,7 @@ public class OutcomeGatewayService {
     } catch (IOException ex) {
       throw new ReadRequestException();
     }
+
   }
 
   public GatewayResponse updateFollowUp(String followUpJson) throws MalformedURLException {
@@ -156,15 +158,27 @@ public class OutcomeGatewayService {
     }
   }
 
-  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException {
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException   {
     URL requestURL = new OutcomesMicroServiceResources().cancelParticipantEventByActivityId(activityID);
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
-      jsonPUT.finish();
-      return new GatewayResponse().buildSuccess();
+      String response = jsonPUT.finish();
+      return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
-      throw new ReadRequestException();
+      throw new ReadRequestException(ex.getMessage(), ex.getCause());
     }
   }
+
+
+//  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException {
+//    URL requestURL = new OutcomesMicroServiceResources().cancelParticipantEventByActivityId(activityID);
+//    try {
+//      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+//      jsonPUT.finish();
+//      return new GatewayResponse().buildSuccess();
+//    } catch (IOException ex) {
+//      throw new ReadRequestException();
+//    }
+//  }
 
 }
