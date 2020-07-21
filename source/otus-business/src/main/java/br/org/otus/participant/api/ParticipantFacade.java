@@ -1,5 +1,6 @@
 package br.org.otus.participant.api;
 
+import br.org.otus.email.system.SystemInstallationEmail;
 import br.org.otus.participant.management.ManagementParticipantService;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -132,6 +133,17 @@ public class ParticipantFacade {
     try {
       return managementParticipantService.requestPasswordResetLink(requestData);
     } catch (MalformedURLException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
+
+  public Boolean editEmail(String participantId, String email) {
+    try {
+      if(!SystemInstallationEmail.isValid(email)) {
+        throw new ValidationException(new Throwable("Malformed email"));
+      }
+      return participantService.editEmail(participantId, email);
+    } catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
   }

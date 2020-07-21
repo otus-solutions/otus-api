@@ -93,4 +93,13 @@ public class ParticipantResource {
   public String update(@Context HttpServletRequest request, String participantJson){
     return new Response().buildSuccess(participantFacade.update(participantJson)).toJson(Participant.getGsonBuilder());
   }
+
+  @PUT
+  @Path("/edit/{participantId}/{email}")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String editEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId, @PathParam("email") String email){
+    return new Response().buildSuccess(participantFacade.editEmail(participantId, email)).toJson();
+  }
 }

@@ -224,4 +224,15 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     return collection.count(query);
   }
 
+  public Boolean editEmail(ObjectId id, String email) throws DataNotFoundException {
+
+    UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, email)));
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("Participant no found"));
+    }
+
+    return updateResult.getModifiedCount() != 0;
+  }
+
 }
