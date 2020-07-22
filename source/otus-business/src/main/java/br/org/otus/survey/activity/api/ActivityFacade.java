@@ -156,7 +156,7 @@ public class ActivityFacade {
       return activityService.update(surveyActivity);
 
     } catch (DataNotFoundException | ParseException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
