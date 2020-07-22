@@ -168,17 +168,4 @@ public class OutcomeGatewayService {
       throw new ReadRequestException(ex.getMessage(), ex.getCause());
     }
   }
-
-
-//  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException {
-//    URL requestURL = new OutcomesMicroServiceResources().cancelParticipantEventByActivityId(activityID);
-//    try {
-//      JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
-//      jsonPUT.finish();
-//      return new GatewayResponse().buildSuccess();
-//    } catch (IOException ex) {
-//      throw new ReadRequestException();
-//    }
-//  }
-
 }

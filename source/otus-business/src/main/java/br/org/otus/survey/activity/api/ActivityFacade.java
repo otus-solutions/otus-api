@@ -1,6 +1,5 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.outcomes.FollowUpFacade;
@@ -113,28 +112,12 @@ public class ActivityFacade {
     try {
       if (surveyActivity.getMode().name().equals("AUTOFILL")) {
         followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
-//      followUpFacade.cancelParticipantEventByActivityId("5edfaa2b317fe15a86c317f8");
       }
       return activityService.update(surveyActivity);
     } catch (ReadRequestException | MalformedURLException | RequestException | DataNotFoundException e) {
-          throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
+      throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
-
-//TODO:Remover cópia da implementação inicial, quando terminar confecção do nova lógica acima
-
-//  public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
-//    try {
-//      final SurveyActivity updatedActivity = activityService.update(surveyActivity);
-//      if (isBeingDiscarded(updatedActivity) && updatedActivity.getMode().name().equals("AUTOFILL")) {
-//        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
-//      }
-//      return updatedActivity;
-//
-//    } catch (DataNotFoundException e) {
-//      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-//    }
-//  }
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) {
     try {
@@ -175,10 +158,6 @@ public class ActivityFacade {
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
-  }
-
-  public boolean isBeingDiscarded(SurveyActivity activity) {
-    return activity.isDiscarded();
   }
 
   public boolean updateCheckerActivity(String checkerUpdated) {
