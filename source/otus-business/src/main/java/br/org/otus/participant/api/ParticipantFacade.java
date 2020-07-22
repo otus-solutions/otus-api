@@ -155,4 +155,12 @@ public class ParticipantFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
   }
+
+  public Boolean removeEmailByParticipant(String participantId) {
+    try {
+      return participantService.removeEmailByParticipant(participantId);
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
 }

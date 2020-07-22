@@ -103,6 +103,15 @@ public class ParticipantResource {
     return new Response().buildSuccess(participantFacade.editEmail(participantId, email)).toJson();
   }
 
+  @PUT
+  @Path("/remove/email/{participantId}")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String removeEmailByParticipant(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.removeEmailByParticipant(participantId)).toJson();
+  }
+
   @GET
   @Path("/email/{participantId}")
   @Secured

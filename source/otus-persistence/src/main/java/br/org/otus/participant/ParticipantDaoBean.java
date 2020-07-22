@@ -32,6 +32,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   private static final String SET = "$set";
   private static final String PASSWORD = "password";
   private static final String ID = "_id";
+  private static final String EMPTY = "";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -226,7 +227,6 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public Boolean editEmail(ObjectId id, String email) throws DataNotFoundException {
-
     UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, email)));
 
     if (updateResult.getMatchedCount() == 0) {
@@ -244,5 +244,16 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     }
 
     return Participant.deserialize(participantFound.toJson()).getEmail();
+  }
+
+  @Override
+  public Boolean removeEmailByParticipant(ObjectId id) throws DataNotFoundException {
+    UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, EMPTY)));
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("Participant no found"));
+    }
+
+    return updateResult.getModifiedCount() != 0;
   }
 }

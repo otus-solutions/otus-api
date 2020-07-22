@@ -140,4 +140,14 @@ public class ParticipantServiceBean implements ParticipantService {
 
     return participantDao.getEmailByParticipant(id);
   }
+
+  @Override
+  public Boolean removeEmailByParticipant(String participantId) throws ValidationException, DataNotFoundException {
+     if(!ObjectId.isValid(participantId)) {
+      throw new ValidationException(new Throwable("ObjectId is not valid"));
+    }
+    ObjectId id = new ObjectId(participantId);
+
+    return participantDao.removeEmailByParticipant(id);
+  }
 }
