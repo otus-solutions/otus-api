@@ -135,4 +135,30 @@ public class ParticipantFacadeTest {
     participantFacade.editEmail(ID,EMAIL);
   }
 
+  @Test
+  public void removeEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+    when(participantService.removeEmailByParticipant(ID)).thenReturn(true);
+    assertEquals(true,  participantFacade.removeEmailByParticipant(ID));
+    verify(participantService, times(1)).removeEmailByParticipant(ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void removeEmailByParticipant_method_should_catch_Exception() throws Exception {
+    Mockito.doThrow(validationException).when(participantService).removeEmailByParticipant(ID);
+    participantFacade.removeEmailByParticipant(ID);
+  }
+
+  @Test
+  public void getEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+    when(participantService.getEmailByParticipant(ID)).thenReturn(EMAIL);
+    assertEquals(EMAIL,  participantFacade.getEmailByParticipant(ID));
+    verify(participantService, times(1)).getEmailByParticipant(ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getEmailByParticipant_method_should_catch_Exception() throws Exception {
+    Mockito.doThrow(validationException).when(participantService).getEmailByParticipant(ID);
+    participantFacade.getEmailByParticipant(ID);
+  }
+
 }

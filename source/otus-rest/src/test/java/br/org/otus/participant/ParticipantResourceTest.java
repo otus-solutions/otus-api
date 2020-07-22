@@ -148,6 +148,12 @@ public class ParticipantResourceTest {
   }
 
   @Test
+  public void removeEmailByParticipant_method_should_evoke_call_methods() {
+    participantResource.removeEmailByParticipant(request,ID);
+    verify(participantFacade, times(1)).removeEmailByParticipant(ID);
+  }
+
+  @Test
   public void getEmailByParticipant_method_should_evoke_call_methods() {
     participantResource.getEmailByParticipant(request,ID);
     verify(participantFacade, times(1)).getEmailByParticipant(ID);
