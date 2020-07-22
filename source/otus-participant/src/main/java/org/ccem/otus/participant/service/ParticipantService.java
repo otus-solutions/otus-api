@@ -37,4 +37,6 @@ public interface ParticipantService {
   Participant getId(ObjectId id) throws DataNotFoundException;
 
   Boolean editEmail(String participantId, String email) throws DataNotFoundException, ValidationException;
+
+  String getEmailByParticipant(String participantId) throws ValidationException, DataNotFoundException;
 }

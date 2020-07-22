@@ -102,4 +102,13 @@ public class ParticipantResource {
   public String editEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId, @PathParam("email") String email){
     return new Response().buildSuccess(participantFacade.editEmail(participantId, email)).toJson();
   }
+
+  @GET
+  @Path("/email/{participantId}")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getEmailByParticpant(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.getEmalByParticipant(participantId)).toJson();
+  }
 }

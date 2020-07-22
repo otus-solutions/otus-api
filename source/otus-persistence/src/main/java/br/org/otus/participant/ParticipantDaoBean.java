@@ -65,7 +65,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public boolean exists(Long rn) {
-    Document result = this.collection.find(eq("recruitmentNumber", rn)).first();
+    Document result = this.collection.find(eq(RN, rn)).first();
     return result == null ? false : true;
   }
 
@@ -90,7 +90,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public ArrayList<Long> getRecruitmentNumbersByFieldCenter(String center) throws DataNotFoundException {
     Document query = new Document("fieldCenter.acronym", center);
-    MongoCursor<Long> cursor = collection.distinct("recruitmentNumber", query, Long.class).iterator();
+    MongoCursor<Long> cursor = collection.distinct(RN, query, Long.class).iterator();
 
     ArrayList<Long> rns = new ArrayList<Long>();
 
@@ -199,13 +199,13 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public ObjectId findIdByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
-    return result.getObjectId("_id");
+    Document result = this.collection.find(eq(RN, recruitmentNumber)).first();
+    return result.getObjectId(ID);
   }
 
   @Override
   public String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+    Document result = this.collection.find(eq(RN, recruitmentNumber)).first();
     if (result == null) {
       throw new DataNotFoundException(new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
     }
@@ -224,6 +224,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     return collection.count(query);
   }
 
+  @Override
   public Boolean editEmail(ObjectId id, String email) throws DataNotFoundException {
 
     UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, email)));
@@ -235,4 +236,13 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     return updateResult.getModifiedCount() != 0;
   }
 
+  @Override
+  public String getEmailByParticipant(ObjectId id) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(ID, id)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
+    }
+
+    return Participant.deserialize(participantFound.toJson()).getEmail();
+  }
 }

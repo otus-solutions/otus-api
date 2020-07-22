@@ -147,4 +147,12 @@ public class ParticipantFacade {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
   }
+
+  public String getEmalByParticipant(String participantId) {
+    try {
+      return participantService.getEmailByParticipant(participantId);
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
 }

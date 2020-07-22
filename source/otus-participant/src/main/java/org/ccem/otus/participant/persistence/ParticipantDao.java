@@ -51,5 +51,7 @@ public interface ParticipantDao {
   Participant getId(ObjectId id) throws DataNotFoundException;
 
   Boolean editEmail(ObjectId participantId, String email) throws DataNotFoundException;
+
+  String getEmailByParticipant(ObjectId id) throws DataNotFoundException;
 }
 
