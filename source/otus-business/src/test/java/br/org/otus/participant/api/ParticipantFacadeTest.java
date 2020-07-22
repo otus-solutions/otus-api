@@ -9,6 +9,7 @@ import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
@@ -23,6 +24,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.net.MalformedURLException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -30,6 +32,9 @@ import static org.mockito.Mockito.*;
 @PrepareForTest(ParticipantFacade.class)
 public class ParticipantFacadeTest {
   private static long RN = 1063154;
+  private static final String EMAIL = "otus@gmail.com";
+  private static final String ID = "58c83f502226685b94f8973a";
+
   @InjectMocks
   private ParticipantFacade participantFacade;
   @Mock
@@ -53,7 +58,7 @@ public class ParticipantFacadeTest {
   private PasswordResetRequestDto passwordResetRequestDto = PowerMockito.spy(new PasswordResetRequestDto());
   private EmailNotificationException emailNotificationException =  PowerMockito.spy(new EmailNotificationException());
   private MalformedURLException malformedURLException =  PowerMockito.spy(new MalformedURLException());
-
+  private ValidationException validationException =  PowerMockito.spy(new ValidationException());
 
   @Test
   public void method_getByRecruitmentNumber_should_return_participant() throws DataNotFoundException {
@@ -117,6 +122,17 @@ public class ParticipantFacadeTest {
     participantFacade.requestPasswordResetLink(passwordResetRequestDto);
   }
 
+  @Test
+  public void editEmail_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+    when(participantService.editEmail(ID,EMAIL)).thenReturn(true);
+    assertEquals(true,  participantFacade.editEmail(ID,EMAIL));
+    verify(participantService, times(1)).editEmail(ID,EMAIL);
+  }
 
+  @Test(expected = HttpResponseException.class)
+  public void editEmail_method_should_catch_Exception() throws Exception {
+    Mockito.doThrow(validationException).when(participantService).editEmail(ID,EMAIL);
+    participantFacade.editEmail(ID,EMAIL);
+  }
 
 }
