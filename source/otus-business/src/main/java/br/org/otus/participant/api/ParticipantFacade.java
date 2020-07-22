@@ -148,7 +148,7 @@ public class ParticipantFacade {
     }
   }
 
-  public String getEmalByParticipant(String participantId) {
+  public String getEmailByParticipant(String participantId) {
     try {
       return participantService.getEmailByParticipant(participantId);
     } catch (DataNotFoundException | ValidationException e) {

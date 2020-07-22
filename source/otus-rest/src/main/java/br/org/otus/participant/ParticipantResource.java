@@ -108,7 +108,7 @@ public class ParticipantResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getEmailByParticpant(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
-    return new Response().buildSuccess(participantFacade.getEmalByParticipant(participantId)).toJson();
+  public String getEmailByParticipant(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.getEmailByParticipant(participantId)).toJson();
   }
 }
