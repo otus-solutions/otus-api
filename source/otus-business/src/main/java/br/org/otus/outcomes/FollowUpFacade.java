@@ -174,7 +174,6 @@ public class FollowUpFacade {
     System.err.println(notification.getData());
   }
 
-
   public Object cancelParticipantEvent(String eventId) {
     try {
       return new OutcomeGatewayService().cancelParticipantEvent(eventId);
