@@ -31,7 +31,7 @@ public class FollowUpFacadeTest {
   }
 
   @Test
-  public void cancelParticipantEventByActivityIdMethod_should() throws Exception {
+  public void cancelParticipantEventByActivityIdMethod_should_return_response_by_OutcomeGatewayService() throws Exception {
     PowerMockito.whenNew(OutcomeGatewayService.class).withAnyArguments().thenReturn(outcomeGatewayService);
     PowerMockito.when(outcomeGatewayService.cancelParticipantEventByActivityId(activityId))
       .thenReturn(response);
