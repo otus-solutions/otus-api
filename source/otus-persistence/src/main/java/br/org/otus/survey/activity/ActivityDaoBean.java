@@ -51,7 +51,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public static final String STATUS_HISTORY_NAME = "statusHistory.name";
     public static final String FINALIZED = "FINALIZED";
     private static final String SET = "$set";
-    private static final String PARTICIPANT_DATA = "participantData";
+    private static final String PARTICIPANT_DATA_EMAIL = "participantData.email";
 
     public ActivityDaoBean() {
         super(COLLECTION_NAME, Document.class);
@@ -292,11 +292,8 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
     @Override
     public void updateEmailByParticipant(Participant participant) {
-        Document query = new Document();
-        query.put(RECRUITMENT_NUMBER_PATH, participant.getRecruitmentNumber());
-        Document parsed = Document.parse(Participant.serialize(participant));
 
-        collection.updateMany(query, new Document(SET , new Document(PARTICIPANT_DATA, parsed)));
+        collection.updateMany(new Document(RECRUITMENT_NUMBER_PATH, participant.getRecruitmentNumber()), new Document(SET , new Document(PARTICIPANT_DATA_EMAIL, participant.getEmail())));
     }
 
     private void removeOids(Document parsedActivity) {
