@@ -142,7 +142,7 @@ public class ParticipantFacadeTest {
   }
 
   @Test
-  public void removeEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+  public void removeEmailByParticipant_method_should_evoke_call_methods() throws DataNotFoundException {
     when(participantService.removeEmailByParticipant(objectId)).thenReturn(true);
     assertEquals(true,  participantFacade.removeEmailByParticipant(ID));
     verify(participantService, times(1)).removeEmailByParticipant(objectId);
@@ -150,7 +150,7 @@ public class ParticipantFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void removeEmailByParticipant_method_should_catch_Exception() throws Exception {
-    Mockito.doThrow(validationException).when(participantService).removeEmailByParticipant(objectId);
+    Mockito.doThrow(dataNotFoundException).when(participantService).removeEmailByParticipant(objectId);
     participantFacade.removeEmailByParticipant(ID);
   }
 
