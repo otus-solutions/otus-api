@@ -141,7 +141,7 @@ public class ParticipantFacade {
     }
   }
 
-  public Boolean editEmail(String participantId, String email) {
+  public Boolean updateEmail(String participantId, String email) {
     try {
       if(!SystemInstallationEmail.isValid(email)) {
         throw new ValidationException(new Throwable("Malformed email"));
@@ -152,10 +152,11 @@ public class ParticipantFacade {
       }
 
       ObjectId id = new ObjectId(participantId);
-      Boolean result = participantService.editEmail(id, email);
+      Boolean result = participantService.updateEmail(id, email);
+      Participant participant = participantService.getParticipant(id);
 
       if(result){
-        activityService.updateEmailByParticipant(participantService.getId(id));
+        activityService.updateParticipantEmail(participant.getRecruitmentNumber(), participant.getEmail());
       }
 
       return result;
@@ -164,25 +165,26 @@ public class ParticipantFacade {
     }
   }
 
-  public String getEmailByParticipant(String participantId) {
+  public String getEmail(String participantId) {
     try {
-      return participantService.getEmailByParticipant(participantId);
+      return participantService.getEmail(participantId);
     } catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
   }
 
-  public Boolean removeEmailByParticipant(String participantId) {
+  public Boolean deleteEmail(String participantId) {
     try {
       if(!ObjectId.isValid(participantId)) {
         throw new ValidationException(new Throwable("ObjectId is not valid"));
       }
 
       ObjectId id = new ObjectId(participantId);
-      Boolean result = participantService.removeEmailByParticipant(id);
+      Boolean result = participantService.deleteEmail(id);
+      Participant participant = participantService.getParticipant(id);
 
       if(result){
-        activityService.updateEmailByParticipant(participantService.getId(id));
+        activityService.updateParticipantEmail(participant.getRecruitmentNumber(), participant.getEmail());
       }
 
       return result;

@@ -34,11 +34,11 @@ public interface ParticipantService {
 
   String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException;
 
-  Participant getId(ObjectId id) throws DataNotFoundException;
+  Participant getParticipant(ObjectId id) throws DataNotFoundException;
 
-  Boolean editEmail(ObjectId participantId, String email) throws DataNotFoundException;
+  Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException;
 
-  String getEmailByParticipant(String participantId) throws ValidationException, DataNotFoundException;
+  String getEmail(String participantId) throws ValidationException, DataNotFoundException;
 
-  Boolean removeEmailByParticipant(ObjectId participantId) throws DataNotFoundException;
+  Boolean deleteEmail(ObjectId participantId) throws DataNotFoundException;
 }

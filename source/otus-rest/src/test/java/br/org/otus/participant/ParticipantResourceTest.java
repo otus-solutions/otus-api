@@ -142,20 +142,20 @@ public class ParticipantResourceTest {
   }
 
   @Test
-  public void editEmail_method_should_evoke_call_methods() {
-    participantResource.editEmail(request,ID,USER_MAIL);
-    verify(participantFacade, times(1)).editEmail(ID,USER_MAIL);
+  public void updateEmail_method_should_evoke_call_methods() {
+    participantResource.updateEmail(request,ID,USER_MAIL);
+    verify(participantFacade, times(1)).updateEmail(ID,USER_MAIL);
   }
 
   @Test
-  public void removeEmailByParticipant_method_should_evoke_call_methods() {
-    participantResource.removeEmailByParticipant(request,ID);
-    verify(participantFacade, times(1)).removeEmailByParticipant(ID);
+  public void deleteEmail_method_should_evoke_call_methods() {
+    participantResource.deleteEmail(request,ID);
+    verify(participantFacade, times(1)).deleteEmail(ID);
   }
 
   @Test
-  public void getEmailByParticipant_method_should_evoke_call_methods() {
-    participantResource.getEmailByParticipant(request,ID);
-    verify(participantFacade, times(1)).getEmailByParticipant(ID);
+  public void getEmail_method_should_evoke_call_methods() {
+    participantResource.getEmail(request,ID);
+    verify(participantFacade, times(1)).getEmail(ID);
   }
 }

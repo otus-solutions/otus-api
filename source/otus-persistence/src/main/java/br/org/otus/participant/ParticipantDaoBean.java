@@ -137,7 +137,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public Participant getId(ObjectId id) throws DataNotFoundException {
+  public Participant getParticpant(ObjectId id) throws DataNotFoundException {
     Document participantFound = this.collection.find(eq(ID, id)).first();
     if (participantFound == null) {
       throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
@@ -226,7 +226,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public Boolean editEmail(ObjectId id, String email) throws DataNotFoundException {
+  public Boolean updateEmail(ObjectId id, String email) throws DataNotFoundException {
     UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document( EMAIL, email).append(TOKEN_LIST_FIELD, new ArrayList())));
 
     if (updateResult.getMatchedCount() == 0) {
@@ -237,7 +237,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public String getEmailByParticipant(ObjectId id) throws DataNotFoundException {
+  public String getEmail(ObjectId id) throws DataNotFoundException {
     Document participantFound = this.collection.find(eq(ID, id)).first();
     if (participantFound == null) {
       throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
@@ -247,7 +247,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public Boolean removeEmailByParticipant(ObjectId id) throws DataNotFoundException {
+  public Boolean deleteEmail(ObjectId id) throws DataNotFoundException {
     UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, EMPTY).append(TOKEN_LIST_FIELD, new ArrayList())));
 
     if (updateResult.getMatchedCount() == 0) {

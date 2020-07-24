@@ -246,4 +246,12 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public void updateParticipantEmail(long rn, String email){
+    try {
+      activityService.updateParticipantEmail(rn, email);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 }

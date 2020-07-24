@@ -165,20 +165,20 @@ public class ParticipantServiceBeanTest {
   }
 
   @Test
-  public void editEmail_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
-    participantServiceBean.editEmail(objectId,EMAIL);
-    verify(participantDao, times(1)).editEmail(objectId, EMAIL);
+  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+    participantServiceBean.updateEmail(objectId,EMAIL);
+    verify(participantDao, times(1)).updateEmail(objectId, EMAIL);
   }
 
   @Test
-  public void removeEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
-    participantServiceBean.removeEmailByParticipant(objectId);
-    verify(participantDao, times(1)).removeEmailByParticipant(objectId);
+  public void deleteEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+    participantServiceBean.deleteEmail(objectId);
+    verify(participantDao, times(1)).deleteEmail(objectId);
   }
 
   @Test
-  public void getEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
-    participantServiceBean.getEmailByParticipant(ID);
-    verify(participantDao, times(1)).getEmailByParticipant(objectId);
+  public void getEmail_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+    participantServiceBean.getEmail(ID);
+    verify(participantDao, times(1)).getEmail(objectId);
   }
 }

@@ -5,6 +5,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.security.services.SecurityService;
+import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.user.dto.PasswordResetDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -129,42 +130,44 @@ public class ParticipantFacadeTest {
   }
 
   @Test
-  public void editEmail_method_should_evoke_call_methods() throws DataNotFoundException {
-    when(participantService.editEmail(objectId,EMAIL)).thenReturn(true);
-    assertEquals(true,  participantFacade.editEmail(ID, EMAIL));
-    verify(participantService, times(1)).editEmail(objectId, EMAIL);
+  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+    when(participantService.updateEmail(objectId,EMAIL)).thenReturn(true);
+    when(participantService.getParticipant(objectId)).thenReturn(participant);
+    assertEquals(true,  participantFacade.updateEmail(ID, EMAIL));
+    verify(participantService, times(1)).updateEmail(objectId, EMAIL);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void editEmail_method_should_catch_Exception() throws Exception {
-    Mockito.doThrow(dataNotFoundException).when(participantService).editEmail(objectId, EMAIL);
-    participantFacade.editEmail(ID,EMAIL);
+  public void updateEmail_method_should_catch_Exception() throws Exception {
+    Mockito.doThrow(dataNotFoundException).when(participantService).updateEmail(objectId, EMAIL);
+    participantFacade.updateEmail(ID,EMAIL);
   }
 
   @Test
-  public void removeEmailByParticipant_method_should_evoke_call_methods() throws DataNotFoundException {
-    when(participantService.removeEmailByParticipant(objectId)).thenReturn(true);
-    assertEquals(true,  participantFacade.removeEmailByParticipant(ID));
-    verify(participantService, times(1)).removeEmailByParticipant(objectId);
+  public void deleteEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+    when(participantService.deleteEmail(objectId)).thenReturn(true);
+    when(participantService.getParticipant(objectId)).thenReturn(participant);
+    assertEquals(true,  participantFacade.deleteEmail(ID));
+    verify(participantService, times(1)).deleteEmail(objectId);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void removeEmailByParticipant_method_should_catch_Exception() throws Exception {
-    Mockito.doThrow(dataNotFoundException).when(participantService).removeEmailByParticipant(objectId);
-    participantFacade.removeEmailByParticipant(ID);
+  public void deleteEmail_method_should_catch_Exception() throws Exception {
+    Mockito.doThrow(dataNotFoundException).when(participantService).deleteEmail(objectId);
+    participantFacade.deleteEmail(ID);
   }
 
   @Test
-  public void getEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
-    when(participantService.getEmailByParticipant(ID)).thenReturn(EMAIL);
-    assertEquals(EMAIL,  participantFacade.getEmailByParticipant(ID));
-    verify(participantService, times(1)).getEmailByParticipant(ID);
+  public void getEmail_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+    when(participantService.getEmail(ID)).thenReturn(EMAIL);
+    assertEquals(EMAIL,  participantFacade.getEmail(ID));
+    verify(participantService, times(1)).getEmail(ID);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void getEmailByParticipant_method_should_catch_Exception() throws Exception {
-    Mockito.doThrow(validationException).when(participantService).getEmailByParticipant(ID);
-    participantFacade.getEmailByParticipant(ID);
+  public void getEmail_method_should_catch_Exception() throws Exception {
+    Mockito.doThrow(validationException).when(participantService).getEmail(ID);
+    participantFacade.getEmail(ID);
   }
 
 }
