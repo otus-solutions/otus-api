@@ -182,4 +182,9 @@ public class ActivityServiceBean implements ActivityService {
     offlineActivityDao.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
   }
 
+  @Override
+  public boolean updateParticipantEmail(long rn, String email) throws DataNotFoundException {
+    return activityDao.updateParticipantEmail(rn, email);
+  }
+
 }

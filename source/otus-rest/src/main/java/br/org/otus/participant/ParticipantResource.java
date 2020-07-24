@@ -99,8 +99,8 @@ public class ParticipantResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String editEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId, @PathParam("email") String email){
-    return new Response().buildSuccess(participantFacade.editEmail(participantId, email)).toJson();
+  public String updateEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId, @PathParam("email") String email){
+    return new Response().buildSuccess(participantFacade.updateEmail(participantId, email)).toJson();
   }
 
   @PUT
@@ -108,8 +108,8 @@ public class ParticipantResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String removeEmailByParticipant(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
-    return new Response().buildSuccess(participantFacade.removeEmailByParticipant(participantId)).toJson();
+  public String deleteEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.deleteEmail(participantId)).toJson();
   }
 
   @GET
@@ -117,7 +117,7 @@ public class ParticipantResource {
   @Secured
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getEmailByParticipant(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
-    return new Response().buildSuccess(participantFacade.getEmailByParticipant(participantId)).toJson();
+  public String getEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.getEmail(participantId)).toJson();
   }
 }
