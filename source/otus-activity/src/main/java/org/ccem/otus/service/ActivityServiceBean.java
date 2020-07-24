@@ -183,7 +183,8 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public void updateParticipantEmail(long rn, String email) throws DataNotFoundException {
-    activityDao.updateParticipantEmail(rn, email);
+  public boolean updateParticipantEmail(long rn, String email) throws DataNotFoundException {
+    return activityDao.updateParticipantEmail(rn, email);
   }
+
 }
