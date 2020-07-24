@@ -122,13 +122,9 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
-  public Boolean editEmail(String participantId, String email) throws ValidationException, DataNotFoundException {
-    if(!ObjectId.isValid(participantId)) {
-      throw new ValidationException(new Throwable("ObjectId is not valid"));
-    }
-    ObjectId id = new ObjectId(participantId);
+  public Boolean editEmail(ObjectId participantId, String email) throws DataNotFoundException {
 
-    return participantDao.editEmail(id, email);
+    return participantDao.editEmail(participantId, email);
   }
 
   @Override
@@ -142,12 +138,8 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
-  public Boolean removeEmailByParticipant(String participantId) throws ValidationException, DataNotFoundException {
-     if(!ObjectId.isValid(participantId)) {
-      throw new ValidationException(new Throwable("ObjectId is not valid"));
-    }
-    ObjectId id = new ObjectId(participantId);
+  public Boolean removeEmailByParticipant(ObjectId participantId) throws DataNotFoundException {
 
-    return participantDao.removeEmailByParticipant(id);
+    return participantDao.removeEmailByParticipant(participantId);
   }
 }

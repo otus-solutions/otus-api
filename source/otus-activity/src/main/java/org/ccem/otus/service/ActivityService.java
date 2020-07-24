@@ -6,6 +6,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import java.util.HashMap;
@@ -41,4 +42,6 @@ public interface ActivityService {
   OfflineActivityCollection fetchOfflineActivityCollection(String collectionId) throws DataNotFoundException;
 
   void deactivateOfflineActivityCollection(String offlineCollectionId, List<ObjectId> createdActivityIds);
+
+    void updateEmailByParticipant(Participant participant);
 }

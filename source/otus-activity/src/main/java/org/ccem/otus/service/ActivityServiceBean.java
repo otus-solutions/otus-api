@@ -18,6 +18,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.ActivityExtractionDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
@@ -182,4 +183,8 @@ public class ActivityServiceBean implements ActivityService {
     offlineActivityDao.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
   }
 
+  @Override
+  public void updateEmailByParticipant(Participant participant) {
+    activityDao.updateEmailByParticipant(participant);
+  }
 }

@@ -166,13 +166,13 @@ public class ParticipantServiceBeanTest {
 
   @Test
   public void editEmail_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
-    participantServiceBean.editEmail(ID,EMAIL);
+    participantServiceBean.editEmail(objectId,EMAIL);
     verify(participantDao, times(1)).editEmail(objectId, EMAIL);
   }
 
   @Test
   public void removeEmailByParticipant_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
-    participantServiceBean.removeEmailByParticipant(ID);
+    participantServiceBean.removeEmailByParticipant(objectId);
     verify(participantDao, times(1)).removeEmailByParticipant(objectId);
   }
 

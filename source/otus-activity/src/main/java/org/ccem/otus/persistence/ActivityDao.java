@@ -10,6 +10,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.participant.model.Participant;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface ActivityDao {
   SurveyActivity findByID(String id) throws DataNotFoundException;
 
   List<SurveyActivity> getUndiscarded(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
-  
+
   List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException;
 
   SurveyActivity getLastFinalizedActivity(String acronym, Integer version, String categoryName, Long recruitmentNumber) throws DataNotFoundException;
@@ -36,4 +37,6 @@ public interface ActivityDao {
   AggregateIterable<Document> aggregate(List<Bson> query);
 
   boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException;
+
+  void updateEmailByParticipant(Participant participant);
 }

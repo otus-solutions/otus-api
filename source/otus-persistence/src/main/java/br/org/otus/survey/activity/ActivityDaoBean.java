@@ -15,6 +15,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
@@ -37,7 +38,7 @@ import br.org.mongodb.MongoGenericDao;
 public class ActivityDaoBean extends MongoGenericDao<Document> implements ActivityDao {
 
     public static final String COLLECTION_NAME = "activity";
-    
+
     public static final String ACRONYM_PATH = "surveyForm.acronym";
     public static final String VERSION_PATH = "surveyForm.version";
     public static final String DISCARDED_PATH = "isDiscarded";
@@ -49,6 +50,8 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public static final String ID_PATH = "_id";
     public static final String STATUS_HISTORY_NAME = "statusHistory.name";
     public static final String FINALIZED = "FINALIZED";
+    private static final String SET = "$set";
+    private static final String PARTICIPANT_DATA = "participantData";
 
     public ActivityDaoBean() {
         super(COLLECTION_NAME, Document.class);
@@ -93,7 +96,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     public SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException {
         Document parsed = Document.parse(SurveyActivity.serialize(surveyActivity));
         removeOids(parsed);
-        UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()), new Document("$set", parsed), new UpdateOptions().upsert(false));
+        UpdateResult updateOne = collection.updateOne(eq("_id", surveyActivity.getActivityID()), new Document(SET, parsed), new UpdateOptions().upsert(false));
 
         if (updateOne.getMatchedCount() == 0) {
             throw new DataNotFoundException(new Throwable("OID {" + surveyActivity.getActivityID().toString() + "} not found."));
@@ -151,21 +154,21 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
         return activities;
     }
-    
+
     public List<SurveyActivity> getExtraction(String acronym, Integer version) throws DataNotFoundException, MemoryExcededException {
       List<Bson> pipeline = new ArrayList<>();
-      pipeline.add(ParseQuery.toDocument("{\n" + 
-          "    '$match': {\n" + 
-          "      \"surveyForm.acronym\":" + acronym + ", \n" + 
-          "      \"surveyForm.version\":" + version + ", \n" + 
-          "      \"isDiscarded\": false\n" + 
-          "    }\n" + 
+      pipeline.add(ParseQuery.toDocument("{\n" +
+          "    '$match': {\n" +
+          "      \"surveyForm.acronym\":" + acronym + ", \n" +
+          "      \"surveyForm.version\":" + version + ", \n" +
+          "      \"isDiscarded\": false\n" +
+          "    }\n" +
           "  }"));
       AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
       if (results == null) {
         throw new DataNotFoundException("There are no results");
       }
-      
+
       MongoCursor<Document> iterator = results.iterator();
       ArrayList<SurveyActivity> activities = new ArrayList<>();
       while (iterator.hasNext()) {
@@ -177,11 +180,11 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
           throw new MemoryExcededException("Extraction {" + acronym + "} exceded memory used.");
         }
       }
-      
+
       if (activities.isEmpty()) {
         throw new DataNotFoundException(new Throwable("OID {" + acronym + "} not found."));
       }
-      
+
       return activities;
     }
 
@@ -230,7 +233,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         Document query = new Document();
         query.put("category.name", activityCategory.getName());
 
-        UpdateResult updateResult = collection.updateOne(query, new Document("$set", new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())), new UpdateOptions().upsert(false));
+        UpdateResult updateResult = collection.updateOne(query, new Document(SET, new Document(CATEGORY_LABEL_PATH, activityCategory.getLabel())), new UpdateOptions().upsert(false));
     }
 
     @Override
@@ -243,7 +246,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         UpdateResult updateResult = collection.updateOne(
                 and(eq("_id", new ObjectId(checkerUpdatedDTO.getId())),
                         eq("statusHistory.name", checkerUpdatedDTO.getActivityStatus().getName())),
-                new Document("$set", new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date", dateUpdated)));
+                new Document(SET, new Document("statusHistory.$.user", checkerUpdate).append("statusHistory.$.date", dateUpdated)));
 
         if (updateResult.getMatchedCount() == 0) {
             throw new DataNotFoundException(new Throwable("Activity of Participant not found"));
@@ -285,6 +288,15 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
         pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
 
         return collection.aggregate(pipeline);
+    }
+
+    @Override
+    public void updateEmailByParticipant(Participant participant) {
+        Document query = new Document();
+        query.put(RECRUITMENT_NUMBER_PATH, participant.getRecruitmentNumber());
+        Document parsed = Document.parse(Participant.serialize(participant));
+
+        collection.updateMany(query, new Document(SET , new Document(PARTICIPANT_DATA, parsed)));
     }
 
     private void removeOids(Document parsedActivity) {

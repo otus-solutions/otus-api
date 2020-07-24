@@ -18,6 +18,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
+import org.ccem.otus.service.ActivityService;
 
 import javax.inject.Inject;
 import java.net.MalformedURLException;
@@ -37,6 +38,9 @@ public class ParticipantFacade {
 
   @Inject
   private ManagementParticipantService managementParticipantService;
+
+  @Inject
+  private ActivityService activityService;
 
   public Participant getByRecruitmentNumber(long rn) {
     try {
@@ -142,7 +146,19 @@ public class ParticipantFacade {
       if(!SystemInstallationEmail.isValid(email)) {
         throw new ValidationException(new Throwable("Malformed email"));
       }
-      return participantService.editEmail(participantId, email);
+
+      if(!ObjectId.isValid(participantId)) {
+        throw new ValidationException(new Throwable("ObjectId is not valid"));
+      }
+
+      ObjectId id = new ObjectId(participantId);
+      Boolean result = participantService.editEmail(id, email);
+
+      if(result){
+        activityService.updateEmailByParticipant(participantService.getId(id));
+      }
+
+      return result;
     } catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
@@ -158,7 +174,18 @@ public class ParticipantFacade {
 
   public Boolean removeEmailByParticipant(String participantId) {
     try {
-      return participantService.removeEmailByParticipant(participantId);
+      if(!ObjectId.isValid(participantId)) {
+        throw new ValidationException(new Throwable("ObjectId is not valid"));
+      }
+
+      ObjectId id = new ObjectId(participantId);
+      Boolean result = participantService.removeEmailByParticipant(id);
+
+      if(result){
+        activityService.updateEmailByParticipant(participantService.getId(id));
+      }
+
+      return result;
     } catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
