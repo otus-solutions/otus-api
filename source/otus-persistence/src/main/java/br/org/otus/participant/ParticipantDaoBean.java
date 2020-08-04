@@ -51,6 +51,10 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public void update(Participant participant) {
     Document parsed = Document.parse(Participant.serialize(participant));
+    parsed.remove(ID);
+    parsed.remove(RN);
+    parsed.remove(EMAIL);
+    parsed.remove(TOKEN_LIST_FIELD);
     this.collection.updateOne(new Document(RN, participant.getRecruitmentNumber()), new Document(SET, parsed));
   }
 
