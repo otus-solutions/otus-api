@@ -42,6 +42,6 @@ public interface ActivityService {
 
   void deactivateOfflineActivityCollection(String offlineCollectionId, List<ObjectId> createdActivityIds);
 
-  boolean updateParticipantEmail(long rn, String email) throws DataNotFoundException;
+  boolean updateParticipantEmail(long rn, String email);
 
 }

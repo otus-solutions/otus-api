@@ -290,12 +290,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   }
 
   @Override
-  public boolean updateParticipantEmail(long rn, String email) throws DataNotFoundException {
+  public boolean updateParticipantEmail(long rn, String email) {
 
     UpdateResult updateResult =collection.updateMany(new Document(RECRUITMENT_NUMBER_PATH, rn), new Document(SET , new Document(PARTICIPANT_DATA_EMAIL, email)));
-    if (updateResult.getMatchedCount() == 0) {
-      throw new DataNotFoundException(new Throwable("Participant no found"));
-    }
 
     return updateResult.getModifiedCount() != 0;
   }
