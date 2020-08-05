@@ -130,27 +130,22 @@ public class ActivityFacade {
       if (mode.equals("user")) {
         br.org.otus.model.User user = managementUserService.fetchByEmail(email);
         statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
-
-        List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
-        int size = statusHistory.size();
-        for (int i = size - 1; i != 0; i--) {
-          ActivityStatus activityStatus = statusHistory.get(i);
-          try {
-            activityStatus.getUser();
-            break;
-          } catch (UserNotFoundException e) {
-            activityStatus.setUser(statusHistoryUser);
-          }
-        }
-      } else {
+      }
+      else {
         Participant participant = participantService.getByEmail(email);
         statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
-        surveyActivity.setStatusHistory(surveyActivity.getStatusHistory().stream().map(activityStatus -> {
-          activityStatus.setUser(statusHistoryUser);
-          return activityStatus;
-        }).collect(Collectors.toList()));
+      }
 
-        surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
+      List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
+      int size = statusHistory.size();
+      for (int i = size - 1; i != 0; i--) {
+        ActivityStatus activityStatus = statusHistory.get(i);
+        try {
+          activityStatus.getUser();
+          break;
+        } catch (UserNotFoundException e) {
+          activityStatus.setUser(statusHistoryUser);
+        }
       }
 
       return activityService.update(surveyActivity);
