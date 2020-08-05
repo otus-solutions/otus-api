@@ -73,13 +73,13 @@ public class ParticipantServiceBean implements ParticipantService {
 
   @Override
   public Participant update(Participant participant) throws ValidationException, DataNotFoundException {
-      if (participantDao.exists(participant.getRecruitmentNumber())) {
-        participantDao.update(participant);
-      } else {
-        String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} not exists.";
-        throw new ValidationException(new Throwable(error));
-      }
-      return participant;
+    if (participantDao.exists(participant.getRecruitmentNumber())) {
+      participantDao.update(participant);
+    } else {
+      String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} not exists.";
+      throw new ValidationException(new Throwable(error));
+    }
+    return participant;
   }
 
   @Override
@@ -114,6 +114,11 @@ public class ParticipantServiceBean implements ParticipantService {
   @Override
   public String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
     return participantDao.getParticipantFieldCenterByRecruitmentNumber(recruitmentNumber);
+  }
+
+  @Override
+  public Participant getId(ObjectId id) throws DataNotFoundException {
+    return  participantDao.getId(id);
   }
 
 }

@@ -17,11 +17,11 @@ public class ExamResult {
   private ObjectId _id;
 
   private String objectType;
-  private String aliquotCode;
+  private String code;
   private String examName;
   private String resultName;
   private String value;
-  private Boolean aliquotValid;
+  private Boolean isValid;
   private String releaseDate;
   private List<Observation> observations;
 
@@ -42,13 +42,13 @@ public class ExamResult {
     this.fieldCenter = fieldCenter;
   }
 
-  public String getAliquotCode() {
-    return aliquotCode;
+  public String getCode() {
+    return code;
   }
 
   //used for unit testing
-  public void setAliquotCode(String aliquotCode) {
-    this.aliquotCode = aliquotCode;
+  public void setCode(String code) {
+    this.code = code;
   }
 
   public Long getRecruitmentNumber() {
@@ -71,8 +71,8 @@ public class ExamResult {
     this.birthdate = birthdate;
   }
 
-  public void setAliquotValid(boolean aliquotValid) {
-    this.aliquotValid = aliquotValid;
+  public void setIsValid(boolean isValid) {
+    this.isValid = isValid;
   }
 
   public static String serialize(ExamResult examResult) {

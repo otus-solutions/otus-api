@@ -4,11 +4,9 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 
-import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.exam.utils.ExamResultTube;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -27,6 +25,7 @@ import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ParseQuery;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
@@ -174,6 +173,46 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     }
 
     return tubes;
+  }
+
+  @Override
+  public HashMap<String, ExamResultTube> getTubesParticipantData(List<String> tubeCodes) {
+    HashMap<String, ExamResultTube> hmap = new HashMap<>();
+    MongoCursor<Document> cursor = collection.aggregate(Arrays.asList(
+      new Document("$match",new Document("tubes.code",new Document("$in",tubeCodes))),
+      ParseQuery.toDocument("{\n" +
+        "        $lookup: {\n" +
+        "            from:\"participant\",\n" +
+        "            localField:\"recruitmentNumber\",\n" +
+        "            foreignField:\"recruitmentNumber\",\n" +
+        "            as:\"participantData\"\n" +
+        "        }\n" +
+        "    }"),
+      ParseQuery.toDocument("{\n" +
+        "        $unwind: \"$tubes\"\n" +
+        "    }"),
+      new Document("$match",new Document("tubes.code",new Document("$in",tubeCodes))),
+      ParseQuery.toDocument("{\n" +
+        "        $project:{\n" +
+        "            tubeCode: \"$tubes.code\",\n" +
+        "            recruitmentNumber: \"$recruitmentNumber\",\n" +
+        "            isCollected: \"$tubes.tubeCollectionData.isCollected\",\n" +
+        "            name: \"$tubes.type\",\n" +
+        "            participantData: {$arrayElemAt:[\"$participantData\",0]}\n" +
+        "        }\n" +
+        "    }")
+    )).iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        ExamResultTube examResultTube = ExamResultTube.deserialize(cursor.next().toJson());
+        hmap.putIfAbsent(examResultTube.getTubeCode(), examResultTube);
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return hmap;
   }
 
 }

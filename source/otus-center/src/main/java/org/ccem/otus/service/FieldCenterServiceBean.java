@@ -40,4 +40,9 @@ public class FieldCenterServiceBean implements FieldCenterService {
   public List<FieldCenter> list() {
     return fieldCenterDao.find();
   }
+
+  @Override
+  public FieldCenter fetchByAcronym(String acronym) {
+    return fieldCenterDao.fetchByAcronym(acronym);
+  }
 }

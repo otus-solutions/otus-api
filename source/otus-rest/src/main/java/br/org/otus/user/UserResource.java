@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import br.org.otus.model.User;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.user.dto.PasswordResetDto;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
