@@ -36,7 +36,10 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   private static final String NAME = "name";
   private static final String SEX = "sex";
   private static final String FIELD_CENTER_ACRONYM = "fieldCenter.acronym";
+  private static final String FIELD_CENTER_CODE = "fieldCenter.code";
   private static final String BIRTHDATE_VALUE = "birthdate.value";
+  private static final String LATE = "late";
+  private static final String IDENTIFIED = "identified";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -55,7 +58,9 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public void update(Participant participant) {
     this.collection.updateOne(new Document(RN, participant.getRecruitmentNumber()), new Document(SET, new Document(NAME, participant.getName())
-      .append(SEX, participant.getSex().toString()).append(FIELD_CENTER_ACRONYM, participant.getFieldCenter().getAcronym()).append(BIRTHDATE_VALUE, participant.getBirthdate().getFormattedValue())));
+      .append(SEX, participant.getSex().toString()).append(FIELD_CENTER_ACRONYM, participant.getFieldCenter().getAcronym())
+      .append(FIELD_CENTER_CODE, participant.getFieldCenter().getCode()).append(BIRTHDATE_VALUE, participant.getBirthdate().getFormattedValue())
+      .append(LATE, participant.getLate()).append(IDENTIFIED, participant.isIdentified())));
   }
 
   @Override
