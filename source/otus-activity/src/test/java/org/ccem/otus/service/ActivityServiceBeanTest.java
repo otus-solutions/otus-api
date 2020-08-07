@@ -18,6 +18,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.persistence.ActivityDao;
 import org.ccem.otus.persistence.ActivityExtractionDao;
 import org.ccem.otus.persistence.ActivityProgressExtractionDao;
@@ -46,6 +47,7 @@ public class ActivityServiceBeanTest {
   private static final String ACRONYM = "ACTA";
   private static final String CATEGORY_NAME = "C0";
   private static final String CENTER = "RS";
+  private static final String EMAIL= "email@email.com";
   private ActivityAccessPermission permission;
   private List<SurveyActivity> surveyActivities;
 
@@ -74,6 +76,8 @@ public class ActivityServiceBeanTest {
   private ActivityProgressExtractionDao activityProgressExtractionDao;
   @Mock
   private ActivityExtractionDao activityExtractionDao;
+  @Mock
+  private Participant participant;
 
   @Before
   public void setup() {
@@ -166,5 +170,11 @@ public class ActivityServiceBeanTest {
   public void getParticipantFieldCenterByActivity_method_should_call_getParticipantFieldCenter_of_service() throws DataNotFoundException {
     service.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
     verify(activityExtractionDao, times(1)).getParticipantFieldCenter(ACRONYM, VERSION);
+  }
+
+  @Test
+  public void updateParticipantEmail_method_should_call_updateEmailByParticipant_of_service() throws DataNotFoundException {
+    service.updateParticipantEmail(RECRUIMENT_NUMBER, EMAIL);
+    verify(activityDao, times(1)).updateParticipantEmail(RECRUIMENT_NUMBER, EMAIL);
   }
 }

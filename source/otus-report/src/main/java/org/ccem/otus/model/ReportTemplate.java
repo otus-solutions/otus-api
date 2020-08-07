@@ -3,6 +3,7 @@ package org.ccem.otus.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.dataSources.ReportDataSource;
@@ -24,6 +25,7 @@ public class ReportTemplate {
   private LocalDateTime sendingDate;
   private ArrayList<String> fieldCenter;
   private ArrayList<ReportDataSource> dataSources;
+  private Boolean isInApp;
 
   public static String serialize(ReportTemplate reportTemplate) {
     return ReportTemplate.getGsonBuilder().create().toJson(reportTemplate);
@@ -74,6 +76,14 @@ public class ReportTemplate {
     return _id;
   }
 
+  public Boolean getIsInApp(){
+    return isInApp;
+  }
+
+  public void setIsInApp(Boolean inApp){
+    this.isInApp = inApp;
+  }
+
   public void setSender(String sender) {
     this.sender = sender;
   }
@@ -81,6 +91,8 @@ public class ReportTemplate {
   public void setId(ObjectId id) {
     this._id = id;
   }
+
+
 
   private static void validate(ReportTemplate reportTemplate) throws ValidationException {
     String result = "";

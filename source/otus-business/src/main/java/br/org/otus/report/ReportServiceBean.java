@@ -127,6 +127,11 @@ public class ReportServiceBean implements ReportService {
     String field = participant.getFieldCenter().getAcronym();
     return reportDao.getByCenter(field);
   }
+  public List<ReportTemplateDTO> getReportByParticipantPaginated(Long recruitmentNumber, int page) throws DataNotFoundException, ValidationException {
+    Participant participant = participantService.getByRecruitmentNumber(recruitmentNumber);
+    String field = participant.getFieldCenter().getAcronym();
+    return reportDao.getByCenterPaginated(field, page);
+  }
 
   @Override
   public ReportTemplate create(ReportTemplate reportTemplate) {

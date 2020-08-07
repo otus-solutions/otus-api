@@ -48,6 +48,12 @@ public interface ParticipantDao {
 
   void registerPassword(String email, String password) throws DataNotFoundException;
 
-  Participant getId(ObjectId id) throws DataNotFoundException;
+  Participant getParticpant(ObjectId id) throws DataNotFoundException;
+
+  Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException;
+
+  String getEmail(ObjectId id) throws DataNotFoundException;
+
+  Boolean deleteEmail(ObjectId id) throws DataNotFoundException;
 }
 

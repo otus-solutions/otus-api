@@ -11,7 +11,6 @@ import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -192,7 +191,7 @@ public class MessageCommunicationFacade {
   private Object findById(String id) throws DataNotFoundException {
     ObjectId objectId = new ObjectId(id);
     try {
-      return participantService.getId(objectId);
+      return participantService.getParticipant(objectId);
     } catch (DataNotFoundException e) {
       return managementUserService.getById(objectId);
     }
