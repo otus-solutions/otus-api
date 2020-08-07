@@ -49,4 +49,9 @@ public class SystemInstallationEmail extends Email implements OtusEmail {
     dataMap = new HashMap<String, String>();
   }
 
+  public static boolean isValid(String email) {
+    String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+    return email.matches(regex);
+  }
+
 }

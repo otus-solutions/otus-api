@@ -32,6 +32,14 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   private static final String SET = "$set";
   private static final String PASSWORD = "password";
   private static final String ID = "_id";
+  private static final String EMPTY = "";
+  private static final String NAME = "name";
+  private static final String SEX = "sex";
+  private static final String FIELD_CENTER_ACRONYM = "fieldCenter.acronym";
+  private static final String FIELD_CENTER_CODE = "fieldCenter.code";
+  private static final String BIRTHDATE_VALUE = "birthdate.value";
+  private static final String LATE = "late";
+  private static final String IDENTIFIED = "identified";
 
   @Inject
   private FieldCenterDao fieldCenterDao;
@@ -49,8 +57,10 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public void update(Participant participant) {
-    Document parsed = Document.parse(Participant.serialize(participant));
-    this.collection.updateOne(new Document(RN, participant.getRecruitmentNumber()), new Document(SET, parsed));
+    this.collection.updateOne(new Document(RN, participant.getRecruitmentNumber()), new Document(SET, new Document(NAME, participant.getName())
+      .append(SEX, participant.getSex().toString()).append(FIELD_CENTER_ACRONYM, participant.getFieldCenter().getAcronym())
+      .append(FIELD_CENTER_CODE, participant.getFieldCenter().getCode()).append(BIRTHDATE_VALUE, participant.getBirthdate().getFormattedValue())
+      .append(LATE, participant.getLate()).append(IDENTIFIED, participant.isIdentified())));
   }
 
   @Override
@@ -65,7 +75,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public boolean exists(Long rn) {
-    Document result = this.collection.find(eq("recruitmentNumber", rn)).first();
+    Document result = this.collection.find(eq(RN, rn)).first();
     return result == null ? false : true;
   }
 
@@ -90,7 +100,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public ArrayList<Long> getRecruitmentNumbersByFieldCenter(String center) throws DataNotFoundException {
     Document query = new Document("fieldCenter.acronym", center);
-    MongoCursor<Long> cursor = collection.distinct("recruitmentNumber", query, Long.class).iterator();
+    MongoCursor<Long> cursor = collection.distinct(RN, query, Long.class).iterator();
 
     ArrayList<Long> rns = new ArrayList<Long>();
 
@@ -136,7 +146,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public Participant getId(ObjectId id) throws DataNotFoundException {
+  public Participant getParticpant(ObjectId id) throws DataNotFoundException {
     Document participantFound = this.collection.find(eq(ID, id)).first();
     if (participantFound == null) {
       throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
@@ -199,13 +209,13 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public ObjectId findIdByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
-    return result.getObjectId("_id");
+    Document result = this.collection.find(eq(RN, recruitmentNumber)).first();
+    return result.getObjectId(ID);
   }
 
   @Override
   public String getParticipantFieldCenterByRecruitmentNumber(Long recruitmentNumber) throws DataNotFoundException {
-    Document result = this.collection.find(eq("recruitmentNumber", recruitmentNumber)).first();
+    Document result = this.collection.find(eq(RN, recruitmentNumber)).first();
     if (result == null) {
       throw new DataNotFoundException(new Throwable("Participant with recruitment number {" + recruitmentNumber + "} not found."));
     }
@@ -224,4 +234,35 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     return collection.count(query);
   }
 
+  @Override
+  public Boolean updateEmail(ObjectId id, String email) throws DataNotFoundException {
+    UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document( EMAIL, email).append(TOKEN_LIST_FIELD, new ArrayList())));
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("Participant no found"));
+    }
+
+    return updateResult.getModifiedCount() != 0;
+  }
+
+  @Override
+  public String getEmail(ObjectId id) throws DataNotFoundException {
+    Document participantFound = this.collection.find(eq(ID, id)).first();
+    if (participantFound == null) {
+      throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
+    }
+
+    return Participant.deserialize(participantFound.toJson()).getEmail();
+  }
+
+  @Override
+  public Boolean deleteEmail(ObjectId id) throws DataNotFoundException {
+    UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, EMPTY).append(TOKEN_LIST_FIELD, new ArrayList())));
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException(new Throwable("Participant no found"));
+    }
+
+    return updateResult.getModifiedCount() != 0;
+  }
 }

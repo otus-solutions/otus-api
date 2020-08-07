@@ -1,5 +1,7 @@
 package br.org.otus.survey.activity.api;
 
+import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -26,6 +28,7 @@ import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import javax.inject.Inject;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,11 +107,15 @@ public class ActivityFacade {
     return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
   }
 
-  public SurveyActivity updateActivity(SurveyActivity surveyActivity) {
+  public SurveyActivity updateActivity(SurveyActivity surveyActivity) throws HttpResponseException {
+
     try {
+      if (surveyActivity.getMode().name().equals("AUTOFILL")) {
+        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+      }
       return activityService.update(surveyActivity);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (ReadRequestException | MalformedURLException | RequestException | DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
@@ -123,31 +130,28 @@ public class ActivityFacade {
       if (mode.equals("user")) {
         br.org.otus.model.User user = managementUserService.fetchByEmail(email);
         statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
-
-        List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
-        int size = statusHistory.size();
-        for (int i = size - 1; i != 0; i--) {
-          ActivityStatus activityStatus = statusHistory.get(i);
-          try {
-            activityStatus.getUser();
-            break;
-          } catch (UserNotFoundException e) {
-            activityStatus.setUser(statusHistoryUser);
-          }
-        }
-      } else {
+      }
+      else {
         Participant participant = participantService.getByEmail(email);
         statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
-        surveyActivity.setStatusHistory(surveyActivity.getStatusHistory().stream().map(activityStatus -> {
-          activityStatus.setUser(statusHistoryUser);
-          return activityStatus;
-        }).collect(Collectors.toList()));
-
-        surveyActivity.getStatusHistory().forEach(activityStatus -> activityStatus.setUser(statusHistoryUser));
       }
+
+      List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
+      int size = statusHistory.size();
+      for (int i = size - 1; i != 0; i--) {
+        ActivityStatus activityStatus = statusHistory.get(i);
+        try {
+          activityStatus.getUser();
+          break;
+        } catch (UserNotFoundException e) {
+          activityStatus.setUser(statusHistoryUser);
+        }
+      }
+
       return activityService.update(surveyActivity);
+
     } catch (DataNotFoundException | ParseException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 

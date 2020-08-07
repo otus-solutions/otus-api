@@ -1,12 +1,11 @@
 package br.org.otus.survey.activity.api;
 
+import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.model.User;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.Gson;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -16,7 +15,6 @@ import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,6 +23,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +47,6 @@ public class ActivityFacadeTest {
   private static final boolean NOTIFY = false;
 
   @Mock
-  private SurveyActivity surveyActivityInvalid;
-  @Mock
   private ActivityService activityService;
   @InjectMocks
   ActivityFacade activityFacade;
@@ -59,14 +56,15 @@ public class ActivityFacadeTest {
   private SurveyActivity surveyActivity;
   @Mock
   private ManagementUserService managementUserService;
-  @Mock
-  private SurveyService surveyService;
-
   private SurveyActivity surveyActivityFull;
+  private SurveyActivity autofillSurveyActivity;
+
 
   @Before
   public void setUp() {
     surveyActivityFull = new Gson().fromJson(JSON, SurveyActivity.class);
+    autofillSurveyActivity = SurveyActivity.deserialize(
+      "{\"_id\":\"5f1844d60d7b3e017612f47d\",\"mode\":\"AUTOFILL\"}");
   }
 
   @Test
@@ -114,33 +112,45 @@ public class ActivityFacadeTest {
     activityFacade.create(surveyActivity, NOTIFY);
   }
 
-@Test
-public void method_updateActivity_should_update_the_last_status_user_when_mode_is_user() throws Exception {
-  String statusHistory = "[{\"objectType\":\"ActivityStatus\",\"name\":\"CREATED\",\"date\":\"2017-04-12T10:35:11.971Z\",\"user\":{\"name\":\"Fulano\",\"surname\":\"Detal\",\"phone\":\"5199999999\",\"email\":\"fulano@yahoo.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"OPENED\",\"date\":\"2017-04-12T11:16:08.584Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"Aparecida\",\"phone\":\"5199999999\",\"email\":\"maria@gmail.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_ONLINE\",\"date\":\"2017-04-12T11:16:59.154Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"da Graça\",\"phone\":\"5199999999\",\"email\":\"dagraca@gmail.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"FINALIZED\",\"date\":\"2017-04-12T11:28:05.250Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"Aparecida\",\"phone\":\"5199999999\",\"email\":\"maria@gmail.com\"}}]";
-  SurveyActivity act = SurveyActivity.deserialize("{\"statusHistory\":" + statusHistory + "}");
-  br.org.otus.model.User user = new User();
-  user.setEmail(USER_EMAIL);
-  act.getStatusHistory().get(2).setUser(null);
-  act.getStatusHistory().get(3).setUser(null);
-  when(managementUserService.fetchByEmail(USER_EMAIL)).thenReturn(user);
+  @Test
+  public void updateActivityMethod_without_tokenParameter_should_evoke_cancelParticipantEventByActivityId_by_followUpFacade_if_mode_equals_AUTOFILL() throws MalformedURLException, DataNotFoundException {
+    activityFacade.updateActivity(autofillSurveyActivity);
+    verify(followUpFacade, times(1))
+      .cancelParticipantEventByActivityId(autofillSurveyActivity.getActivityID().toString());
+    verify(activityService, times(1)).update(autofillSurveyActivity);
+  }
 
-  SignedJWT signedJWT = spy(SignedJWT.parse(TOKEN));
-  mockStatic(SignedJWT.class);
+  @Test(expected = HttpResponseException.class)
+  public void updateActivityMethod_without_tokenParameter_should_throw_HttpResponseException_when_catch_internalException() throws Exception {
+    when(followUpFacade.cancelParticipantEventByActivityId(autofillSurveyActivity.getActivityID().toString()))
+      .thenThrow(new ReadRequestException());
+   activityFacade.updateActivity(autofillSurveyActivity);
+  }
 
-  JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
-  PowerMockito.when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
+  @Test
+  public void method_updateActivity_should_update_the_last_status_user_when_mode_is_user() throws Exception {
+    String statusHistory = "[{\"objectType\":\"ActivityStatus\",\"name\":\"CREATED\",\"date\":\"2017-04-12T10:35:11.971Z\",\"user\":{\"name\":\"Fulano\",\"surname\":\"Detal\",\"phone\":\"5199999999\",\"email\":\"fulano@yahoo.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"OPENED\",\"date\":\"2017-04-12T11:16:08.584Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"Aparecida\",\"phone\":\"5199999999\",\"email\":\"maria@gmail.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_ONLINE\",\"date\":\"2017-04-12T11:16:59.154Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"da Graça\",\"phone\":\"5199999999\",\"email\":\"dagraca@gmail.com\"}},{\"objectType\":\"ActivityStatus\",\"name\":\"FINALIZED\",\"date\":\"2017-04-12T11:28:05.250Z\",\"user\":{\"name\":\"Maria\",\"surname\":\"Aparecida\",\"phone\":\"5199999999\",\"email\":\"maria@gmail.com\"}}]";
+    SurveyActivity act = SurveyActivity.deserialize("{\"statusHistory\":" + statusHistory + "}");
+    br.org.otus.model.User user = new User();
+    user.setEmail(USER_EMAIL);
+    act.getStatusHistory().get(2).setUser(null);
+    act.getStatusHistory().get(3).setUser(null);
+    when(managementUserService.fetchByEmail(USER_EMAIL)).thenReturn(user);
 
-  activityFacade.updateActivity(act,TOKEN_BEARER);
-  Assert.assertNotEquals(act.getStatusHistory().get(1).getUser().getEmail(), USER_EMAIL);
-  Assert.assertEquals(act.getStatusHistory().get(2).getUser().getEmail(), USER_EMAIL);
-  Assert.assertEquals(act.getStatusHistory().get(3).getUser().getEmail(), USER_EMAIL);
+    SignedJWT signedJWT = spy(SignedJWT.parse(TOKEN));
+    mockStatic(SignedJWT.class);
+    PowerMockito.when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
 
-}
+    activityFacade.updateActivity(act, TOKEN_BEARER);
+    Assert.assertNotEquals(act.getStatusHistory().get(1).getUser().getEmail(), USER_EMAIL);
+    Assert.assertEquals(act.getStatusHistory().get(2).getUser().getEmail(), USER_EMAIL);
+    Assert.assertEquals(act.getStatusHistory().get(3).getUser().getEmail(), USER_EMAIL);
+  }
 
-  @Ignore
+
   @Test(expected = HttpResponseException.class)
   public void method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
-    when(activityService.update(surveyActivity)).thenThrow(new HttpResponseException(null));
+    when(activityService.update(surveyActivity)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateActivity(surveyActivity, TOKEN);
   }
 

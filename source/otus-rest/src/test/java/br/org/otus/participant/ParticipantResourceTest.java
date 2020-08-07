@@ -2,9 +2,7 @@ package br.org.otus.participant;
 
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyNew;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +54,8 @@ public class ParticipantResourceTest {
     + "    }\n" + "}";
   private static final String PARTICIPANT_INVALID = "{}";
   private static final Long RECRUITMENT_NUMBER = (long) 1063154;
+  private static final String ID = "58c83f502226685b94f8973a";
+
   @InjectMocks
   private ParticipantResource participantResource;
   @Mock
@@ -139,5 +139,23 @@ public class ParticipantResourceTest {
     PasswordResetRequestDto requestData = new PasswordResetRequestDto();
     participantResource.requestPasswordResetLink(requestData);
     verify(participantFacade, times(1)).requestPasswordResetLink(requestData);
+  }
+
+  @Test
+  public void updateEmail_method_should_evoke_call_methods() {
+    participantResource.updateEmail(request,ID,USER_MAIL);
+    verify(participantFacade, times(1)).updateEmail(ID,USER_MAIL);
+  }
+
+  @Test
+  public void deleteEmail_method_should_evoke_call_methods() {
+    participantResource.deleteEmail(request,ID);
+    verify(participantFacade, times(1)).deleteEmail(ID);
+  }
+
+  @Test
+  public void getEmail_method_should_evoke_call_methods() {
+    participantResource.getEmail(request,ID);
+    verify(participantFacade, times(1)).getEmail(ID);
   }
 }

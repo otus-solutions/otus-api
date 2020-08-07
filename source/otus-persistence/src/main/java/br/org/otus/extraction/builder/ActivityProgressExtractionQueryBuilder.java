@@ -303,8 +303,9 @@ public class ActivityProgressExtractionQueryBuilder {
     return pipeline;
   }
 
-  public List<Bson> getInapplicabilities() {
+  public List<Bson> getInapplicabilities(List<Long> rns) {
     List<Bson> pipeline = new ArrayList<>();
+    pipeline.add(new Document("$match",new Document("recruitmentNumber",new Document("$in",rns))));
     pipeline.add(ParseQuery.toDocument("{\n" +
       "    $group: {\n" +
       "      _id: {\n" +

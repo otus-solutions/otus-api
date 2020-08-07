@@ -1,5 +1,6 @@
 package org.ccem.otus.participant.service;
 
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -30,6 +31,8 @@ public class ParticipantServiceBeanTest {
   private static final String ACRONYM = "RS";
   private static final String EMAIL = "email@test.com";
   private static final String PASSWORD = "password";
+  private static final String ID = "58c83f502226685b94f8973a";
+
   @InjectMocks
   ParticipantServiceBean participantServiceBean;
   @Mock
@@ -42,6 +45,7 @@ public class ParticipantServiceBeanTest {
   private Participant participant;
   private FieldCenter fieldCenter;
   private ArrayList<Participant> listParticipants;
+  private ObjectId objectId;
 
   @Before
   public void setUp() {
@@ -57,6 +61,7 @@ public class ParticipantServiceBeanTest {
     listParticipants = new ArrayList<>();
     listParticipants.add(participant);
     listParticipants.add(participant);
+    objectId = new ObjectId(ID);
   }
 
   @Test
@@ -157,5 +162,23 @@ public class ParticipantServiceBeanTest {
   public void method_registerPassword_should_call_participantDao_registerPassword() throws DataNotFoundException {
     participantServiceBean.registerPassword(EMAIL, PASSWORD);
     verify(participantDao, times(1)).registerPassword(EMAIL, PASSWORD);
+  }
+
+  @Test
+  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+    participantServiceBean.updateEmail(objectId,EMAIL);
+    verify(participantDao, times(1)).updateEmail(objectId, EMAIL);
+  }
+
+  @Test
+  public void deleteEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+    participantServiceBean.deleteEmail(objectId);
+    verify(participantDao, times(1)).deleteEmail(objectId);
+  }
+
+  @Test
+  public void getEmail_method_should_evoke_call_methods() throws ValidationException, DataNotFoundException {
+    participantServiceBean.getEmail(ID);
+    verify(participantDao, times(1)).getEmail(objectId);
   }
 }

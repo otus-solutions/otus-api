@@ -5,6 +5,7 @@ import br.org.otus.communication.FollowUpCommunicationData;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
@@ -120,7 +121,7 @@ public class FollowUpFacade {
       GatewayResponse gatewayResponse = new OutcomeGatewayService().startParticipantEvent(participantId.toString(), eventJson);
 
       if (!gatewayResponse.getData().toString().isEmpty()) {
-        if(!(participantEventDTO.emailNotification == null)) {
+        if (!(participantEventDTO.emailNotification == null)) {
           this.notificationEvent(participantEventDTO, participant);
         }
       }
@@ -173,7 +174,6 @@ public class FollowUpFacade {
     System.err.println(notification.getData());
   }
 
-
   public Object cancelParticipantEvent(String eventId) {
     try {
       return new OutcomeGatewayService().cancelParticipantEvent(eventId);
@@ -216,4 +216,9 @@ public class FollowUpFacade {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     }
   }
+
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException{
+    return new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
+  }
 }
+

@@ -93,4 +93,31 @@ public class ParticipantResource {
   public String update(@Context HttpServletRequest request, String participantJson){
     return new Response().buildSuccess(participantFacade.update(participantJson)).toJson(Participant.getGsonBuilder());
   }
+
+  @PUT
+  @Path("/edit/{participantId}/{email}")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String updateEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId, @PathParam("email") String email){
+    return new Response().buildSuccess(participantFacade.updateEmail(participantId, email)).toJson();
+  }
+
+  @PUT
+  @Path("/remove/email/{participantId}")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String deleteEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.deleteEmail(participantId)).toJson();
+  }
+
+  @GET
+  @Path("/email/{participantId}")
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getEmail(@Context HttpServletRequest request, @PathParam("participantId") String participantId){
+    return new Response().buildSuccess(participantFacade.getEmail(participantId)).toJson();
+  }
 }

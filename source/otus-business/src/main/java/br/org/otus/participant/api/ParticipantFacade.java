@@ -1,5 +1,6 @@
 package br.org.otus.participant.api;
 
+import br.org.otus.email.system.SystemInstallationEmail;
 import br.org.otus.participant.management.ManagementParticipantService;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -17,6 +18,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
+import org.ccem.otus.service.ActivityService;
 
 import javax.inject.Inject;
 import java.net.MalformedURLException;
@@ -36,6 +38,9 @@ public class ParticipantFacade {
 
   @Inject
   private ManagementParticipantService managementParticipantService;
+
+  @Inject
+  private ActivityService activityService;
 
   public Participant getByRecruitmentNumber(long rn) {
     try {
@@ -132,6 +137,58 @@ public class ParticipantFacade {
     try {
       return managementParticipantService.requestPasswordResetLink(requestData);
     } catch (MalformedURLException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
+
+  public Boolean updateEmail(String participantId, String email) {
+    try {
+      if(!SystemInstallationEmail.isValid(email)) {
+        throw new ValidationException(new Throwable("Malformed email"));
+      }
+
+      if(!ObjectId.isValid(participantId)) {
+        throw new ValidationException(new Throwable("ObjectId is not valid"));
+      }
+
+      ObjectId id = new ObjectId(participantId);
+      Boolean result = participantService.updateEmail(id, email);
+      Participant participant = participantService.getParticipant(id);
+
+      if(result){
+        activityService.updateParticipantEmail(participant.getRecruitmentNumber(), participant.getEmail());
+      }
+
+      return result;
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
+
+  public String getEmail(String participantId) {
+    try {
+      return participantService.getEmail(participantId);
+    } catch (DataNotFoundException | ValidationException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
+    }
+  }
+
+  public Boolean deleteEmail(String participantId) {
+    try {
+      if(!ObjectId.isValid(participantId)) {
+        throw new ValidationException(new Throwable("ObjectId is not valid"));
+      }
+
+      ObjectId id = new ObjectId(participantId);
+      Boolean result = participantService.deleteEmail(id);
+      Participant participant = participantService.getParticipant(id);
+
+      if(result){
+        activityService.updateParticipantEmail(participant.getRecruitmentNumber(), participant.getEmail());
+      }
+
+      return result;
+    } catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getMessage()));
     }
   }

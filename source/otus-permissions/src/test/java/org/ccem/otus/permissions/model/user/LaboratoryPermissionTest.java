@@ -9,14 +9,18 @@ import org.powermock.reflect.Whitebox;
 public class LaboratoryPermissionTest {
 
   private static final String OBJECT_SERIALIZED = "{\"objectType\":\"Permission\",\"email\":\"test@test\"}";
-  private static final String OBJECT_DESERIALIZED = "{\"access\":false}";
+  private static final String OBJECT_DESERIALIZED = "{\"participantLaboratoryAccess\": false, \"sampleTransportationAccess\":false,\"examLotsAccess\":false,\"examSendingAccess\":false,\"unattachedLaboratoriesAccess\":false}";
   private LaboratoryPermission laboratoryPermission;
   private Permission permission;
 
   @Before
   public void setup() {
     this.laboratoryPermission = new LaboratoryPermission();
-    Whitebox.setInternalState(this.laboratoryPermission, "access", Boolean.FALSE);
+    Whitebox.setInternalState(this.laboratoryPermission, "participantLaboratoryAccess", Boolean.FALSE);
+    Whitebox.setInternalState(this.laboratoryPermission, "sampleTransportationAccess", Boolean.FALSE);
+    Whitebox.setInternalState(this.laboratoryPermission, "examLotsAccess", Boolean.FALSE);
+    Whitebox.setInternalState(this.laboratoryPermission, "examSendingAccess", Boolean.FALSE);
+    Whitebox.setInternalState(this.laboratoryPermission, "unattachedLaboratoriesAccess", Boolean.FALSE);
 
     this.permission = new Permission();
     Whitebox.setInternalState(this.permission, "objectType", "Permission");
@@ -31,11 +35,14 @@ public class LaboratoryPermissionTest {
   }
 
   @Test
-  public void deserialize_method_should_return_expected_SurveyGroupPermission_with_elements() {
+  public void deserialize_method_should_return_expected_LaboratoryPermission_with_elements() {
     LaboratoryPermission deserialized = LaboratoryPermission.deserialize(OBJECT_DESERIALIZED);
 
     Assert.assertThat(deserialized, CoreMatchers.instanceOf(LaboratoryPermission.class));
-    Assert.assertTrue(deserialized.getAccess().equals(Boolean.FALSE));
+    Assert.assertTrue(deserialized.getSampleTransportationAccess().equals(Boolean.FALSE));
+    Assert.assertTrue(deserialized.getExamSendingAccess().equals(Boolean.FALSE));
+    Assert.assertTrue(deserialized.getExamLotsAccess().equals(Boolean.FALSE));
+    Assert.assertTrue(deserialized.getUnattachedLaboratoriesAccess().equals(Boolean.FALSE));
   }
 
   @Test
