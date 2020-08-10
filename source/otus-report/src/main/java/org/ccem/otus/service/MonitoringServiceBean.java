@@ -99,7 +99,8 @@ public class MonitoringServiceBean implements MonitoringService {
   public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
-    groupActivityInapplicabilityStage();
+    ArrayList<Long> rns = this.participantDao.getRecruitmentNumbersByFieldCenter(center);
+    groupActivityInapplicabilityStageByCenter(rns);
     Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
     Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, surveyAcronyms, activityInapplicabilities);
 
@@ -175,6 +176,17 @@ public class MonitoringServiceBean implements MonitoringService {
   @Override
   public LaboratoryProgressDTO getDataToCSVOfOrphansByExam() throws DataNotFoundException {
     return laboratoryProgressDao.getDataToCSVOfOrphansByExam();
+  }
+
+  private void groupActivityInapplicabilityStageByCenter(List<Long> rns) {
+    pipeline = new ArrayList<>();
+    pipeline.add(new Document("$match",new Document("recruitmentNumber",new Document("$in",rns))));
+    pipeline.add(ParseQuery.toDocument("{" +
+      "         $group:{_id:\"$recruitmentNumber\",AI:{$push:{acronym : \"$acronym\",recruitmentNumber :\"$recruitmentNumber\"}}}" +
+      "    }"));
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "         $group:{_id:\"\",participantAI:{$push:{rn:\"$_id\",AI:\"$AI\"}}}" +
+      "    }"));
   }
 
   private void groupActivityInapplicabilityStage() {
