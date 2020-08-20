@@ -24,6 +24,7 @@ public class ActivityProgressHeadersFactory {
     this.headers.add(ActivityProgressExtractionHeaders.STATUS.getValue());
     this.headers.add(ActivityProgressExtractionHeaders.STATUS_DATE.getValue());
     this.headers.add(ActivityProgressExtractionHeaders.INAPPLICABILITY_OBSERVATION.getValue());
+    this.headers.add(ActivityProgressExtractionHeaders.EXTERNAL_ID.getValue());
   }
 
 }

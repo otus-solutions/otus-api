@@ -29,14 +29,14 @@ public class AttachmentsExtractionQueryBuilder {
     pipeline.add(parseQuery("{\"$lookup\":{\"from\":\"survey\",\"let\":{\"acronym\":\"$surveyForm.acronym\",\"version\":\"$surveyForm.version\"},\"pipeline\":[{\"$match\":{\"$expr\":{\"$and\":[{\"$eq\":[\"$surveyTemplate.identity.acronym\",\"$$acronym\"]},{\"$eq\":[\"$version\",\"$$version\"]}]}}},{\"$replaceRoot\":{\"newRoot\":\"$surveyTemplate\"}}],\"as\":\"surveyForm.surveyTemplate\"}}"));
     pipeline.add(parseQuery("{\"$addFields\":{\"surveyForm.surveyTemplate\":{$arrayElemAt: [\"$surveyForm.surveyTemplate\",0]}}}"));
     pipeline.add(parseQuery("{\"$addFields\":{\"itemContainer\":\"$surveyForm.surveyTemplate.itemContainer\"}}"));
-    pipeline.add(parseQuery("{\"$project\":{\"itemContainer\":1,\"participantData.recruitmentNumber\":1.0,\"fillContainer\":1.0}}"));
+    pipeline.add(parseQuery("{\"$project\":{\"itemContainer\":1,\"participantData.recruitmentNumber\":1.0,\"fillContainer\":1.0, \"externalID\": 1.0}}"));
     pipeline.add(parseQuery("{$unwind:\"$fillContainer.fillingList\"}"));
     pipeline.add(parseQuery("{$match:{\"fillContainer.fillingList.answer.type\":\"FileUploadQuestion\"}}"));
     pipeline.add(parseQuery("{$unwind:\"$fillContainer.fillingList.answer.value\"}"));
     pipeline.add(parseQuery("{$match:{\"fillContainer.fillingList.answer.value.oid\":{" + state + objectIds + "}}}"));
     pipeline.add(parseQuery("{\"$addFields\":{\"questionFound\":{\"$filter\":{\"input\":\"$itemContainer\",\"as\":\"item\",\"cond\":{\"$eq\":[\"$$item.templateID\",\"$fillContainer.fillingList.questionID\"]}}}}}"));
-    pipeline.add(parseQuery("{\"$group\":{\"_id\":{\"recruitmentNumber\":\"$participantData.recruitmentNumber\",\"questionId\":{\"$arrayElemAt\": [ {\"$slice\": [ \"$questionFound.customID\",-1.0] }, 0.0]},\"archiveId\":\"$fillContainer.fillingList.answer.value.oid\",\"archiveName\":\"$fillContainer.fillingList.answer.value.name\",\"status\":\"$status\",\"uploadDate\":\"$fillContainer.fillingList.answer.value.sentDate\"}}}"));
-    pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"attachmentsList\":{\"$push\":{\"recruitmentNumber\":\"$_id.recruitmentNumber\",\"questionId\":\"$_id.questionId\",\"archiveId\":\"$_id.archiveId\",\"status\":" + statueSubtitle + ",\"archiveName\":\"$_id.archiveName\",\"uploadDate\":\"$_id.uploadDate\"}}}}"));
+    pipeline.add(parseQuery("{\"$group\":{\"_id\":{\"recruitmentNumber\":\"$participantData.recruitmentNumber\",\"questionId\":{\"$arrayElemAt\": [ {\"$slice\": [ \"$questionFound.customID\",-1.0] }, 0.0]},\"archiveId\":\"$fillContainer.fillingList.answer.value.oid\",\"archiveName\":\"$fillContainer.fillingList.answer.value.name\",\"status\":\"$status\",\"uploadDate\":\"$fillContainer.fillingList.answer.value.sentDate\", \"externalID\":\"$externalID\"}}}"));
+    pipeline.add(parseQuery("{\"$group\":{\"_id\":{},\"attachmentsList\":{\"$push\":{\"recruitmentNumber\":\"$_id.recruitmentNumber\",\"questionId\":\"$_id.questionId\",\"archiveId\":\"$_id.archiveId\",\"status\":" + statueSubtitle + ",\"archiveName\":\"$_id.archiveName\",\"uploadDate\":\"$_id.uploadDate\", \"externalID\":\"$_id.externalID\"}}}}"));
     return pipeline;
   }
 

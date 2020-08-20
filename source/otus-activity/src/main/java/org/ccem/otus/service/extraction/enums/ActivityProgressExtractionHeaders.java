@@ -7,7 +7,8 @@ public enum ActivityProgressExtractionHeaders {
   ACRONYM("acronym"),
   STATUS("status"),
   STATUS_DATE("status_date"),
-  INAPPLICABILITY_OBSERVATION("inapplicability_observation");
+  INAPPLICABILITY_OBSERVATION("inapplicability_observation"),
+  EXTERNAL_ID("external_id");
 
   private final String value;
 
