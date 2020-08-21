@@ -1,11 +1,9 @@
-package br.org.otus.sharing;
+package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.rest.Response;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.api.ActivityFacade;
-import br.org.otus.survey.activity.sharing.ActivitySharingFacade;
-import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
