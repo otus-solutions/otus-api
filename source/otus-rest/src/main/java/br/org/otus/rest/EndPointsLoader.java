@@ -29,6 +29,7 @@ import br.org.otus.report.ReportResource;
 import br.org.otus.security.participant.rest.ParticipantAuthenticationResource;
 import br.org.otus.security.user.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
+import br.org.otus.sharing.ActivitySharingResource;
 import br.org.otus.staticVariable.StaticVariableResource;
 import br.org.otus.survey.activity.ActivityResource;
 import br.org.otus.survey.activity.OfflineActivityResource;
@@ -162,6 +163,9 @@ public class EndPointsLoader extends Application {
   @Inject
   private MessageCommunicationResource messageCommunicationResource;
 
+  @Inject
+  private ActivitySharingResource activitySharingResource;
+
   @Override
   public Set<Class<?>> getClasses() {
     Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -201,7 +205,8 @@ public class EndPointsLoader extends Application {
     resources.add(SurveyGroupResource.class);
     resources.add(StaticVariableResource.class);
     resources.add(OfflineActivityResource.class);
-     resources.add(MessageCommunicationResource.class);
+    resources.add(MessageCommunicationResource.class);
+    resources.add(ActivitySharingResource.class);
 
     return resources;
   }
@@ -247,6 +252,7 @@ public class EndPointsLoader extends Application {
     resources.add(staticVariableResource);
     resources.add(offlineActivityResource);
     resources.add(messageCommunicationResource);
+    resources.add(activitySharingResource);
 
     return resources;
   }
