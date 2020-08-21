@@ -6,6 +6,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.sharing.ActivitySharingService;
 
 import javax.inject.Inject;
@@ -13,10 +14,13 @@ import javax.inject.Inject;
 public class ActivitySharingFacade {
 
   private static final String AUTOFILL_MODE = "AUTOFILL";
-  private static final String NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE = "Apenas atividades de atuopreenchimento podem gerar link.";
+  private static final String NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE = "Apenas atividades de autopreenchimento podem gerar link.";
 
   @Inject
   private ActivitySharingService activitySharingService;
+
+  @Inject
+  private ActivityService activityService;
 
   public String getSharedLink(String activityID, String token) throws HttpResponseException {
     try {
@@ -47,11 +51,10 @@ public class ActivitySharingFacade {
     }
   }
 
-  private void checkIfActivityModeIsAutoFill(String activityID){
-    SurveyActivity surveyActivity = null;
-//    if (!surveyActivity.getMode().name().equals(AUTOFILL_MODE)) {
-//      throw new HttpResponseException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
-//    }
-
+  private void checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException {
+    SurveyActivity surveyActivity = activityService.getByID(activityID);
+    if (!surveyActivity.getMode().name().equals(AUTOFILL_MODE)) {
+      throw new HttpResponseException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
+    }
   }
 }
