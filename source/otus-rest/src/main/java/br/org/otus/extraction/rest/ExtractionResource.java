@@ -68,7 +68,7 @@ public class ExtractionResource {
   }
 
   @GET
-  //@SecuredExtraction
+  @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/{acronym}/{version}/attachments")
   public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {

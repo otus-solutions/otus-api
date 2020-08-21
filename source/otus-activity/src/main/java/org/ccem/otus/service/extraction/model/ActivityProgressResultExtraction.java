@@ -11,7 +11,6 @@ public class ActivityProgressResultExtraction {
   private String status;
   private String statusDate;
   private String observation;
-  private String externalID;
 
   public static String serialize(ActivityProgressResultExtraction record) {
     return ActivityProgressResultExtraction.getGsonBuilder().create().toJson(record);
@@ -48,7 +47,5 @@ public class ActivityProgressResultExtraction {
   public String getInapplicabilityObservation() {
     return observation;
   }
-
-  public String getExternalID() {return externalID;}
 
 }

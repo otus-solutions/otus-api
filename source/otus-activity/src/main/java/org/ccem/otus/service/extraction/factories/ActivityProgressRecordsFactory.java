@@ -35,7 +35,6 @@ public class ActivityProgressRecordsFactory {
     answers.add(record.getStatus());
     answers.add(record.getStatusDate());
     answers.add(record.getInapplicabilityObservation());
-    answers.add(record.getExternalID());
 
     return answers;
   }
