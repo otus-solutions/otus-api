@@ -18,7 +18,7 @@ public enum SurveyActivityExtractionHeaders {
 
   QUESTION_COMMENT_SUFFIX("_comment"),
   QUESTION_METADATA_SUFFIX("_metadata"),
-  EXTERNAL_ID("external_ID");
+  EXTERNAL_ID("external_id");
 
   private final String value;
 
