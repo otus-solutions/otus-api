@@ -1,9 +1,8 @@
 package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.context.SecurityContext;
+import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
-import br.org.otus.survey.activity.api.ActivityFacade;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -18,19 +17,13 @@ public class ActivitySharingResource {
   @Inject
   private ActivitySharingFacade activitySharingFacade;
 
-  @Inject
-  private ActivityFacade activityFacade;
-
-  @Inject
-  private SecurityContext securityContext;
-
   @GET
   @Secured
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String getSharedLink(@Context HttpServletRequest request, @PathParam("id") String id) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
     String sharedLink = activitySharingFacade.getSharedLink(id, token);
     return new Response().buildSuccess(sharedLink).toJson();
   }
@@ -41,7 +34,7 @@ public class ActivitySharingResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String recreateSharedLink(@Context HttpServletRequest request, @PathParam("id") String id) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
     String sharedLink = activitySharingFacade.recreateSharedLink(id, token);
     return new Response().buildSuccess(sharedLink).toJson();
   }
@@ -51,8 +44,7 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteSharedLink(@Context HttpServletRequest request, @PathParam("id") String id) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+  public String deleteSharedLink(@PathParam("id") String id) {
     activitySharingFacade.deleteSharedLink(id);
     return new Response().buildSuccess().toJson();
   }
