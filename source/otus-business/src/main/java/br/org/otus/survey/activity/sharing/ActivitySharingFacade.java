@@ -36,12 +36,12 @@ public class ActivitySharingFacade {
   private FindByTokenService findByTokenService;
 
 
-  public String getSharedLink(String activityID, String token) throws HttpResponseException {
+  public String getSharedLink(String activityID, String userToken) throws HttpResponseException {
     try {
       SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
       String url = activitySharingService.getSharedLink(activityID);
       if(url==null){
-        url = createSharedLink(surveyActivity, token);
+        url = createSharedLink(surveyActivity, userToken);
       }
       return url;
     } catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
@@ -49,10 +49,10 @@ public class ActivitySharingFacade {
     }
   }
 
-  public String recreateSharedLink(String activityID, String token) throws HttpResponseException {
+  public String recreateSharedLink(String activityID, String userToken) throws HttpResponseException {
     try {
       SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
-      return createSharedLink(surveyActivity, token);
+      return createSharedLink(surveyActivity, userToken);
     } catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
@@ -77,10 +77,12 @@ public class ActivitySharingFacade {
   }
 
   private String createSharedLink(SurveyActivity surveyActivity, String userToken) throws DataNotFoundException, ValidationException, ParseException {
-    String userId = findByTokenService.findUserIdByToken(userToken);
+    ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
     Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
-    ActivitySharing activitySharing = new ActivitySharing(surveyActivity.getActivityID(),
-      new ObjectId(userId), generateTempParticipantToken(participant));
+    ActivitySharing activitySharing = new ActivitySharing(
+      surveyActivity.getActivityID(),
+      userOID,
+      generateTempParticipantToken(participant));
     return activitySharingService.recreateSharedLink(activitySharing);
   }
 
