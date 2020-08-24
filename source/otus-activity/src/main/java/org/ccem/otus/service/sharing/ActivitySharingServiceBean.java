@@ -21,7 +21,7 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
 
   private String buildActivitySharedURL(ActivitySharing activitySharing){
     return "https://otus.hmg.ccem.ufrgs.br/survey-player/#/?activity="+activitySharing.getActivityID()+
-      "&token="+activitySharing.getToken();
+      "&token="+activitySharing.getParticipantToken();
   }
 
 }
