@@ -53,7 +53,7 @@ public class ActivitySharingResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String deleteSharedLink(@Context HttpServletRequest request, @PathParam("id") String id) {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    activitySharingFacade.deleteSharedLink(id, token);
+    activitySharingFacade.deleteSharedLink(id);
     return new Response().buildSuccess().toJson();
   }
 }

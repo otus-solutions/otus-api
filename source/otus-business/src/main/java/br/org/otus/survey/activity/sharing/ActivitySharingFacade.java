@@ -1,11 +1,15 @@
 package br.org.otus.survey.activity.sharing;
 
+import br.org.otus.extraction.ExtractionSecurityDaoBean;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
+import br.org.otus.model.User;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.sharing.ActivitySharingService;
 
@@ -22,11 +26,17 @@ public class ActivitySharingFacade {
   @Inject
   private ActivityService activityService;
 
+  @Inject
+  private ExtractionSecurityDaoBean extractionSecurityDaoBean;
+
   public String getSharedLink(String activityID, String token) throws HttpResponseException {
     try {
       checkIfActivityModeIsAutoFill(activityID);
-      return activitySharingService.getSharedLink(activityID, token);
-
+      String url = activitySharingService.getSharedLink(activityID);
+      if(url==null){
+        url = createSharedLink(activityID, token);
+      }
+      return url;
     } catch (ReadRequestException | RequestException | DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
@@ -35,17 +45,22 @@ public class ActivitySharingFacade {
   public String recreateSharedLink(String activityID, String token) throws HttpResponseException {
     try {
       checkIfActivityModeIsAutoFill(activityID);
-      return activitySharingService.recreateSharedLink(activityID, token);
-
+      return createSharedLink(activityID, token);
     } catch (ReadRequestException | RequestException | DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  public void deleteSharedLink(String activityID, String token) throws HttpResponseException {
+  private String createSharedLink(String activityID, String token) throws DataNotFoundException {
+    User user = extractionSecurityDaoBean.validateSecurityCredentials(token);
+    ActivitySharing activitySharing = new ActivitySharing(new ObjectId(activityID), token, user.getEmail());
+    return activitySharingService.recreateSharedLink(activitySharing);
+  }
+
+  public void deleteSharedLink(String activityID) throws HttpResponseException {
     try {
       checkIfActivityModeIsAutoFill(activityID);
-      activitySharingService.deleteSharedLink(activityID, token);
+      activitySharingService.deleteSharedLink(activityID);
     } catch (ReadRequestException | RequestException | DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
@@ -57,4 +72,5 @@ public class ActivitySharingFacade {
       throw new HttpResponseException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
     }
   }
+
 }
