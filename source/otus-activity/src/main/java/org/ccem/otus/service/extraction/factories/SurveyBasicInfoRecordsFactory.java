@@ -20,6 +20,7 @@ public class SurveyBasicInfoRecordsFactory {
   private static final String CATEGORY_NOT_FOUND = "Category value error";
   private static final String PARTICIPANT_NOT_FOUND = "Participant value error";
   private static final String PARTICIPANT_FIELD_CENTER_NOT_FOUND = "Participant Field Center by activity error";
+  private static final String EXTERNAL_ID_NOT_FOUND = "ExternalID value error";
 
   public static Long getRecruitmentNumber(SurveyActivity surveyActivity) {
     try {
@@ -124,6 +125,15 @@ public class SurveyBasicInfoRecordsFactory {
       return (acronym != null) ? acronym : null;
     } catch (Exception e) {
       SurveyBasicInfoRecordsFactory.printMessageError(PARTICIPANT_FIELD_CENTER_NOT_FOUND);
+      return null;
+    }
+  }
+
+  public static String getExternalID(SurveyActivity surveyActivity) {
+    try {
+      return surveyActivity.getExternalID();
+    } catch (Exception e) {
+      SurveyBasicInfoRecordsFactory.printMessageError(EXTERNAL_ID_NOT_FOUND);
       return null;
     }
   }
