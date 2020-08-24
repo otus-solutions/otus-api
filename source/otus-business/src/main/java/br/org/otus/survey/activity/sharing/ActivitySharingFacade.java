@@ -1,19 +1,22 @@
 package br.org.otus.survey.activity.sharing;
 
-import br.org.otus.extraction.ExtractionSecurityDaoBean;
+import br.org.otus.commons.FindByTokenService;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
-import br.org.otus.model.User;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.sharing.ActivitySharingService;
 
 import javax.inject.Inject;
+import java.text.ParseException;
 
 public class ActivitySharingFacade {
 
@@ -27,34 +30,32 @@ public class ActivitySharingFacade {
   private ActivityService activityService;
 
   @Inject
-  private ExtractionSecurityDaoBean extractionSecurityDaoBean;
+  private ParticipantService participantService;
+
+  @Inject
+  private FindByTokenService findByTokenService;
+
 
   public String getSharedLink(String activityID, String token) throws HttpResponseException {
     try {
-      checkIfActivityModeIsAutoFill(activityID);
+      SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
       String url = activitySharingService.getSharedLink(activityID);
       if(url==null){
-        url = createSharedLink(activityID, token);
+        url = createSharedLink(surveyActivity, token);
       }
       return url;
-    } catch (ReadRequestException | RequestException | DataNotFoundException e) {
+    } catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
   public String recreateSharedLink(String activityID, String token) throws HttpResponseException {
     try {
-      checkIfActivityModeIsAutoFill(activityID);
-      return createSharedLink(activityID, token);
-    } catch (ReadRequestException | RequestException | DataNotFoundException e) {
+      SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
+      return createSharedLink(surveyActivity, token);
+    } catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
-  }
-
-  private String createSharedLink(String activityID, String token) throws DataNotFoundException {
-    User user = extractionSecurityDaoBean.validateSecurityCredentials(token);
-    ActivitySharing activitySharing = new ActivitySharing(new ObjectId(activityID), token, user.getEmail());
-    return activitySharingService.recreateSharedLink(activitySharing);
   }
 
   public void deleteSharedLink(String activityID) throws HttpResponseException {
@@ -66,11 +67,25 @@ public class ActivitySharingFacade {
     }
   }
 
-  private void checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException {
+
+  private SurveyActivity checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException {
     SurveyActivity surveyActivity = activityService.getByID(activityID);
     if (!surveyActivity.getMode().name().equals(AUTOFILL_MODE)) {
       throw new HttpResponseException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
     }
+    return surveyActivity;
+  }
+
+  private String createSharedLink(SurveyActivity surveyActivity, String userToken) throws DataNotFoundException, ValidationException, ParseException {
+    String userId = findByTokenService.findUserIdByToken(userToken);
+    Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
+    ActivitySharing activitySharing = new ActivitySharing(surveyActivity.getActivityID(),
+      new ObjectId(userId), generateTempParticipantToken(participant));
+    return activitySharingService.recreateSharedLink(activitySharing);
+  }
+
+  private String generateTempParticipantToken(Participant participant){
+    return "abc"; //todo
   }
 
 }
