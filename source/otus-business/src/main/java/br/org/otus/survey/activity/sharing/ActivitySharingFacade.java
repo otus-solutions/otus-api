@@ -20,7 +20,7 @@ import java.text.ParseException;
 
 public class ActivitySharingFacade {
 
-  private static final String AUTOFILL_MODE = "AUTOFILL";
+  public static final String AUTOFILL_MODE = "AUTOFILL";
   private static final String NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE = "Apenas atividades de autopreenchimento podem gerar link.";
 
   @Inject
@@ -38,22 +38,18 @@ public class ActivitySharingFacade {
 
   public String getSharedLink(String activityID, String userToken) throws HttpResponseException {
     try {
-      SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
-      String url = activitySharingService.getSharedLink(activityID);
-      if(url==null){
-        url = createSharedLink(surveyActivity, userToken);
-      }
-      return url;
-    } catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
+      return activitySharingService.getSharedLink(buildActivitySharing(activityID, userToken));
+    }
+    catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
   public String recreateSharedLink(String activityID, String userToken) throws HttpResponseException {
     try {
-      SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
-      return createSharedLink(surveyActivity, userToken);
-    } catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
+      return activitySharingService.recreateSharedLink(buildActivitySharing(activityID, userToken));
+    }
+    catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -62,7 +58,8 @@ public class ActivitySharingFacade {
     try {
       checkIfActivityModeIsAutoFill(activityID);
       activitySharingService.deleteSharedLink(activityID);
-    } catch (ReadRequestException | RequestException | DataNotFoundException e) {
+    }
+    catch (ReadRequestException | RequestException | DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -76,14 +73,14 @@ public class ActivitySharingFacade {
     return surveyActivity;
   }
 
-  private String createSharedLink(SurveyActivity surveyActivity, String userToken) throws DataNotFoundException, ValidationException, ParseException {
-    ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+  private ActivitySharing buildActivitySharing(String activityID, String userToken) throws DataNotFoundException, ValidationException, ParseException {
+    SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
     Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
-    ActivitySharing activitySharing = new ActivitySharing(
+    ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+    return new ActivitySharing(
       surveyActivity.getActivityID(),
       userOID,
       generateTempParticipantToken(participant));
-    return activitySharingService.recreateSharedLink(activitySharing);
   }
 
   private String generateTempParticipantToken(Participant participant){
