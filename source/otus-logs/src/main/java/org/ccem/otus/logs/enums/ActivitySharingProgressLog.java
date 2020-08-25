@@ -4,6 +4,7 @@ public enum ActivitySharingProgressLog {
   CREATE("create"),
   RENEW("renew"),
   ACCESS("access"),
+  SEARCH("search"),
   DELETION("deletion");
 
   private final String value;
