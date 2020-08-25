@@ -1,8 +1,6 @@
 package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.commons.FindByTokenService;
-import br.org.otus.gateway.response.exception.ReadRequestException;
-import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import org.bson.types.ObjectId;
@@ -40,7 +38,7 @@ public class ActivitySharingFacade {
     try {
       return activitySharingService.getSharedLink(buildActivitySharing(activityID, userToken));
     }
-    catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
+    catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -49,7 +47,7 @@ public class ActivitySharingFacade {
     try {
       return activitySharingService.recreateSharedLink(buildActivitySharing(activityID, userToken));
     }
-    catch (ReadRequestException | RequestException | DataNotFoundException | ValidationException | ParseException e) {
+    catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -59,7 +57,7 @@ public class ActivitySharingFacade {
       checkIfActivityModeIsAutoFill(activityID);
       activitySharingService.deleteSharedLink(activityID);
     }
-    catch (ReadRequestException | RequestException | DataNotFoundException e) {
+    catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
