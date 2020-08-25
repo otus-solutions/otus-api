@@ -87,4 +87,12 @@ public class ActivitySharing {
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
   }
+
+  public void renovate(){
+    try {
+      this.expirationDate = DateAdapter.getDatePlusDays(DateAdapter.nowToISODate(), EXPIRATION_TIME);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
 }
