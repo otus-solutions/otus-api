@@ -13,27 +13,27 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
   private ActivitySharingDao activitySharingDao;
 
   @Override
-  public String getSharedLink(ActivitySharing activitySharing) {
+  public String getSharedURL(ActivitySharing activitySharing) {
     try {
-      ActivitySharing activitySharingFounded = activitySharingDao.getSharedLink(activitySharing.getActivityID());
+      ActivitySharing activitySharingFounded = activitySharingDao.getSharedURL(activitySharing.getActivityID());
       return buildActivitySharedURL(activitySharingFounded);
     }
     catch (DataNotFoundException e){
-      return recreateSharedLink(activitySharing);
+      return recreateSharedURL(activitySharing);
     }
 //    return "https://meu.link"; //TODO
   }
 
   @Override
-  public String recreateSharedLink(ActivitySharing activitySharing) {
-    activitySharingDao.recreateSharedLink(activitySharing);
+  public String recreateSharedURL(ActivitySharing activitySharing) {
+    activitySharingDao.recreateSharedURL(activitySharing);
     return buildActivitySharedURL(activitySharing);
 //    return "https://novo.link"; //TODO
   }
 
   @Override
-  public void deleteSharedLink(String activityId) throws DataNotFoundException {
-    activitySharingDao.deleteSharedLink(new ObjectId(activityId));
+  public void deleteSharedURL(String activityId) throws DataNotFoundException {
+    activitySharingDao.deleteSharedURL(new ObjectId(activityId));
   }
 
   private String buildActivitySharedURL(ActivitySharing activitySharing){

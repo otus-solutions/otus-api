@@ -23,7 +23,7 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public ActivitySharing getSharedLink(ObjectId activityOID) throws DataNotFoundException {
+  public ActivitySharing getSharedURL(ObjectId activityOID) throws DataNotFoundException {
     Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activityOID)).first();
     if(result == null){
       throw new DataNotFoundException(new Throwable(
@@ -33,7 +33,7 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public ObjectId recreateSharedLink(ActivitySharing activitySharing) {
+  public ObjectId recreateSharedURL(ActivitySharing activitySharing) {
     activitySharing.setObjectType(OBJECT_TYPE);
     Document parsed = Document.parse(ActivitySharing.serialize(activitySharing));
     collection.insertOne(parsed);
@@ -41,7 +41,7 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public void deleteSharedLink(ObjectId activityOID) throws DataNotFoundException {
+  public void deleteSharedURL(ObjectId activityOID) throws DataNotFoundException {
     DeleteResult deleteResult = collection.deleteOne(eq(ACTIVITY_ID_FIELD_NAME, activityOID));
     if(deleteResult == null){
       throw new DataNotFoundException(new Throwable(

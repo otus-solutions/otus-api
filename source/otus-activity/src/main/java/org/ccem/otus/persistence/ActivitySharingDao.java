@@ -6,10 +6,10 @@ import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
 
 public interface ActivitySharingDao {
 
-  ActivitySharing getSharedLink(ObjectId activityOID) throws DataNotFoundException;
+  ActivitySharing getSharedURL(ObjectId activityOID) throws DataNotFoundException;
 
-  ObjectId recreateSharedLink(ActivitySharing activitySharing);
+  ObjectId recreateSharedURL(ActivitySharing activitySharing);
 
-  void deleteSharedLink(ObjectId activityOID) throws DataNotFoundException;
+  void deleteSharedURL(ObjectId activityOID) throws DataNotFoundException;
 
 }

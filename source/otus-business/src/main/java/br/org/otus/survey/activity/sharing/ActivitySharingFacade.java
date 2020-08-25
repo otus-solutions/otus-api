@@ -34,28 +34,28 @@ public class ActivitySharingFacade {
   private FindByTokenService findByTokenService;
 
 
-  public String getSharedLink(String activityID, String userToken) throws HttpResponseException {
+  public String getSharedURL(String activityID, String userToken) throws HttpResponseException {
     try {
-      return activitySharingService.getSharedLink(buildActivitySharing(activityID, userToken));
+      return activitySharingService.getSharedURL(buildActivitySharing(activityID, userToken));
     }
     catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  public String recreateSharedLink(String activityID, String userToken) throws HttpResponseException {
+  public String recreateSharedURL(String activityID, String userToken) throws HttpResponseException {
     try {
-      return activitySharingService.recreateSharedLink(buildActivitySharing(activityID, userToken));
+      return activitySharingService.recreateSharedURL(buildActivitySharing(activityID, userToken));
     }
     catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  public void deleteSharedLink(String activityID) throws HttpResponseException {
+  public void deleteSharedURL(String activityID) throws HttpResponseException {
     try {
       checkIfActivityModeIsAutoFill(activityID);
-      activitySharingService.deleteSharedLink(activityID);
+      activitySharingService.deleteSharedURL(activityID);
     }
     catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));

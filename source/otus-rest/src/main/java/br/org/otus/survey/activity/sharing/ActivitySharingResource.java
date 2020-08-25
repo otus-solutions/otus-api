@@ -22,10 +22,10 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String getSharedLink(@Context HttpServletRequest request, @PathParam("id") String id) {
+  public String getSharedURL(@Context HttpServletRequest request, @PathParam("id") String id) {
     String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
-    String sharedLink = activitySharingFacade.getSharedLink(id, token);
-    return new Response().buildSuccess(sharedLink).toJson();
+    String sharedURL = activitySharingFacade.getSharedURL(id, token);
+    return new Response().buildSuccess(sharedURL).toJson();
   }
 
   @PUT
@@ -33,10 +33,10 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String recreateSharedLink(@Context HttpServletRequest request, @PathParam("id") String id) {
+  public String recreateSharedURL(@Context HttpServletRequest request, @PathParam("id") String id) {
     String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
-    String sharedLink = activitySharingFacade.recreateSharedLink(id, token);
-    return new Response().buildSuccess(sharedLink).toJson();
+    String sharedURL = activitySharingFacade.recreateSharedURL(id, token);
+    return new Response().buildSuccess(sharedURL).toJson();
   }
 
   @DELETE
@@ -44,8 +44,8 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteSharedLink(@PathParam("id") String id) {
-    activitySharingFacade.deleteSharedLink(id);
+  public String deleteSharedURL(@PathParam("id") String id) {
+    activitySharingFacade.deleteSharedURL(id);
     return new Response().buildSuccess().toJson();
   }
 }
