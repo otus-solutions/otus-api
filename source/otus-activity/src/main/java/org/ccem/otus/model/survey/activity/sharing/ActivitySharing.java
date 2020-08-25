@@ -40,6 +40,10 @@ public class ActivitySharing {
     return objectType;
   }
 
+  public void setObjectType(String objectType) {
+    this.objectType = objectType;
+  }
+
   public ObjectId getId() {
     return id;
   }
