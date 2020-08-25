@@ -7,7 +7,7 @@ public interface ActivitySharingService {
 
   String getSharedURL(ActivitySharing activitySharing) throws DataNotFoundException;
 
-  String recreateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException;
+  String renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException;
 
   void deleteSharedURL(String activityId) throws DataNotFoundException;
 }

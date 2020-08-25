@@ -12,11 +12,12 @@ import java.text.ParseException;
 public class ActivitySharing {
 
   public static final int EXPIRATION_TIME = 7;
+  private static final String OBJECT_TYPE = "ActivitySharing";
 
   private String objectType;
   @SerializedName("_id")
   private ObjectId id;
-  private ObjectId activityID;
+  private ObjectId activityId;
   private ObjectId userID;
   private String participantToken;
   private String creationDate;
@@ -24,8 +25,9 @@ public class ActivitySharing {
 
   public ActivitySharing() { }
 
-  public ActivitySharing(ObjectId activityID, ObjectId userID, String participantToken) {
-    this.activityID = activityID;
+  public ActivitySharing(ObjectId activityId, ObjectId userID, String participantToken) {
+    this.objectType = OBJECT_TYPE;
+    this.activityId = activityId;
     this.userID = userID;
     this.participantToken = participantToken;
     this.creationDate = DateAdapter.nowToISODate();
@@ -48,8 +50,8 @@ public class ActivitySharing {
     return id;
   }
 
-  public ObjectId getActivityID() {
-    return activityID;
+  public ObjectId getActivityId() {
+    return activityId;
   }
 
   public String getParticipantToken() {

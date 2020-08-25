@@ -33,9 +33,9 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String recreateSharedURL(@Context HttpServletRequest request, @PathParam("id") String id) {
+  public String renovateSharedURL(@Context HttpServletRequest request, @PathParam("id") String id) {
     String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
-    String sharedURL = activitySharingFacade.recreateSharedURL(id, token);
+    String sharedURL = activitySharingFacade.renovateSharedURL(id, token);
     return new Response().buildSuccess(sharedURL).toJson();
   }
 

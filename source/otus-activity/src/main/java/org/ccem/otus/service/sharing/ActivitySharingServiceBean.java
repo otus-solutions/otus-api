@@ -15,20 +15,20 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
   @Override
   public String getSharedURL(ActivitySharing activitySharing) {
     try {
-      ActivitySharing activitySharingFounded = activitySharingDao.getSharedURL(activitySharing.getActivityID());
+      ActivitySharing activitySharingFounded = activitySharingDao.getSharedURL(activitySharing.getActivityId());
       return buildActivitySharedURL(activitySharingFounded);
     }
     catch (DataNotFoundException e){
-      return recreateSharedURL(activitySharing);
+      activitySharingDao.createSharedURL(activitySharing);
+      return buildActivitySharedURL(activitySharing);
     }
-//    return "https://meu.link"; //TODO
   }
 
   @Override
-  public String recreateSharedURL(ActivitySharing activitySharing) {
-    activitySharingDao.recreateSharedURL(activitySharing);
+  public String renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException {
+    activitySharing.renovate();
+    activitySharingDao.renovateSharedURL(activitySharing);
     return buildActivitySharedURL(activitySharing);
-//    return "https://novo.link"; //TODO
   }
 
   @Override
@@ -38,7 +38,7 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
 
   private String buildActivitySharedURL(ActivitySharing activitySharing){
     //TODO
-    return "https://otus.hmg.ccem.ufrgs.br/survey-player/#/?activity="+activitySharing.getActivityID()+
+    return "https://otus.hmg.ccem.ufrgs.br/survey-player/#/?activity="+activitySharing.getActivityId()+
       "&token="+activitySharing.getParticipantToken();
   }
 
