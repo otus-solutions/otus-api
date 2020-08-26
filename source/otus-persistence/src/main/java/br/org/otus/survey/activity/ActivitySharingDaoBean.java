@@ -50,17 +50,17 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   @Override
   public ActivitySharing renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException {
     ObjectId activityOID = activitySharing.getActivityId();
-    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activityOID)).first();
-    if(result == null){
+
+    UpdateResult updateResult = collection.updateOne(
+      eq(ACTIVITY_ID_FIELD_NAME, activityOID),
+      new Document("$set", new Document(EXPIRATION_DATE_FIELD_NAME, activitySharing.getExpirationDate()))
+    );
+    if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException(new Throwable(
         "No activity shared link found for " + ACTIVITY_ID_FIELD_NAME + " " + activityOID.toString()));
     }
 
-    collection.updateOne(
-      eq(ACTIVITY_ID_FIELD_NAME, activityOID),
-      new Document("$set", new Document(EXPIRATION_DATE_FIELD_NAME, activitySharing.getExpirationDate()))
-    );
-
+    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activityOID)).first();
     return ActivitySharing.deserialize(result.toJson());
   }
 
