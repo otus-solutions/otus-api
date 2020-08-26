@@ -45,6 +45,10 @@ public class ActivitySharing {
     return id;
   }
 
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
+
   public ObjectId getActivityId() {
     return activityId;
   }
