@@ -69,10 +69,9 @@ public class ActivitySharingFacade {
 
   public void deleteSharedURL(String activityId) throws HttpResponseException {
     try {
-      checkIfActivityModeIsAutoFill(activityId);
       activitySharingService.deleteSharedURL(activityId);
     }
-    catch (DataFormatException | DataNotFoundException e) {
+    catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }

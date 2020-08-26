@@ -171,13 +171,6 @@ public class ActivitySharingFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void deleteSharedURL_method_should_throw_exception_in_case_not_fill_activity() throws Exception {
-    surveyActivity.setMode(ActivityMode.ONLINE);
-    mockInitializeForDeleteMethod();
-    activitySharingFacade.deleteSharedURL(ACTIVITY_ID);
-  }
-
-  @Test(expected = HttpResponseException.class)
   public void deleteSharedURL_method_should_handle_DataNotFoundException() throws Exception {
     mockInitializeForDeleteMethod();
     doThrow(new DataNotFoundException()).when(activitySharingService, "deleteSharedURL", ACTIVITY_ID);
