@@ -3,8 +3,11 @@ package br.org.otus.survey.activity.sharing;
 import br.org.otus.commons.FindByTokenService;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
+import br.org.otus.security.dtos.ParticipantTempTokenRequestDto;
+import br.org.otus.security.services.TemporaryParticipantTokenService;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
@@ -34,29 +37,40 @@ public class ActivitySharingFacade {
   @Inject
   private FindByTokenService findByTokenService;
 
+  @Inject
+  private TemporaryParticipantTokenService temporaryParticipantTokenService;
 
-  public String getSharedURL(String activityID, String userToken) throws HttpResponseException {
+
+  public String getSharedURL(String activityId, String userToken) throws HttpResponseException {
     try {
-      return activitySharingService.getSharedURL(buildActivitySharing(activityID, userToken));
+      SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityId);
+      Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+      String token = temporaryParticipantTokenService.generateTempToken(
+        new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), userOID.toString())
+      );
+      ActivitySharing activitySharing =  new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
+      return activitySharingService.getSharedURL(activitySharing);
     }
-    catch (DataFormatException | DataNotFoundException | ValidationException | ParseException e) {
+    catch (DataFormatException | DataNotFoundException | ValidationException | ParseException | TokenException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  public String renovateSharedURL(String activityID, String userToken) throws HttpResponseException {
+  public String renovateSharedURL(String activityId) throws HttpResponseException {
     try {
-      return activitySharingService.renovateSharedURL(buildActivitySharing(activityID, userToken));
+      ActivitySharing activitySharing = new ActivitySharing(new ObjectId(activityId), null, null);
+      return activitySharingService.renovateSharedURL(activitySharing);
     }
-    catch (DataFormatException | DataNotFoundException | ValidationException | ParseException e) {
+    catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  public void deleteSharedURL(String activityID) throws HttpResponseException {
+  public void deleteSharedURL(String activityId) throws HttpResponseException {
     try {
-      checkIfActivityModeIsAutoFill(activityID);
-      activitySharingService.deleteSharedURL(activityID);
+      checkIfActivityModeIsAutoFill(activityId);
+      activitySharingService.deleteSharedURL(activityId);
     }
     catch (DataFormatException | DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
@@ -70,20 +84,6 @@ public class ActivitySharingFacade {
       throw new DataFormatException(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE);
     }
     return surveyActivity;
-  }
-
-  private ActivitySharing buildActivitySharing(String activityID, String userToken) throws DataFormatException, DataNotFoundException, ParseException, ValidationException {
-    SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
-    Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
-    ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
-    return new ActivitySharing(
-      surveyActivity.getActivityID(),
-      userOID,
-      generateTempParticipantToken(participant));
-  }
-
-  private String generateTempParticipantToken(Participant participant){
-    return "abc"; //todo
   }
 
 }

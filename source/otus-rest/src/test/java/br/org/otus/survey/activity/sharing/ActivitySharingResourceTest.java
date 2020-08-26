@@ -47,13 +47,12 @@ public class ActivitySharingResourceTest {
 
   @Test
   public void renovateSharedURL_method_should_return_url(){
-    mockContextToSetUserToken();
-    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN)).thenReturn(SHARED_URL);
+    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID)).thenReturn(SHARED_URL);
     assertEquals(
       encapsulateExpectedResponse(SHARED_URL),
-      activitySharingResource.renovateSharedURL(request, ACTIVITY_ID)
+      activitySharingResource.renovateSharedURL(ACTIVITY_ID)
     );
-    verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_ID, USER_TOKEN);
+    verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_ID);
   }
 
   @Test
