@@ -46,12 +46,19 @@ public class ActivitySharingTest {
   }
 
   @Test
-  public void serializeStaticMethod_should_convert_objectModel_to_JsonString() {
+  public void setId_test() {
+    ObjectId id2 = new ObjectId(ACTIVITY_ID);
+    activitySharing.setId(id2);
+    assertEquals(id2, activitySharing.getId());
+  }
+
+  @Test
+  public void serialize_static_method_should_convert_objectModel_to_JsonString() {
     assertTrue(ActivitySharing.serialize(activitySharing) instanceof String);
   }
 
   @Test
-  public void deserializeStaticMethod_shold_convert_JsonString_to_objectModel() {
+  public void deserialize_static_method_should_convert_JsonString_to_objectModel() {
     String activitySharingJson = ActivitySharing.serialize(activitySharing);
     assertTrue(ActivitySharing.deserialize(activitySharingJson) instanceof ActivitySharing);
   }
