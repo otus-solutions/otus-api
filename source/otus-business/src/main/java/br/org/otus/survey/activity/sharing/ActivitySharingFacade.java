@@ -12,6 +12,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharingDto;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
@@ -41,7 +42,7 @@ public class ActivitySharingFacade {
   private TemporaryParticipantTokenService temporaryParticipantTokenService;
 
 
-  public String getSharedURL(String activityId, String userToken) throws HttpResponseException {
+  public ActivitySharingDto getSharedURL(String activityId, String userToken) throws HttpResponseException {
     try {
       SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityId);
       Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
@@ -50,7 +51,8 @@ public class ActivitySharingFacade {
         new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), userOID.toString())
       );
       ActivitySharing activitySharing =  new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
-      return activitySharingService.getSharedURL(activitySharing);
+      String url = activitySharingService.getSharedURL(activitySharing);
+      return new ActivitySharingDto(activitySharing, url);
     }
     catch (DataFormatException | DataNotFoundException | ValidationException | ParseException | TokenException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));

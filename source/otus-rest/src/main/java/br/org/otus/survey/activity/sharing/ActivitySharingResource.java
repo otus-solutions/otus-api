@@ -3,6 +3,7 @@ package br.org.otus.survey.activity.sharing;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharingDto;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +25,8 @@ public class ActivitySharingResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getSharedURL(@Context HttpServletRequest request, @PathParam("id") String activityId) {
     String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
-    String sharedURL = activitySharingFacade.getSharedURL(activityId, token);
-    return new Response().buildSuccess(sharedURL).toJson();
+    ActivitySharingDto activitySharingDto = activitySharingFacade.getSharedURL(activityId, token);
+    return new Response().buildSuccess(activitySharingDto).toJson(ActivitySharingDto.getFrontGsonBuilder());
   }
 
   @PUT
