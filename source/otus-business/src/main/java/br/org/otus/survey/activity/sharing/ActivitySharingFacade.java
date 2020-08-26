@@ -19,7 +19,7 @@ import java.text.ParseException;
 
 public class ActivitySharingFacade {
 
-  private static final String NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE = "Apenas atividades de autopreenchimento podem gerar link.";
+  private static final String NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE = "Only autofill activities could generate url.";
 
   @Inject
   private ActivitySharingService activitySharingService;
