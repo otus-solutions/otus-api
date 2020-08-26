@@ -57,16 +57,16 @@ public class ActivitySharingFacade {
       checkIfActivityModeIsAutoFill(activityID);
       activitySharingService.deleteSharedURL(activityID);
     }
-    catch (DataNotFoundException e) {
+    catch (DataNotFoundException | ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
 
-  private SurveyActivity checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException {
+  private SurveyActivity checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException, ValidationException {
     SurveyActivity surveyActivity = activityService.getByID(activityID);
     if (!surveyActivity.getMode().name().equals(ActivityMode.AUTOFILL.toString())) {
-      throw new HttpResponseException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
+      throw new ValidationException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
     }
     return surveyActivity;
   }
