@@ -3,6 +3,7 @@ package org.ccem.otus.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharingDto;
 import org.ccem.otus.persistence.ActivitySharingDao;
 import org.ccem.otus.service.sharing.ActivitySharingServiceBean;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
@@ -42,10 +44,10 @@ public class ActivitySharingServiceBeanTest {
   }
 
   @Test
-  public void getSharedURL_method_should_handle_DataNotFoundException() throws DataNotFoundException {
+  public void getSharedURL_method_should_handle_DataNotFoundException_from_activitySharingDao_get_method() throws DataNotFoundException {
     when(activitySharingDao.getSharedURL(ACTIVITY_OID)).thenThrow(new DataNotFoundException());
-    String url = activitySharingServiceBean.getSharedURL(activitySharing);
-    assertNotNull(url);
+    when(activitySharingDao.createSharedURL(activitySharing)).thenReturn(activitySharing);
+    assertNotNull(activitySharingServiceBean.getSharedURL(activitySharing));
     verify(activitySharingDao, Mockito.times(1)).getSharedURL(ACTIVITY_OID);
     verify(activitySharingDao, Mockito.times(1)).createSharedURL(activitySharing);
   }
@@ -53,8 +55,14 @@ public class ActivitySharingServiceBeanTest {
 
   @Test
   public void renovateSharedURL_method_should_return_url() throws DataNotFoundException {
-    String url = activitySharingServiceBean.renovateSharedURL(activitySharing);
-    assertNotNull(url);
+    ActivitySharing activitySharingRenovated = new ActivitySharing(ACTIVITY_OID, null, null);
+    activitySharingRenovated.renovate();
+    when(activitySharingDao.renovateSharedURL(activitySharing)).thenReturn(activitySharingRenovated);
+    ActivitySharingDto activitySharingDtoRenovated = activitySharingServiceBean.renovateSharedURL(activitySharing);
+    assertNotNull(activitySharingDtoRenovated);
+    assertEquals(
+      activitySharingRenovated.getExpirationDate(),
+      activitySharingDtoRenovated.getActivitySharing().getExpirationDate());
     verify(activitySharingDao, Mockito.times(1)).renovateSharedURL(activitySharing);
   }
 

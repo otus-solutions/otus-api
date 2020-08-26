@@ -1,6 +1,8 @@
 package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.security.AuthorizationHeaderReader;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharingDto;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,13 +34,23 @@ public class ActivitySharingResourceTest {
   @Mock
   private HttpServletRequest request;
 
+  private ActivitySharingDto activitySharingDto;
+
+  @Before
+  public void setUp(){
+    activitySharingDto = new ActivitySharingDto(null, SHARED_URL);
+  }
+
 
   @Test
   public void getSharedURL_method_should_return_url(){
-    mockContextToSetUserToken();
-    when(activitySharingFacade.getSharedURL(ACTIVITY_ID, USER_TOKEN)).thenReturn(SHARED_URL);
+    mockStatic(AuthorizationHeaderReader.class);
+    when(request.getHeader(Mockito.any())).thenReturn(USER_TOKEN);
+    when(AuthorizationHeaderReader.readToken(Mockito.any())).thenReturn(USER_TOKEN);
+
+    when(activitySharingFacade.getSharedURL(ACTIVITY_ID, USER_TOKEN)).thenReturn(activitySharingDto);
     assertEquals(
-      encapsulateExpectedResponse(SHARED_URL),
+      encapsulateExpectedResponse(ActivitySharingDto.serialize(activitySharingDto)),
       activitySharingResource.getSharedURL(request, ACTIVITY_ID)
     );
     verify(activitySharingFacade, Mockito.times(1)).getSharedURL(ACTIVITY_ID, USER_TOKEN);
@@ -47,9 +59,9 @@ public class ActivitySharingResourceTest {
 
   @Test
   public void renovateSharedURL_method_should_return_url(){
-    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID)).thenReturn(SHARED_URL);
+    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID)).thenReturn(activitySharingDto);
     assertEquals(
-      encapsulateExpectedResponse(SHARED_URL),
+      encapsulateExpectedResponse(ActivitySharingDto.serialize(activitySharingDto)),
       activitySharingResource.renovateSharedURL(ACTIVITY_ID)
     );
     verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_ID);
@@ -63,13 +75,7 @@ public class ActivitySharingResourceTest {
 
 
   private String encapsulateExpectedResponse(String data) {
-    return "{\"data\":\"" + data + "\"}";
-  }
-
-  private void mockContextToSetUserToken() {
-    mockStatic(AuthorizationHeaderReader.class);
-    when(request.getHeader(Mockito.any())).thenReturn(USER_TOKEN);
-    when(AuthorizationHeaderReader.readToken(Mockito.any())).thenReturn(USER_TOKEN);
+    return "{\"data\":" + data + "}";
   }
 
 }

@@ -13,6 +13,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharingDto;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
@@ -30,7 +31,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
 
@@ -65,6 +66,7 @@ public class ActivitySharingFacadeTest {
   private ActivitySharing activitySharing;
   private SurveyActivity surveyActivity;
   private ParticipantTempTokenRequestDto participantTempTokenRequestDto;
+  private ActivitySharingDto activitySharingDto;
 
 
   @Before
@@ -80,11 +82,12 @@ public class ActivitySharingFacadeTest {
     surveyActivity.setParticipantData(participant);
 
     participantTempTokenRequestDto = new ParticipantTempTokenRequestDto(RN, USER_ID);
+    activitySharingDto = new ActivitySharingDto(null, SHARED_URL);
   }
 
 
   @Test
-  public void getSharedURL_method_should_return_url() throws Exception {
+  public void getSharedURL_method_should_return_dto_with_url() throws Exception {
     when(activityService.getByID(ACTIVITY_ID)).thenReturn(surveyActivity);
     when(participantService.getByRecruitmentNumber(RN)).thenReturn(participant);
     when(findByTokenService.findUserByToken(USER_TOKEN)).thenReturn(user);
@@ -94,10 +97,9 @@ public class ActivitySharingFacadeTest {
       .thenReturn(PARTICIPANT_TOKEN);
     whenNew(ActivitySharing.class).withArguments(ACTIVITY_OID, USER_OID, PARTICIPANT_TOKEN)
       .thenReturn(activitySharing);
-    when(activitySharingService.getSharedURL(activitySharing)).thenReturn(SHARED_URL);
-    assertEquals(
-      SHARED_URL,
-      activitySharingFacade.getSharedURL(ACTIVITY_ID, USER_TOKEN)
+    when(activitySharingService.getSharedURL(activitySharing)).thenReturn(activitySharingDto);
+    assertNotNull(
+      activitySharingFacade.getSharedURL(ACTIVITY_ID, USER_TOKEN).getUrl()
     );
   }
 
@@ -146,13 +148,10 @@ public class ActivitySharingFacadeTest {
 
 
   @Test
-  public void renovateSharedURL_method_should_return_url() throws Exception {
+  public void renovateSharedURL_method_should_return_dto_with_url() throws Exception {
     mockActivitySharingInstanceForRenovateMethod();
-    when(activitySharingService.renovateSharedURL(activitySharing)).thenReturn(SHARED_URL);
-    assertEquals(
-      SHARED_URL,
-      activitySharingFacade.renovateSharedURL(ACTIVITY_ID)
-    );
+    when(activitySharingService.renovateSharedURL(activitySharing)).thenReturn(activitySharingDto);
+    assertNotNull(activitySharingFacade.renovateSharedURL(ACTIVITY_ID).getUrl());
   }
 
   @Test(expected = HttpResponseException.class)
