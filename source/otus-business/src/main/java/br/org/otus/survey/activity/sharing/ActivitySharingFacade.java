@@ -16,6 +16,7 @@ import org.ccem.otus.service.sharing.ActivitySharingService;
 
 import javax.inject.Inject;
 import java.text.ParseException;
+import java.util.zip.DataFormatException;
 
 public class ActivitySharingFacade {
 
@@ -38,7 +39,7 @@ public class ActivitySharingFacade {
     try {
       return activitySharingService.getSharedURL(buildActivitySharing(activityID, userToken));
     }
-    catch (DataNotFoundException | ValidationException | ParseException e) {
+    catch (DataFormatException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -47,7 +48,7 @@ public class ActivitySharingFacade {
     try {
       return activitySharingService.renovateSharedURL(buildActivitySharing(activityID, userToken));
     }
-    catch (DataNotFoundException | ValidationException | ParseException e) {
+    catch (DataFormatException | DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -57,21 +58,21 @@ public class ActivitySharingFacade {
       checkIfActivityModeIsAutoFill(activityID);
       activitySharingService.deleteSharedURL(activityID);
     }
-    catch (DataNotFoundException | ValidationException e) {
+    catch (DataFormatException | DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
 
-  private SurveyActivity checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException, ValidationException {
+  private SurveyActivity checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException, DataFormatException {
     SurveyActivity surveyActivity = activityService.getByID(activityID);
     if (!surveyActivity.getMode().name().equals(ActivityMode.AUTOFILL.toString())) {
-      throw new ValidationException(Validation.build(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE, null));
+      throw new DataFormatException(NOT_AUTOFILL_INVALID_SHARED_LINK_REQUEST_MESSAGE);
     }
     return surveyActivity;
   }
 
-  private ActivitySharing buildActivitySharing(String activityID, String userToken) throws DataNotFoundException, ValidationException, ParseException {
+  private ActivitySharing buildActivitySharing(String activityID, String userToken) throws DataFormatException, DataNotFoundException, ParseException, ValidationException {
     SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityID);
     Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
     ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
