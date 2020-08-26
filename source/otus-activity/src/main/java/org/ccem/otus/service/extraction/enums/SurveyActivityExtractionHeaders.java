@@ -15,9 +15,10 @@ public enum SurveyActivityExtractionHeaders {
   PAPER_REALIZATION_DATE("paper_realization_date"),
   PAPER_INTERVIEWER("paper_interviewer"),
   LAST_FINALIZATION_DATE("last_finalization_date"),
-  
+
   QUESTION_COMMENT_SUFFIX("_comment"),
-  QUESTION_METADATA_SUFFIX("_metadata");
+  QUESTION_METADATA_SUFFIX("_metadata"),
+  EXTERNAL_ID("external_id");
 
   private final String value;
 

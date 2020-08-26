@@ -68,6 +68,8 @@ public class SurveyActivityExtractionRecordsFactory {
 
     final LocalDateTime lastFinalizationDate = SurveyBasicInfoRecordsFactory.getLasFinalizationDate(surveyActivity);
     this.surveyInformation.replace(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue(), lastFinalizationDate);
+
+    this.surveyInformation.replace(SurveyActivityExtractionHeaders.EXTERNAL_ID.getValue(), SurveyBasicInfoRecordsFactory.getExternalID(surveyActivity));
   }
 
   public void buildSurveyQuestionInfo(SurveyActivity surveyActivity) throws DataNotFoundException {
