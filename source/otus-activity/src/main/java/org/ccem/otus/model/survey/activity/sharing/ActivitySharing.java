@@ -1,7 +1,6 @@
 package org.ccem.otus.model.survey.activity.sharing;
 
 import br.org.otus.utils.ObjectIdAdapter;
-import br.org.otus.utils.ObjectIdToStringAdapter;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
@@ -18,17 +17,17 @@ public class ActivitySharing {
   @SerializedName("_id")
   private ObjectId id;
   private ObjectId activityId;
-  private ObjectId userID;
+  private ObjectId userId;
   private String participantToken;
   private String creationDate;
   private String expirationDate;
 
   public ActivitySharing() { }
 
-  public ActivitySharing(ObjectId activityId, ObjectId userID, String participantToken) {
+  public ActivitySharing(ObjectId activityId, ObjectId userId, String participantToken) {
     this.objectType = OBJECT_TYPE;
     this.activityId = activityId;
-    this.userID = userID;
+    this.userId = userId;
     this.participantToken = participantToken;
     this.creationDate = DateAdapter.nowToISODate();
     try {
@@ -40,10 +39,6 @@ public class ActivitySharing {
 
   public String getObjectType() {
     return objectType;
-  }
-
-  public void setObjectType(String objectType) {
-    this.objectType = objectType;
   }
 
   public ObjectId getId() {
@@ -58,8 +53,8 @@ public class ActivitySharing {
     return participantToken;
   }
 
-  public ObjectId getUserID() {
-    return userID;
+  public ObjectId getUserId() {
+    return userId;
   }
 
   public String getCreationDate() {
@@ -81,12 +76,6 @@ public class ActivitySharing {
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-    return builder;
-  }
-
-  public static GsonBuilder getFrontGsonBuilder() {
-    GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     return builder;
   }
 
