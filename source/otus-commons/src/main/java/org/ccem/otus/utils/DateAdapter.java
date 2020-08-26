@@ -30,4 +30,8 @@ public class DateAdapter {
     return toISODate(calendar.getTime());
   }
 
+  public static boolean compareDateWithoutTime(String dateStr1, String dateStr2) throws ParseException {
+    return dateStr1.substring(0, 11).equals(dateStr2.substring(0, 11));
+  }
+
 }
