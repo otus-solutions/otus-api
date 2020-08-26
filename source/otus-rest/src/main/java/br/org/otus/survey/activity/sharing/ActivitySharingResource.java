@@ -35,8 +35,8 @@ public class ActivitySharingResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String renovateSharedURL(@PathParam("id") String activityId) {
-    String sharedURL = activitySharingFacade.renovateSharedURL(activityId);
-    return new Response().buildSuccess(sharedURL).toJson();
+    ActivitySharingDto activitySharingDto = activitySharingFacade.renovateSharedURL(activityId);
+    return new Response().buildSuccess(activitySharingDto).toJson(ActivitySharingDto.getFrontGsonBuilder());
   }
 
   @DELETE

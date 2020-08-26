@@ -34,28 +34,34 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public ObjectId createSharedURL(ActivitySharing activitySharing) {
+  public ActivitySharing createSharedURL(ActivitySharing activitySharing) {
     Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activitySharing.getActivityId())).first();
     if(result != null){
-      return result.getObjectId(OID_KEY_NAME);
+      activitySharing.setId(result.getObjectId(OID_KEY_NAME));
+      return activitySharing;
     }
 
     Document parsed = Document.parse(ActivitySharing.serialize(activitySharing));
     collection.insertOne(parsed);
-    return parsed.getObjectId(OID_KEY_NAME);
+    activitySharing.setId(parsed.getObjectId(OID_KEY_NAME));
+    return activitySharing;
   }
 
   @Override
-  public void renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException {
-    UpdateResult updateResult = collection.updateOne(
-      eq(ACTIVITY_ID_FIELD_NAME, activitySharing.getActivityId()),
+  public ActivitySharing renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException {
+    ObjectId activityOID = activitySharing.getActivityId();
+    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activityOID)).first();
+    if(result == null){
+      throw new DataNotFoundException(new Throwable(
+        "No activity shared link found for " + ACTIVITY_ID_FIELD_NAME + " " + activityOID.toString()));
+    }
+
+    collection.updateOne(
+      eq(ACTIVITY_ID_FIELD_NAME, activityOID),
       new Document("$set", new Document(EXPIRATION_DATE_FIELD_NAME, activitySharing.getExpirationDate()))
     );
 
-    if(updateResult.getMatchedCount() == 0){
-      throw new DataNotFoundException(new Throwable(
-        "No activity shared link found for " + ACTIVITY_ID_FIELD_NAME + " " + activitySharing.getActivityId().toString()));
-    }
+    return ActivitySharing.deserialize(result.toJson());
   }
 
   @Override
