@@ -51,14 +51,14 @@ public class ActivitySharingFacade {
         new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), userOID.toString())
       );
       ActivitySharing activitySharing =  new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
-      return getOrCreateSharedURL(activitySharing);
+      return getOrCreateSharedURL(activitySharing, userOID.toString());
     }
     catch (DataFormatException | DataNotFoundException | ValidationException | ParseException | TokenException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing){
+  private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing, String userId){
     try{
       return activitySharingService.getSharedURL(activitySharing);
     }
@@ -67,21 +67,23 @@ public class ActivitySharingFacade {
     }
   }
 
-  public ActivitySharingDto renovateSharedURL(String activityId) throws HttpResponseException {
+  public ActivitySharingDto renovateSharedURL(String activityId, String userToken) throws HttpResponseException {
     try {
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       ActivitySharing activitySharing = new ActivitySharing(new ObjectId(activityId), null, null);
       return activitySharingService.renovateSharedURL(activitySharing);
     }
-    catch (DataNotFoundException e) {
+    catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  public void deleteSharedURL(String activityId) throws HttpResponseException {
+  public void deleteSharedURL(String activityId, String userToken) throws HttpResponseException {
     try {
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       activitySharingService.deleteSharedURL(activityId);
     }
-    catch (DataNotFoundException e) {
+    catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }

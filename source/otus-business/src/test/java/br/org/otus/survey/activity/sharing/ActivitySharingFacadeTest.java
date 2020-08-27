@@ -83,6 +83,8 @@ public class ActivitySharingFacadeTest {
 
     participantTempTokenRequestDto = new ParticipantTempTokenRequestDto(RN, USER_ID);
     activitySharingDto = new ActivitySharingDto(null, SHARED_URL);
+
+    when(findByTokenService.findUserByToken(USER_TOKEN)).thenReturn(user);
   }
 
 
@@ -90,7 +92,6 @@ public class ActivitySharingFacadeTest {
   public void getSharedURL_method_should_return_dto_with_url() throws Exception {
     when(activityService.getByID(ACTIVITY_ID)).thenReturn(surveyActivity);
     when(participantService.getByRecruitmentNumber(RN)).thenReturn(participant);
-    when(findByTokenService.findUserByToken(USER_TOKEN)).thenReturn(user);
     whenNew(ParticipantTempTokenRequestDto.class).withArguments(RN, USER_ID)
       .thenReturn(participantTempTokenRequestDto);
     when(temporaryParticipantTokenService.generateTempToken(participantTempTokenRequestDto))
@@ -151,21 +152,21 @@ public class ActivitySharingFacadeTest {
   public void renovateSharedURL_method_should_return_dto_with_url() throws Exception {
     mockActivitySharingInstanceForRenovateMethod();
     when(activitySharingService.renovateSharedURL(activitySharing)).thenReturn(activitySharingDto);
-    assertNotNull(activitySharingFacade.renovateSharedURL(ACTIVITY_ID).getUrl());
+    assertNotNull(activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN).getUrl());
   }
 
   @Test(expected = HttpResponseException.class)
   public void renovateSharedURL_method_should_handle_DataNotFoundException() throws Exception {
     mockActivitySharingInstanceForRenovateMethod();
     when(activitySharingService.renovateSharedURL(activitySharing)).thenThrow(new DataNotFoundException());
-    activitySharingFacade.renovateSharedURL(ACTIVITY_ID);
+    activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN);
   }
 
 
   @Test
   public void deleteSharedURL_method_should_return_url() throws Exception {
     mockInitializeForDeleteMethod();
-    activitySharingFacade.deleteSharedURL(ACTIVITY_ID);
+    activitySharingFacade.deleteSharedURL(ACTIVITY_ID, USER_TOKEN);
     verify(activitySharingService, Mockito.times(1)).deleteSharedURL(ACTIVITY_ID);
   }
 
@@ -173,7 +174,7 @@ public class ActivitySharingFacadeTest {
   public void deleteSharedURL_method_should_handle_DataNotFoundException() throws Exception {
     mockInitializeForDeleteMethod();
     doThrow(new DataNotFoundException()).when(activitySharingService, "deleteSharedURL", ACTIVITY_ID);
-    activitySharingFacade.deleteSharedURL(ACTIVITY_ID);
+    activitySharingFacade.deleteSharedURL(ACTIVITY_ID, USER_TOKEN);
   }
 
 
@@ -185,7 +186,6 @@ public class ActivitySharingFacadeTest {
   private void mockInitializeForDeleteMethod() {
     try {
       when(activityService.getByID(ACTIVITY_ID)).thenReturn(surveyActivity);
-      when(findByTokenService.findUserByToken(USER_TOKEN)).thenReturn(user);
     }
     catch (Exception e){}
   }

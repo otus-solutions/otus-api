@@ -39,15 +39,15 @@ public class ActivitySharingResourceTest {
   @Before
   public void setUp(){
     activitySharingDto = new ActivitySharingDto(null, SHARED_URL);
+
+    mockStatic(AuthorizationHeaderReader.class);
+    when(request.getHeader(Mockito.any())).thenReturn(USER_TOKEN);
+    when(AuthorizationHeaderReader.readToken(Mockito.any())).thenReturn(USER_TOKEN);
   }
 
 
   @Test
   public void getSharedURL_method_should_return_url(){
-    mockStatic(AuthorizationHeaderReader.class);
-    when(request.getHeader(Mockito.any())).thenReturn(USER_TOKEN);
-    when(AuthorizationHeaderReader.readToken(Mockito.any())).thenReturn(USER_TOKEN);
-
     when(activitySharingFacade.getSharedURL(ACTIVITY_ID, USER_TOKEN)).thenReturn(activitySharingDto);
     assertEquals(
       encapsulateExpectedResponse(ActivitySharingDto.serialize(activitySharingDto)),
@@ -59,18 +59,18 @@ public class ActivitySharingResourceTest {
 
   @Test
   public void renovateSharedURL_method_should_return_url(){
-    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID)).thenReturn(activitySharingDto);
+    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN)).thenReturn(activitySharingDto);
     assertEquals(
       encapsulateExpectedResponse(ActivitySharingDto.serialize(activitySharingDto)),
-      activitySharingResource.renovateSharedURL(ACTIVITY_ID)
+      activitySharingResource.renovateSharedURL(request, ACTIVITY_ID)
     );
-    verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_ID);
+    verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_ID, USER_TOKEN);
   }
 
   @Test
   public void deleteSharedURL_method_should_invoke_activitySharingFacade(){
-    activitySharingResource.deleteSharedURL(ACTIVITY_ID);
-    verify(activitySharingFacade, Mockito.times(1)).deleteSharedURL(ACTIVITY_ID);
+    activitySharingResource.deleteSharedURL(request, ACTIVITY_ID);
+    verify(activitySharingFacade, Mockito.times(1)).deleteSharedURL(ACTIVITY_ID, USER_TOKEN);
   }
 
 
