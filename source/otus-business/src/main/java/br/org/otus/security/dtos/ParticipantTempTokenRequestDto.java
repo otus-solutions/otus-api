@@ -20,7 +20,7 @@ public class ParticipantTempTokenRequestDto implements Dto, JWTClaimSetBuilder {
 
   @Override
   public Boolean isValid() {
-    return null;
+    return recruitmentNumber!=null && activityId!=null;
   }
 
   @Override
