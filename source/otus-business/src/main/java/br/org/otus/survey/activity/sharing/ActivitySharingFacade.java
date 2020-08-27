@@ -51,14 +51,14 @@ public class ActivitySharingFacade {
         new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), userOID.toString())
       );
       ActivitySharing activitySharing =  new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
-      return getOrCreateSharedURL(activitySharing, userOID.toString());
+      return getOrCreateSharedURL(activitySharing, userOID);
     }
     catch (DataFormatException | DataNotFoundException | ValidationException | ParseException | TokenException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing, String userId){
+  private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing, ObjectId userOID){
     try{
       return activitySharingService.getSharedURL(activitySharing);
     }
