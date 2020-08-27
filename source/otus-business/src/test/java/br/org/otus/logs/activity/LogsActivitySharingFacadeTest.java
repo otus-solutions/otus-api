@@ -21,37 +21,35 @@ public class LogsActivitySharingFacadeTest{
   @Mock
   private LogsActivitySharingService logsActivitysharingService;
 
-  private ActivityLog activityLog;
-
   private ObjectId objectId = new ObjectId(ID);
 
   @Test
   public void testLogsActivitySharingCreateMethod_should_persist_Create() {
     logsActivitySharingFacade.logsActivitySharingCreate(objectId);
-    verify(logsActivitysharingService, times(1)).persist(any());
+    verify(logsActivitysharingService, times(1)).logsActivitySharingCreate(any());
   }
 
   @Test
   public void testLogsActivitySharingRenewMethod_should_persist_Renew() {
     logsActivitySharingFacade.logsActivitySharingRenew(objectId);
-    verify(logsActivitysharingService, times(1)).persist(any());
+    verify(logsActivitysharingService, times(1)).logsActivitySharingRenew(any());
   }
 
   @Test
   public void testLogsActivitySharingAccessMethod_should_persist_Access() {
     logsActivitySharingFacade.logsActivitySharingAccess(objectId);
-    verify(logsActivitysharingService, times(1)).persist(any());
+    verify(logsActivitysharingService, times(1)).logsActivitySharingAccess(any());
   }
 
   @Test
   public void testLogsActivitySharingSearchMethod_should_persist_Search() {
     logsActivitySharingFacade.logsActivitySharingSearch(objectId);
-    verify(logsActivitysharingService, times(1)).persist(any());
+    verify(logsActivitysharingService, times(1)).logsActivitySharingSearch(any());
   }
 
   @Test
   public void testLogsActivitySharingDeletionMethod_should_persist_Deletion() {
     logsActivitySharingFacade.logsActivitySharingDeletion(objectId);
-    verify(logsActivitysharingService, times(1)).persist(any());
+    verify(logsActivitysharingService, times(1)).logsActivitySharingDeletion(any());
   }
 }

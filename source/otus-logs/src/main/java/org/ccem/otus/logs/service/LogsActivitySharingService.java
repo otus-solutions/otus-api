@@ -1,7 +1,15 @@
 package org.ccem.otus.logs.service;
 
-import org.ccem.otus.logs.activity.ActivityLog;
+import org.bson.types.ObjectId;
 
 public interface LogsActivitySharingService {
-  void persist(ActivityLog activityLog);
+  void logsActivitySharingCreate(ObjectId userId);
+
+  void logsActivitySharingRenew(ObjectId userId);
+
+  void logsActivitySharingAccess(ObjectId userId);
+
+  void logsActivitySharingSearch(ObjectId userId);
+
+  void logsActivitySharingDeletion(ObjectId userId);
 }
