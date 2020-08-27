@@ -41,8 +41,8 @@ public class ActivitySharingFacade {
   @Inject
   private TemporaryParticipantTokenService temporaryParticipantTokenService;
 
-//  @Inject
-//  private LogsActivitySharingFacade logsActivitySharingFacade;
+  @Inject
+  private LogsActivitySharingFacade logsActivitySharingFacade;
 
 
   public ActivitySharingDto getSharedURL(String activityId, String userToken) throws HttpResponseException {
@@ -62,20 +62,20 @@ public class ActivitySharingFacade {
   }
 
   private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing, ObjectId userOID){
+    ActivitySharingDto activitySharingDto;
     try{
-      ActivitySharingDto activitySharingDto = activitySharingService.getSharedURL(activitySharing);
+      activitySharingDto = activitySharingService.getSharedURL(activitySharing);
       if(activitySharingDto != null){
-//        logsActivitySharingFacade.logsActivitySharingSearch(userOID);
+        logsActivitySharingFacade.logsActivitySharingSearch(userOID);
       }
-      return activitySharingDto;
     }
     catch (DataNotFoundException e) {
-      ActivitySharingDto activitySharingDto = activitySharingService.createSharedURL(activitySharing);
+      activitySharingDto = activitySharingService.createSharedURL(activitySharing);
       if(activitySharingDto != null){
-//        logsActivitySharingFacade.logsActivitySharingCreate(userOID);
+        logsActivitySharingFacade.logsActivitySharingCreate(userOID);
       }
-      return activitySharingDto;
     }
+    return activitySharingDto;
   }
 
   public ActivitySharingDto renovateSharedURL(String activitySharingId, String userToken) throws HttpResponseException {
@@ -83,7 +83,7 @@ public class ActivitySharingFacade {
       ActivitySharingDto activitySharingDto = activitySharingService.renovateSharedURL(activitySharingId);
       if(activitySharingDto != null){
         ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
-//        logsActivitySharingFacade.logsActivitySharingRenew(userOID);
+        logsActivitySharingFacade.logsActivitySharingRenew(userOID);
       }
       return activitySharingDto;
     }
@@ -96,7 +96,7 @@ public class ActivitySharingFacade {
     try {
       activitySharingService.deleteSharedURL(activitySharingId);
       ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
-//      logsActivitySharingFacade.logsActivitySharingRenew(userOID);
+      logsActivitySharingFacade.logsActivitySharingRenew(userOID);
     }
     catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
