@@ -50,7 +50,7 @@ public class SystemInstallationEmail extends Email implements OtusEmail {
   }
 
   public static boolean isValid(String email) {
-    String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+    String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@\\w+([[.-]?\\w]+\\.)+[\\w]+[\\w]$";
     return email.matches(regex);
   }
 
