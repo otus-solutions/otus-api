@@ -1,6 +1,7 @@
 package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.commons.FindByTokenService;
+import br.org.otus.logs.activity.LogsActivitySharingFacade;
 import br.org.otus.model.User;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.ParticipantTempTokenRequestDto;
@@ -61,6 +62,8 @@ public class ActivitySharingFacadeTest {
   private FindByTokenService findByTokenService;
   @Mock
   private TemporaryParticipantTokenService temporaryParticipantTokenService;
+  @Mock
+  private LogsActivitySharingFacade logsActivitySharingFacade;
 
   private Participant participant;
   private User user;
@@ -115,8 +118,6 @@ public class ActivitySharingFacadeTest {
   @Test(expected = HttpResponseException.class)
   public void getSharedURL_method_should_handle_DataNotFoundException() throws Exception {
     when(activityService.getByID(ACTIVITY_ID)).thenThrow(new DataNotFoundException());
-
-    //when(activitySharingService.getSharedURL(activitySharing)).thenThrow(new DataNotFoundException());
     activitySharingFacade.getSharedURL(ACTIVITY_ID, USER_TOKEN);
   }
 
