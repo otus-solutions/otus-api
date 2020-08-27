@@ -24,6 +24,7 @@ public class ActivitySharingResourceTest {
 
   private static final String USER_TOKEN = "123456";
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
+  private static final String ACTIVITY_SHARING_ID = "5a33cb4a28f10d1043710f7e";
   private static final String SHARED_URL = "https://otus";
 
 
@@ -59,18 +60,18 @@ public class ActivitySharingResourceTest {
 
   @Test
   public void renovateSharedURL_method_should_return_url(){
-    when(activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN)).thenReturn(activitySharingDto);
+    when(activitySharingFacade.renovateSharedURL(ACTIVITY_SHARING_ID, USER_TOKEN)).thenReturn(activitySharingDto);
     assertEquals(
       encapsulateExpectedResponse(ActivitySharingDto.serialize(activitySharingDto)),
-      activitySharingResource.renovateSharedURL(request, ACTIVITY_ID)
+      activitySharingResource.renovateSharedURL(request, ACTIVITY_SHARING_ID)
     );
-    verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_ID, USER_TOKEN);
+    verify(activitySharingFacade, Mockito.times(1)).renovateSharedURL(ACTIVITY_SHARING_ID, USER_TOKEN);
   }
 
   @Test
   public void deleteSharedURL_method_should_invoke_activitySharingFacade(){
-    activitySharingResource.deleteSharedURL(request, ACTIVITY_ID);
-    verify(activitySharingFacade, Mockito.times(1)).deleteSharedURL(ACTIVITY_ID, USER_TOKEN);
+    activitySharingResource.deleteSharedURL(request, ACTIVITY_SHARING_ID);
+    verify(activitySharingFacade, Mockito.times(1)).deleteSharedURL(ACTIVITY_SHARING_ID, USER_TOKEN);
   }
 
 

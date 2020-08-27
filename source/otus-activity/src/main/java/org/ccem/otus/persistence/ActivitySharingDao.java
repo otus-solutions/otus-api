@@ -10,8 +10,8 @@ public interface ActivitySharingDao {
 
   ActivitySharing createSharedURL(ActivitySharing activitySharing);
 
-  ActivitySharing renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException;
+  ActivitySharing renovateSharedURL(ObjectId activitySharingOID) throws DataNotFoundException;
 
-  void deleteSharedURL(ObjectId activityOID) throws DataNotFoundException;
+  void deleteSharedURL(ObjectId activitySharingOID) throws DataNotFoundException;
 
 }

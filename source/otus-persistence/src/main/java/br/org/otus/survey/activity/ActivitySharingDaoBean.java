@@ -28,16 +28,15 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
     Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activityOID)).first();
     if(result == null){
       throw new DataNotFoundException(new Throwable(
-        "No activity shared link found for " + ACTIVITY_ID_FIELD_NAME + " " + activityOID.toString()));
+        "No activity shared url found for " + ACTIVITY_ID_FIELD_NAME + " " + activityOID.toString()));
     }
     return ActivitySharing.deserialize(result.toJson());
   }
 
   @Override
   public ActivitySharing createSharedURL(ActivitySharing activitySharing) {
-    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activitySharing.getActivityId())).first();
+    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activitySharing.getId())).first();
     if(result != null){
-      activitySharing.setId(result.getObjectId(OID_KEY_NAME));
       return activitySharing;
     }
 
@@ -48,28 +47,30 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   }
 
   @Override
-  public ActivitySharing renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException {
-    ObjectId activityOID = activitySharing.getActivityId();
-
-    UpdateResult updateResult = collection.updateOne(
-      eq(ACTIVITY_ID_FIELD_NAME, activityOID),
-      new Document("$set", new Document(EXPIRATION_DATE_FIELD_NAME, activitySharing.getExpirationDate()))
-    );
-    if(updateResult.getMatchedCount() == 0){
+  public ActivitySharing renovateSharedURL(ObjectId activitySharingOID) throws DataNotFoundException {
+    Document result = collection.find(eq(OID_KEY_NAME, activitySharingOID)).first();
+    if(result == null){
       throw new DataNotFoundException(new Throwable(
-        "No activity shared link found for " + ACTIVITY_ID_FIELD_NAME + " " + activityOID.toString()));
+        "No activity shared url found with id " + activitySharingOID.toString()));
     }
 
-    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activityOID)).first();
-    return ActivitySharing.deserialize(result.toJson());
+    ActivitySharing activitySharing = ActivitySharing.deserialize(result.toJson());
+    activitySharing.renovate();
+
+    collection.updateOne(
+      eq(OID_KEY_NAME, activitySharingOID),
+      new Document("$set", new Document(EXPIRATION_DATE_FIELD_NAME, activitySharing.getExpirationDate()))
+    );
+
+    return activitySharing;
   }
 
   @Override
-  public void deleteSharedURL(ObjectId activityOID) throws DataNotFoundException {
-    DeleteResult deleteResult = collection.deleteOne(eq(ACTIVITY_ID_FIELD_NAME, activityOID));
+  public void deleteSharedURL(ObjectId activitySharingOID) throws DataNotFoundException {
+    DeleteResult deleteResult = collection.deleteOne(eq(OID_KEY_NAME, activitySharingOID));
     if(deleteResult == null){
       throw new DataNotFoundException(new Throwable(
-        "No activity shared link found for " + ACTIVITY_ID_FIELD_NAME + " " + activityOID.toString()));
+        "No activity shared url found with id" + activitySharingOID.toString()));
     }
   }
 

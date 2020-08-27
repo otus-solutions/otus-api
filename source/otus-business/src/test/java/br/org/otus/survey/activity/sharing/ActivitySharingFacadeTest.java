@@ -42,6 +42,7 @@ public class ActivitySharingFacadeTest {
   private static final Long RN = 123456L;
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
   private static final ObjectId ACTIVITY_OID = new ObjectId(ACTIVITY_ID);
+  private static final String ACTIVITY_SHARING_ID = "5a33cb4a28f10d1043710f7e";
   private static final String USER_ID = "5e0658135b4ff40f8916d2b5";
   private static final ObjectId USER_OID = new ObjectId(USER_ID);
   private static final String USER_TOKEN = "123456";
@@ -151,15 +152,15 @@ public class ActivitySharingFacadeTest {
   @Test
   public void renovateSharedURL_method_should_return_dto_with_url() throws Exception {
     mockActivitySharingInstanceForRenovateMethod();
-    when(activitySharingService.renovateSharedURL(activitySharing)).thenReturn(activitySharingDto);
-    assertNotNull(activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN).getUrl());
+    when(activitySharingService.renovateSharedURL(ACTIVITY_SHARING_ID)).thenReturn(activitySharingDto);
+    assertNotNull(activitySharingFacade.renovateSharedURL(ACTIVITY_SHARING_ID, USER_TOKEN).getUrl());
   }
 
   @Test(expected = HttpResponseException.class)
   public void renovateSharedURL_method_should_handle_DataNotFoundException() throws Exception {
     mockActivitySharingInstanceForRenovateMethod();
-    when(activitySharingService.renovateSharedURL(activitySharing)).thenThrow(new DataNotFoundException());
-    activitySharingFacade.renovateSharedURL(ACTIVITY_ID, USER_TOKEN);
+    when(activitySharingService.renovateSharedURL(ACTIVITY_SHARING_ID)).thenThrow(new DataNotFoundException());
+    activitySharingFacade.renovateSharedURL(ACTIVITY_SHARING_ID, USER_TOKEN);
   }
 
 

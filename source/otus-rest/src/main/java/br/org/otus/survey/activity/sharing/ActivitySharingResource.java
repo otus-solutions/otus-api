@@ -34,9 +34,9 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String renovateSharedURL(@Context HttpServletRequest request, @PathParam("id") String activityId) {
+  public String renovateSharedURL(@Context HttpServletRequest request, @PathParam("id") String id) {
     String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
-    ActivitySharingDto activitySharingDto = activitySharingFacade.renovateSharedURL(activityId, token);
+    ActivitySharingDto activitySharingDto = activitySharingFacade.renovateSharedURL(id, token);
     return new Response().buildSuccess(activitySharingDto).toJson(ActivitySharingDto.getFrontGsonBuilder());
   }
 
@@ -45,9 +45,9 @@ public class ActivitySharingResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String deleteSharedURL(@Context HttpServletRequest request, @PathParam("id") String activityId) {
+  public String deleteSharedURL(@Context HttpServletRequest request, @PathParam("id") String id) {
     String token = AuthorizationHeaderReader.readToken(request.getHeader(HttpHeaders.AUTHORIZATION));
-    activitySharingFacade.deleteSharedURL(activityId, token);
+    activitySharingFacade.deleteSharedURL(id, token);
     return new Response().buildSuccess().toJson();
   }
 }

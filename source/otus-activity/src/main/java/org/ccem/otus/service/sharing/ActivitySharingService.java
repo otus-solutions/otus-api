@@ -10,7 +10,7 @@ public interface ActivitySharingService {
 
   ActivitySharingDto createSharedURL(ActivitySharing activitySharing);
 
-  ActivitySharingDto renovateSharedURL(ActivitySharing activitySharing) throws DataNotFoundException;
+  ActivitySharingDto renovateSharedURL(String activitySharingId) throws DataNotFoundException;
 
-  void deleteSharedURL(String activityId) throws DataNotFoundException;
+  void deleteSharedURL(String activitySharingId) throws DataNotFoundException;
 }

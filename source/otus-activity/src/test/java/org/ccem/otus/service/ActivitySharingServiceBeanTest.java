@@ -24,6 +24,8 @@ public class ActivitySharingServiceBeanTest {
 
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
   private static final ObjectId ACTIVITY_OID = new ObjectId(ACTIVITY_ID);
+  private static final String ACTIVITY_SHARING_ID = "5a33cb4a28f10d1043710f7e";
+  private static final ObjectId ACTIVITY_SHARING_OID = new ObjectId(ACTIVITY_SHARING_ID);
 
   @InjectMocks
   private ActivitySharingServiceBean activitySharingServiceBean;
@@ -49,7 +51,7 @@ public class ActivitySharingServiceBeanTest {
     activitySharingServiceBean.getSharedURL(activitySharing);
   }
 
-  
+
   @Test
   public void createSharedURL_method_should_return_url() {
     when(activitySharingDao.createSharedURL(activitySharing)).thenReturn(activitySharing);
@@ -61,19 +63,19 @@ public class ActivitySharingServiceBeanTest {
   public void renovateSharedURL_method_should_return_url() throws DataNotFoundException {
     ActivitySharing activitySharingRenovated = new ActivitySharing(ACTIVITY_OID, null, null);
     activitySharingRenovated.renovate();
-    when(activitySharingDao.renovateSharedURL(activitySharing)).thenReturn(activitySharingRenovated);
-    ActivitySharingDto activitySharingDtoRenovated = activitySharingServiceBean.renovateSharedURL(activitySharing);
+    when(activitySharingDao.renovateSharedURL(ACTIVITY_SHARING_OID)).thenReturn(activitySharingRenovated);
+    ActivitySharingDto activitySharingDtoRenovated = activitySharingServiceBean.renovateSharedURL(ACTIVITY_SHARING_ID);
     assertNotNull(activitySharingDtoRenovated);
     assertEquals(
       activitySharingRenovated.getExpirationDate(),
       activitySharingDtoRenovated.getActivitySharing().getExpirationDate());
-    verify(activitySharingDao, Mockito.times(1)).renovateSharedURL(activitySharing);
+    verify(activitySharingDao, Mockito.times(1)).renovateSharedURL(ACTIVITY_SHARING_OID);
   }
 
   @Test(expected = DataNotFoundException.class)
   public void renovateSharedURL_method_should_handle_DataNotFoundException() throws Exception {
-    doThrow(new DataNotFoundException()).when(activitySharingDao, "renovateSharedURL", activitySharing);
-    activitySharingServiceBean.renovateSharedURL(activitySharing);
+    doThrow(new DataNotFoundException()).when(activitySharingDao, "renovateSharedURL", ACTIVITY_SHARING_OID);
+    activitySharingServiceBean.renovateSharedURL(ACTIVITY_SHARING_ID);
   }
 
 
