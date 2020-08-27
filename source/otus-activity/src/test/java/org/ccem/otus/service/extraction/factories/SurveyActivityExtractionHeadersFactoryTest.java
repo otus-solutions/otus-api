@@ -58,7 +58,7 @@ public class SurveyActivityExtractionHeadersFactoryTest {
     Assert.assertEquals("paper_realization_date", this.factory.getHeaders().get(11));
     Assert.assertEquals("paper_interviewer", this.factory.getHeaders().get(12));
     Assert.assertEquals("last_finalization_date", this.factory.getHeaders().get(13));
-//    Assert.assertEquals("external_ID", this.factory.getHeaders().get(14));
+    Assert.assertEquals("external_id", this.factory.getHeaders().get(14));
     /* Answers headers */
     Assert.assertEquals("FORM1", this.factory.getHeaders().get(15));
   }
