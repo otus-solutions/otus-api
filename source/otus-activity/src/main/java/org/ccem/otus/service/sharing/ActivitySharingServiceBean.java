@@ -10,6 +10,8 @@ import javax.inject.Inject;
 
 public class ActivitySharingServiceBean implements ActivitySharingService {
 
+  private static final String SURVEY_PLAYER_URL = "DATABASE_NAME";
+
   @Inject
   private ActivitySharingDao activitySharingDao;
 
@@ -36,7 +38,7 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
 
   private ActivitySharingDto buildActivitySharingDto(ActivitySharing activitySharing){
     return new ActivitySharingDto(activitySharing,
-      "https://otus.hmg.ccem.ufrgs.br/survey-player/#/?activity="+activitySharing.getActivityId()+
+      System.getenv(SURVEY_PLAYER_URL)+"?activity="+activitySharing.getActivityId()+
       "&token="+activitySharing.getParticipantToken());
   }
 
