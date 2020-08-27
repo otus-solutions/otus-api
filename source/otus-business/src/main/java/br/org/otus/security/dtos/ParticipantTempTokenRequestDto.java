@@ -5,15 +5,17 @@ import org.ccem.otus.exceptions.Dto;
 
 public class ParticipantTempTokenRequestDto implements Dto, JWTClaimSetBuilder {
 
-  private static final String MODE = "participant-temp-token";
+  private static final String MODE = "sharing";
 
+  private String mode;
   private Long recruitmentNumber;
-  private String userId;
+  private String activityId;
   private String token;
 
-  public ParticipantTempTokenRequestDto(Long recruitmentNumber, String userId) {
+  public ParticipantTempTokenRequestDto(Long recruitmentNumber, String activityId) {
+    this.mode = MODE;
     this.recruitmentNumber = recruitmentNumber;
-    this.userId = userId;
+    this.activityId = activityId;
   }
 
   @Override

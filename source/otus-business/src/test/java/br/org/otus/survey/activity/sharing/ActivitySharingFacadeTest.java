@@ -45,7 +45,7 @@ public class ActivitySharingFacadeTest {
   private static final String USER_ID = "5e0658135b4ff40f8916d2b5";
   private static final ObjectId USER_OID = new ObjectId(USER_ID);
   private static final String USER_TOKEN = "123456";
-  private static final String PARTICIPANT_TOKEN = "123456";
+  private static final String PARTICIPANT_TOKEN = "abc";
   private static final String SHARED_URL = "https://otus";
 
   @InjectMocks
@@ -81,7 +81,7 @@ public class ActivitySharingFacadeTest {
     surveyActivity.setMode(ActivityMode.AUTOFILL);
     surveyActivity.setParticipantData(participant);
 
-    participantTempTokenRequestDto = new ParticipantTempTokenRequestDto(RN, USER_ID);
+    participantTempTokenRequestDto = new ParticipantTempTokenRequestDto(RN, ACTIVITY_ID);
     activitySharingDto = new ActivitySharingDto(null, SHARED_URL);
 
     when(findByTokenService.findUserByToken(USER_TOKEN)).thenReturn(user);
@@ -92,7 +92,7 @@ public class ActivitySharingFacadeTest {
   public void getSharedURL_method_should_return_dto_with_url() throws Exception {
     when(activityService.getByID(ACTIVITY_ID)).thenReturn(surveyActivity);
     when(participantService.getByRecruitmentNumber(RN)).thenReturn(participant);
-    whenNew(ParticipantTempTokenRequestDto.class).withArguments(RN, USER_ID)
+    whenNew(ParticipantTempTokenRequestDto.class).withArguments(RN, ACTIVITY_ID)
       .thenReturn(participantTempTokenRequestDto);
     when(temporaryParticipantTokenService.generateTempToken(participantTempTokenRequestDto))
       .thenReturn(PARTICIPANT_TOKEN);
@@ -140,7 +140,7 @@ public class ActivitySharingFacadeTest {
     when(activityService.getByID(ACTIVITY_ID)).thenReturn(surveyActivity);
     when(participantService.getByRecruitmentNumber(RN)).thenReturn(participant);
     when(findByTokenService.findUserByToken(USER_TOKEN)).thenReturn(user);
-    whenNew(ParticipantTempTokenRequestDto.class).withArguments(RN, USER_ID)
+    whenNew(ParticipantTempTokenRequestDto.class).withArguments(RN, ACTIVITY_ID)
       .thenReturn(participantTempTokenRequestDto);
     when(temporaryParticipantTokenService.generateTempToken(participantTempTokenRequestDto))
       .thenThrow(new TokenException());

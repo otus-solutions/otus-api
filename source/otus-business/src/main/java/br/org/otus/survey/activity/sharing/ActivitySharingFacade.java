@@ -48,7 +48,7 @@ public class ActivitySharingFacade {
       Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
       ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       String token = temporaryParticipantTokenService.generateTempToken(
-        new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), userOID.toString())
+        new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), activityId)
       );
       ActivitySharing activitySharing =  new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
       return getOrCreateSharedURL(activitySharing, userOID);
