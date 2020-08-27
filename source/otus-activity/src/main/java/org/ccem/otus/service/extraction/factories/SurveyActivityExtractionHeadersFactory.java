@@ -38,6 +38,7 @@ public class SurveyActivityExtractionHeadersFactory {
     this.headers.add(SurveyActivityExtractionHeaders.PAPER_REALIZATION_DATE.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.PAPER_INTERVIEWER.getValue());
     this.headers.add(SurveyActivityExtractionHeaders.LAST_FINALIZATION_DATE.getValue());
+    this.headers.add(SurveyActivityExtractionHeaders.EXTERNAL_ID.getValue());
 
     /* Answers headers */
     this.surveyForm.getSurveyTemplate().itemContainer.forEach(surveyItem -> {

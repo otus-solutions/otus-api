@@ -42,7 +42,8 @@ public class AttachmentsReport {
         "ID do Arquivo",
         "Nome do Arquivo",
         "Status",
-        "Data de Upload"
+        "Data de Upload",
+        "ExternalID"
       );
 
       for (AttachmentsReport.Attachment attachment : this.attachmentsList) {
@@ -52,7 +53,8 @@ public class AttachmentsReport {
           attachment.getArchiveId(),
           attachment.getArchiveName(),
           attachment.getTranslatedStatus(),
-          attachment.getUploadDate()
+          attachment.getUploadDate(),
+          attachment.getExternalID()
         );
       }
 
@@ -71,6 +73,7 @@ public class AttachmentsReport {
     private String status;
     private String archiveName;
     private String uploadDate;
+    private String externalID;
 
     public Integer getRecruitmentNumber() {
       return recruitmentNumber;
@@ -94,6 +97,10 @@ public class AttachmentsReport {
 
     public String getUploadDate() {
       return uploadDate;
+    }
+
+    public String getExternalID() {
+      return externalID;
     }
 
     public String getTranslatedStatus() {
