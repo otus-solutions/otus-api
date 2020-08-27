@@ -4,7 +4,7 @@ import br.org.otus.utils.ObjectIdAdapter;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
-import org.ccem.otus.utils.DateAdapter;
+import org.ccem.otus.utils.DateUtil;
 
 import java.text.ParseException;
 
@@ -29,9 +29,9 @@ public class ActivitySharing {
     this.activityId = activityId;
     this.userId = userId;
     this.participantToken = participantToken;
-    this.creationDate = DateAdapter.nowToISODate();
+    this.creationDate = DateUtil.nowToISODate();
     try {
-      this.expirationDate = DateAdapter.getDatePlusDays(this.creationDate, EXPIRATION_TIME);
+      this.expirationDate = DateUtil.getDatePlusDays(this.creationDate, EXPIRATION_TIME);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -85,7 +85,7 @@ public class ActivitySharing {
 
   public void renovate(){
     try {
-      this.expirationDate = DateAdapter.getDatePlusDays(DateAdapter.nowToISODate(), EXPIRATION_TIME);
+      this.expirationDate = DateUtil.getDatePlusDays(DateUtil.nowToISODate(), EXPIRATION_TIME);
     } catch (ParseException e) {
       e.printStackTrace();
     }

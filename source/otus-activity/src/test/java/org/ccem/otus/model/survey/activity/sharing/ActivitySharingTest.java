@@ -1,7 +1,7 @@
 package org.ccem.otus.model.survey.activity.sharing;
 
 import org.bson.types.ObjectId;
-import org.ccem.otus.utils.DateAdapter;
+import org.ccem.otus.utils.DateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,9 +38,9 @@ public class ActivitySharingTest {
     assertEquals(PARTICIPANT_TOKEN, activitySharing.getParticipantToken());
     assertEquals(USER_OID, activitySharing.getUserId());
 
-    String today = DateAdapter.nowToISODate();
-    assertTrue(DateAdapter.compareDateWithoutTime(today,  activitySharing.getCreationDate()));
-    assertTrue(DateAdapter.compareDateWithoutTime(
+    String today = DateUtil.nowToISODate();
+    assertTrue(DateUtil.compareDateWithoutTime(today,  activitySharing.getCreationDate()));
+    assertTrue(DateUtil.compareDateWithoutTime(
       plusExpirationTime(today),
       activitySharing.getExpirationDate()));
   }
@@ -65,14 +65,14 @@ public class ActivitySharingTest {
 
   @Test
   public void renovate_method_should_add_EXPIRATION_TIME_to_expirationDate() throws ParseException {
-    assertTrue(DateAdapter.compareDateWithoutTime(
-      plusExpirationTime(DateAdapter.nowToISODate()),
+    assertTrue(DateUtil.compareDateWithoutTime(
+      plusExpirationTime(DateUtil.nowToISODate()),
       activitySharing.getExpirationDate()
     ));
   }
 
   private String plusExpirationTime(String dateStr) throws ParseException {
-    return DateAdapter.getDatePlusDays(dateStr, ActivitySharing.EXPIRATION_TIME);
+    return DateUtil.getDatePlusDays(dateStr, ActivitySharing.EXPIRATION_TIME);
   }
 
 }
