@@ -68,7 +68,7 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
   @Override
   public void deleteSharedURL(ObjectId activitySharingOID) throws DataNotFoundException {
     DeleteResult deleteResult = collection.deleteOne(eq(OID_KEY_NAME, activitySharingOID));
-    if(deleteResult == null){
+    if(deleteResult.getDeletedCount() == 0){
       throw new DataNotFoundException(new Throwable(
         "No activity shared url found with id" + activitySharingOID.toString()));
     }
