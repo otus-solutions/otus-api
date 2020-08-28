@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -122,7 +123,7 @@ public class ParticipantServiceBean implements ParticipantService {
   }
 
   @Override
-  public Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException {
+  public Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException, AlreadyExistException {
 
     return participantDao.updateEmail(participantId, email);
   }
