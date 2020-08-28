@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -50,7 +51,7 @@ public interface ParticipantDao {
 
   Participant getParticpant(ObjectId id) throws DataNotFoundException;
 
-  Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException;
+  Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException, AlreadyExistException;
 
   String getEmail(ObjectId id) throws DataNotFoundException;
 

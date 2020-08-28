@@ -8,6 +8,7 @@ import br.org.otus.security.services.SecurityService;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.user.dto.PasswordResetDto;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
@@ -130,7 +131,7 @@ public class ParticipantFacadeTest {
   }
 
   @Test
-  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException, AlreadyExistException {
     when(participantService.updateEmail(objectId,EMAIL)).thenReturn(true);
     when(participantService.getParticipant(objectId)).thenReturn(participant);
     assertEquals(true,  participantFacade.updateEmail(ID, EMAIL));

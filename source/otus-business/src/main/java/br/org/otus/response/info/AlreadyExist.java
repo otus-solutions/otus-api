@@ -10,8 +10,16 @@ public class AlreadyExist extends ResponseInfo {
     super(Response.Status.CONFLICT, "Data Already Exist");
   }
 
+  public AlreadyExist(String message) {
+    super(Response.Status.CONFLICT, "Data Already Exist - " + message);
+  }
+
   public static ResponseInfo build() {
     return new AlreadyExist();
+  }
+
+  public static ResponseInfo build(String message) {
+    return new AlreadyExist(message);
   }
 }
 
