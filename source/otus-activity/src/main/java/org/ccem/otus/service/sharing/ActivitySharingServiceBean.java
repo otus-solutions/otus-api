@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 public class ActivitySharingServiceBean implements ActivitySharingService {
 
-  private static final String SURVEY_PLAYER_URL = "DATABASE_NAME";
+  private static final String SURVEY_PLAYER_URL = "SURVEY_PLAYER_URL";
 
   @Inject
   private ActivitySharingDao activitySharingDao;
