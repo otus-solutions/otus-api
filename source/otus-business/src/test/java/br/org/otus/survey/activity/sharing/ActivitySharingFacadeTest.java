@@ -1,7 +1,7 @@
 package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.commons.FindByTokenService;
-import br.org.otus.logs.activity.LogsActivitySharingFacade;
+import br.org.otus.logs.LogEventFacade;
 import br.org.otus.model.User;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.ParticipantTempTokenRequestDto;
@@ -63,7 +63,7 @@ public class ActivitySharingFacadeTest {
   @Mock
   private TemporaryParticipantTokenService temporaryParticipantTokenService;
   @Mock
-  private LogsActivitySharingFacade logsActivitySharingFacade;
+  private LogEventFacade logEventFacade;
 
   private Participant participant;
   private User user;

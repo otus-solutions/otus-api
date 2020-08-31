@@ -1,7 +1,7 @@
 package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.commons.FindByTokenService;
-import br.org.otus.logs.activity.LogsActivitySharingFacade;
+import br.org.otus.logs.LogEventFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import br.org.otus.security.dtos.ParticipantTempTokenRequestDto;
@@ -10,6 +10,8 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.logs.enums.ActivitySharingProgressLog;
+import org.ccem.otus.logs.events.ActivitySharedLog;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
@@ -43,14 +45,15 @@ public class ActivitySharingFacade {
   private TemporaryParticipantTokenService temporaryParticipantTokenService;
 
   @Inject
-  private LogsActivitySharingFacade logsActivitySharingFacade;
+  private LogEventFacade logEventFacade;
 
 
   public ActivitySharingDto getSharedURL(String activityId, String userToken) throws HttpResponseException {
     try {
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+      logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.ACCESS));
       SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityId);
       Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
-      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       String token = temporaryParticipantTokenService.generateTempToken(
         new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), activityId)
       );
@@ -67,13 +70,13 @@ public class ActivitySharingFacade {
     try{
       activitySharingDto = activitySharingService.getSharedURL(activitySharing);
       if(activitySharingDto != null){
-        logsActivitySharingFacade.logsActivitySharingSearch(userOID);
+        logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.SEARCH));
       }
     }
     catch (DataNotFoundException e) {
       activitySharingDto = activitySharingService.createSharedURL(activitySharing);
       if(activitySharingDto != null){
-        logsActivitySharingFacade.logsActivitySharingCreate(userOID);
+        logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.CREATE));
       }
     }
     return activitySharingDto;
@@ -81,10 +84,11 @@ public class ActivitySharingFacade {
 
   public ActivitySharingDto renovateSharedURL(String activitySharingId, String userToken) throws HttpResponseException {
     try {
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+      logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.ACCESS));
       ActivitySharingDto activitySharingDto = activitySharingService.renovateSharedURL(activitySharingId);
       if(activitySharingDto != null){
-        ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
-        logsActivitySharingFacade.logsActivitySharingRenew(userOID);
+        logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.RENEW));
       }
       return activitySharingDto;
     }
@@ -97,7 +101,7 @@ public class ActivitySharingFacade {
     try {
       activitySharingService.deleteSharedURL(activitySharingId);
       ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
-      logsActivitySharingFacade.logsActivitySharingRenew(userOID);
+      logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.DELETION));
     }
     catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));

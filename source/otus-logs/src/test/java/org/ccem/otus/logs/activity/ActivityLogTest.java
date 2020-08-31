@@ -1,9 +1,12 @@
 package org.ccem.otus.logs.activity;
 
 import org.bson.types.ObjectId;
+import org.ccem.otus.logs.enums.ActivitySharingProgressLog;
+import org.ccem.otus.logs.events.ActivitySharedLog;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.LocalDateTime;
@@ -20,6 +23,11 @@ public class ActivityLogTest {
 
   @InjectMocks
   private ActivityLog activityLog;
+
+  @Mock
+  private ActivitySharedLog activitySharedLog;
+
+  private ActivitySharingProgressLog activitySharingProgressLog;
 
   @Test
   public void testGetActionMethod_and_setActionMethod_should_return_string() {
@@ -41,7 +49,8 @@ public class ActivityLogTest {
 
   @Test
   public void testSerializeMethod_should_convert_object_in_string() {
-    activityLog = new ActivityLog(ACTION, USER_ID);
+    activitySharedLog = new ActivitySharedLog(USER_ID, activitySharingProgressLog.CREATE);
+    activityLog = new ActivityLog(activitySharedLog);
     activityLog.setDate(DATE);
     assertEquals(activityLogExpected, ActivityLog.serialize(activityLog));
   }
