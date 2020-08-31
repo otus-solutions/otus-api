@@ -48,9 +48,10 @@ public class ActivitySharingFacade {
 
   public ActivitySharingDto getSharedURL(String activityId, String userToken) throws HttpResponseException {
     try {
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+      logsActivitySharingFacade.logsActivitySharingAccess(userOID);
       SurveyActivity surveyActivity = checkIfActivityModeIsAutoFill(activityId);
       Participant participant = participantService.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
-      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       String token = temporaryParticipantTokenService.generateTempToken(
         new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), activityId)
       );
@@ -81,9 +82,10 @@ public class ActivitySharingFacade {
 
   public ActivitySharingDto renovateSharedURL(String activitySharingId, String userToken) throws HttpResponseException {
     try {
+      ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
+      logsActivitySharingFacade.logsActivitySharingAccess(userOID);
       ActivitySharingDto activitySharingDto = activitySharingService.renovateSharedURL(activitySharingId);
       if(activitySharingDto != null){
-        ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
         logsActivitySharingFacade.logsActivitySharingRenew(userOID);
       }
       return activitySharingDto;
@@ -97,7 +99,7 @@ public class ActivitySharingFacade {
     try {
       activitySharingService.deleteSharedURL(activitySharingId);
       ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
-      logsActivitySharingFacade.logsActivitySharingRenew(userOID);
+      logsActivitySharingFacade.logsActivitySharingDeletion(userOID);
     }
     catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
