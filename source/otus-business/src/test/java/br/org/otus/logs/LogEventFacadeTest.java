@@ -1,8 +1,9 @@
-package org.ccem.otus.logs.service;
+package br.org.otus.logs;
 
+import br.org.otus.logs.LogEventFacade;
 import org.bson.types.ObjectId;
 import org.ccem.otus.logs.events.ActivitySharedLog;
-import org.ccem.otus.logs.persistence.LogsActivitySharingDao;
+import org.ccem.otus.logs.service.LogEventService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,23 +13,23 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-public class LogEventBeanTest {
+public class LogEventFacadeTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
 
   @InjectMocks
-  private LogEventServiceBean logEventServiceBean;
+  private LogEventFacade logEventFacade;
 
   @Mock
-  private LogsActivitySharingDao logsActivitySharingDao;
+  private LogEventService logsActivitysharingService;
 
-  @Mock
   private ActivitySharedLog activitySharedLog;
 
   private ObjectId objectId = new ObjectId(ID);
 
   @Test
-  public void testLogsActivitySharingCreateMethod_should_persist_Create() {
-    logEventServiceBean.log(activitySharedLog);
-    verify(logsActivitySharingDao, times(1)).persist(any());
+  public void testLogMethod_should_persist_action() {
+    logEventFacade.log(activitySharedLog);
+    verify(logsActivitysharingService, times(1)).log(any());
   }
+
 }
