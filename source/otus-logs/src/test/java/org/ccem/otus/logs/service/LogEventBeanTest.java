@@ -12,11 +12,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-public class LogsActivitySharingServiceBeanTest {
+public class LogEventBeanTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
 
   @InjectMocks
-  private LogsActivitySharingServiceBean logsActivitySharingServiceBean;
+  private LogEventBean logEventBean;
 
   @Mock
   private LogsActivitySharingDao logsActivitySharingDao;
@@ -28,31 +28,31 @@ public class LogsActivitySharingServiceBeanTest {
 
   @Test
   public void testLogsActivitySharingCreateMethod_should_persist_Create() {
-    logsActivitySharingServiceBean.logsActivitySharingCreate(objectId);
+    logEventBean.logsActivitySharingCreate(objectId);
     verify(logsActivitySharingDao, times(1)).persist(any());
   }
 
   @Test
   public void testLogsActivitySharingRenewMethod_should_persist_Renew() {
-    logsActivitySharingServiceBean.logsActivitySharingRenew(objectId);
+    logEventBean.logsActivitySharingRenew(objectId);
     verify(logsActivitySharingDao, times(1)).persist(any());
   }
 
   @Test
   public void testLogsActivitySharingAccessMethod_should_persist_Access() {
-    logsActivitySharingServiceBean.logsActivitySharingAccess(objectId);
+    logEventBean.logsActivitySharingAccess(objectId);
     verify(logsActivitySharingDao, times(1)).persist(any());
   }
 
   @Test
   public void testLogsActivitySharingSearchMethod_should_persist_Search() {
-    logsActivitySharingServiceBean.logsActivitySharingSearch(objectId);
+    logEventBean.logsActivitySharingSearch(objectId);
     verify(logsActivitySharingDao, times(1)).persist(any());
   }
 
   @Test
   public void testLogsActivitySharingDeletionMethod_should_persist_Deletion() {
-    logsActivitySharingServiceBean.logsActivitySharingDeletion(objectId);
+    logEventBean.logsActivitySharingDeletion(objectId);
     verify(logsActivitySharingDao, times(1)).persist(any());
   }
 }

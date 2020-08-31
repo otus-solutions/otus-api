@@ -1,8 +1,8 @@
 package br.org.otus.logs.activity;
 
+import br.org.otus.logs.LogEventFacade;
 import org.bson.types.ObjectId;
-import org.ccem.otus.logs.activity.ActivityLog;
-import org.ccem.otus.logs.service.LogsActivitySharingService;
+import org.ccem.otus.logs.service.LogEventService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,44 +12,44 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-public class LogsActivitySharingFacadeTest{
+public class LogEventFacadeTest {
   private static final String ID = "5e0658135b4ff40f8916d2b5";
 
   @InjectMocks
-  private LogsActivitySharingFacade logsActivitySharingFacade;
+  private LogEventFacade logEventFacade;
 
   @Mock
-  private LogsActivitySharingService logsActivitysharingService;
+  private LogEventService logsActivitysharingService;
 
   private ObjectId objectId = new ObjectId(ID);
 
   @Test
   public void testLogsActivitySharingCreateMethod_should_persist_Create() {
-    logsActivitySharingFacade.logsActivitySharingCreate(objectId);
+    logEventFacade.logsActivitySharingCreate(objectId);
     verify(logsActivitysharingService, times(1)).logsActivitySharingCreate(any());
   }
 
   @Test
   public void testLogsActivitySharingRenewMethod_should_persist_Renew() {
-    logsActivitySharingFacade.logsActivitySharingRenew(objectId);
+    logEventFacade.logsActivitySharingRenew(objectId);
     verify(logsActivitysharingService, times(1)).logsActivitySharingRenew(any());
   }
 
   @Test
   public void testLogsActivitySharingAccessMethod_should_persist_Access() {
-    logsActivitySharingFacade.logsActivitySharingAccess(objectId);
+    logEventFacade.logsActivitySharingAccess(objectId);
     verify(logsActivitysharingService, times(1)).logsActivitySharingAccess(any());
   }
 
   @Test
   public void testLogsActivitySharingSearchMethod_should_persist_Search() {
-    logsActivitySharingFacade.logsActivitySharingSearch(objectId);
+    logEventFacade.logsActivitySharingSearch(objectId);
     verify(logsActivitysharingService, times(1)).logsActivitySharingSearch(any());
   }
 
   @Test
   public void testLogsActivitySharingDeletionMethod_should_persist_Deletion() {
-    logsActivitySharingFacade.logsActivitySharingDeletion(objectId);
+    logEventFacade.logsActivitySharingDeletion(objectId);
     verify(logsActivitysharingService, times(1)).logsActivitySharingDeletion(any());
   }
 }

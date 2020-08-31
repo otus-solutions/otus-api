@@ -3,6 +3,7 @@ package org.ccem.otus.logs.activity;
 import br.org.otus.utils.ObjectIdAdapter;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
+import org.ccem.otus.logs.events.ActivitySharedLog;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import java.time.LocalDateTime;
@@ -12,9 +13,9 @@ public class ActivityLog {
   private ObjectId userId;
   private LocalDateTime date;
 
-  public ActivityLog(String action, ObjectId userId) {
-    this.action = action;
-    this.userId = userId;
+  public ActivityLog(ActivitySharedLog activitySharedLog) {
+    this.action = activitySharedLog.getActivitySharingProgressLog();
+    this.userId = activitySharedLog.getObjectId();
     this.date = LocalDateTime.now();
   }
 
