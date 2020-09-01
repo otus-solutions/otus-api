@@ -1,5 +1,6 @@
 package br.org.otus.security.dtos;
 
+import com.google.gson.GsonBuilder;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.ccem.otus.exceptions.Dto;
 
@@ -32,6 +33,14 @@ public class ParticipantTempTokenRequestDto implements Dto, JWTClaimSetBuilder {
     return builder.build();
   }
 
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
+  }
+
+  public String getActivityId() {
+    return activityId;
+  }
+
   public String getToken() {
     return token;
   }
@@ -40,4 +49,8 @@ public class ParticipantTempTokenRequestDto implements Dto, JWTClaimSetBuilder {
     this.token = token;
   }
 
+
+  public static ParticipantTempTokenRequestDto deserialize(String participantTempTokenRequestDtoJson) {
+    return new GsonBuilder().create().fromJson(participantTempTokenRequestDtoJson, ParticipantTempTokenRequestDto.class);
+  }
 }
