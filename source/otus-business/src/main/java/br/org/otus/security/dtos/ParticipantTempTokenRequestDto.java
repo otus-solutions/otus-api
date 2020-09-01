@@ -27,6 +27,8 @@ public class ParticipantTempTokenRequestDto implements Dto, JWTClaimSetBuilder {
   public JWTClaimsSet buildClaimSet() {
     JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
     builder.claim("mode", MODE);
+    builder.claim("recruitmentNumber", recruitmentNumber.toString());
+    builder.claim("activityId", activityId);
     return builder.build();
   }
 
