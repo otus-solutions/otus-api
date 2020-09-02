@@ -28,7 +28,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
   private SecurityFacade securityFacade;
 
   @Override
-  public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+  public void filter(ContainerRequestContext containerRequestContext) {
     String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
     try {
       String token = AuthorizationHeaderReader.readToken(authorizationHeader);
