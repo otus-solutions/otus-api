@@ -34,13 +34,25 @@ public class AuthenticationFilter implements ContainerRequestFilter {
       String token = AuthorizationHeaderReader.readToken(authorizationHeader);
       SignedJWT parsed = SignedJWT.parse(token);
       String mode = parsed.getJWTClaimsSet().getClaim("mode").toString();
-      if (mode.equals("user")|| mode.equals("client")) {
-        securityContextService.validateToken(token);
-      } else if (mode.equals("participant")) {
-        securityFacade.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
-      } else {
-        throw new Exception("Invalid mode");
+
+      switch(mode){
+        case "user":
+        case "client":
+          securityContextService.validateToken(token);
+          break;
+
+        case "participant":
+          securityFacade.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
+          break;
+
+        case "sharing":
+          securityFacade.validateActivitySharingToken(AuthorizationHeaderReader.readToken(authorizationHeader));
+          break;
+
+        default:
+          throw new Exception("Invalid mode");
       }
+
     } catch (Exception e) {
       containerRequestContext.abortWith(Authorization.build().toResponse());
     }
