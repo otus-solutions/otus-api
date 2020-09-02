@@ -20,7 +20,7 @@ ENV REPORT_PORT "8080"
 ENV COMMUNICATION_HOST "communication-service"
 ENV COMMUNICATION_PORT "8080"
 ENV APP_URL "http://localhost"
-ENV SURVEY_PLAYER_URL "https://localhost:51008/otus/survey-player/#/"
+ENV SURVEY_PLAYER_URL "http://localhost:51001/#/"
 ENV DEBUG_MODE "false"
 ENV JVM_MEMORY "3G"
 USER root

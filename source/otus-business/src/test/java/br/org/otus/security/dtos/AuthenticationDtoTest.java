@@ -2,6 +2,7 @@ package br.org.otus.security.dtos;
 
 import br.org.otus.security.EncryptorResources;
 import com.nimbusds.jwt.JWTClaimsSet;
+import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,13 +61,13 @@ public class AuthenticationDtoTest {
 
   @Test
   public void shouldReturnMode() {
-    assertEquals(authenticationDto.getMode(), "user");
+    assertEquals(authenticationDto.getMode(), AuthenticationMode.USER.getName());
   }
 
   @Test
   public void shouldFillClaimsSetWithCorretValues() {
     JWTClaimsSet jwtClaimsSet = authenticationDto.buildClaimSet();
-    assertEquals(jwtClaimsSet.getClaim("mode"), "user");
+    assertEquals(jwtClaimsSet.getClaim("mode"), AuthenticationMode.USER.getName());
     assertEquals(jwtClaimsSet.getIssuer(), EMAIL);
   }
 }

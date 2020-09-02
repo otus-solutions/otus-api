@@ -7,15 +7,20 @@ import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.persistence.UserDao;
 import br.org.tutty.Equalizer;
+import com.nimbusds.jwt.SignedJWT;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
+import org.ccem.otus.persistence.ActivitySharingDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import java.text.ParseException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
@@ -25,6 +30,9 @@ public class SecurityServiceBean implements SecurityService {
 
   @Inject
   private ParticipantDao participantDao;
+
+  @Inject
+  private ActivitySharingDao activitySharingDao;
 
   @Inject
   private SystemConfigDaoBean systemConfigDao;
@@ -40,25 +48,21 @@ public class SecurityServiceBean implements SecurityService {
     try {
       User user = userDao.fetchByEmail(authenticationData.getUserEmail());
 
-      if (user.getPassword().equals(authenticationData.getKey())) {
-        if (user.isEnable()) {
-          UserSecurityAuthorizationDto userSecurityAuthorizationDto = new UserSecurityAuthorizationDto();
-          Equalizer.equalize(user, userSecurityAuthorizationDto);
-
-          if (user.getFieldCenter() != null) {
-            userSecurityAuthorizationDto.getFieldCenter().acronym = user.getFieldCenter().getAcronym();
-          }
-
-          String token = initializeToken(authenticationData);
-          userSecurityAuthorizationDto.setToken(token);
-          return userSecurityAuthorizationDto;
-
-        } else {
-          throw new AuthenticationException();
-        }
-      } else {
+      if (!user.getPassword().equals(authenticationData.getKey()) || !user.isEnable()) {
         throw new AuthenticationException();
       }
+
+      UserSecurityAuthorizationDto userSecurityAuthorizationDto = new UserSecurityAuthorizationDto();
+      Equalizer.equalize(user, userSecurityAuthorizationDto);
+
+      if (user.getFieldCenter() != null) {
+        userSecurityAuthorizationDto.getFieldCenter().acronym = user.getFieldCenter().getAcronym();
+      }
+
+      String token = initializeToken(authenticationData);
+      userSecurityAuthorizationDto.setToken(token);
+      return userSecurityAuthorizationDto;
+
     } catch (DataNotFoundException e) {
       throw new AuthenticationException();
     }
@@ -77,22 +81,38 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
+  public void validateActivitySharingToken(String token) throws TokenException {
+    try {
+      SignedJWT signedJWT = SignedJWT.parse(token);
+      String payload = signedJWT.getPayload().toString();
+      ParticipantTempTokenRequestDto dto = ParticipantTempTokenRequestDto.deserialize(payload);
+
+      ActivitySharing activitySharing = activitySharingDao.getSharedURL(new ObjectId(dto.getActivityId()));
+      if(activitySharing == null){
+        throw new TokenException();
+      }
+    } catch (ParseException | DataNotFoundException e) {
+      throw new TokenException(e);
+    }
+  }
+
+  @Override
   public ParticipantSecurityAuthorizationDto participantAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException {
     try {
       Participant participant = participantDao.fetchByEmail(authenticationData.getUserEmail());
 
-      if (participant.getPassword().equals(authenticationData.getKey())) {
-        ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = new ParticipantSecurityAuthorizationDto();
-
-        Equalizer.equalize(participant, participantSecurityAuthorizationDto);
-        byte[] secretKey = securityContextService.generateSecretKey();
-        String token = securityContextService.generateToken(authenticationData, secretKey);
-        participantDao.addAuthToken(authenticationData.getUserEmail(), token);
-        participantSecurityAuthorizationDto.setToken(token);
-        return participantSecurityAuthorizationDto;
-      } else {
+      if (!participant.getPassword().equals(authenticationData.getKey())) {
         throw new AuthenticationException();
       }
+
+      ParticipantSecurityAuthorizationDto participantSecurityAuthorizationDto = new ParticipantSecurityAuthorizationDto();
+      Equalizer.equalize(participant, participantSecurityAuthorizationDto);
+      byte[] secretKey = securityContextService.generateSecretKey();
+      String token = securityContextService.generateToken(authenticationData, secretKey);
+      participantDao.addAuthToken(authenticationData.getUserEmail(), token);
+      participantSecurityAuthorizationDto.setToken(token);
+      return participantSecurityAuthorizationDto;
+      
     } catch (DataNotFoundException e) {
       throw new AuthenticationException();
     }
@@ -109,16 +129,11 @@ public class SecurityServiceBean implements SecurityService {
       SystemConfig systemConfig = systemConfigDao.fetchSystemConfig();
       String password = authenticationData.getKey();
 
-      if (authenticationData.isValid()) {
-        if (systemConfig.getProjectToken().equals(password)) {
-          return initializeToken(authenticationData);
-
-        } else {
-          throw new AuthenticationException();
-        }
-      } else {
+      if (!authenticationData.isValid() || !systemConfig.getProjectToken().equals(password)) {
         throw new AuthenticationException();
       }
+      return initializeToken(authenticationData);
+
     } catch (NoResultException e) {
       throw new AuthenticationException(e);
     }
@@ -131,14 +146,14 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
-    if (userDao.exists(requestData.getEmail())) {
-      String token = buildToken(requestData);
-      requestData.setToken(token);
-      passwordResetContextService.registerToken(requestData);
-      return token;
-    } else {
+    if (!userDao.exists(requestData.getEmail())) {
       throw new DataNotFoundException(new Throwable("User with email: {" + requestData.getEmail() + "} not found."));
     }
+
+    String token = buildToken(requestData);
+    requestData.setToken(token);
+    passwordResetContextService.registerToken(requestData);
+    return token;
   }
 
   public void registerParticipantPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException {
@@ -162,8 +177,7 @@ public class SecurityServiceBean implements SecurityService {
 
   @Override
   public void validatePasswordReset(String token) throws TokenException {
-    Boolean exists = passwordResetContextService.hasToken(token);
-    if (!exists) {
+    if (!passwordResetContextService.hasToken(token)) {
       throw new TokenException();
     }
   }
@@ -175,7 +189,6 @@ public class SecurityServiceBean implements SecurityService {
 
   private String buildToken(JWTClaimSetBuilder tokenData) throws TokenException {
     byte[] secretKey = securityContextService.generateSecretKey();
-
     return securityContextService.generateToken(tokenData, secretKey);
   }
 

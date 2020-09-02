@@ -1,6 +1,7 @@
 package br.org.otus.security.dtos;
 
 import com.nimbusds.jwt.JWTClaimsSet;
+import org.ccem.otus.enums.AuthenticationMode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,7 @@ import static org.junit.Assert.*;
 @RunWith(PowerMockRunner.class)
 public class ParticipantTempTokenRequestDtoTest {
 
-  private static final String MODE = "sharing";
+  private static final String MODE = AuthenticationMode.ACTIVITY_SHARING.getName();
   private static final Long RN = 123456L;
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
   private static final String TOKEN = "1234567890";

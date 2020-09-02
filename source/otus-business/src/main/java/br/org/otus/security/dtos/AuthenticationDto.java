@@ -2,12 +2,13 @@ package br.org.otus.security.dtos;
 
 import br.org.otus.security.EncryptorResources;
 import com.nimbusds.jwt.JWTClaimsSet;
+import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.Dto;
 import org.ccem.otus.exceptions.Encripting;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 
 public class AuthenticationDto implements Dto, Encripting, AuthenticationData {
-  private static final String MODE = "user";
+  private static final String MODE = AuthenticationMode.USER.getName();
 
   public String userEmail;
   public String password;
