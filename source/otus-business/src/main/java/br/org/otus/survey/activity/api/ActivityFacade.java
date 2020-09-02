@@ -8,9 +8,9 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.JsonSyntaxException;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.bson.types.ObjectId;
+import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -129,18 +129,18 @@ public class ActivityFacade {
       String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
       Object email = signedJWT.getJWTClaimsSet().getClaim("iss");
 
-      switch (mode){
-        case "user":
+      switch (AuthenticationMode.valueFromName(mode)){
+        case USER:
           br.org.otus.model.User user = managementUserService.fetchByEmail(email.toString());
           statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
           break;
 
-        case "participant":
+        case PARTICIPANT:
           participant = participantService.getByEmail(email.toString());
           statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
           break;
 
-        case "sharing":
+        case ACTIVITY_SHARING:
           Long rn = Long.parseLong(signedJWT.getJWTClaimsSet().getClaim("recruitmentNumber").toString());
           participant = participantService.getByRecruitmentNumber(rn);
           statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
