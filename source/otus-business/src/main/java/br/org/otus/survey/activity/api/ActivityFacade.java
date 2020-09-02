@@ -8,6 +8,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.JsonSyntaxException;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -121,19 +122,32 @@ public class ActivityFacade {
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) {
     try {
-      User statusHistoryUser;
+      User statusHistoryUser = null;
+      Participant participant = null;
       token = token.substring("Bearer".length()).trim();
       SignedJWT signedJWT = SignedJWT.parse(token);
       String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
-      String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
+      Object email = signedJWT.getJWTClaimsSet().getClaim("iss");
 
-      if (mode.equals("user")) {
-        br.org.otus.model.User user = managementUserService.fetchByEmail(email);
-        statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
-      }
-      else {
-        Participant participant = participantService.getByEmail(email);
-        statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
+      switch (mode){
+        case "user":
+          br.org.otus.model.User user = managementUserService.fetchByEmail(email.toString());
+          statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
+          break;
+
+        case "participant":
+          participant = participantService.getByEmail(email.toString());
+          statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
+          break;
+
+        case "sharing":
+          Long rn = Long.parseLong(signedJWT.getJWTClaimsSet().getClaim("recruitmentNumber").toString());
+          participant = participantService.getByRecruitmentNumber(rn);
+          statusHistoryUser = new User(participant.getName(), participant.getEmail(), "", null);
+          break;
+
+        default:
+          throw new HttpResponseException(Validation.build("Invalid token mode", null));
       }
 
       List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
