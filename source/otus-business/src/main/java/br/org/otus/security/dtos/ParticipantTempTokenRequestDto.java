@@ -2,11 +2,12 @@ package br.org.otus.security.dtos;
 
 import com.google.gson.GsonBuilder;
 import com.nimbusds.jwt.JWTClaimsSet;
+import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.Dto;
 
 public class ParticipantTempTokenRequestDto implements Dto, JWTClaimSetBuilder {
 
-  private static final String MODE = "sharing";
+  private static final String MODE = AuthenticationMode.ACTIVITY_SHARING.getName();
 
   private String mode;
   private Long recruitmentNumber;
