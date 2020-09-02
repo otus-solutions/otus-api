@@ -2,6 +2,7 @@ package br.org.otus.commons;
 
 import br.org.otus.model.User;
 import br.org.otus.user.management.ManagementUserService;
+import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
@@ -14,6 +15,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.text.ParseException;
+
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -22,8 +25,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({FindByTokenServiceBean.class})
 public class FindByTokenServiceBeanTest {
 
-  private static final String USER_MODE = "user";
-  private static final String PARTICIPANT_MODE = "participant";
+  private static final String USER_MODE = AuthenticationMode.USER.getName();
+  private static final String PARTICIPANT_MODE = AuthenticationMode.PARTICIPANT.getName();
   private static final String INVALID_MODE = "x";
   private static final String EMAIL = "user@otus";
   private static final String TOKEN = "abc";
@@ -87,9 +90,9 @@ public class FindByTokenServiceBeanTest {
     assertEquals(participant, findByTokenServiceBean.findPersonByToken(TOKEN));
   }
 
-  @Test(expected = ValidationException.class)
+  @Test(expected = Exception.class)
   public void findPersonByToken_method_throw_ValidationException() throws Exception {
-    doReturn(INVALID_MODE).when(findByTokenServiceBean, "getTokenMode", TOKEN);
+    doReturn(new ParseException("", 0)).when(findByTokenServiceBean, "getTokenMode", TOKEN);
     findByTokenServiceBean.findPersonByToken(TOKEN);
   }
 
