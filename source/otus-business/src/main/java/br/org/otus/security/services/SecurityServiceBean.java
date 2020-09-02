@@ -7,15 +7,20 @@ import br.org.otus.system.SystemConfig;
 import br.org.otus.system.SystemConfigDaoBean;
 import br.org.otus.persistence.UserDao;
 import br.org.tutty.Equalizer;
+import com.nimbusds.jwt.SignedJWT;
+import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
+import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
+import org.ccem.otus.persistence.ActivitySharingDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import java.text.ParseException;
 
 @Stateless
 public class SecurityServiceBean implements SecurityService {
@@ -25,6 +30,9 @@ public class SecurityServiceBean implements SecurityService {
 
   @Inject
   private ParticipantDao participantDao;
+
+  @Inject
+  private ActivitySharingDao activitySharingDao;
 
   @Inject
   private SystemConfigDaoBean systemConfigDao;
@@ -72,6 +80,22 @@ public class SecurityServiceBean implements SecurityService {
         throw new TokenException();
       }
     } catch (DataNotFoundException e) {
+      throw new TokenException(e);
+    }
+  }
+
+  @Override
+  public void validateActivitySharingToken(String token) throws TokenException {
+    try {
+      SignedJWT signedJWT = SignedJWT.parse(token);
+      String payload = signedJWT.getPayload().toString();
+      ParticipantTempTokenRequestDto dto = ParticipantTempTokenRequestDto.deserialize(payload);
+
+      ActivitySharing activitySharing = activitySharingDao.getSharedURL(new ObjectId(dto.getActivityId()));
+      if(activitySharing == null){
+        throw new TokenException();
+      }
+    } catch (ParseException | DataNotFoundException e) {
       throw new TokenException(e);
     }
   }

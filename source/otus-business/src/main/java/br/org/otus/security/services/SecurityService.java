@@ -18,6 +18,8 @@ public interface SecurityService {
 
   void validateToken(String token) throws TokenException, AuthenticationException;
 
+  void validateActivitySharingToken(String token) throws TokenException, AuthenticationException;
+
   String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 
   String getPasswordResetToken(PasswordResetRequestDto requestData) throws TokenException, DataNotFoundException;
