@@ -5,6 +5,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.dtos.*;
 import br.org.otus.security.services.SecurityService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.ExpiredDataException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 
@@ -94,7 +95,11 @@ public class SecurityFacade {
   public void validateActivitySharingToken(String token) {
     try {
       securityService.validateActivitySharingToken(token);
-    } catch (AuthenticationException | TokenException e) {
+    }
+    catch(ExpiredDataException e){
+
+    }
+    catch (AuthenticationException | TokenException e) {
       throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
     }
   }
