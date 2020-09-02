@@ -19,7 +19,7 @@ public interface SecurityService {
 
   void validateToken(String token) throws TokenException, AuthenticationException;
 
-  void validateActivitySharingToken(String token) throws TokenException, AuthenticationException, ExpiredDataException;
+  void validateActivitySharingToken(String token) throws TokenException, ExpiredDataException;
 
   String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 

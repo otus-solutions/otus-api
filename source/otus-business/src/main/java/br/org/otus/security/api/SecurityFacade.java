@@ -2,6 +2,7 @@ package br.org.otus.security.api;
 
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.Authorization;
 import br.org.otus.security.dtos.*;
 import br.org.otus.security.services.SecurityService;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -97,10 +98,10 @@ public class SecurityFacade {
       securityService.validateActivitySharingToken(token);
     }
     catch(ExpiredDataException e){
-
+      throw new HttpResponseException(ResponseBuild.Security.Authorization.build(e.getMessage()));
     }
-    catch (AuthenticationException | TokenException e) {
-      throw new HttpResponseException(ResponseBuild.Security.Authorization.build());
+    catch (TokenException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build());
     }
   }
 
