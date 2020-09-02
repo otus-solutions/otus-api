@@ -5,6 +5,7 @@ import br.org.otus.security.dtos.ParticipantSecurityAuthorizationDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import br.org.otus.security.dtos.UserSecurityAuthorizationDto;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.ExpiredDataException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 
@@ -18,7 +19,7 @@ public interface SecurityService {
 
   void validateToken(String token) throws TokenException, AuthenticationException;
 
-  void validateActivitySharingToken(String token) throws TokenException, AuthenticationException;
+  void validateActivitySharingToken(String token) throws TokenException, AuthenticationException, ExpiredDataException;
 
   String projectAuthenticate(AuthenticationData authenticationData) throws TokenException, AuthenticationException;
 

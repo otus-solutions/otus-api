@@ -10,12 +10,14 @@ import br.org.tutty.Equalizer;
 import com.nimbusds.jwt.SignedJWT;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.ExpiredDataException;
 import org.ccem.otus.exceptions.webservice.security.AuthenticationException;
 import org.ccem.otus.exceptions.webservice.security.TokenException;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharing;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.ActivitySharingDao;
+import org.ccem.otus.utils.DateUtil;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -81,7 +83,7 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
-  public void validateActivitySharingToken(String token) throws TokenException {
+  public void validateActivitySharingToken(String token) throws TokenException, ExpiredDataException {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);
       String payload = signedJWT.getPayload().toString();
@@ -91,7 +93,14 @@ public class SecurityServiceBean implements SecurityService {
       if(activitySharing == null){
         throw new TokenException();
       }
-    } catch (ParseException | DataNotFoundException e) {
+      if(DateUtil.before(activitySharing.getExpirationDate(), DateUtil.nowToISODate())){
+        throw new ExpiredDataException("Expired token");
+      }
+    }
+    catch(ExpiredDataException e){
+      throw e;
+    }
+    catch (ParseException | DataNotFoundException e) {
       throw new TokenException(e);
     }
   }
@@ -112,7 +121,7 @@ public class SecurityServiceBean implements SecurityService {
       participantDao.addAuthToken(authenticationData.getUserEmail(), token);
       participantSecurityAuthorizationDto.setToken(token);
       return participantSecurityAuthorizationDto;
-      
+
     } catch (DataNotFoundException e) {
       throw new AuthenticationException();
     }
