@@ -15,6 +15,8 @@ import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.services.SecurityContextService;
 import com.nimbusds.jwt.SignedJWT;
+import org.ccem.otus.enums.AuthenticationMode;
+import org.ccem.otus.exceptions.webservice.security.TokenException;
 
 @Secured
 @Provider
@@ -35,22 +37,22 @@ public class AuthenticationFilter implements ContainerRequestFilter {
       SignedJWT parsed = SignedJWT.parse(token);
       String mode = parsed.getJWTClaimsSet().getClaim("mode").toString();
 
-      switch(mode){
-        case "user":
-        case "client":
+      switch(AuthenticationMode.valueFromName(mode)){
+        case USER:
+        case CLIENT:
           securityContextService.validateToken(token);
           break;
 
-        case "participant":
+        case PARTICIPANT:
           securityFacade.validateToken(AuthorizationHeaderReader.readToken(authorizationHeader));
           break;
 
-        case "sharing":
+        case ACTIVITY_SHARING:
           securityFacade.validateActivitySharingToken(AuthorizationHeaderReader.readToken(authorizationHeader));
           break;
 
         default:
-          throw new Exception("Invalid mode");
+          throw new TokenException("Invalid token mode");
       }
 
     } catch (Exception e) {
