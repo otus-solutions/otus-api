@@ -35,7 +35,7 @@ public class ActivitySharingDaoBean extends MongoGenericDao<Document> implements
 
   @Override
   public ActivitySharing createSharedURL(ActivitySharing activitySharing) {
-    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activitySharing.getId())).first();
+    Document result = collection.find(eq(ACTIVITY_ID_FIELD_NAME, activitySharing.getActivityId())).first();
     if(result != null){
       return activitySharing;
     }
