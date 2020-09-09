@@ -12,9 +12,11 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.persistence.SurveyJumpMapDao;
+import org.ccem.otus.service.permission.ActivityAccessPermissionService;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import br.org.otus.survey.dtos.UpdateSurveyFormTypeDto;
@@ -30,22 +32,37 @@ public class SurveyServiceBean implements SurveyService {
   private SurveyJumpMapDao surveyJumpMapDao;
   @Inject
   private SurveyValidatorService surveyValidatorService;
+  @Inject
+  private ActivityAccessPermissionService activityAccessPermissionService;
 
   @Override
   public SurveyForm saveSurvey(SurveyForm survey) throws DataNotFoundException, AlreadyExistException {
     surveyValidatorService.validateSurvey(surveyDao, survey);
 
-    SurveyForm lastVersionSurvey = surveyDao.getLastVersionByAcronym(survey.getSurveyTemplate().identity.acronym);
+    String acronym = survey.getSurveyTemplate().identity.acronym;
 
-    if (lastVersionSurvey != null) {
+    SurveyForm lastVersionSurvey = surveyDao.getLastVersionByAcronym(acronym);
+
+    if (lastVersionSurvey == null) {
+      survey.setVersion(1);
+    }
+    else {
       try {
         discardSurvey(lastVersionSurvey);
       } catch (DataNotFoundException e) {
         throw e;
       }
-      survey.setVersion(lastVersionSurvey.getVersion() + 1);
-    } else {
-      survey.setVersion(1);
+      Integer version = lastVersionSurvey.getVersion();
+      survey.setVersion(version + 1);
+
+      try{
+        ActivityAccessPermission lastActivityAccessPermission = activityAccessPermissionService.get(acronym, version);
+        ActivityAccessPermission activityAccessPermission = new ActivityAccessPermission(acronym, version);
+        activityAccessPermission.setVersion(version + 1);
+        activityAccessPermission.setExclusiveDisjunction(lastActivityAccessPermission.getExclusiveDisjunction());
+        activityAccessPermissionService.create(activityAccessPermission);
+      }
+      catch(DataNotFoundException e){ }
     }
 
     ObjectId persist = surveyDao.persist(survey);
