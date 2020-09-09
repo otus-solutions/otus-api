@@ -61,7 +61,7 @@ public class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> i
 
     AggregateIterable<Document> results = collection.aggregate(queryBuilder.getByAcronymVersion(acronym, version));
 
-    if (results == null) {
+    if (results == null || results.first() == null) {
       throw new DataNotFoundException("There are no results");
     }
 
