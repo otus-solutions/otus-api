@@ -15,8 +15,6 @@ public class ActivityPermissionResource {
 
   @Inject
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
-  @Inject
-  private ActivityAccessPermission activityAccessPermission;
 
   @POST
   @Secured
