@@ -47,11 +47,8 @@ public class SurveyServiceBean implements SurveyService {
       survey.setVersion(1);
     }
     else {
-      try {
-        discardSurvey(lastVersionSurvey);
-      } catch (DataNotFoundException e) {
-        throw e;
-      }
+      discardSurvey(lastVersionSurvey);
+
       Integer version = lastVersionSurvey.getVersion();
       survey.setVersion(version + 1);
 
@@ -97,28 +94,18 @@ public class SurveyServiceBean implements SurveyService {
 
   @Override
   public Boolean updateLastVersionSurveyType(UpdateSurveyFormTypeDto updateSurveyFormTypeDto) throws ValidationException, DataNotFoundException {
-    if (updateSurveyFormTypeDto.isValid()) {
-      try {
-        return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym, updateSurveyFormTypeDto.newSurveyFormType.toString());
-      } catch (DataNotFoundException e) {
-        throw e;
-      }
-    } else {
+    if(!updateSurveyFormTypeDto.isValid()){
       throw new ValidationException("Invalid UpdateSurveyFormTypeDto");
     }
+    return surveyDao.updateLastVersionSurveyType(updateSurveyFormTypeDto.acronym, updateSurveyFormTypeDto.newSurveyFormType.toString());
   }
 
   @Override
   public Boolean deleteLastVersionByAcronym(String acronym) throws ValidationException, DataNotFoundException {
     if (acronym == null || acronym.isEmpty()) {
       throw new ValidationException();
-    } else {
-      try {
-        return surveyDao.deleteLastVersionByAcronym(acronym);
-      } catch (DataNotFoundException e) {
-        throw e;
-      }
     }
+    return surveyDao.deleteLastVersionByAcronym(acronym);
   }
 
   @Override
@@ -130,8 +117,7 @@ public class SurveyServiceBean implements SurveyService {
 
   @Override
   public List<String> listAcronyms() {
-    List<String> surveys = surveyDao.listAcronyms();
-    return surveys;
+    return surveyDao.listAcronyms();
   }
 
   @Override
@@ -152,11 +138,7 @@ public class SurveyServiceBean implements SurveyService {
   }
 
   private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
-    try {
-      surveyDao.discardSurvey(survey.getSurveyID());
-    } catch (DataNotFoundException e) {
-      throw e;
-    }
+    surveyDao.discardSurvey(survey.getSurveyID());
     survey.setDiscarded(true);
   }
 
