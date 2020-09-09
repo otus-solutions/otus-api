@@ -5,19 +5,15 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.persistence.ActivityAccessPermissionDao;
 
 @Stateless
-class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionService {
+public class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionService {
 
   @Inject
   private ActivityAccessPermissionDao activityAccessPermissionDao;
-
-  @Override
-  public List<ActivityAccessPermission> list() {
-    return activityAccessPermissionDao.find();
-  }
 
   @Override
   public void create(ActivityAccessPermission activityAccessPermission) {
@@ -28,4 +24,15 @@ class ActivityAccessPermissionServiceBean implements ActivityAccessPermissionSer
   public void update(ActivityAccessPermission activityAccessPermission) {
     activityAccessPermissionDao.update(activityAccessPermission);
   }
+
+  @Override
+  public List<ActivityAccessPermission> list() {
+    return activityAccessPermissionDao.find();
+  }
+
+  @Override
+  public ActivityAccessPermission get(String acronym, Integer version) throws DataNotFoundException {
+    return activityAccessPermissionDao.get(acronym, version);
+  }
+
 }
