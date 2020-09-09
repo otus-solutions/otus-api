@@ -35,7 +35,6 @@ public class ActivityAccessPermissionDaoBean extends MongoGenericDao<Document> i
 
   @Override
   public void update(ActivityAccessPermission activityAccessPermission) {
-    Document parsed = Document.parse(ActivityAccessPermission.serialize(activityAccessPermission));
     collection.updateOne(
       eq("_id", activityAccessPermission.getId()),
       new Document("$set", new Document("exclusiveDisjunction", activityAccessPermission.getExclusiveDisjunction())));
