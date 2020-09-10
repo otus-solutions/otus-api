@@ -42,6 +42,4 @@ public class ActivityResource {
     SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity, token);
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
-
-
 }

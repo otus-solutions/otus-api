@@ -53,6 +53,7 @@ public class ActivityFacade {
 
   @Inject
   private FollowUpFacade followUpFacade;
+  private SurveyActivity surveyActivityUpdated;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
@@ -162,7 +163,15 @@ public class ActivityFacade {
         }
       }
 
-      return activityService.update(surveyActivity);
+     try {
+       surveyActivityUpdated = activityService.update(surveyActivity);
+       String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
+       followUpFacade.statusUpdateEvent(nameLastStatusHistory);
+
+       System.out.println(nameLastStatusHistory);
+     } catch(Exception e){}
+
+     return surveyActivityUpdated;
 
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));

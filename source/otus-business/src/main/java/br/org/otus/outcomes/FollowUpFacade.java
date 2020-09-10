@@ -195,6 +195,18 @@ public class FollowUpFacade {
     }
   }
 
+  public void statusUpdateEvent(String status) {
+    switch (status) {
+      case "FINISHED":
+        accomplishedParticipantEvent("teste");
+      break;
+
+      case "REOPENED":
+        reopenedParticipantEvent("teste");
+      break;
+    }
+  }
+
   public Object accomplishedParticipantEvent(String eventId) {
     try {
       return new OutcomeGatewayService().accomplishedParticipantEvent(eventId);
@@ -227,7 +239,7 @@ public class FollowUpFacade {
     }
   }
 
-  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException{
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException {
     return new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
   }
 }
