@@ -205,6 +205,16 @@ public class FollowUpFacade {
     }
   }
 
+  public Object reopenedParticipantEvent(String eventId) {
+    try {
+      return new OutcomeGatewayService().reopenedParticipantEvent(eventId);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
   public Object listAllParticipantEvents(String rn) {
     try {
       ObjectId participantId = participantFacade.findIdByRecruitmentNumber(Long.parseLong(rn));
