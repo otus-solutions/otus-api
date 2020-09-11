@@ -67,6 +67,10 @@ public class SurveyActivity {
     return mode;
   }
 
+  public void setMode(ActivityMode mode) {
+    this.mode = mode;
+  }
+
   public ActivityCategory getCategory() {
     return category;
   }

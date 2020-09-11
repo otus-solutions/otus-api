@@ -1,5 +1,6 @@
 package br.org.otus.communication;
 
+import br.org.otus.commons.FindByTokenService;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.RequestException;
@@ -10,7 +11,6 @@ import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.nimbusds.jwt.SignedJWT;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -47,6 +47,9 @@ public class MessageCommunicationFacade {
 
   @Inject
   private ManagementUserService managementUserService;
+
+  @Inject
+  private FindByTokenService findByTokenService;
 
   public Object createIssue(String token, String issueJson) {
     try {
@@ -197,43 +200,28 @@ public class MessageCommunicationFacade {
     }
   }
 
-  //todo: refactor
+
   private List<String> findByToken(String token) throws DataNotFoundException, ValidationException, ParseException {
     List<String> array = new ArrayList<>();
-    final String mode = getTokenMode(token);
-    final String email = getTokenEmail(token);
-    if (mode.equals("user")) {
-      user = managementUserService.fetchByEmail(email);
-
+    Object person = findByTokenService.findPersonByToken(token);
+    if(person instanceof User){
+      user = (User)person;
       array.add(String.valueOf(user.get_id()));
-      if (user.getFieldCenter() != null) {
-        fieldCenter = fieldCenterService.fetchByAcronym(user.getFieldCenter().getAcronym());
-        array.add(String.valueOf(fieldCenter.getId()));
-      } else {
+      if (user.getFieldCenter() == null) {
         array.add(null);
       }
-
-      return array;
-    } else if (mode.equals("participant")) {
-      participant = participantService.getByEmail(email);
+      else {
+        fieldCenter = fieldCenterService.fetchByAcronym(user.getFieldCenter().getAcronym());
+        array.add(String.valueOf(fieldCenter.getId()));
+      }
+    }
+    else{
+      participant = (Participant)person;
       fieldCenter = fieldCenterService.fetchByAcronym(participant.getFieldCenter().getAcronym());
       array.add(String.valueOf(participant.getId()));
       array.add(String.valueOf(fieldCenter.getId()));
-      return array;
-    } else {
-      throw new ValidationException("Invalid Mode");
     }
+    return array;
   }
 
-  private String getTokenEmail(String token) throws ParseException {
-    SignedJWT signedJWT = SignedJWT.parse(token);
-    String email = signedJWT.getJWTClaimsSet().getClaim("iss").toString();
-    return email;
-  }
-
-  private String getTokenMode(String token) throws ParseException {
-    SignedJWT signedJWT = SignedJWT.parse(token);
-    String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
-    return mode;
-  }
 }

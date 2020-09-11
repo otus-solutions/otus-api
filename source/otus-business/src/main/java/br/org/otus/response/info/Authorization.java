@@ -10,8 +10,16 @@ public class Authorization extends ResponseInfo {
     super(Response.Status.UNAUTHORIZED, "Authentication Invalid");
   }
 
+  public Authorization(String message) {
+    super(Response.Status.UNAUTHORIZED, "Authentication Invalid - " + message);
+  }
+
   public static ResponseInfo build() {
     return new Authorization();
+  }
+
+  public static ResponseInfo build(String message) {
+    return new Authorization(message);
   }
 }
 

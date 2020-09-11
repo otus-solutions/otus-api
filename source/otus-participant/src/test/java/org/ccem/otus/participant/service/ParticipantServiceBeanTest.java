@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -165,7 +166,7 @@ public class ParticipantServiceBeanTest {
   }
 
   @Test
-  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException {
+  public void updateEmail_method_should_evoke_call_methods() throws DataNotFoundException, AlreadyExistException {
     participantServiceBean.updateEmail(objectId,EMAIL);
     verify(participantDao, times(1)).updateEmail(objectId, EMAIL);
   }

@@ -20,4 +20,4 @@ database/persistence/**
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
-persistence/
+

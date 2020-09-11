@@ -7,6 +7,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -235,14 +236,20 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   }
 
   @Override
-  public Boolean updateEmail(ObjectId id, String email) throws DataNotFoundException {
+  public Boolean updateEmail(ObjectId id, String email) throws DataNotFoundException, AlreadyExistException {
+    Boolean result;
     UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document( EMAIL, email).append(TOKEN_LIST_FIELD, new ArrayList())));
+
+    result = updateResult.getModifiedCount() != 0;
 
     if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException(new Throwable("Participant no found"));
     }
+    if(!result){
+      throw new AlreadyExistException(new Throwable("Mail already exists"));
+    }
 
-    return updateResult.getModifiedCount() != 0;
+    return result;
   }
 
   @Override
