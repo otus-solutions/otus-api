@@ -8,7 +8,8 @@ public enum ActivityStatusOptions {
   INITIALIZED_ONLINE("INITIALIZED_ONLINE"),
   OPENED("OPENED"),
   SAVED("SAVED"),
-  FINALIZED("FINALIZED");
+  FINALIZED("FINALIZED"),
+  REOPENED("REOPENED");
 
   private String name;
 

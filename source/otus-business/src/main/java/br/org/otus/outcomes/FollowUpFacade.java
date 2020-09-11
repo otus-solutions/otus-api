@@ -195,14 +195,14 @@ public class FollowUpFacade {
     }
   }
 
-  public void statusUpdateEvent(String status) {
+  public void statusUpdateEvent(String status, String activityId) {
     switch (status) {
-      case "FINISHED":
-        accomplishedParticipantEvent("teste");
+      case "FINALIZED":
+        accomplishedParticipantEventByActivity(activityId);
       break;
 
       case "REOPENED":
-        reopenedParticipantEvent("teste");
+        reopenedParticipantEventByActivity(activityId);
       break;
     }
   }
@@ -217,9 +217,19 @@ public class FollowUpFacade {
     }
   }
 
-  public Object reopenedParticipantEvent(String eventId) {
+  public Object accomplishedParticipantEventByActivity(String activityId) {
     try {
-      return new OutcomeGatewayService().reopenedParticipantEvent(eventId);
+      return new OutcomeGatewayService().accomplishedParticipantEventByActivity(activityId);
+    } catch (JsonSyntaxException | MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    } catch (RequestException ex) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    }
+  }
+
+  public Object reopenedParticipantEventByActivity(String activityId) {
+    try {
+      return new OutcomeGatewayService().reopenedParticipantEventByActivity(activityId);
     } catch (JsonSyntaxException | MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {

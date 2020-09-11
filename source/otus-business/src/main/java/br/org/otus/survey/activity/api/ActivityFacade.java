@@ -130,7 +130,7 @@ public class ActivityFacade {
       String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
       Object email = signedJWT.getJWTClaimsSet().getClaim("iss");
 
-      switch (AuthenticationMode.valueFromName(mode)){
+      switch (AuthenticationMode.valueFromName(mode)) {
         case USER:
           br.org.otus.model.User user = managementUserService.fetchByEmail(email.toString());
           statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
@@ -163,15 +163,14 @@ public class ActivityFacade {
         }
       }
 
-     try {
-       surveyActivityUpdated = activityService.update(surveyActivity);
-       String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
-       followUpFacade.statusUpdateEvent(nameLastStatusHistory);
+      surveyActivityUpdated = activityService.update(surveyActivity);
+      if (surveyActivity.getMode().name().equals("AUTOFILL")) {
+        String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
+        String activityId = String.valueOf(surveyActivity.getActivityID());
+        followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
+      }
 
-       System.out.println(nameLastStatusHistory);
-     } catch(Exception e){}
-
-     return surveyActivityUpdated;
+      return surveyActivityUpdated;
 
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
