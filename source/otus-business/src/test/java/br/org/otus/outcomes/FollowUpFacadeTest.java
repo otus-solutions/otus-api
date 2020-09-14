@@ -48,7 +48,6 @@ public class FollowUpFacadeTest {
   @Test
   public void statusUpdateEventMethod_should(){
 //    followUpFacade.statusUpdateEvent(statusHistory, );
-
   }
 }
 
