@@ -118,16 +118,16 @@ public class ParticipantActivityResourceTest {
     assertEquals(responseExpected, participantActivityResource.getByID(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY));
   }
 
-  @Test
-  public void method_update_should_return_update_ObjectResponse() {
-    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
-    when(activityFacade.updateActivity(activityFacade.deserialize(jsonActivity))).thenReturn(activityDeserialize);
-    SurveyActivity deserializeActivityUpdate = activityFacade.updateActivity(activityFacade.deserialize(jsonActivity));
-    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate);
-    String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
-    assertEquals(responseExpected, participantActivityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
-    verify(participantFacade).getByRecruitmentNumber(anyLong());
-  }
+//  @Test
+//  public void method_update_should_return_update_ObjectResponse() {
+//    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
+//    when(activityFacade.updateActivity(activityFacade.deserialize(jsonActivity))).thenReturn(activityDeserialize);
+//    SurveyActivity deserializeActivityUpdate = activityFacade.updateActivity(activityFacade.deserialize(jsonActivity));
+//    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate);
+//    String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
+//    assertEquals(responseExpected, participantActivityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
+//    verify(participantFacade).getByRecruitmentNumber(anyLong());
+//  }
 
   @Test
   public void updateCheckerActivityMethod_should_return_responseBooleanData() {

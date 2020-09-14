@@ -69,15 +69,29 @@ public class ParticipantActivityResource {
     return new Response().buildSuccess(activityFacade.getByID(id)).toSurveyJson();
   }
 
+//  @PUT
+//  @Secured
+//  @Path("/{id}")
+//  @Consumes(MediaType.APPLICATION_JSON)
+//  @Produces(MediaType.APPLICATION_JSON)
+//  public String update(@PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
+//    isValidRecruitmentNumber(rn);
+//    SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
+//    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
+//    return new Response().buildSuccess(updatedActivity).toSurveyJson();
+//  }
+
+
   @PUT
   @Secured
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String update(@PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
+  public String update(@Context HttpServletRequest request, @PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     isValidRecruitmentNumber(rn);
     SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
-    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
+    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity, token);
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
 

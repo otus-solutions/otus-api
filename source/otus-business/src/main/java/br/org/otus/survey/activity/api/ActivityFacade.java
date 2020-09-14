@@ -177,6 +177,8 @@ public class ActivityFacade {
     }
   }
 
+
+
   public boolean updateCheckerActivity(String checkerUpdated) {
     try {
       return activityService.updateCheckerActivity(checkerUpdated);
