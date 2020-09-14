@@ -2,9 +2,7 @@ package br.org.otus.outcomes;
 
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
-import netscape.javascript.JSObject;
 import org.bson.types.ObjectId;
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +25,6 @@ public class FollowUpFacadeTest {
   @Mock
   private OutcomeGatewayService outcomeGatewayService;
   private GatewayResponse response;
-  private JSObject Mock;
 
   @Before
   public void setUp() throws Exception {
