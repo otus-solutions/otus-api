@@ -1,12 +1,7 @@
 package br.org.otus.permission;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
@@ -20,14 +15,20 @@ public class ActivityPermissionResource {
 
   @Inject
   private ActivityAccessPermissionFacade activityAccessPermissionFacade;
-  @Inject
-  private ActivityAccessPermission activityAccessPermission;
 
   @POST
   @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   public String create(String permission) {
     activityAccessPermissionFacade.create(ActivityAccessPermission.deserialize(permission));
+    return new Response().buildSuccess().toJson();
+  }
+
+  @PUT
+  @Secured
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String update(String permission) {
+    activityAccessPermissionFacade.update(ActivityAccessPermission.deserialize(permission));
     return new Response().buildSuccess().toJson();
   }
 
@@ -38,11 +39,12 @@ public class ActivityPermissionResource {
     return new Response().buildSuccess(activityAccessPermissionFacade.getAll()).toJson(ActivityAccessPermission.getGsonBuilder());
   }
 
-  @PUT
+  @GET
+  @Path("/{acronym}/{version}")
   @Secured
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String update(String permission) {
-    activityAccessPermissionFacade.update(ActivityAccessPermission.deserialize(permission));
-    return new Response().buildSuccess().toJson();
+  @Produces(MediaType.APPLICATION_JSON)
+  public String get(@PathParam("acronym") String acronym, @PathParam("version") String version) {
+    return new Response().buildSuccess(activityAccessPermissionFacade.get(acronym, version)).toJson(ActivityAccessPermission.getGsonBuilder());
   }
+
 }
