@@ -220,10 +220,12 @@ public class FollowUpFacade {
   public Object accomplishedParticipantEventByActivity(String activityId) {
     try {
       return new OutcomeGatewayService().accomplishedParticipantEventByActivity(activityId);
-    } catch (JsonSyntaxException | MalformedURLException e) {
+    } catch (MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    } catch (JsonSyntaxException e){
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502) , "OUTCOMES COMUNICATION FAIL"));
     }
   }
 
