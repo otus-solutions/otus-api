@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
@@ -53,7 +54,7 @@ public class ActivityFacade {
 
   @Inject
   private FollowUpFacade followUpFacade;
-  private SurveyActivity surveyActivityUpdated;
+  private SurveyActivity activityUpdated;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
@@ -163,17 +164,20 @@ public class ActivityFacade {
         }
       }
 
-      if (surveyActivity.getMode().name().equals(ActivityMode.AUTOFILL)) {
+      activityUpdated = activityService.update(surveyActivity);
+
+      if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
         String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
         String activityId = String.valueOf(surveyActivity.getActivityID());
         try {
           followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
         } catch (HttpResponseException e) {
-          System.out.println(e);
+          Logger logger = Logger.getLogger("fail:");
+          logger.warning("status: "+ e.getResponseInfo().STATUS+" info: "+e.getResponseInfo().MESSAGE);
         }
       }
 
-      return activityService.update(surveyActivity);
+      return activityUpdated;
 
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
