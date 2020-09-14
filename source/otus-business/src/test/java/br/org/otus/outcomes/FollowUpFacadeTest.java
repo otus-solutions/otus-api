@@ -30,7 +30,6 @@ public class FollowUpFacadeTest {
   public void setUp() throws Exception {
     activityId = new ObjectId("5f1844d60d7b3e017612f47d").toString();
     response = new GatewayResponse().buildSuccess();
-
   }
 
   @Test
@@ -41,10 +40,9 @@ public class FollowUpFacadeTest {
     Assert.assertEquals(followUpFacade.cancelParticipantEventByActivityId(activityId), response);
   }
 
-
-  @Test
-  public void statusUpdateEventMethod_should(){
+//  @Test
+//  public void statusUpdateEventMethod_should(){
 //    followUpFacade.statusUpdateEvent(statusHistory, );
-  }
+//  }
 }
 

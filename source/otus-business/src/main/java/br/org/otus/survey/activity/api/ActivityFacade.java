@@ -163,20 +163,22 @@ public class ActivityFacade {
         }
       }
 
-      surveyActivityUpdated = activityService.update(surveyActivity);
-      if (surveyActivity.getMode().name().equals("AUTOFILL")) {
+      if (surveyActivity.getMode().name().equals(ActivityMode.AUTOFILL)) {
         String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
         String activityId = String.valueOf(surveyActivity.getActivityID());
-        followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
+        try {
+          followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
+        } catch (HttpResponseException e) {
+          System.out.println(e);
+        }
       }
 
-      return surveyActivityUpdated;
+      return activityService.update(surveyActivity);
 
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
-
 
 
   public boolean updateCheckerActivity(String checkerUpdated) {
