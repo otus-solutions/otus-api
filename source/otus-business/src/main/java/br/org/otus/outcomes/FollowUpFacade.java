@@ -199,11 +199,11 @@ public class FollowUpFacade {
     switch (status) {
       case "FINALIZED":
         accomplishedParticipantEventByActivity(activityId);
-      break;
+        break;
 
       case "REOPENED":
         reopenedParticipantEventByActivity(activityId);
-      break;
+        break;
     }
   }
 
@@ -224,18 +224,20 @@ public class FollowUpFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    } catch (JsonSyntaxException e){
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502) , "OUTCOMES COMUNICATION FAIL"));
+    } catch (JsonSyntaxException e) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502), "OUTCOMES COMUNICATION FAIL"));
     }
   }
 
   public Object reopenedParticipantEventByActivity(String activityId) {
     try {
       return new OutcomeGatewayService().reopenedParticipantEventByActivity(activityId);
-    } catch (JsonSyntaxException | MalformedURLException e) {
+    } catch (MalformedURLException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
+    } catch (JsonSyntaxException e) {
+      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502), "OUTCOMES COMUNICATION FAIL"));
     }
   }
 
