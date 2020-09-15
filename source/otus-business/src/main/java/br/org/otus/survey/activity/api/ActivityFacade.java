@@ -35,10 +35,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
+  private static Logger LOGGER = Logger.getLogger("ActivityFacade");
 
   @Inject
   private ActivityService activityService;
@@ -172,11 +174,9 @@ public class ActivityFacade {
         try {
           followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
         } catch (HttpResponseException e) {
-          Logger logger = Logger.getLogger("fail:");
-          logger.warning("status: "+ e.getResponseInfo().STATUS+" info: "+e.getResponseInfo().MESSAGE);
+          LOGGER.severe("status: "+ e.getResponseInfo().STATUS+" info: "+e.getResponseInfo().MESSAGE);
         }
       }
-
       return activityUpdated;
 
     } catch (DataNotFoundException | ParseException e) {
