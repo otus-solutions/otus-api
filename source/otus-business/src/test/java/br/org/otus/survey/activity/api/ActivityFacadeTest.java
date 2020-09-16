@@ -134,19 +134,6 @@ public class ActivityFacadeTest {
     verify(followUpFacade, times(1)).statusUpdateEvent(nameLastStatusHistory, activityId);
   }
 
-
-//  @Test
-//  public void should_create_errorLog_in_catching_outcomesException() throws DataNotFoundException {
-//    String nameLastStatusHistory = autofillSurveyActivity.getLastStatus().get().getName();
-//    String activityId = String.valueOf(autofillSurveyActivity.getActivityID());
-//
-//    PowerMockito
-//      .doThrow(new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502), "OUTCOMES COMUNICATION FAIL")))
-//      .when(followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId));
-//
-//    activityFacade.updateActivity(autofillSurveyActivity, TOKEN);
-//  }
-
   @Test(expected = HttpResponseException.class)
   public void method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
     Mockito.when(activityService.update(surveyActivity)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
