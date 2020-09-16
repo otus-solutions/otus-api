@@ -16,6 +16,8 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
   private static final String LIST_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/listAll";
   private static final String CANCEL_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/cancel";
   private static final String ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/accomplished";
+  private static final String ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE_ACTIVITY = "/participantEvent/accomplished/activity";
+  private static final String REOPENED_PARTICIPANT_EVENT_RESOURCE_RESOURCE_ACTIVITY = "/participantEvent/reopened/activity";
   private static final String NOTIFICATION_DATA_EVENT_RESOURCE = "/event/notification-data";
   private static final String  DEACTIVATED_PARTICIPANT_EVENT_RESOURCE = "/participantEvent/discarded/activity";
 
@@ -67,6 +69,14 @@ public class OutcomesMicroServiceResources extends MicroservicesResources {
 
   public URL getAccomplishedParticipantEventAddress(String eventId) throws MalformedURLException {
     return new URL("http://" + this.HOST + ":" + this.PORT + ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE + "/" + eventId);
+  }
+
+  public URL getAccomplishedParticipantEventAddressByActivity(String activityId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + ACCOMPLISHED_PARTICIPANT_EVENT_RESOURCE_ACTIVITY + "/" + activityId);
+  }
+
+  public URL getReopenedParticipantEventAddressByActivity(String activityId) throws MalformedURLException {
+    return new URL("http://" + this.HOST + ":" + this.PORT + REOPENED_PARTICIPANT_EVENT_RESOURCE_RESOURCE_ACTIVITY + "/" + activityId);
   }
 
   public URL listAllParticipantEvents(String rn) throws MalformedURLException {
