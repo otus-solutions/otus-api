@@ -64,7 +64,6 @@ public class ActivityFacadeTest {
   private SurveyActivity surveyActivityFull;
   private SurveyActivity autofillSurveyActivity;
 
-
   @Before
   public void setUp() {
     surveyActivityFull = new Gson().fromJson(JSON, SurveyActivity.class);
