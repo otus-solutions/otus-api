@@ -1,11 +1,8 @@
 package br.org.otus.survey.activity;
 
 import br.org.otus.rest.Response;
-import br.org.otus.security.AuthorizationHeaderReader;
-import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.api.ActivityFacade;
-import com.nimbusds.jwt.SignedJWT;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 
 import javax.inject.Inject;
@@ -20,9 +17,6 @@ public class ActivityResource {
 
   @Inject
   private ActivityFacade activityFacade;
-
-  @Inject
-  private SecurityContext securityContext;
 
   @GET
   @Secured

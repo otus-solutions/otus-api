@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -112,18 +111,6 @@ public class ActivityFacade {
     return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
   }
 
-  public SurveyActivity updateActivity(SurveyActivity surveyActivity) throws HttpResponseException {
-
-    try {
-      if (surveyActivity.getMode().name().equals("AUTOFILL")) {
-        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
-      }
-      return activityService.update(surveyActivity);
-    } catch (ReadRequestException | MalformedURLException | RequestException | DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
-    }
-  }
-
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) {
     try {
       User statusHistoryUser = null;
@@ -169,8 +156,8 @@ public class ActivityFacade {
       activityUpdated = activityService.update(surveyActivity);
 
       if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
-        String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
-        String activityId = String.valueOf(surveyActivity.getActivityID());
+        String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
+        String activityId = String.valueOf(activityUpdated.getActivityID());
         try {
           followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
         } catch (HttpResponseException e) {
@@ -183,7 +170,6 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
-
 
   public boolean updateCheckerActivity(String checkerUpdated) {
     try {
