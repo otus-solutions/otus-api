@@ -26,7 +26,7 @@ public class OutcomeGatewayServiceTest {
   private static final String ACTIVITY_ID = "5f5fade308a0fc339325a8c8";
   private static final String EVENT_ID = "6f5fade308a0fc339325a8c9";
   private OutcomeGatewayService service = PowerMockito.spy(new OutcomeGatewayService());
-  
+
   @Mock
   private URL mockUrl;
   @Mock
