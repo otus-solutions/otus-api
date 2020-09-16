@@ -22,9 +22,13 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 
 public class FollowUpFacade {
+  private static Logger LOGGER = Logger.getLogger("br.org.otus.outcomes.FollowUpFacade");
+  private static String ACCOMPLISHED_METHOD = "accomplishedParticipantEventByActivity";
+  private static String REOPEN_METHOD = "reopenedParticipantEventByActivity";
 
   @Inject
   private ParticipantFacade participantFacade;
@@ -198,11 +202,11 @@ public class FollowUpFacade {
   public void statusUpdateEvent(String status, String activityId) {
     switch (status) {
       case "FINALIZED":
-        accomplishedParticipantEventByActivity(activityId);
+        accomplishedParticipantEventByActivity(activityId, status);
         break;
 
       case "REOPENED":
-        reopenedParticipantEventByActivity(activityId);
+        reopenedParticipantEventByActivity(activityId, status);
         break;
     }
   }
@@ -217,7 +221,7 @@ public class FollowUpFacade {
     }
   }
 
-  public Object accomplishedParticipantEventByActivity(String activityId) {
+  public Object accomplishedParticipantEventByActivity(String activityId, String status) {
     try {
       return new OutcomeGatewayService().accomplishedParticipantEventByActivity(activityId);
     } catch (MalformedURLException e) {
@@ -225,11 +229,12 @@ public class FollowUpFacade {
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     } catch (JsonSyntaxException e) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502), "OUTCOMES COMUNICATION FAIL"));
+      callOtuscomesErrorLog(activityId, status, ACCOMPLISHED_METHOD, e);
+      return false;
     }
   }
 
-  public Object reopenedParticipantEventByActivity(String activityId) {
+  public Object reopenedParticipantEventByActivity(String activityId, String status) {
     try {
       return new OutcomeGatewayService().reopenedParticipantEventByActivity(activityId);
     } catch (MalformedURLException e) {
@@ -237,8 +242,13 @@ public class FollowUpFacade {
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
     } catch (JsonSyntaxException e) {
-      throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(502), "OUTCOMES COMUNICATION FAIL"));
+      callOtuscomesErrorLog(activityId, status, REOPEN_METHOD, e);
+      return false;
     }
+  }
+  private void callOtuscomesErrorLog(String activityId, String status, String action, JsonSyntaxException e){
+    LOGGER.severe(""  + "info: " + Response.Status.fromStatusCode(502)+ ", cause: OUTCOMES COMMUNICATION FAIL"
+    +"\nactivityId: " + activityId +", status:" + status + ", action:"+action);
   }
 
   public Object listAllParticipantEvents(String rn) {

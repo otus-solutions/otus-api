@@ -48,5 +48,5 @@ public class ActivityResourceTest {
     String responseExpected = new Response().buildSuccess(activityFacade.updateActivity(any(), anyString())).toSurveyJson();
     assertEquals(responseExpected, activityResource.update(request, autofillSurveyActivity.toString()));
   }
-  
+
 }

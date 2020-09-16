@@ -39,8 +39,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
-  private static Logger LOGGER = Logger.getLogger("ActivityFacade");
-
   @Inject
   private ActivityService activityService;
 
@@ -158,11 +156,7 @@ public class ActivityFacade {
       if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
         String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
         String activityId = String.valueOf(activityUpdated.getActivityID());
-        try {
-          followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
-        } catch (HttpResponseException e) {
-          LOGGER.severe("status: "+ e.getResponseInfo().STATUS+" info: "+e.getResponseInfo().MESSAGE);
-        }
+        followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
       }
       return activityUpdated;
 
