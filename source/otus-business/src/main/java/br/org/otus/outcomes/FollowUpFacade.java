@@ -20,6 +20,7 @@ import org.ccem.otus.participant.model.Participant;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -228,7 +229,7 @@ public class FollowUpFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    } catch (JsonSyntaxException e) {
+    } catch (JsonSyntaxException | IOException e) {
       callOtuscomesErrorLog(activityId, status, ACCOMPLISHED_METHOD, e);
       return false;
     }
@@ -241,14 +242,15 @@ public class FollowUpFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     } catch (RequestException ex) {
       throw new HttpResponseException(new ResponseInfo(Response.Status.fromStatusCode(ex.getErrorCode()), ex.getErrorMessage(), ex.getErrorContent()));
-    } catch (JsonSyntaxException e) {
+    } catch (JsonSyntaxException | IOException e) {
       callOtuscomesErrorLog(activityId, status, REOPEN_METHOD, e);
       return false;
     }
   }
-  private void callOtuscomesErrorLog(String activityId, String status, String action, JsonSyntaxException e){
-    LOGGER.severe(""  + "info: " + Response.Status.fromStatusCode(502)+ ", cause: OUTCOMES COMMUNICATION FAIL"
-    +"\nactivityId: " + activityId +", status:" + status + ", action:"+action);
+
+  private void callOtuscomesErrorLog(String activityId, String status, String action, Exception e) {
+    LOGGER.severe("" + "info: " + Response.Status.fromStatusCode(502) + ", cause: OUTCOMES COMMUNICATION FAIL"
+      + "\nactivityId: " + activityId + ", status:" + status + ", action:" + action);
   }
 
   public Object listAllParticipantEvents(String rn) {

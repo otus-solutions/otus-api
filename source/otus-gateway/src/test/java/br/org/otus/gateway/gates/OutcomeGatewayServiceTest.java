@@ -80,15 +80,6 @@ public class OutcomeGatewayServiceTest {
     assertTrue(service.accomplishedParticipantEventByActivity(ACTIVITY_ID) instanceof GatewayResponse);
   }
 
-  @Test(expected = ReadRequestException.class)
-  public void accomplishedParticipantEventByActivityMethod_should_catch_IOException() throws Exception {
-    whenNew(OutcomesMicroServiceResources.class).withAnyArguments().thenReturn(outcomesMicroServiceResources);
-    when(outcomesMicroServiceResources.getAccomplishedParticipantEventAddressByActivity(ACTIVITY_ID)).thenReturn(mockUrl);
-    whenNew(JsonPUTRequestUtility.class).withAnyArguments().thenReturn(jsonPUTRequestUtility);
-    Mockito.when(jsonPUTRequestUtility.finish()).thenThrow(new IOException(new Throwable()));
-    service.accomplishedParticipantEventByActivity(ACTIVITY_ID);
-  }
-
   @Test
   public void reopenedParticipantEventByActivityMethod_should_simulate_microserviceResponse() throws Exception {
     whenNew(OutcomesMicroServiceResources.class).withAnyArguments().thenReturn(outcomesMicroServiceResources);
@@ -96,14 +87,4 @@ public class OutcomeGatewayServiceTest {
     whenNew(JsonPUTRequestUtility.class).withAnyArguments().thenReturn(jsonPUTRequestUtility);
     assertTrue(service.reopenedParticipantEventByActivity(ACTIVITY_ID) instanceof GatewayResponse);
   }
-
-  @Test(expected = ReadRequestException.class)
-  public void reopenedParticipantEventByActivityMethod_should_catch_IOException() throws Exception {
-    whenNew(OutcomesMicroServiceResources.class).withAnyArguments().thenReturn(outcomesMicroServiceResources);
-    when(outcomesMicroServiceResources.getReopenedParticipantEventAddressByActivity(ACTIVITY_ID)).thenReturn(mockUrl);
-    whenNew(JsonPUTRequestUtility.class).withAnyArguments().thenReturn(jsonPUTRequestUtility);
-    Mockito.when(jsonPUTRequestUtility.finish()).thenThrow(new IOException(new Throwable()));
-    service.reopenedParticipantEventByActivity(ACTIVITY_ID);
-  }
-
 }
