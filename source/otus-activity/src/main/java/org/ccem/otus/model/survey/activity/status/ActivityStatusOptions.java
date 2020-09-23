@@ -1,7 +1,5 @@
 package org.ccem.otus.model.survey.activity.status;
 
-import com.google.gson.annotations.SerializedName;
-
 public enum ActivityStatusOptions {
   CREATED("CREATED"),
   INITIALIZED_OFFLINE("INITIALIZED_OFFLINE"),

@@ -154,9 +154,14 @@ public class ActivityFacade {
       activityUpdated = activityService.update(surveyActivity);
 
       if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
-        String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
-        String activityId = String.valueOf(activityUpdated.getActivityID());
-        followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
+        if(activityUpdated.isDiscarded()){
+          followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+        }
+        else{
+          String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
+          String activityId = String.valueOf(activityUpdated.getActivityID());
+          followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
+        }
       }
       return activityUpdated;
 

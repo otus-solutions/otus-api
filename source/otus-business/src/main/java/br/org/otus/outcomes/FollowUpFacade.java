@@ -265,8 +265,12 @@ public class FollowUpFacade {
     }
   }
 
-  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException {
-    return new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws ReadRequestException, RequestException {
+    try {
+      return new OutcomeGatewayService().cancelParticipantEventByActivityId(activityID);
+    } catch (Exception e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
   }
 }
 
