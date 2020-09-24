@@ -15,15 +15,7 @@ public class SimpleAliquotTest {
   public static final String OBJECT_TYPE = "Aliquot";
   public static final String CODE = "334000000";
   public static final String NAME = "BIOCHEMICAL_SERUM";
-  public static final String ALIQUOT_JSON_STRING = "{\"objectType\":\"Aliquot\",\"code\":\"334000000\",\"name\":\"BIOCHEMICAL_SERUM\",\"container\":\"PALLET\",\"role\":\"EXAM\",\"aliquotCollectionData\":{\"objectType\":\"AliquotCollectionData\",\"metadata\":\"\",\"operator\":\"nando.souza97@hotmail.com\",\"time\":\"2017-10-09T18:30:06.811Z\",\"processing\":null},\"aliquotHistory\":" +
-    "[{" +
-    "\"objectType\":\"AliquotEvent\"," +
-    "\"type\":\"CONVERTED STORAGE\"," +
-    "\"userEmail\":\"otus@gmail.com\"," +
-    "\"description\":\"Falta de material para completar os exames\"," +
-    "\"date\":\"2019-05-14T12:36:23.631Z\"" +
-    "}]" +
-    "}";
+  public static final String ALIQUOT_JSON_STRING = "{\"objectType\":\"Aliquot\",\"code\":\"334000000\",\"name\":\"BIOCHEMICAL_SERUM\",\"container\":\"PALLET\",\"role\":\"EXAM\",\"aliquotCollectionData\":{\"objectType\":\"AliquotCollectionData\",\"metadata\":\"\",\"operator\":\"nando.souza97@hotmail.com\",\"time\":\"2017-10-09T18:30:06.811Z\",\"processing\":null},\"locationPoint\":null,\"aliquotHistory\":[{\"objectType\":\"AliquotEvent\",\"type\":\"CONVERTED STORAGE\",\"userEmail\":\"otus@gmail.com\",\"description\":\"Falta de material para completar os exames\",\"date\":\"2019-05-14T12:36:23.631Z\"}]}";
 
   @Mock
   private SimpleAliquot simpleAliquotFromJson;

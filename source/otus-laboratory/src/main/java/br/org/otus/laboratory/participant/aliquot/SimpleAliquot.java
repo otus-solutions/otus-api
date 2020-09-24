@@ -4,7 +4,9 @@ import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotContain
 import br.org.otus.laboratory.configuration.collect.aliquot.enums.AliquotRole;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,16 +19,18 @@ public class SimpleAliquot {
   private AliquotContainer container;
   private AliquotRole role;
   private AliquotCollectionData aliquotCollectionData;
+  private ObjectId locationPoint;
   private List<AliquotEvent> aliquotHistory;
 
 
-  public SimpleAliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData) {
+  public SimpleAliquot(String objectType, String code, String name, AliquotContainer container, AliquotRole role, AliquotCollectionData aliquotCollectionData, ObjectId locationPoint) {
     this.objectType = objectType;
     this.code = code;
     this.name = name;
     this.container = container;
     this.role = role;
     this.aliquotCollectionData = aliquotCollectionData;
+    this.locationPoint = locationPoint;
   }
 
   public SimpleAliquot() {
@@ -60,6 +64,10 @@ public class SimpleAliquot {
     return aliquotCollectionData;
   }
 
+  public ObjectId getLocationPoint() {
+    return this.locationPoint;
+  }
+
   public static String serialize(SimpleAliquot simpleAliquot) {
     Gson builder = SimpleAliquot.getGsonBuilder().create();
     return builder.toJson(simpleAliquot);
@@ -73,6 +81,7 @@ public class SimpleAliquot {
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     builder.serializeNulls();
     return builder;
   }
