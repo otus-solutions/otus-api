@@ -7,12 +7,18 @@ import br.org.otus.gateway.request.JsonPUTRequestUtility;
 import br.org.otus.gateway.resource.CommunicationMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.gateway.response.exception.RequestException;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 public class CommunicationGatewayService {
+  private static Logger LOGGER = Logger.getLogger("br.org.otus.gateway.gates.CommunicationGatewayService");
+
   public GatewayResponse sendMail(String emailVariables) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getCommunicationAddress();
     try {
@@ -21,6 +27,10 @@ public class CommunicationGatewayService {
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
       throw new ReadRequestException();
+    } catch(RequestException ex){
+      LOGGER.severe("" + "info: in sendEmail" + ", cause: COMMUNICATION SERVICE FAIL"
+        + "\nemail_context: " + emailVariables);
+      return new GatewayResponse();
     }
   }
 
