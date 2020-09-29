@@ -147,8 +147,12 @@ public class FollowUpFacade {
       followUpCommunicationData.setEmail(participant.getEmail());
       followUpCommunicationData.pushVariable(PARTICIPANT_NAME, participant.getName());
       followUpCommunicationData.pushVariable(EVENT_NAME, participantEventDTO.description);
-      GatewayResponse notification = new CommunicationGatewayService().sendMail(FollowUpCommunicationData.serialize(followUpCommunicationData));
-      System.err.println(notification.getData());
+      try {
+        GatewayResponse notification = new CommunicationGatewayService().sendMail(FollowUpCommunicationData.serialize(followUpCommunicationData));
+        logNotification(notification.getData(), true);
+      } catch (ReadRequestException e) {
+//        System.err.println(notification.getData());
+      }
     }
   }
 
@@ -176,7 +180,15 @@ public class FollowUpFacade {
     activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
     activitySendingCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
     GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
-    System.err.println(notification.getData());
+    //System.err.println(notification.getData());
+    logNotification(notification.getData(), true);
+  }
+
+  private void logNotification(Object notification, Boolean success) {
+    if (success) {
+      LOGGER.info("action: sendEmail, status: success, info: " +notification);
+      return;
+    }
   }
 
   public Object cancelParticipantEvent(String eventId) {
