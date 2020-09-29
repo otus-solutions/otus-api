@@ -28,8 +28,6 @@ public class CommunicationGatewayService {
     } catch (IOException ex) {
       throw new ReadRequestException();
     } catch(RequestException ex){
-      LOGGER.severe("" + "info: in sendEmail" + ", cause: COMMUNICATION SERVICE FAIL"
-        + "\nemail_context: " + emailVariables);
       throw new ReadRequestException("COMMUNICATION SERVICE FAIL", ex);
     }
   }

@@ -26,20 +26,18 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
       participantCommunicationDataDto.pushVariable("host", String.valueOf(isValidURL(requestData.getRedirectUrl())));
       GatewayResponse notification = new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));
       logNotification(notification.getData(), true);
-    } catch (MalformedURLException | RequestException e) {
-      throw new EmailNotificationException(e);
-    } catch(ReadRequestException e){
-      logNotification(e, false);
+    } catch (MalformedURLException | RequestException | ReadRequestException ex) {
+      if (ex instanceof ReadRequestException) logNotification(ex, false);
+      throw new EmailNotificationException(ex);
     }
   }
 
-
-  private void logNotification(Object notification, Boolean success){
-    if(success){
-      LOGGER.info("action: sendEmail, status: success, info: " +notification);
+  private void logNotification(Object notification, Boolean success) {
+    if (success) {
+      LOGGER.info("action: sendEmail, status: success, info: " + notification);
       return;
     }
-    LOGGER.severe("action: sendEmail, status: fail, info: " +notification);
+    LOGGER.severe("action: sendEmail, status: fail, info: " + notification);
   }
 
   @Override
