@@ -35,10 +35,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
-
   @Inject
   private ActivityService activityService;
 
@@ -53,6 +53,7 @@ public class ActivityFacade {
 
   @Inject
   private FollowUpFacade followUpFacade;
+  private SurveyActivity activityUpdated;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
@@ -108,18 +109,6 @@ public class ActivityFacade {
     return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
   }
 
-  public SurveyActivity updateActivity(SurveyActivity surveyActivity) throws HttpResponseException {
-
-    try {
-      if (surveyActivity.getMode().name().equals("AUTOFILL")) {
-        followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
-      }
-      return activityService.update(surveyActivity);
-    } catch (ReadRequestException | MalformedURLException | RequestException | DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
-    }
-  }
-
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) {
     try {
       User statusHistoryUser = null;
@@ -129,7 +118,7 @@ public class ActivityFacade {
       String mode = signedJWT.getJWTClaimsSet().getClaim("mode").toString();
       Object email = signedJWT.getJWTClaimsSet().getClaim("iss");
 
-      switch (AuthenticationMode.valueFromName(mode)){
+      switch (AuthenticationMode.valueFromName(mode)) {
         case USER:
           br.org.otus.model.User user = managementUserService.fetchByEmail(email.toString());
           statusHistoryUser = new User(user.getName(), user.getEmail(), user.getSurname(), user.getPhone());
@@ -162,7 +151,19 @@ public class ActivityFacade {
         }
       }
 
-      return activityService.update(surveyActivity);
+      activityUpdated = activityService.update(surveyActivity);
+
+      if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
+        if(activityUpdated.isDiscarded()){
+          followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+        }
+        else{
+          String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
+          String activityId = String.valueOf(activityUpdated.getActivityID());
+          followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
+        }
+      }
+      return activityUpdated;
 
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));

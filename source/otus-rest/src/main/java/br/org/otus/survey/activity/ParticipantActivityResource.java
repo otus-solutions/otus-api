@@ -74,10 +74,11 @@ public class ParticipantActivityResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String update(@PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
+  public String update(@Context HttpServletRequest request, @PathParam("rn") long rn, @PathParam("id") String id, String surveyActivity) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     isValidRecruitmentNumber(rn);
     SurveyActivity deserializedSurveyActivity = activityFacade.deserialize(surveyActivity);
-    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity);
+    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity, token);
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
 

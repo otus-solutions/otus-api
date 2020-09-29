@@ -125,6 +125,20 @@ public class OutcomeGatewayService {
     }
   }
 
+  public GatewayResponse accomplishedParticipantEventByActivity(String activityId) throws IOException {
+    URL requestURL = new OutcomesMicroServiceResources().getAccomplishedParticipantEventAddressByActivity(activityId);
+    JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+    String response = jsonPUT.finish();
+    return new GatewayResponse().buildSuccess(response);
+  }
+
+  public GatewayResponse reopenedParticipantEventByActivity(String activityId) throws IOException {
+    URL requestURL = new OutcomesMicroServiceResources().getReopenedParticipantEventAddressByActivity(activityId);
+    JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);
+    String response = jsonPUT.finish();
+    return new GatewayResponse().buildSuccess(response);
+  }
+
   public GatewayResponse removeFollowUpEvent(String eventId) throws MalformedURLException {
     URL requestURL = new OutcomesMicroServiceResources().getRemoveFollowUpEventAddress(eventId);
     try {
@@ -158,7 +172,7 @@ public class OutcomeGatewayService {
     }
   }
 
-  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException   {
+  public GatewayResponse cancelParticipantEventByActivityId(String activityID) throws MalformedURLException, ReadRequestException, RequestException {
     URL requestURL = new OutcomesMicroServiceResources().cancelParticipantEventByActivityId(activityID);
     try {
       JsonPUTRequestUtility jsonPUT = new JsonPUTRequestUtility(requestURL);

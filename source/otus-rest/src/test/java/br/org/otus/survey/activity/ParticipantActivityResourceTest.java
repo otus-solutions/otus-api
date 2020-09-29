@@ -120,13 +120,11 @@ public class ParticipantActivityResourceTest {
 
   @Test
   public void method_update_should_return_update_ObjectResponse() {
-    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
-    when(activityFacade.updateActivity(activityFacade.deserialize(jsonActivity))).thenReturn(activityDeserialize);
-    SurveyActivity deserializeActivityUpdate = activityFacade.updateActivity(activityFacade.deserialize(jsonActivity));
-    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate);
+    SurveyActivity deserializeActivityUpdate = activityFacade.updateActivity(activityFacade.deserialize(jsonActivity), TOKEN);
+    SurveyActivity updatedActivity = activityFacade.updateActivity(deserializeActivityUpdate, TOKEN);
     String responseExpected = new Response().buildSuccess(updatedActivity).toSurveyJson();
-    assertEquals(responseExpected, participantActivityResource.update(RECRUIMENT_NUMBER, ID_SURVEY_ACITIVITY, jsonActivity));
-    verify(participantFacade).getByRecruitmentNumber(anyLong());
+    assertEquals(responseExpected, participantActivityResource.update(request, RECRUIMENT_NUMBER, ID_ACITIVITY, jsonActivity));
+    verify(participantFacade, times(1)).getByRecruitmentNumber(RECRUIMENT_NUMBER);
   }
 
   @Test
