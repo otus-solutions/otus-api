@@ -149,9 +149,9 @@ public class FollowUpFacade {
       followUpCommunicationData.pushVariable(EVENT_NAME, participantEventDTO.description);
       try {
         GatewayResponse notification = new CommunicationGatewayService().sendMail(FollowUpCommunicationData.serialize(followUpCommunicationData));
-        logNotification(notification.getData(), true);
-      } catch (ReadRequestException e) {
-//        System.err.println(notification.getData());
+        logNotification("notificationEvent", notification.getData(), true, participant, null);
+      } catch (ReadRequestException ex) {
+        logNotification("sendAutoFillActivityNotificationEmail", ex, false, participant, null);
       }
     }
   }
@@ -179,16 +179,32 @@ public class FollowUpFacade {
     activitySendingCommunicationData.setEmail(participant.getEmail());
     activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
     activitySendingCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
-    GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
-    //System.err.println(notification.getData());
-    logNotification(notification.getData(), true);
+    try {
+      GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
+      logNotification("sendAutoFillActivityNotificationEmail", notification.getData(), true, participant, surveyActivity);
+    }catch (ReadRequestException ex){
+      logNotification("sendAutoFillActivityNotificationEmail", ex, false, participant, surveyActivity);
+    }
   }
 
-  private void logNotification(Object notification, Boolean success) {
+  private void logNotification(String action, Object notification, Boolean success,
+                               Participant participant, SurveyActivity activity) {
     if (success) {
-      LOGGER.info("action: sendEmail, status: success, info: " +notification);
+      LOGGER.info("status: success, action: "+action+",\n" +
+        "participantId: "+participant.getId()+", email: "+participant.getEmail()+",\n" +
+        "info: " + notification+",\n"+
+        getActivityInfo(activity));
       return;
     }
+    LOGGER.severe(" status: fail, action: "+action+",\n" +
+      "participantId: "+participant.getId()+", email: "+participant.getEmail()+",\n"+
+      "info: " + notification+",\n"+
+      getActivityInfo(activity));
+  }
+
+  private String getActivityInfo(SurveyActivity activity){
+    if(activity instanceof SurveyActivity)  return "activityId: "+activity.getActivityID()+", acronym: "+activity.getSurveyForm().getAcronym()+"\n";
+    return "";
   }
 
   public Object cancelParticipantEvent(String eventId) {

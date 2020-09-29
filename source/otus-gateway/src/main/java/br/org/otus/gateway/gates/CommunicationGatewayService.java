@@ -17,8 +17,6 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 public class CommunicationGatewayService {
-  private static Logger LOGGER = Logger.getLogger("br.org.otus.gateway.gates.CommunicationGatewayService");
-
   public GatewayResponse sendMail(String emailVariables) throws MalformedURLException, ReadRequestException {
     URL requestURL = new CommunicationMicroServiceResources().getCommunicationAddress();
     try {
@@ -26,9 +24,9 @@ public class CommunicationGatewayService {
       String response = jsonPOST.finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
-      throw new ReadRequestException();
+      throw new ReadRequestException("COMMUNICATION SERVICE FAIL",ex);
     } catch(RequestException ex){
-      throw new ReadRequestException("COMMUNICATION SERVICE FAIL", ex);
+      throw new ReadRequestException("COMMUNICATION SERVICE FAIL - sendEmail", ex);
     }
   }
 
