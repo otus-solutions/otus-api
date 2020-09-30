@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 
 public class FollowUpFacade {
-  private static Logger LOGGER = Logger.getLogger("br.org.otus.outcomes.FollowUpFacade");
-  private static String ACCOMPLISHED_METHOD = "accomplishedParticipantEventByActivity";
-  private static String REOPEN_METHOD = "reopenedParticipantEventByActivity";
+  private final static Logger LOGGER = Logger.getLogger("br.org.otus.outcomes.FollowUpFacade");
+  private final static String ACCOMPLISHED_METHOD = "accomplishedParticipantEventByActivity";
+  private final static String REOPEN_METHOD = "reopenedParticipantEventByActivity";
 
   @Inject
   private ParticipantFacade participantFacade;
@@ -182,7 +182,7 @@ public class FollowUpFacade {
     try {
       GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
       logNotification("sendAutoFillActivityNotificationEmail", notification.getData(), true, participant, surveyActivity);
-    }catch (ReadRequestException ex){
+    } catch (ReadRequestException ex) {
       logNotification("sendAutoFillActivityNotificationEmail", ex, false, participant, surveyActivity);
     }
   }
@@ -190,21 +190,21 @@ public class FollowUpFacade {
   private void logNotification(String action, Object notification, Boolean success,
                                Participant participant, SurveyActivity activity) {
     if (success) {
-      LOGGER.info("status: success, action: "+action+",\n" +
-        "participantId: "+participant.getId()+", email: "+participant.getEmail()+",\n" +
-        "info: " + notification+",\n"+
+      LOGGER.info("status: success, action: " + action + ",\n" +
+        "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
+        "info: " + notification + ",\n" +
         getActivityInfo(activity));
       return;
     }
-    LOGGER.severe(" status: fail, action: "+action+",\n" +
-      "participantId: "+participant.getId()+", email: "+participant.getEmail()+",\n"+
-      "info: " + notification+",\n"+
+    LOGGER.severe(" status: fail, action: " + action + ",\n" +
+      "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
+      "info: " + notification + ",\n" +
       getActivityInfo(activity));
   }
 
-  private String getActivityInfo(SurveyActivity activity){
-    if(activity instanceof SurveyActivity)  return "activityId: "+activity.getActivityID()+", acronym: "+activity.getSurveyForm().getAcronym()+"\n";
-    return "";
+  private String getActivityInfo(SurveyActivity activity) {
+    return activity instanceof SurveyActivity ?
+      "activityId: " + activity.getActivityID() + ", acronym: " + activity.getSurveyForm().getAcronym() + "\n" : "";
   }
 
   public Object cancelParticipantEvent(String eventId) {

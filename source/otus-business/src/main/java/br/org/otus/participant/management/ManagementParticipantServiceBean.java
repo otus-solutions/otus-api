@@ -27,17 +27,18 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
       GatewayResponse notification = new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));
       logNotification("requestPasswordReset", notification.getData(), true, null);
     } catch (MalformedURLException | RequestException | ReadRequestException ex) {
-      if (ex instanceof ReadRequestException) logNotification("requestPasswordReset", ex, false, requestData.getEmail());
+      if (ex instanceof ReadRequestException)
+        logNotification("requestPasswordReset", ex, false, requestData.getEmail());
       throw new EmailNotificationException(ex);
     }
   }
 
   private void logNotification(String action, Object notification, Boolean success, String email) {
     if (success) {
-      LOGGER.info("action: "+action+", status: success, info: " + notification);
+      LOGGER.info("action: " + action + ", status: success, info: " + notification);
       return;
     }
-    LOGGER.severe("action: "+action+", status: fail, email: "+email+", info: " + notification);
+    LOGGER.severe("action: " + action + ", status: fail, email: " + email + ", info: " + notification);
   }
 
   @Override

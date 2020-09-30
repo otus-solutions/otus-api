@@ -9,12 +9,9 @@ import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
-import java.util.logging.Logger;
 
 public class CommunicationGatewayService {
   public GatewayResponse sendMail(String emailVariables) throws MalformedURLException, ReadRequestException {
@@ -24,8 +21,8 @@ public class CommunicationGatewayService {
       String response = jsonPOST.finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
-      throw new ReadRequestException("COMMUNICATION SERVICE FAIL",ex);
-    } catch(RequestException ex){
+      throw new ReadRequestException("COMMUNICATION SERVICE FAIL", ex);
+    } catch (RequestException ex) {
       throw new ReadRequestException("COMMUNICATION SERVICE FAIL - sendEmail", ex);
     }
   }
@@ -157,7 +154,7 @@ public class CommunicationGatewayService {
   public GatewayResponse getMessageByIssueId(String issueId) throws MalformedURLException {
     URL requestURL = new CommunicationMicroServiceResources().getMessageByIdCommunicationAddress(issueId);
     try {
-      JsonGETUtility jsonGET  = new JsonGETUtility(requestURL);
+      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException ex) {
@@ -166,7 +163,7 @@ public class CommunicationGatewayService {
   }
 
   public GatewayResponse getMessageByIdLimit(String issueId, String skip, String limit, String order) throws MalformedURLException {
-    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, skip, limit,order);
+    URL requestURL = new CommunicationMicroServiceResources().getMessageByIdLimitCommunicationAddress(issueId, skip, limit, order);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();
