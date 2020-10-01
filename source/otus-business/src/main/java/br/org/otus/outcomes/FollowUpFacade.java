@@ -30,12 +30,11 @@ public class FollowUpFacade {
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.outcomes.FollowUpFacade");
   private final static String ACCOMPLISHED_METHOD = "accomplishedParticipantEventByActivity";
   private final static String REOPEN_METHOD = "reopenedParticipantEventByActivity";
+  private static final String PARTICIPANT_NAME = "participant_name";
+  private static final String EVENT_NAME = "event_name";
 
   @Inject
   private ParticipantFacade participantFacade;
-
-  private static final String PARTICIPANT_NAME = "participant_name";
-  private static final String EVENT_NAME = "event_name";
 
   public Object createFollowUp(String FollowUpJson) {
     try {
@@ -174,7 +173,7 @@ public class FollowUpFacade {
     }
   }
 
-  private void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
+  public void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
     ActivitySendingCommunicationData activitySendingCommunicationData = new ActivitySendingCommunicationData();
     activitySendingCommunicationData.setEmail(participant.getEmail());
     activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
