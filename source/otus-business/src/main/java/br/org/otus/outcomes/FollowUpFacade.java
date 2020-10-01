@@ -186,8 +186,7 @@ public class FollowUpFacade {
     }
   }
 
-  private void logNotification(String action, Object notification, Boolean success,
-                               Participant participant, SurveyActivity activity) {
+  private void logNotification(String action, Object notification, Boolean success, Participant participant, SurveyActivity activity) {
     if (success) {
       LOGGER.info("status: success, action: " + action + ",\n" +
         "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
