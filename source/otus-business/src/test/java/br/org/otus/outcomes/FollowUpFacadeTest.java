@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -20,10 +19,11 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({FollowUpFacade.class, Logger.class})
+@PrepareForTest({FollowUpFacade.class})
 public class FollowUpFacadeTest {
   private static final String FINALIZED_STATUS_HISTORY = "FINALIZED";
   private static final String REOPENED_STATUS_HISTORY = "REOPENED";
@@ -71,17 +71,4 @@ public class FollowUpFacadeTest {
     followUpFacade.statusUpdateEvent(REOPENED_STATUS_HISTORY, ACTIVITY_ID);
     verify(outcomeGatewayService, Mockito.times(1)).reopenedParticipantEventByActivity(ACTIVITY_ID);
   }
-
-
-//  @Test
-//  public void createParticipantActivityAutoFillEvent_should() throws Exception {
-//    when(participant, "getEmail").thenReturn("otus@gmail.com");
-//    when(surveyActivity, "getSurveyForm").thenReturn(surveyForm);
-//    when(surveyForm, "getAcronym").thenReturn("TCLE");
-//    whenNew(CommunicationGatewayService.class).withAnyArguments().thenReturn(communicationGatewayService);
-//    PowerMockito.mockStatic(Logger.class);
-//    when(communicationGatewayService, "sendMail", Mockito.any()).thenReturn(notification);
-//    followUpFacade.sendAutoFillActivityNotificationEmail(participant, surveyActivity);
-//    PowerMockito.verifyStatic(Logger.class, Mockito.times(2));
-//  }
 }
