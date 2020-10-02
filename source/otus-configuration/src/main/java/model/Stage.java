@@ -3,6 +3,7 @@ package model;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
+import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public class Stage {
@@ -29,11 +30,17 @@ public class Stage {
   }
 
   public static Stage deserialize(String stageJson) {
-    return new GsonBuilder().create().fromJson(stageJson, Stage.class);
+    return getGsonBuilder().create().fromJson(stageJson, Stage.class);
   }
 
   public static String serialize(Stage stage) {
-    return new GsonBuilder().create().toJson(stage);
+    return getGsonBuilder().create().toJson(stage);
+  }
+
+  public static GsonBuilder getGsonBuilder() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return builder;
   }
 
   public static GsonBuilder getFrontGsonBuilder() {
