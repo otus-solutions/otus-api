@@ -1,16 +1,16 @@
 package br.org.otus.stage;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.model.Stage;
-import br.org.otus.persistence.StageDao;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import model.Stage;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import persistence.StageDao;
 
 import java.util.ArrayList;
 import java.util.List;

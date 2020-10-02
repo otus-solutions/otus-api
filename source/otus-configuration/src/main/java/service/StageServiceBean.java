@@ -1,10 +1,10 @@
-package br.org.otus.service;
+package service;
 
-import br.org.otus.model.Stage;
-import br.org.otus.persistence.StageDao;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import persistence.StageDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -1,6 +1,7 @@
-package br.org.otus.persistence;
+package persistence;
 
-import br.org.otus.model.Stage;
+
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;

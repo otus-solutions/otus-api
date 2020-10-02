@@ -158,12 +158,6 @@
       <version>${project.parent.version}</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.ccem.otus</groupId>
-      <artifactId>otus-stage</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>compile</scope>
-    </dependency>
   </dependencies>
   <build>
     <resources>

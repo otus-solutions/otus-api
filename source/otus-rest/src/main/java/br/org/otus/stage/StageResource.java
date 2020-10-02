@@ -1,7 +1,8 @@
 package br.org.otus.stage;
 
-import br.org.otus.model.Stage;
+import br.org.otus.configuration.api.StageFacade;
 import br.org.otus.rest.Response;
+import model.Stage;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -23,10 +24,11 @@ public class StageResource {
   }
 
   @PUT
+  @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String update(String stageJson){
-    stageFacade.update(stageJson);
+  public String update(@PathParam("id") String stageID, String stageJson){
+    stageFacade.update(stageID, stageJson);
     return (new Response()).buildSuccess().toJson();
   }
 

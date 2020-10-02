@@ -1,7 +1,6 @@
-package br.org.otus.model;
+package model;
 
 import com.google.gson.GsonBuilder;
-
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;

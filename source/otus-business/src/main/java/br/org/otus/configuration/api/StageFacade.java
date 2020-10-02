@@ -1,13 +1,13 @@
-package br.org.otus.stage;
+package br.org.otus.configuration.api;
 
-import br.org.otus.model.Stage;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
-import br.org.otus.service.StageService;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import service.StageService;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,12 +21,10 @@ public class StageFacade {
     return stageService.create(Stage.deserialize(stageJson)).toString();
   }
 
-  public void update(String stageJson) {
-    Stage stage = Stage.deserialize(stageJson);
-    if(stage.getId() == null){
-      throw new HttpResponseException(Validation.build("Can not update stage without id"));
-    }
+  public void update(String stageID, String stageJson) {
     try{
+      Stage stage = Stage.deserialize(stageJson);
+      stage.setId(new ObjectId(stageID));
       stageService.update(stage);
     }
     catch (DataNotFoundException e){

@@ -1,6 +1,6 @@
-package br.org.otus.service;
+package service;
 
-import br.org.otus.model.Stage;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
