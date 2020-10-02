@@ -61,24 +61,4 @@ public class StageFacade {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
-
-//  public String create(String stageJson) {
-//    return null;
-//  }
-//
-//  public void update(String stageJson) {
-//
-//  }
-//
-//  public void delete(String stageID) {
-//
-//  }
-//
-//  public Stage getByID(String stageID) {
-//    return null;
-//  }
-//
-//  public List<Stage> getAll() {
-//    return null;
-//  }
 }
