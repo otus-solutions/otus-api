@@ -66,6 +66,7 @@
     <module>../otus-configuration</module>
     <module>../otus-gateway</module>
     <module>../otus-logs</module>
+    <module>../otus-stage</module>
   </modules>
 
   <repositories>
