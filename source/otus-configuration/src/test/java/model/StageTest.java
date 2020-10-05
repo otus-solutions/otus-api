@@ -1,5 +1,6 @@
 package model;
 
+import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +55,11 @@ public class StageTest {
   public void deserializeStaticMethod_should_convert_JsonString_to_objectModel() {
     String stageJson = "{}";
     assertTrue(Stage.deserialize(stageJson) instanceof Stage);
+  }
+
+  @Test
+  public void getFrontGsonBuilder_return_GsonBuilder_instance(){
+    assertTrue(Stage.getFrontGsonBuilder() instanceof GsonBuilder);
   }
 
 }
