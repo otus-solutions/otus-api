@@ -1,4 +1,4 @@
-package br.org.otus.stage;
+package br.org.otus.configuration.stage;
 
 import br.org.mongodb.MongoGenericDao;
 import com.mongodb.client.FindIterable;
