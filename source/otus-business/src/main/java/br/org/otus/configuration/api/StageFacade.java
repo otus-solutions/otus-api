@@ -2,11 +2,11 @@ package br.org.otus.configuration.api;
 
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
-import br.org.otus.response.info.Validation;
 import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.service.ActivityService;
 import service.StageService;
 
 import javax.inject.Inject;
@@ -16,6 +16,10 @@ public class StageFacade {
 
   @Inject
   private StageService stageService;
+
+  @Inject
+  private ActivityService activityService;
+
 
   public String create(String stageJson) {
     return stageService.create(Stage.deserialize(stageJson)).toString();
@@ -35,9 +39,7 @@ public class StageFacade {
   public void delete(String stageID) {
     try{
       stageService.delete(new ObjectId(stageID));
-
-      // TODO update de todas as atividades da etapa
-
+      activityService.removeStageFromActivities(stageID);
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
