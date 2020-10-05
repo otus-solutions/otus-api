@@ -1,4 +1,4 @@
-package br.org.otus.stage;
+package br.org.otus.configuration.stage;
 
 import br.org.otus.configuration.api.StageFacade;
 import br.org.otus.rest.Response;

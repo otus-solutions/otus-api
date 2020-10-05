@@ -29,7 +29,7 @@ import br.org.otus.report.ReportResource;
 import br.org.otus.security.participant.rest.ParticipantAuthenticationResource;
 import br.org.otus.security.user.rest.AuthenticationResource;
 import br.org.otus.settings.InstallerResource;
-import br.org.otus.stage.StageResource;
+import br.org.otus.configuration.stage.StageResource;
 import br.org.otus.survey.activity.sharing.ActivitySharingResource;
 import br.org.otus.staticVariable.StaticVariableResource;
 import br.org.otus.survey.activity.ActivityResource;
