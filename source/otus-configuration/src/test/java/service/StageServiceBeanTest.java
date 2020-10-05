@@ -35,31 +35,31 @@ public class StageServiceBeanTest {
   }
 
   @Test
-  public void create_method_shoul_call_dao_create_method(){
+  public void create_method_should_call_dao_create_method(){
     stageServiceBean.create(stage);
     verify(stageDao, Mockito.times(1)).create(stage);
   }
 
   @Test
-  public void update_method_shoul_call_dao_update_method() throws DataNotFoundException {
+  public void update_method_should_call_dao_update_method() throws DataNotFoundException {
     stageServiceBean.update(stage);
     verify(stageDao, Mockito.times(1)).update(stage);
   }
 
   @Test
-  public void delete_method_shoul_call_dao_delete_method() throws DataNotFoundException {
+  public void delete_method_should_call_dao_delete_method() throws DataNotFoundException {
     stageServiceBean.delete(STAGE_OID);
     verify(stageDao, Mockito.times(1)).delete(STAGE_OID);
   }
 
   @Test
-  public void getByID_method_shoul_call_dao_getByID_method() throws DataNotFoundException {
+  public void getByID_method_should_call_dao_getByID_method() throws DataNotFoundException {
     stageServiceBean.getByID(STAGE_OID);
     verify(stageDao, Mockito.times(1)).getByID(STAGE_OID);
   }
 
   @Test
-  public void getAll_method_shoul_call_dao_getAll_method() throws MemoryExcededException {
+  public void getAll_method_should_call_dao_getAll_method() throws MemoryExcededException {
     stageServiceBean.getAll();
     verify(stageDao, Mockito.times(1)).getAll();
   }
