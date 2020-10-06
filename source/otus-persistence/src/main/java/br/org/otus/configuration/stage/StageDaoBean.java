@@ -20,7 +20,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class StageDaoBean extends MongoGenericDao<Document> implements StageDao {
 
   private static final String COLLECTION_NAME = "stage";
-  private static final String ACTIVITY_COLLECTION_NAME = "activity";
+  private static final String KEY_FIELD_NAME = "name";
 
   public StageDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -28,6 +28,10 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
 
   @Override
   public ObjectId create(Stage stage) {
+    Document result = collection.find(eq(KEY_FIELD_NAME, stage.getName())).first();
+    if(result != null){
+      return result.getObjectId(ID_FIELD_NAME);
+    }
     Document parsed = Document.parse(Stage.serialize(stage));
     collection.insertOne(parsed);
     return parsed.getObjectId(ID_FIELD_NAME);
