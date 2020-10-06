@@ -299,9 +299,9 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   }
 
   @Override
-  public void removeStageFromActivities(String stageID) {
+  public void removeStageFromActivities(ObjectId stageOID) {
     collection.updateMany(
-      eq(STAGE_FIELD_NAME, stageID),
+      eq(STAGE_FIELD_NAME, stageOID),
       new Document("$unset", new Document(STAGE_FIELD_NAME, ""))
     );
   }

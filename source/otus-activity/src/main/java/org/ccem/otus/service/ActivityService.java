@@ -44,6 +44,6 @@ public interface ActivityService {
 
   boolean updateParticipantEmail(long rn, String email);
 
-  void removeStageFromActivities(String stageID);
+  void removeStageFromActivities(ObjectId stageOID);
 
 }

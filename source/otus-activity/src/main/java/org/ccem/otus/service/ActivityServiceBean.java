@@ -188,8 +188,8 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public void removeStageFromActivities(String stageID) {
-    activityDao.removeStageFromActivities(stageID);
+  public void removeStageFromActivities(ObjectId stageOID) {
+    activityDao.removeStageFromActivities(stageOID);
   }
 
 }

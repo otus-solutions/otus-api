@@ -73,7 +73,7 @@ public class StageFacadeTest {
   public void delete_method_should_call_stageService_delete_and_activityService_removeStageFromActivities_methods() throws DataNotFoundException {
     stageFacade.delete(STAGE_ID);
     verify(stageService, Mockito.times(1)).delete(STAGE_OID);
-    verify(activityService, Mockito.times(1)).removeStageFromActivities(STAGE_ID);
+    verify(activityService, Mockito.times(1)).removeStageFromActivities(STAGE_OID);
   }
 
   @Test(expected = HttpResponseException.class)

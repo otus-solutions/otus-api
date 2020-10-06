@@ -39,5 +39,5 @@ public interface ActivityDao {
 
   boolean updateParticipantEmail(long rn, String email);
 
-  void removeStageFromActivities(String stageID);
+  void removeStageFromActivities(ObjectId stageOID);
 }

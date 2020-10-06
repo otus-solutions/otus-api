@@ -48,7 +48,7 @@ public class ActivityServiceBeanTest {
   private static final String CATEGORY_NAME = "C0";
   private static final String CENTER = "RS";
   private static final String EMAIL= "email@email.com";
-  private static final String STAGE_ID = "5f77920624439758ce4a43ab";
+  private static final ObjectId STAGE_OID = new ObjectId("5f77920624439758ce4a43ab");
   private ActivityAccessPermission permission;
   private List<SurveyActivity> surveyActivities;
 
@@ -181,7 +181,7 @@ public class ActivityServiceBeanTest {
 
   @Test
   public void removeStageFromActivities_method_should_call_removeStageFromActivities_of_dao() {
-    service.removeStageFromActivities(STAGE_ID);
-    verify(activityDao, times(1)).removeStageFromActivities(STAGE_ID);
+    service.removeStageFromActivities(STAGE_OID);
+    verify(activityDao, times(1)).removeStageFromActivities(STAGE_OID);
   }
 }

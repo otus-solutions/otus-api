@@ -38,8 +38,9 @@ public class StageFacade {
 
   public void delete(String stageID) {
     try{
-      stageService.delete(new ObjectId(stageID));
-      activityService.removeStageFromActivities(stageID);
+      ObjectId stageOID = new ObjectId(stageID);
+      stageService.delete(stageOID);
+      activityService.removeStageFromActivities(stageOID);
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
