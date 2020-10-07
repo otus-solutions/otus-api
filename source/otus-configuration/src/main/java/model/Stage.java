@@ -10,8 +10,16 @@ public class Stage {
 
   @SerializedName("_id")
   private ObjectId id;
-
+  private String objectType;
   private String name;
+
+  public Stage(){
+    this.objectType = "Stage";
+  }
+
+  public String getObjectType() {
+    return objectType;
+  }
 
   public ObjectId getId() {
     return id;

@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class StageTest {
 
   private static final ObjectId OID = new ObjectId();
+  private static final String OBJECT_TYPE = "Stage";
   private static final String NAME = "some stage";
 
   private Stage stage;
@@ -29,6 +30,7 @@ public class StageTest {
   @Test
   public void getters_test(){
     assertEquals(OID, stage.getId());
+    assertEquals(OBJECT_TYPE, stage.getObjectType());
     assertEquals(NAME, stage.getName());
   }
 
