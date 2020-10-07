@@ -51,7 +51,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   public static final String FINALIZED = "FINALIZED";
   private static final String SET = "$set";
   private static final String PARTICIPANT_DATA_EMAIL = "participantData.email";
-  private static final String STAGE_FIELD_NAME = "stage";
+  private static final String STAGE_FIELD_NAME = "stageID";
 
   public ActivityDaoBean() {
     super(COLLECTION_NAME, Document.class);
