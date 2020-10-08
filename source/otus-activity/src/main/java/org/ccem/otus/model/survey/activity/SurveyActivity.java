@@ -10,6 +10,7 @@ import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
@@ -34,6 +35,7 @@ public class SurveyActivity {
   private Boolean isDiscarded;
   private NavigationTracker navigationTracker;
   private String externalID;
+  private ObjectId stageID;
 
   public SurveyActivity() {
     this.isDiscarded = Boolean.FALSE;
@@ -107,6 +109,14 @@ public class SurveyActivity {
     return this.getSurveyForm().getRequiredExternalID();
   }
 
+  public ObjectId getStageID() {
+    return stageID;
+  }
+
+  public void setStageID(ObjectId stageID) {
+    this.stageID = stageID;
+  }
+
   public Optional<ActivityStatus> getCurrentStatus() {
     return this.statusHistory.stream().reduce((activityStatus, activityStatus2) -> activityStatus2);
   }
@@ -129,7 +139,7 @@ public class SurveyActivity {
 
   public Boolean isFinalized() {
     ActivityStatus activityStatus = getCurrentStatus().get();
-    return activityStatus.getName().equals("FINALIZED");
+    return activityStatus.getName().equals(ActivityStatusOptions.FINALIZED.getName());
   }
 
   public static String serialize(SurveyActivity surveyActivity) {
