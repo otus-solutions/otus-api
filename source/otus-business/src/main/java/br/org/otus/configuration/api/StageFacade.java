@@ -1,6 +1,7 @@
 package br.org.otus.configuration.api;
 
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.AlreadyExist;
 import br.org.otus.response.info.NotFound;
 import model.Stage;
 import org.bson.types.ObjectId;
@@ -26,7 +27,7 @@ public class StageFacade {
     try {
       return stageService.create(Stage.deserialize(stageJson)).toString();
     } catch (AlreadyExistException e) {
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
+      throw new HttpResponseException(AlreadyExist.build(e.getMessage()));
     }
   }
 
@@ -36,7 +37,10 @@ public class StageFacade {
       stage.setId(new ObjectId(stageID));
       stageService.update(stage);
     }
-    catch (DataNotFoundException | AlreadyExistException e){
+    catch (AlreadyExistException e){
+      throw new HttpResponseException(AlreadyExist.build(e.getMessage()));
+    }
+    catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
