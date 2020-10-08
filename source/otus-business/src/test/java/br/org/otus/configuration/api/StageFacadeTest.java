@@ -3,6 +3,7 @@ package br.org.otus.configuration.api;
 import br.org.otus.response.exception.HttpResponseException;
 import model.Stage;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.service.ActivityService;
@@ -49,17 +50,29 @@ public class StageFacadeTest {
   }
 
   @Test
-  public void create_method_should_call_stageService_create_method(){
+  public void create_method_should_call_stageService_create_method() throws AlreadyExistException {
     when(stageService.create(stage)).thenReturn(STAGE_OID);
     String result = stageFacade.create(STAGE_JSON);
     verify(stageService, Mockito.times(1)).create(stage);
     assertEquals(STAGE_ID, result);
   }
 
+  @Test(expected = HttpResponseException.class)
+  public void create_method_should_handle_call_AlreadyExistException() throws Exception {
+    PowerMockito.doThrow(new AlreadyExistException()).when(stageService, "create", stage);
+    stageFacade.create(STAGE_JSON);
+  }
+
   @Test
-  public void update_method_should_call_stageService_update_method() throws DataNotFoundException {
+  public void update_method_should_call_stageService_update_method() throws DataNotFoundException, AlreadyExistException {
     stageFacade.update(STAGE_ID, STAGE_JSON);
     verify(stageService, Mockito.times(1)).update(stage);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void update_method_should_handle_call_AlreadyExistException() throws Exception {
+    PowerMockito.doThrow(new AlreadyExistException()).when(stageService, "update", stage);
+    stageFacade.update(STAGE_ID, STAGE_JSON);
   }
 
   @Test(expected = HttpResponseException.class)

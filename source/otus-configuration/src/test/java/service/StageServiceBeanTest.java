@@ -2,6 +2,7 @@ package service;
 
 import model.Stage;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.junit.Before;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import persistence.StageDao;
 
@@ -35,15 +37,27 @@ public class StageServiceBeanTest {
   }
 
   @Test
-  public void create_method_should_call_dao_create_method(){
+  public void create_method_should_call_dao_create_method() throws AlreadyExistException {
     stageServiceBean.create(stage);
     verify(stageDao, Mockito.times(1)).create(stage);
   }
 
+  @Test(expected = AlreadyExistException.class)
+  public void create_method_should_throw_call_AlreadyExistException() throws Exception {
+    PowerMockito.doThrow(new AlreadyExistException()).when(stageDao, "create", stage);
+    stageServiceBean.create(stage);
+  }
+
   @Test
-  public void update_method_should_call_dao_update_method() throws DataNotFoundException {
+  public void update_method_should_call_dao_update_method() throws DataNotFoundException, AlreadyExistException {
     stageServiceBean.update(stage);
     verify(stageDao, Mockito.times(1)).update(stage);
+  }
+
+  @Test(expected = AlreadyExistException.class)
+  public void update_method_should_throw_call_AlreadyExistException() throws Exception {
+    PowerMockito.doThrow(new AlreadyExistException()).when(stageDao, "update", stage);
+    stageServiceBean.update(stage);
   }
 
   @Test
