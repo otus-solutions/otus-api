@@ -2,6 +2,7 @@ package service;
 
 import model.Stage;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import persistence.StageDao;
@@ -18,12 +19,12 @@ public class StageServiceBean implements StageService {
 
 
   @Override
-  public ObjectId create(Stage stage) {
+  public ObjectId create(Stage stage) throws AlreadyExistException {
     return stageDao.create(stage);
   }
 
   @Override
-  public void update(Stage stage) throws DataNotFoundException {
+  public void update(Stage stage) throws DataNotFoundException, AlreadyExistException {
     stageDao.update(stage);
   }
 

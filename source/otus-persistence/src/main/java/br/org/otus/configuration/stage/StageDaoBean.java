@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 import model.Stage;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import persistence.StageDao;
@@ -27,18 +28,18 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   }
 
   @Override
-  public ObjectId create(Stage stage) {
-    Document result = collection.find(eq(KEY_FIELD_NAME, stage.getName())).first();
-    if(result != null){
-      return result.getObjectId(ID_FIELD_NAME);
-    }
+  public ObjectId create(Stage stage) throws AlreadyExistException {
+    checkExistence(stage);
+
     Document parsed = Document.parse(Stage.serialize(stage));
     collection.insertOne(parsed);
     return parsed.getObjectId(ID_FIELD_NAME);
   }
 
   @Override
-  public void update(Stage stage) throws DataNotFoundException {
+  public void update(Stage stage) throws DataNotFoundException, AlreadyExistException {
+    checkExistence(stage);
+
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, stage.getId()),
         new Document("$set", new Document("name", stage.getName()))
@@ -85,5 +86,12 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
     }
 
     return stages;
+  }
+
+  private void checkExistence(Stage stage) throws AlreadyExistException {
+    Document result = collection.find(eq(KEY_FIELD_NAME, stage.getName())).first();
+    if(result != null){
+      throw new AlreadyExistException(new Throwable(result.getObjectId(ID_FIELD_NAME).toString()));
+    }
   }
 }
