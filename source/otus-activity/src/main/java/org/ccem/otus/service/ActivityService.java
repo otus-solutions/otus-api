@@ -3,6 +3,7 @@ package org.ccem.otus.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
@@ -19,6 +20,8 @@ public interface ActivityService {
   SurveyActivity update(SurveyActivity surveyActivity) throws DataNotFoundException;
 
   List<SurveyActivity> list(long rn, String userEmail);
+
+  List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail);
 
   SurveyActivity getByID(String id) throws DataNotFoundException;
 

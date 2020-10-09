@@ -13,6 +13,7 @@ import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
@@ -87,6 +88,11 @@ public class ActivityServiceBean implements ActivityService {
       }
     });
     return filteredActivities;
+  }
+
+  @Override
+  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
+    return activityDao.findByStageGroup(new ArrayList<>(), userEmail, rn);
   }
 
   private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn) {
