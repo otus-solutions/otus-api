@@ -9,48 +9,58 @@ import java.util.List;
 public class SurveyActivityQueryBuilder {
 
   public ArrayList<Bson> getSurveyActivityListByStageAndAcronymQuery(long rn, List<String> permittedSurveys){
+
+    String acronymsCondition = "{ $in: [\"$surveyForm.acronym\", "+ permittedSurveys.toString() +"] },\n";
+    if(permittedSurveys.isEmpty()){
+      acronymsCondition = "";
+    }
+
     ArrayList<Bson> pipeline = new ArrayList<>();
+
     pipeline.add(ParseQuery.toDocument("{\n" +
-      "            $match: {\n" +
-      "                $expr: {\n" +
-      "                    $and: [\n" +
-      "                        { $eq: [\"$participantData.recruitmentNumber\", "+ rn + "] },\n" +
-      "                        { $eq: [\"$isDiscarded\", false] },\n" +
-      "                        { $in: [\"$surveyForm.acronym\", "+permittedSurveys+"] }\n" +
-      "                    ]\n" +
-      "                }\n" +
-      "            }\n" +
-      "        },\n" +
-      "        {\n" +
+        "            $match: {\n" +
+        "                $expr: {\n" +
+        "                    $and: [\n" +
+//      "                       " + acronymsCondition +
+        "                        { $eq: [\"$participantData.recruitmentNumber\", "+ rn + "] },\n" +
+        "                        { $eq: [\"$isDiscarded\", false] }\n" +
+        "                    ]\n" +
+        "                }\n" +
+        "            }\n" +
+        "        }"));
+
+    pipeline.add(ParseQuery.toDocument("  {\n" +
       "            $group: {\n" +
       "                _id: { \n" +
       "                    stageID: \"$stageID\",\n" +
       "                    acronym:\"$surveyForm.acronym\"\n" +
       "                },\n" +
-      "                \"activities\": { \n" +
-      "                    \"$push\": {\n" +
+      "                activities: { \n" +
+      "                    $push: {\n" +
       "                        _id: \"$_id\",\n" +
-      "                        \"objectType\": \"ActivityBasicModel\",\n" +
-      "                    \t\"acronym\": \"$surveyForm.acronym\",\n" +
-      "                    \t\"name\": \"$surveyForm.name\",\n" +
-      "                    \t\"mode\": \"$mode\",\n" +
-      "                    \t\"category\": \"$category.name\",\n" +
+      "                        objectType: \"ActivityBasicModel\",\n" +
+      "                        acronym: \"$surveyForm.acronym\",\n" +
+      "                        name: \"$surveyForm.name\",\n" +
+      "                        mode: \"$mode\",\n" +
+      "                        category: \"$category.name\",\n" +
       "                        lastStatus: { $slice: [ \"$statusHistory\", -1 ] },\n" +
-      "                        \"externalID\": \"$externalID\"\n" +
+      "                        externalID: \"$externalID\"\n" +
       "                    }\n" +
       "                }\n" +
       "            }\n" +
-      "            \n" +
-      "        },\n" +
-      "        {\n" +
+      "        }"));
+
+    pipeline.add(ParseQuery.toDocument("{\n" +
       "            $group:{\n" +
       "                _id: \"$_id.stageID\",\n" +
-      "                acronyms: { $push:\"$$ROOT\" }\n" +
+      "                acronyms: { $push: \"$$ROOT\" }\n" +
       "            }\n" +
-      "        },\n" +
-      "        {\n" +
-      "            $sort: { \"_id\": 1 }\n" +
       "        }"));
+
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "            $sort: { _id: 1 }\n" +
+      "        }"));
+
     return pipeline;
   }
 }
