@@ -5,10 +5,14 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
-public abstract class AbstractModel {
+public abstract class SerializableModelWithID {
 
   public static String serialize(Object stage) {
     return getGsonBuilder().create().toJson(stage);
+  }
+
+  public static Object deserialize(String json, Class clazz){
+    return getGsonBuilder().create().fromJson(json, clazz);
   }
 
   public static GsonBuilder getGsonBuilder() {

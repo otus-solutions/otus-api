@@ -2,11 +2,11 @@ package org.ccem.otus.model.survey.activity.dto;
 
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
-import org.ccem.otus.model.AbstractModel;
+import org.ccem.otus.model.SerializableModelWithID;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.status.StatusDto;
 
-public class SurveyActivityItemListDto extends AbstractModel {
+public class SurveyActivityItemListDto extends SerializableModelWithID {
 
   private static final String OBJECT_TYPE = "ActivityBasicModel";
 
