@@ -17,6 +17,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
@@ -57,6 +58,10 @@ public class ActivityFacade {
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
+  }
+
+  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
+    return activityService.listByStageGroups(rn, userEmail);
   }
 
   public SurveyActivity getByID(String id) {
