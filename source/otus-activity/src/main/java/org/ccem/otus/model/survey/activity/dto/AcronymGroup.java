@@ -11,4 +11,8 @@ public class AcronymGroup extends SerializableModelWithID {
   public String getAcronym() {
     return acronym;
   }
+
+  public static AcronymGroup deserialize(String json){
+    return (AcronymGroup)deserialize(json, AcronymGroup.class);
+  }
 }
