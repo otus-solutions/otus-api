@@ -37,7 +37,7 @@ public class ParticipantActivityResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     isValidRecruitmentNumber(rn);
-    return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toJson(StageSurveyActivitiesDto.getFrontGsonBuilder());
+    return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
   }
 
   @GET
@@ -48,7 +48,8 @@ public class ParticipantActivityResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     isValidRecruitmentNumber(rn);
-    return new Response().buildSuccess(activityFacade.listByStageGroups(rn, userEmail)).toSurveyJson();
+    return new Response().buildSuccess(activityFacade.listByStageGroups(rn, userEmail))
+      .toJson(StageSurveyActivitiesDto.getFrontGsonBuilder());
   }
 
   @POST
