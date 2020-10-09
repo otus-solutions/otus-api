@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import br.org.otus.survey.activity.builder.SurveyActivityQueryBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -18,6 +19,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.ActivityDao;
@@ -51,7 +53,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   public static final String FINALIZED = "FINALIZED";
   private static final String SET = "$set";
   private static final String PARTICIPANT_DATA_EMAIL = "participantData.email";
-  private static final String STAGE_FIELD_NAME = "stageID";
+  private static final String STAGE_PATH = "stageID";
 
   public ActivityDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -71,13 +73,34 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   @Override
   @UserPermission
   public List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn) {
+
     ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
     List<Bson> pipeline = new ArrayList<>();
-    pipeline.add(new Document("$match", new Document(RECRUITMENT_NUMBER_PATH, rn).append(DISCARDED_PATH, false).append(ACRONYM_PATH, new Document("$in", permittedSurveys))));
+    pipeline.add(new Document("$match",
+      new Document(RECRUITMENT_NUMBER_PATH, rn)
+        .append(DISCARDED_PATH, false)
+        .append(ACRONYM_PATH, new Document("$in", permittedSurveys))));
     AggregateIterable<Document> result = collection.aggregate(pipeline);
 
     result.forEach((Block<Document>) document -> {
       activities.add(SurveyActivity.deserialize(document.toJson()));
+    });
+
+    return activities;
+  }
+
+  @Override
+  @UserPermission
+  public List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn) {
+    ArrayList<StageSurveyActivitiesDto> activities = new ArrayList<>();
+
+    ArrayList<Bson> pipeline = (new SurveyActivityQueryBuilder())
+      .getSurveyActivityListByStageAndAcronymQuery(rn, permittedSurveys);
+
+    AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+
+    results.forEach((Block<Document>) document -> {
+      activities.add(StageSurveyActivitiesDto.deserialize(document.toJson()));
     });
 
     return activities;
@@ -301,8 +324,8 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   @Override
   public void removeStageFromActivities(ObjectId stageOID) {
     collection.updateMany(
-      eq(STAGE_FIELD_NAME, stageOID),
-      new Document("$unset", new Document(STAGE_FIELD_NAME, ""))
+      eq(STAGE_PATH, stageOID),
+      new Document("$unset", new Document(STAGE_PATH, ""))
     );
   }
 
