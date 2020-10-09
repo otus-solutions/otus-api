@@ -7,15 +7,15 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public abstract class SerializableModelWithID {
 
-  public static String serialize(Object stage) {
-    return getGsonBuilder().create().toJson(stage);
+  protected static String serialize(Object object) {
+    return getGsonBuilder().create().toJson(object);
   }
 
-  public static Object deserialize(String json, Class clazz){
+  protected static Object deserialize(String json, Class clazz){
     return getGsonBuilder().create().fromJson(json, clazz);
   }
 
-  public static GsonBuilder getGsonBuilder() {
+  protected static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder;
