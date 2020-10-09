@@ -43,7 +43,7 @@ public class SurveyActivityQueryBuilder {
       "                        name: \"$surveyForm.name\",\n" +
       "                        mode: \"$mode\",\n" +
       "                        category: \"$category.name\",\n" +
-      "                        lastStatus: { $slice: [ \"$statusHistory\", -1 ] },\n" +
+      "                        lastStatus: { $arrayElemAt: [ \"$statusHistory\", -1 ] },\n" +
       "                        externalID: \"$externalID\"\n" +
       "                    }\n" +
       "                }\n" +
