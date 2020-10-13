@@ -1,9 +1,7 @@
 package org.ccem.otus.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
@@ -96,6 +95,7 @@ public class ActivityServiceBean implements ActivityService {
     return activityDao.findByStageGroup(permittedSurveys, userEmail, rn);
   }
 
+
   private boolean isSameVersion(ActivityAccessPermission permission, SurveyActivity activity) {
     return (permission.getVersion().equals(activity.getSurveyForm().getVersion()));
   }
@@ -105,25 +105,31 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   private boolean isUserInStatusHistory(SurveyActivity activity, String userEmail) {
+    List<String> finalStatus = new ArrayList<>();
+    finalStatus.add(ActivityStatusOptions.FINALIZED.getName());
+    finalStatus.add(ActivityStatusOptions.SAVED.getName());
+
     isPresent = false;
     activity.getStatusHistory().forEach(status -> {
-      if (status.getUser().getEmail().equals(userEmail)) {
+      if (finalStatus.contains(status.getName()) && status.getUser().getEmail().equals(userEmail)) {
         isPresent = true;
       }
     });
     return isPresent;
   }
 
-  private boolean isUsersPermissionInStatusHistory(ActivityAccessPermission permission, SurveyActivity activity) {
-    isPresent = false;
-    activity.getStatusHistory().forEach(status -> {
-      permission.getExclusiveDisjunction().forEach(otherUserEmail -> {
-        if (status.getUser().getEmail().equals(otherUserEmail)) {
-          isPresent = true;
-        }
-      });
-    });
-    return isPresent;
+  private boolean someUserPermissionIsInSomeSavedOrFinalizedStatus(ActivityAccessPermission permission, SurveyActivity activity, String userEmail) {
+
+    List<String> finalStatus = new ArrayList<>();
+    finalStatus.add(ActivityStatusOptions.FINALIZED.getName());
+    finalStatus.add(ActivityStatusOptions.SAVED.getName());
+
+    List<String> otherUserEmailsThatSavedOrFinalizedActivity = activity.getStatusHistory().stream()
+      .filter(status -> finalStatus.contains(status.getName()) && !status.getUser().getEmail().equals(userEmail))
+      .map(status -> status.getUser().getEmail())
+      .collect(Collectors.toList());
+
+    return !Collections.disjoint(otherUserEmailsThatSavedOrFinalizedActivity, permission.getExclusiveDisjunction());
   }
 
   @Override
