@@ -11,6 +11,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
@@ -97,6 +98,20 @@ public class ParticipantActivityResourceTest {
     when(activityFacade.list(RECRUIMENT_NUMBER, userEmail)).thenReturn(listSurveyActivity);
     String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
     assertEquals(listSurveyActivityExpected, participantActivityResource.getAll(request, RECRUIMENT_NUMBER));
+  }
+  @Test
+  public void method_getAllByStageGroup_should_return_entire_list_by_recruitment_number() throws Exception {
+    when(request.getHeader(Mockito.anyString())).thenReturn(TOKEN);
+    PowerMockito.mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.readToken(TOKEN)).thenReturn(TOKEN);
+    when(securityContext.getSession(TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(userEmail);
+
+    List<StageSurveyActivitiesDto> stageActivities = new ArrayList<>();
+    when(activityFacade.listByStageGroups(RECRUIMENT_NUMBER, userEmail)).thenReturn(stageActivities);
+    String listSurveyActivityExpected = new Response().buildSuccess(stageActivities).toJson(StageSurveyActivitiesDto.getFrontGsonBuilder());
+    assertEquals(listSurveyActivityExpected, participantActivityResource.getAllByStageGroup(request, RECRUIMENT_NUMBER));
   }
 
   @Test
