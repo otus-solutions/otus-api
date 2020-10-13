@@ -1,7 +1,5 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.gateway.response.exception.ReadRequestException;
-import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -31,10 +29,8 @@ import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import service.StageService;
 
 import javax.inject.Inject;
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
@@ -68,12 +64,15 @@ public class ActivityFacade {
         stageMap.put(stage.getId(), stage.getName());
       });
 
-      List<StageSurveyActivitiesDto> stageDtos = activityService.listByStageGroups(rn, userEmail);
+      List<StageSurveyActivitiesDto> stageDtos = activityService.listByStageGroups(rn, userEmail)
+        .stream().filter(stageDto -> stageDto.hasAcronyms())
+        .collect(Collectors.toList());
 
-      for (int i = 0; i < stageDtos.size(); i++) {
-        String stageName = stageMap.get(stageDtos.get(i).getStageID());
-        stageDtos.get(i).setStageName(stageName);
-      }
+      stageDtos.forEach(stageDto -> {
+        String stageName = stageMap.get(stageDto.getStageID());
+        stageDto.setStageName(stageName);
+        stageDto.removeAcronymsWithoutActivities();
+      });
 
       return stageDtos;
     }
