@@ -21,7 +21,7 @@ public class SurveyActivityQueryBuilder {
         "            $match: {\n" +
         "                $expr: {\n" +
         "                    $and: [\n" +
-//      "                       " + acronymsCondition +
+      "                       " + acronymsCondition +
         "                        { $eq: [\"$participantData.recruitmentNumber\", "+ rn + "] },\n" +
         "                        { $eq: [\"$isDiscarded\", false] }\n" +
         "                    ]\n" +
