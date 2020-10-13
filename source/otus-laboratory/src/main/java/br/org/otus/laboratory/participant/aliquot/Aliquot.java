@@ -25,18 +25,13 @@ public class Aliquot extends SimpleAliquot {
   private Sex sex;
   private FieldCenter fieldCenter;
   private ImmutableDate birthdate;
-  private ObjectId locationPoint;
 
   public Aliquot() {
     super();
   }
 
   public Aliquot(SimpleAliquot simpleAliquot) {
-    super(simpleAliquot.getObjectType(), simpleAliquot.getCode(), simpleAliquot.getName(), simpleAliquot.getContainer(), simpleAliquot.getRole(), simpleAliquot.getAliquotCollectionData());
-  }
-
-  public ObjectId getLocationPoint() {
-    return locationPoint;
+    super(simpleAliquot.getObjectType(), simpleAliquot.getCode(), simpleAliquot.getName(), simpleAliquot.getContainer(), simpleAliquot.getRole(), simpleAliquot.getAliquotCollectionData(), simpleAliquot.getLocationPoint());
   }
 
   private class ExamLotData {
@@ -49,10 +44,6 @@ public class Aliquot extends SimpleAliquot {
     this.setBirthdate(participant.getBirthdate());
     this.setFieldCenter(participant.getFieldCenter());
     this.setSex(participant.getSex());
-  }
-
-  public void setLocationPoint(ObjectId locationPoint){
-    this.locationPoint = locationPoint;
   }
 
   public SimpleAliquot getSimpleAliquot() {
