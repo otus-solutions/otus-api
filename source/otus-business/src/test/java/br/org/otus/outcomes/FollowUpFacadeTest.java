@@ -1,8 +1,11 @@
 package br.org.otus.outcomes;
 
+import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
-import org.bson.types.ObjectId;
+import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.survey.form.SurveyForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +15,15 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.logging.Logger;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(FollowUpFacade.class)
+@PrepareForTest({FollowUpFacade.class})
 public class FollowUpFacadeTest {
   private static final String FINALIZED_STATUS_HISTORY = "FINALIZED";
   private static final String REOPENED_STATUS_HISTORY = "REOPENED";
@@ -29,6 +34,18 @@ public class FollowUpFacadeTest {
   @Mock
   private OutcomeGatewayService outcomeGatewayService;
   private GatewayResponse response;
+  @Mock
+  private Participant participant;
+  @Mock
+  private SurveyActivity surveyActivity;
+  @Mock
+  private SurveyForm surveyForm;
+  @Mock
+  private CommunicationGatewayService communicationGatewayService;
+  @Mock
+  private GatewayResponse notification;
+  @Mock
+  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -54,5 +71,4 @@ public class FollowUpFacadeTest {
     followUpFacade.statusUpdateEvent(REOPENED_STATUS_HISTORY, ACTIVITY_ID);
     verify(outcomeGatewayService, Mockito.times(1)).reopenedParticipantEventByActivity(ACTIVITY_ID);
   }
-
 }
