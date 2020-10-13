@@ -25,6 +25,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import service.StageService;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -61,6 +62,9 @@ public class ActivityFacadeTest {
   private SurveyActivity surveyActivity;
   @Mock
   private ManagementUserService managementUserService;
+  @Mock
+  private StageService stageService;
+
   private SurveyActivity surveyActivityFull;
   private SurveyActivity autofillSurveyActivity;
 
@@ -78,6 +82,21 @@ public class ActivityFacadeTest {
   }
 
   @Test
+  public void method_should_return_grouped_list_for_rn() throws MemoryExcededException {
+    Mockito.when(stageService.getAll()).thenReturn(new ArrayList<>());
+    Mockito.when(activityService.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL)).thenReturn(new ArrayList<>());
+    activityFacade.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
+    verify(activityService, times(1)).listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void method_should_handle_MemoryExcededException() throws Exception {
+    when(stageService.getAll()).thenReturn(new ArrayList<>());
+    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "listByStageGroups", RECRUITMENT_NUMBER, USER_EMAIL);
+    activityFacade.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
+  }
+
+  @Test
   public void method_should_verify_get_with_id() throws DataNotFoundException {
     Mockito.when(activityService.getByID(ACRONYM)).thenReturn(surveyActivity);
     activityFacade.getByID(ACRONYM);
@@ -85,8 +104,7 @@ public class ActivityFacadeTest {
   }
 
   @Test
-  public void method_should_verify_get_with_id_and_version()
-    throws DataNotFoundException, InterruptedException, MemoryExcededException {
+  public void method_should_verify_get_with_id_and_version() throws DataNotFoundException, MemoryExcededException {
     List<SurveyActivity> list = new ArrayList<SurveyActivity>();
     list.add(surveyActivity);
     list.add(surveyActivity);
