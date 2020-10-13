@@ -91,17 +91,23 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
 
   @Override
   @UserPermission
-  public List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn) {
+  public List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn) throws MemoryExcededException {
     ArrayList<StageSurveyActivitiesDto> activities = new ArrayList<>();
 
     ArrayList<Bson> pipeline = (new SurveyActivityQueryBuilder())
       .getSurveyActivityListByStageAndAcronymQuery(rn, permittedSurveys);
 
     AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+    MongoCursor<Document> iterator = results.iterator();
 
-    results.forEach((Block<Document>) document -> {
-      activities.add(StageSurveyActivitiesDto.deserialize(document.toJson()));
-    });
+    while(iterator.hasNext()){
+      try{
+        activities.add(StageSurveyActivitiesDto.deserialize(iterator.next().toJson()));
+      }
+      catch (OutOfMemoryError e){
+        throw new MemoryExcededException("Activities for " + rn + " exceded memory used");
+      }
+    }
 
     return activities;
   }

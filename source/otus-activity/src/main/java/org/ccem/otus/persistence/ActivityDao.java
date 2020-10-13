@@ -18,7 +18,7 @@ public interface ActivityDao {
 
   List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn);
 
-  List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn);
+  List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn) throws MemoryExcededException;
 
   ObjectId persist(SurveyActivity surveyActivity);
 
