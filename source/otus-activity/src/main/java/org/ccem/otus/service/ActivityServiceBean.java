@@ -66,7 +66,7 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> list(long rn, String userEmail) {
 
     List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionService.list();
-    List<SurveyActivity> activities = getPermittedSurveys(userEmail, rn);
+    List<SurveyActivity> activities = activityDao.find(new ArrayList<>(), userEmail, rn);
     List<SurveyActivity> filteredActivities = new ArrayList<SurveyActivity>();
 
     activities.forEach(activity -> {
@@ -94,10 +94,6 @@ public class ActivityServiceBean implements ActivityService {
   public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) throws MemoryExcededException {
     List<String> permittedSurveys = new ArrayList<>();
     return activityDao.findByStageGroup(permittedSurveys, userEmail, rn);
-  }
-
-  private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn) {
-    return activityDao.find(new ArrayList<>(), userEmail, rn);
   }
 
   private boolean isSameVersion(ActivityAccessPermission permission, SurveyActivity activity) {
