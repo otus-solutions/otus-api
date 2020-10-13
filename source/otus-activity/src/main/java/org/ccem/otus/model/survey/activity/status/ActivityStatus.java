@@ -30,8 +30,10 @@ public class ActivityStatus {
   }
 
   public User getUser() {
-    if (user != null) return user;
-    throw new UserNotFoundException();
+    if(user == null){
+      throw new UserNotFoundException();
+    }
+    return user;
   }
 
   public static String serialize(ActivityStatus activityStatus) {
