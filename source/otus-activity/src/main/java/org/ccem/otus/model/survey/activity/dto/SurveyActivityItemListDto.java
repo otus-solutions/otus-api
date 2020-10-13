@@ -19,6 +19,9 @@ public class SurveyActivityItemListDto extends SerializableModelWithID {
   private StatusDto lastStatus;
   private String externalID;
 
+  public String getName() {
+    return name;
+  }
 
   public static SurveyActivityItemListDto deserialize(String json){
     return (SurveyActivityItemListDto)deserialize(json, SurveyActivityItemListDto.class);
