@@ -7,10 +7,12 @@ import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.Gson;
 import com.nimbusds.jwt.SignedJWT;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Assert;
@@ -83,8 +85,20 @@ public class ActivityFacadeTest {
 
   @Test
   public void method_should_return_grouped_list_for_rn() throws MemoryExcededException {
-    Mockito.when(stageService.getAll()).thenReturn(new ArrayList<>());
-    Mockito.when(activityService.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL)).thenReturn(new ArrayList<>());
+    Stage stage = new Stage();
+    stage.setId(OID);
+    stage.setName("stage");
+    List<Stage> stages = new ArrayList<>();
+    stages.add(stage);
+    Mockito.when(stageService.getAll()).thenReturn(stages);
+
+    StageSurveyActivitiesDto stageDto = PowerMockito.spy(new StageSurveyActivitiesDto());
+    when(stageDto.hasAcronyms()).thenReturn(true);
+    doNothing().when(stageDto).removeAcronymsWithoutActivities();
+    List<StageSurveyActivitiesDto> stageDtos = new ArrayList<>();
+    stageDtos.add(stageDto);
+
+    Mockito.when(activityService.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL)).thenReturn(stageDtos);
     activityFacade.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
     verify(activityService, times(1)).listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
   }
