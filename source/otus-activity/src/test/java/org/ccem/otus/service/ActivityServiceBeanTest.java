@@ -107,11 +107,18 @@ public class ActivityServiceBeanTest {
   }
 
   @Test
-  public void listMethod_should_invoke_find_of_ActivityDao_find() {
+  public void method_listByStageGroups_should_invoke_findByStageGroup_of_ActivityDao() {
     surveyActivities = service.list(RECRUIMENT_NUMBER, USER_EMAIL);
     assertTrue(surveyActivities.get(0) instanceof SurveyActivity);
     verify(activityDao, times(1)).find(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER);
     verify(activityAccessPermissionService, times(1)).list();
+  }
+
+  @Test
+  public void listMethod_should_invoke_find_of_ActivityDao_find() throws MemoryExcededException {
+    when(activityDao.findByStageGroup(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER)).thenReturn(new ArrayList<>());
+    service.listByStageGroups(RECRUIMENT_NUMBER, USER_EMAIL);
+    verify(activityDao, times(1)).findByStageGroup(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER);
   }
 
   @Test
