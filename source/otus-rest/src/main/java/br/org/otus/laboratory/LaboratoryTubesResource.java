@@ -1,6 +1,7 @@
 package br.org.otus.laboratory;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
+import br.org.otus.laboratory.participant.TubeParticipantLaboratory;
 import br.org.otus.laboratory.tubes.api.LaboratoryTubesFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
@@ -23,8 +24,8 @@ public class LaboratoryTubesResource {
   @Path("/{tubeCode}")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getTubeWithParticipant(@PathParam("tubeCode") String tubeCode) throws DataNotFoundException {
-    ParticipantLaboratory participantTube = laboratoryTubesFacade.getTubeWithParticipantLaboratory(tubeCode);
-    return new Response().buildSuccess(ParticipantLaboratory.serialize(participantTube)).toJson();
+    TubeParticipantLaboratory participantTube = laboratoryTubesFacade.getTubeWithParticipantLaboratory(tubeCode);
+    return new Response().buildSuccess(TubeParticipantLaboratory.serialize(participantTube)).toJson();
   }
 
 }
