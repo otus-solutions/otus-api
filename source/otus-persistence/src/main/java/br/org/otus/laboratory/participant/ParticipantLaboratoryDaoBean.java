@@ -142,6 +142,31 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
+  public ParticipantLaboratory getTubeWithParticipantLaboratory(String tubeCode) throws DataNotFoundException {
+    Document first = collection.aggregate(Arrays.asList(
+      ParseQuery.toDocument("{ \n" +
+        "        $match: {\n" +
+        "            \"tubes.code\":'" + tubeCode + "'" +
+        "        }\n" +
+        "    }"),
+      ParseQuery.toDocument("{\n" +
+        "        $unwind: \"$tubes\"\n" +
+        "    }"),
+      ParseQuery.toDocument("{ \n" +
+        "        $match: {\n" +
+        "            \"tubes.code\":'" + tubeCode + "'" +
+        "        }\n" +
+        "    }")
+    )).first();
+
+    if (first == null) {
+      throw new DataNotFoundException("Tube not found");
+    }
+
+    return ParticipantLaboratory.deserialize(first.toJson());
+  }
+
+  @Override
   public ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException {
     Document locationPoint = collection.find(eq("tubes.code", tubeCode)).projection(new Document("locationPoint", 1)).first();
     if (locationPoint == null) {

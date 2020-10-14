@@ -160,4 +160,11 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     }
     return tube;
   }
+
+  @Override
+  public ParticipantLaboratory getTubeWithParticipantLaboratory(String tubeCode) throws DataNotFoundException {
+    ParticipantLaboratory participantLaboratoryTube = participantLaboratoryDao.getTubeWithParticipantLaboratory(tubeCode);
+
+    return participantLaboratoryTube;
+  }
 }
