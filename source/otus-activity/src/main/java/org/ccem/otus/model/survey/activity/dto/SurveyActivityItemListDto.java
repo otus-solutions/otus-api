@@ -15,6 +15,7 @@ public class SurveyActivityItemListDto extends SerializableModelWithID {
   private String objectType;
   private String acronym;
   private String name;
+  private String mode;
   private String category;
   private StatusDto lastStatus;
   private String externalID;
