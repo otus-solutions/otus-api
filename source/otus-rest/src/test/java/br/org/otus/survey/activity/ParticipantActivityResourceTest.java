@@ -125,6 +125,15 @@ public class ParticipantActivityResourceTest {
   }
 
   @Test
+  public void createFollowUpActivity_method_should_return_ObjectResponse() {
+    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
+    when(activityFacade.createFollowUp(activityDeserialize)).thenReturn(ID_SURVEY_ACITIVITY);
+    assertEquals(ACTIVITY_EXPECTED, participantActivityResource.createFollowUpActivity(RECRUIMENT_NUMBER, jsonActivity));
+    verify(participantFacade).getByRecruitmentNumber(anyLong());
+    verify(activityFacade).deserialize(anyString());
+  }
+
+  @Test
   public void method_getByID_should_return_ObjectResponse() throws DataNotFoundException {
     when(participantFacade.getByRecruitmentNumber(RECRUIMENT_NUMBER)).thenReturn(participant);
     when(activityFacade.getByID(ID_SURVEY_ACITIVITY)).thenReturn(activityDeserialize);
