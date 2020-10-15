@@ -91,8 +91,7 @@ public class ActivityServiceBean implements ActivityService {
 
   @Override
   public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) throws MemoryExcededException {
-    List<String> permittedSurveys = new ArrayList<>();
-    return activityDao.findByStageGroup(permittedSurveys, userEmail, rn);
+    return activityDao.findByStageGroup(new ArrayList<>(), userEmail, rn);
   }
 
 
