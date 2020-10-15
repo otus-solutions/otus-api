@@ -3,7 +3,6 @@ package br.org.otus.survey.activity.api;
 import br.org.otus.model.User;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.exception.ResponseInfo;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.Gson;
 import com.nimbusds.jwt.SignedJWT;
@@ -14,26 +13,23 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
+import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.service.ActivityService;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import service.StageService;
 
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -47,11 +43,10 @@ public class ActivityFacadeTest {
   private static final ObjectId OID = new ObjectId();
   private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvdHVzQGdtYWlsLmNvbSIsIm1vZGUiOiJ1c2VyIiwianRpIjoiYzc1ODIzNWMtYjQzMy00NDQ2LWFhMDMtYmU0NmI3ODU3NWEyIiwiaWF0IjoxNTg1MTc2NDg5LCJleHAiOjE1ODUxODAwODl9.wlSmhUXYW6Apqg5skGPLDGCyuA0sDYyVtZIBM8RxkLs";
   private static final String TOKEN_BEARER = "Bearer " + TOKEN;
-  private static final String SURVEY_ACTIVITY_EXCEPTION = "notExist";
   private static final String JSON = "" + "{\"objectType\" : \"Activity\"," + "\"extents\" : \"StudioObject\"}";
   private static final Integer VERSION = 1;
   private static final String USER_EMAIL = "otus@gmail.com";
-  private static final String checkerUpdated = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
+  private static final String CHECKER_UPDATED = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
   private static final String CENTER = "RS";
   private static final boolean NOTIFY = false;
 
@@ -78,14 +73,14 @@ public class ActivityFacadeTest {
   }
 
   @Test
-  public void method_should_verify_list_with_rn() {
+  public void list_method_should_verify_list_with_rn() {
     Mockito.when(activityService.list(RECRUITMENT_NUMBER, USER_EMAIL)).thenReturn(new ArrayList<>());
     activityFacade.list(RECRUITMENT_NUMBER, USER_EMAIL);
     verify(activityService, times(1)).list(RECRUITMENT_NUMBER, USER_EMAIL);
   }
 
   @Test
-  public void method_should_return_grouped_list_for_rn() throws MemoryExcededException {
+  public void listByStageGroups_method_should_return_grouped_list_for_rn() throws MemoryExcededException {
     Stage stage = new Stage();
     stage.setId(OID);
     stage.setName("stage");
@@ -105,21 +100,27 @@ public class ActivityFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void method_should_handle_MemoryExcededException() throws Exception {
+  public void listByStageGroups_method_should_handle_MemoryExcededException() throws Exception {
     when(stageService.getAll()).thenReturn(new ArrayList<>());
     PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "listByStageGroups", RECRUITMENT_NUMBER, USER_EMAIL);
     activityFacade.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
   }
 
   @Test
-  public void method_should_verify_get_with_id() throws DataNotFoundException {
-    Mockito.when(activityService.getByID(ACRONYM)).thenReturn(surveyActivity);
-    activityFacade.getByID(ACRONYM);
-    verify(activityService, times(1)).getByID(ACRONYM);
+  public void getByID_method_should_verify_get_with_id() throws DataNotFoundException {
+    Mockito.when(activityService.getByID(ACTIVITY_ID)).thenReturn(surveyActivity);
+    activityFacade.getByID(ACTIVITY_ID);
+    verify(activityService, times(1)).getByID(ACTIVITY_ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getByID_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "getByID", ACTIVITY_ID);
+    activityFacade.getByID(ACTIVITY_ID);
   }
 
   @Test
-  public void method_should_verify_get_with_id_and_version() throws DataNotFoundException, MemoryExcededException {
+  public void get_method_should_verify_get_with_id_and_version() throws DataNotFoundException, MemoryExcededException {
     List<SurveyActivity> list = new ArrayList<SurveyActivity>();
     list.add(surveyActivity);
     list.add(surveyActivity);
@@ -129,27 +130,54 @@ public class ActivityFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void method_should_throw_HttpResponseException_getById_invalid() throws Exception {
-    Mockito.when(activityService.getByID(SURVEY_ACTIVITY_EXCEPTION)).thenThrow(new HttpResponseException(null));
-    activityFacade.getByID(SURVEY_ACTIVITY_EXCEPTION);
+  public void get_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "get", ACRONYM, VERSION);
+    activityFacade.get(ACRONYM, VERSION);
   }
 
-  @Test
-  public void method_should_verify_create_with_surveyActivity() {
-    Mockito.when(activityService.create(surveyActivity)).thenReturn(OID.toString());
+  @Test(expected = HttpResponseException.class)
+  public void get_method_should_handle_MemoryExcededException() throws Exception {
+    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "get", ACRONYM, VERSION);
+    activityFacade.get(ACRONYM, VERSION);
+  }
 
+
+  @Test
+  public void getExtraction_method_should_invoke_getExtration_from_ActivityService() throws Exception {
+    List<SurveyActivity> activities = new ArrayList<>();
+    activities.add(surveyActivity);
+    when(activityService.getExtraction(ACRONYM, VERSION)).thenReturn(activities);
+    assertEquals(activities, activityFacade.getExtraction(ACRONYM, VERSION));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getExtraction_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "getExtraction", ACRONYM, VERSION);
+    activityFacade.getExtraction(ACRONYM, VERSION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getExtraction_method_should_handle_MemoryExcededException() throws Exception {
+    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "getExtraction", ACRONYM, VERSION);
+    activityFacade.getExtraction(ACRONYM, VERSION);
+  }
+
+
+  @Test
+  public void create_method_should_verify_create_with_surveyActivity() {
+    Mockito.when(activityService.create(surveyActivity)).thenReturn(OID.toString());
     activityFacade.create(surveyActivity, NOTIFY);
     verify(activityService, times(1)).create(surveyActivity);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void createMethodTest_should_trigger_requiredExternalID_validation() {
+  public void create_method_should_trigger_requiredExternalID_validation() {
     when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
     activityFacade.create(surveyActivity, NOTIFY);
   }
 
   @Test
-  public void method_updateActivity_should_update_the_last_status_user_when_mode_is_user() throws Exception {
+  public void updateActivity_method_should_update_the_last_status_user_when_mode_is_user() throws Exception {
     br.org.otus.model.User user = new User();
     user.setEmail(USER_EMAIL);
     Mockito.when(managementUserService.fetchByEmail(USER_EMAIL)).thenReturn(user);
@@ -167,27 +195,33 @@ public class ActivityFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
+  public void update_method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
     Mockito.when(activityService.update(surveyActivity)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateActivity(surveyActivity, TOKEN);
   }
 
   @Test
-  public void updateCheckerActivityMethod_should_invoke_updateCheckerActivity_of_ActivityService() throws DataNotFoundException {
-    activityFacade.updateCheckerActivity(checkerUpdated);
-    verify(activityService, times(1)).updateCheckerActivity(checkerUpdated);
+  public void updateCheckerActivity_method_should_invoke_updateCheckerActivity_of_ActivityService() throws DataNotFoundException {
+    activityFacade.updateCheckerActivity(CHECKER_UPDATED);
+    verify(activityService, times(1)).updateCheckerActivity(CHECKER_UPDATED);
   }
 
   @Test(expected = HttpResponseException.class)
   public void updateCheckerActivityMethod_should_throw_HttpResponseException_when_ObjectId_invalid() throws Exception {
-    Mockito.when(activityService.updateCheckerActivity(checkerUpdated)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
-    activityFacade.updateCheckerActivity(checkerUpdated);
+    Mockito.when(activityService.updateCheckerActivity(CHECKER_UPDATED)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
+    activityFacade.updateCheckerActivity(CHECKER_UPDATED);
   }
 
   @Test
   public void getActivityProgressExtraction_method_should_call_method_getActivityProgressExtraction_of_service() throws DataNotFoundException {
     activityFacade.getActivityProgressExtraction(CENTER);
     verify(activityService, times(1)).getActivityProgressExtraction(CENTER);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getActivityProgressExtraction_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "getActivityProgressExtraction", CENTER);
+    activityFacade.getActivityProgressExtraction(CENTER);
   }
 
   @Test
@@ -198,7 +232,7 @@ public class ActivityFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void getParticipantFieldCenterByActivityMethod_should_throw_HttpResponseException_when_activity_invalid() throws Exception {
-    Mockito.when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
+    Mockito.when(activityService.getParticipantFieldCenterByActivity(ACRONYM, VERSION)).thenThrow(new DataNotFoundException(""));
     activityFacade.getParticipantFieldCenterByActivity(ACRONYM, VERSION);
   }
 
@@ -212,7 +246,35 @@ public class ActivityFacadeTest {
   }
 
   @Test
-  public void method_should_verify_create_for_follow_up_with_surveyActivity() {
+  public void save_method_should_verify_create_for_follow_up_with_surveyActivity() throws DataNotFoundException {
+    OfflineActivityCollection offlineActivityCollection = new OfflineActivityCollection();
+    activityFacade.save(USER_EMAIL, offlineActivityCollection);
+    verify(activityService, times(1)).save(USER_EMAIL, offlineActivityCollection);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void save_method_should_handle_DataNotFoundException() throws Exception {
+    OfflineActivityCollection offlineActivityCollection = new OfflineActivityCollection();
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "save", USER_EMAIL, offlineActivityCollection)  ;
+    activityFacade.save(USER_EMAIL, offlineActivityCollection);
+  }
+
+
+  @Test
+  public void fetchOfflineActivityCollections_method_should_verify_create_for_follow_up_with_surveyActivity() throws DataNotFoundException {
+    activityFacade.fetchOfflineActivityCollections(USER_EMAIL);
+    verify(activityService, times(1)).fetchOfflineActivityCollections(USER_EMAIL);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void fetchOfflineActivityCollections_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "fetchOfflineActivityCollections", USER_EMAIL)  ;
+    activityFacade.fetchOfflineActivityCollections(USER_EMAIL);
+  }
+
+
+  @Test
+  public void createFollowUp_method_should_verify_create_for_follow_up_with_surveyActivity() {
     Mockito.when(activityService.create(surveyActivity)).thenReturn(ACRONYM);
     activityFacade.createFollowUp(surveyActivity);
     verify(activityService, times(1)).create(surveyActivity);
@@ -223,6 +285,7 @@ public class ActivityFacadeTest {
     when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
     activityFacade.createFollowUp(surveyActivity);
   }
+
 
   @Test
   public void discardByID_method_should_invoke_ActivityService_discardByID() throws DataNotFoundException {
