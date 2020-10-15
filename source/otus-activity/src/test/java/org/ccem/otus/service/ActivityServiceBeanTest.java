@@ -48,6 +48,7 @@ public class ActivityServiceBeanTest {
   private static final String CATEGORY_NAME = "C0";
   private static final String CENTER = "RS";
   private static final String EMAIL= "email@email.com";
+  private static final ObjectId ACTIVITY_OID = new ObjectId("5c0e5d41e69a69006430cb75");
   private static final ObjectId STAGE_OID = new ObjectId("5f77920624439758ce4a43ab");
   private ActivityAccessPermission permission;
   private List<SurveyActivity> surveyActivities;
@@ -191,4 +192,11 @@ public class ActivityServiceBeanTest {
     service.removeStageFromActivities(STAGE_OID);
     verify(activityDao, times(1)).removeStageFromActivities(STAGE_OID);
   }
+
+  @Test
+  public void discardByID_method_should_invoke_ActivityDao_discardByID() throws DataNotFoundException {
+    service.discardByID(ACTIVITY_OID);
+    verify(activityDao, times(1)).discardByID(ACTIVITY_OID);
+  }
+
 }

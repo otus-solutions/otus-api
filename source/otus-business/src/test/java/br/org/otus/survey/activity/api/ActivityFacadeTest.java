@@ -43,6 +43,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class ActivityFacadeTest {
   private static final long RECRUITMENT_NUMBER = 5112345;
   private static final String ACRONYM = "CISE";
+  private static final String ACTIVITY_ID = "5c0e5d41e69a69006430cb75";
   private static final ObjectId OID = new ObjectId();
   private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvdHVzQGdtYWlsLmNvbSIsIm1vZGUiOiJ1c2VyIiwianRpIjoiYzc1ODIzNWMtYjQzMy00NDQ2LWFhMDMtYmU0NmI3ODU3NWEyIiwiaWF0IjoxNTg1MTc2NDg5LCJleHAiOjE1ODUxODAwODl9.wlSmhUXYW6Apqg5skGPLDGCyuA0sDYyVtZIBM8RxkLs";
   private static final String TOKEN_BEARER = "Bearer " + TOKEN;
@@ -221,5 +222,17 @@ public class ActivityFacadeTest {
   public void createFollowUpMethodTest_should_trigger_requiredExternalID_validation() {
     when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
     activityFacade.createFollowUp(surveyActivity);
+  }
+
+  @Test
+  public void discardByID_method_should_invoke_ActivityService_discardByID() throws DataNotFoundException {
+    activityFacade.discardByID(ACTIVITY_ID);
+    verify(activityService, Mockito.times(1)).discardByID(new ObjectId(ACTIVITY_ID));
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void discardById_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "discardByID", new ObjectId(ACTIVITY_ID));
+    activityFacade.discardByID(ACTIVITY_ID);
   }
 }

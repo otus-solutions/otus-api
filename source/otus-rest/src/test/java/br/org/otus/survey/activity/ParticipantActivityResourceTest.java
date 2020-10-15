@@ -167,4 +167,12 @@ public class ParticipantActivityResourceTest {
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
     assertEquals(listSurveyActivityExpected, participantActivityResource.getActivityRevisions(request, ID_ACITIVITY));
   }
+
+  @Test
+  public void method_discardByID_should_invoke_ActivityFacade_discardByID(){
+    String expectedResponse = "{\"data\":true}";
+    String response = participantActivityResource.discardByID(RECRUIMENT_NUMBER, ID_ACITIVITY);
+    verify(activityFacade, Mockito.times(1)).discardByID(ID_ACITIVITY);
+    assertEquals(expectedResponse, response);
+  }
 }
