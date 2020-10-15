@@ -29,6 +29,65 @@ public class SurveyActivityQueryBuilder {
         "            }\n" +
         "        }"));
 
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "            $lookup: {\n" +
+      "                from:\"activity_permission\",\n" +
+      "                let: {\n" +
+      "                    acronym: \"$surveyForm.acronym\",\n" +
+      "                    version: \"$surveyForm.version\"\n" +
+      "                },\n" +
+      "                pipeline: [\n" +
+      "                    {\n" +
+      "                        $match: { \n" +
+      "                            $expr: {\n" +
+      "                                $and: [\n" +
+      "                                    { $eq: [\"$acronym\", \"$$acronym\"] },\n" +
+      "                                    { $eq: [\"$version\", \"$$version\"] }\n" +
+      "                                ]\n" +
+      "                            }\n" +
+      "                        }\n" +
+      "                    },\n" +
+      "                    {\n" +
+      "                        $project: {\n" +
+      "                            '_id': 0,\n" +
+      "                            \"emails\": \"$exclusiveDisjunction\"\n" +
+      "                        }\n" +
+      "                    }\n" +
+      "                ],\n" +
+      "                as:\"permissionUsers\"\n" +
+      "            }\n" +
+      "        }"));
+
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "            $addFields: {\n" +
+      "                \"permissionUsers\": { $ifNull: [ { $arrayElemAt: [\"$permissionUsers\", 0] }, [] ] } \n" +
+      "            }\n" +
+      "        }"));
+
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "            $match: {\n" +
+      "                $expr: {\n" +
+      "                    $eq: [ 0, \n" +
+      "                        {\n" +
+      "                            $size: {\n" +
+      "                                $filter:{\n" +
+      "                                    \"input\": \"$statusHistory\",\n" +
+      "                                    \"as\": \"statusHistory\",\n" +
+      "                                    \"cond\": {\n" +
+      "                                        $and: [\n" +
+      "                                            { $in: [ \"$$statusHistory.name\", [\"SAVED\", \"FINALIZED\"]] },\n" +
+      "                                            { $not: { $eq: [ userEmail, \"$$statusHistory.user.email\" ] } },  \n" +
+      "                                            { $in: [ \"$$statusHistory.user.email\", \"$permissionUsers.emails\"] }\n" +
+      "                                        ]\n" +
+      "                                    }\n" +
+      "                                }\n" +
+      "                            }\n" +
+      "                        }\n" +
+      "                    ]\n" +
+      "                }\n" +
+      "            }\n" +
+      "        }"));
+
     pipeline.add(ParseQuery.toDocument("  {\n" +
       "            $group: {\n" +
       "                _id: { \n" +
