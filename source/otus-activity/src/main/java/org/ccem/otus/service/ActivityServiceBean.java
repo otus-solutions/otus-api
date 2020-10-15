@@ -200,4 +200,9 @@ public class ActivityServiceBean implements ActivityService {
     activityDao.removeStageFromActivities(stageOID);
   }
 
+  @Override
+  public void discardByID(ObjectId activityID) throws DataNotFoundException {
+    activityDao.discardByID(activityID);
+  }
+
 }

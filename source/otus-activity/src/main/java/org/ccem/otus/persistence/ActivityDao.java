@@ -43,4 +43,6 @@ public interface ActivityDao {
   boolean updateParticipantEmail(long rn, String email);
 
   void removeStageFromActivities(ObjectId stageOID);
+
+  void discardByID(ObjectId activityOID) throws DataNotFoundException;
 }

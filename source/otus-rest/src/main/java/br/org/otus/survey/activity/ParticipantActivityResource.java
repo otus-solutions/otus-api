@@ -126,6 +126,16 @@ public class ParticipantActivityResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @PUT
+  @Secured
+  @Path("/discard/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String discardByID(@PathParam("rn") long rn, @PathParam("id") String id) {
+    isValidRecruitmentNumber(rn);
+    activityFacade.discardByID(id);
+    return new Response().buildSuccess().toJson();
+  }
+
   private void isValidRecruitmentNumber(long rn) {
     participantFacade.getByRecruitmentNumber(rn);
   }

@@ -49,4 +49,6 @@ public interface ActivityService {
 
   void removeStageFromActivities(ObjectId stageOID);
 
+  void discardByID(ObjectId activityOID) throws DataNotFoundException;
+
 }

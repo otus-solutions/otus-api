@@ -287,4 +287,12 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public void discardByID(String activityID) {
+    try {
+      activityService.discardByID(new ObjectId(activityID));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
 }

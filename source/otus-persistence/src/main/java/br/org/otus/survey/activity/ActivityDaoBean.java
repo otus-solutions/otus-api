@@ -335,6 +335,18 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     );
   }
 
+  @Override
+  public void discardByID(ObjectId activityOID) throws DataNotFoundException {
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, activityOID),
+      new Document(SET, new Document("isDiscarded", true))
+    );
+
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Activity with id "+ activityOID.toHexString() + "was not found."));
+    }
+  }
+
   private void removeOids(Document parsedActivity) {
     parsedActivity.remove("_id");
     ((Document) parsedActivity.get("surveyForm")).remove("_id"); //todo: remove when this id becomes standard
