@@ -117,20 +117,6 @@ public class ActivityServiceBean implements ActivityService {
     return isPresent;
   }
 
-  private boolean someUserPermissionIsInSomeSavedOrFinalizedStatus(ActivityAccessPermission permission, SurveyActivity activity, String userEmail) {
-
-    List<String> finalStatus = new ArrayList<>();
-    finalStatus.add(ActivityStatusOptions.FINALIZED.getName());
-    finalStatus.add(ActivityStatusOptions.SAVED.getName());
-
-    List<String> otherUserEmailsThatSavedOrFinalizedActivity = activity.getStatusHistory().stream()
-      .filter(status -> finalStatus.contains(status.getName()) && !status.getUser().getEmail().equals(userEmail))
-      .map(status -> status.getUser().getEmail())
-      .collect(Collectors.toList());
-
-    return !Collections.disjoint(otherUserEmailsThatSavedOrFinalizedActivity, permission.getExclusiveDisjunction());
-  }
-
   @Override
   public SurveyActivity getByID(String id) throws DataNotFoundException {
     return activityDao.findByID(id);
