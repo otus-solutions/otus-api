@@ -13,7 +13,7 @@ import br.org.otus.fileuploader.FileUploaderResource;
 import br.org.otus.importation.ActivityImportationResource;
 import br.org.otus.importation.ParticipantImportationResource;
 import br.org.otus.laboratory.ParticipantLaboratoryResource;
-import br.org.otus.laboratory.LaboratoryTubesResource;
+import br.org.otus.laboratory.TubesResource;
 import br.org.otus.laboratory.UnattachedLaboratoryResource;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
 import br.org.otus.laboratory.project.ExamResource;
@@ -113,7 +113,7 @@ public class EndPointsLoader extends Application {
   @Inject
   private ParticipantLaboratoryResource laboratoryParticipantResource;
   @Inject
-  private LaboratoryTubesResource laboratoryTubesResource;
+  private TubesResource laboratoryTubesResource;
 
   @Inject
   private DataSourceResource dataSourceResource;

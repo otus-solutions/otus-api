@@ -25,7 +25,6 @@ import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.participant.tube.TubeCollectionData;
-import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ParseQuery;
 
 public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> implements ParticipantLaboratoryDao {
@@ -142,7 +141,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public TubeParticipantLaboratory getTubeWithParticipantLaboratory(String tubeCode) throws DataNotFoundException {
+  public TubeParticipantLaboratory getTubeWithRn(String tubeCode) throws DataNotFoundException {
     Document first = collection.aggregate(Arrays.asList(
       ParseQuery.toDocument("{ \n" +
         "        $match: {\n" +
