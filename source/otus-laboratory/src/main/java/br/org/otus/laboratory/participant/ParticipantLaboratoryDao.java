@@ -39,7 +39,7 @@ public interface ParticipantLaboratoryDao {
 
   Tube getTube(String tubeCode) throws DataNotFoundException;
 
-  TubeParticipantLaboratory getTubeWithRn(String tubeCode) throws  DataNotFoundException;
+  ParticipantLaboratory getTubeWithRn(String tubeCode) throws  DataNotFoundException;
 
   ObjectId getTubeLocationPoint(String tubeCode) throws DataNotFoundException;
 

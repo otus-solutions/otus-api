@@ -84,6 +84,15 @@ public class ParticipantLaboratoryFacade {
     }
   }
 
+  public ParticipantLaboratory getTubeWithRn(String tube) {
+    try {
+      return service.getTubeWithRn(tube);
+    } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
+  }
+
   public String convertAliquotRole(Aliquot convertedAliquot) {
     try {
       return service.convertAliquotRole(convertedAliquot);
