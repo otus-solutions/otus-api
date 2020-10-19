@@ -90,8 +90,18 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   @Override
-  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) throws MemoryExcededException {
-    return activityDao.findByStageGroup(new ArrayList<>(), userEmail, rn);
+  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail, Map<ObjectId, String> stageMap) throws MemoryExcededException {
+    List<StageSurveyActivitiesDto> activitiesDtos = activityDao.findByStageGroup(new ArrayList<>(), userEmail, rn)
+      .stream().filter(stageDto -> stageDto.hasAcronyms())
+      .collect(Collectors.toList());
+
+    activitiesDtos.forEach(stageDto -> {
+      String stageName = stageMap.get(stageDto.getStageID());
+      stageDto.setStageName(stageName);
+      stageDto.removeAcronymsWithoutActivities();
+    });
+
+    return activitiesDtos;
   }
 
 

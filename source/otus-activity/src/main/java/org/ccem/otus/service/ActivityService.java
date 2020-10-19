@@ -12,6 +12,7 @@ import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public interface ActivityService {
 
@@ -21,7 +22,7 @@ public interface ActivityService {
 
   List<SurveyActivity> list(long rn, String userEmail);
 
-  List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) throws MemoryExcededException;
+  List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail, Map<ObjectId, String> stageMap) throws MemoryExcededException;
 
   SurveyActivity getByID(String id) throws DataNotFoundException;
 

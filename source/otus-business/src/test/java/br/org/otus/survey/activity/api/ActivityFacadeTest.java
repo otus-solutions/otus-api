@@ -27,7 +27,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import service.StageService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -49,6 +51,7 @@ public class ActivityFacadeTest {
   private static final String CHECKER_UPDATED = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
   private static final String CENTER = "RS";
   private static final boolean NOTIFY = false;
+  private static final Map<ObjectId, String> STAGE_MAP = new HashMap<>();
 
   @InjectMocks
   ActivityFacade activityFacade;
@@ -81,12 +84,7 @@ public class ActivityFacadeTest {
 
   @Test
   public void listByStageGroups_method_should_return_grouped_list_for_rn() throws MemoryExcededException {
-    Stage stage = new Stage();
-    stage.setId(OID);
-    stage.setName("stage");
-    List<Stage> stages = new ArrayList<>();
-    stages.add(stage);
-    Mockito.when(stageService.getAll()).thenReturn(stages);
+    Mockito.when(stageService.getAll()).thenReturn(new ArrayList<>());
 
     StageSurveyActivitiesDto stageDto = PowerMockito.spy(new StageSurveyActivitiesDto());
     when(stageDto.hasAcronyms()).thenReturn(true);
@@ -94,15 +92,15 @@ public class ActivityFacadeTest {
     List<StageSurveyActivitiesDto> stageDtos = new ArrayList<>();
     stageDtos.add(stageDto);
 
-    Mockito.when(activityService.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL)).thenReturn(stageDtos);
+    Mockito.when(activityService.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL, STAGE_MAP)).thenReturn(stageDtos);
     activityFacade.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
-    verify(activityService, times(1)).listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
+    verify(activityService, times(1)).listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL, STAGE_MAP);
   }
 
   @Test(expected = HttpResponseException.class)
   public void listByStageGroups_method_should_handle_MemoryExcededException() throws Exception {
     when(stageService.getAll()).thenReturn(new ArrayList<>());
-    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "listByStageGroups", RECRUITMENT_NUMBER, USER_EMAIL);
+    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "listByStageGroups", RECRUITMENT_NUMBER, USER_EMAIL, STAGE_MAP);
     activityFacade.listByStageGroups(RECRUITMENT_NUMBER, USER_EMAIL);
   }
 

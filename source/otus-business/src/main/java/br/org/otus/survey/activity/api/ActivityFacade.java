@@ -64,17 +64,7 @@ public class ActivityFacade {
         stageMap.put(stage.getId(), stage.getName());
       });
 
-      List<StageSurveyActivitiesDto> stageDtos = activityService.listByStageGroups(rn, userEmail)
-        .stream().filter(stageDto -> stageDto.hasAcronyms())
-        .collect(Collectors.toList());
-
-      stageDtos.forEach(stageDto -> {
-        String stageName = stageMap.get(stageDto.getStageID());
-        stageDto.setStageName(stageName);
-        stageDto.removeAcronymsWithoutActivities();
-      });
-
-      return stageDtos;
+      return activityService.listByStageGroups(rn, userEmail, stageMap);
     }
     catch (MemoryExcededException e){
       throw new HttpResponseException(Validation.build(e.getMessage()));
