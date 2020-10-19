@@ -3,8 +3,6 @@ package br.org.otus.outcomes.configuration;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -105,6 +103,5 @@ public class FollowUpConfiguration {
   public String listAllParticipantEvents(@PathParam("rn") String rn) {
     return new Response().buildSuccess(followUpFacade.listAllParticipantEvents(rn)).toJson();
   }
-
 
 }

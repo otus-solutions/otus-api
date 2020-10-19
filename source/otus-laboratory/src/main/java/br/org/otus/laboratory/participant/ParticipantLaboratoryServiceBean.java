@@ -111,7 +111,6 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
       Aliquot aliquot = new Aliquot(simpleAliquot);
       aliquot.setTubeCode(updateTubeAliquotsDTO.getTubeCode());
       aliquot.setParticipatData(participant);
-      aliquot.setLocationPoint(participantLaboratory.getLocationPoint());
       aliquotDao.persist(aliquot);
     }));
 

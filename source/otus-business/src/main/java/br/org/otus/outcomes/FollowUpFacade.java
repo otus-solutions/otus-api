@@ -27,15 +27,14 @@ import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 
 public class FollowUpFacade {
-  private static Logger LOGGER = Logger.getLogger("br.org.otus.outcomes.FollowUpFacade");
-  private static String ACCOMPLISHED_METHOD = "accomplishedParticipantEventByActivity";
-  private static String REOPEN_METHOD = "reopenedParticipantEventByActivity";
+  private final static Logger LOGGER = Logger.getLogger("br.org.otus.outcomes.FollowUpFacade");
+  private final static String ACCOMPLISHED_METHOD = "accomplishedParticipantEventByActivity";
+  private final static String REOPEN_METHOD = "reopenedParticipantEventByActivity";
+  private static final String PARTICIPANT_NAME = "participant_name";
+  private static final String EVENT_NAME = "event_name";
 
   @Inject
   private ParticipantFacade participantFacade;
-
-  private static final String PARTICIPANT_NAME = "participant_name";
-  private static final String EVENT_NAME = "event_name";
 
   public Object createFollowUp(String FollowUpJson) {
     try {
@@ -147,8 +146,12 @@ public class FollowUpFacade {
       followUpCommunicationData.setEmail(participant.getEmail());
       followUpCommunicationData.pushVariable(PARTICIPANT_NAME, participant.getName());
       followUpCommunicationData.pushVariable(EVENT_NAME, participantEventDTO.description);
-      GatewayResponse notification = new CommunicationGatewayService().sendMail(FollowUpCommunicationData.serialize(followUpCommunicationData));
-      System.err.println(notification.getData());
+      try {
+        GatewayResponse notification = new CommunicationGatewayService().sendMail(FollowUpCommunicationData.serialize(followUpCommunicationData));
+        logNotification("notificationEvent", notification.getData(), true, participant, null);
+      } catch (ReadRequestException ex) {
+        logNotification("sendAutoFillActivityNotificationEmail", ex, false, participant, null);
+      }
     }
   }
 
@@ -170,13 +173,36 @@ public class FollowUpFacade {
     }
   }
 
-  private void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
+  public void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
     ActivitySendingCommunicationData activitySendingCommunicationData = new ActivitySendingCommunicationData();
     activitySendingCommunicationData.setEmail(participant.getEmail());
     activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
     activitySendingCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
-    GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
-    System.err.println(notification.getData());
+    try {
+      GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
+      logNotification("sendAutoFillActivityNotificationEmail", notification.getData(), true, participant, surveyActivity);
+    } catch (ReadRequestException ex) {
+      logNotification("sendAutoFillActivityNotificationEmail", ex, false, participant, surveyActivity);
+    }
+  }
+
+  private void logNotification(String action, Object notification, Boolean success, Participant participant, SurveyActivity activity) {
+    if (success) {
+      LOGGER.info("status: success, action: " + action + ",\n" +
+        "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
+        "info: " + notification + ",\n" +
+        getActivityInfo(activity));
+      return;
+    }
+    LOGGER.severe(" status: fail, action: " + action + ",\n" +
+      "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
+      "info: " + notification + ",\n" +
+      getActivityInfo(activity));
+  }
+
+  private String getActivityInfo(SurveyActivity activity) {
+    return activity instanceof SurveyActivity ?
+      "activityId: " + activity.getActivityID() + ", acronym: " + activity.getSurveyForm().getAcronym() + "\n" : "";
   }
 
   public Object cancelParticipantEvent(String eventId) {

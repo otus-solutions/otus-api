@@ -1,6 +1,7 @@
 package br.org.otus.participant.management;
 
 import br.org.otus.gateway.gates.CommunicationGatewayService;
+import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.security.dtos.ParticipantCommunicationDataDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -10,14 +11,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ManagementParticipantServiceBean.class, ParticipantCommunicationDataDto.class})
@@ -31,6 +30,8 @@ public class ManagementParticipantServiceBeanTest {
   private ParticipantCommunicationDataDto participantCommunicationDataDto;
   @Mock
   private CommunicationGatewayService communicationGatewayService;
+  @Mock
+  private GatewayResponse notification;
 
   @Before
   public void setUp() throws Exception {
@@ -42,8 +43,10 @@ public class ManagementParticipantServiceBeanTest {
   @Test
   public void requestPasswordResetMethod_should_mount_ParticipantCommunicationDataDto_by_PasswordResetRequestDtoValues() throws Exception {
     mockStatic(ParticipantCommunicationDataDto.class);
-    PowerMockito.whenNew(ParticipantCommunicationDataDto.class).withNoArguments().thenReturn(participantCommunicationDataDto);
-    PowerMockito.whenNew(CommunicationGatewayService.class).withAnyArguments().thenReturn(communicationGatewayService);
+    whenNew(ParticipantCommunicationDataDto.class).withNoArguments().thenReturn(participantCommunicationDataDto);
+    whenNew(CommunicationGatewayService.class).withAnyArguments().thenReturn(communicationGatewayService);
+    when(communicationGatewayService, "sendMail", Mockito.any()).thenReturn(notification);
+
 
     service.requestPasswordReset(requestData);
     verify(participantCommunicationDataDto, times(1)).setEmail(requestData.getEmail());
@@ -61,7 +64,7 @@ public class ManagementParticipantServiceBeanTest {
   @Test
   public void requestPasswordResetLinkMethod_should_mount_ParticipantCommunicationDataDto_by_PasswordResetRequestDtoValues() throws Exception {
     mockStatic(ParticipantCommunicationDataDto.class);
-    PowerMockito.whenNew(ParticipantCommunicationDataDto.class).withNoArguments().thenReturn(participantCommunicationDataDto);
+    whenNew(ParticipantCommunicationDataDto.class).withNoArguments().thenReturn(participantCommunicationDataDto);
     Assert.assertEquals(service.requestPasswordResetLink(requestData), EXPECTED_LINK);
 
   }
