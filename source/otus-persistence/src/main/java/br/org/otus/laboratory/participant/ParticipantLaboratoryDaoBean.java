@@ -141,7 +141,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public ParticipantLaboratory getTubeWithRn(String tubeCode) throws DataNotFoundException {
+  public ParticipantLaboratory get(String tubeCode) throws DataNotFoundException {
     Document first =  collection.find(eq("tubes.code", tubeCode)).first();
 
     if (first == null) {

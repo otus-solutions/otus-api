@@ -162,8 +162,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public ParticipantLaboratory getTubeWithRn(String tubeCode) throws DataNotFoundException {
-    ParticipantLaboratory participantLaboratoryTube = participantLaboratoryDao.getTubeWithRn(tubeCode);
+  public ParticipantLaboratory get(String tubeCode) throws DataNotFoundException {
+    ParticipantLaboratory participantLaboratoryTube = participantLaboratoryDao.get(tubeCode);
     List<Aliquot> aliquots = aliquotService.getAliquots(participantLaboratoryTube.getRecruitmentNumber());
     participantLaboratoryTube.setAliquots(aliquots);
     return participantLaboratoryTube;

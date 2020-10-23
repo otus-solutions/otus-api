@@ -32,8 +32,8 @@ public class ParticipantLaboratoryResource {
   @Secured
   @Path("/by-tube/{tubeCode}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getTubeWithRn(@PathParam("tubeCode") String tubeCode) throws DataNotFoundException {
-    ParticipantLaboratory participantTube = participantLaboratoryFacade.getTubeWithRn(tubeCode);
+  public String getByTubeCode(@PathParam("tubeCode") String tubeCode) throws DataNotFoundException {
+    ParticipantLaboratory participantTube = participantLaboratoryFacade.get(tubeCode);
     return new Response().buildSuccess(ParticipantLaboratory.serialize(participantTube)).toJson();
   }
 

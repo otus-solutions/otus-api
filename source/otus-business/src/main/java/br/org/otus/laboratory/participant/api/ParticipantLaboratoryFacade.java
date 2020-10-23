@@ -84,9 +84,9 @@ public class ParticipantLaboratoryFacade {
     }
   }
 
-  public ParticipantLaboratory getTubeWithRn(String tube) {
+  public ParticipantLaboratory get(String tubeCode) {
     try {
-      return service.getTubeWithRn(tube);
+      return service.get(tubeCode);
     } catch (DataNotFoundException e) {
       e.printStackTrace();
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
