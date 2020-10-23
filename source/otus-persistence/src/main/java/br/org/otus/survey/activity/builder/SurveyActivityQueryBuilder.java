@@ -82,7 +82,7 @@ public class SurveyActivityQueryBuilder {
     pipeline.add(ParseQuery.toDocument("  {\n" +
       "            $group: {\n" +
       "                _id: { \n" +
-      "                    stageID: \"$stageID\",\n" +
+      "                    stageId: \"$stageId\",\n" +
       "                    acronym:\"$surveyForm.acronym\"\n" +
       "                },\n" +
       "                activities: { \n" +
@@ -102,7 +102,7 @@ public class SurveyActivityQueryBuilder {
 
     pipeline.add(ParseQuery.toDocument("{\n" +
       "            $group:{\n" +
-      "                _id: \"$_id.stageID\",\n" +
+      "                _id: \"$_id.stageId\",\n" +
       "                acronyms: { $push: \"$$ROOT\" }\n" +
       "            }\n" +
       "        }"));

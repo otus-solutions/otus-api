@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 public class StageSurveyActivitiesDto extends SerializableModelWithID {
 
   @SerializedName("_id")
-  private ObjectId stageID;
+  private ObjectId stageId;
 
   private String stageName;
 
   private List<StageAcronymSurveyActivitiesDto> acronyms;
 
 
-  public ObjectId getStageID() {
-    return stageID;
+  public ObjectId getStageId() {
+    return stageId;
   }
 
   public List<StageAcronymSurveyActivitiesDto> getAcronyms() {

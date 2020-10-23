@@ -35,7 +35,7 @@ public class SurveyActivity {
   private Boolean isDiscarded;
   private NavigationTracker navigationTracker;
   private String externalID;
-  private ObjectId stageID;
+  private ObjectId stageId;
 
   public SurveyActivity() {
     this.isDiscarded = Boolean.FALSE;
@@ -109,12 +109,12 @@ public class SurveyActivity {
     return this.getSurveyForm().getRequiredExternalID();
   }
 
-  public ObjectId getStageID() {
-    return stageID;
+  public ObjectId getStageId() {
+    return stageId;
   }
 
-  public void setStageID(ObjectId stageID) {
-    this.stageID = stageID;
+  public void setStageId(ObjectId stageId) {
+    this.stageId = stageId;
   }
 
   public Optional<ActivityStatus> getCurrentStatus() {

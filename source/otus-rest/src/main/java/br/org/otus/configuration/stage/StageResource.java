@@ -27,8 +27,8 @@ public class StageResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String update(@PathParam("id") String stageID, String stageJson){
-    stageFacade.update(stageID, stageJson);
+  public String update(@PathParam("id") String stageId, String stageJson){
+    stageFacade.update(stageId, stageJson);
     return (new Response()).buildSuccess().toJson();
   }
 
@@ -36,8 +36,8 @@ public class StageResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String delete(@PathParam("id") String stageID){
-    stageFacade.delete(stageID);
+  public String delete(@PathParam("id") String stageId){
+    stageFacade.delete(stageId);
     return (new Response()).buildSuccess().toJson();
   }
 
@@ -45,8 +45,8 @@ public class StageResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String getByID(@PathParam("id") String stageID){
-    Stage stage = stageFacade.getByID(stageID);
+  public String getByID(@PathParam("id") String stageId){
+    Stage stage = stageFacade.getByID(stageId);
     return (new Response()).buildSuccess(stage).toJson(Stage.getFrontGsonBuilder());
   }
 

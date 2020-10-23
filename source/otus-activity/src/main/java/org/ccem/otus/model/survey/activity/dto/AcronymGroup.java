@@ -5,7 +5,7 @@ import org.ccem.otus.model.SerializableModelWithID;
 
 public class AcronymGroup extends SerializableModelWithID {
 
-  private ObjectId stageID;
+  private ObjectId stageId;
   private String acronym;
 
   public String getAcronym() {

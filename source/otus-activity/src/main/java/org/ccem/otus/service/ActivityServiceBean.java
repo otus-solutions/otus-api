@@ -96,7 +96,7 @@ public class ActivityServiceBean implements ActivityService {
       .collect(Collectors.toList());
 
     activitiesDtos.forEach(stageDto -> {
-      String stageName = stageMap.get(stageDto.getStageID());
+      String stageName = stageMap.get(stageDto.getStageId());
       stageDto.setStageName(stageName);
       stageDto.removeAcronymsWithoutActivities();
     });
