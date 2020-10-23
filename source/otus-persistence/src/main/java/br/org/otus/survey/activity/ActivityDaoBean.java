@@ -51,6 +51,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   public static final String FINALIZED = "FINALIZED";
   private static final String SET = "$set";
   private static final String PARTICIPANT_DATA_EMAIL = "participantData.email";
+  private static final String STAGE_FIELD_NAME = "stageID";
 
   public ActivityDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -295,6 +296,14 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     UpdateResult updateResult =collection.updateMany(new Document(RECRUITMENT_NUMBER_PATH, rn), new Document(SET , new Document(PARTICIPANT_DATA_EMAIL, email)));
 
     return updateResult.getModifiedCount() != 0;
+  }
+
+  @Override
+  public void removeStageFromActivities(ObjectId stageOID) {
+    collection.updateMany(
+      eq(STAGE_FIELD_NAME, stageOID),
+      new Document("$unset", new Document(STAGE_FIELD_NAME, ""))
+    );
   }
 
   private void removeOids(Document parsedActivity) {

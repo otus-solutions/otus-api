@@ -187,4 +187,9 @@ public class ActivityServiceBean implements ActivityService {
     return activityDao.updateParticipantEmail(rn, email);
   }
 
+  @Override
+  public void removeStageFromActivities(ObjectId stageOID) {
+    activityDao.removeStageFromActivities(stageOID);
+  }
+
 }

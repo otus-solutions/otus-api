@@ -48,6 +48,7 @@ public class ActivityServiceBeanTest {
   private static final String CATEGORY_NAME = "C0";
   private static final String CENTER = "RS";
   private static final String EMAIL= "email@email.com";
+  private static final ObjectId STAGE_OID = new ObjectId("5f77920624439758ce4a43ab");
   private ActivityAccessPermission permission;
   private List<SurveyActivity> surveyActivities;
 
@@ -106,7 +107,7 @@ public class ActivityServiceBeanTest {
   }
 
   @Test
-  public void listMethod_should_invoke_find_of_ActivityDao_find() throws Exception {
+  public void listMethod_should_invoke_find_of_ActivityDao_find() {
     surveyActivities = service.list(RECRUIMENT_NUMBER, USER_EMAIL);
     assertTrue(surveyActivities.get(0) instanceof SurveyActivity);
     verify(activityDao, times(1)).find(new ArrayList<>(), USER_EMAIL, RECRUIMENT_NUMBER);
@@ -120,14 +121,14 @@ public class ActivityServiceBeanTest {
   }
 
   @Test
-  public void method_get_should_call_ActivityDao_getUndiscarded() throws DataNotFoundException, InterruptedException, MemoryExcededException {
+  public void method_get_should_call_ActivityDao_getUndiscarded() throws DataNotFoundException, MemoryExcededException {
     service.get(SURVEY_ID, VERSION);
     verify(activityDao, times(1)).getUndiscarded(SURVEY_ID, VERSION);
   }
 
   @SuppressWarnings("unchecked")
   @Test(expected = DataNotFoundException.class)
-  public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException, InterruptedException, MemoryExcededException {
+  public void method_get_should_throw_DataNotFound_when_getUndiscarded_not_found() throws DataNotFoundException, MemoryExcededException {
     when(activityDao.getUndiscarded(SURVEY_ID, VERSION)).thenThrow(DataNotFoundException.class);
     service.get(SURVEY_ID, VERSION);
     verify(activityDao, times(1)).getUndiscarded(SURVEY_ID, VERSION);
@@ -173,8 +174,14 @@ public class ActivityServiceBeanTest {
   }
 
   @Test
-  public void updateParticipantEmail_method_should_call_updateEmailByParticipant_of_service() throws DataNotFoundException {
+  public void updateParticipantEmail_method_should_call_updateEmailByParticipant_of_dao() {
     service.updateParticipantEmail(RECRUIMENT_NUMBER, EMAIL);
     verify(activityDao, times(1)).updateParticipantEmail(RECRUIMENT_NUMBER, EMAIL);
+  }
+
+  @Test
+  public void removeStageFromActivities_method_should_call_removeStageFromActivities_of_dao() {
+    service.removeStageFromActivities(STAGE_OID);
+    verify(activityDao, times(1)).removeStageFromActivities(STAGE_OID);
   }
 }

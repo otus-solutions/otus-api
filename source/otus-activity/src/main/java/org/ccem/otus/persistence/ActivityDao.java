@@ -38,4 +38,6 @@ public interface ActivityDao {
   boolean updateCheckerActivity(CheckerUpdatedDTO checkerUpdatedDTO) throws DataNotFoundException;
 
   boolean updateParticipantEmail(long rn, String email);
+
+  void removeStageFromActivities(ObjectId stageOID);
 }
