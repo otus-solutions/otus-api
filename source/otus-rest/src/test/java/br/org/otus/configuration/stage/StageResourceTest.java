@@ -1,6 +1,7 @@
 package br.org.otus.configuration.stage;
 
 import br.org.otus.configuration.api.StageFacade;
+import br.org.otus.ResourceTestsParent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-public class StageResourceTest {
+public class StageResourceTest extends ResourceTestsParent {
 
   private static final String STAGE_ID = "5f77920624439758ce4a43ab";
   private static final String STAGE_JSON = "{}";
@@ -37,14 +38,14 @@ public class StageResourceTest {
   public void update_method_should_call_stageFacade_update_method(){
     String result = stageResource.update(STAGE_ID, STAGE_JSON);
     verify(stageFacade, Mockito.times(1)).update(STAGE_ID, STAGE_JSON);
-    assertEquals(encapsulateExpectedResponse("true"), result);
+    assertEquals(EMPTY_RESPONSE, result);
   }
 
   @Test
   public void delete_method_should_call_stageFacade_delete_method(){
     String result = stageResource.delete(STAGE_ID);
     verify(stageFacade, Mockito.times(1)).delete(STAGE_ID);
-    assertEquals(encapsulateExpectedResponse("true"), result);
+    assertEquals(EMPTY_RESPONSE, result);
   }
 
   @Test
@@ -59,11 +60,6 @@ public class StageResourceTest {
     String result = stageResource.getAll();
     verify(stageFacade, Mockito.times(1)).getAll();
     assertEquals(encapsulateExpectedResponse("[]"), result);
-  }
-
-
-  private String encapsulateExpectedResponse(String data) {
-    return "{\"data\":" + data + "}";
   }
 
 }

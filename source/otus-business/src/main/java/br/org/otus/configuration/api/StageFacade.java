@@ -31,10 +31,10 @@ public class StageFacade {
     }
   }
 
-  public void update(String stageID, String stageJson) {
+  public void update(String stageId, String stageJson) {
     try{
       Stage stage = Stage.deserialize(stageJson);
-      stage.setId(new ObjectId(stageID));
+      stage.setId(new ObjectId(stageId));
       stageService.update(stage);
     }
     catch (AlreadyExistException e){
@@ -45,9 +45,9 @@ public class StageFacade {
     }
   }
 
-  public void delete(String stageID) {
+  public void delete(String stageId) {
     try{
-      ObjectId stageOID = new ObjectId(stageID);
+      ObjectId stageOID = new ObjectId(stageId);
       stageService.delete(stageOID);
       activityService.removeStageFromActivities(stageOID);
     }
@@ -56,9 +56,9 @@ public class StageFacade {
     }
   }
 
-  public Stage getByID(String stageID) {
+  public Stage getByID(String stageId) {
     try{
-      return stageService.getByID(new ObjectId(stageID));
+      return stageService.getByID(new ObjectId(stageId));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));

@@ -7,6 +7,7 @@ import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.context.SessionIdentifier;
 import br.org.otus.security.dtos.AuthenticationData;
 import br.org.otus.user.api.pendency.UserActivityPendencyFacade;
+import br.org.otus.ResourceTestsParent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +28,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AuthorizationHeaderReader.class})
-public class UserActivityPendencyResourceTest {
+public class UserActivityPendencyResourceTest extends ResourceTestsParent {
 
   private static final String USER_EMAIL = "user@otus.com";
   private static final String TOKEN = "123456";
@@ -35,7 +36,6 @@ public class UserActivityPendencyResourceTest {
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
 
   private static final String NEW_PENDENCY_DATA = "";
-  private static final String EXPECTED_EMPTY_RESPONSE = "{\"data\":true}";
   private static final String EXPECTED_CREATE_RESPONSE = "12355b8e415e9c6746ca2da1";
   private static final String SEARCH_SETTINGS_JSON = "";
 
@@ -77,13 +77,13 @@ public class UserActivityPendencyResourceTest {
 
   @Test
   public void update_method_should_be_update_pendency_by_userActivityPendencyFacade() {
-    assertEquals(EXPECTED_EMPTY_RESPONSE, userActivityPendencyResource.update(PENDENCY_ID, userActivityPendencyJson));
+    assertEquals(EMPTY_RESPONSE, userActivityPendencyResource.update(PENDENCY_ID, userActivityPendencyJson));
     verify(userActivityPendencyFacade, Mockito.times(1)).update(PENDENCY_ID, userActivityPendencyJson);
   }
 
   @Test
   public void delete_method_should_be_delete_pendency_by_userActivityPendencyFacade() {
-    assertEquals(EXPECTED_EMPTY_RESPONSE, userActivityPendencyResource.delete(PENDENCY_ID));
+    assertEquals(EMPTY_RESPONSE, userActivityPendencyResource.delete(PENDENCY_ID));
     verify(userActivityPendencyFacade, Mockito.times(1)).delete(PENDENCY_ID);
   }
 
@@ -167,9 +167,6 @@ public class UserActivityPendencyResourceTest {
   /*
    * Private Methods
    */
-  private String encapsulateExpectedResponse(String data) {
-    return "{\"data\":" + data + "}";
-  }
 
   private String encapsulateExpectedResponseList() {
     return encapsulateExpectedResponse("[" + String.join(",", userActivityPendencyJson) + "]");

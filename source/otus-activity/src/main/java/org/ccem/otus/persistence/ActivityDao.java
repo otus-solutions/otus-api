@@ -10,12 +10,15 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 
 import java.util.List;
 
 public interface ActivityDao {
 
   List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn);
+
+  List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn) throws MemoryExcededException;
 
   ObjectId persist(SurveyActivity surveyActivity);
 
@@ -40,4 +43,6 @@ public interface ActivityDao {
   boolean updateParticipantEmail(long rn, String email);
 
   void removeStageFromActivities(ObjectId stageOID);
+
+  void discardByID(ObjectId activityOID) throws DataNotFoundException;
 }

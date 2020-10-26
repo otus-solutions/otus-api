@@ -1,9 +1,7 @@
 package org.ccem.otus.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -13,6 +11,8 @@ import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
@@ -65,7 +65,7 @@ public class ActivityServiceBean implements ActivityService {
   public List<SurveyActivity> list(long rn, String userEmail) {
 
     List<ActivityAccessPermission> activityAccessPermissions = activityAccessPermissionService.list();
-    List<SurveyActivity> activities = getPermittedSurveys(userEmail, rn);
+    List<SurveyActivity> activities = activityDao.find(new ArrayList<>(), userEmail, rn);
     List<SurveyActivity> filteredActivities = new ArrayList<SurveyActivity>();
 
     activities.forEach(activity -> {
@@ -89,9 +89,21 @@ public class ActivityServiceBean implements ActivityService {
     return filteredActivities;
   }
 
-  private List<SurveyActivity> getPermittedSurveys(String userEmail, Long rn) {
-    return activityDao.find(new ArrayList<>(), userEmail, rn);
+  @Override
+  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail, Map<ObjectId, String> stageMap) throws MemoryExcededException {
+    List<StageSurveyActivitiesDto> activitiesDtos = activityDao.findByStageGroup(new ArrayList<>(), userEmail, rn)
+      .stream().filter(stageDto -> stageDto.hasAcronyms())
+      .collect(Collectors.toList());
+
+    activitiesDtos.forEach(stageDto -> {
+      String stageName = stageMap.get(stageDto.getStageId());
+      stageDto.setStageName(stageName);
+      stageDto.removeAcronymsWithoutActivities();
+    });
+
+    return activitiesDtos;
   }
+
 
   private boolean isSameVersion(ActivityAccessPermission permission, SurveyActivity activity) {
     return (permission.getVersion().equals(activity.getSurveyForm().getVersion()));
@@ -102,23 +114,15 @@ public class ActivityServiceBean implements ActivityService {
   }
 
   private boolean isUserInStatusHistory(SurveyActivity activity, String userEmail) {
+    List<String> finalStatus = new ArrayList<>();
+    finalStatus.add(ActivityStatusOptions.FINALIZED.getName());
+    finalStatus.add(ActivityStatusOptions.SAVED.getName());
+
     isPresent = false;
     activity.getStatusHistory().forEach(status -> {
-      if (status.getUser().getEmail().equals(userEmail)) {
+      if (finalStatus.contains(status.getName()) && status.getUser().getEmail().equals(userEmail)) {
         isPresent = true;
       }
-    });
-    return isPresent;
-  }
-
-  private boolean isUsersPermissionInStatusHistory(ActivityAccessPermission permission, SurveyActivity activity) {
-    isPresent = false;
-    activity.getStatusHistory().forEach(status -> {
-      permission.getExclusiveDisjunction().forEach(otherUserEmail -> {
-        if (status.getUser().getEmail().equals(otherUserEmail)) {
-          isPresent = true;
-        }
-      });
     });
     return isPresent;
   }
@@ -190,6 +194,11 @@ public class ActivityServiceBean implements ActivityService {
   @Override
   public void removeStageFromActivities(ObjectId stageOID) {
     activityDao.removeStageFromActivities(stageOID);
+  }
+
+  @Override
+  public void discardByID(ObjectId activityID) throws DataNotFoundException {
+    activityDao.discardByID(activityID);
   }
 
 }

@@ -1,7 +1,5 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.gateway.response.exception.ReadRequestException;
-import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -17,6 +15,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
@@ -27,15 +26,11 @@ import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
+import service.StageService;
 
 import javax.inject.Inject;
-import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
@@ -52,11 +47,28 @@ public class ActivityFacade {
   private ActivityCategoryService activityCategoryService;
 
   @Inject
+  private StageService stageService;
+
+  @Inject
   private FollowUpFacade followUpFacade;
   private SurveyActivity activityUpdated;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
+  }
+
+  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
+    try{
+      Map<ObjectId, String> stageMap = new HashMap<>();
+      stageService.getAll().forEach(stage -> {
+        stageMap.put(stage.getId(), stage.getName());
+      });
+
+      return activityService.listByStageGroups(rn, userEmail, stageMap);
+    }
+    catch (MemoryExcededException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
   }
 
   public SurveyActivity getByID(String id) {
@@ -262,6 +274,14 @@ public class ActivityFacade {
       return activityService.create(surveyActivity);
 
     } catch (ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void discardByID(String activityID) {
+    try {
+      activityService.discardByID(new ObjectId(activityID));
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
