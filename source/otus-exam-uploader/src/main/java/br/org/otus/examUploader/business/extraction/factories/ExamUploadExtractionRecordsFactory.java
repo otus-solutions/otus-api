@@ -30,7 +30,7 @@ public class ExamUploadExtractionRecordsFactory {
   private List<String> createRecordsAnswers(ParticipantExamUploadResultExtraction record) {
     List<String> answers = new LinkedList<String>();
     answers.add(record.getRecruitmentNumber().toString());
-    answers.add(record.getAliquotCode());
+    answers.add(record.getCode());
     answers.add(record.getResultName());
     answers.add(record.getValue());
     answers.add(record.getReleaseDate());

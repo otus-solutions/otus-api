@@ -12,7 +12,7 @@ import br.org.otus.examUploader.Observation;
 
 public class ParticipantExamUploadRecordExtractionTest {
 
-  private static final String ALIQUOT_CODE = "1000330";
+  private static final String CODE = "1000330";
   private static final String RESULT_NAME = "1000330";
   private static final String VALUE = "1000330";
   private static final String RELEASE_DATE = "1000330";
@@ -44,7 +44,7 @@ public class ParticipantExamUploadRecordExtractionTest {
   private List<ParticipantExamUploadResultExtraction> createFakeParticipantExamUploadResultExtractioList() {
     List<ParticipantExamUploadResultExtraction> results = new LinkedList<>();
     ParticipantExamUploadResultExtraction result = new ParticipantExamUploadResultExtraction();
-    Whitebox.setInternalState(result, "aliquotCode", ALIQUOT_CODE);
+    Whitebox.setInternalState(result, "code", CODE);
     Whitebox.setInternalState(result, "resultName", RESULT_NAME);
     Whitebox.setInternalState(result, "value", VALUE);
     Whitebox.setInternalState(result, "releaseDate", RELEASE_DATE);
