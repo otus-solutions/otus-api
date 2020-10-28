@@ -8,6 +8,7 @@ public class ParticipantExamUploadResultExtraction {
 
   private Long recruitmentNumber;
   private String code;
+  private String examName;
   private String resultName;
   private String value;
   private String releaseDate;
@@ -37,4 +38,7 @@ public class ParticipantExamUploadResultExtraction {
     return observations;
   }
 
+  public String getExamName() {
+    return examName;
+  }
 }

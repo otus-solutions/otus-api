@@ -68,12 +68,15 @@ public class ExamUploadExtractionHeadersFactoryTest {
     Assert.assertEquals(ExamUploadExtractionHeaders.EXAM_NAME.getValue(), header);
 
     header = headers.get(3);
-    Assert.assertEquals(ExamUploadExtractionHeaders.RESULT.getValue(), header);
+    Assert.assertEquals(ExamUploadExtractionHeaders.RESULT_NAME.getValue(), header);
 
     header = headers.get(4);
-    Assert.assertEquals(ExamUploadExtractionHeaders.RELEASE_DATE.getValue(), header);
+    Assert.assertEquals(ExamUploadExtractionHeaders.RESULT.getValue(), header);
 
     header = headers.get(5);
+    Assert.assertEquals(ExamUploadExtractionHeaders.RELEASE_DATE.getValue(), header);
+
+    header = headers.get(6);
     Assert.assertEquals(ExamUploadExtractionHeaders.OBSERVATIONS.getValue(), header);
   }
 
