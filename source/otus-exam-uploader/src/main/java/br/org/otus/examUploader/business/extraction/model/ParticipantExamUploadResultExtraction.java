@@ -7,7 +7,8 @@ import br.org.otus.examUploader.Observation;
 public class ParticipantExamUploadResultExtraction {
 
   private Long recruitmentNumber;
-  private String aliquotCode;
+  private String code;
+  private String examName;
   private String resultName;
   private String value;
   private String releaseDate;
@@ -29,12 +30,15 @@ public class ParticipantExamUploadResultExtraction {
     return releaseDate;
   }
 
-  public String getAliquotCode() {
-    return aliquotCode;
+  public String getCode() {
+    return code;
   }
 
   public List<Observation> getObservations() {
     return observations;
   }
 
+  public String getExamName() {
+    return examName;
+  }
 }

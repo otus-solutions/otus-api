@@ -22,6 +22,7 @@ public class ExamUploadExtractionHeadersFactory {
     this.headers.add(ExamUploadExtractionHeaders.RECRUITMENT_NUMBER.getValue());
     this.headers.add(ExamUploadExtractionHeaders.ALIQUOT_CODE.getValue());
     this.headers.add(ExamUploadExtractionHeaders.EXAM_NAME.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.RESULT_NAME.getValue());
     this.headers.add(ExamUploadExtractionHeaders.RESULT.getValue());
     this.headers.add(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
     this.headers.add(ExamUploadExtractionHeaders.OBSERVATIONS.getValue());

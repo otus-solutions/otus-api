@@ -5,6 +5,7 @@ public enum ExamUploadExtractionHeaders {
   RECRUITMENT_NUMBER("recruitment_number"),
   ALIQUOT_CODE("aliquot_code"),
   EXAM_NAME("exam_name"),
+  RESULT_NAME("result_name"),
   RESULT("result"),
   RELEASE_DATE("release_date"),
   OBSERVATIONS("observations");
