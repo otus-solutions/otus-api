@@ -23,7 +23,7 @@ public class ParticipantExamUploadResultExtractionTest {
   public void setup() {
     this.participantExamUploadResultExtraction = new ParticipantExamUploadResultExtraction();
 
-    Whitebox.setInternalState(participantExamUploadResultExtraction, "aliquotCode", ALIQUOT_CODE);
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "code", ALIQUOT_CODE);
     Whitebox.setInternalState(participantExamUploadResultExtraction, "resultName", RESULT_NAME);
     Whitebox.setInternalState(participantExamUploadResultExtraction, "value", VALUE);
     Whitebox.setInternalState(participantExamUploadResultExtraction, "releaseDate", RELEASE_DATE);
@@ -32,7 +32,7 @@ public class ParticipantExamUploadResultExtractionTest {
 
   @Test
   public void getters_methods_should_return_values_expected() {
-    Assert.assertEquals(ALIQUOT_CODE, participantExamUploadResultExtraction.getAliquotCode());
+    Assert.assertEquals(ALIQUOT_CODE, participantExamUploadResultExtraction.getCode());
     Assert.assertEquals(RESULT_NAME, participantExamUploadResultExtraction.getResultName());
     Assert.assertEquals(VALUE, participantExamUploadResultExtraction.getValue());
     Assert.assertEquals(RELEASE_DATE, participantExamUploadResultExtraction.getReleaseDate());

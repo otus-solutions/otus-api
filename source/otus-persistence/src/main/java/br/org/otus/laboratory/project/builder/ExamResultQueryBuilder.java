@@ -46,6 +46,7 @@ public class ExamResultQueryBuilder {
       "        $push:{\n" +
       "          \"recruitmentNumber\":\"$recruitmentNumber\",\n" +
       "          \"code\":\"$code\",\n" +
+      "          \"examName\":\"$examName\",\n" +
       "          \"resultName\":\"$resultName\",\n" +
       "          \"value\":\"$value\",\n" +
       "          \"releaseDate\":\"$releaseDate\",\n" +
