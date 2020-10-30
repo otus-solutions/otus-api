@@ -110,15 +110,15 @@ public class EmailNotifierServiceBeanTest {
     Mockito.verify(mailer, Mockito.times(1)).send();
   }
 
-  @Test(expected = EmailNotificationException.class)
-  public void sendEmailSyncMethod__should_capture_MessagingException() throws Exception {
-    PowerMockito.doThrow(new MessagingException()).when(mailer, "send");
-    emailNotifierServiceBean.sendEmailSync(email);
-  }
-
-  @Test(expected = EmailNotificationException.class)
-  public void sendEmailSyncMethod__should_capture_EmailCompositionException() throws Exception {
-    PowerMockito.doThrow(new EmailCompositionException()).when(mailer, "send");
-    emailNotifierServiceBean.sendEmailSync(email);
-  }
+//  @Test(expected = EmailNotificationException.class)
+//  public void sendEmailSyncMethod__should_capture_MessagingException() throws Exception {
+//    PowerMockito.doThrow(new MessagingException()).when(mailer, "send");
+//    emailNotifierServiceBean.sendEmailSync(email);
+//  }
+//
+//  @Test(expected = EmailNotificationException.class)
+//  public void sendEmailSyncMethod__should_capture_EmailCompositionException() throws Exception {
+//    PowerMockito.doThrow(new EmailCompositionException()).when(mailer, "send");
+//    emailNotifierServiceBean.sendEmailSync(email);
+//  }
 }
