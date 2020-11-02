@@ -58,9 +58,8 @@ public class EmailNotifierServiceBean implements EmailNotifierService {
 
     try {
       mailer.send();
-
     } catch (MessagingException | EmailCompositionException e) {
-      throw new EmailNotificationException(e);
+      e.printStackTrace();
     }
   }
 
