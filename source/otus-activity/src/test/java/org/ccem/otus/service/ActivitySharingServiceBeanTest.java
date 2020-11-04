@@ -38,7 +38,6 @@ public class ActivitySharingServiceBeanTest {
   public void setUp(){
     activitySharing = new ActivitySharing(ACTIVITY_OID, null, null);
     activitySharing.setId(ACTIVITY_SHARING_OID);
-
   }
 
   @Test
