@@ -37,6 +37,8 @@ public class ActivitySharingServiceBeanTest {
   @Before
   public void setUp(){
     activitySharing = new ActivitySharing(ACTIVITY_OID, null, null);
+    activitySharing.setId(ACTIVITY_SHARING_OID);
+
   }
 
   @Test
@@ -51,13 +53,11 @@ public class ActivitySharingServiceBeanTest {
     activitySharingServiceBean.getSharedURL(activitySharing);
   }
 
-
   @Test
   public void createSharedURL_method_should_return_url() {
     when(activitySharingDao.createSharedURL(activitySharing)).thenReturn(activitySharing);
     assertNotNull(activitySharingServiceBean.createSharedURL(activitySharing));
   }
-
 
   @Test
   public void renovateSharedURL_method_should_return_url() throws DataNotFoundException {
@@ -78,7 +78,6 @@ public class ActivitySharingServiceBeanTest {
     activitySharingServiceBean.renovateSharedURL(ACTIVITY_SHARING_ID);
   }
 
-
   @Test
   public void deleteSharedURL_method_should_return_url() throws DataNotFoundException {
     activitySharingServiceBean.deleteSharedURL(ACTIVITY_ID);
@@ -91,4 +90,17 @@ public class ActivitySharingServiceBeanTest {
     activitySharingServiceBean.deleteSharedURL(ACTIVITY_ID);
   }
 
+  @Test
+  public void getActivitySharingIdByActivityId_method_should_return_id_sharedLink() throws Exception {
+    when(activitySharingDao.getSharedURL(ACTIVITY_OID)).thenReturn(activitySharing);
+    ObjectId expectID = activitySharingServiceBean.getActivitySharingIdByActivityId(ACTIVITY_OID);
+    assertEquals(ACTIVITY_SHARING_ID, String.valueOf(expectID));
+  }
+
+  @Test
+  public void getActivitySharingIdByActivityId_method_should_treat_DataNotFoundException() throws Exception {
+    doThrow(new DataNotFoundException()).when(activitySharingDao, "getSharedURL", ACTIVITY_OID);
+    ObjectId expectID = activitySharingServiceBean.getActivitySharingIdByActivityId(ACTIVITY_OID);
+    assertEquals(null, expectID);
+  }
 }
