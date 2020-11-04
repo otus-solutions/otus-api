@@ -15,6 +15,7 @@ import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.service.ActivityService;
+import org.ccem.otus.service.sharing.ActivitySharingService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +53,8 @@ public class ActivityFacadeTest {
   private static final String CENTER = "RS";
   private static final boolean NOTIFY = false;
   private static final Map<ObjectId, String> STAGE_MAP = new HashMap<>();
+  private static final String ACTIVITY_SHARING_ID = "5a33cb4a28f10d1043710f7e";
+  private static final ObjectId ACTIVITY_SHARING_OID = new ObjectId(ACTIVITY_SHARING_ID);
 
   @InjectMocks
   ActivityFacade activityFacade;
@@ -65,7 +68,8 @@ public class ActivityFacadeTest {
   private ManagementUserService managementUserService;
   @Mock
   private StageService stageService;
-
+  @Mock
+  private ActivitySharingService activitySharingService;
   private SurveyActivity surveyActivityFull;
   private SurveyActivity autofillSurveyActivity;
 
@@ -139,7 +143,6 @@ public class ActivityFacadeTest {
     activityFacade.get(ACRONYM, VERSION);
   }
 
-
   @Test
   public void getExtraction_method_should_invoke_getExtration_from_ActivityService() throws Exception {
     List<SurveyActivity> activities = new ArrayList<>();
@@ -159,7 +162,6 @@ public class ActivityFacadeTest {
     PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "getExtraction", ACRONYM, VERSION);
     activityFacade.getExtraction(ACRONYM, VERSION);
   }
-
 
   @Test
   public void create_method_should_verify_create_with_surveyActivity() {
@@ -196,6 +198,24 @@ public class ActivityFacadeTest {
   public void update_method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
     Mockito.when(activityService.update(surveyActivity)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
     activityFacade.updateActivity(surveyActivity, TOKEN);
+  }
+
+  @Test
+  public void updateActivity_method_should_update_evoke_removeSharedURL_when_mode_is_ACTIVITY_SHARING() throws Exception {
+    br.org.otus.model.User user = new User();
+    user.setEmail(USER_EMAIL);
+    Mockito.when(managementUserService.fetchByEmail(USER_EMAIL)).thenReturn(user);
+
+    SignedJWT signedJWT = spy(SignedJWT.parse(TOKEN));
+    mockStatic(SignedJWT.class);
+    when(SignedJWT.class, "parse", TOKEN).thenReturn(signedJWT);
+    when(activityService, "update", autofillSurveyActivity).thenReturn(autofillSurveyActivity);
+    autofillSurveyActivity.setIsDiscarded(true);
+    when(activitySharingService.getActivitySharingIdByActivityId(Mockito.anyObject())).thenReturn(autofillSurveyActivity.getActivityID());
+
+    activityFacade.updateActivity(autofillSurveyActivity, TOKEN_BEARER);
+    verify(followUpFacade, times(1)).cancelParticipantEventByActivityId(Mockito.any());
+    verify(activitySharingService, times(1)).deleteSharedURL(Mockito.any());
   }
 
   @Test
@@ -257,7 +277,6 @@ public class ActivityFacadeTest {
     activityFacade.save(USER_EMAIL, offlineActivityCollection);
   }
 
-
   @Test
   public void fetchOfflineActivityCollections_method_should_verify_create_for_follow_up_with_surveyActivity() throws DataNotFoundException {
     activityFacade.fetchOfflineActivityCollections(USER_EMAIL);
@@ -269,7 +288,6 @@ public class ActivityFacadeTest {
     PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "fetchOfflineActivityCollections", USER_EMAIL)  ;
     activityFacade.fetchOfflineActivityCollections(USER_EMAIL);
   }
-
 
   @Test
   public void createFollowUp_method_should_verify_create_for_follow_up_with_surveyActivity() {
@@ -283,7 +301,6 @@ public class ActivityFacadeTest {
     when(surveyActivity.hasRequiredExternalID()).thenReturn(true);
     activityFacade.createFollowUp(surveyActivity);
   }
-
 
   @Test
   public void discardByID_method_should_invoke_ActivityService_discardByID() throws DataNotFoundException {
