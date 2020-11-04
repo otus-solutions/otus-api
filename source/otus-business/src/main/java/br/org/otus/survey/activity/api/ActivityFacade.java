@@ -175,7 +175,6 @@ public class ActivityFacade {
         if(activityUpdated.isDiscarded()){
           followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
           removeShareUrl(activityUpdated.getActivityID());
-
         }
         else{
           String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
@@ -191,8 +190,8 @@ public class ActivityFacade {
   }
 
   private void removeShareUrl(ObjectId activityID) throws DataNotFoundException {
-    String activitySharingId = String.valueOf(activitySharingService.getActivitySharingIdByActivityId(activityID));
-    activitySharingService.deleteSharedURL(activitySharingId);
+    ObjectId activitySharingId = activitySharingService.getActivitySharingIdByActivityId(activityID);
+    if(Objects.nonNull(activitySharingId)) activitySharingService.deleteSharedURL(String.valueOf(activitySharingId));
   }
 
   public boolean updateCheckerActivity(String checkerUpdated) {

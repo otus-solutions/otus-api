@@ -23,8 +23,12 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
 
   @Override
   public ObjectId getActivitySharingIdByActivityId(ObjectId activityId) throws DataNotFoundException {
-    ActivitySharing activitySharingFounded = activitySharingDao.getSharedURL(activityId);
-    return activitySharingFounded.getId();
+    try {
+      ActivitySharing activitySharingFounded = activitySharingDao.getSharedURL(activityId);
+      return activitySharingFounded.getId();
+    } catch (DataNotFoundException e) {
+      return null;
+    }
   }
 
   @Override
