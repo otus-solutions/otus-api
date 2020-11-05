@@ -26,6 +26,7 @@ import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
+import org.ccem.otus.service.sharing.ActivitySharingService;
 import service.StageService;
 
 import javax.inject.Inject;
@@ -51,6 +52,11 @@ public class ActivityFacade {
 
   @Inject
   private FollowUpFacade followUpFacade;
+
+  @Inject
+  private ActivitySharingService activitySharingService;
+
+
   private SurveyActivity activityUpdated;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
@@ -168,6 +174,7 @@ public class ActivityFacade {
       if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
         if(activityUpdated.isDiscarded()){
           followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+          removeShareUrl(activityUpdated.getActivityID());
         }
         else{
           String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
@@ -180,6 +187,11 @@ public class ActivityFacade {
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
+  }
+
+  private void removeShareUrl(ObjectId activityID) throws DataNotFoundException {
+    ObjectId activitySharingId = activitySharingService.getActivitySharingIdByActivityId(activityID);
+    if(Objects.nonNull(activitySharingId)) activitySharingService.deleteSharedURL(String.valueOf(activitySharingId));
   }
 
   public boolean updateCheckerActivity(String checkerUpdated) {
