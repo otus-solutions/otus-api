@@ -118,21 +118,6 @@ public class ManagementUserServiceBeanTest {
   }
 
   @Test
-  public void method_enable_should_send_email_to_user() throws Exception {
-    //todo review
-//    enableUserNotificationEmail = new EnableUserNotificationEmail();
-//    enableUserNotificationEmail.defineRecipient(user);
-//    enableUserNotificationEmail.setFrom(sender);
-    Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
-    Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
-    Mockito.when(emailNotifierService.getSender()).thenReturn(sender);
-    Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-    managementUserServiceBean.enable(managementUserDto);
-    //todo review
-//    Mockito.verify(emailNotifierService).sendEmail(enableUserNotificationEmail);
-  }
-
-  @Test
   public void method_disable_should_fetch_user_by_email()
     throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     Mockito.when(user.isAdmin()).thenReturn(Boolean.FALSE);
@@ -163,20 +148,6 @@ public class ManagementUserServiceBeanTest {
     Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
     managementUserServiceBean.disable(managementUserDto);
     Mockito.verify(userDao).update(user);
-  }
-
-  @Test
-  public void method_disable_should_send_email_to_user() throws Exception {
-//    disableUserNotificationEmail = new DisableUserNotificationEmail();
-//    disableUserNotificationEmail.defineRecipient(user);
-//    disableUserNotificationEmail.setFrom(sender);
-    Mockito.when(userDao.fetchByEmail(EMAIL)).thenReturn(user);
-    Mockito.when(managementUserDto.getEmail()).thenReturn(EMAIL);
-    Mockito.when(emailNotifierService.getSender()).thenReturn(sender);
-    Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-    managementUserServiceBean.disable(managementUserDto);
-//todo review
-    //    Mockito.verify(emailNotifierService).sendEmail(disableUserNotificationEmail);
   }
 
   @Test
@@ -317,20 +288,6 @@ public class ManagementUserServiceBeanTest {
     verify(userDao, times(1)).update(user);
     verify(user, times(0)).setFieldCenter(fieldCenter);
     verify(user, times(1)).setFieldCenter(null);
-  }
-
-  @Test
-  public void requestPasswordReset_Method_should_invoke_internal_methods() throws Exception {
-    when(requestData.getToken()).thenReturn(TOKEN);
-    when(requestData.getRedirectUrl()).thenReturn(PROJECT_REST_URL);
-    when(requestData.getEmail()).thenReturn(EMAIL);
-    when(emailNotifierService.getSender()).thenReturn(sender);
-//    passwordResetEmail = new PasswordResetEmail(TOKEN, PROJECT_REST_URL);
-//    passwordResetEmail.defineRecipient(EMAIL);
-//    passwordResetEmail.setFrom(sender);
-    managementUserServiceBean.requestPasswordReset(requestData);
-//todo review
-    //    verify(emailNotifierService, times(1)).sendEmail(passwordResetEmail);
   }
 
   @Test

@@ -4,7 +4,6 @@ import br.org.otus.model.User;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 

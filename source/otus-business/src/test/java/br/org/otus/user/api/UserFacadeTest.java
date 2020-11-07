@@ -155,14 +155,14 @@ public class UserFacadeTest {
 
   @Test
   public void disableMethod_should_check_evocation_of_disableMethod_by_managementUserService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     userFacade.disable(managementUserDto);
     verify(managementUserService).disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).disable(managementUserDto);
     userFacade.disable(managementUserDto);
   }
@@ -211,21 +211,21 @@ public class UserFacadeTest {
 
   @Test
   public void disableExtractionMethod_should_check_evocation_of_disableMethod_by_managementUserService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     userFacade.disableExtraction(managementUserDto);
     verify(managementUserService).disableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableExtractionMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).disableExtraction(managementUserDto);
     userFacade.disableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableExtractionMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).disableExtraction(managementUserDto);
     userFacade.disableExtraction(managementUserDto);
   }
@@ -239,21 +239,21 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void enableExtractionMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).enableExtraction(managementUserDto);
     userFacade.enableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableExtractionMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).enableExtraction(managementUserDto);
     userFacade.enableExtraction(managementUserDto);
   }
 
   @Test
   public void method_updateExtractionIps_should_check_evocation_of_updateExtractionIps_by_managementUserService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     userFacade.updateExtractionIps(managementUserDto);
     verify(managementUserService).updateExtractionIps(managementUserDto);
   }
@@ -274,14 +274,14 @@ public class UserFacadeTest {
 
   @Test
   public void getExtractionTokenMethod_should_check_evocation_of_getExtractionToken_by_extractionSecurityService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws DataNotFoundException {
     userFacade.getExtractionToken(EMAIL);
     verify(extractionSecurityService).getExtractionToken(EMAIL);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getExtractionTokenMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-    throws ValidationException, DataNotFoundException {
+    throws DataNotFoundException {
     doThrow(new DataNotFoundException()).when(extractionSecurityService).getExtractionToken(EMAIL);
     userFacade.getExtractionToken(EMAIL);
   }

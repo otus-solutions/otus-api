@@ -29,13 +29,13 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({EmailNotifierServiceBean.class, GMailer.class, CommunicationDataBuilder.class, Equalizer.class})
+@PrepareForTest({SystemEmailNotifierServiceBean.class, GMailer.class, CommunicationDataBuilder.class, Equalizer.class})
 public class EmailNotifierServiceTest {
   private static String PASSWORD = "PASSWORD";
   private static String EMAIL = "EMAIL";
 
   @InjectMocks
-  private EmailNotifierServiceBean service;
+  private SystemEmailNotifierServiceBean service;
 
   @Mock
   private SystemConfigDaoBean systemConfigDao;

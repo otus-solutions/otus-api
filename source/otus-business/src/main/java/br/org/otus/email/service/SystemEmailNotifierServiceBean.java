@@ -22,7 +22,7 @@ import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
 @Stateless
-public class EmailNotifierServiceBean implements EmailNotifierService {
+public class SystemEmailNotifierServiceBean implements EmailNotifierService {
 
   @Inject
   private SystemConfigDaoBean systemConfigDao;

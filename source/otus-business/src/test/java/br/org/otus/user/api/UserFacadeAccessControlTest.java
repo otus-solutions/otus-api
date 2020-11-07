@@ -1,6 +1,6 @@
 package br.org.otus.user.api;
 
-import br.org.otus.email.service.EmailNotifierServiceBean;
+import br.org.otus.email.service.SystemEmailNotifierServiceBean;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
@@ -28,7 +27,7 @@ public class UserFacadeAccessControlTest {
   private UserFacade userFacade;
 
   @Mock
-  private EmailNotifierServiceBean emailNotifierServiceBean;
+  private SystemEmailNotifierServiceBean systemEmailNotifierServiceBean;
 
   @Mock
   private ManagementUserServiceBean managementUserServiceBean;
