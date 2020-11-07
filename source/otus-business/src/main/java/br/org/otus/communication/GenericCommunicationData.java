@@ -17,6 +17,8 @@ public class GenericCommunicationData {
   }
 
   public String toJson() {
+    CommunicationDataBuilder.serialize(this);
+
     return serialize(this);
   }
 

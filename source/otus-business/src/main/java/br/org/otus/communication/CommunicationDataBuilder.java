@@ -8,20 +8,19 @@ import br.org.otus.model.User;
 import org.ccem.otus.participant.model.Participant;
 
 
-
 public class CommunicationDataBuilder {
   public CommunicationDataBuilder() {
 
   }
 
-  public static GenericCommunicationData buildGreetingsCommunicationData(User user) {
-    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.GREETINGS.getValue());
+  public static GenericCommunicationData newUserGreeting(User user) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.NEW_USER_GREETINGS.getValue());
     genericCommunicationData.setEmail(user.getEmail());
 
     return genericCommunicationData;
   }
 
-  public static GenericCommunicationData buildActivitySendingCommunicationData(SurveyActivity surveyActivity, Participant participant) {
+  public static GenericCommunicationData activitySending(SurveyActivity surveyActivity, Participant participant) {
     GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.ACTIVITY_SENDING.getValue());
 
     genericCommunicationData.setEmail(participant.getEmail());
@@ -31,8 +30,16 @@ public class CommunicationDataBuilder {
     return genericCommunicationData;
   }
 
-  public static GenericCommunicationData deserialize(String json) {
-    return GenericCommunicationData.getGsonBuilder().create().fromJson(json, GenericCommunicationData.class);
+  public static GenericCommunicationData newUserNotification(User systemAdmin, User user) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.NEW_USER_NOTIFICATION.getValue());
+
+    genericCommunicationData.setEmail(systemAdmin.getEmail());
+
+    genericCommunicationData.pushVariable("name", user.getName());
+    genericCommunicationData.pushVariable("surname", user.getSurname());
+    genericCommunicationData.pushVariable("mail", user.getEmail());
+    genericCommunicationData.pushVariable("phone", user.getPhone());
+    return genericCommunicationData;
   }
 
   public static String serialize(GenericCommunicationData followUpCommunicationData) {
