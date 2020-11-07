@@ -1,11 +1,11 @@
 package br.org.otus.communication;
 
+import br.org.otus.model.User;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.utils.ObjectIdToStringAdapter;
-import br.org.otus.model.User;
 import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 
 public class CommunicationDataBuilder {
@@ -13,27 +13,27 @@ public class CommunicationDataBuilder {
 
   }
 
-  public static GenericCommunicationData newUserGreeting(User user) {
-    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.NEW_USER_GREETINGS.getValue());
-    genericCommunicationData.setEmail(user.getEmail());
-
-    return genericCommunicationData;
-  }
-
-  public static GenericCommunicationData activitySending(SurveyActivity surveyActivity, Participant participant) {
+  public static GenericCommunicationData activitySending(String recipient, SurveyActivity surveyActivity) {
     GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.ACTIVITY_SENDING.getValue());
 
-    genericCommunicationData.setEmail(participant.getEmail());
+    genericCommunicationData.setEmail(recipient);
     genericCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
     genericCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
 
     return genericCommunicationData;
   }
 
-  public static GenericCommunicationData newUserNotification(User systemAdmin, User user) {
+  public static GenericCommunicationData newUserGreeting(String recipient) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.NEW_USER_GREETINGS.getValue());
+    genericCommunicationData.setEmail(recipient);
+
+    return genericCommunicationData;
+  }
+
+  public static GenericCommunicationData newUserNotification(String recipient, User user) {
     GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.NEW_USER_NOTIFICATION.getValue());
 
-    genericCommunicationData.setEmail(systemAdmin.getEmail());
+    genericCommunicationData.setEmail(recipient);
 
     genericCommunicationData.pushVariable("name", user.getName());
     genericCommunicationData.pushVariable("surname", user.getSurname());
@@ -41,6 +41,34 @@ public class CommunicationDataBuilder {
     genericCommunicationData.pushVariable("phone", user.getPhone());
     return genericCommunicationData;
   }
+
+  public static GenericCommunicationData userPasswordReset(String recipient, String token, String host) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.RESET_PASSWD_USER.getValue());
+
+    genericCommunicationData.setEmail(recipient);
+    genericCommunicationData.pushVariable("host", host);
+    genericCommunicationData.pushVariable("token", token);
+
+    return genericCommunicationData;
+  }
+
+  public static GenericCommunicationData enableUser(String recipient) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.ENABLE_USER.getValue());
+
+    genericCommunicationData.setEmail(recipient);
+
+    return genericCommunicationData;
+  }
+
+  public static GenericCommunicationData disableUser(String recipient) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.DISABLE_USER.getValue());
+
+    genericCommunicationData.setEmail(recipient);
+
+    return genericCommunicationData;
+  }
+
+
 
   public static String serialize(GenericCommunicationData followUpCommunicationData) {
     return GenericCommunicationData.getGsonBuilder().create().toJson(followUpCommunicationData);

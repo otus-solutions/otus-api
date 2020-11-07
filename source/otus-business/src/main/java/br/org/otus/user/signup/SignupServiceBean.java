@@ -81,7 +81,7 @@ public class SignupServiceBean implements SignupService {
   }
 
   private void sendEmailToUser(User user) {
-    GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.newUserGreeting(user);
+    GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.newUserGreeting(user.getEmail());
 
     try {
       CommunicationGatewayService emailSender = new CommunicationGatewayService();
@@ -93,7 +93,7 @@ public class SignupServiceBean implements SignupService {
 
   private void sendEmailToAdmin(Sender sender, User userToRegister) throws EmailNotificationException {
     User systemAdministrator = userDao.findAdmin();
-    GenericCommunicationData notificationData = CommunicationDataBuilder.newUserNotification(systemAdministrator, userToRegister);
+    GenericCommunicationData notificationData = CommunicationDataBuilder.newUserNotification(systemAdministrator.getEmail(), userToRegister);
 
     try {
       CommunicationGatewayService emailSender = new CommunicationGatewayService();

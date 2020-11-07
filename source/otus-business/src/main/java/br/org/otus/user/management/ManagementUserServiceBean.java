@@ -1,15 +1,19 @@
 package br.org.otus.user.management;
 
+import br.org.otus.communication.CommunicationDataBuilder;
+import br.org.otus.communication.GenericCommunicationData;
 import br.org.otus.email.service.EmailNotifierService;
 import br.org.otus.email.user.management.DisableUserNotificationEmail;
 import br.org.otus.email.user.management.EnableUserNotificationEmail;
-import br.org.otus.email.user.management.PasswordResetEmail;
+import br.org.otus.gateway.gates.CommunicationGatewayService;
+import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.persistence.UserDao;
 import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
+import br.org.otus.user.signup.SignupService;
 import br.org.tutty.Equalizer;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -21,8 +25,10 @@ import org.ccem.otus.persistence.FieldCenterDao;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Stateless
 public class ManagementUserServiceBean implements ManagementUserService {
@@ -38,6 +44,9 @@ public class ManagementUserServiceBean implements ManagementUserService {
   @Inject
   private SecurityFacade securityFacade;
 
+  private final static Logger LOGGER = Logger.getLogger(SignupService.class.getName());
+
+
   @Override
   public User fetchByEmail(String email) throws DataNotFoundException {
     return userDao.fetchByEmail(email);
@@ -45,17 +54,22 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
   @Override
   public void enable(ManagementUserDto managementUserDto)
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
       user.enable();
 
       userDao.update(user);
 
-      EnableUserNotificationEmail enableUserNotificationEmail = new EnableUserNotificationEmail();
-      enableUserNotificationEmail.defineRecipient(user);
-      enableUserNotificationEmail.setFrom(emailNotifierService.getSender());
-      emailNotifierService.sendEmail(enableUserNotificationEmail);
+      GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.enableUser(user.getEmail());
+
+      try {
+        CommunicationGatewayService emailSender = new CommunicationGatewayService();
+        emailSender.sendMail(genericCommunicationData.toJson());
+
+      } catch (ReadRequestException | MalformedURLException ex) {
+        LOGGER.severe("enable: " + user.getEmail());
+      }
     } else {
       throw new ValidationException();
     }
@@ -63,7 +77,7 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
   @Override
   public void disable(ManagementUserDto managementUserDto)
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     if (managementUserDto.isValid()) {
       User user = fetchByEmail(managementUserDto.getEmail());
 
@@ -72,10 +86,15 @@ public class ManagementUserServiceBean implements ManagementUserService {
 
         userDao.update(user);
 
-        DisableUserNotificationEmail disableUserNotificationEmail = new DisableUserNotificationEmail();
-        disableUserNotificationEmail.defineRecipient(user);
-        disableUserNotificationEmail.setFrom(emailNotifierService.getSender());
-        emailNotifierService.sendEmail(disableUserNotificationEmail);
+        GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.disableUser(user.getEmail());
+
+        try {
+          CommunicationGatewayService emailSender = new CommunicationGatewayService();
+          emailSender.sendMail(genericCommunicationData.toJson());
+
+        } catch (ReadRequestException | MalformedURLException ex) {
+          LOGGER.severe("disable: " + user.getEmail());
+        }
       }
     } else {
       throw new ValidationException();
@@ -156,13 +175,18 @@ public class ManagementUserServiceBean implements ManagementUserService {
   }
 
   @Override
-  public void requestPasswordReset(PasswordResetRequestDto requestData)
-    throws EncryptedException, DataNotFoundException, EmailNotificationException {
-    PasswordResetEmail passwordResetEmail = new PasswordResetEmail(requestData.getToken(),
+  public void requestPasswordReset(PasswordResetRequestDto requestData) {
+
+    GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.userPasswordReset(requestData.getEmail(), requestData.getToken(),
       requestData.getRedirectUrl());
-    passwordResetEmail.defineRecipient(requestData.getEmail());
-    passwordResetEmail.setFrom(emailNotifierService.getSender());
-    emailNotifierService.sendEmail(passwordResetEmail);
+
+    try {
+      CommunicationGatewayService emailSender = new CommunicationGatewayService();
+      emailSender.sendMail(genericCommunicationData.toJson());
+
+    } catch (ReadRequestException | MalformedURLException ex) {
+      LOGGER.severe("requestPasswordReset: " + requestData.getEmail());
+    }
   }
 
   public void updateUserPassword(PasswordResetDto passwordResetDto) throws EncryptedException {
