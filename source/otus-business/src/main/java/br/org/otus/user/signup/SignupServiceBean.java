@@ -27,9 +27,13 @@ import br.org.owail.sender.email.Sender;
 import br.org.tutty.Equalizer;
 
 import java.net.MalformedURLException;
+import java.util.logging.Logger;
 
 @Stateless
 public class SignupServiceBean implements SignupService {
+
+  private final static Logger LOGGER = Logger.getLogger(SignupService.class.getName());
+
 
   @Inject
   private UserDao userDao;
@@ -82,10 +86,8 @@ public class SignupServiceBean implements SignupService {
     try {
       CommunicationGatewayService emailSender = new CommunicationGatewayService();
       emailSender.sendMail(genericCommunicationData.toJson());
-//      log("success");
-
     } catch (ReadRequestException | MalformedURLException ex) {
-      ex.printStackTrace();
+      LOGGER.severe("sendEmailToUser: " + user.getEmail());
     }
   }
 
@@ -96,10 +98,9 @@ public class SignupServiceBean implements SignupService {
     try {
       CommunicationGatewayService emailSender = new CommunicationGatewayService();
       emailSender.sendMail(notificationData.toJson());
-//      log("success");
 
     } catch (ReadRequestException | MalformedURLException ex) {
-      ex.printStackTrace();
+      LOGGER.severe("sendEmailToAdmin: " + systemAdministrator.getEmail());
     }
   }
 }
