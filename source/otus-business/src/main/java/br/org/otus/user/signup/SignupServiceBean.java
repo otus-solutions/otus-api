@@ -1,31 +1,26 @@
 package br.org.otus.user.signup;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
 import br.org.otus.communication.CommunicationDataBuilder;
 import br.org.otus.communication.GenericCommunicationData;
+import br.org.otus.configuration.builder.SystemConfigBuilder;
+import br.org.otus.configuration.dto.OtusInitializationConfigDto;
+import br.org.otus.email.service.EmailNotifierService;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
+import br.org.otus.user.dto.SignupDataDto;
+import br.org.otus.user.management.ManagementUserService;
+import br.org.owail.sender.email.Sender;
+import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.configuration.builder.SystemConfigBuilder;
-import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.OtusEmailFactory;
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.signup.NewUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.persistence.UserDao;
-import br.org.otus.user.dto.SignupDataDto;
-import br.org.otus.user.management.ManagementUserService;
-import br.org.owail.sender.email.Recipient;
-import br.org.owail.sender.email.Sender;
-import br.org.tutty.Equalizer;
-
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 

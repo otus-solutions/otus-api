@@ -1,16 +1,16 @@
 package br.org.otus.user.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.doThrow;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import br.org.otus.configuration.dto.OtusInitializationConfigDto;
+import br.org.otus.extraction.ExtractionSecurityService;
+import br.org.otus.model.User;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.security.api.SecurityFacade;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.otus.user.dto.PasswordResetDto;
+import br.org.otus.user.dto.SignupDataDto;
+import br.org.otus.user.management.ManagementUserService;
+import br.org.otus.user.signup.SignupService;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -22,18 +22,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.extraction.ExtractionSecurityService;
-import br.org.otus.model.User;
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.security.api.SecurityFacade;
-import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.otus.user.dto.PasswordResetDto;
-import br.org.otus.user.dto.SignupDataDto;
-import br.org.otus.user.management.ManagementUserService;
-import br.org.otus.user.signup.SignupService;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class UserFacadeTest {
@@ -43,8 +40,6 @@ public class UserFacadeTest {
   private UserFacade userFacade;
   @Mock
   private ExtractionSecurityService extractionSecurityService;
-  @Mock
-  private EmailNotifierService emailNotifierService;
   @Mock
   private ManagementUserService managementUserService;
   @Mock
@@ -163,20 +158,6 @@ public class UserFacadeTest {
     throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
     userFacade.disable(managementUserDto);
     verify(managementUserService).disable(managementUserDto);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void disableMethod_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-    doThrow(new EmailNotificationException()).when(managementUserService).disable(managementUserDto);
-    userFacade.disable(managementUserDto);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void disableMethod_should_throw_HttpResponseException_if_caught_EncryptedException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-    doThrow(new EncryptedException()).when(managementUserService).disable(managementUserDto);
-    userFacade.disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)

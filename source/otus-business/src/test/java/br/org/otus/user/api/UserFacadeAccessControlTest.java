@@ -57,66 +57,6 @@ public class UserFacadeAccessControlTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void method_disable_should_throw_EmailCommunication_when_EncryptedException() throws EmailNotificationException, EncryptedException, AlreadyExistException, ValidationException, DataNotFoundException {
-    ResponseInfo errorResponseInfo = ResponseBuild.Email.CommunicationFail.build();
-    Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-    PowerMockito.doThrow(new EncryptedException()).when(managementUserServiceBean).disable(managementUserDto);
-
-    try {
-      userFacade.disable(managementUserDto);
-
-    } catch (HttpResponseException e) {
-      validateException(e, errorResponseInfo);
-      throw e;
-    }
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void method_disable_should_throw_EmailCommunication_when_EmailNotificationException() throws EmailNotificationException, EncryptedException, AlreadyExistException, ValidationException, DataNotFoundException {
-    ResponseInfo errorResponseInfo = ResponseBuild.Email.CommunicationFail.build();
-    Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-    PowerMockito.doThrow(new EmailNotificationException()).when(managementUserServiceBean).disable(managementUserDto);
-
-    try {
-      userFacade.disable(managementUserDto);
-
-    } catch (HttpResponseException e) {
-      validateException(e, errorResponseInfo);
-      throw e;
-    }
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void method_enable_should_throw_EmailCommunication_when_EncryptedException() throws EmailNotificationException, EncryptedException, AlreadyExistException, ValidationException, DataNotFoundException {
-    ResponseInfo errorResponseInfo = ResponseBuild.Email.CommunicationFail.build();
-    Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-    PowerMockito.doThrow(new EncryptedException()).when(managementUserServiceBean).enable(managementUserDto);
-
-    try {
-      userFacade.enable(managementUserDto);
-
-    } catch (HttpResponseException e) {
-      validateException(e, errorResponseInfo);
-      throw e;
-    }
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void method_enable_should_throw_EmailCommunication_when_EmailNotificationException() throws EmailNotificationException, EncryptedException, AlreadyExistException, ValidationException, DataNotFoundException {
-    ResponseInfo errorResponseInfo = ResponseBuild.Email.CommunicationFail.build();
-    Mockito.when(managementUserDto.isValid()).thenReturn(Boolean.TRUE);
-    PowerMockito.doThrow(new EmailNotificationException()).when(managementUserServiceBean).enable(managementUserDto);
-
-    try {
-      userFacade.enable(managementUserDto);
-
-    } catch (HttpResponseException e) {
-      validateException(e, errorResponseInfo);
-      throw e;
-    }
-  }
-
-  @Test(expected = HttpResponseException.class)
   public void method_enable_should_throw_securityValidation_when_dto_is_not_valid() throws EmailNotificationException, EncryptedException, AlreadyExistException, ValidationException, DataNotFoundException {
     ResponseInfo errorResponseInfo = ResponseBuild.Security.Validation.build();
     Mockito.doThrow(ValidationException.class).when(managementUserServiceBean).enable(managementUserDto);
