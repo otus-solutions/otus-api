@@ -68,6 +68,14 @@ public class CommunicationDataBuilder {
     return genericCommunicationData;
   }
 
+  public static GenericCommunicationData systemInstallation(String recipient) {
+    GenericCommunicationData genericCommunicationData = new GenericCommunicationData(TemplateEmailKeys.SYSTEM_INSTALATION.getValue());
+
+    genericCommunicationData.setEmail(recipient);
+
+    return genericCommunicationData;
+  }
+
 
 
   public static String serialize(GenericCommunicationData followUpCommunicationData) {

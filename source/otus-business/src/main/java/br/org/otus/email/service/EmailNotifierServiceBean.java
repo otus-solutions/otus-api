@@ -1,12 +1,17 @@
 package br.org.otus.email.service;
 
+import br.org.otus.communication.CommunicationDataBuilder;
+import br.org.otus.communication.GenericCommunicationData;
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.email.BasicEmailSender;
 import br.org.otus.email.OtusEmail;
 import br.org.otus.email.OtusEmailFactory;
 import br.org.otus.email.system.SystemInstallationEmail;
+import br.org.otus.gateway.gates.CommunicationGatewayService;
+import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.security.EncryptorResources;
 import br.org.otus.system.SystemConfigDaoBean;
+import br.org.otus.user.signup.SignupService;
 import br.org.owail.io.TemplateReader;
 import br.org.owail.sender.email.EmailCompositionException;
 import br.org.owail.sender.email.Recipient;
@@ -22,7 +27,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
+import java.net.MalformedURLException;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Stateless
 public class EmailNotifierServiceBean implements EmailNotifierService {
@@ -30,15 +37,26 @@ public class EmailNotifierServiceBean implements EmailNotifierService {
   @Inject
   private SystemConfigDaoBean systemConfigDao;
 
+  private final static Logger LOGGER = Logger.getLogger(SignupService.class.getName());
+
   @Override
   public void sendSystemInstallationEmail(OtusInitializationConfigDto initializationData) throws EmailNotificationException, EncryptedException {
     BasicEmailSender emailSenderDto = new BasicEmailSender();
     Equalizer.equalize(initializationData.getEmailSender(), emailSenderDto);
-    Recipient recipient = Recipient.createTO(initializationData.getUser().getName(), initializationData.getUser().getEmail());
-    Sender sender = new Sender(emailSenderDto.getName(), emailSenderDto.getEmail(), EncryptorResources.decrypt(emailSenderDto.getPassword()));
-    SystemInstallationEmail email = OtusEmailFactory.createSystemInstallationEmail(sender, recipient);
-    sendEmail(email);
+
+    String recipientEmail = initializationData.getUser().getEmail();
+
+    GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.systemInstallation(recipientEmail);
+    try {
+      CommunicationGatewayService emailSender = new CommunicationGatewayService();
+      emailSender.sendMail(genericCommunicationData.toJson());
+
+    } catch (ReadRequestException | MalformedURLException ex) {
+      LOGGER.severe("sendSystemInstallationEmail: " + recipientEmail);
+    }
   }
+
+
 
   @Override
   @Asynchronous
