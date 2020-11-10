@@ -48,11 +48,11 @@ public class Stage extends SerializableModelWithID {
     this.availableSurveys = availableSurveys;
   }
 
-  public void addAvailableSurvey(String acronym){
+  public void addAvailableSurveyInStage(String acronym){
     this.availableSurveys.add(acronym);
   }
 
-  public void removeAvailableSurvey(String acronym){
+  public void removeAvailableSurveyInStage(String acronym){
     this.availableSurveys.remove(acronym);
   }
 
