@@ -73,4 +73,33 @@ public class StageFacade {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
+
+  public List<String> getAvailableSurveysOfStage(String stageId) {
+    try{
+      return stageService.getAvailableSurveysOfStage(new ObjectId(stageId));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public void addAvailableSurveysInStage(String stageJson) {
+    try{
+      Stage stage = Stage.deserialize(stageJson);
+      stageService.addAvailableSurveyInStage(stage.getId(), stage.getAvailableSurveys());
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public void removeAvailableSurveyInStage(String stageJson) {
+    try{
+      Stage stage = Stage.deserialize(stageJson);
+      stageService.removeAvailableSurveyInStage(stage.getId(), stage.getAvailableSurveys());
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
 }
