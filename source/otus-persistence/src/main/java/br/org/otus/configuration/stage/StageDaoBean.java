@@ -14,7 +14,9 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import persistence.StageDao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -22,6 +24,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
 
   private static final String COLLECTION_NAME = "stage";
   private static final String KEY_FIELD_NAME = "name";
+  private static final String ACRONYMS_FIELD_NAME = "availableSurveys";
 
   public StageDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -86,6 +89,33 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
     }
 
     return stages;
+  }
+
+  @Override
+  public List<String> getAvailableSurveysOfStage(ObjectId stageOID) throws DataNotFoundException {
+    return new ArrayList<>(Arrays.asList("abc")); // TODO;
+  }
+
+  @Override
+  public void addAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException {
+    Document result = collection.find(eq(ID_FIELD_NAME, stageOID)).first();
+    if(result == null){
+      throw new DataNotFoundException(new Throwable("Stage with id " + stageOID.toString() + " was not found."));
+    }
+    Stage stage = Stage.deserialize(result.toJson());
+    newAcronyms = newAcronyms.stream().filter(acronym -> !stage.getAvailableSurveys().contains(acronym))
+      .collect(Collectors.toList());
+
+    if(newAcronyms.size() == 0){
+      return;
+    }
+
+    //TODO
+  }
+
+  @Override
+  public void removeAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException {
+    //TODO
   }
 
   private void checkExistence(Stage stage) throws AlreadyExistException {

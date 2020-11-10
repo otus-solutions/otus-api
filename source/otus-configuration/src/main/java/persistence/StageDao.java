@@ -1,6 +1,5 @@
 package persistence;
 
-
 import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
@@ -20,4 +19,11 @@ public interface StageDao {
   Stage getByID(ObjectId stageOID) throws DataNotFoundException;
 
   List<Stage> getAll() throws MemoryExcededException;
+
+  List<String> getAvailableSurveysOfStage(ObjectId stageOID) throws DataNotFoundException;
+
+  void addAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException;
+
+  void removeAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException;
+
 }
