@@ -21,7 +21,7 @@ public interface ManagementUserService {
     throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
 
   void disable(ManagementUserDto managementUserDto)
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException;
+    throws ValidationException, DataNotFoundException;
 
   void enableExtraction(ManagementUserDto managementUserDto) throws ValidationException, DataNotFoundException;
 

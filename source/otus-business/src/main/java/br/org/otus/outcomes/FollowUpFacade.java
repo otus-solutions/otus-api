@@ -1,7 +1,8 @@
 package br.org.otus.outcomes;
 
-import br.org.otus.communication.ActivitySendingCommunicationData;
+import br.org.otus.communication.CommunicationDataBuilder;
 import br.org.otus.communication.FollowUpCommunicationData;
+import br.org.otus.communication.GenericCommunicationData;
 import br.org.otus.gateway.gates.CommunicationGatewayService;
 import br.org.otus.gateway.gates.OutcomeGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
@@ -174,12 +175,11 @@ public class FollowUpFacade {
   }
 
   public void sendAutoFillActivityNotificationEmail(Participant participant, SurveyActivity surveyActivity) throws MalformedURLException {
-    ActivitySendingCommunicationData activitySendingCommunicationData = new ActivitySendingCommunicationData();
-    activitySendingCommunicationData.setEmail(participant.getEmail());
-    activitySendingCommunicationData.pushVariable("name", surveyActivity.getSurveyForm().getName());
-    activitySendingCommunicationData.pushVariable("acronym", surveyActivity.getSurveyForm().getAcronym());
+    GenericCommunicationData communicationData = CommunicationDataBuilder.activitySending(participant.getEmail(), surveyActivity);
+
+
     try {
-      GatewayResponse notification = new CommunicationGatewayService().sendMail(ActivitySendingCommunicationData.serialize(activitySendingCommunicationData));
+      GatewayResponse notification = new CommunicationGatewayService().sendMail(CommunicationDataBuilder.serialize(communicationData));
       logNotification("sendAutoFillActivityNotificationEmail", notification.getData(), true, participant, surveyActivity);
     } catch (ReadRequestException ex) {
       logNotification("sendAutoFillActivityNotificationEmail", ex, false, participant, surveyActivity);
