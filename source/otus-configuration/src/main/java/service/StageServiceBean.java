@@ -42,4 +42,19 @@ public class StageServiceBean implements StageService {
   public List<Stage> getAll() throws MemoryExcededException {
     return stageDao.getAll();
   }
+
+  @Override
+  public List<String> getAvailableSurveysOfStage(ObjectId stageOID) throws DataNotFoundException {
+    return stageDao.getAvailableSurveysOfStage(stageOID);
+  }
+
+  @Override
+  public void addAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException {
+    stageDao.addAvailableSurveyInStage(stageOID, newAcronyms);
+  }
+
+  @Override
+  public void removeAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException {
+    stageDao.removeAvailableSurveyInStage(stageOID, newAcronyms);
+  }
 }
