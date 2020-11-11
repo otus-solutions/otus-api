@@ -83,23 +83,13 @@ public class StageFacade {
     }
   }
 
-  public void addAvailableSurveysInStage(String stageJson) {
+  public void updateAvailableSurveyInStage(String stageJson) {
     try{
-      Stage stage = Stage.deserialize(stageJson);
-      stageService.addAvailableSurveyInStage(stage.getId(), stage.getAvailableSurveys());
+      stageService.updateAvailableSurveyInStage(Stage.deserialize(stageJson));
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 
-  public void removeAvailableSurveyInStage(String stageJson) {
-    try{
-      Stage stage = Stage.deserialize(stageJson);
-      stageService.removeAvailableSurveyInStage(stage.getId(), stage.getAvailableSurveys());
-    }
-    catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
 }

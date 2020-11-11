@@ -22,8 +22,6 @@ public interface StageDao {
 
   List<String> getAvailableSurveysOfStage(ObjectId stageOID) throws DataNotFoundException;
 
-  void addAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException;
-
-  void removeAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException;
+  void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException;
 
 }

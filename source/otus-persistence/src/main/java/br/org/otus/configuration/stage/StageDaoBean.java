@@ -93,26 +93,21 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
 
   @Override
   public List<String> getAvailableSurveysOfStage(ObjectId stageOID) throws DataNotFoundException {
-    return findStageById(stageOID).getAvailableSurveys();
+    return getByID(stageOID).getAvailableSurveys();
   }
 
   @Override
-  public void addAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException {
-    Stage stage = findStageById(stageOID);
-    newAcronyms = newAcronyms.stream().filter(acronym -> !stage.getAvailableSurveys().contains(acronym))
-      .collect(Collectors.toList());
+  public void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException {
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, stage.getId()),
+      new Document("$set", new Document(ACRONYMS_FIELD_NAME, stage.getAvailableSurveys()))
+    );
 
-    if(newAcronyms.size() == 0){
-      return;
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stage with id " + stage.getId().toString() + " was not found."));
     }
-
-    //TODO
   }
 
-  @Override
-  public void removeAvailableSurveyInStage(ObjectId stageOID, List<String> newAcronyms) throws DataNotFoundException {
-    //TODO
-  }
 
   private void checkExistence(Stage stage) throws AlreadyExistException {
     Document result = collection.find(eq(KEY_FIELD_NAME, stage.getName())).first();
@@ -121,11 +116,4 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
     }
   }
 
-  private Stage findStageById(ObjectId stageOID) throws DataNotFoundException {
-    Document result = collection.find(eq(ID_FIELD_NAME, stageOID)).first();
-    if(result == null){
-      throw new DataNotFoundException(new Throwable("Stage with id " + stageOID.toString() + " was not found."));
-    }
-    return Stage.deserialize(result.toJson());
-  }
 }
