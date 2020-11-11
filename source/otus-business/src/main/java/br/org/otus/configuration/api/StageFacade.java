@@ -74,15 +74,6 @@ public class StageFacade {
     }
   }
 
-  public List<String> getAvailableSurveysOfStage(String stageId) {
-    try{
-      return stageService.getAvailableSurveysOfStage(new ObjectId(stageId));
-    }
-    catch (DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
-
   public void updateAvailableSurveyInStage(String stageJson) {
     try{
       stageService.updateAvailableSurveyInStage(Stage.deserialize(stageJson));

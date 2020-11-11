@@ -58,15 +58,6 @@ public class StageResource {
     return (new Response()).buildSuccess(stages).toJson(Stage.getFrontGsonBuilder());
   }
 
-  @GET
-  @Path("/surveys/{id}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public String getAvailableSurveysOfStage(@PathParam("id") String stageId){
-    List<String> acronyms = stageFacade.getAvailableSurveysOfStage(stageId);
-    return (new Response()).buildSuccess(acronyms).toJson();
-  }
-
   @PUT
   @Path("/surveys")
   @Consumes(MediaType.APPLICATION_JSON)

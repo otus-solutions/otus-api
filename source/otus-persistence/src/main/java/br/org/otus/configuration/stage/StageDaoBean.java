@@ -92,11 +92,6 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   }
 
   @Override
-  public List<String> getAvailableSurveysOfStage(ObjectId stageOID) throws DataNotFoundException {
-    return getByID(stageOID).getAvailableSurveys();
-  }
-
-  @Override
   public void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException {
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, stage.getId()),
