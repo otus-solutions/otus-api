@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.SerializableModelWithID;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,15 +15,16 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
 
   private String stageName;
 
-  private List<StageAcronymSurveyActivitiesDto> acronyms;
+  @SerializedName("acronyms")
+  private List<StageAcronymSurveyActivitiesDto> stageAcronymSurveyActivitiesDtos;
 
 
   public ObjectId getStageId() {
     return stageId;
   }
 
-  public List<StageAcronymSurveyActivitiesDto> getAcronyms() {
-    return acronyms;
+  public List<StageAcronymSurveyActivitiesDto> getStageAcronymSurveyActivitiesDtos() {
+    return stageAcronymSurveyActivitiesDtos;
   }
 
   public void setStageName(String stageName) {
@@ -35,15 +37,23 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
 
 
   public boolean hasAcronyms(){
-    return (acronyms != null && !acronyms.isEmpty());
+    return (stageAcronymSurveyActivitiesDtos != null && !stageAcronymSurveyActivitiesDtos.isEmpty());
   }
 
   public void removeAcronymsWithoutActivities(){
-    acronyms = acronyms.stream().filter(dto -> dto.hasActivities()).collect(Collectors.toList());
+    stageAcronymSurveyActivitiesDtos = stageAcronymSurveyActivitiesDtos.stream().filter(dto -> dto.hasActivities()).collect(Collectors.toList());
 
-    for(StageAcronymSurveyActivitiesDto dto : acronyms){
+    for(StageAcronymSurveyActivitiesDto dto : stageAcronymSurveyActivitiesDtos){
       dto.removeAcronymGroup();
     }
+  }
+
+  public void addAcronymWithNoActivity(String acronym, String activityName){
+    StageAcronymSurveyActivitiesDto acronymSurveyActivitiesDto = new StageAcronymSurveyActivitiesDto();
+    acronymSurveyActivitiesDto.setAcronym(acronym);
+    acronymSurveyActivitiesDto.setActivityName(activityName);
+    acronymSurveyActivitiesDto.setActivities(new ArrayList<>());
+    stageAcronymSurveyActivitiesDtos.add(acronymSurveyActivitiesDto);
   }
 
 }
