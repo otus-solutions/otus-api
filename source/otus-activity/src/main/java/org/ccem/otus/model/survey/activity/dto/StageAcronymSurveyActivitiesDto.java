@@ -17,6 +17,33 @@ public class StageAcronymSurveyActivitiesDto extends SerializableModel {
 
   private List<SurveyActivityItemListDto> activities;
 
+  public AcronymGroup getAcronymGroup() {
+    return acronymGroup;
+  }
+
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
+
+  public String getActivityName() {
+    return activityName;
+  }
+
+  public void setActivityName(String activityName) {
+    this.activityName = activityName;
+  }
+
+  public List<SurveyActivityItemListDto> getActivities() {
+    return activities;
+  }
+
+  public void setActivities(List<SurveyActivityItemListDto> activities) {
+    this.activities = activities;
+  }
 
   public static StageAcronymSurveyActivitiesDto deserialize(String json){
     return (StageAcronymSurveyActivitiesDto)deserialize(json, StageAcronymSurveyActivitiesDto.class);
