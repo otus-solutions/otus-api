@@ -3,19 +3,27 @@ package org.ccem.otus.model.survey.activity.dto;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.model.SerializableModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StageAcronymSurveyActivitiesDto extends SerializableModel {
 
   @SerializedName("_id")
   private AcronymGroup acronymGroup;
-
   private String acronym;
-
   @SerializedName("name")
   private String activityName;
-
   private List<SurveyActivityItemListDto> activities;
+
+
+  public StageAcronymSurveyActivitiesDto(){}
+
+  public StageAcronymSurveyActivitiesDto(String acronym, String activityName){
+    this.acronym = acronym;
+    this.activityName = activityName;
+    this.activities = new ArrayList<>();
+  }
+
 
   public AcronymGroup getAcronymGroup() {
     return acronymGroup;
@@ -58,5 +66,5 @@ public class StageAcronymSurveyActivitiesDto extends SerializableModel {
     acronymGroup = null;
     activityName = activities.get(0).getName();
   }
-
+  
 }
