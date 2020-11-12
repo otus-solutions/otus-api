@@ -14,17 +14,15 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import persistence.StageDao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class StageDaoBean extends MongoGenericDao<Document> implements StageDao {
 
   private static final String COLLECTION_NAME = "stage";
-  private static final String KEY_FIELD_NAME = "name";
-  private static final String ACRONYMS_FIELD_NAME = "availableSurveys";
+  private static final String NAME_PATH = "name";
+  private static final String SURVEY_ACRONYMS = "surveyAcronyms";
 
   public StageDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -95,7 +93,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   public void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException {
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, stage.getId()),
-      new Document("$set", new Document(ACRONYMS_FIELD_NAME, stage.getAvailableSurveys()))
+      new Document("$set", new Document(SURVEY_ACRONYMS, stage.getSurveyAcronyms()))
     );
 
     if(updateResult.getMatchedCount() == 0){
@@ -105,7 +103,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
 
 
   private void checkExistence(Stage stage) throws AlreadyExistException {
-    Document result = collection.find(eq(KEY_FIELD_NAME, stage.getName())).first();
+    Document result = collection.find(eq(NAME_PATH, stage.getName())).first();
     if(result != null){
       throw new AlreadyExistException(new Throwable(result.getObjectId(ID_FIELD_NAME).toString()));
     }

@@ -66,22 +66,21 @@ public class ActivityFacade {
 
   public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
     try{
-      Map<ObjectId, Stage> stageMap = new HashMap<>();
-
       List<Stage> stages = stageService.getAll();
+
+      Map<ObjectId, Stage> stageMap = new HashMap<>();
       stages.forEach(stage -> {
         stageMap.put(stage.getId(), stage);
       });
 
-      List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail, null);
+      List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail);
 
       stageSurveyActivitiesDtos.forEach(stageDto -> {
         Stage stage = stageMap.get(stageDto.getStageId());
         try{
-
-          stageDto.formatAndGetAcronymsNotInStageAvailableSurveys(stage.getName(), stage.getAvailableSurveys())
+          stageDto.formatAndGetAcronymsNotInStageAvailableSurveys(stage.getName(), stage.getSurveyAcronyms())
             .forEach(acronym -> {
-              stageDto.addAcronymWithNoActivities(acronym);
+              stageDto.addAcronymWithNoActivities(acronym); //TODO incluir activityName
             });
         }
         catch (NullPointerException e){ // activities with no stage

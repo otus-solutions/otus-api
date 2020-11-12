@@ -13,11 +13,11 @@ public class Stage extends SerializableModelWithID {
   private ObjectId id;
   private String objectType;
   private String name;
-  private List<String> availableSurveys;
+  private List<String> surveyAcronyms;
 
   public Stage(){
     this.objectType = "Stage";
-    this.availableSurveys = new ArrayList<>();
+    this.surveyAcronyms = new ArrayList<>();
   }
 
   public String getObjectType() {
@@ -40,20 +40,12 @@ public class Stage extends SerializableModelWithID {
     this.name = name;
   }
 
-  public List<String> getAvailableSurveys() {
-    return availableSurveys;
+  public List<String> getSurveyAcronyms() {
+    return surveyAcronyms;
   }
 
-  public void setAvailableSurveys(List<String> availableSurveys) {
-    this.availableSurveys = availableSurveys;
-  }
-
-  public void addAvailableSurveyInStage(String acronym){
-    this.availableSurveys.add(acronym);
-  }
-
-  public void removeAvailableSurveyInStage(String acronym){
-    this.availableSurveys.remove(acronym);
+  public void setSurveyAcronyms(List<String> surveyAcronyms) {
+    this.surveyAcronyms = surveyAcronyms;
   }
 
   public static Stage deserialize(String stageJson) {
