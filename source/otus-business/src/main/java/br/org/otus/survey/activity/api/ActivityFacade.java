@@ -112,9 +112,7 @@ public class ActivityFacade {
   public List<SurveyActivity> get(String acronym, Integer version) {
     try {
       return activityService.get(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
@@ -122,9 +120,7 @@ public class ActivityFacade {
   public List<SurveyActivity> getExtraction(String acronym, Integer version) {
     try {
       return activityService.getExtraction(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
