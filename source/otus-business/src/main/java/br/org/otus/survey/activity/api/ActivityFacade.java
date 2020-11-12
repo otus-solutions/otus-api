@@ -96,7 +96,7 @@ public class ActivityFacade {
 
       return stageSurveyActivitiesDtos;
     }
-    catch (DataNotFoundException | MemoryExcededException e){
+    catch (MemoryExcededException e){
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
