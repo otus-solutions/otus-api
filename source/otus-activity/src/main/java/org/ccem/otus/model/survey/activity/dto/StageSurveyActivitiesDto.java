@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.model.SerializableModelWithID;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,20 +41,30 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
     return (stageAcronymSurveyActivitiesDtos != null && !stageAcronymSurveyActivitiesDtos.isEmpty());
   }
 
-  public void removeAcronymsWithoutActivities(){
-    stageAcronymSurveyActivitiesDtos = stageAcronymSurveyActivitiesDtos.stream().filter(dto -> dto.hasActivities()).collect(Collectors.toList());
-
+  public void format(){
     for(StageAcronymSurveyActivitiesDto dto : stageAcronymSurveyActivitiesDtos){
       dto.removeAcronymGroup();
     }
   }
 
-  public void addAcronymWithNoActivity(String acronym, String activityName){
-    StageAcronymSurveyActivitiesDto acronymSurveyActivitiesDto = new StageAcronymSurveyActivitiesDto();
-    acronymSurveyActivitiesDto.setAcronym(acronym);
-    acronymSurveyActivitiesDto.setActivityName(activityName);
-    acronymSurveyActivitiesDto.setActivities(new ArrayList<>());
-    stageAcronymSurveyActivitiesDtos.add(acronymSurveyActivitiesDto);
+  public List<String> formatAndGetAcronymsNotInStageAvailableSurveys(String stageName, List<String> stageAvailableSurveys){
+    this.stageName = stageName;
+    List<String> acronymInStageAvailableSurveys = new ArrayList<>();
+
+    for(StageAcronymSurveyActivitiesDto dto : stageAcronymSurveyActivitiesDtos){
+      dto.removeAcronymGroup();
+      if(stageAvailableSurveys.contains(dto.getAcronym())){
+        acronymInStageAvailableSurveys.add(dto.getAcronym());
+      }
+    }
+
+    return stageAvailableSurveys.stream()
+      .filter(x -> !acronymInStageAvailableSurveys.contains(x))
+      .collect(Collectors.toList());
+  }
+
+  public void addAcronymWithNoActivities(String acronym){
+    stageAcronymSurveyActivitiesDtos.add(new StageAcronymSurveyActivitiesDto(acronym, null));
   }
 
 }
