@@ -7,6 +7,7 @@ import br.org.otus.response.info.Validation;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -65,12 +66,30 @@ public class ActivityFacade {
 
   public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
     try{
-      Map<ObjectId, String> stageMap = new HashMap<>();
-      stageService.getAll().forEach(stage -> {
-        stageMap.put(stage.getId(), stage.getName());
+      Map<ObjectId, Stage> stageMap = new HashMap<>();
+
+      List<Stage> stages = stageService.getAll();
+      stages.forEach(stage -> {
+        stageMap.put(stage.getId(), stage);
       });
 
-      return activityService.listByStageGroups(rn, userEmail, stageMap);
+      List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail, null);
+
+      stageSurveyActivitiesDtos.forEach(stageDto -> {
+        Stage stage = stageMap.get(stageDto.getStageId());
+        try{
+
+          stageDto.formatAndGetAcronymsNotInStageAvailableSurveys(stage.getName(), stage.getAvailableSurveys())
+            .forEach(acronym -> {
+              stageDto.addAcronymWithNoActivities(acronym);
+            });
+        }
+        catch (NullPointerException e){ // activities with no stage
+          stageDto.format();
+        }
+      });
+
+      return stageSurveyActivitiesDtos;
     }
     catch (MemoryExcededException e){
       throw new HttpResponseException(Validation.build(e.getMessage()));
