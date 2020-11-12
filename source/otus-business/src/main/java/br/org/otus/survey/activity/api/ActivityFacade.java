@@ -4,6 +4,7 @@ import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
+import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
@@ -57,6 +58,9 @@ public class ActivityFacade {
   @Inject
   private ActivitySharingService activitySharingService;
 
+  @Inject
+  private SurveyService surveyService;
+
 
   private SurveyActivity activityUpdated;
 
@@ -73,6 +77,8 @@ public class ActivityFacade {
         stageMap.put(stage.getId(), stage);
       });
 
+      Map<String, String> acronymNameMap = surveyService.getAcronymNameMap();
+
       List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail);
 
       stageSurveyActivitiesDtos.forEach(stageDto -> {
@@ -80,7 +86,7 @@ public class ActivityFacade {
         try{
           stageDto.formatAndGetAcronymsNotInStageAvailableSurveys(stage.getName(), stage.getSurveyAcronyms())
             .forEach(acronym -> {
-              stageDto.addAcronymWithNoActivities(acronym); //TODO incluir activityName
+              stageDto.addAcronymWithNoActivities(acronym, acronymNameMap.get(acronym));
             });
         }
         catch (NullPointerException e){ // activities with no stage
@@ -90,8 +96,8 @@ public class ActivityFacade {
 
       return stageSurveyActivitiesDtos;
     }
-    catch (MemoryExcededException e){
-      throw new HttpResponseException(Validation.build(e.getMessage()));
+    catch (DataNotFoundException | MemoryExcededException e){
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 

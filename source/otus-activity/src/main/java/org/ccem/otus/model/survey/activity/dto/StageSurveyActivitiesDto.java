@@ -63,8 +63,8 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
       .collect(Collectors.toList());
   }
 
-  public void addAcronymWithNoActivities(String acronym){
-    stageAcronymSurveyActivitiesDtos.add(new StageAcronymSurveyActivitiesDto(acronym, null));
+  public void addAcronymWithNoActivities(String acronym, String activityName){
+    stageAcronymSurveyActivitiesDtos.add(new StageAcronymSurveyActivitiesDto(acronym, activityName));
   }
 
 }
