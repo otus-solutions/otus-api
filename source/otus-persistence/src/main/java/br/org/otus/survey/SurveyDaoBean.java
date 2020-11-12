@@ -245,7 +245,7 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
   }
 
   @Override
-  public Map<String, String> getAcronymNameMap() throws DataNotFoundException, MemoryExcededException {
+  public Map<String, String> getAcronymNameMap() throws MemoryExcededException {
 
     Map<String, String> acronymNameMap = new HashMap<>();
 

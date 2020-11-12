@@ -37,5 +37,5 @@ public interface SurveyService {
 
   UpdateResult updateSurveyRequiredExternalID(String surveyID, String requiredExternalID) throws JSONException, DataNotFoundException;
 
-  Map<String, String> getAcronymNameMap() throws DataNotFoundException, MemoryExcededException;
+  Map<String, String> getAcronymNameMap() throws MemoryExcededException;
 }

@@ -140,7 +140,7 @@ public class SurveyServiceBean implements SurveyService {
   }
 
   @Override
-  public Map<String, String> getAcronymNameMap() throws DataNotFoundException, MemoryExcededException {
+  public Map<String, String> getAcronymNameMap() throws MemoryExcededException {
     return surveyDao.getAcronymNameMap();
   }
 

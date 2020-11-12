@@ -49,5 +49,5 @@ public interface SurveyDao {
 
   AggregateIterable<Document> aggregate(List<Bson> query);
 
-  Map<String, String> getAcronymNameMap() throws DataNotFoundException, MemoryExcededException;
+  Map<String, String> getAcronymNameMap() throws MemoryExcededException;
 }
