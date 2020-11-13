@@ -59,7 +59,7 @@ public class StageResource {
   }
 
   @PUT
-  @Path("/surveys")
+  @Path("/update-surveys-of-stage")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String updateAvailableSurveyInStage(String stageJson){
@@ -68,7 +68,7 @@ public class StageResource {
   }
 
   @PUT
-  @Path("/update-acronym-stages")
+  @Path("/update-stages-with-survey")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String updateStagesOfSurveyAcronym(String stageDtoJson){
