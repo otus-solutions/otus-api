@@ -62,8 +62,8 @@ public class StageResource {
   @Path("/update-surveys-of-stage")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String updateAvailableSurveyInStage(String stageJson){
-    stageFacade.updateAvailableSurveyInStage(stageJson);
+  public String updateSurveyAcronymsOfStage(String stageJson){
+    stageFacade.updateSurveyAcronymsOfStage(stageJson);
     return (new Response()).buildSuccess().toJson();
   }
 

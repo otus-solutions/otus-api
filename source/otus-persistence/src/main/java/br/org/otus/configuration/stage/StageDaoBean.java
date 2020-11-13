@@ -90,7 +90,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   }
 
   @Override
-  public void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException {
+  public void updateSurveyAcronymsOfStage(Stage stage) throws DataNotFoundException {
     UpdateResult updateResult = collection.updateOne(
       eq(ID_FIELD_NAME, stage.getId()),
       new Document("$set", new Document(SURVEY_ACRONYMS, stage.getSurveyAcronyms()))

@@ -20,7 +20,7 @@ public interface StageDao {
 
   List<Stage> getAll() throws MemoryExcededException;
 
-  void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException;
+  void updateSurveyAcronymsOfStage(Stage stage) throws DataNotFoundException;
 
   void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDs) throws DataNotFoundException;
 
