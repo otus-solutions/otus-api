@@ -67,4 +67,13 @@ public class StageResource {
     return (new Response()).buildSuccess().toJson();
   }
 
+  @PUT
+  @Path("/update-acronym-stages")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateStagesOfSurveyAcronym(String stageDtoJson){
+    stageFacade.updateStagesOfSurveyAcronym(stageDtoJson);
+    return (new Response()).buildSuccess().toJson();
+  }
+
 }

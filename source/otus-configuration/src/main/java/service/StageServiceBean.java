@@ -47,4 +47,9 @@ public class StageServiceBean implements StageService {
   public void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException {
     stageDao.updateAvailableSurveyInStage(stage);
   }
+
+  @Override
+  public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDs) throws DataNotFoundException {
+    stageDao.updateStagesOfSurveyAcronym(acronym, stageOIDs);
+  }
 }

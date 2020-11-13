@@ -101,6 +101,11 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
     }
   }
 
+  @Override
+  public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDs) throws DataNotFoundException {
+    //TODO
+  }
+
 
   private void checkExistence(Stage stage) throws AlreadyExistException {
     Document result = collection.find(eq(NAME_PATH, stage.getName())).first();

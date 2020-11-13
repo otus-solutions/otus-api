@@ -22,4 +22,6 @@ public interface StageService {
 
   void updateAvailableSurveyInStage(Stage stage) throws DataNotFoundException;
 
+  void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDs) throws DataNotFoundException;
+
 }
