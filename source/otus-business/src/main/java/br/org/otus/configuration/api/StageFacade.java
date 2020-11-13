@@ -87,7 +87,7 @@ public class StageFacade {
   public void updateStagesOfSurveyAcronym(String stageDtoJson) {
     try{
       StageDto stageDto = StageDto.deserialize(stageDtoJson);
-      stageService.updateStagesOfSurveyAcronym(stageDto.getAcronym(), stageDto.getStageIds());
+      stageService.updateStagesOfSurveyAcronym(stageDto.getAcronym(), stageDto.getStageIdsToAdd(), stageDto.getStageIdsToRemove());
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));

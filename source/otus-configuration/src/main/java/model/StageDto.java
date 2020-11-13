@@ -8,14 +8,19 @@ import java.util.List;
 public class StageDto extends SerializableModelWithID {
 
   private String acronym;
-  private List<ObjectId> stageIds;
+  private List<ObjectId> stageIdsToAdd;
+  private List<ObjectId> stageIdsToRemove;
 
   public String getAcronym() {
     return acronym;
   }
 
-  public List<ObjectId> getStageIds() {
-    return stageIds;
+  public List<ObjectId> getStageIdsToAdd() {
+    return stageIdsToAdd;
+  }
+
+  public List<ObjectId> getStageIdsToRemove() {
+    return stageIdsToRemove;
   }
 
   public static StageDto deserialize(String json){

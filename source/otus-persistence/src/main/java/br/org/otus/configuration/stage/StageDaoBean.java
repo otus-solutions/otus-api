@@ -1,16 +1,19 @@
 package br.org.otus.configuration.stage;
 
 import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import model.Stage;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.service.ParseQuery;
 import persistence.StageDao;
 
 import java.util.ArrayList;
@@ -102,8 +105,25 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   }
 
   @Override
-  public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDs) throws DataNotFoundException {
-    //TODO
+  public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDsToAdd, List<ObjectId> stageOIDsToRemove) throws DataNotFoundException {
+    UpdateResult updateAddResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, new Document("$in", stageOIDsToAdd)),
+      new Document("$addToSet", new Document(SURVEY_ACRONYMS, acronym))
+    );
+
+    if(updateAddResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDsToAdd.toString() + " was not found."));
+    }
+
+    UpdateResult updateRemoveResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, new Document("$in", stageOIDsToRemove)),
+      new Document("$pull", new Document(SURVEY_ACRONYMS, acronym))
+    );
+
+    if(updateRemoveResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDsToRemove.toString() + " was not found."));
+    }
+
   }
 
 
