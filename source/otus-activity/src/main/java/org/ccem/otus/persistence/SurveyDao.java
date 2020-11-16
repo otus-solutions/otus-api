@@ -2,12 +2,14 @@ package org.ccem.otus.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -46,4 +48,6 @@ public interface SurveyDao {
   UpdateResult updateSurveyRequiredExternalID(ObjectId surveyID, Boolean stateRequiredExternalID) throws DataNotFoundException;
 
   AggregateIterable<Document> aggregate(List<Bson> query);
+
+  Map<String, String> getAcronymNameMap() throws MemoryExcededException;
 }

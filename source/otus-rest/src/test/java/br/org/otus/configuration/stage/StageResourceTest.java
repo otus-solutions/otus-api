@@ -18,6 +18,7 @@ public class StageResourceTest extends ResourceTestsParent {
 
   private static final String STAGE_ID = "5f77920624439758ce4a43ab";
   private static final String STAGE_JSON = "{}";
+  private static final String STAGE_DTO_JSON = "{}";
 
   @InjectMocks
   private StageResource stageResource;
@@ -60,6 +61,20 @@ public class StageResourceTest extends ResourceTestsParent {
     String result = stageResource.getAll();
     verify(stageFacade, Mockito.times(1)).getAll();
     assertEquals(encapsulateExpectedResponse("[]"), result);
+  }
+
+  @Test
+  public void updateSurveyAcronymsOfStage_method_should_call_stageFacade_updateSurveyAcronymsOfStage_method(){
+    String result = stageResource.updateSurveyAcronymsOfStage(STAGE_JSON);
+    verify(stageFacade, Mockito.times(1)).updateSurveyAcronymsOfStage(STAGE_JSON);
+    assertEquals(EMPTY_RESPONSE, result);
+  }
+
+  @Test
+  public void updateStagesOfSurveyAcronym_method_should_call_stageFacade_updateSurveyAcronymsOfStage_method(){
+    String result = stageResource.updateStagesOfSurveyAcronym(STAGE_DTO_JSON);
+    verify(stageFacade, Mockito.times(1)).updateStagesOfSurveyAcronym(STAGE_DTO_JSON);
+    assertEquals(EMPTY_RESPONSE, result);
   }
 
 }

@@ -4,9 +4,11 @@ import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
+import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -56,6 +58,9 @@ public class ActivityFacade {
   @Inject
   private ActivitySharingService activitySharingService;
 
+  @Inject
+  private SurveyService surveyService;
+
 
   private SurveyActivity activityUpdated;
 
@@ -65,15 +70,34 @@ public class ActivityFacade {
 
   public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
     try{
-      Map<ObjectId, String> stageMap = new HashMap<>();
-      stageService.getAll().forEach(stage -> {
-        stageMap.put(stage.getId(), stage.getName());
+      List<Stage> stages = stageService.getAll();
+
+      Map<ObjectId, Stage> stageMap = new HashMap<>();
+      stages.forEach(stage -> {
+        stageMap.put(stage.getId(), stage);
       });
 
-      return activityService.listByStageGroups(rn, userEmail, stageMap);
+      Map<String, String> acronymNameMap = surveyService.getAcronymNameMap();
+
+      List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail);
+
+      stageSurveyActivitiesDtos.forEach(stageDto -> {
+        Stage stage = stageMap.get(stageDto.getStageId());
+        try{
+          stageDto.formatAndGetAcronymsNotInStageAvailableSurveys(stage.getName(), stage.getSurveyAcronyms())
+            .forEach(acronym -> {
+              stageDto.addAcronymWithNoActivities(acronym, acronymNameMap.get(acronym));
+            });
+        }
+        catch (NullPointerException e){ // activities with no stage
+          stageDto.format();
+        }
+      });
+
+      return stageSurveyActivitiesDtos;
     }
     catch (MemoryExcededException e){
-      throw new HttpResponseException(Validation.build(e.getMessage()));
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
 
@@ -88,9 +112,7 @@ public class ActivityFacade {
   public List<SurveyActivity> get(String acronym, Integer version) {
     try {
       return activityService.get(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
@@ -98,9 +120,7 @@ public class ActivityFacade {
   public List<SurveyActivity> getExtraction(String acronym, Integer version) {
     try {
       return activityService.getExtraction(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }

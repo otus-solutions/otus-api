@@ -15,12 +15,16 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import persistence.StageDao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 public class StageServiceBeanTest {
 
   private static final ObjectId STAGE_OID = new ObjectId("5f77920624439758ce4a43ab");
+  private static final String ACRONYM = "ABC";
 
   @InjectMocks
   private StageServiceBean stageServiceBean;
@@ -76,6 +80,20 @@ public class StageServiceBeanTest {
   public void getAll_method_should_call_dao_getAll_method() throws MemoryExcededException {
     stageServiceBean.getAll();
     verify(stageDao, Mockito.times(1)).getAll();
+  }
+
+  @Test
+  public void updateSurveyAcronymsOfStage_method_should_call_dao_getAll_method() throws DataNotFoundException {
+    stageServiceBean.updateSurveyAcronymsOfStage(stage);
+    verify(stageDao, Mockito.times(1)).updateSurveyAcronymsOfStage(stage);
+  }
+
+  @Test
+  public void updateStagesOfSurveyAcronym_method_should_call_dao_getAll_method() throws DataNotFoundException {
+    List<ObjectId> stageOIDsToAdd = new ArrayList<>();
+    List<ObjectId> stageOIDsToRemove = new ArrayList<>();
+    stageServiceBean.updateStagesOfSurveyAcronym(ACRONYM, stageOIDsToAdd, stageOIDsToRemove);
+    verify(stageDao, Mockito.times(1)).updateStagesOfSurveyAcronym(ACRONYM, stageOIDsToAdd, stageOIDsToRemove);
   }
 
 }

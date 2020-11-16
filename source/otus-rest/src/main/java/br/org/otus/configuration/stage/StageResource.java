@@ -57,4 +57,23 @@ public class StageResource {
     List<Stage> stages = stageFacade.getAll();
     return (new Response()).buildSuccess(stages).toJson(Stage.getFrontGsonBuilder());
   }
+
+  @PUT
+  @Path("/update-surveys-of-stage")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateSurveyAcronymsOfStage(String stageJson){
+    stageFacade.updateSurveyAcronymsOfStage(stageJson);
+    return (new Response()).buildSuccess().toJson();
+  }
+
+  @PUT
+  @Path("/update-stages-with-survey")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateStagesOfSurveyAcronym(String stageDtoJson){
+    stageFacade.updateStagesOfSurveyAcronym(stageDtoJson);
+    return (new Response()).buildSuccess().toJson();
+  }
+
 }

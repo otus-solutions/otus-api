@@ -42,4 +42,14 @@ public class StageServiceBean implements StageService {
   public List<Stage> getAll() throws MemoryExcededException {
     return stageDao.getAll();
   }
+
+  @Override
+  public void updateSurveyAcronymsOfStage(Stage stage) throws DataNotFoundException {
+    stageDao.updateSurveyAcronymsOfStage(stage);
+  }
+
+  @Override
+  public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDsToAdd, List<ObjectId> stageOIDsToRemove) throws DataNotFoundException {
+    stageDao.updateStagesOfSurveyAcronym(acronym, stageOIDsToAdd, stageOIDsToRemove);
+  }
 }

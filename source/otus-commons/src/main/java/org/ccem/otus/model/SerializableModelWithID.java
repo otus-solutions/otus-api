@@ -7,7 +7,7 @@ import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 public abstract class SerializableModelWithID {
 
-  protected static String serialize(Object object) {
+  public static String serialize(Object object) {
     return getGsonBuilder().create().toJson(object);
   }
 

@@ -1,6 +1,5 @@
 package model;
 
-import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +31,7 @@ public class StageTest {
     assertEquals(OID, stage.getId());
     assertEquals(OBJECT_TYPE, stage.getObjectType());
     assertEquals(NAME, stage.getName());
+    assertEquals(0, stage.getSurveyAcronyms().size());
   }
 
   @Test
@@ -43,25 +43,14 @@ public class StageTest {
 
   @Test
   public void name_setter_test(){
-    String NAME2 = "stage2";
+    final String NAME2 = NAME + "2";
     stage.setName(NAME2);
     assertEquals(NAME2, stage.getName());
   }
 
   @Test
-  public void serializeStaticMethod_should_convert_objectModel_to_JsonString() {
-    assertTrue(Stage.serialize(stage) instanceof String);
-  }
-
-  @Test
   public void deserializeStaticMethod_should_convert_JsonString_to_objectModel() {
-    String stageJson = "{}";
-    assertTrue(Stage.deserialize(stageJson) instanceof Stage);
-  }
-
-  @Test
-  public void getFrontGsonBuilder_return_GsonBuilder_instance(){
-    assertTrue(Stage.getFrontGsonBuilder() instanceof GsonBuilder);
+    assertTrue(Stage.deserialize("{}") instanceof Stage);
   }
 
 }

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.SerializableModelWithID;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,20 +16,18 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
 
   private String stageName;
 
-  private List<StageAcronymSurveyActivitiesDto> acronyms;
+  @SerializedName("acronyms")
+  private List<StageAcronymSurveyActivitiesDto> stageAcronymSurveyActivitiesDtos;
 
 
   public ObjectId getStageId() {
     return stageId;
   }
 
-  public List<StageAcronymSurveyActivitiesDto> getAcronyms() {
-    return acronyms;
+  public List<StageAcronymSurveyActivitiesDto> getStageAcronymSurveyActivitiesDtos() {
+    return stageAcronymSurveyActivitiesDtos;
   }
 
-  public void setStageName(String stageName) {
-    this.stageName = stageName;
-  }
 
   public static StageSurveyActivitiesDto deserialize(String json){
     return (StageSurveyActivitiesDto) SerializableModelWithID.deserialize(json, StageSurveyActivitiesDto.class);
@@ -35,15 +35,33 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
 
 
   public boolean hasAcronyms(){
-    return (acronyms != null && !acronyms.isEmpty());
+    return (stageAcronymSurveyActivitiesDtos != null && !stageAcronymSurveyActivitiesDtos.isEmpty());
   }
 
-  public void removeAcronymsWithoutActivities(){
-    acronyms = acronyms.stream().filter(dto -> dto.hasActivities()).collect(Collectors.toList());
-
-    for(StageAcronymSurveyActivitiesDto dto : acronyms){
+  public void format(){
+    for(StageAcronymSurveyActivitiesDto dto : stageAcronymSurveyActivitiesDtos){
       dto.removeAcronymGroup();
     }
+  }
+
+  public List<String> formatAndGetAcronymsNotInStageAvailableSurveys(String stageName, List<String> stageAvailableSurveys){
+    this.stageName = stageName;
+    List<String> acronymInStageAvailableSurveys = new ArrayList<>();
+
+    for(StageAcronymSurveyActivitiesDto dto : stageAcronymSurveyActivitiesDtos){
+      dto.removeAcronymGroup();
+      if(stageAvailableSurveys.contains(dto.getAcronym())){
+        acronymInStageAvailableSurveys.add(dto.getAcronym());
+      }
+    }
+
+    return stageAvailableSurveys.stream()
+      .filter(x -> !acronymInStageAvailableSurveys.contains(x))
+      .collect(Collectors.toList());
+  }
+
+  public void addAcronymWithNoActivities(String acronym, String surveyName){
+    stageAcronymSurveyActivitiesDtos.add(new StageAcronymSurveyActivitiesDto(acronym, surveyName));
   }
 
 }

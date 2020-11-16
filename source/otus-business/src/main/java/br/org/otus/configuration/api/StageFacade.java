@@ -4,6 +4,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.AlreadyExist;
 import br.org.otus.response.info.NotFound;
 import model.Stage;
+import model.StageDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -73,4 +74,24 @@ public class StageFacade {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
+
+  public void updateSurveyAcronymsOfStage(String stageJson) {
+    try{
+      stageService.updateSurveyAcronymsOfStage(Stage.deserialize(stageJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public void updateStagesOfSurveyAcronym(String stageDtoJson) {
+    try{
+      StageDto stageDto = StageDto.deserialize(stageDtoJson);
+      stageService.updateStagesOfSurveyAcronym(stageDto.getAcronym(), stageDto.getStageIdsToAdd(), stageDto.getStageIdsToRemove());
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
 }

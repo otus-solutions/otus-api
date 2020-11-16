@@ -1,16 +1,19 @@
 package br.org.otus.configuration.stage;
 
 import br.org.mongodb.MongoGenericDao;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import model.Stage;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.service.ParseQuery;
 import persistence.StageDao;
 
 import java.util.ArrayList;
@@ -21,7 +24,8 @@ import static com.mongodb.client.model.Filters.eq;
 public class StageDaoBean extends MongoGenericDao<Document> implements StageDao {
 
   private static final String COLLECTION_NAME = "stage";
-  private static final String KEY_FIELD_NAME = "name";
+  private static final String NAME_PATH = "name";
+  private static final String SURVEY_ACRONYMS = "surveyAcronyms";
 
   public StageDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -88,10 +92,46 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
     return stages;
   }
 
+  @Override
+  public void updateSurveyAcronymsOfStage(Stage stage) throws DataNotFoundException {
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, stage.getId()),
+      new Document("$set", new Document(SURVEY_ACRONYMS, stage.getSurveyAcronyms()))
+    );
+
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stage with id " + stage.getId().toString() + " was not found."));
+    }
+  }
+
+  @Override
+  public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDsToAdd, List<ObjectId> stageOIDsToRemove) throws DataNotFoundException {
+    UpdateResult updateAddResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, new Document("$in", stageOIDsToAdd)),
+      new Document("$addToSet", new Document(SURVEY_ACRONYMS, acronym))
+    );
+
+    if(updateAddResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDsToAdd.toString() + " was not found."));
+    }
+
+    UpdateResult updateRemoveResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, new Document("$in", stageOIDsToRemove)),
+      new Document("$pull", new Document(SURVEY_ACRONYMS, acronym))
+    );
+
+    if(updateRemoveResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDsToRemove.toString() + " was not found."));
+    }
+
+  }
+
+
   private void checkExistence(Stage stage) throws AlreadyExistException {
-    Document result = collection.find(eq(KEY_FIELD_NAME, stage.getName())).first();
+    Document result = collection.find(eq(NAME_PATH, stage.getName())).first();
     if(result != null){
       throw new AlreadyExistException(new Throwable(result.getObjectId(ID_FIELD_NAME).toString()));
     }
   }
+
 }

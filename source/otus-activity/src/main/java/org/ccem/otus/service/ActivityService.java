@@ -22,7 +22,7 @@ public interface ActivityService {
 
   List<SurveyActivity> list(long rn, String userEmail);
 
-  List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail, Map<ObjectId, String> stageMap) throws MemoryExcededException;
+  List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) throws MemoryExcededException;
 
   SurveyActivity getByID(String id) throws DataNotFoundException;
 

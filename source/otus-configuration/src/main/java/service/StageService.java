@@ -20,4 +20,8 @@ public interface StageService {
 
   List<Stage> getAll() throws MemoryExcededException;
 
+  void updateSurveyAcronymsOfStage(Stage stage) throws DataNotFoundException;
+
+  void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDsToAdd, List<ObjectId> stageOIDsToRemove) throws DataNotFoundException;
+
 }
