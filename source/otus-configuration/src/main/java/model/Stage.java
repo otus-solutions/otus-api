@@ -43,11 +43,7 @@ public class Stage extends SerializableModelWithID {
   public List<String> getSurveyAcronyms() {
     return surveyAcronyms;
   }
-
-  public void setSurveyAcronyms(List<String> surveyAcronyms) {
-    this.surveyAcronyms = surveyAcronyms;
-  }
-
+  
   public static Stage deserialize(String stageJson) {
     return (Stage)deserialize(stageJson, Stage.class);
   }
