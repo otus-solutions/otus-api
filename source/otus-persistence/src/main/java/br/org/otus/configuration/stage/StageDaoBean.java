@@ -106,26 +106,24 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
 
   @Override
   public void updateStagesOfSurveyAcronym(String acronym, List<ObjectId> stageOIDsToAdd, List<ObjectId> stageOIDsToRemove) throws DataNotFoundException {
-    UpdateResult updateAddResult = collection.updateOne(
-      new Document(ID_FIELD_NAME, new Document("$in", stageOIDsToAdd)),
-      new Document("$addToSet", new Document(SURVEY_ACRONYMS, acronym))
-    );
-
-    if(updateAddResult.getMatchedCount() == 0){
-      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDsToAdd.toString() + " was not found."));
-    }
-
-    UpdateResult updateRemoveResult = collection.updateOne(
-      new Document(ID_FIELD_NAME, new Document("$in", stageOIDsToRemove)),
-      new Document("$pull", new Document(SURVEY_ACRONYMS, acronym))
-    );
-
-    if(updateRemoveResult.getMatchedCount() == 0){
-      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDsToRemove.toString() + " was not found."));
-    }
-
+    addOrRemoveStagesOfSurveyAcronym("$addToSet", acronym, stageOIDsToAdd);
+    addOrRemoveStagesOfSurveyAcronym("$pull", acronym, stageOIDsToRemove);
   }
 
+  private void addOrRemoveStagesOfSurveyAcronym(String operator, String acronym, List<ObjectId> stageOIDs) throws DataNotFoundException {
+    if(stageOIDs.size() == 0){
+      return;
+    }
+
+    UpdateResult updateResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, new Document("$in", stageOIDs)),
+      new Document(operator, new Document(SURVEY_ACRONYMS, acronym))
+    );
+
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Stages with ids " + stageOIDs.toString() + " was not found."));
+    }
+  }
 
   private void checkExistence(Stage stage) throws AlreadyExistException {
     Document result = collection.find(eq(NAME_PATH, stage.getName())).first();
