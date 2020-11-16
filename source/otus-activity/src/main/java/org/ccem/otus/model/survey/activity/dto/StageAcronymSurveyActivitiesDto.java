@@ -25,24 +25,12 @@ public class StageAcronymSurveyActivitiesDto extends SerializableModel {
   }
 
 
-  public AcronymGroup getAcronymGroup() {
-    return acronymGroup;
-  }
-
   public String getAcronym() {
     return acronym;
   }
 
   public void setAcronym(String acronym) {
     this.acronym = acronym;
-  }
-
-  public String getActivityName() {
-    return activityName;
-  }
-
-  public void setActivityName(String activityName) {
-    this.activityName = activityName;
   }
 
   public List<SurveyActivityItemListDto> getActivities() {
@@ -57,14 +45,10 @@ public class StageAcronymSurveyActivitiesDto extends SerializableModel {
     return (StageAcronymSurveyActivitiesDto)deserialize(json, StageAcronymSurveyActivitiesDto.class);
   }
 
-  public boolean hasActivities(){
-    return !activities.isEmpty();
-  }
-
   public void removeAcronymGroup(){
     acronym = acronymGroup.getAcronym();
     acronymGroup = null;
     activityName = activities.get(0).getName();
   }
-  
+
 }
