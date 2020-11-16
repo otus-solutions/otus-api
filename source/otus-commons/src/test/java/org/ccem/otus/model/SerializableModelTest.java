@@ -13,16 +13,16 @@ public class SerializableModelTest {
 
   @Test
   public void serializeStaticMethod_should_convert_objectModel_to_JsonString() {
-    assertTrue(SerializableModelWithID.serialize(Mockito.anyObject()) instanceof String);
+    assertTrue(SerializableModel.serialize(Mockito.anyObject()) instanceof String);
   }
 
   @Test
   public void deserializeStaticMethod_should_convert_JsonString_to_objectModel() {
-    assertTrue(SerializableModelWithID.deserialize("{}", Object.class) instanceof Object);
+    assertTrue(SerializableModel.deserialize("{}", Object.class) instanceof Object);
   }
 
   @Test
   public void getGsonBuilder_return_GsonBuilder_instance(){
-    assertTrue(SerializableModelWithID.getGsonBuilder() instanceof GsonBuilder);
+    assertTrue(SerializableModel.getGsonBuilder() instanceof GsonBuilder);
   }
 }
