@@ -2,6 +2,7 @@ package br.org.otus.configuration.api;
 
 import br.org.otus.response.exception.HttpResponseException;
 import model.Stage;
+import model.StageDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -23,12 +24,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Stage.class})
+@PrepareForTest({Stage.class, StageDto.class})
 public class StageFacadeTest {
 
   private static final String STAGE_ID = "5f77920624439758ce4a43ab";
   private static final ObjectId STAGE_OID = new ObjectId(STAGE_ID);
   private static final String STAGE_JSON = "{}";
+  private static final String STAGE_DTO_JSON = "{}";
 
   @InjectMocks
   private StageFacade stageFacade;
@@ -39,14 +41,18 @@ public class StageFacadeTest {
   private ActivityService activityService;
 
   private Stage stage;
+  private StageDto stageDto;
 
   @Before
   public void setUp(){
     stage = new Stage();
     stage.setId(STAGE_OID);
-
     PowerMockito.mockStatic(Stage.class);
     when(Stage.deserialize(STAGE_JSON)).thenReturn(stage);
+
+    stageDto = new StageDto();
+    PowerMockito.mockStatic(StageDto.class);
+    when(StageDto.deserialize(STAGE_DTO_JSON)).thenReturn(stageDto);
   }
 
   @Test
@@ -119,5 +125,32 @@ public class StageFacadeTest {
   public void getAll_method_should_handle_DataNotFoundException() throws Exception {
     PowerMockito.doThrow(new MemoryExcededException("")).when(stageService, "getAll");
     stageFacade.getAll();
+  }
+
+
+  @Test
+  public void updateSurveyAcronymsOfStage_method_should_call_stageService_updateSurveyAcronymsOfStage_method() throws DataNotFoundException {
+    stageFacade.updateSurveyAcronymsOfStage(STAGE_JSON);
+    verify(stageService, Mockito.times(1)).updateSurveyAcronymsOfStage(stage);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void updateSurveyAcronymsOfStage_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException()).when(stageService, "updateSurveyAcronymsOfStage", stage);
+    stageFacade.updateSurveyAcronymsOfStage(STAGE_JSON);
+  }
+
+  @Test
+  public void updateStagesOfSurveyAcronym_method_should_call_stageService_updateStagesOfSurveyAcronym_method() throws DataNotFoundException {
+    stageFacade.updateStagesOfSurveyAcronym(STAGE_DTO_JSON);
+    verify(stageService, Mockito.times(1)).updateStagesOfSurveyAcronym(stageDto.getAcronym(),
+      stageDto.getStageIdsToAdd(), stageDto.getStageIdsToRemove());
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void updateStagesOfSurveyAcronym_method_should_handle_DataNotFoundException() throws Exception {
+    PowerMockito.doThrow(new DataNotFoundException()).when(stageService, "updateStagesOfSurveyAcronym", stageDto.getAcronym(),
+      stageDto.getStageIdsToAdd(), stageDto.getStageIdsToRemove());
+    stageFacade.updateStagesOfSurveyAcronym(STAGE_DTO_JSON);
   }
 }
