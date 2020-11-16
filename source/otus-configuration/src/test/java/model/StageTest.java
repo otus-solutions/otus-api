@@ -1,6 +1,5 @@
 package model;
 
-import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
