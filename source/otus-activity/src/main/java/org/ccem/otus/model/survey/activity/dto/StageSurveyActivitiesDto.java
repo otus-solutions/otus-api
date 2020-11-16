@@ -28,9 +28,6 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
     return stageAcronymSurveyActivitiesDtos;
   }
 
-  public void setStageName(String stageName) {
-    this.stageName = stageName;
-  }
 
   public static StageSurveyActivitiesDto deserialize(String json){
     return (StageSurveyActivitiesDto) SerializableModelWithID.deserialize(json, StageSurveyActivitiesDto.class);
