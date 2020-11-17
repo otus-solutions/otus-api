@@ -115,7 +115,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
       return;
     }
 
-    UpdateResult updateResult = collection.updateOne(
+    UpdateResult updateResult = collection.updateMany(
       new Document(ID_FIELD_NAME, new Document("$in", stageOIDs)),
       new Document(operator, new Document(SURVEY_ACRONYMS, acronym))
     );
