@@ -37,6 +37,10 @@ public class TubeCollectionData {
     return metadata;
   }
 
+  public List<ObjectId> getCustomMetadata() {
+    return customMetadata;
+  }
+
   public String getOperatorEmail() {
     return operator;
   }
@@ -50,16 +54,14 @@ public class TubeCollectionData {
     return builder.create().toJson(tubeCollectionData);
   }
 
-  public static Tube deserialize(String tubeJson) {
-    GsonBuilder builder = ParticipantLaboratory.getGsonBuilder();
-    return builder.create().fromJson(tubeJson, Tube.class);
+  public static TubeCollectionData deserialize(String tubeJson) {
+    return getGsonBuilder().create().fromJson(tubeJson, TubeCollectionData.class);
   }
 
-  public static Gson getGsonBuilder() {
+  public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     builder.serializeNulls();
-
-    return builder.create();
+    return builder;
   }
 }
