@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -202,7 +205,23 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-  public List<TubeCustomMetadata> getTubeCustomMedataDataByType(String type) throws DataNotFoundException {
-    return null;
+  public List<TubeCustomMetadata> getTubeCustomMedataDataByType(String tubeType) throws DataNotFoundException {
+
+    Document query = new Document("objectType", TubeCustomMetadata.OBJECT_TYPE);
+    query.put("type", tubeType);
+
+    FindIterable<Document> results = collection.find(query);
+    if(results == null){
+      throw new DataNotFoundException("Tube custom metadata of type " + tubeType + "was not found.");
+    }
+
+    List<TubeCustomMetadata> tubeCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      tubeCustomMetadata.add(TubeCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return tubeCustomMetadata;
   }
 }
