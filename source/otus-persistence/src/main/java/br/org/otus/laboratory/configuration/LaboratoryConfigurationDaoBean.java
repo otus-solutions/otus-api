@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -207,5 +208,10 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
       throw new DataNotFoundException("Any exams available found for the given center: \"" + center + "\"");
     }
     return centerAliquots;
+  }
+
+  @Override
+  public List<TubeCustomMetadata> getTubeCustomMedataDataByType(String type) throws DataNotFoundException {
+    return null;
   }
 }
