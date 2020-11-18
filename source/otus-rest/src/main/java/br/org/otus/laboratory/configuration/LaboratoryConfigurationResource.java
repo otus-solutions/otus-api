@@ -3,10 +3,7 @@ package br.org.otus.laboratory.configuration;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
@@ -62,8 +59,10 @@ public class LaboratoryConfigurationResource {
   @GET
   @Secured
   @Path("/tube-custom-metadata/{type}")
+  @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public String getTubeMedataDataByType(@PathParam("type") String tubeType) {
-    return new Response().buildSuccess(laboratoryConfigurationFacade.getTubeMedataDataByType(tubeType)).toJson();
+    List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationFacade.getTubeMedataDataByType(tubeType);
+    return new Response().buildSuccess(tubeCustomMetadata).toJson(TubeCustomMetadata.getGsonBuilder());
   }
 }
