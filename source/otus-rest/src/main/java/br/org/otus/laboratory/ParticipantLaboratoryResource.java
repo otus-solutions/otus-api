@@ -109,8 +109,8 @@ public class ParticipantLaboratoryResource {
   @Path("/tube/custom-metadata")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String updateTubeCustomMetadata(String tubeCollectionDataJson) {
-    participantLaboratoryFacade.updateTubeCustomMetadata(tubeCollectionDataJson);
+  public String updateTubeCustomMetadata(String tubeJson) {
+    participantLaboratoryFacade.updateTubeCustomMetadata(tubeJson);
     return new Response().buildSuccess().toJson();
   }
 }

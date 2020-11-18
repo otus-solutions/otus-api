@@ -3,7 +3,6 @@ package br.org.otus.laboratory.participant;
 import java.util.LinkedList;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
-import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -33,5 +32,5 @@ public interface ParticipantLaboratoryService {
 
   ParticipantLaboratory get(String tubeCode) throws DataNotFoundException;
 
-  void updateTubeCustomMetadata(TubeCollectionData tubeCollectionData) throws DataNotFoundException;
+  void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException;
 }

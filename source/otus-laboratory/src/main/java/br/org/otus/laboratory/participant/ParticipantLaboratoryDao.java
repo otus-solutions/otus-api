@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 import br.org.otus.laboratory.project.exam.utils.ExamResultTube;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -48,5 +47,5 @@ public interface ParticipantLaboratoryDao {
 
   HashMap<String, ExamResultTube> getTubesParticipantData(List<String> tubeCodes);
 
-  void updateTubeCustomMetadata(TubeCollectionData tubeCollectionData) throws DataNotFoundException;
+  void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException;
 }

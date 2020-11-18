@@ -226,7 +226,7 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
   }
 
   @Override
-  public void updateTubeCustomMetadata(TubeCollectionData tubeCollectionData) throws DataNotFoundException {
+  public void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException {
     //TODO
   }
 

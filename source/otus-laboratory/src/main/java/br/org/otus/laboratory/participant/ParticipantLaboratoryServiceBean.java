@@ -9,7 +9,6 @@ import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
-import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 import br.org.otus.laboratory.participant.tube.TubeService;
 import br.org.otus.laboratory.participant.validators.AliquotDeletionValidator;
 import br.org.otus.laboratory.participant.validators.AliquotUpdateValidator;
@@ -171,7 +170,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
   }
 
   @Override
-  public void updateTubeCustomMetadata(TubeCollectionData tubeCollectionData) throws DataNotFoundException {
-    participantLaboratoryDao.updateTubeCustomMetadata(tubeCollectionData);
+  public void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException {
+    participantLaboratoryDao.updateTubeCustomMetadata(tube);
   }
 }
