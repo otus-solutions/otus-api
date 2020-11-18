@@ -42,25 +42,16 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
   @Override
   public Boolean getCheckingExist() {
-    Document query = new Document("objectType", "LaboratoryConfiguration");
-
-    Document first = collection.find(query).first();
-    if (first != null) {
-      return true;
-    }
-    return false;
+    Document first = collection.find(new Document("objectType", "LaboratoryConfiguration")).first();
+    return (first != null);
   }
 
   @Override
   public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
-    Document query = new Document("objectType", "AliquotExamCorrelation");
-
-    Document first = collection.find(query).first();
-
+    Document first = collection.find(new Document("objectType", "AliquotExamCorrelation")).first();
     if (first == null) {
       throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
     }
-
     return AliquotExamCorrelation.deserialize(first.toJson());
   }
 
