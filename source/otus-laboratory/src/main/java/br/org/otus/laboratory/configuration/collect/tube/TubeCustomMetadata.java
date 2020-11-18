@@ -1,14 +1,5 @@
 package br.org.otus.laboratory.configuration.collect.tube;
 
-import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfiguration;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupConfigurationAdapter;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
-import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptorAdapter;
-import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfiguration;
-import br.org.otus.laboratory.configuration.collect.moment.CollectMomentConfigurationAdapter;
-import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
-import br.org.otus.laboratory.configuration.label.LabelPrintConfigurationAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
