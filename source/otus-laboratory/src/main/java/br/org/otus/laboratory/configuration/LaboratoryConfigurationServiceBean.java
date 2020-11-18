@@ -106,8 +106,7 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
-  public List<TubeCustomMetadata> get(String type) throws DataNotFoundException {
-    ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(type);
-    return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
+  public List<TubeCustomMetadata> getTubeCustomMedataDataByType(String type) throws DataNotFoundException {
+    return laboratoryConfigurationDao.getTubeCustomMedataDataByType(type);
   }
 }
