@@ -103,4 +103,14 @@ public class ParticipantLaboratoryResource {
     Aliquot convertedAliquot = Aliquot.deserialize(convertedAliquotJson);
     return javax.ws.rs.core.Response.ok(participantLaboratoryFacade.convertAliquotRole(convertedAliquot)).build();
   }
+
+  @PUT
+  @Secured
+  @Path("/tube/custom-metadata")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateTubeCustomMetadata(String tubeCollectionDataJson) {
+    participantLaboratoryFacade.updateTubeCustomMetadata(tubeCollectionDataJson);
+    return new Response().buildSuccess().toJson();
+  }
 }

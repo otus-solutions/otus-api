@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import javax.inject.Inject;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.participant.tube.TubeCollectionData;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
@@ -100,6 +101,14 @@ public class ParticipantLaboratoryFacade {
       throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     } catch (ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void updateTubeCustomMetadata(String tubeCollectionDataJson) {
+    try {
+      service.updateTubeCustomMetadata(TubeCollectionData.deserialize(tubeCollectionDataJson));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
   }
 }

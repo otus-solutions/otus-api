@@ -225,4 +225,9 @@ public class ParticipantLaboratoryDaoBean extends MongoGenericDao<Document> impl
     return hmap;
   }
 
+  @Override
+  public void updateTubeCustomMetadata(TubeCollectionData tubeCollectionData) throws DataNotFoundException {
+    //TODO
+  }
+
 }
