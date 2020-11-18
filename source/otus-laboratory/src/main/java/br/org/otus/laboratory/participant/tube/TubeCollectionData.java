@@ -3,15 +3,18 @@ package br.org.otus.laboratory.participant.tube;
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TubeCollectionData {
 
   private String objectType;
   private boolean isCollected;
   private String metadata;
+  private List<ObjectId> customMetadata;
   private String operator;
   private LocalDateTime time;
 

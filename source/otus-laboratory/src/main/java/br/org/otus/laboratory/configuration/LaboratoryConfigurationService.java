@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
@@ -39,4 +40,6 @@ public interface LaboratoryConfigurationService {
   AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException;
 
   List<String> listPossibleExams(String center) throws DataNotFoundException;
+
+    List<TubeCustomMetadata> get(String type) throws DataNotFoundException;
 }

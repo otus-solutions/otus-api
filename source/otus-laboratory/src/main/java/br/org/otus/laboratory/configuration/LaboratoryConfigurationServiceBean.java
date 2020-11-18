@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
@@ -101,6 +102,12 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   @Override
   public List<String> listPossibleExams(String center) throws DataNotFoundException {
     ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(center);
+    return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
+  }
+
+  @Override
+  public List<TubeCustomMetadata> get(String type) throws DataNotFoundException {
+    ArrayList centerAliquots = laboratoryConfigurationDao.listCenterAliquots(type);
     return laboratoryConfigurationDao.getAliquotsExams(centerAliquots);
   }
 }
