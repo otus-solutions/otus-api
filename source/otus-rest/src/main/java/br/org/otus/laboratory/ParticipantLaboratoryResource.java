@@ -34,7 +34,7 @@ public class ParticipantLaboratoryResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String getByTubeCode(@PathParam("tubeCode") String tubeCode) throws DataNotFoundException {
     ParticipantLaboratory participantTube = participantLaboratoryFacade.get(tubeCode);
-    return new Response().buildSuccess(ParticipantLaboratory.serialize(participantTube)).toJson();
+    return new Response().buildSuccess(participantTube).toJson(ParticipantLaboratory.getFrontGsonBuilder());
   }
 
   @POST
