@@ -24,7 +24,9 @@ import static org.junit.Assert.assertEquals;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(LaboratoryConfigurationServiceBean.class)
 public class LaboratoryConfigurationServiceBeanTest {
+
   private static final String CENTER = "MG";
+  private static final String TUBE_TYPE = "type";
 
 
   @InjectMocks
@@ -170,5 +172,10 @@ public class LaboratoryConfigurationServiceBeanTest {
     Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getAliquotsExams(arrayList);
   }
 
+  @Test
+  public void getTubeCustomMedataDataByType_method_should_invoke_dao_method() throws DataNotFoundException {
+    laboratoryConfigurationServiceBean.getTubeCustomMedataDataByType(TUBE_TYPE);
+    Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getTubeCustomMedataDataByType(TUBE_TYPE);
+  }
 
 }

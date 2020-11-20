@@ -41,5 +41,5 @@ public interface LaboratoryConfigurationService {
 
   List<String> listPossibleExams(String center) throws DataNotFoundException;
 
-  List<TubeCustomMetadata> getTubeCustomMedataDataByType(String type) throws DataNotFoundException;
+  List<TubeCustomMetadata> getTubeCustomMedataDataByType(String tubeType) throws DataNotFoundException;
 }
