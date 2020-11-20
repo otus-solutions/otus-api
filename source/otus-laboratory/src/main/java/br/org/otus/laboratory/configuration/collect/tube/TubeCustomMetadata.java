@@ -1,7 +1,7 @@
 package br.org.otus.laboratory.configuration.collect.tube;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
@@ -9,14 +9,15 @@ public class TubeCustomMetadata {
 
   public static final String OBJECT_TYPE = "TubeCustomMetadata";
 
-  private ObjectId _id;
+  @SerializedName("_id")
+  private ObjectId id;
   private String objectType;
   private String type;
   private String value;
   private String extractionValue;
 
-  public ObjectId get_id() {
-    return _id;
+  public ObjectId getId() {
+    return id;
   }
 
   public String getObjectType() {
