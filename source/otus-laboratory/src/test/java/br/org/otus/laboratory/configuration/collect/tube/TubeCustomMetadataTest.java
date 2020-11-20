@@ -35,7 +35,7 @@ public class TubeCustomMetadataTest {
   public void getters_unit_test(){
     assertEquals(OID, tubeCustomMetadata.getId());
     assertEquals(OBJECT_TYPE, tubeCustomMetadata.getObjectType());
-    assertEquals(OBJECT_TYPE, tubeCustomMetadata.getObjectType());
+    assertEquals(TYPE, tubeCustomMetadata.getType());
     assertEquals(VALUE, tubeCustomMetadata.getValue());
     assertEquals(EXTRACTION_VALUE, tubeCustomMetadata.getExtractionValue());
   }
