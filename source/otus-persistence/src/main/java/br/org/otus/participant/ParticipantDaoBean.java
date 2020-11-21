@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -122,7 +123,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public Participant fetchByEmail(String userEmail) throws DataNotFoundException {
-    Document participantFound = this.collection.find(eq(EMAIL, userEmail)).first();
+    Document participantFound = this.collection.find(eq(EMAIL, new Document("$regex", userEmail).append("$options","i"))).first();
     if (participantFound == null) {
       throw new DataNotFoundException(new Throwable("Participant with email: {" + userEmail + "} not found."));
     }
