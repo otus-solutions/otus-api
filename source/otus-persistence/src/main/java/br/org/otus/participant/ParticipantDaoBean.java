@@ -67,12 +67,12 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public void addAuthToken(String email, String Token) {
-    this.collection.updateOne(new Document(EMAIL, email), new Document(PUSH, new Document(TOKEN_LIST_FIELD, Token)));
+    this.collection.updateOne(new Document(EMAIL, new Document("$regex", email).append("$options","i")), new Document(PUSH, new Document(TOKEN_LIST_FIELD, Token)));
   }
 
   @Override
   public void removeAuthToken(String email, String Token) {
-    this.collection.updateOne(new Document(EMAIL, email), new Document(PULL, new Document(TOKEN_LIST_FIELD, Token)));
+    this.collection.updateOne(new Document(EMAIL, new Document("$regex", email).append("$options","i")), new Document(PULL, new Document(TOKEN_LIST_FIELD, Token)));
   }
 
   @Override
@@ -141,7 +141,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public void registerPassword(String email, String password) throws DataNotFoundException {
-    UpdateResult updateResult = this.collection.updateOne(new Document(EMAIL, email), new Document(SET, new Document(PASSWORD, password)));
+    UpdateResult updateResult = this.collection.updateOne(new Document(EMAIL, new Document("$regex", email).append("$options","i")), new Document(SET, new Document(PASSWORD, password)));
     if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("Participant no found");
     }
