@@ -2,6 +2,7 @@ package br.org.otus.participant;
 
 import br.org.otus.participant.api.ParticipantContactFacade;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
+import br.org.otus.ResourceTestsParent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 
-public class ParticipantContactResourceTest {
+public class ParticipantContactResourceTest extends ResourceTestsParent {
+
   private static final String PARTICIPANT_CONTACT_ID = "5e0658135b4ff40f8916d2b5";
   private static final Long RN = 1234567L;
 
@@ -111,9 +113,5 @@ public class ParticipantContactResourceTest {
     assertEquals(
       encapsulateExpectedResponse(participantContactJson),
       participantContactResource.getParticipantContactByRecruitmentNumber(RN.toString()));
-  }
-
-  private String encapsulateExpectedResponse(String data) {
-    return "{\"data\":" + data + "}";
   }
 }

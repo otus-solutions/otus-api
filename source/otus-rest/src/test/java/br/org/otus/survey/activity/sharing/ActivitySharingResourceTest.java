@@ -2,6 +2,7 @@ package br.org.otus.survey.activity.sharing;
 
 import br.org.otus.security.AuthorizationHeaderReader;
 import org.ccem.otus.model.survey.activity.sharing.ActivitySharingDto;
+import br.org.otus.ResourceTestsParent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AuthorizationHeaderReader.class})
-public class ActivitySharingResourceTest {
+public class ActivitySharingResourceTest extends ResourceTestsParent {
 
   private static final String USER_TOKEN = "123456";
   private static final String ACTIVITY_ID = "5a33cb4a28f10d1043710f7d";
@@ -72,11 +73,6 @@ public class ActivitySharingResourceTest {
   public void deleteSharedURL_method_should_invoke_activitySharingFacade(){
     activitySharingResource.deleteSharedURL(request, ACTIVITY_SHARING_ID);
     verify(activitySharingFacade, Mockito.times(1)).deleteSharedURL(ACTIVITY_SHARING_ID, USER_TOKEN);
-  }
-
-
-  private String encapsulateExpectedResponse(String data) {
-    return "{\"data\":" + data + "}";
   }
 
 }

@@ -22,6 +22,16 @@ public class ActivitySharingServiceBean implements ActivitySharingService {
   }
 
   @Override
+  public ObjectId getActivitySharingIdByActivityId(ObjectId activityId) {
+    try {
+      ActivitySharing activitySharingFounded = activitySharingDao.getSharedURL(activityId);
+      return activitySharingFounded.getId();
+    } catch (DataNotFoundException e) {
+      return null;
+    }
+  }
+
+  @Override
   public ActivitySharingDto createSharedURL(ActivitySharing activitySharing) {
     return buildActivitySharingDto(activitySharingDao.createSharedURL(activitySharing));
   }

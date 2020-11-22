@@ -1,14 +1,14 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.gateway.response.exception.ReadRequestException;
-import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
+import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.JsonSyntaxException;
 import com.nimbusds.jwt.SignedJWT;
+import model.Stage;
 import org.bson.types.ObjectId;
 import org.ccem.otus.enums.AuthenticationMode;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -17,6 +17,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.model.survey.activity.status.UserNotFoundException;
@@ -27,15 +28,12 @@ import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
 import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
+import org.ccem.otus.service.sharing.ActivitySharingService;
+import service.StageService;
 
 import javax.inject.Inject;
-import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ActivityFacade {
@@ -52,11 +50,55 @@ public class ActivityFacade {
   private ActivityCategoryService activityCategoryService;
 
   @Inject
+  private StageService stageService;
+
+  @Inject
   private FollowUpFacade followUpFacade;
+
+  @Inject
+  private ActivitySharingService activitySharingService;
+
+  @Inject
+  private SurveyService surveyService;
+
+
   private SurveyActivity activityUpdated;
 
   public List<SurveyActivity> list(long rn, String userEmail) {
     return activityService.list(rn, userEmail);
+  }
+
+  public List<StageSurveyActivitiesDto> listByStageGroups(long rn, String userEmail) {
+    try{
+      List<Stage> stages = stageService.getAll();
+
+      Map<ObjectId, Stage> stageMap = new HashMap<>();
+      stages.forEach(stage -> {
+        stageMap.put(stage.getId(), stage);
+      });
+
+      Map<String, String> acronymNameMap = surveyService.getAcronymNameMap();
+
+      List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail);
+
+      stageSurveyActivitiesDtos.forEach(stageDto -> {
+        Stage stage = stageMap.get(stageDto.getStageId());
+        try{
+          stageDto.formatAndGetAcronymsNotInStageAvailableSurveys(stage.getName(), stage.getSurveyAcronyms())
+            .forEach(acronym -> {
+              stageDto.addAcronymWithNoActivities(acronym, acronymNameMap.get(acronym));
+            });
+        }
+        catch (NullPointerException e){ // activities with no stage
+          stageDto.format();
+        }
+      });
+
+      return stageSurveyActivitiesDtos;
+    }
+    catch (MemoryExcededException e){
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
   }
 
   public SurveyActivity getByID(String id) {
@@ -70,9 +112,7 @@ public class ActivityFacade {
   public List<SurveyActivity> get(String acronym, Integer version) {
     try {
       return activityService.get(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
@@ -80,9 +120,7 @@ public class ActivityFacade {
   public List<SurveyActivity> getExtraction(String acronym, Integer version) {
     try {
       return activityService.getExtraction(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
-    } catch (MemoryExcededException e) {
+    } catch (DataNotFoundException | MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
@@ -156,6 +194,7 @@ public class ActivityFacade {
       if (activityUpdated.getMode().name().equals(ActivityMode.AUTOFILL.name())) {
         if(activityUpdated.isDiscarded()){
           followUpFacade.cancelParticipantEventByActivityId(surveyActivity.getActivityID().toString());
+          removeShareUrl(activityUpdated.getActivityID());
         }
         else{
           String nameLastStatusHistory = activityUpdated.getLastStatus().get().getName();
@@ -168,6 +207,11 @@ public class ActivityFacade {
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
+  }
+
+  private void removeShareUrl(ObjectId activityID) throws DataNotFoundException {
+    ObjectId activitySharingId = activitySharingService.getActivitySharingIdByActivityId(activityID);
+    if(Objects.nonNull(activitySharingId)) activitySharingService.deleteSharedURL(String.valueOf(activitySharingId));
   }
 
   public boolean updateCheckerActivity(String checkerUpdated) {
@@ -262,6 +306,14 @@ public class ActivityFacade {
       return activityService.create(surveyActivity);
 
     } catch (ValidationException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public void discardByID(String activityID) {
+    try {
+      activityService.discardByID(new ObjectId(activityID));
+    } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }

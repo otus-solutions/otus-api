@@ -3,6 +3,7 @@ package br.org.otus.survey.services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
@@ -135,6 +137,11 @@ public class SurveyServiceBean implements SurveyService {
     JSONObject requiredExternalIDJsonObject = new JSONObject(requiredExternalID);
     Boolean stateRequiredExternalID = (Boolean) requiredExternalIDJsonObject.get("requiredExternalID");
     return surveyDao.updateSurveyRequiredExternalID(objectId, stateRequiredExternalID);
+  }
+
+  @Override
+  public Map<String, String> getAcronymNameMap() throws MemoryExcededException {
+    return surveyDao.getAcronymNameMap();
   }
 
   private void discardSurvey(SurveyForm survey) throws DataNotFoundException {
