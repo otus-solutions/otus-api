@@ -32,10 +32,10 @@ public class LaboratoryConfigurationResourceTest extends ResourceTestsParent {
   @Test
   public void updateTubeCustomMetadata_method_should_return_empty_response(){
     List<TubeCustomMetadata> tubeCustomMetadata = new ArrayList<>();
-    when(laboratoryConfigurationFacade.getTubeMedataDataByType(TUBE_JSON)).thenReturn(tubeCustomMetadata);
+    when(laboratoryConfigurationFacade.getTubeMedataData(TUBE_JSON)).thenReturn(tubeCustomMetadata);
 
-    String response = resource.getTubeMedataDataByType(TUBE_JSON);
-    verify(laboratoryConfigurationFacade, Mockito.times(1)).getTubeMedataDataByType(TUBE_JSON);
+    String response = resource.getTubeMedataData(TUBE_JSON);
+    verify(laboratoryConfigurationFacade, Mockito.times(1)).getTubeMedataData(TUBE_JSON);
     assertEquals(encapsulateExpectedResponse(tubeCustomMetadata.toString()), response);
   }
 }

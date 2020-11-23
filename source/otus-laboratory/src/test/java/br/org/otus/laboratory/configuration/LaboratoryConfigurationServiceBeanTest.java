@@ -173,9 +173,9 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void getTubeCustomMedataDataByType_method_should_invoke_dao_method() throws DataNotFoundException {
-    laboratoryConfigurationServiceBean.getTubeCustomMedataDataByType(TUBE_TYPE);
-    Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getTubeCustomMedataDataByType(TUBE_TYPE);
+  public void getTubeCustomMedataData_method_should_invoke_dao_method() throws DataNotFoundException {
+    laboratoryConfigurationServiceBean.getTubeCustomMedataData(TUBE_TYPE);
+    Mockito.verify(laboratoryConfigurationDao, Mockito.times(1)).getTubeCustomMedataData(TUBE_TYPE);
   }
 
 }

@@ -28,13 +28,13 @@ public class LaboratoryConfigurationFacadeTest {
 
   @Test
   public void getTubeMedataDataByType_method_should_invoke_service_method() throws DataNotFoundException {
-    laboratoryConfigurationFacade.getTubeMedataDataByType(TUBE_TYPE);
-    verify(laboratoryConfigurationService, times(1)).getTubeCustomMedataDataByType(TUBE_TYPE);
+    laboratoryConfigurationFacade.getTubeMedataData(TUBE_TYPE);
+    verify(laboratoryConfigurationService, times(1)).getTubeCustomMedataData(TUBE_TYPE);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getTubeMedataDataByType_method_should_handle_DataNotFoundException() throws DataNotFoundException {
-    when(laboratoryConfigurationService.getTubeCustomMedataDataByType(TUBE_TYPE)).thenThrow(new DataNotFoundException());
-    laboratoryConfigurationFacade.getTubeMedataDataByType(TUBE_TYPE);
+    when(laboratoryConfigurationService.getTubeCustomMedataData(TUBE_TYPE)).thenThrow(new DataNotFoundException());
+    laboratoryConfigurationFacade.getTubeMedataData(TUBE_TYPE);
   }
 }

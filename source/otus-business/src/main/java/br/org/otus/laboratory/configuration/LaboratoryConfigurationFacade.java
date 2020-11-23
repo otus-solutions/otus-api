@@ -15,9 +15,9 @@ public class LaboratoryConfigurationFacade {
   private LaboratoryConfigurationService laboratoryConfigurationService;
 
 
-  public List<TubeCustomMetadata> getTubeMedataDataByType(String tubeType) {
+  public List<TubeCustomMetadata> getTubeMedataData(String tubeType) {
     try{
-      return laboratoryConfigurationService.getTubeCustomMedataDataByType(tubeType);
+      return laboratoryConfigurationService.getTubeCustomMedataData(tubeType);
     }catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

@@ -61,8 +61,8 @@ public class LaboratoryConfigurationResource {
   @Path("/tube-custom-metadata/{type}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getTubeMedataDataByType(@PathParam("type") String tubeType) {
-    List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationFacade.getTubeMedataDataByType(tubeType);
+  public String getTubeMedataData(@PathParam("type") String tubeType) {
+    List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationFacade.getTubeMedataData(tubeType);
     return new Response().buildSuccess(tubeCustomMetadata).toJson(TubeCustomMetadata.getGsonBuilder());
   }
 }

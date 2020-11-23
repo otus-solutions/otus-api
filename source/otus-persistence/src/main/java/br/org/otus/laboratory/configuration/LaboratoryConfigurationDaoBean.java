@@ -205,7 +205,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-  public List<TubeCustomMetadata> getTubeCustomMedataDataByType(String tubeType) throws DataNotFoundException {
+  public List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException {
 
     Document query = new Document("objectType", TubeCustomMetadata.OBJECT_TYPE);
     query.put("type", tubeType);
