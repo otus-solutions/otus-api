@@ -46,4 +46,6 @@ public interface ParticipantLaboratoryDao {
   ArrayList<Tube> getTubes(ArrayList<String> tubeCodeList);
 
   HashMap<String, ExamResultTube> getTubesParticipantData(List<String> tubeCodes);
+
+  void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException;
 }
