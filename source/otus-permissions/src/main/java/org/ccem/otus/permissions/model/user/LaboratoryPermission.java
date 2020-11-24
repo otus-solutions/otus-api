@@ -9,6 +9,7 @@ public class LaboratoryPermission extends Permission {
   private Boolean examSendingAccess;
   private Boolean unattachedLaboratoriesAccess;
   private Boolean laboratoryMaterialManagerAccess;
+  private Boolean aliquotManagerAccess;
 
   public static String serialize(Permission permission) {
     return LaboratoryPermission.getGsonBuilder().create().toJson(permission);
@@ -38,7 +39,8 @@ public class LaboratoryPermission extends Permission {
       getExamSendingAccess() == c.getExamSendingAccess() &&
       getSampleTransportationAccess() == c.getSampleTransportationAccess() &&
       getUnattachedLaboratoriesAccess() == c.getUnattachedLaboratoriesAccess() &&
-      getLaboratoryMaterialManagerAccess() == c.getLaboratoryMaterialManagerAccess();
+      getLaboratoryMaterialManagerAccess() == c.getLaboratoryMaterialManagerAccess() &&
+      getAliquotManagerAccess() == c.getAliquotManagerAccess();
   }
 
   @Override
@@ -51,7 +53,8 @@ public class LaboratoryPermission extends Permission {
       ((examLotsAccess == null) ? 0 : examLotsAccess.hashCode()) +
       ((examSendingAccess == null) ? 0 : examSendingAccess.hashCode()) +
       ((unattachedLaboratoriesAccess == null) ? 0 : unattachedLaboratoriesAccess.hashCode()) +
-      ((laboratoryMaterialManagerAccess == null) ? 0 : laboratoryMaterialManagerAccess.hashCode());
+      ((laboratoryMaterialManagerAccess == null) ? 0 : laboratoryMaterialManagerAccess.hashCode()) +
+      ((aliquotManagerAccess == null) ? 0 : aliquotManagerAccess.hashCode());
     return result;
   }
 
@@ -77,5 +80,9 @@ public class LaboratoryPermission extends Permission {
 
   public Boolean getLaboratoryMaterialManagerAccess() {
     return laboratoryMaterialManagerAccess;
+  }
+
+  public Boolean getAliquotManagerAccess() {
+    return aliquotManagerAccess;
   }
 }

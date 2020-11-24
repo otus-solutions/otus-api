@@ -1,24 +1,22 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.info.NotFound;
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 @Path("/laboratory-configuration")
 public class LaboratoryConfigurationResource {
+
+  @Inject
+  private LaboratoryConfigurationFacade laboratoryConfigurationFacade;
 
   @Inject
   private LaboratoryConfigurationService laboratoryConfigurationService;
@@ -56,5 +54,15 @@ public class LaboratoryConfigurationResource {
   public String getAliquotDescriptors() {
     List<AliquoteDescriptor> aliquoteDescriptors = laboratoryConfigurationService.getAliquotDescriptors();
     return new Response().buildSuccess(aliquoteDescriptors).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/tube-custom-metadata/{type}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getTubeMedataData(@PathParam("type") String tubeType) {
+    List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationFacade.getTubeMedataData(tubeType);
+    return new Response().buildSuccess(tubeCustomMetadata).toJson(TubeCustomMetadata.getGsonBuilder());
   }
 }

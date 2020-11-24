@@ -1,7 +1,7 @@
 package br.org.otus.user.api;
 
 import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.service.EmailNotifierServiceBean;
+import br.org.otus.email.service.SystemEmailNotifierServiceBean;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.exception.ResponseInfo;
@@ -28,7 +28,7 @@ public class UserFacadeCreateTest {
   private UserFacade userFacade;
 
   @Mock
-  private EmailNotifierServiceBean emailNotifierServiceBean;
+  private SystemEmailNotifierServiceBean systemEmailNotifierServiceBean;
 
   @Mock
   private ManagementUserServiceBean managementUserServiceBean;

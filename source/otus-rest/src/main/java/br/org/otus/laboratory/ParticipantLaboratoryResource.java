@@ -34,7 +34,7 @@ public class ParticipantLaboratoryResource {
   @Consumes(MediaType.APPLICATION_JSON)
   public String getByTubeCode(@PathParam("tubeCode") String tubeCode) throws DataNotFoundException {
     ParticipantLaboratory participantTube = participantLaboratoryFacade.get(tubeCode);
-    return new Response().buildSuccess(ParticipantLaboratory.serialize(participantTube)).toJson();
+    return new Response().buildSuccess(participantTube).toJson(ParticipantLaboratory.getFrontGsonBuilder());
   }
 
   @POST
@@ -102,5 +102,15 @@ public class ParticipantLaboratoryResource {
   public javax.ws.rs.core.Response convertAliquotRole(String convertedAliquotJson) {
     Aliquot convertedAliquot = Aliquot.deserialize(convertedAliquotJson);
     return javax.ws.rs.core.Response.ok(participantLaboratoryFacade.convertAliquotRole(convertedAliquot)).build();
+  }
+
+  @PUT
+  @Secured
+  @Path("/tube/custom-metadata")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateTubeCustomMetadata(String tubeJson) {
+    participantLaboratoryFacade.updateTubeCustomMetadata(tubeJson);
+    return new Response().buildSuccess().toJson();
   }
 }

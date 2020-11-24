@@ -6,7 +6,7 @@ import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 import br.org.otus.security.dtos.ParticipantCommunicationDataDto;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.template.enums.TemplateEmailKey;
+import br.org.otus.communication.TemplateEmailKeys;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 
 import java.net.MalformedURLException;
@@ -21,7 +21,7 @@ public class ManagementParticipantServiceBean implements ManagementParticipantSe
     try {
       ParticipantCommunicationDataDto participantCommunicationDataDto = new ParticipantCommunicationDataDto();
       participantCommunicationDataDto.setEmail(requestData.getEmail());
-      participantCommunicationDataDto.setId(TemplateEmailKey.TEMPLATE_RESET_PASSWD_PARTICIPANT_ID.getValue());
+      participantCommunicationDataDto.setId(TemplateEmailKeys.RESET_PASSWD_PARTICIPANT.getValue());
       participantCommunicationDataDto.pushVariable("token", requestData.getToken());
       participantCommunicationDataDto.pushVariable("host", String.valueOf(isValidURL(requestData.getRedirectUrl())));
       GatewayResponse notification = new CommunicationGatewayService().sendMail(ParticipantCommunicationDataDto.serialize(participantCommunicationDataDto));

@@ -1,6 +1,5 @@
 package br.org.otus.participant.api;
 
-import br.org.otus.email.system.SystemInstallationEmail;
 import br.org.otus.participant.management.ManagementParticipantService;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
@@ -145,7 +144,7 @@ public class ParticipantFacade {
 
   public Boolean updateEmail(String participantId, String email) {
     try {
-      if(!SystemInstallationEmail.isValid(email)) {
+      if(!isValid(email)) {
         throw new ValidationException(new Throwable("Malformed email"));
       }
 
@@ -201,5 +200,10 @@ public class ParticipantFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
+  }
+
+  public boolean isValid(String email) {
+    String regex = "^[\\w-_+]+(\\.[\\w-_]+)*\\@\\w+([[.-]?\\w])*(\\.[A-Za-z]{2,3})+$";
+    return email.matches(regex);
   }
 }

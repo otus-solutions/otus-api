@@ -1,16 +1,16 @@
 package br.org.otus.user.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.doThrow;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import br.org.otus.configuration.dto.OtusInitializationConfigDto;
+import br.org.otus.extraction.ExtractionSecurityService;
+import br.org.otus.model.User;
+import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.security.api.SecurityFacade;
+import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.dto.ManagementUserDto;
+import br.org.otus.user.dto.PasswordResetDto;
+import br.org.otus.user.dto.SignupDataDto;
+import br.org.otus.user.management.ManagementUserService;
+import br.org.otus.user.signup.SignupService;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -22,18 +22,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.extraction.ExtractionSecurityService;
-import br.org.otus.model.User;
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.security.api.SecurityFacade;
-import br.org.otus.security.dtos.PasswordResetRequestDto;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.otus.user.dto.PasswordResetDto;
-import br.org.otus.user.dto.SignupDataDto;
-import br.org.otus.user.management.ManagementUserService;
-import br.org.otus.user.signup.SignupService;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class UserFacadeTest {
@@ -43,8 +40,6 @@ public class UserFacadeTest {
   private UserFacade userFacade;
   @Mock
   private ExtractionSecurityService extractionSecurityService;
-  @Mock
-  private EmailNotifierService emailNotifierService;
   @Mock
   private ManagementUserService managementUserService;
   @Mock
@@ -160,28 +155,14 @@ public class UserFacadeTest {
 
   @Test
   public void disableMethod_should_check_evocation_of_disableMethod_by_managementUserService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     userFacade.disable(managementUserDto);
     verify(managementUserService).disable(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void disableMethod_should_throw_HttpResponseException_if_caught_EmailNotificationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-    doThrow(new EmailNotificationException()).when(managementUserService).disable(managementUserDto);
-    userFacade.disable(managementUserDto);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void disableMethod_should_throw_HttpResponseException_if_caught_EncryptedException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
-    doThrow(new EncryptedException()).when(managementUserService).disable(managementUserDto);
-    userFacade.disable(managementUserDto);
-  }
-
-  @Test(expected = HttpResponseException.class)
   public void disableMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).disable(managementUserDto);
     userFacade.disable(managementUserDto);
   }
@@ -230,21 +211,21 @@ public class UserFacadeTest {
 
   @Test
   public void disableExtractionMethod_should_check_evocation_of_disableMethod_by_managementUserService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     userFacade.disableExtraction(managementUserDto);
     verify(managementUserService).disableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableExtractionMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).disableExtraction(managementUserDto);
     userFacade.disableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void disableExtractionMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).disableExtraction(managementUserDto);
     userFacade.disableExtraction(managementUserDto);
   }
@@ -258,21 +239,21 @@ public class UserFacadeTest {
 
   @Test(expected = HttpResponseException.class)
   public void enableExtractionMethod_should_throw_HttpResponseException_if_caught_ValidationException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new ValidationException()).when(managementUserService).enableExtraction(managementUserDto);
     userFacade.enableExtraction(managementUserDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void enableExtractionMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     doThrow(new DataNotFoundException()).when(managementUserService).enableExtraction(managementUserDto);
     userFacade.enableExtraction(managementUserDto);
   }
 
   @Test
   public void method_updateExtractionIps_should_check_evocation_of_updateExtractionIps_by_managementUserService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws ValidationException, DataNotFoundException {
     userFacade.updateExtractionIps(managementUserDto);
     verify(managementUserService).updateExtractionIps(managementUserDto);
   }
@@ -293,14 +274,14 @@ public class UserFacadeTest {
 
   @Test
   public void getExtractionTokenMethod_should_check_evocation_of_getExtractionToken_by_extractionSecurityService()
-    throws EmailNotificationException, EncryptedException, ValidationException, DataNotFoundException {
+    throws DataNotFoundException {
     userFacade.getExtractionToken(EMAIL);
     verify(extractionSecurityService).getExtractionToken(EMAIL);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getExtractionTokenMethod_should_throw_HttpResponseException_if_caught_DataNotFoundException()
-    throws ValidationException, DataNotFoundException {
+    throws DataNotFoundException {
     doThrow(new DataNotFoundException()).when(extractionSecurityService).getExtractionToken(EMAIL);
     userFacade.getExtractionToken(EMAIL);
   }

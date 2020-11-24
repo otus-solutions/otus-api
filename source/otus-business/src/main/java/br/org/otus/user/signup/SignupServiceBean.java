@@ -1,30 +1,34 @@
 package br.org.otus.user.signup;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
+import br.org.otus.communication.CommunicationDataBuilder;
+import br.org.otus.communication.GenericCommunicationData;
+import br.org.otus.configuration.builder.SystemConfigBuilder;
+import br.org.otus.configuration.dto.OtusInitializationConfigDto;
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.gateway.gates.CommunicationGatewayService;
+import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
+import br.org.otus.user.dto.SignupDataDto;
+import br.org.otus.user.management.ManagementUserService;
+import br.org.owail.sender.email.Sender;
+import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.configuration.builder.SystemConfigBuilder;
-import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.OtusEmailFactory;
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.signup.NewUserGreetingsEmail;
-import br.org.otus.email.user.signup.NewUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.persistence.UserDao;
-import br.org.otus.user.dto.SignupDataDto;
-import br.org.otus.user.management.ManagementUserService;
-import br.org.owail.sender.email.Recipient;
-import br.org.owail.sender.email.Sender;
-import br.org.tutty.Equalizer;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.net.MalformedURLException;
+import java.util.logging.Logger;
 
 @Stateless
 public class SignupServiceBean implements SignupService {
+
+  private final static Logger LOGGER = Logger.getLogger(SignupService.class.getName());
+
 
   @Inject
   private UserDao userDao;
@@ -43,7 +47,7 @@ public class SignupServiceBean implements SignupService {
         Equalizer.equalize(signupDataDto, user);
         Sender sender = emailNotifierService.getSender();
 
-        sendEmailToUser(user, sender);
+        sendEmailToUser(user);
         sendEmailToAdmin(sender, user);
         userDao.persist(user);
 
@@ -71,16 +75,27 @@ public class SignupServiceBean implements SignupService {
     }
   }
 
-  private void sendEmailToUser(User user, Sender sender) throws EmailNotificationException {
-    Recipient recipient = Recipient.createTO(user.getName(), user.getEmail());
-    NewUserGreetingsEmail email = OtusEmailFactory.createNewUserGreetingsEmail(sender, recipient);
-    emailNotifierService.sendEmailSync(email);
+  private void sendEmailToUser(User user) {
+    GenericCommunicationData genericCommunicationData = CommunicationDataBuilder.newUserGreeting(user.getEmail());
+
+    try {
+      CommunicationGatewayService emailSender = new CommunicationGatewayService();
+      emailSender.sendMail(genericCommunicationData.toJson());
+    } catch (ReadRequestException | MalformedURLException ex) {
+      LOGGER.severe("sendEmailToUser: " + user.getEmail());
+    }
   }
 
   private void sendEmailToAdmin(Sender sender, User userToRegister) throws EmailNotificationException {
     User systemAdministrator = userDao.findAdmin();
-    Recipient recipient = Recipient.createTO(systemAdministrator.getName(), systemAdministrator.getEmail());
-    NewUserNotificationEmail email = OtusEmailFactory.createNewUserNotificationEmail(sender, recipient, userToRegister);
-    emailNotifierService.sendEmailSync(email);
+    GenericCommunicationData notificationData = CommunicationDataBuilder.newUserNotification(systemAdministrator.getEmail(), userToRegister);
+
+    try {
+      CommunicationGatewayService emailSender = new CommunicationGatewayService();
+      emailSender.sendMail(notificationData.toJson());
+
+    } catch (ReadRequestException | MalformedURLException ex) {
+      LOGGER.severe("sendEmailToAdmin: " + systemAdministrator.getEmail());
+    }
   }
 }

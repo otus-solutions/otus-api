@@ -1,33 +1,27 @@
 package br.org.otus.user.api;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
+import br.org.otus.configuration.dto.OtusInitializationConfigDto;
 import br.org.otus.extraction.ExtractionSecurityService;
+import br.org.otus.model.User;
+import br.org.otus.response.builders.ResponseBuild;
+import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.security.api.SecurityFacade;
 import br.org.otus.security.dtos.PasswordResetRequestDto;
+import br.org.otus.user.dto.ManagementUserDto;
 import br.org.otus.user.dto.PasswordResetDto;
+import br.org.otus.user.dto.SignupDataDto;
+import br.org.otus.user.management.ManagementUserService;
+import br.org.otus.user.signup.SignupService;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
-import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.model.User;
-import br.org.otus.response.builders.ResponseBuild;
-import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.user.dto.ManagementUserDto;
-import br.org.otus.user.dto.SignupDataDto;
-import br.org.otus.user.management.ManagementUserService;
-import br.org.otus.user.signup.SignupService;
+import javax.inject.Inject;
+import java.util.List;
 
 public class UserFacade {
-
-  @Inject
-  private EmailNotifierService emailNotifierService;
 
   @Inject
   private ManagementUserService managementUserService;
@@ -81,9 +75,6 @@ public class UserFacade {
   public void disable(ManagementUserDto managementUserDto) {
     try {
       managementUserService.disable(managementUserDto);
-
-    } catch (EmailNotificationException | EncryptedException e) {
-      throw new HttpResponseException(ResponseBuild.Email.CommunicationFail.build());
 
     } catch (ValidationException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build());

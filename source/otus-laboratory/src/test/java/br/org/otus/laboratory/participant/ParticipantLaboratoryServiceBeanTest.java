@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.org.otus.laboratory.participant.aliquot.AliquotEvent;
+import br.org.otus.laboratory.participant.tube.Tube;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
@@ -108,7 +109,7 @@ public class ParticipantLaboratoryServiceBeanTest {
   private UpdateAliquotsDTO updateAliquotsDTO;
 
   @Before
-  public void setup() throws DataNotFoundException {
+  public void setup() {
     JsonObjectUpdateAliquotsDTOFactory dtoFactory = new JsonObjectUpdateAliquotsDTOFactory();
     updateAliquotsDTO = UpdateAliquotsDTO.deserialize(dtoFactory.create().toString());
 
@@ -206,7 +207,6 @@ public class ParticipantLaboratoryServiceBeanTest {
   @Test
   public void getLaboratoryExtraction_method_should_call_getLaboratoryExtraction_method() throws DataNotFoundException {
     participantLaboratoryServiceBean.getLaboratoryExtraction();
-
     verify(participantLaboratoryExtractionDao).getLaboratoryExtraction();
   }
 
@@ -221,6 +221,13 @@ public class ParticipantLaboratoryServiceBeanTest {
   @Test(expected = ValidationException.class)
   public void convertAliquotRole_method_throws_ValidationException_in_case_aliquotHistory_empty() throws DataNotFoundException, ValidationException {
     participantLaboratoryServiceBean.convertAliquotRole(convertedAliquot);
+  }
+
+  @Test
+  public void updateTubeCustomMetadata_method_should_call_dao_method() throws DataNotFoundException {
+    Tube tube = new Tube("", "", "", "");
+    participantLaboratoryServiceBean.updateTubeCustomMetadata(tube);
+    verify(participantLaboratoryDao, Mockito.times(1)).updateTubeCustomMetadata(tube);
   }
 
 }
