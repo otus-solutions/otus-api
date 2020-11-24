@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -41,25 +45,16 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
   @Override
   public Boolean getCheckingExist() {
-    Document query = new Document("objectType", "LaboratoryConfiguration");
-
-    Document first = collection.find(query).first();
-    if (first != null) {
-      return true;
-    }
-    return false;
+    Document first = collection.find(new Document("objectType", "LaboratoryConfiguration")).first();
+    return (first != null);
   }
 
   @Override
   public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
-    Document query = new Document("objectType", "AliquotExamCorrelation");
-
-    Document first = collection.find(query).first();
-
+    Document first = collection.find(new Document("objectType", "AliquotExamCorrelation")).first();
     if (first == null) {
       throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
     }
-
     return AliquotExamCorrelation.deserialize(first.toJson());
   }
 
@@ -207,5 +202,26 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
       throw new DataNotFoundException("Any exams available found for the given center: \"" + center + "\"");
     }
     return centerAliquots;
+  }
+
+  @Override
+  public List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException {
+
+    Document query = new Document("objectType", TubeCustomMetadata.OBJECT_TYPE);
+    query.put("type", tubeType);
+
+    FindIterable<Document> results = collection.find(query);
+    if(results == null){
+      throw new DataNotFoundException("Tube custom metadata of type " + tubeType + "was not found.");
+    }
+
+    List<TubeCustomMetadata> tubeCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      tubeCustomMetadata.add(TubeCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return tubeCustomMetadata;
   }
 }

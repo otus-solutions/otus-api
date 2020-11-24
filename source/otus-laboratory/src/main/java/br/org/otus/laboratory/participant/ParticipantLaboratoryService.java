@@ -31,4 +31,6 @@ public interface ParticipantLaboratoryService {
   Tube getTube(String locationPointId, String tubeCode) throws DataNotFoundException, ValidationException;
 
   ParticipantLaboratory get(String tubeCode) throws DataNotFoundException;
+
+  void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException;
 }

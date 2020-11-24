@@ -1,6 +1,6 @@
 package br.org.otus.security.dtos;
 
-import br.org.otus.template.enums.TemplateEmailKey;
+import br.org.otus.communication.TemplateEmailKeys;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ public class ParticipantCommunicationDataDtoTest {
   @Before
   public void setUp() throws Exception {
     dto.setEmail("mock@email.com");
-    dto.setId(TemplateEmailKey.TEMPLATE_RESET_PASSWD_PARTICIPANT_ID.getValue());
+    dto.setId(TemplateEmailKeys.RESET_PASSWD_PARTICIPANT.getValue());
     dto.pushVariable("host", "http://wwww.mock.com.br");
     dto.pushVariable("token", "1234567890");
     dtoSerialized = ParticipantCommunicationDataDto.serialize(dto);

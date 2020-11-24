@@ -9,7 +9,7 @@ import org.powermock.reflect.Whitebox;
 public class LaboratoryPermissionTest {
 
   private static final String OBJECT_SERIALIZED = "{\"objectType\":\"Permission\",\"email\":\"test@test\"}";
-  private static final String OBJECT_DESERIALIZED = "{\"participantLaboratoryAccess\": false, \"sampleTransportationAccess\":false,\"examLotsAccess\":false,\"examSendingAccess\":false,\"unattachedLaboratoriesAccess\":false, \"laboratoryMaterialManagerAccess\":false}";
+  private static final String OBJECT_DESERIALIZED = "{\"participantLaboratoryAccess\": false, \"sampleTransportationAccess\":false,\"examLotsAccess\":false,\"examSendingAccess\":false,\"unattachedLaboratoriesAccess\":false, \"laboratoryMaterialManagerAccess\":false, \"aliquotManagerAccess\":false}";
   private LaboratoryPermission laboratoryPermission;
   private Permission permission;
 
@@ -22,6 +22,7 @@ public class LaboratoryPermissionTest {
     Whitebox.setInternalState(this.laboratoryPermission, "examSendingAccess", Boolean.FALSE);
     Whitebox.setInternalState(this.laboratoryPermission, "unattachedLaboratoriesAccess", Boolean.FALSE);
     Whitebox.setInternalState(this.laboratoryPermission, "laboratoryMaterialManagerAccess", Boolean.FALSE);
+    Whitebox.setInternalState(this.laboratoryPermission, "aliquotManagerAccess", Boolean.FALSE);
 
     this.permission = new Permission();
     Whitebox.setInternalState(this.permission, "objectType", "Permission");
@@ -45,6 +46,7 @@ public class LaboratoryPermissionTest {
     Assert.assertTrue(deserialized.getExamLotsAccess().equals(Boolean.FALSE));
     Assert.assertTrue(deserialized.getUnattachedLaboratoriesAccess().equals(Boolean.FALSE));
     Assert.assertTrue(deserialized.getLaboratoryMaterialManagerAccess().equals(Boolean.FALSE));
+    Assert.assertTrue(deserialized.getAliquotManagerAccess().equals(Boolean.FALSE));
   }
 
   @Test

@@ -102,4 +102,12 @@ public class ParticipantLaboratoryFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public void updateTubeCustomMetadata(String tubeJson) {
+    try {
+      service.updateTubeCustomMetadata(Tube.deserialize(tubeJson));
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
+  }
 }

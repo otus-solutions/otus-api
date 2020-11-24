@@ -168,4 +168,9 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     participantLaboratoryTube.setAliquots(aliquots);
     return participantLaboratoryTube;
   }
+
+  @Override
+  public void updateTubeCustomMetadata(Tube tube) throws DataNotFoundException {
+    participantLaboratoryDao.updateTubeCustomMetadata(tube);
+  }
 }

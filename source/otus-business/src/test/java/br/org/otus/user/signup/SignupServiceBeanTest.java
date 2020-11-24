@@ -1,16 +1,16 @@
 package br.org.otus.user.signup;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.verifyNew;
-import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
-
+import br.org.otus.configuration.builder.SystemConfigBuilder;
+import br.org.otus.configuration.dto.OtusInitializationConfigDto;
+import br.org.otus.email.dto.EmailSenderDto;
+import br.org.otus.email.service.EmailNotifierService;
+import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
+import br.org.otus.user.dto.SignupDataDto;
+import br.org.otus.user.management.ManagementUserService;
+import br.org.owail.sender.email.Recipient;
+import br.org.owail.sender.email.Sender;
+import br.org.tutty.Equalizer;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
@@ -25,24 +25,13 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import br.org.otus.configuration.builder.SystemConfigBuilder;
-import br.org.otus.configuration.dto.OtusInitializationConfigDto;
-import br.org.otus.email.OtusEmailFactory;
-import br.org.otus.email.dto.EmailSenderDto;
-import br.org.otus.email.service.EmailNotifierService;
-import br.org.otus.email.user.signup.NewUserGreetingsEmail;
-import br.org.otus.email.user.signup.NewUserNotificationEmail;
-import br.org.otus.model.User;
-import br.org.otus.persistence.UserDao;
-import br.org.otus.user.dto.SignupDataDto;
-import br.org.otus.user.management.ManagementUserService;
-import br.org.owail.sender.email.Recipient;
-import br.org.owail.sender.email.Sender;
-import br.org.tutty.Equalizer;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SignupServiceBean.class, Equalizer.class, Recipient.class, OtusEmailFactory.class,
-  SystemConfigBuilder.class})
+@PrepareForTest({SignupServiceBean.class, Equalizer.class, Recipient.class, SystemConfigBuilder.class})
 public class SignupServiceBeanTest {
   private static final Boolean NEGATIVE_ANSWER = false;
   private static final Boolean POSITIVE_ANSWER = true;
@@ -62,14 +51,6 @@ public class SignupServiceBeanTest {
   private SignupDataDto signupDataDto;
   @Mock
   private OtusInitializationConfigDto initializationConfigDto;
-  @Mock
-  private NewUserGreetingsEmail greetingsEmail;
-  @Mock
-  private User userToRegister;
-  @Mock
-  private NewUserNotificationEmail notificationEmail;
-  @Mock
-  private Recipient recipientUser;
   @Mock
   private EmailSenderDto emailSenderDto;
 
@@ -102,7 +83,7 @@ public class SignupServiceBeanTest {
     when(userDao.findAdmin()).thenReturn(systemAdministrator);
     when(systemAdministrator.getName()).thenReturn(NAME);
     when(systemAdministrator.getEmail()).thenReturn(EMAIL);
-    mockStatic(OtusEmailFactory.class);
+//    mockStatic(OtusEmailFactory.class);
 
     signupServiceBean.create(signupDataDto);
     verifyNew(User.class, times(2)).withNoArguments();
