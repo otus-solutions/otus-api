@@ -2,7 +2,9 @@ package br.org.otus.laboratory.participant.dto;
 
 import br.org.otus.laboratory.participant.tube.Tube;
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +26,10 @@ public class UpdateTubeCollectionDataDTO {
   }
 
   public static GsonBuilder getGsonBuilder() {
-    return new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    GsonBuilder gsonBuilder =  new GsonBuilder();
+    gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    gsonBuilder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return gsonBuilder;
   }
 
 }
