@@ -80,6 +80,7 @@ public class ActivityFacade {
       Map<String, String> acronymNameMap = surveyService.getAcronymNameMap();
 
       List<StageSurveyActivitiesDto> stageSurveyActivitiesDtos = activityService.listByStageGroups(rn, userEmail);
+      List<ObjectId> stageWithActivities = new ArrayList<>();
 
       stageSurveyActivitiesDtos.forEach(stageDto -> {
         Stage stage = stageMap.get(stageDto.getStageId());
@@ -88,11 +89,19 @@ public class ActivityFacade {
             .forEach(acronym -> {
               stageDto.addAcronymWithNoActivities(acronym, acronymNameMap.get(acronym));
             });
+
+          stageWithActivities.add(stage.getId());
         }
         catch (NullPointerException e){ // activities with no stage
           stageDto.format();
         }
       });
+
+      stageMap.keySet().stream()
+        .filter(stageOID -> !stageWithActivities.contains(stageOID))
+        .forEach(stageOID -> {
+          stageSurveyActivitiesDtos.add(new StageSurveyActivitiesDto(stageOID, stageMap.get(stageOID).getName()));
+        });
 
       return stageSurveyActivitiesDtos;
     }
