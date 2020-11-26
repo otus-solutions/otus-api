@@ -36,7 +36,6 @@ public class ParticipantServiceBean implements ParticipantService {
       } catch (ValidationException | DataNotFoundException e) {
         insertedParticipants.add(null);
       }
-
     });
   }
 
@@ -54,32 +53,28 @@ public class ParticipantServiceBean implements ParticipantService {
   public Participant create(Participant participant) throws ValidationException, DataNotFoundException {
     if (projectConfigurationService.isRnProvided()) {
       Long rn = recruitmentNumberService.get(participant.getFieldCenter().getAcronym());
-
       participant.setRecruitmentNumber(rn);
-      participantDao.persist(participant);
-
-      return participant;
-
-    } else {
-      recruitmentNumberService.validate(participant.getFieldCenter(), participant.getRecruitmentNumber());
-
-      if (participantDao.exists(participant.getRecruitmentNumber())) {
-        String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} already exists.";
-        throw new ValidationException(new Throwable(error));
-      }
       participantDao.persist(participant);
       return participant;
     }
+
+    recruitmentNumberService.validate(participant.getFieldCenter(), participant.getRecruitmentNumber());
+
+    if (participantDao.exists(participant.getRecruitmentNumber())) {
+      String error = "RecruitmentNumber {" + participant.getRecruitmentNumber().toString() + "} already exists.";
+      throw new ValidationException(new Throwable(error));
+    }
+    participantDao.persist(participant);
+    return participant;
   }
 
   @Override
   public Participant update(Participant participant) throws ValidationException, DataNotFoundException {
-    if (participantDao.exists(participant.getRecruitmentNumber())) {
-      participantDao.update(participant);
-    } else {
-      String error = "RecruimentNumber {" + participant.getRecruitmentNumber().toString() + "} not exists.";
+    if(!participantDao.exists(participant.getRecruitmentNumber())){
+      String error = "RecruitmentNumber {" + participant.getRecruitmentNumber().toString() + "} not exists.";
       throw new ValidationException(new Throwable(error));
     }
+    participantDao.update(participant);
     return participant;
   }
 
@@ -87,9 +82,8 @@ public class ParticipantServiceBean implements ParticipantService {
   public List<Participant> list(FieldCenter fieldCenter) {
     if (fieldCenter == null) {
       return participantDao.find();
-    } else {
-      return participantDao.findByFieldCenter(fieldCenter);
     }
+    return participantDao.findByFieldCenter(fieldCenter);
   }
 
   @Override
@@ -132,8 +126,7 @@ public class ParticipantServiceBean implements ParticipantService {
     if(!ObjectId.isValid(participantId)) {
       throw new ValidationException(new Throwable("ObjectId is not valid"));
     }
-    ObjectId id = new ObjectId(participantId);
-    return participantDao.getEmail(id);
+    return participantDao.getEmail(new ObjectId(participantId));
   }
 
   @Override
