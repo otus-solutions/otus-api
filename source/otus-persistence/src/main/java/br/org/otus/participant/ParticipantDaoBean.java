@@ -9,16 +9,14 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -272,5 +270,24 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     }
 
     return updateResult.getModifiedCount() != 0;
+  }
+
+  @Override
+  public List<Participant> getByFieldCenter(String centerAcronym) throws MemoryExcededException {
+    List<Participant> centerParticipants = new ArrayList<>();
+
+    FindIterable<Document> find = collection.find(eq(FIELD_CENTER_ACRONYM, centerAcronym));
+    MongoCursor<Document> iterator = find.iterator();
+
+    while(iterator.hasNext()){
+      try{
+        centerParticipants.add(Participant.deserialize(iterator.next().toJson()));
+      }
+      catch (OutOfMemoryError e){
+        throw new MemoryExcededException("Participants of center {" + centerAcronym + "} exceded memory.");
+      }
+    }
+
+    return centerParticipants;
   }
 }
