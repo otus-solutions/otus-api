@@ -13,7 +13,6 @@ import br.org.otus.user.dto.PasswordResetDto;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -206,13 +205,5 @@ public class ParticipantFacade {
   public boolean isValid(String email) {
     String regex = "^[\\w-_+]+(\\.[\\w-_]+)*\\@\\w+([[.-]?\\w])*(\\.[A-Za-z]{2,3})+$";
     return email.matches(regex);
-  }
-
-  public List<Participant> getByFieldCenter(String centerAcronym){
-    try {
-      return participantService.getByFieldCenter(centerAcronym);
-    } catch (MemoryExcededException e) {
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
   }
 }

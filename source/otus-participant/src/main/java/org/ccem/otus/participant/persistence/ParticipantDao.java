@@ -57,7 +57,5 @@ public interface ParticipantDao {
   String getEmail(ObjectId id) throws DataNotFoundException;
 
   Boolean deleteEmail(ObjectId id) throws DataNotFoundException;
-
-  List<Participant> getByFieldCenter(String centerAcronym) throws MemoryExcededException;
 }
 

@@ -43,6 +43,4 @@ public interface ParticipantService {
   String getEmail(String participantId) throws ValidationException, DataNotFoundException;
 
   Boolean deleteEmail(ObjectId participantId) throws DataNotFoundException;
-
-  List<Participant> getByFieldCenter(String centerAcronym) throws MemoryExcededException;
 }

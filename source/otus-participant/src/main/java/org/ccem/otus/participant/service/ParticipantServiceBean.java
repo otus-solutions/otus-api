@@ -141,9 +141,4 @@ public class ParticipantServiceBean implements ParticipantService {
   public Boolean deleteEmail(ObjectId participantId) throws DataNotFoundException {
     return participantDao.deleteEmail(participantId);
   }
-
-  @Override
-  public List<Participant> getByFieldCenter(String centerAcronym) throws MemoryExcededException {
-    return participantDao.getByFieldCenter(centerAcronym);
-  }
 }

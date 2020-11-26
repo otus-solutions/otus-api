@@ -272,22 +272,4 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     return updateResult.getModifiedCount() != 0;
   }
 
-  @Override
-  public List<Participant> getByFieldCenter(String centerAcronym) throws MemoryExcededException {
-    List<Participant> centerParticipants = new ArrayList<>();
-
-    FindIterable<Document> find = collection.find(eq(FIELD_CENTER_ACRONYM, centerAcronym));
-    MongoCursor<Document> iterator = find.iterator();
-
-    while(iterator.hasNext()){
-      try{
-        centerParticipants.add(Participant.deserialize(iterator.next().toJson()));
-      }
-      catch (OutOfMemoryError e){
-        throw new MemoryExcededException("Participants of center {" + centerAcronym + "} exceded memory.");
-      }
-    }
-
-    return centerParticipants;
-  }
 }
