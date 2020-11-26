@@ -3,6 +3,7 @@ package org.ccem.otus.participant.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
@@ -124,7 +125,6 @@ public class ParticipantServiceBean implements ParticipantService {
 
   @Override
   public Boolean updateEmail(ObjectId participantId, String email) throws DataNotFoundException, AlreadyExistException {
-
     return participantDao.updateEmail(participantId, email);
   }
 
@@ -134,13 +134,16 @@ public class ParticipantServiceBean implements ParticipantService {
       throw new ValidationException(new Throwable("ObjectId is not valid"));
     }
     ObjectId id = new ObjectId(participantId);
-
     return participantDao.getEmail(id);
   }
 
   @Override
   public Boolean deleteEmail(ObjectId participantId) throws DataNotFoundException {
-
     return participantDao.deleteEmail(participantId);
+  }
+
+  @Override
+  public List<Participant> getByFieldCenter(String centerAcronym) throws MemoryExcededException {
+    return participantDao.getByFieldCenter(centerAcronym);
   }
 }
