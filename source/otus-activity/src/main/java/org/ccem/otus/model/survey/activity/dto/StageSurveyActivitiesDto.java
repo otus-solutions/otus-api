@@ -19,6 +19,13 @@ public class StageSurveyActivitiesDto extends SerializableModelWithID {
   @SerializedName("acronyms")
   private List<StageAcronymSurveyActivitiesDto> stageAcronymSurveyActivitiesDtos;
 
+  public StageSurveyActivitiesDto() { }
+
+  public StageSurveyActivitiesDto(ObjectId stageId, String stageName) {
+    this.stageId = stageId;
+    this.stageName = stageName;
+    this.stageAcronymSurveyActivitiesDtos = new ArrayList<>();
+  }
 
   public ObjectId getStageId() {
     return stageId;
