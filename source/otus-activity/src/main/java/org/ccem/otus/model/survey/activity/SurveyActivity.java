@@ -15,6 +15,7 @@ import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.LongAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.util.List;
@@ -143,12 +144,15 @@ public class SurveyActivity {
   }
 
   public static String serialize(SurveyActivity surveyActivity) {
-    return getGsonBuilder().create().toJson(surveyActivity);
+    GsonBuilder builder = getGsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return builder.create().toJson(surveyActivity);
   }
 
   public static SurveyActivity deserialize(String surveyActivity) {
     GsonBuilder builder = getGsonBuilder();
     builder.registerTypeAdapter(Long.class, new LongAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder.create().fromJson(surveyActivity, SurveyActivity.class);
   }
 
