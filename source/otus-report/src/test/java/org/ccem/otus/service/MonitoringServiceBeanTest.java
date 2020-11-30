@@ -130,12 +130,12 @@ public class MonitoringServiceBeanTest {
     when(participantDao.getRecruitmentNumbersByFieldCenter(CENTER)).thenReturn(RNS);
     when(activityInapplicabilityDao.aggregate(PIPELINE)).thenReturn(result);
     when(result.first()).thenReturn(ACTIVITY_INAPPLICABILITY_RESULT);
-    when(activityFlagReportDao.getActivitiesProgressReport(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY_RESULT)).thenReturn(ACTIVITIES_PROGRESS_REPORT_RESULT);
+    when(activityFlagReportDao.getActivitiesProgressReport(CENTER, RNS, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY_RESULT)).thenReturn(ACTIVITIES_PROGRESS_REPORT_RESULT);
 
     monitoringServiceBean.getActivitiesProgress(CENTER);
 
     verify(activityInapplicabilityDao, times(1)).aggregate(PIPELINE);
-    verify(activityFlagReportDao, times(1)).getActivitiesProgressReport(CENTER, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY_RESULT);
+    verify(activityFlagReportDao, times(1)).getActivitiesProgressReport(CENTER, RNS, SURVEY_ACRONYM_LIST, ACTIVITY_INAPPLICABILITY_RESULT);
   }
 
   @Test

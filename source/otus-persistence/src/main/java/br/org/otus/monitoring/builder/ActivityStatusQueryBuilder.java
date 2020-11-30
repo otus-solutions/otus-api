@@ -7,6 +7,7 @@ import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ActivityStatusQueryBuilder {
 
@@ -16,8 +17,9 @@ public class ActivityStatusQueryBuilder {
     this.pipeline = new ArrayList<>();
   }
 
-  public ArrayList<Bson> getActivityStatusQuery(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) {
-    addMatchFieldCenterStage(center);
+  public ArrayList<Bson> getActivityStatusQuery(List<Long> centerRecruitmentNumbers,
+                                                LinkedList<String> surveyAcronyms, Document activityInapplicabilities) {
+    addMatchFieldCenterRns(centerRecruitmentNumbers);
     addBuildDataStages(surveyAcronyms, activityInapplicabilities);
     return pipeline;
   }
@@ -28,13 +30,13 @@ public class ActivityStatusQueryBuilder {
     return pipeline;
   }
 
-  private void addMatchFieldCenterStage(String center) {
-    pipeline.add(ParseQuery.toDocument("{" +
-      "    \"$match\": {" +
-      "      \"participantData.fieldCenter.acronym\": " + center + "," +
-      "      \"isDiscarded\": false" +
-      "    }" +
-      "  }"));
+  private void addMatchFieldCenterRns(List<Long> centerRecruitmentNumbers) {
+    pipeline.add(ParseQuery.toDocument("{ \n" +
+      "        $match: {\n" +
+      "            \"participantData.recruitmentNumber\": { $in: " + centerRecruitmentNumbers.toString() +" },\n" +
+      "            \"isDiscarded\": false\n" +
+      "        }\n" +
+      "    }"));
   }
 
   private void addMatchIsDiscardedStage() {
