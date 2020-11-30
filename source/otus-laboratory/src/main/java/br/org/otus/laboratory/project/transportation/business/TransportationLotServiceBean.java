@@ -108,8 +108,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
   private void rollBackMaterial(TransportationLot transportationLot, List<String> removedMaterialCodes) {
     if(removedMaterialCodes != null){
       ArrayList<String> aliquotsToRollBack = materialTrackingDao.verifyNeedToRollback(removedMaterialCodes,transportationLot.getLotId());
-      materialTrackingDao.removeTransportation(transportationLot.getLotId());
       if (aliquotsToRollBack.size() > 0){
+        materialTrackingDao.removeMaterialTransportation(transportationLot.getLotId(),aliquotsToRollBack);
         ArrayList<ObjectId> TrailsToActivate = materialTrackingDao.getLastTrailsToRollBack(aliquotsToRollBack);
         materialTrackingDao.activateTrails(TrailsToActivate);
       }
