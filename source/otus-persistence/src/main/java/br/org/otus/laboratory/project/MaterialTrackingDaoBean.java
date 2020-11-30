@@ -107,6 +107,11 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
   }
 
   @Override
+  public void removeMaterialTransportation(ObjectId transportationLotId, ArrayList<String> materialsToRollBack) {
+    collection.deleteMany(new Document("transportationLotId",transportationLotId).append("materialCode",new Document("$in",materialsToRollBack)));
+  }
+
+  @Override
   public ArrayList<String> verifyNeedToRollback(ObjectId transportationLotId) {
     ArrayList<String> materialCodeList = new ArrayList<>();
     Document first = collection.aggregate(Arrays.asList(

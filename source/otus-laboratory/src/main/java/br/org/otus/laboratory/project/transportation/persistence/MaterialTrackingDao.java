@@ -25,6 +25,8 @@ public interface MaterialTrackingDao {
 
   void removeTransportation(ObjectId transportationLotId);
 
+  void removeMaterialTransportation(ObjectId transportationLotId, ArrayList<String> aliquotsToRollBack);
+
   ArrayList<String> verifyNeedToRollback(ObjectId lotId);
 
   void insert(MaterialTrail materialTrail);
