@@ -3,6 +3,7 @@ package br.org.otus.survey;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,31 @@ public class SurveyJumpMapQueryBuilder {
       .addProjectThatBuildTheQuestionHashMapElement()
       .addGroupThatCreateTheJumpMap();
 
+    return pipeline;
+  }
+
+  public List<Bson> acronymNameMapQuery(){
+    pipeline = new ArrayList<>();
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "        $group: {\n" +
+      "            _id: {\n" +
+      "                acronym: \"$surveyTemplate.identity.acronym\",\n" +
+      "                name: '$surveyTemplate.identity.name'\n" +
+      "            }\n" +
+      "        }\n" +
+      "    }"));
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "      $project: {\n" +
+      "          _id: 0,\n" +
+      "          'acronym': \"$_id.acronym\", \n" +
+      "          'name': \"$_id.name\"\n" +
+      "        }\n" +
+      "    }"));
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "       $sort: {\n" +
+      "           acronym: 1\n" +
+      "       }\n" +
+      "   }"));
     return pipeline;
   }
 

@@ -10,10 +10,12 @@ import org.ccem.otus.model.survey.activity.interview.Interview;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTracker;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerAdapter;
 import org.ccem.otus.utils.LongAdapter;
+import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class SurveyActivity {
   private Boolean isDiscarded;
   private NavigationTracker navigationTracker;
   private String externalID;
+  private ObjectId stageId;
 
   public SurveyActivity() {
     this.isDiscarded = Boolean.FALSE;
@@ -107,6 +110,14 @@ public class SurveyActivity {
     return this.getSurveyForm().getRequiredExternalID();
   }
 
+  public ObjectId getStageId() {
+    return stageId;
+  }
+
+  public void setStageId(ObjectId stageId) {
+    this.stageId = stageId;
+  }
+
   public Optional<ActivityStatus> getCurrentStatus() {
     return this.statusHistory.stream().reduce((activityStatus, activityStatus2) -> activityStatus2);
   }
@@ -129,16 +140,19 @@ public class SurveyActivity {
 
   public Boolean isFinalized() {
     ActivityStatus activityStatus = getCurrentStatus().get();
-    return activityStatus.getName().equals("FINALIZED");
+    return activityStatus.getName().equals(ActivityStatusOptions.FINALIZED.getName());
   }
 
   public static String serialize(SurveyActivity surveyActivity) {
-    return getGsonBuilder().create().toJson(surveyActivity);
+    GsonBuilder builder = getGsonBuilder();
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+    return builder.create().toJson(surveyActivity);
   }
 
   public static SurveyActivity deserialize(String surveyActivity) {
     GsonBuilder builder = getGsonBuilder();
     builder.registerTypeAdapter(Long.class, new LongAdapter());
+    builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     return builder.create().fromJson(surveyActivity, SurveyActivity.class);
   }
 

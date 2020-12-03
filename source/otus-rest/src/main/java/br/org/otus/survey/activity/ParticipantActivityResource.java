@@ -8,6 +8,7 @@ import br.org.otus.security.user.Secured;
 import br.org.otus.survey.activity.activityRevision.ActivityRevisionFacade;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.jboss.resteasy.annotations.Query;
 
 import javax.inject.Inject;
@@ -37,6 +38,18 @@ public class ParticipantActivityResource {
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     isValidRecruitmentNumber(rn);
     return new Response().buildSuccess(activityFacade.list(rn, userEmail)).toSurveyJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/by-stage")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getAllByStageGroup(@Context HttpServletRequest request, @PathParam("rn") long rn) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    isValidRecruitmentNumber(rn);
+    return new Response().buildSuccess(activityFacade.listByStageGroups(rn, userEmail))
+      .toJson(StageSurveyActivitiesDto.getFrontGsonBuilder());
   }
 
   @POST
@@ -110,6 +123,16 @@ public class ParticipantActivityResource {
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
     activityRevisionFacade.create(activityRevisionJson, userEmail);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @PUT
+  @Secured
+  @Path("/discard/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String discardByID(@PathParam("rn") long rn, @PathParam("id") String id) {
+    isValidRecruitmentNumber(rn);
+    activityFacade.discardByID(id);
     return new Response().buildSuccess().toJson();
   }
 

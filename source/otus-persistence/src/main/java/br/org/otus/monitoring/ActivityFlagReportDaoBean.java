@@ -26,8 +26,9 @@ public class ActivityFlagReportDaoBean extends MongoGenericDao<Document> impleme
   }
 
   @Override
-  public Document getActivitiesProgressReport(String center, LinkedList<String> surveyAcronyms, Document activityInapplicabilities) throws DataNotFoundException {
-    List<Bson> query = new ActivityStatusQueryBuilder().getActivityStatusQuery(center, surveyAcronyms, activityInapplicabilities);
+  public Document getActivitiesProgressReport(String center, List<Long> centerRecruitmentNumbers,
+                                              LinkedList<String> surveyAcronyms, Document activityInapplicabilities) throws DataNotFoundException {
+    List<Bson> query = new ActivityStatusQueryBuilder().getActivityStatusQuery(centerRecruitmentNumbers, surveyAcronyms, activityInapplicabilities);
     return getDocument(query);
   }
 

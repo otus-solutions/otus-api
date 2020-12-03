@@ -6,6 +6,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.permission.ActivityAccessPermission;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
@@ -26,6 +27,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -230,4 +232,12 @@ public class SurveyServiceBeanTest {
     service.createSurveyJumpMap(survey);
     verify(surveyJumpMapDao).persist(surveyJumpMap);
   }
+
+  @Test
+  public void getAcronymNameMap_method_should_invoke_surveyDaoBean_getAcronymNameMap_method() throws MemoryExcededException {
+    when(surveyDaoBean.getAcronymNameMap()).thenReturn(new HashMap<>());
+    service.getAcronymNameMap();
+    verify(surveyDaoBean, Mockito.times(1)).getAcronymNameMap();
+  }
+
 }

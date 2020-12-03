@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import br.org.otus.survey.activity.builder.SurveyActivityQueryBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -18,6 +19,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.CheckerUpdatedDTO;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.activity.status.ActivityStatus;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.ActivityDao;
@@ -51,6 +53,7 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   public static final String FINALIZED = "FINALIZED";
   private static final String SET = "$set";
   private static final String PARTICIPANT_DATA_EMAIL = "participantData.email";
+  private static final String STAGE_PATH = "stageId";
 
   public ActivityDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -70,14 +73,41 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
   @Override
   @UserPermission
   public List<SurveyActivity> find(List<String> permittedSurveys, String userEmail, long rn) {
+
     ArrayList<SurveyActivity> activities = new ArrayList<SurveyActivity>();
     List<Bson> pipeline = new ArrayList<>();
-    pipeline.add(new Document("$match", new Document(RECRUITMENT_NUMBER_PATH, rn).append(DISCARDED_PATH, false).append(ACRONYM_PATH, new Document("$in", permittedSurveys))));
+    pipeline.add(new Document("$match",
+      new Document(RECRUITMENT_NUMBER_PATH, rn)
+        .append(DISCARDED_PATH, false)
+        .append(ACRONYM_PATH, new Document("$in", permittedSurveys))));
     AggregateIterable<Document> result = collection.aggregate(pipeline);
 
     result.forEach((Block<Document>) document -> {
       activities.add(SurveyActivity.deserialize(document.toJson()));
     });
+
+    return activities;
+  }
+
+  @Override
+  @UserPermission
+  public List<StageSurveyActivitiesDto> findByStageGroup(List<String> permittedSurveys, String userEmail, long rn) throws MemoryExcededException {
+    ArrayList<StageSurveyActivitiesDto> activities = new ArrayList<>();
+
+    ArrayList<Bson> pipeline = (new SurveyActivityQueryBuilder())
+      .getSurveyActivityListByStageAndAcronymQuery(rn, permittedSurveys);
+
+    AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+    MongoCursor<Document> iterator = results.iterator();
+
+    while(iterator.hasNext()){
+      try{
+        activities.add(StageSurveyActivitiesDto.deserialize(iterator.next().toJson()));
+      }
+      catch (OutOfMemoryError e){
+        throw new MemoryExcededException("Activities for " + rn + " exceded memory used");
+      }
+    }
 
     return activities;
   }
@@ -295,6 +325,26 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     UpdateResult updateResult =collection.updateMany(new Document(RECRUITMENT_NUMBER_PATH, rn), new Document(SET , new Document(PARTICIPANT_DATA_EMAIL, email)));
 
     return updateResult.getModifiedCount() != 0;
+  }
+
+  @Override
+  public void removeStageFromActivities(ObjectId stageOID) {
+    collection.updateMany(
+      eq(STAGE_PATH, stageOID),
+      new Document("$unset", new Document(STAGE_PATH, ""))
+    );
+  }
+
+  @Override
+  public void discardByID(ObjectId activityOID) throws DataNotFoundException {
+    UpdateResult updateResult = collection.updateOne(
+      eq(ID_FIELD_NAME, activityOID),
+      new Document(SET, new Document("isDiscarded", true))
+    );
+
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException(new Throwable("Activity with id "+ activityOID.toHexString() + "was not found."));
+    }
   }
 
   private void removeOids(Document parsedActivity) {
