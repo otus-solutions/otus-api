@@ -99,10 +99,10 @@ public class MonitoringServiceBean implements MonitoringService {
   public ProgressReport getActivitiesProgress(String center) throws DataNotFoundException {
     LinkedList<String> surveyAcronyms = new LinkedList<>(surveyDao.listAcronyms());
 
-    ArrayList<Long> rns = this.participantDao.getRecruitmentNumbersByFieldCenter(center);
+    List<Long> rns = this.participantDao.getRecruitmentNumbersByFieldCenter(center);
     groupActivityInapplicabilityStageByCenter(rns);
     Document activityInapplicabilities = activityInapplicabilityDao.aggregate(pipeline).first();
-    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, surveyAcronyms, activityInapplicabilities);
+    Document activitiesProgressReportDocument = activityFlagReportDao.getActivitiesProgressReport(center, rns, surveyAcronyms, activityInapplicabilities);
 
     return getProgressReport(surveyAcronyms, activitiesProgressReportDocument);
   }

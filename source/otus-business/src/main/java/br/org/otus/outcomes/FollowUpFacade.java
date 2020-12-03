@@ -188,15 +188,15 @@ public class FollowUpFacade {
 
   private void logNotification(String action, Object notification, Boolean success, Participant participant, SurveyActivity activity) {
     if (success) {
-      LOGGER.info("status: success, action: " + action + ",\n" +
-        "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
-        "info: " + notification + ",\n" +
+      LOGGER.info("status: success, action: " + action +
+        "participantId: " + participant.getId() + ", email: " + participant.getEmail() +
+        "info: " + notification +
         getActivityInfo(activity));
       return;
     }
-    LOGGER.severe(" status: fail, action: " + action + ",\n" +
-      "participantId: " + participant.getId() + ", email: " + participant.getEmail() + ",\n" +
-      "info: " + notification + ",\n" +
+    LOGGER.severe(" status: fail, action: " + action +
+      "participantId: " + participant.getId() + ", email: " + participant.getEmail() +
+      "info: " + notification +
       getActivityInfo(activity));
   }
 
@@ -276,7 +276,7 @@ public class FollowUpFacade {
 
   private void callOtuscomesErrorLog(String activityId, String status, String action, Exception e) {
     LOGGER.severe("" + "info: " + Response.Status.fromStatusCode(502) + ", cause: OUTCOMES COMMUNICATION FAIL"
-      + "\nactivityId: " + activityId + ", status:" + status + ", action:" + action);
+      + "activityId: " + activityId + ", status:" + status + ", action:" + action);
   }
 
   public Object listAllParticipantEvents(String rn) {

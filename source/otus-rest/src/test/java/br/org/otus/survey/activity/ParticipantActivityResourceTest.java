@@ -11,6 +11,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.activityRevision.ActivityRevision;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.ActivityService;
 import org.junit.Before;
@@ -98,6 +99,20 @@ public class ParticipantActivityResourceTest {
     String listSurveyActivityExpected = new Response().buildSuccess(listSurveyActivity).toSurveyJson();
     assertEquals(listSurveyActivityExpected, participantActivityResource.getAll(request, RECRUIMENT_NUMBER));
   }
+  @Test
+  public void method_getAllByStageGroup_should_return_entire_list_by_recruitment_number() throws Exception {
+    when(request.getHeader(Mockito.anyString())).thenReturn(TOKEN);
+    PowerMockito.mockStatic(AuthorizationHeaderReader.class);
+    when(AuthorizationHeaderReader.readToken(TOKEN)).thenReturn(TOKEN);
+    when(securityContext.getSession(TOKEN)).thenReturn(sessionIdentifier);
+    when(sessionIdentifier.getAuthenticationData()).thenReturn(authenticationData);
+    when(authenticationData.getUserEmail()).thenReturn(userEmail);
+
+    List<StageSurveyActivitiesDto> stageActivities = new ArrayList<>();
+    when(activityFacade.listByStageGroups(RECRUIMENT_NUMBER, userEmail)).thenReturn(stageActivities);
+    String listSurveyActivityExpected = new Response().buildSuccess(stageActivities).toJson(StageSurveyActivitiesDto.getFrontGsonBuilder());
+    assertEquals(listSurveyActivityExpected, participantActivityResource.getAllByStageGroup(request, RECRUIMENT_NUMBER));
+  }
 
   @Test
   public void method_createActivity_should_return_ObjectResponse() {
@@ -107,6 +122,15 @@ public class ParticipantActivityResourceTest {
     verify(participantFacade).getByRecruitmentNumber(anyLong());
     verify(activityFacade).deserialize(anyString());
     verify(activityFacade).create(anyObject(), eq(NOTIFY));
+  }
+
+  @Test
+  public void createFollowUpActivity_method_should_return_ObjectResponse() {
+    when(activityFacade.deserialize(jsonActivity)).thenReturn(activityDeserialize);
+    when(activityFacade.createFollowUp(activityDeserialize)).thenReturn(ID_SURVEY_ACITIVITY);
+    assertEquals(ACTIVITY_EXPECTED, participantActivityResource.createFollowUpActivity(RECRUIMENT_NUMBER, jsonActivity));
+    verify(participantFacade).getByRecruitmentNumber(anyLong());
+    verify(activityFacade).deserialize(anyString());
   }
 
   @Test
@@ -151,5 +175,13 @@ public class ParticipantActivityResourceTest {
     when(activityRevisionFacade.getActivityRevisions(ID_ACITIVITY)).thenReturn(listActivityRevision);
     String listSurveyActivityExpected = new Response().buildSuccess(listActivityRevision).toSurveyJson();
     assertEquals(listSurveyActivityExpected, participantActivityResource.getActivityRevisions(request, ID_ACITIVITY));
+  }
+
+  @Test
+  public void method_discardByID_should_invoke_ActivityFacade_discardByID(){
+    String expectedResponse = "{\"data\":true}";
+    String response = participantActivityResource.discardByID(RECRUIMENT_NUMBER, ID_ACITIVITY);
+    verify(activityFacade, Mockito.times(1)).discardByID(ID_ACITIVITY);
+    assertEquals(expectedResponse, response);
   }
 }

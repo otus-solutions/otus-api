@@ -57,25 +57,23 @@ public class ActivitySharingFacade {
       String token = temporaryParticipantTokenService.generateTempToken(
         new ParticipantTempTokenRequestDto(participant.getRecruitmentNumber(), activityId)
       );
-      ActivitySharing activitySharing =  new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
+      ActivitySharing activitySharing = new ActivitySharing(surveyActivity.getActivityID(), userOID, token);
       return getOrCreateSharedURL(activitySharing, userOID);
-    }
-    catch (DataFormatException | DataNotFoundException | ValidationException | ParseException | TokenException e) {
+    } catch (DataFormatException | DataNotFoundException | ValidationException | ParseException | TokenException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
 
-  private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing, ObjectId userOID){
+  private ActivitySharingDto getOrCreateSharedURL(ActivitySharing activitySharing, ObjectId userOID) {
     ActivitySharingDto activitySharingDto;
-    try{
+    try {
       activitySharingDto = activitySharingService.getSharedURL(activitySharing);
-      if(activitySharingDto != null){
+      if (activitySharingDto != null) {
         logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.SEARCH));
       }
-    }
-    catch (DataNotFoundException e) {
+    } catch (DataNotFoundException e) {
       activitySharingDto = activitySharingService.createSharedURL(activitySharing);
-      if(activitySharingDto != null){
+      if (activitySharingDto != null) {
         logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.CREATE));
       }
     }
@@ -87,12 +85,11 @@ public class ActivitySharingFacade {
       ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.ACCESS));
       ActivitySharingDto activitySharingDto = activitySharingService.renovateSharedURL(activitySharingId);
-      if(activitySharingDto != null){
+      if (activitySharingDto != null) {
         logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.RENEW));
       }
       return activitySharingDto;
-    }
-    catch (DataNotFoundException | ValidationException | ParseException e) {
+    } catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
@@ -102,12 +99,10 @@ public class ActivitySharingFacade {
       activitySharingService.deleteSharedURL(activitySharingId);
       ObjectId userOID = findByTokenService.findUserByToken(userToken).get_id();
       logEventFacade.log(new ActivitySharedLog(userOID, ActivitySharingProgressLog.DELETION));
-    }
-    catch (DataNotFoundException | ValidationException | ParseException e) {
+    } catch (DataNotFoundException | ValidationException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
     }
   }
-
 
   private SurveyActivity checkIfActivityModeIsAutoFill(String activityID) throws DataNotFoundException, DataFormatException {
     SurveyActivity surveyActivity = activityService.getByID(activityID);
