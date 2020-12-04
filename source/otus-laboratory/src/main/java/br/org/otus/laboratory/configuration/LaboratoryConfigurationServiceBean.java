@@ -117,4 +117,10 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   public List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException {
     return laboratoryConfigurationDao.getTubeCustomMedataData(tubeType);
   }
+
+  @Override
+  public Integer updateUnattachedLaboratoryLastInsertion() {
+    return laboratoryConfigurationDao.updateUnattachedLaboratoryLastInsertion();
+  }
+
 }
