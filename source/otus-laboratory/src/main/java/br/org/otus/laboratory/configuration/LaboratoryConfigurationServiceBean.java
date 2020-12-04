@@ -53,12 +53,8 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
-  public List<LabelReference> getLabelOrderByName(String orderName) {
-    try {
-      return laboratoryConfigurationDao.find().getLabelPrintConfiguration().getOrders().get(orderName);
-    } catch (DataNotFoundException e) {
-      return new ArrayList<>();
-    }
+  public List<LabelReference> getLabelOrderByName(String orderName) throws DataNotFoundException {
+    return laboratoryConfigurationDao.find().getLabelPrintConfiguration().getOrders().get(orderName);
   }
 
   @Override

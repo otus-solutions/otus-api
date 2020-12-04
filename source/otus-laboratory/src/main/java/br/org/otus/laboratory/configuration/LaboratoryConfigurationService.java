@@ -22,7 +22,7 @@ public interface LaboratoryConfigurationService {
 
   Set<TubeDefinition> getTubeSetByGroupName(String setName) throws DataNotFoundException;
 
-  List<LabelReference> getLabelOrderByName(String orderName);
+  List<LabelReference> getLabelOrderByName(String orderName) throws DataNotFoundException;
 
   List<String> generateCodes(TubeSeed seed);
 

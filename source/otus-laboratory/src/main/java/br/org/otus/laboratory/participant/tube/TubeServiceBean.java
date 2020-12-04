@@ -44,7 +44,7 @@ public class TubeServiceBean implements TubeService {
     return tubes;
   }
 
-  private void reorderTubes(List<Tube> tubes, TubeSeed tubeSeed) {
+  private void reorderTubes(List<Tube> tubes, TubeSeed tubeSeed) throws DataNotFoundException {
     String orderName = tubeSeed.getCollectGroupName();
     List<LabelReference> order = laboratoryConfigurationService.getLabelOrderByName(orderName);
     order.forEach(mergeReferenceOrderWithTube(tubes));

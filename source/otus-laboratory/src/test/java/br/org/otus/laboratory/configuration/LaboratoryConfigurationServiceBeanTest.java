@@ -108,7 +108,7 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void should_get_label_order_by_Name() {
+  public void should_get_label_order_by_Name() throws DataNotFoundException {
     String reference = "QC_1";
     List<LabelReference> labelReference = new ArrayList<LabelReference>();
     labelReference.add(new LabelReference("DEFAULT", "GEL", "FASTING"));
