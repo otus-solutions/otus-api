@@ -3,6 +3,7 @@ package br.org.otus.laboratory.configuration.collect.tube.generator;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import br.org.otus.laboratory.participant.tube.Tube;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public abstract class AbstractTubeGenerator implements TubeGenerator {
   protected LaboratoryConfigurationService laboratoryConfigurationService;
 
   @Override
-  public List<Tube> generateTubes(TubeSeed tubeSeed) {
+  public List<Tube> generateTubes(TubeSeed tubeSeed) throws DataNotFoundException {
     List<TubeDefinition> tubeTypeDefinitions = getTubeDefinitions(tubeSeed);
     List<String> codesToUse = laboratoryConfigurationService.generateCodes(tubeSeed);
     List<Tube> tubes = new ArrayList<>();
@@ -36,6 +37,6 @@ public abstract class AbstractTubeGenerator implements TubeGenerator {
     return new Tube(tubeDefinition.getType(), tubeDefinition.getMoment(), code, tubeDefinition.getGroup());
   }
 
-  public abstract List<TubeDefinition> getTubeDefinitions(TubeSeed tubeSeed);
+  public abstract List<TubeDefinition> getTubeDefinitions(TubeSeed tubeSeed) throws DataNotFoundException;
 
 }

@@ -18,7 +18,7 @@ public interface LaboratoryConfigurationService {
 
   Boolean getCheckingExist();
 
-  Set<TubeDefinition> getDefaultTubeSet();
+  Set<TubeDefinition> getDefaultTubeSet() throws DataNotFoundException;
 
   Set<TubeDefinition> getTubeSetByGroupName(String setName);
 

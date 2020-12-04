@@ -7,6 +7,7 @@ import br.org.otus.laboratory.configuration.collect.tube.qualifier.CenterGenerat
 import br.org.otus.laboratory.configuration.collect.tube.qualifier.DefaultGenerator;
 import br.org.otus.laboratory.configuration.collect.tube.qualifier.QualityControlGenerator;
 import br.org.otus.laboratory.configuration.label.LabelReference;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -34,7 +35,7 @@ public class TubeServiceBean implements TubeService {
   private TubeGenerator centerTubeGenerator;
 
   @Override
-  public List<Tube> generateTubes(TubeSeed tubeSeed) {
+  public List<Tube> generateTubes(TubeSeed tubeSeed) throws DataNotFoundException {
     List<Tube> tubes = new ArrayList<>();
     tubes.addAll(defaultTubeGenerator.generateTubes(tubeSeed));
     tubes.addAll(qualityControlTubeGenerator.generateTubes(tubeSeed));

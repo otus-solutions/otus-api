@@ -39,12 +39,8 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
-  public Set<TubeDefinition> getDefaultTubeSet() {
-    try {
-      return laboratoryConfigurationDao.find().getCollectGroupConfiguration().getDefaultCollectGroupDescriptor().getTubes();
-    } catch (DataNotFoundException e) {
-      return new HashSet<>();
-    }
+  public Set<TubeDefinition> getDefaultTubeSet() throws DataNotFoundException {
+    return laboratoryConfigurationDao.find().getCollectGroupConfiguration().getDefaultCollectGroupDescriptor().getTubes();
   }
 
   @Override

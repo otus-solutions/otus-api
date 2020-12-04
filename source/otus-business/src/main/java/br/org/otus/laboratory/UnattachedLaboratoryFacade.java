@@ -32,24 +32,23 @@ public class UnattachedLaboratoryFacade {
   private CollectGroupRaffle groupRaffle;
 
   public void create(String userEmail, String fieldCenterAcronym, String collectGroupDescriptorName) {
-    LaboratoryConfiguration laboratoryConfiguration = null;
     try{
-      laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
+      LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
+
+      CollectGroupDescriptor collectGroupDescriptor;
+      try {
+        collectGroupDescriptor = laboratoryConfiguration.getCollectGroupConfiguration().getCollectGroupByName(collectGroupDescriptorName);
+      } catch (Exception e) {
+        throw new HttpResponseException(Validation.build("Collect group not found"));
+      }
+
+      FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(fieldCenterAcronym);
+      Integer lastInsertion = laboratoryConfigurationService.updateUnattachedLaboratoryLastInsertion();
+      unattachedLaboratoryService.create(userEmail, lastInsertion, collectGroupDescriptor, fieldCenter);
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
-
-    CollectGroupDescriptor collectGroupDescriptor;
-    try {
-      collectGroupDescriptor = laboratoryConfiguration.getCollectGroupConfiguration().getCollectGroupByName(collectGroupDescriptorName);
-    } catch (Exception e) {
-      throw new HttpResponseException(Validation.build("Collect group not found"));
-    }
-
-    FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(fieldCenterAcronym);
-    Integer lastInsertion = laboratoryConfigurationService.updateUnattachedLaboratoryLastInsertion();
-    unattachedLaboratoryService.create(userEmail, lastInsertion, collectGroupDescriptor, fieldCenter);
   }
 
   public ListUnattachedLaboratoryDTO find(String fieldCenterAcronym, String collectGroupDescriptorName, int page, int quantityByPage) {
