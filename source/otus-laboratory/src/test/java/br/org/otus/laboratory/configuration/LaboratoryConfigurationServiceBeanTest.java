@@ -59,7 +59,7 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void should_to_return_get_Default_TubeSet() {
+  public void should_to_return_get_Default_TubeSet() throws DataNotFoundException {
     Set<TubeDefinition> tubeSet = new HashSet<>();
     tubeSet.add(new TubeDefinition(1, "FLOURIDE", "POST OVERLOAD"));
 
@@ -75,7 +75,7 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void should_to_return_get_TubeSet_By_GroupName() {
+  public void should_to_return_get_TubeSet_By_GroupName() throws DataNotFoundException {
     Set<TubeDefinition> tubeSet = new HashSet<>();
     tubeSet.add(new TubeDefinition(1, "CITRATE", "NONE"));
 
@@ -93,7 +93,7 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void should_to_return_list_void_case_not_find_GroupName() {
+  public void should_to_return_list_void_case_not_find_GroupName() throws DataNotFoundException {
     Set<TubeDefinition> tubeSet = new HashSet<>();
     tubeSet.add(new TubeDefinition(1, "CITRATE", "NONE"));
 

@@ -20,7 +20,7 @@ public interface LaboratoryConfigurationService {
 
   Set<TubeDefinition> getDefaultTubeSet() throws DataNotFoundException;
 
-  Set<TubeDefinition> getTubeSetByGroupName(String setName);
+  Set<TubeDefinition> getTubeSetByGroupName(String setName) throws DataNotFoundException;
 
   List<LabelReference> getLabelOrderByName(String orderName);
 

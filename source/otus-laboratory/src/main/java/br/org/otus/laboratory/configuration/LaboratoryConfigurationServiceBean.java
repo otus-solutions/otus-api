@@ -44,10 +44,10 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
-  public Set<TubeDefinition> getTubeSetByGroupName(String groupName) {
+  public Set<TubeDefinition> getTubeSetByGroupName(String groupName) throws DataNotFoundException {
     try {
       return laboratoryConfigurationDao.find().getCollectGroupConfiguration().getCollectGroupByName(groupName).getTubes();
-    } catch (DataNotFoundException | NoSuchElementException e) {
+    } catch (NoSuchElementException e) {
       return new HashSet<>();
     }
   }

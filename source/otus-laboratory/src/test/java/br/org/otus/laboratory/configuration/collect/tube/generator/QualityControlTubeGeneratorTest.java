@@ -4,6 +4,7 @@ import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.participant.model.Participant;
 import org.junit.Before;
@@ -43,7 +44,7 @@ public class QualityControlTubeGeneratorTest {
   private int tubeCountExpected;
 
   @Before
-  public void setUp() {
+  public void setUp() throws DataNotFoundException {
     tubeSets = new HashSet<TubeDefinition>();
     tubeSets.add(new TubeDefinition(1, "FLOURIDE", "POST_OVERLOAD"));
     tubeSets.add(new TubeDefinition(4, "GEL", "FASTING"));
@@ -60,13 +61,13 @@ public class QualityControlTubeGeneratorTest {
   }
 
   @Test
-  public void method_should_call_getTubeDefinitionList() {
+  public void method_should_call_getTubeDefinitionList() throws DataNotFoundException {
     qualityControlTubeGenerator.getTubeDefinitions(tubeSeed);
     verify(laboratoryConfigurationService).getTubeSetByGroupName("DEFAULT");
   }
 
   @Test
-  public void method_should_getTubeDefinitions() {
+  public void method_should_getTubeDefinitions() throws DataNotFoundException {
     expectedTubeSets = new HashSet<TubeDefinition>();
     expectedTubeSets.add(new TubeDefinition(4, "GEL", "POST_OVERLOAD"));
     expectedTubeSets.add(new TubeDefinition(3, "EDTA", "FASTING"));
@@ -87,13 +88,13 @@ public class QualityControlTubeGeneratorTest {
   }
 
   @Test
-  public void method_should_getQuantityTubeDefinition() {
+  public void method_should_getQuantityTubeDefinition() throws DataNotFoundException {
     int expectatedSizeTubeDefinition = tubeSets.size();
     assertEquals(expectatedSizeTubeDefinition, qualityControlTubeGenerator.getTubeDefinitions(tubeSeed).size());
   }
 
   @Test
-  public void method_should_sumGetTubes() {
+  public void method_should_sumGetTubes() throws DataNotFoundException {
     tubeCountExpected = 0;
     for (TubeDefinition tubeSet : tubeSets) {
       tubeCountExpected += tubeSet.getCount();

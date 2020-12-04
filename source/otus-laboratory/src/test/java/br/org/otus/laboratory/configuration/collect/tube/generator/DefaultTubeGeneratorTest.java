@@ -3,6 +3,7 @@ package br.org.otus.laboratory.configuration.collect.tube.generator;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.group.CollectGroupDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -35,7 +36,7 @@ public class DefaultTubeGeneratorTest {
 
 
   @Before
-  public void setUp() {
+  public void setUp() throws DataNotFoundException {
     tubeDefinitions = new HashSet<TubeDefinition>();
     tubeDefinitions.add(new TubeDefinition(1, "GEL", "POST_OVERLOAD"));
     tubeDefinitions.add(new TubeDefinition(2, "FLORIDE", "POST_OVERLOAD"));
@@ -46,7 +47,7 @@ public class DefaultTubeGeneratorTest {
 
   @Ignore
   @Test
-  public void method_should_getTubeDefinitions() {
+  public void method_should_getTubeDefinitions() throws DataNotFoundException {
     String expectTypeTubeGel = tubeDefinitions.stream().filter(t -> t.getType().equals("GEL")).findFirst().get()
       .getType();
     assertEquals(expectTypeTubeGel, defaultTubeGenerator.getTubeDefinitions(tubeSeed).get(0).getType());
@@ -56,7 +57,7 @@ public class DefaultTubeGeneratorTest {
   }
 
   @Test
-  public void method_should_return_GROUP_NAME_DEFAULT() {
+  public void method_should_return_GROUP_NAME_DEFAULT() throws DataNotFoundException {
     assertEquals(GROUP_NAME_DEFAULT,
       defaultTubeGenerator.getTubeDefinitions(tubeSeed).stream().findAny().get().getGroup());
   }
