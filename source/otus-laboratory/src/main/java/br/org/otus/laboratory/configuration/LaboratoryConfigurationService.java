@@ -1,6 +1,5 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,11 +26,11 @@ public interface LaboratoryConfigurationService {
 
   List<String> generateCodes(TubeSeed seed);
 
-  LaboratoryConfiguration getLaboratoryConfiguration();
+  LaboratoryConfiguration getLaboratoryConfiguration() throws DataNotFoundException;
 
-  AliquotConfiguration getAliquotConfiguration();
+  AliquotConfiguration getAliquotConfiguration() throws DataNotFoundException;
 
-  List<AliquoteDescriptor> getAliquotDescriptors();
+  List<AliquoteDescriptor> getAliquotDescriptors() throws DataNotFoundException;
 
   List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException;
 
