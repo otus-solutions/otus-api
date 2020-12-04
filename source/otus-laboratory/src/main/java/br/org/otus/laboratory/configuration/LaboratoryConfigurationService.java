@@ -24,7 +24,7 @@ public interface LaboratoryConfigurationService {
 
   List<LabelReference> getLabelOrderByName(String orderName) throws DataNotFoundException;
 
-  List<String> generateCodes(TubeSeed seed);
+  List<String> generateCodes(TubeSeed seed) throws DataNotFoundException;
 
   LaboratoryConfiguration getLaboratoryConfiguration() throws DataNotFoundException;
 

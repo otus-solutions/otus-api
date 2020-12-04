@@ -58,15 +58,11 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
-  public List<String> generateCodes(TubeSeed seed) {
-    try {
-      LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationDao.find();
-      Integer startingPoint = this.laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount());
-      laboratoryConfiguration.getCodeConfiguration().setLastInsertion(startingPoint + seed.getTubeCount());
-      return laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint);
-    } catch (DataNotFoundException e) {
-      return new ArrayList<>();
-    }
+  public List<String> generateCodes(TubeSeed seed) throws DataNotFoundException {
+    LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationDao.find();
+    Integer startingPoint = this.laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount());
+    laboratoryConfiguration.getCodeConfiguration().setLastInsertion(startingPoint + seed.getTubeCount());
+    return laboratoryConfiguration.generateNewCodeList(seed, ++startingPoint);
   }
 
   @Override

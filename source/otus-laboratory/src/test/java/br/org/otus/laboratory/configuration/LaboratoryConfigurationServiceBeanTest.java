@@ -131,7 +131,7 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void method_generateCodes_should_use_correct_starting_point() {
+  public void method_generateCodes_should_use_correct_starting_point() throws DataNotFoundException {
     Mockito.when(laboratoryConfigurationDao.updateLastTubeInsertion(seed.getTubeCount())).thenReturn(startingPoint);
     Mockito.when(laboratoryConfiguration.getCodeConfiguration()).thenReturn(codeConfiguration);
 
@@ -142,7 +142,7 @@ public class LaboratoryConfigurationServiceBeanTest {
   }
 
   @Test
-  public void method_generateCodes_should_return_generateNewCodeList_result() {
+  public void method_generateCodes_should_return_generateNewCodeList_result() throws DataNotFoundException {
     List<String> codes = new ArrayList<>();
     codes.add("33100031");
     codes.add("33100032");
