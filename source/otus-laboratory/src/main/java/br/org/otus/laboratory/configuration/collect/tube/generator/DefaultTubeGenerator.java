@@ -17,7 +17,7 @@ public class DefaultTubeGenerator extends AbstractTubeGenerator implements TubeG
   @Override
   public List<TubeDefinition> getTubeDefinitions(TubeSeed tubeSeed) {
     Set<TubeDefinition> tubeSet = this.laboratoryConfigurationService.getDefaultTubeSet();
-    List<TubeDefinition> tubeDefinitions = tubeSet.stream().map(definition -> definition).collect(Collectors.toList());
+    List<TubeDefinition> tubeDefinitions = tubeSet.stream().collect(Collectors.toList());
     tubeDefinitions.forEach(definition -> definition.setGroup(GROUP_NAME_DEFAULT));
     tubeSeed.setTubeCount(this.sumTubeCounts(tubeDefinitions));
     return tubeDefinitions;
