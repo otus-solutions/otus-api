@@ -36,12 +36,12 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-  public LaboratoryConfiguration find() {
-    Document query = new Document("objectType", "LaboratoryConfiguration");
-
-    Document first = collection.find(query).first();
-
-    return LaboratoryConfiguration.deserialize(first.toJson());
+  public LaboratoryConfiguration find() throws DataNotFoundException {
+    Document result = collection.find(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)).first();
+    if(result == null){
+      throw new DataNotFoundException(LABORATORY_CONFIGURATION_OBJECT_TYPE + " was not found.");
+    }
+    return LaboratoryConfiguration.deserialize(result.toJson());
   }
 
   @Override

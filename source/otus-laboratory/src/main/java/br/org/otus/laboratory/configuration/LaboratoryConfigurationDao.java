@@ -14,7 +14,7 @@ import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 
 public interface LaboratoryConfigurationDao {
 
-  LaboratoryConfiguration find();
+  LaboratoryConfiguration find() throws DataNotFoundException;
 
   Boolean getCheckingExist();
 
