@@ -25,8 +25,6 @@ public class LaboratoryConfigurationResourceTest extends ResourceTestsParent {
   private LaboratoryConfigurationResource resource;
   @Mock
   private LaboratoryConfigurationFacade laboratoryConfigurationFacade;
-  @Mock
-  private LaboratoryConfigurationService laboratoryConfigurationService;
 
 
   @Test
