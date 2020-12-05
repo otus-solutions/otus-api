@@ -22,6 +22,7 @@ public class UnattachedLaboratory {
   private Integer identification;
   private ArrayList<UserAction> actionHistory;
   private Boolean availableToAttache;
+  private ObjectId participantId;
 
   public UnattachedLaboratory(Integer unattachedLaboratoryLastInsertion, String fieldCenterAcronym, String collectGroupName, List<Tube> tubes) {
     this.objectType = "UnattachedLaboratory";
@@ -29,6 +30,7 @@ public class UnattachedLaboratory {
     this.actionHistory = new ArrayList<>();
     this.fieldCenterAcronym = fieldCenterAcronym;
     this.collectGroupName = collectGroupName;
+    this.participantId = null;
     this.tubes = tubes;
     this.identification = unattachedLaboratoryLastInsertion;
   }
@@ -94,4 +96,13 @@ public class UnattachedLaboratory {
   public Boolean getAvailableToAttache() {
     return availableToAttache;
   }
+
+  public ObjectId getParticipantId() {
+    return participantId;
+  }
+
+  public void setParticipantId(ObjectId participantId) {
+    this.participantId = participantId;
+  }
+
 }
