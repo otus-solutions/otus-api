@@ -166,11 +166,50 @@ public class UnattachedLaboratoryFacadeTest {
     when(participantDao.findByRecruitmentNumber(RECRUITMENT_NUMBER)).thenReturn(participant);
     when(participant.isIdentified()).thenReturn(true);
     when(groupRaffle.perform(participant)).thenReturn(collectGroupDescriptor);
-    doThrow(new ValidationException()).when(unattachedLaboratoryService).attache(
+
+    doThrow(new ValidationException(new Throwable(""))).when(unattachedLaboratoryService).attache(
       RECRUITMENT_NUMBER, USER_EMAIL, LABORATORY_IDENTIFICATION, collectGroupDescriptor.getName(), FIELD_CENTER_ACRONYM);
 
     unattachedLaboratoryFacade.attache(USER_EMAIL, LABORATORY_IDENTIFICATION, RECRUITMENT_NUMBER);
   }
 
+
+  @Test
+  public void discard_method_should_call_service_discard_method() throws DataNotFoundException {
+    unattachedLaboratoryFacade.discard(USER_EMAIL, LABORATORY_OID);
+    verify(unattachedLaboratoryService, Mockito.times(1)).discard(USER_EMAIL, LABORATORY_OID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void discard_method_should_handle_DataNotFound() throws DataNotFoundException {
+    doThrow(new DataNotFoundException()).when(unattachedLaboratoryService).discard(USER_EMAIL, LABORATORY_OID);
+    unattachedLaboratoryFacade.discard(USER_EMAIL, LABORATORY_OID);
+  }
+
+
+  @Test
+  public void findById_method_should_call_service_findById_method() throws DataNotFoundException {
+    unattachedLaboratoryFacade.findById(LABORATORY_OID);
+    verify(unattachedLaboratoryService, Mockito.times(1)).findById(LABORATORY_OID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void findById_method_should_handle_DataNotFound() throws DataNotFoundException {
+    doThrow(new DataNotFoundException()).when(unattachedLaboratoryService).findById(LABORATORY_OID);
+    unattachedLaboratoryFacade.findById(LABORATORY_OID);
+  }
+
+
+  @Test
+  public void findByIdentification_method_should_call_service_findByIdentification_method() throws DataNotFoundException {
+    unattachedLaboratoryFacade.findByIdentification(LABORATORY_IDENTIFICATION);
+    verify(unattachedLaboratoryService, Mockito.times(1)).findByIdentification(LABORATORY_IDENTIFICATION);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void findByIdentification_method_should_handle_DataNotFound() throws DataNotFoundException {
+    doThrow(new DataNotFoundException()).when(unattachedLaboratoryService).findByIdentification(LABORATORY_IDENTIFICATION);
+    unattachedLaboratoryFacade.findByIdentification(LABORATORY_IDENTIFICATION);
+  }
 
 }
