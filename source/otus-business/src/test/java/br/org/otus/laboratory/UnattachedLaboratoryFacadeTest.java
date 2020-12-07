@@ -61,12 +61,11 @@ public class UnattachedLaboratoryFacadeTest {
   private FieldCenter fieldCenter = new FieldCenter();
   private Participant participant = PowerMockito.spy(new Participant(RECRUITMENT_NUMBER));
 
+
   @Before
   public void setUp() throws DataNotFoundException {
     fieldCenter.setAcronym(FIELD_CENTER_ACRONYM);
-
     participant.setFieldCenter(fieldCenter);
-
   }
 
 
