@@ -6,7 +6,6 @@ import br.org.otus.laboratory.configuration.collect.tube.TubeDefinition;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
