@@ -22,12 +22,4 @@ public class CenterTubeGenerator extends AbstractTubeGenerator implements TubeGe
     return tubeDefinitions;
   }
 
-  private Integer sumTubeCounts(List<TubeDefinition> tubeDefinitions) {
-    Integer tubeCount = 0;
-    for (TubeDefinition tubeDefinition : tubeDefinitions) {
-      tubeCount += tubeDefinition.getCount();
-    }
-    return tubeCount;
-  }
-
 }

@@ -24,12 +24,4 @@ public class DefaultTubeGenerator extends AbstractTubeGenerator implements TubeG
     return tubeDefinitions;
   }
 
-  private Integer sumTubeCounts(List<TubeDefinition> tubeDefinitions) {
-    Integer tubeCount = 0;
-    for (TubeDefinition tubeDefinition : tubeDefinitions) {
-      tubeCount += tubeDefinition.getCount();
-    }
-    return tubeCount;
-  }
-
 }

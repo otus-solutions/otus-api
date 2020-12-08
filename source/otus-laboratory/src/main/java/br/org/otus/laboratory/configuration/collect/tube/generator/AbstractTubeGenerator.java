@@ -39,4 +39,11 @@ public abstract class AbstractTubeGenerator implements TubeGenerator {
 
   public abstract List<TubeDefinition> getTubeDefinitions(TubeSeed tubeSeed) throws DataNotFoundException;
 
+  protected Integer sumTubeCounts(List<TubeDefinition> tubeDefinitions) {
+    Integer tubeCount = 0;
+    for (TubeDefinition tubeDefinition : tubeDefinitions) {
+      tubeCount += tubeDefinition.getCount();
+    }
+    return tubeCount;
+  }
 }
