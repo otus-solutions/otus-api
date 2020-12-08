@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -61,21 +62,21 @@ public class QualityControlTubeGeneratorTest {
   }
 
   @Test
-  public void getTubeDefinitions_method_check() throws DataNotFoundException {
+  public void getTubeDefinitions_method_should_return_tubeDefinitions_list() throws DataNotFoundException {
     List<TubeDefinition> tubeDefinitions = qualityControlTubeGenerator.getTubeDefinitions(tubeSeed);
     assertEquals(tubeSets.size(), tubeDefinitions.size());
 
-    assertEquals(TUBE_1_TYPE, tubeDefinitions.get(0).getType());
-    assertEquals(TUBE_1_MOMENT, tubeDefinitions.get(0).getMoment());
-
-    assertEquals(TUBE_2_TYPE, tubeDefinitions.get(1).getType());
-    assertEquals(TUBE_2_MOMENT, tubeDefinitions.get(1).getMoment());
+    TubeDefinition tubeDefinition = tubeDefinitions.stream()
+      .filter(tube -> tube.getType().equals(TUBE_1_TYPE)).findFirst().get();
+    assertEquals(TUBE_1_TYPE, tubeDefinition.getType());
+    assertEquals(TUBE_1_MOMENT, tubeDefinition.getMoment());
+    assertEquals(TUBE_1_COUNT, tubeDefinition.getCount());
   }
 
   @Test
   public void getTubeDefinitions_method_should_return_empty_list() throws DataNotFoundException {
     tubeSets.clear();
-    assertEquals(0, qualityControlTubeGenerator.getTubeDefinitions(tubeSeed).size());
+    assertTrue(qualityControlTubeGenerator.getTubeDefinitions(tubeSeed).isEmpty());
   }
 
   @Test
