@@ -20,10 +20,6 @@ public class QualityControlTubeGenerator extends AbstractTubeGenerator implement
       return new ArrayList<>();
     }
 
-    return getTubeDefinitionList(tubeSeed);
-  }
-
-  private List<TubeDefinition> getTubeDefinitionList(TubeSeed tubeSeed) throws DataNotFoundException {
     Set<TubeDefinition> tubeSet = this.laboratoryConfigurationService.getTubeSetByGroupName(tubeSeed.getCollectGroupDescriptor().getName());
     List<TubeDefinition> tubeDefinitions = tubeSet.stream().collect(Collectors.toList());
     tubeDefinitions.forEach(definition -> definition.setGroup(tubeSeed.getCollectGroupDescriptor().getName()));
