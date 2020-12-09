@@ -37,7 +37,7 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
   private FieldCenterDao fieldCenterDao;
 
   @Override
-  public void create(String userEmail, Integer unattachedLaboratoryLastInsertion, CollectGroupDescriptor collectGroupDescriptor, FieldCenter fieldCenter) {
+  public void create(String userEmail, Integer unattachedLaboratoryLastInsertion, CollectGroupDescriptor collectGroupDescriptor, FieldCenter fieldCenter) throws DataNotFoundException {
     collectGroupDescriptor.getTubes().clear();
     List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(fieldCenter, collectGroupDescriptor));
     UnattachedLaboratory laboratory = new UnattachedLaboratory(unattachedLaboratoryLastInsertion, fieldCenter.getAcronym(), collectGroupDescriptor.getName(), tubes);
@@ -57,24 +57,25 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
       throw new ValidationException(new Throwable("Participant already have a laboratory"));
     } catch (DataNotFoundException e) {
       UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryDao.find(laboratoryIdentification);
-      if (unattachedLaboratory.getAvailableToAttache()) {
-        if (!unattachedLaboratory.getFieldCenterAcronym().equals(participantFieldCenterAcronym) || !unattachedLaboratory.getCollectGroupName().equals(participantCollectGroupName)) {
-          throw new ValidationException(new Throwable("Invalid configuration"), new ValidationErrorResponseDTO(participantFieldCenterAcronym, unattachedLaboratory.getFieldCenterAcronym(), participantCollectGroupName, unattachedLaboratory.getCollectGroupName()));
-        }
-        Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
-        FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
-        ParticipantLaboratory participantLaboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, participantCollectGroupName, unattachedLaboratory.getTubes());
-        participantLaboratoryDao.persist(participantLaboratory);
-        unattachedLaboratory.disable();
-        unattachedLaboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.ATTACHED);
-        unattachedLaboratoryDao.update(unattachedLaboratory.getIdentification(), unattachedLaboratory);
-      } else {
+
+      if (!unattachedLaboratory.getAvailableToAttache()) {
         if (unattachedLaboratory.getLastHistory().getAction().equals(UnattachedLaboratoryActions.ATTACHED)) {
           throw new ValidationException(new Throwable("Laboratory is already attached"));
-        } else {
-          throw new ValidationException(new Throwable("Laboratory is removed"));
         }
+        throw new ValidationException(new Throwable("Laboratory is removed"));
       }
+
+      if (!unattachedLaboratory.getFieldCenterAcronym().equals(participantFieldCenterAcronym) || !unattachedLaboratory.getCollectGroupName().equals(participantCollectGroupName)) {
+        throw new ValidationException(new Throwable("Invalid configuration"), new ValidationErrorResponseDTO(participantFieldCenterAcronym, unattachedLaboratory.getFieldCenterAcronym(), participantCollectGroupName, unattachedLaboratory.getCollectGroupName()));
+      }
+
+      Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
+      FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
+      ParticipantLaboratory participantLaboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, participantCollectGroupName, unattachedLaboratory.getTubes());
+      participantLaboratoryDao.persist(participantLaboratory);
+      unattachedLaboratory.disable();
+      unattachedLaboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.ATTACHED);
+      unattachedLaboratoryDao.update(unattachedLaboratory.getIdentification(), unattachedLaboratory);
     }
   }
 
@@ -90,13 +91,11 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
 
   @Override
   public UnattachedLaboratory findById(String laboratoryOid) throws DataNotFoundException {
-    UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryDao.findById(laboratoryOid);
-    return unattachedLaboratory;
+    return unattachedLaboratoryDao.findById(laboratoryOid);
   }
 
   @Override
   public UnattachedLaboratory findByIdentification(int laboratoryIdentification) throws DataNotFoundException {
-    UnattachedLaboratory unattachedLaboratory = unattachedLaboratoryDao.find(laboratoryIdentification);
-    return unattachedLaboratory;
+    return unattachedLaboratoryDao.find(laboratoryIdentification);
   }
 }

@@ -6,8 +6,6 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
-import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
@@ -18,14 +16,11 @@ public class LaboratoryConfigurationResource {
   @Inject
   private LaboratoryConfigurationFacade laboratoryConfigurationFacade;
 
-  @Inject
-  private LaboratoryConfigurationService laboratoryConfigurationService;
-
   @GET
   @Secured
   @Path("/exists")
   public String getCheckingExist() {
-    return new Response().buildSuccess(laboratoryConfigurationService.getCheckingExist()).toJson();
+    return new Response().buildSuccess(laboratoryConfigurationFacade.getCheckingExist()).toJson();
   }
 
   @GET
@@ -33,9 +28,7 @@ public class LaboratoryConfigurationResource {
   @Path("/descriptor")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getDescriptor() {
-    LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
-    LaboratoryConfigurationDTO laboratoryConfigurationDTO = new LaboratoryConfigurationDTO(laboratoryConfiguration);
-    return new Response().buildSuccess(laboratoryConfigurationDTO).toJson();
+    return new Response().buildSuccess(laboratoryConfigurationFacade.getLaboratoryConfiguration()).toJson();
   }
 
   @GET
@@ -43,8 +36,7 @@ public class LaboratoryConfigurationResource {
   @Path("/aliquot-configuration")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getAliquotConfiguration() {
-    AliquotConfiguration aliquotConfiguration = laboratoryConfigurationService.getAliquotConfiguration();
-    return new Response().buildSuccess(aliquotConfiguration).toJson();
+    return new Response().buildSuccess(laboratoryConfigurationFacade.getAliquotConfiguration()).toJson();
   }
 
   @GET
@@ -52,8 +44,7 @@ public class LaboratoryConfigurationResource {
   @Path("/aliquot-descriptors")
   @Consumes(MediaType.APPLICATION_JSON)
   public String getAliquotDescriptors() {
-    List<AliquoteDescriptor> aliquoteDescriptors = laboratoryConfigurationService.getAliquotDescriptors();
-    return new Response().buildSuccess(aliquoteDescriptors).toJson();
+    return new Response().buildSuccess(laboratoryConfigurationFacade.getAliquotDescriptors()).toJson();
   }
 
   @GET

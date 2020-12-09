@@ -1,6 +1,5 @@
 package br.org.otus.laboratory.configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,19 +18,19 @@ public interface LaboratoryConfigurationService {
 
   Boolean getCheckingExist();
 
-  Set<TubeDefinition> getDefaultTubeSet();
+  Set<TubeDefinition> getDefaultTubeSet() throws DataNotFoundException;
 
-  Set<TubeDefinition> getTubeSetByGroupName(String setName);
+  Set<TubeDefinition> getTubeSetByGroupName(String setName) throws DataNotFoundException;
 
-  List<LabelReference> getLabelOrderByName(String orderName);
+  List<LabelReference> getLabelOrderByName(String orderName) throws DataNotFoundException;
 
-  List<String> generateCodes(TubeSeed seed);
+  List<String> generateCodes(TubeSeed seed) throws DataNotFoundException;
 
-  LaboratoryConfiguration getLaboratoryConfiguration();
+  LaboratoryConfiguration getLaboratoryConfiguration() throws DataNotFoundException;
 
-  AliquotConfiguration getAliquotConfiguration();
+  AliquotConfiguration getAliquotConfiguration() throws DataNotFoundException;
 
-  List<AliquoteDescriptor> getAliquotDescriptors();
+  List<AliquoteDescriptor> getAliquotDescriptors() throws DataNotFoundException;
 
   List<CenterAliquot> getAliquotDescriptorsByCenter(String center) throws DataNotFoundException;
 
@@ -42,4 +41,6 @@ public interface LaboratoryConfigurationService {
   List<String> listPossibleExams(String center) throws DataNotFoundException;
 
   List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException;
+
+  Integer updateUnattachedLaboratoryLastInsertion();
 }

@@ -26,6 +26,7 @@ import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
 public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> implements LaboratoryConfigurationDao {
 
   private static final String COLLECTION_NAME = "laboratory_configuration";
+  private static final String LABORATORY_CONFIGURATION_OBJECT_TYPE = "LaboratoryConfiguration";
   private static final String TRANSPORTATION = "transportation_lot";
   private static final String EXAM = "exam_lot";
   private static final Integer DEFAULT_CODE = 300000000;
@@ -35,23 +36,23 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
-  public LaboratoryConfiguration find() {
-    Document query = new Document("objectType", "LaboratoryConfiguration");
-
-    Document first = collection.find(query).first();
-
-    return LaboratoryConfiguration.deserialize(first.toJson());
+  public LaboratoryConfiguration find() throws DataNotFoundException {
+    Document result = collection.find(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)).first();
+    if(result == null){
+      throw new DataNotFoundException(LABORATORY_CONFIGURATION_OBJECT_TYPE + " was not found.");
+    }
+    return LaboratoryConfiguration.deserialize(result.toJson());
   }
 
   @Override
   public Boolean getCheckingExist() {
-    Document first = collection.find(new Document("objectType", "LaboratoryConfiguration")).first();
-    return (first != null);
+    Document result = collection.find(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)).first();
+    return (result != null);
   }
 
   @Override
   public AliquotExamCorrelation getAliquotExamCorrelation() throws DataNotFoundException {
-    Document first = collection.find(new Document("objectType", "AliquotExamCorrelation")).first();
+    Document first = collection.find(new Document(OBJECT_TYPE_PATH, "AliquotExamCorrelation")).first();
     if (first == null) {
       throw new DataNotFoundException(new Throwable("Aliquot exam correlation document not found."));
     }
@@ -141,7 +142,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   @Override
   public Integer getLastInsertion(String lot) {
     Document output = collection.aggregate(Arrays.asList(
-      Aggregates.match(new Document("objectType", "LaboratoryConfiguration")),
+      Aggregates.match(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)),
       Aggregates.project(new Document("lotConfiguration.lastInsertionTransportation",
         new Document("$ifNull", Arrays.asList("$lotConfiguration.lastInsertionTransportation", 0)))
         .append("lotConfiguration.lastInsertionExam",
@@ -164,17 +165,17 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   public void restoreLotConfiguration(String config, Integer code) {
     switch (config) {
       case TRANSPORTATION:
-        collection.updateOne(new Document("objectType", "LaboratoryConfiguration"), new Document("$set", new Document("lotConfiguration.lastInsertionTransportation", code)));
+        collection.updateOne(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE), new Document("$set", new Document("lotConfiguration.lastInsertionTransportation", code)));
         break;
       case EXAM:
-        collection.updateOne(new Document("objectType", "LaboratoryConfiguration"), new Document("$set", new Document("lotConfiguration.lastInsertionExam", code)));
+        collection.updateOne(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE), new Document("$set", new Document("lotConfiguration.lastInsertionExam", code)));
         break;
     }
   }
 
   @Override
   public Integer updateLastTubeInsertion(int quantity) {
-    Document query = new Document("objectType", "LaboratoryConfiguration")
+    Document query = new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)
       .append("codeConfiguration.lastInsertion", new Document("$exists", true));
 
     Document updateLotCode = collection.findOneAndUpdate(query, new Document("$inc", new Document("codeConfiguration.lastInsertion", quantity)),
@@ -184,7 +185,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
   @Override
   public Integer updateUnattachedLaboratoryLastInsertion() {
-    Document query = new Document("objectType", "LaboratoryConfiguration")
+    Document query = new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)
       .append("codeConfiguration.unattachedLaboratoryLastInsertion", new Document("$exists", true));
 
     Document updateLotCode = collection.findOneAndUpdate(query, new Document("$inc", new Document("codeConfiguration.unattachedLaboratoryLastInsertion", 1)),
@@ -207,7 +208,7 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   @Override
   public List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException {
 
-    Document query = new Document("objectType", TubeCustomMetadata.OBJECT_TYPE);
+    Document query = new Document(OBJECT_TYPE_PATH, TubeCustomMetadata.OBJECT_TYPE);
     query.put("type", tubeType);
 
     FindIterable<Document> results = collection.find(query);
