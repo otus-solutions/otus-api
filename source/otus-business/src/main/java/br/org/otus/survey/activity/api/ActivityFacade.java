@@ -100,7 +100,12 @@ public class ActivityFacade {
       stageMap.keySet().stream()
         .filter(stageOID -> !stageWithActivities.contains(stageOID))
         .forEach(stageOID -> {
-          stageSurveyActivitiesDtos.add(new StageSurveyActivitiesDto(stageOID, stageMap.get(stageOID).getName()));
+          Stage stage = stageMap.get(stageOID);
+          StageSurveyActivitiesDto stageSurveyActivitiesDto = new StageSurveyActivitiesDto(stageOID, stage.getName());
+          stage.getSurveyAcronyms().forEach(acronym -> {
+            stageSurveyActivitiesDto.addAcronymWithNoActivities(acronym, acronymNameMap.get(acronym));
+          });
+          stageSurveyActivitiesDtos.add(stageSurveyActivitiesDto);
         });
 
       return stageSurveyActivitiesDtos;
