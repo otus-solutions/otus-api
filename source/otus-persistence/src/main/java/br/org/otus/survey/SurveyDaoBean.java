@@ -1,23 +1,25 @@
 package br.org.otus.survey;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.survey.activity.builder.SurveyActivityQueryBuilder;
 import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
 import org.ccem.otus.model.survey.jumpMap.SurveyJumpMap;
 import org.ccem.otus.permissions.service.user.group.UserPermission;
 import org.ccem.otus.persistence.SurveyDao;
 import org.ccem.otus.survey.form.SurveyForm;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.descending;
@@ -241,4 +243,29 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
     }
     return updateResult;
   }
+
+  @Override
+  public Map<String, String> getAcronymNameMap() throws MemoryExcededException {
+
+    Map<String, String> acronymNameMap = new HashMap<>();
+
+    List<Bson> pipeline = (new SurveyJumpMapQueryBuilder()).acronymNameMapQuery();
+
+    AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+    MongoCursor<Document> iterator = results.iterator();
+
+    while(iterator.hasNext()){
+      try{
+        SurveyForm surveyForm = SurveyForm.deserialize(iterator.next().toJson());
+        acronymNameMap.put(surveyForm.getAcronym(), surveyForm.getName());
+      }
+      catch (OutOfMemoryError e){
+        throw new MemoryExcededException("Surveys exceded memory used");
+      }
+    }
+
+    return acronymNameMap;
+  }
+
+
 }

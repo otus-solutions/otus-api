@@ -15,11 +15,7 @@ import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -78,7 +74,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public boolean exists(Long rn) {
     Document result = this.collection.find(eq(RN, rn)).first();
-    return result == null ? false : true;
+    return result != null;
   }
 
   @Override
@@ -229,7 +225,6 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
   @Override
   public Long countParticipantActivities(String centerAcronym) throws DataNotFoundException {
     Document query = new Document();
-
     query.put("fieldCenter.acronym", centerAcronym);
     query.put("late", Boolean.FALSE);
 
@@ -238,19 +233,18 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
 
   @Override
   public Boolean updateEmail(ObjectId id, String email) throws DataNotFoundException, AlreadyExistException {
-    Boolean result;
-    UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document( EMAIL, email).append(TOKEN_LIST_FIELD, new ArrayList())));
-
-    result = updateResult.getModifiedCount() != 0;
+    UpdateResult updateResult = this.collection.updateOne(
+      new Document(ID, id),
+      new Document(SET, new Document( EMAIL, email).append(TOKEN_LIST_FIELD, new ArrayList())));
 
     if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException(new Throwable("Participant no found"));
     }
-    if(!result){
+
+    if(updateResult.getModifiedCount() == 0){
       throw new AlreadyExistException(new Throwable("Mail already exists"));
     }
-
-    return result;
+    return true;
   }
 
   @Override
@@ -259,18 +253,19 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     if (participantFound == null) {
       throw new DataNotFoundException(new Throwable("Participant with id: {" + id + "} not found."));
     }
-
     return Participant.deserialize(participantFound.toJson()).getEmail();
   }
 
   @Override
   public Boolean deleteEmail(ObjectId id) throws DataNotFoundException {
-    UpdateResult updateResult = this.collection.updateOne(new Document(ID, id), new Document(SET, new Document(EMAIL, EMPTY).append(TOKEN_LIST_FIELD, new ArrayList())));
+    UpdateResult updateResult = this.collection.updateOne(
+      new Document(ID, id),
+      new Document(SET, new Document(EMAIL, EMPTY).append(TOKEN_LIST_FIELD, new ArrayList())));
 
     if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException(new Throwable("Participant no found"));
     }
-
     return updateResult.getModifiedCount() != 0;
   }
+
 }
