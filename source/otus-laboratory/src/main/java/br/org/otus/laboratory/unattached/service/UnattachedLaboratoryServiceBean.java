@@ -67,6 +67,7 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
         participantLaboratoryDao.persist(participantLaboratory);
         unattachedLaboratory.disable();
         unattachedLaboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.ATTACHED);
+        unattachedLaboratory.setParticipantId(participant.getId());
         unattachedLaboratoryDao.update(unattachedLaboratory.getIdentification(), unattachedLaboratory);
       } else {
         if (unattachedLaboratory.getLastHistory().getAction().equals(UnattachedLaboratoryActions.ATTACHED)) {

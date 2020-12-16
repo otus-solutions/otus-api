@@ -31,10 +31,16 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
     CompletableFuture<AggregateIterable<Document>> future1 = CompletableFuture.supplyAsync(() -> {
       AggregateIterable<Document> notAliquotedTubesDocument = null;
       Document tubeCodeDocument = aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getTubeCodesInAliquotQuery()).first();
+
+      ArrayList<String> tubeCodes = null;
       if (tubeCodeDocument != null) {
-        notAliquotedTubesDocument = participantLaboratoryDao
-          .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery((ArrayList<String>) tubeCodeDocument.get("tubeCodes")));
+        tubeCodes = (ArrayList<String>) tubeCodeDocument.get("tubeCodes");
+      } else {
+        tubeCodes = new ArrayList<>();
       }
+
+      notAliquotedTubesDocument = participantLaboratoryDao
+        .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery(tubeCodes));
 
       return notAliquotedTubesDocument;
     });
