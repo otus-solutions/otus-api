@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.configuration;
 
-
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration;
+import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
@@ -14,6 +15,34 @@ public class LaboratoryConfigurationFacade {
   @Inject
   private LaboratoryConfigurationService laboratoryConfigurationService;
 
+  public Boolean getCheckingExist() {
+    return laboratoryConfigurationService.getCheckingExist();
+  }
+
+  public LaboratoryConfigurationDTO getLaboratoryConfiguration() {
+    try{
+      LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationService.getLaboratoryConfiguration();
+      return new LaboratoryConfigurationDTO(laboratoryConfiguration);
+    }catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public AliquotConfiguration getAliquotConfiguration() {
+    try{
+      return laboratoryConfigurationService.getAliquotConfiguration();
+    }catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<AliquoteDescriptor> getAliquotDescriptors() {
+    try{
+      return laboratoryConfigurationService.getAliquotDescriptors();
+    }catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
 
   public List<TubeCustomMetadata> getTubeMedataData(String tubeType) {
     try{
