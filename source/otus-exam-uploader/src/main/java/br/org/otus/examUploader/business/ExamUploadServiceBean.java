@@ -128,7 +128,7 @@ public class ExamUploadServiceBean implements ExamUploadService {
   @Override
   public void validateExamResults(List<ExamResult> examResults, Boolean forcedSave) throws ValidationException, DataNotFoundException {
     LaboratoryConfiguration laboratoryConfiguration = laboratoryConfigurationDao.find();
-     AliquotExamCorrelation materialExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
+    AliquotExamCorrelation materialExamCorrelation = laboratoryProjectService.getAliquotExamCorrelation();
     Integer tubeToken = laboratoryConfiguration.getCodeConfiguration().getTubeToken();
     List<ExamResult> aliquotExamResults = new ArrayList<>();
     List<ExamResult> tubeExamResults = new ArrayList<>();
@@ -162,7 +162,8 @@ public class ExamUploadServiceBean implements ExamUploadService {
 
     if (materialDoesNotMatchExam.getValue()) {
       throw new ValidationException(new Throwable(MATERIAL_DOES_NOT_MATCH_EXAM_MESSAGE), invalid);
-    } else if (materialNotFound.getValue() && !forcedSave) {
+    }
+    if (materialNotFound.getValue() && !forcedSave) {
       throw new ValidationException(new Throwable(MATERIAL_NOT_FOUND_MESSAGE), invalid);
     }
   }
