@@ -98,7 +98,9 @@ public class SurveyDaoBean extends MongoGenericDao<Document> implements SurveyDa
 
     FindIterable<Document> result = collection.find(query);
 
-    result.forEach((Block<Document>) document -> surveys.add(SurveyForm.deserialize(document.toJson())));
+    result.forEach((Block<Document>) document ->
+      surveys.add(SurveyForm.deserialize(document.toJson()))
+    );
     if (surveys.size() == 0) {
       throw new DataNotFoundException(new Throwable(
         "SURVEY ACRONYM {" + acronym.toUpperCase() + "} VERSION {" + version.toString() + "} not found."));

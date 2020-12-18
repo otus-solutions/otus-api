@@ -28,6 +28,11 @@ public class LaboratoryExtractionRecordsFactory {
       record.getResults().forEach(result -> {
         List<String> answers = new LinkedList<String>();
         answers.add(result.getRecruitmentNumber().toString());
+        if (result.getUnattachedLaboratoryId() != null) {
+          answers.add(result.getUnattachedLaboratoryId().toString());
+        } else {
+          answers.add("");
+        }
         /* information of tube */
         answers.add(result.getTubeCode());
         answers.add(result.getTubeQualityControl().toString());
