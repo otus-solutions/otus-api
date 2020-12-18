@@ -90,13 +90,11 @@ public class LaboratoryConfiguration {
   }
 
   public static String serialize(LaboratoryConfiguration laboratory) {
-    Gson builder = LaboratoryConfiguration.getGsonBuilder();
-    return builder.toJson(laboratory);
+    return getGsonBuilder().toJson(laboratory);
   }
 
   public static LaboratoryConfiguration deserialize(String laboratoryJson) {
-    Gson builder = LaboratoryConfiguration.getGsonBuilder();
-    return builder.fromJson(laboratoryJson, LaboratoryConfiguration.class);
+    return getGsonBuilder().fromJson(laboratoryJson, LaboratoryConfiguration.class);
   }
 
   public static Gson getGsonBuilder() {
