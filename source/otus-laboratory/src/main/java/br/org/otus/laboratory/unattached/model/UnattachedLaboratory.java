@@ -30,9 +30,9 @@ public class UnattachedLaboratory {
     this.actionHistory = new ArrayList<>();
     this.fieldCenterAcronym = fieldCenterAcronym;
     this.collectGroupName = collectGroupName;
+    this.participantId = null;
     this.tubes = tubes;
     this.identification = unattachedLaboratoryLastInsertion;
-    this.participantId = null;
   }
 
 
@@ -104,4 +104,7 @@ public class UnattachedLaboratory {
   public void setParticipantId(ObjectId participantId) {
     this.participantId = participantId;
   }
+
 }
+
+

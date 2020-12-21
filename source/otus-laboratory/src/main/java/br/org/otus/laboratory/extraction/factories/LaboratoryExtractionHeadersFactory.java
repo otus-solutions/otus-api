@@ -20,6 +20,7 @@ public class LaboratoryExtractionHeadersFactory {
 
   private void buildHeader() {
     this.headers.add(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.UNATTACHED_IDENTIFICATION.getValue());
     /* headers information of tube */
     this.headers.add(LaboratoryExtractionHeaders.TUBE_CODE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.TUBE_QUALITY_CONTROL.getValue());
