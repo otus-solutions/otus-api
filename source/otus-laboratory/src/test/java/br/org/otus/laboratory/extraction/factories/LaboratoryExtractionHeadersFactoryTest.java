@@ -34,6 +34,7 @@ public class LaboratoryExtractionHeadersFactoryTest {
     List<String> headers = laboratoryExtractionHeadersFactory.getHeaders();
 
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.UNATTACHED_IDENTIFICATION.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.TUBE_CODE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.TUBE_QUALITY_CONTROL.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.TUBE_TYPE.getValue()));
@@ -54,18 +55,19 @@ public class LaboratoryExtractionHeadersFactoryTest {
     List<String> headers = factory.getHeaders();
 
     Assert.assertEquals(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue(), headers.get(0));
-    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_CODE.getValue(), headers.get(1));
-    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_QUALITY_CONTROL.getValue(), headers.get(2));
-    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_TYPE.getValue(), headers.get(3));
-    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_MOMENT.getValue(), headers.get(4));
-    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_COLLECTION_DATE.getValue(), headers.get(5));
-    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_RESPONSIBLE.getValue(), headers.get(6));
-    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_CODE.getValue(), headers.get(7));
-    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_NAME.getValue(), headers.get(8));
-    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_CONTAINER.getValue(), headers.get(9));
-    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue(), headers.get(10));
-    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue(), headers.get(11));
-    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue(), headers.get(12));
+    Assert.assertEquals(LaboratoryExtractionHeaders.UNATTACHED_IDENTIFICATION.getValue(), headers.get(1));
+    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_CODE.getValue(), headers.get(2));
+    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_QUALITY_CONTROL.getValue(), headers.get(3));
+    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_TYPE.getValue(), headers.get(4));
+    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_MOMENT.getValue(), headers.get(5));
+    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_COLLECTION_DATE.getValue(), headers.get(6));
+    Assert.assertEquals(LaboratoryExtractionHeaders.TUBE_RESPONSIBLE.getValue(), headers.get(7));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_CODE.getValue(), headers.get(8));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_NAME.getValue(), headers.get(9));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_CONTAINER.getValue(), headers.get(10));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue(), headers.get(11));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue(), headers.get(12));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue(), headers.get(13));
   }
 
 }

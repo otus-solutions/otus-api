@@ -1,7 +1,9 @@
 package br.org.otus.laboratory.extraction.builder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -15,38 +17,87 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     this.pipeline = new ArrayList<>();
   }
 
+  public ArrayList<Bson> getAttachedLaboratoryForExtractionQuery() {
+    attachedLaboratoryQuery();
+    forExtraction();
+    return this.pipeline;
+  }
+
+  public void attachedLaboratoryQuery() {
+    this.pipeline.add(parseQuery(" {\n" +
+      "            $match:{\n" +
+      "                     \"availableToAttache\" : false\n" +
+      "            }\n" +
+      "        }"));
+    this.pipeline.add(parseQuery("{\n" +
+      "            $lookup:{\n" +
+      "                from:\"participant\",\n" +
+      "                localField:\"participantId\",\n" +
+      "                foreignField:\"_id\",\n" +
+      "                as:\"participantInfo\"\n" +
+      "            }\n" +
+      "        }"));
+    this.pipeline.add(parseQuery("{\n" +
+      "            $project:{\n" +
+      "                fieldCenterAcronym:1,\n" +
+      "                recruitmentNumber: {$arrayElemAt:[\"$participantInfo.recruitmentNumber\",0]},\n" +
+      "                unattachedLaboratoryIdentification: \"$identification\"\n" +
+      "            }\n" +
+      "        }"));
+  }
+
+  private void forExtraction() {
+    this.pipeline.add(parseQuery("{\n" +
+      "        $group:{\n" +
+      "            _id:{},\n" +
+      "            recruitmentNumbers:{$push:\"$recruitmentNumber\"},\n" +
+      "            relations:{$push:{\n" +
+      "                fieldCenterAcronym: \"$fieldCenterAcronym\",\n" +
+      "                recruitmentNumber: \"$recruitmentNumber\",\n" +
+      "                unattachedLaboratoryIdentification: \"$unattachedLaboratoryIdentification\"\n" +
+      "            }}\n" +
+      "        }\n" +
+      "    }"));
+  }
+
+
+
   public ArrayList<Bson> getTubeCodesInAliquotQuery() {
     this.pipeline.add(parseQuery("{$group:{_id:\"$tubeCode\"}}"));
     this.pipeline.add(parseQuery("{$group:{_id:{},tubeCodes:{$push:\"$_id\"}}}"));
     return this.pipeline;
   }
 
-  public ArrayList<Bson> getNotAliquotedTubesQuery(ArrayList<String> tubeCodes) {
-    this.pipeline.add(parseQuery("{ $project: { _id: 0, recruitmentNumber: 1, tubes: 1 } }"));
+  public ArrayList<Bson> getNotAliquotedTubesQuery(ArrayList<String> tubeCodes, Document attachedLaboratories, boolean extractionFromUnattached) {
+    Document projectInitialFields = new Document("_id", 0).append("recruitmentNumber", 1).append("tubes", 1);
+    Document fieldsToPush = new Document("recruitmentNumber", "$recruitmentNumber");
+    if (extractionFromUnattached) {
+      this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$in", attachedLaboratories.get("recruitmentNumbers")))));
+      this.pipeline.add(new Document("$addFields", new Document("unattachedLaboratory", new Document("$filter", new Document("input",attachedLaboratories.get("relations")).append("as","relation").append("cond",new Document("$eq", Arrays.asList("$$relation.recruitmentNumber","$recruitmentNumber")))))));
+      projectInitialFields.append("unattachedLaboratory",1);
+      fieldsToPush.append("unattachedLaboratoryId",new Document("$arrayElemAt",Arrays.asList("$unattachedLaboratory.unattachedLaboratoryIdentification",0)));
+    } else {
+      this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$nin", attachedLaboratories.get("recruitmentNumbers")))));
+      fieldsToPush.append("unattachedLaboratoryId",null);
+    }
+
+    fieldsToPush.append("tubeCode","$tubes.code")
+      .append("tubeQualityControl",new Document("$cond",Arrays.asList(new Document("$eq",Arrays.asList("$tubes.groupName","DEFAULT")),0,1)))
+      .append("tubeType","$tubes.type")
+      .append("tubeMoment","$tubes.moment")
+      .append("tubeCollectionDate","$tubes.tubeCollectionData.time")
+      .append("tubeResponsible","$tubes.tubeCollectionData.operator")
+      .append("aliquotCode",null)
+      .append("aliquotName",null)
+      .append("aliquotContainer",null)
+      .append("aliquotProcessingDate",null)
+      .append("aliquotRegisterDate",null)
+      .append("aliquotResponsible",null);
+
+    this.pipeline.add(new Document("$project",projectInitialFields));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
     this.pipeline.add(new Document("$match", new Document("tubes.code", new Document("$nin", tubeCodes))));
-    this.pipeline.add(parseQuery("{\n" +
-      "    $group: {\n" +
-      "      _id: \"$recruitmentNumber\",\n" +
-      "      result: {\n" +
-      "        $push: {\n" +
-      "          recruitmentNumber: \"$recruitmentNumber\",\n" +
-      "          tubeCode: \"$tubes.code\",\n" +
-      "          tubeQualityControl: { $cond: [{ $eq: [\"$tubes.groupName\", \"DEFAULT\"] }, 0, 1] },\n" +
-      "          tubeType: '$tubes.type',\n" +
-      "          tubeMoment: '$tubes.moment',\n" +
-      "          tubeCollectionDate: \"$tubes.tubeCollectionData.time\",\n" +
-      "          tubeResponsible: \"$tubes.tubeCollectionData.operator\",\n" +
-      "          aliquotCode: null,\n" +
-      "          aliquotName: null,\n" +
-      "          aliquotContainer: null,\n" +
-      "          aliquotProcessingDate: null,\n" +
-      "          aliquotRegisterDate: null,\n" +
-      "          aliquotResponsible: null\n" +
-      "        }\n" +
-      "      }\n" +
-      "    }\n" +
-      "  }"));
+    this.pipeline.add(new Document("$group", new Document("_id", "$recruitmentNumber").append("result", new Document("$push",fieldsToPush))));
     this.pipeline.add(parseQuery("{\n" +
       "        $project:{\n" +
       "            _id:0,\n" +
@@ -57,7 +108,29 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     return this.pipeline;
   }
 
-  public ArrayList<Bson> getAliquotedTubesQuery() {
+  public ArrayList<Bson> getAliquotedTubesQuery(Document attachedLaboratories, boolean extractionFromUnattached) {
+    Document fieldsToPush = new Document("recruitmentNumber", "$recruitmentNumber");
+    if (extractionFromUnattached) {
+      this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$in", attachedLaboratories.get("recruitmentNumbers")))));
+      fieldsToPush.append("unattachedLaboratoryId",new Document("$arrayElemAt",Arrays.asList("$unattachedLaboratory.unattachedLaboratoryIdentification",0)));
+    } else {
+      this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$nin", attachedLaboratories.get("recruitmentNumbers")))));
+      fieldsToPush.append("unattachedLaboratoryId",null);
+    }
+
+    fieldsToPush.append("tubeCode","$tubeData.tubeCode")
+      .append("tubeQualityControl","$tubeData.qualityControl")
+      .append("tubeType","$tubeData.type")
+      .append("tubeMoment","$tubeData.moment")
+      .append("tubeCollectionDate","$tubeData.collectionDate")
+      .append("tubeResponsible","$tubeData.tubeResponsible")
+      .append("aliquotCode","$code")
+      .append("aliquotName","$name")
+      .append("aliquotContainer","$container")
+      .append("aliquotProcessingDate","$aliquotCollectionData.processing")
+      .append("aliquotRegisterDate","$aliquotCollectionData.operator")
+      .append("aliquotResponsible","$aliquotCollectionData.time");
+
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
       "      from: \"participant_laboratory\",\n" +
@@ -124,28 +197,10 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       "      }\n" +
       "    }\n" +
       "  }"));
-    this.pipeline.add(parseQuery("{\n" +
-      "    $group: {\n" +
-      "      _id: \"$recruitmentNumber\",\n" +
-      "      result: {\n" +
-      "        $push: {\n" +
-      "          recruitmentNumber: \"$recruitmentNumber\",\n" +
-      "          tubeCode: \"$tubeData.tubeCode\",\n" +
-      "          tubeQualityControl: \"$tubeData.qualityControl\",\n" +
-      "          tubeType: '$tubeData.type',\n" +
-      "          tubeMoment: '$tubeData.moment',\n" +
-      "          tubeCollectionDate: \"$tubeData.collectionDate\",\n" +
-      "          tubeResponsible: \"$tubeData.tubeResponsible\",\n" +
-      "          aliquotCode: \"$code\",\n" +
-      "          aliquotName: \"$name\",\n" +
-      "          aliquotContainer: \"$container\",\n" +
-      "          aliquotProcessingDate: \"$aliquotCollectionData.processing\",\n" +
-      "          aliquotResponsible: \"$aliquotCollectionData.operator\",\n" +
-      "          aliquotRegisterDate: \"$aliquotCollectionData.time\"\n" +
-      "        }\n" +
-      "      }\n" +
-      "    }\n" +
-      "  }"));
+    if(extractionFromUnattached){
+      this.pipeline.add(new Document("$addFields", new Document("unattachedLaboratory", new Document("$filter", new Document("input",attachedLaboratories.get("relations")).append("as","relation").append("cond",new Document("$eq", Arrays.asList("$$relation.recruitmentNumber","$recruitmentNumber")))))));
+    }
+    this.pipeline.add(new Document("$group", new Document("_id", "$recruitmentNumber").append("result", new Document("$push",fieldsToPush))));
     this.pipeline.add(parseQuery("{\n" +
       "    $project: {\n" +
       "      _id: 0,\n" +

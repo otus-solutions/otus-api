@@ -3,6 +3,7 @@ package br.org.otus.laboratory.extraction.model;
 public class LaboratoryResultExtraction {
 
   private Long recruitmentNumber;
+  private Integer unattachedLaboratoryId;
   /* information of tube */
   private String tubeCode;
   private Integer tubeQualityControl;
@@ -70,4 +71,7 @@ public class LaboratoryResultExtraction {
     return aliquotResponsible;
   }
 
+  public Integer getUnattachedLaboratoryId() {
+    return unattachedLaboratoryId;
+  }
 }
