@@ -3,6 +3,7 @@ package br.org.otus.laboratory.extraction.enums;
 public enum LaboratoryExtractionHeaders {
 
   RECRUITMENT_NUMBER("recruitment_number"),
+  UNATTACHED_IDENTIFICATION("unattached_identification"),
   TUBE_CODE("tube_code"),
   TUBE_QUALITY_CONTROL("tube_quality_control"),
   TUBE_TYPE("tube_type"),

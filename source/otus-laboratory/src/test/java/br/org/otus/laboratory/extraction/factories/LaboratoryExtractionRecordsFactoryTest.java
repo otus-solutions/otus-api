@@ -14,6 +14,7 @@ import br.org.otus.laboratory.extraction.model.LaboratoryResultExtraction;
 public class LaboratoryExtractionRecordsFactoryTest {
 
   private static final Long RECRUITMENT_NUMBER = 1015533L;
+  private static final Integer UNATTACHED_IDENTIFICATION = 1;
   private static final String TUBE_CODE = "361005197";
   private static final Integer TUBE_QUALITY_CONTROL = 1;
   private static final String TUBE_TYPE = "GEL";
@@ -53,6 +54,7 @@ public class LaboratoryExtractionRecordsFactoryTest {
 
     List<Object> results = records.get(0);
     Assert.assertTrue(results.contains(RECRUITMENT_NUMBER.toString()));
+    Assert.assertTrue(results.contains(UNATTACHED_IDENTIFICATION.toString()));
     Assert.assertTrue(results.contains(TUBE_CODE));
     Assert.assertTrue(results.contains(TUBE_QUALITY_CONTROL.toString()));
     Assert.assertTrue(results.contains(TUBE_TYPE));
@@ -75,18 +77,19 @@ public class LaboratoryExtractionRecordsFactoryTest {
 
     List<Object> results = records.get(0);
     Assert.assertEquals(RECRUITMENT_NUMBER.toString(), results.get(0));
-    Assert.assertEquals(TUBE_CODE, results.get(1));
-    Assert.assertEquals(TUBE_QUALITY_CONTROL.toString(), results.get(2));
-    Assert.assertEquals(TUBE_TYPE, results.get(3));
-    Assert.assertEquals(TUBE_MOMENT, results.get(4));
-    Assert.assertEquals(TUBE_COLLECTION_DATE, results.get(5));
-    Assert.assertEquals(TUBE_RESPONSIBLE, results.get(6));
-    Assert.assertEquals(ALIQUOT_CODE, results.get(7));
-    Assert.assertEquals(ALIQUOT_NAME, results.get(8));
-    Assert.assertEquals(ALIQUOT_CONTAINER, results.get(9));
-    Assert.assertEquals(ALIQUOT_PROCESSING_DATE, results.get(10));
-    Assert.assertEquals(ALIQUOT_REGISTER_DATE, results.get(11));
-    Assert.assertEquals(ALIQUOT_RESPONSIBLE, results.get(12));
+    Assert.assertEquals(UNATTACHED_IDENTIFICATION.toString(), results.get(1));
+    Assert.assertEquals(TUBE_CODE, results.get(2));
+    Assert.assertEquals(TUBE_QUALITY_CONTROL.toString(), results.get(3));
+    Assert.assertEquals(TUBE_TYPE, results.get(4));
+    Assert.assertEquals(TUBE_MOMENT, results.get(5));
+    Assert.assertEquals(TUBE_COLLECTION_DATE, results.get(6));
+    Assert.assertEquals(TUBE_RESPONSIBLE, results.get(7));
+    Assert.assertEquals(ALIQUOT_CODE, results.get(8));
+    Assert.assertEquals(ALIQUOT_NAME, results.get(9));
+    Assert.assertEquals(ALIQUOT_CONTAINER, results.get(10));
+    Assert.assertEquals(ALIQUOT_PROCESSING_DATE, results.get(11));
+    Assert.assertEquals(ALIQUOT_REGISTER_DATE, results.get(12));
+    Assert.assertEquals(ALIQUOT_RESPONSIBLE, results.get(13));
   }
 
   private LaboratoryRecordExtraction createFakeLaboratoryRecordExtraction() {
@@ -94,6 +97,7 @@ public class LaboratoryExtractionRecordsFactoryTest {
     LaboratoryResultExtraction result = new LaboratoryResultExtraction();
 
     Whitebox.setInternalState(result, "recruitmentNumber", RECRUITMENT_NUMBER);
+    Whitebox.setInternalState(result, "unattachedLaboratoryId", UNATTACHED_IDENTIFICATION);
     Whitebox.setInternalState(result, "tubeCode", TUBE_CODE);
     Whitebox.setInternalState(result, "tubeQualityControl", TUBE_QUALITY_CONTROL);
     Whitebox.setInternalState(result, "tubeType", TUBE_TYPE);
