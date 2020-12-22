@@ -10,12 +10,13 @@ public class MicroservicesResources {
 
   public MicroservicesResources(MicroservicesEnvironments microservicesEnvironments) {
     this.microservicesEnvironments = microservicesEnvironments;
-    readAddress();
-  }
 
-  private void readAddress() {
     HOST = System.getenv(microservicesEnvironments.getHost());
     PORT = System.getenv(microservicesEnvironments.getPort());
+  }
+
+  protected String getMainAddress(){
+    return "http://" + this.HOST + ":" + this.PORT;
   }
 
 }
