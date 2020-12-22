@@ -1,73 +1,52 @@
 package br.org.otus.gateway.request;
 
+import br.org.otus.gateway.response.exception.RequestException;
+
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 
-public class MultipartPOSTUtility {
-  private HttpURLConnection httpConn;
-  private DataOutputStream request;
-  private final String boundary = "*****";
-  private final String crlf = "\r\n";
-  private final String twoHyphens = "--";
+public class MultipartPOSTUtility extends JsonWritingRequestUtility {
 
-  public MultipartPOSTUtility(URL requestURL)
-    throws IOException {
+  private static final String BOUNDARY = "*****";
+  private static final String CRLF = "\r\n";
+  private static final String TWO_HYPHENS = "--";
 
-    httpConn = (HttpURLConnection) requestURL.openConnection();
-    httpConn.setUseCaches(false);
-    httpConn.setDoOutput(true);
-    httpConn.setDoInput(true);
-
-    httpConn.setRequestMethod("POST");
-    httpConn.setRequestProperty("Connection", "Keep-Alive");
-    httpConn.setRequestProperty("Cache-Control", "no-cache");
-    httpConn.setRequestProperty(
-      "Content-Type", "multipart/form-data;boundary=" + this.boundary);
-
-    request = new DataOutputStream(httpConn.getOutputStream());
+  public MultipartPOSTUtility(URL requestURL) throws IOException {
+    super(RequestTypeOptions.POST, requestURL, "multipart/form-data;boundary=" + BOUNDARY);
   }
 
   public void addFormField(String name, String value) throws IOException {
-    request.writeBytes(this.twoHyphens + this.boundary + this.crlf);
-    request.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"" + this.crlf);
-    request.writeBytes("Content-Type: text/plain; charset=UTF-8" + this.crlf);
-    request.writeBytes(this.crlf);
-    request.writeBytes(value + this.crlf);
+    request.writeBytes(TWO_HYPHENS + BOUNDARY + CRLF);
+    request.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"" + CRLF);
+    request.writeBytes("Content-Type: text/plain; charset=UTF-8" + CRLF);
+    request.writeBytes(CRLF);
+    request.writeBytes(value + CRLF);
     request.flush();
   }
 
   public void addFilePart(String fieldName, File uploadFile)
     throws IOException {
     String fileName = uploadFile.getName();
-    request.writeBytes(this.twoHyphens + this.boundary + this.crlf);
+    request.writeBytes(TWO_HYPHENS + BOUNDARY + CRLF);
     request.writeBytes("Content-Disposition: form-data; name=\"" +
       fieldName + "\";filename=\"" +
-      fileName + "\"" + this.crlf);
-    request.writeBytes(this.crlf);
+      fileName + "\"" + CRLF);
+    request.writeBytes(CRLF);
 
     byte[] bytes = Files.readAllBytes(uploadFile.toPath());
     request.write(bytes);
   }
 
+  @Override
   public String finish() throws IOException {
-    String response;
-
-    request.writeBytes(this.crlf);
-    request.writeBytes(this.twoHyphens + this.boundary +
-      this.twoHyphens + this.crlf);
-
-    request.flush();
-    request.close();
-
-    int status = httpConn.getResponseCode();
-    if (status == HttpURLConnection.HTTP_OK) {
-      response = RequestUtility.getString(httpConn);
-    } else {
-      throw new IOException("Server returned non-OK status: " + status);
+    request.writeBytes(CRLF);
+    request.writeBytes(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS + CRLF);
+    try {
+      return super.finish();
     }
-
-    return response;
+    catch (RequestException e){
+      throw new IOException("Server returned non-OK status: " + e.getErrorCode());
+    }
   }
 }
