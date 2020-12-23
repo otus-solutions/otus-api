@@ -79,7 +79,7 @@ public class UnattachedLaboratoryServiceBeanTest {
     unattachedLaboratory = PowerMockito.spy(new UnattachedLaboratory(LAST_INSERTION, FIELD_CENTER_ACRONYM, COLLECT_GROUP_DESCRIPTOR_NAME, tubes));
     fieldCenter.setAcronym(FIELD_CENTER_ACRONYM);
     participant.setFieldCenter(fieldCenter);
-    participantLaboratory = new ParticipantLaboratory(new ObjectId(), RECRUITMENT_NUMBER, COLLECT_GROUP_DESCRIPTOR_NAME, tubes);
+    participantLaboratory = new ParticipantLaboratory(new ObjectId(), RECRUITMENT_NUMBER, COLLECT_GROUP_DESCRIPTOR_NAME, tubes, null);
   }
 
   @Test
