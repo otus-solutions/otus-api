@@ -22,9 +22,10 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({JsonPOSTUtility.class, URL.class, DataOutputStream.class, RequestUtility.class})
 public class JsonPOSTUtilityTest {
+
   private static String BODY = "{\"recruitmentNumber\": \"4107\",\"variables\":[{\"name\": \"tst1\",\"value\": \"Text\",\"sending\": \"1\"},{\"name\": \"tst1\",\"value\": \"Text\",\"sending\": \"2\"}]}";
-  private static String CONNECTION_CLOSED = "Stream closed";
-  private static final String RESPONSE_RESULT = "success: connection finalized ";
+  private static String CONNECTION_CLOSED = "closed";
+  private static final String RESPONSE_RESULT = "success";
 
   private JsonPOSTUtility jsonPOSTUtility;
   private URL requestURL;
@@ -37,6 +38,7 @@ public class JsonPOSTUtilityTest {
 
   @Before
   public void setUp() throws Exception {
+    mockStatic(RequestUtility.class);
     requestURL = mock(URL.class);
     when((HttpURLConnection) requestURL.openConnection()).thenReturn(httpConn);
     when(httpConn.getOutputStream()).thenReturn(outputStream);
@@ -65,12 +67,18 @@ public class JsonPOSTUtilityTest {
   }
 
   @Test
-  public void test_should_catch_IOException_of_finishMethod() throws IOException {
+  public void finish_method_should_catch_IOException() throws IOException {
     when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
     try {
       jsonPOSTUtility.finish();
     } catch (IOException e) {
       assertEquals(e.getMessage(), CONNECTION_CLOSED);
     }
+  }
+
+  @Test(expected = RequestException.class)
+  public void finish_method_should_throw_RequestException() throws IOException {
+    when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_BAD_REQUEST);
+    jsonPOSTUtility.finish();
   }
 }
