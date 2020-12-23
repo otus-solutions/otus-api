@@ -2,6 +2,7 @@ package br.org.otus.extraction;
 
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -32,6 +33,8 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 
 public class ExtractionFacade {
+
+  private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ExtractionFacade");
 
   @Inject
   private ActivityFacade activityFacade;
@@ -69,8 +72,10 @@ public class ExtractionFacade {
   public byte[] createExtractionFromPipeline(String pipelineName) {
     try {
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineExtraction(pipelineName);
+      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName);
       return (byte[]) gatewayResponse.getData();
     } catch (MalformedURLException e) {
+      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName);
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
