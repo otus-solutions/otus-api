@@ -54,6 +54,15 @@ public class ExtractionResource {
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/pipeline/{pipeline}")
+  public byte[] extractFromPipeline(@PathParam("pipeline") String pipelineName) {
+    return extractionFacade.createExtractionFromPipeline(pipelineName);
+  }
+
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory/exams-values")
   public byte[] extractExamsValues() throws DataNotFoundException {
     return extractionFacade.createLaboratoryExamsValuesExtraction();
@@ -71,7 +80,7 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/{acronym}/{version}/attachments")
-  public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
+  public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
     return extractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);
   }
 
@@ -79,7 +88,7 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/progress/{center}")
-  public byte[] extractActivitiesProgress(@PathParam("center") String center) throws DataNotFoundException {
+  public byte[] extractActivitiesProgress(@PathParam("center") String center) {
     return extractionFacade.createActivityProgressExtraction(center);
   }
 
