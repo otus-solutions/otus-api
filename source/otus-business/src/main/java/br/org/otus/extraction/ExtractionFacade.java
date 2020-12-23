@@ -50,7 +50,7 @@ public class ExtractionFacade {
   @Inject
   private DataSourceService dataSourceService;
 
-  public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
+  public byte[] createActivityExtraction(String acronym, Integer version) {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
     Map<Long, String> fieldCenterByRecruitmentNumber = activityFacade.getParticipantFieldCenterByActivity(acronym, version);
@@ -62,7 +62,7 @@ public class ExtractionFacade {
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
+      throw new HttpResponseException(NotFound.build("Results to extraction {" + acronym + "} not found."));
     }
   }
 
@@ -79,23 +79,23 @@ public class ExtractionFacade {
     return surveyFacade.listVersions(acronym);
   }
 
-  public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
+  public byte[] createLaboratoryExamsValuesExtraction() {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
     ExamUploadExtration extractor = new ExamUploadExtration(records);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("results to extraction not found."));
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
     }
   }
 
-  public byte[] createLaboratoryExtraction() throws DataNotFoundException {
+  public byte[] createLaboratoryExtraction() {
     LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
     LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("results to extraction not found."));
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
     }
   }
 

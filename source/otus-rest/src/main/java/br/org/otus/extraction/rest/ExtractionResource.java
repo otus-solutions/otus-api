@@ -39,7 +39,7 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/{acronym}/{version}")
-  public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) throws DataNotFoundException {
+  public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
     return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
   }
 
@@ -64,7 +64,7 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory/exams-values")
-  public byte[] extractExamsValues() throws DataNotFoundException {
+  public byte[] extractExamsValues() {
     return extractionFacade.createLaboratoryExamsValuesExtraction();
   }
 
@@ -72,7 +72,7 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory")
-  public byte[] extractLaboratory() throws DataNotFoundException {
+  public byte[] extractLaboratory() {
     return extractionFacade.createLaboratoryExtraction();
   }
 
