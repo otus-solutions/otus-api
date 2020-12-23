@@ -11,19 +11,8 @@ import java.net.URL;
 
 public class ExtractionGatewayService {
 
-  public GatewayResponse getActivityExtraction(String activityId) throws MalformedURLException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionAddress(activityId);
-    try {
-      JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
-      String response = jsonGET.finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException e) {
-      throw new ReadRequestException();
-    }
-  }
-
-  public GatewayResponse getActivitiesExtraction(String pipelineName) throws MalformedURLException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivitiesExtractionAddress(pipelineName);
+  public GatewayResponse getPipelineExtraction(String pipelineName) throws MalformedURLException {
+    URL requestURL = new ExtractionMicroServiceResources().getPipelineExtractionAddress(pipelineName);
     try {
       JsonGETUtility jsonGET = new JsonGETUtility(requestURL);
       String response = jsonGET.finish();
