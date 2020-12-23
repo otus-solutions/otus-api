@@ -76,7 +76,7 @@ public class ExtractionFacade {
       return (byte[]) gatewayResponse.getData();
     } catch (MalformedURLException e) {
       LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName);
-      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
