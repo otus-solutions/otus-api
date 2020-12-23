@@ -1,9 +1,13 @@
 package br.org.otus.extraction;
 
+import java.net.MalformedURLException;
 import java.util.*;
 
 import javax.inject.Inject;
 
+import br.org.otus.gateway.gates.ExtractionGatewayService;
+import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.DataSourceService;
@@ -62,6 +66,15 @@ public class ExtractionFacade {
     }
   }
 
+  public byte[] createExtractionFromPipeline(String pipelineName) {
+    try {
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineExtraction(pipelineName);
+      return (byte[]) gatewayResponse.getData();
+    } catch (MalformedURLException e) {
+      throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
   public List<Integer> listSurveyVersions(String acronym) {
     return surveyFacade.listVersions(acronym);
   }
@@ -94,7 +107,7 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createActivityProgressExtraction(String center) throws DataNotFoundException {
+  public byte[] createActivityProgressExtraction(String center) {
     LinkedList<ActivityProgressResultExtraction> progress = activityFacade.getActivityProgressExtraction(center);
     ActivityProgressRecordsFactory extraction = new ActivityProgressRecordsFactory(progress);
     ActivityProgressExtraction extractor = new ActivityProgressExtraction(extraction);
@@ -108,4 +121,5 @@ public class ExtractionFacade {
   public byte[] downloadFiles(ArrayList<String> oids) {
     return fileUploaderFacade.downloadFiles(oids);
   }
+
 }
