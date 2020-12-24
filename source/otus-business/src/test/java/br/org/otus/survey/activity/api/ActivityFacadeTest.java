@@ -3,6 +3,7 @@ package br.org.otus.survey.activity.api;
 import br.org.otus.model.User;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.survey.services.ActivityTasksService;
 import br.org.otus.survey.services.SurveyService;
 import br.org.otus.user.management.ManagementUserService;
 import com.google.gson.Gson;
@@ -62,8 +63,6 @@ public class ActivityFacadeTest {
   @Mock
   private ActivityService activityService;
   @Mock
-  private FollowUpFacade followUpFacade;
-  @Mock
   private SurveyActivity surveyActivity;
   @Mock
   private ManagementUserService managementUserService;
@@ -73,6 +72,8 @@ public class ActivityFacadeTest {
   private ActivitySharingService activitySharingService;
   @Mock
   private SurveyService surveyService;
+  @Mock
+  private ActivityTasksService activityTasksService;
 
   private SurveyActivity surveyActivityFull;
   private SurveyActivity autofillSurveyActivity;
@@ -173,7 +174,8 @@ public class ActivityFacadeTest {
   public void create_method_should_verify_create_with_surveyActivity() {
     Mockito.when(activityService.create(surveyActivity)).thenReturn(OID.toString());
     activityFacade.create(surveyActivity, NOTIFY);
-    verify(activityService, times(1)).create(surveyActivity);
+    verify(activityTasksService, times(1)).create(surveyActivity, NOTIFY);
+//    verify(activityService, times(1)).create(surveyActivity);
   }
 
   @Test(expected = HttpResponseException.class)
@@ -194,16 +196,18 @@ public class ActivityFacadeTest {
     when(activityService, "update", autofillSurveyActivity).thenReturn(autofillSurveyActivity);
 
     activityFacade.updateActivity(autofillSurveyActivity, TOKEN_BEARER);
-    String nameLastStatusHistory = autofillSurveyActivity.getLastStatus().get().getName();
-    String activityId = String.valueOf(autofillSurveyActivity.getActivityID());
 
-    verify(followUpFacade, times(1)).statusUpdateEvent(nameLastStatusHistory, activityId);
+    verify(activityTasksService, times(1)).updateActivity(autofillSurveyActivity, TOKEN_BEARER);
+
+//    String nameLastStatusHistory = autofillSurveyActivity.getLastStatus().get().getName();
+//    String activityId = String.valueOf(autofillSurveyActivity.getActivityID());
+//    verify(followUpFacade, times(1)).statusUpdateEvent(nameLastStatusHistory, activityId);
   }
 
   @Test(expected = HttpResponseException.class)
   public void update_method_should_throw_HttpResponseException_updateActivity_invalid() throws Exception {
-    Mockito.when(activityService.update(surveyActivity)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
-    activityFacade.updateActivity(surveyActivity, TOKEN);
+    Mockito.when(activityTasksService.updateActivity(surveyActivity, TOKEN_BEARER)).thenThrow(new DataNotFoundException(new Throwable("Activity of Participant not found")));
+    activityFacade.updateActivity(surveyActivity, TOKEN_BEARER);
   }
 
   @Test
@@ -220,8 +224,9 @@ public class ActivityFacadeTest {
     when(activitySharingService.getActivitySharingIdByActivityId(Mockito.anyObject())).thenReturn(autofillSurveyActivity.getActivityID());
 
     activityFacade.updateActivity(autofillSurveyActivity, TOKEN_BEARER);
-    verify(followUpFacade, times(1)).cancelParticipantEventByActivityId(Mockito.any());
-    verify(activitySharingService, times(1)).deleteSharedURL(Mockito.any());
+    verify(activityTasksService, times(1)).updateActivity(autofillSurveyActivity, TOKEN_BEARER);
+//    verify(followUpFacade, times(1)).cancelParticipantEventByActivityId(Mockito.any());
+//    verify(activitySharingService, times(1)).deleteSharedURL(Mockito.any());
   }
 
   @Test
@@ -266,20 +271,23 @@ public class ActivityFacadeTest {
     Mockito.when(surveyActivity.getMode()).thenReturn(ActivityMode.AUTOFILL);
 
     activityFacade.create(surveyActivity, NOTIFY);
-    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity, NOTIFY);
+    verify(activityTasksService, times(1)).create(surveyActivity, NOTIFY);
+//    verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity, NOTIFY);
   }
 
   @Test
   public void save_method_should_verify_create_for_follow_up_with_surveyActivity() throws DataNotFoundException {
     OfflineActivityCollection offlineActivityCollection = new OfflineActivityCollection();
     activityFacade.save(USER_EMAIL, offlineActivityCollection);
-    verify(activityService, times(1)).save(USER_EMAIL, offlineActivityCollection);
+    verify(activityTasksService, times(1)).save(USER_EMAIL, offlineActivityCollection);
+//    verify(activityService, times(1)).save(USER_EMAIL, offlineActivityCollection);
   }
 
   @Test(expected = HttpResponseException.class)
   public void save_method_should_handle_DataNotFoundException() throws Exception {
     OfflineActivityCollection offlineActivityCollection = new OfflineActivityCollection();
-    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "save", USER_EMAIL, offlineActivityCollection)  ;
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityTasksService, "save", USER_EMAIL, offlineActivityCollection)  ;
+//    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "save", USER_EMAIL, offlineActivityCollection)  ;
     activityFacade.save(USER_EMAIL, offlineActivityCollection);
   }
 
@@ -309,14 +317,16 @@ public class ActivityFacadeTest {
   }
 
   @Test
-  public void discardByID_method_should_invoke_ActivityService_discardByID() throws DataNotFoundException {
+  public void discardById_method_should_invoke_ActivityService_discardByID() throws DataNotFoundException {
     activityFacade.discardByID(ACTIVITY_ID);
-    verify(activityService, Mockito.times(1)).discardByID(new ObjectId(ACTIVITY_ID));
+    verify(activityTasksService, Mockito.times(1)).discardById(ACTIVITY_ID);
+//    verify(activityService, Mockito.times(1)).discardByID(new ObjectId(ACTIVITY_ID));
   }
 
   @Test(expected = HttpResponseException.class)
   public void discardById_method_should_handle_DataNotFoundException() throws Exception {
-    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "discardByID", new ObjectId(ACTIVITY_ID));
+//    PowerMockito.doThrow(new DataNotFoundException("")).when(activityService, "discardByID", new ObjectId(ACTIVITY_ID));
+    PowerMockito.doThrow(new DataNotFoundException("")).when(activityTasksService, "discardById", ACTIVITY_ID);
     activityFacade.discardByID(ACTIVITY_ID);
   }
 }
