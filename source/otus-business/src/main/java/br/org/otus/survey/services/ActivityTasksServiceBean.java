@@ -18,9 +18,7 @@ import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
-import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.sharing.ActivitySharingService;
-import service.StageService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
