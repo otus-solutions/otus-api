@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class ExtractionFacadeTest {
   private static final ArrayList<SurveyForm> SURVEYS = new ArrayList<>();
   private static final byte[] BYTES = new byte[1];
   private static final String PIPELINE_NAME = "pipeline";
+  private static final String ACTIVITY_ID = "12345";
 
   @InjectMocks
   private ExtractionFacade extractionFacade;
@@ -113,16 +115,58 @@ public class ExtractionFacadeTest {
 
 
   @Test
-  public void createExtractionFromPipeline_method_should_return_bytes_array() throws MalformedURLException {
+  public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
     when(extractionGatewayService.getPipelineExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
     when(gatewayResponse.getData()).thenReturn(BYTES);
     assertEquals(BYTES, extractionFacade.createExtractionFromPipeline(PIPELINE_NAME));
   }
 
   @Test(expected = HttpResponseException.class)
-  public void createExtractionFromPipeline_method_should_handle_MalformedURLException() throws MalformedURLException {
+  public void createExtractionFromPipeline_method_should_handle_MalformedURLException() throws IOException {
     doThrow(new MalformedURLException()).when(extractionGatewayService).getPipelineExtraction(PIPELINE_NAME);
     extractionFacade.createExtractionFromPipeline(PIPELINE_NAME);
+  }
+
+
+  @Test
+  public void createActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+    doNothing().when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
+    extractionFacade.createActivityExtraction(ACTIVITY_ID);
+    verify(extractionGatewayService, Mockito.times(1)).createActivityExtraction(ACTIVITY_ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void createActivityExtraction_method_should_handle_IOException() throws IOException {
+    doThrow(new MalformedURLException()).when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
+    extractionFacade.createActivityExtraction(ACTIVITY_ID);
+  }
+
+
+  @Test
+  public void updateActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+    doNothing().when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
+    extractionFacade.updateActivityExtraction(ACTIVITY_ID);
+    verify(extractionGatewayService, Mockito.times(1)).updateActivityExtraction(ACTIVITY_ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void updateActivityExtraction_method_should_handle_IOException() throws IOException {
+    doThrow(new MalformedURLException()).when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
+    extractionFacade.updateActivityExtraction(ACTIVITY_ID);
+  }
+
+
+  @Test
+  public void deleteActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+    doNothing().when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
+    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
+    verify(extractionGatewayService, Mockito.times(1)).deleteActivityExtraction(ACTIVITY_ID);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void deleteActivityExtraction_method_should_handle_IOException() throws IOException {
+    doThrow(new MalformedURLException()).when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
+    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
   }
 
 
