@@ -17,12 +17,14 @@ public class TubeCollectionData {
   private List<ObjectId> customMetadata;
   private String operator;
   private LocalDateTime time;
+  private String dynamicMetadata;
 
   public TubeCollectionData() {
     this.objectType = "TubeCollectionData";
     this.isCollected = false;
     this.metadata = "";
     this.operator = "";
+    this.dynamicMetadata = "";
   }
 
   public String getObjectType() {
@@ -47,6 +49,10 @@ public class TubeCollectionData {
 
   public LocalDateTime getTime() {
     return time;
+  }
+
+  public String getDynamicMetadata() {
+    return dynamicMetadata;
   }
 
   public static String serialize(TubeCollectionData tubeCollectionData) {
