@@ -1,6 +1,5 @@
 package br.org.otus.survey.activity.api;
 
-import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.builders.ResponseBuild;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
@@ -16,7 +15,6 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.dto.StageSurveyActivitiesDto;
-import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollection;
 import org.ccem.otus.model.survey.offlineActivity.OfflineActivityCollectionGroupsDTO;
 import org.ccem.otus.participant.model.Participant;
@@ -43,9 +41,6 @@ public class ActivityFacade {
 
   @Inject
   private StageService stageService;
-
-  @Inject
-  private FollowUpFacade followUpFacade;
 
   @Inject
   private SurveyService surveyService;
