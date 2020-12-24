@@ -45,25 +45,14 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
   private ManagementUserService managementUserService;
 
   @Inject
-  private ActivityCategoryService activityCategoryService;
-
-  @Inject
-  private StageService stageService;
-
-  @Inject
   private FollowUpFacade followUpFacade;
 
   @Inject
   private ActivitySharingService activitySharingService;
 
   @Inject
-  private SurveyService surveyService;
-
-  @Inject
   private ExtractionFacade extractionFacade;
 
-
-  private SurveyActivity currActivity;
 
   @Override
   public String create(SurveyActivity surveyActivity, boolean notify) {
@@ -91,10 +80,10 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) throws ParseException, DataNotFoundException {
     updateStatusHistoryUser(surveyActivity, generateStatusHistoryUserForUpdate(token));
 
-    currActivity = activityService.update(surveyActivity);
+    SurveyActivity updatedActivity = activityService.update(surveyActivity);
 
-    if (isSurveyActivityAutofill(currActivity.getMode())) {
-      updateAutofillActivity();
+    if (isSurveyActivityAutofill(updatedActivity.getMode())) {
+      updateAutofillActivity(updatedActivity);
     }
 
     CompletableFuture.runAsync(() -> {
@@ -107,7 +96,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       }
     });
 
-    return currActivity;
+    return updatedActivity;
   }
 
   @Override
@@ -173,8 +162,8 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     }
   }
 
-  private void updateStatusHistoryUser(SurveyActivity surveyActivity, User statusHistoryUser){
-    List<ActivityStatus> statusHistory = surveyActivity.getStatusHistory();
+  private void updateStatusHistoryUser(SurveyActivity updatedActivity, User statusHistoryUser){
+    List<ActivityStatus> statusHistory = updatedActivity.getStatusHistory();
     int size = statusHistory.size();
     for (int i = size - 1; i != 0; i--) {
       ActivityStatus activityStatus = statusHistory.get(i);
@@ -187,18 +176,18 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     }
   }
 
-  private void updateAutofillActivity() throws DataNotFoundException {
-    String activityId = String.valueOf(currActivity.getActivityID());
-    if(currActivity.isDiscarded()){
+  private void updateAutofillActivity(SurveyActivity surveyActivity) throws DataNotFoundException {
+    String activityId = String.valueOf(surveyActivity.getActivityID());
+    if(surveyActivity.isDiscarded()){
       followUpFacade.cancelParticipantEventByActivityId(activityId);
 
-      ObjectId activitySharingId = activitySharingService.getActivitySharingIdByActivityId(currActivity.getActivityID());
+      ObjectId activitySharingId = activitySharingService.getActivitySharingIdByActivityId(surveyActivity.getActivityID());
       if(Objects.nonNull(activitySharingId)) {
         activitySharingService.deleteSharedURL(String.valueOf(activitySharingId));
       }
     }
     else{
-      String nameLastStatusHistory = currActivity.getLastStatus().get().getName();
+      String nameLastStatusHistory = surveyActivity.getLastStatus().get().getName();
       followUpFacade.statusUpdateEvent(nameLastStatusHistory, activityId);
     }
   }
