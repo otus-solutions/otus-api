@@ -132,23 +132,10 @@ public class ActivityFacade {
   public String create(SurveyActivity surveyActivity, boolean notify) {
     try {
       isMissingRequiredExternalID(surveyActivity);
-      String activityId = activityService.create(surveyActivity);
-
-      surveyActivity.setActivityID(new ObjectId(activityId));
-      boolean demandsParticipantEvent = checkForParticipantEventCreation(surveyActivity);
-      if (demandsParticipantEvent) {
-        followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
-      }
-
-      return activityId;
-
+      return activityTasksService.create(surveyActivity, notify);
     } catch (ValidationException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
-  }
-
-  private boolean checkForParticipantEventCreation(SurveyActivity surveyActivity) {
-    return (surveyActivity.getMode() != null && surveyActivity.getMode() == ActivityMode.AUTOFILL);
   }
 
   public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) {
@@ -208,22 +195,24 @@ public class ActivityFacade {
       OfflineActivityCollection offlineActivityCollection = activityService.fetchOfflineActivityCollection(offlineCollectionId);
       if (!offlineActivityCollection.getAvailableToSynchronize()) {
         throw new HttpResponseException(Validation.build("Offline collection is already synchronized"));
-      } else if (!offlineActivityCollection.getUserId().equals(user.get_id())) {
-        throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
-      } else {
-        List<ObjectId> createdActivityIds = new ArrayList<>();
-        offlineActivityCollection.getActivities().forEach(activity -> {
-          activity.setParticipantData(participant);
-          activity.setCategory(activityCategory);
-          activity.setStatusHistory(activity.getStatusHistory().stream().map(activityStatus -> {
-            activityStatus.setUser(statusHistoryUser);
-            return activityStatus;
-          }).collect(Collectors.toList()));
-          String createdId = activityService.create(activity);
-          createdActivityIds.add(new ObjectId(createdId));
-        });
-        activityService.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
       }
+      if (!offlineActivityCollection.getUserId().equals(user.get_id())) {
+        throw new HttpResponseException(Validation.build("Offline collection does not belong to you"));
+      }
+
+      List<ObjectId> createdActivityIds = new ArrayList<>();
+      offlineActivityCollection.getActivities().forEach(activity -> {
+        activity.setParticipantData(participant);
+        activity.setCategory(activityCategory);
+        activity.setStatusHistory(activity.getStatusHistory().stream().map(activityStatus -> {
+          activityStatus.setUser(statusHistoryUser);
+          return activityStatus;
+        }).collect(Collectors.toList()));
+        String createdId = activityService.create(activity);
+        createdActivityIds.add(new ObjectId(createdId));
+      });
+      activityService.deactivateOfflineActivityCollection(offlineCollectionId, createdActivityIds);
+
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
@@ -231,7 +220,7 @@ public class ActivityFacade {
 
   public void save(String userEmail, OfflineActivityCollection offlineActivityCollection) {
     try {
-      activityService.save(userEmail, offlineActivityCollection);
+      activityTasksService.save(userEmail, offlineActivityCollection);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
@@ -255,9 +244,9 @@ public class ActivityFacade {
     }
   }
 
-  public void discardByID(String activityID) {
+  public void discardByID(String activityId) {
     try {
-      activityService.discardByID(new ObjectId(activityID));
+      activityTasksService.discardById(activityId);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
