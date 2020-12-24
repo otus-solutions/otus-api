@@ -1,9 +1,14 @@
 package br.org.otus.extraction;
 
+import java.net.MalformedURLException;
 import java.util.*;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import br.org.otus.gateway.gates.ExtractionGatewayService;
+import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.DataSourceService;
@@ -29,6 +34,8 @@ import br.org.otus.survey.api.SurveyFacade;
 
 public class ExtractionFacade {
 
+  private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ExtractionFacade");
+
   @Inject
   private ActivityFacade activityFacade;
   @Inject
@@ -46,7 +53,7 @@ public class ExtractionFacade {
   @Inject
   private DataSourceService dataSourceService;
 
-  public byte[] createActivityExtraction(String acronym, Integer version) throws DataNotFoundException {
+  public byte[] createActivityExtraction(String acronym, Integer version) {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
     List<SurveyActivity> activities = activityFacade.getExtraction(acronym, version);
     Map<Long, String> fieldCenterByRecruitmentNumber = activityFacade.getParticipantFieldCenterByActivity(acronym, version);
@@ -58,7 +65,18 @@ public class ExtractionFacade {
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("RESULTS TO EXTRACTION {" + acronym + "} not found."));
+      throw new HttpResponseException(NotFound.build("Results to extraction {" + acronym + "} not found."));
+    }
+  }
+
+  public byte[] createExtractionFromPipeline(String pipelineName) {
+    try {
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineExtraction(pipelineName);
+      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName);
+      return (byte[]) gatewayResponse.getData();
+    } catch (MalformedURLException e) {
+      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName);
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -66,23 +84,23 @@ public class ExtractionFacade {
     return surveyFacade.listVersions(acronym);
   }
 
-  public byte[] createLaboratoryExamsValuesExtraction() throws DataNotFoundException {
+  public byte[] createLaboratoryExamsValuesExtraction() {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
     ExamUploadExtration extractor = new ExamUploadExtration(records);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("results to extraction not found."));
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
     }
   }
 
-  public byte[] createLaboratoryExtraction() throws DataNotFoundException {
+  public byte[] createLaboratoryExtraction() {
     LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
     LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
-      throw new DataNotFoundException(new Throwable("results to extraction not found."));
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
     }
   }
 
@@ -94,7 +112,7 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createActivityProgressExtraction(String center) throws DataNotFoundException {
+  public byte[] createActivityProgressExtraction(String center) {
     LinkedList<ActivityProgressResultExtraction> progress = activityFacade.getActivityProgressExtraction(center);
     ActivityProgressRecordsFactory extraction = new ActivityProgressRecordsFactory(progress);
     ActivityProgressExtraction extractor = new ActivityProgressExtraction(extraction);
@@ -108,4 +126,5 @@ public class ExtractionFacade {
   public byte[] downloadFiles(ArrayList<String> oids) {
     return fileUploaderFacade.downloadFiles(oids);
   }
+
 }
