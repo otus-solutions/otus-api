@@ -26,6 +26,7 @@ public class LaboratoryParticipantTest {
       + "\"aliquots\":[]"
       + "}],"
       + "\"exams\":[]"
+      + "\"identification\":null"
       + "}}";
 
     laboratoryParticipant = new Gson().fromJson(json, ParticipantLaboratory.class);

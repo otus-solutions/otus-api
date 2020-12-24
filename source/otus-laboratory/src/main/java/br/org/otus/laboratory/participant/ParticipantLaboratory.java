@@ -24,14 +24,16 @@ public class ParticipantLaboratory {
   private List<Tube> tubes;
   private List<Exam> exams;
   private ObjectId locationPoint;
+  private Integer identification;
 
-  public ParticipantLaboratory(ObjectId locationPoint, Long recruitmentNumber, String collectGroupName, List<Tube> tubes) {
+  public ParticipantLaboratory(ObjectId locationPoint, Long recruitmentNumber, String collectGroupName, List<Tube> tubes, Integer identification) {
     this.objectType = "ParticipantLaboratory";
     this.recruitmentNumber = recruitmentNumber;
     this.collectGroupName = collectGroupName;
     this.tubes = tubes;
     this.exams = new ArrayList<>();
     this.locationPoint = locationPoint;
+    this.identification = identification;
   }
 
   public Long getRecruitmentNumber() {
@@ -61,6 +63,10 @@ public class ParticipantLaboratory {
     }
 
     return aliquotsList;
+  }
+
+  public int getIdentification() {
+    return identification;
   }
 
   public void setAliquots(List<Aliquot> aliquotList) throws DataNotFoundException {
