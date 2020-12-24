@@ -1,6 +1,6 @@
 package br.org.otus.extraction;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -74,8 +74,38 @@ public class ExtractionFacade {
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineExtraction(pipelineName);
       LOGGER.info("status: success, action: extraction for pipeline " + pipelineName);
       return (byte[]) gatewayResponse.getData();
-    } catch (MalformedURLException e) {
+    } catch (IOException e) {
       LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName);
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void createActivityExtraction(String activityId) {
+    try {
+      new ExtractionGatewayService().createActivityExtraction(activityId);
+      LOGGER.info("status: success, action: create extraction for activity " + activityId);
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: create extraction for activity " + activityId);
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void updateActivityExtraction(String activityId) {
+    try {
+      new ExtractionGatewayService().updateActivityExtraction(activityId);
+      LOGGER.info("status: success, action: update extraction for activity " + activityId);
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: update extraction for activity " + activityId);
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public void deleteActivityExtraction(String activityId) {
+    try {
+      new ExtractionGatewayService().deleteActivityExtraction(activityId);
+      LOGGER.info("status: success, action: delete extraction for activity " + activityId);
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: delete extraction for activity " + activityId);
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
