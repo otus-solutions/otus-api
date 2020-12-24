@@ -4,12 +4,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -137,10 +132,37 @@ public class ExtractionResource {
 
   @GET
   @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Produces(MediaType.APPLICATION_JSON)
   @Path("/pipeline/{pipeline}")
   public byte[] extractFromPipeline(@PathParam("pipeline") String pipelineName) {
     return extractionFacade.createExtractionFromPipeline(pipelineName);
+  }
+
+  @POST
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/activity/{id}")
+  public String createActivityExtraction(@PathParam("id") String activityId) {
+    extractionFacade.createActivityExtraction(activityId);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @PUT
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/activity/{id}")
+  public String updateActivityExtraction(@PathParam("id") String activityId) {
+    extractionFacade.updateActivityExtraction(activityId);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @DELETE
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/activity/{id}")
+  public String deleteActivityExtraction(@PathParam("id") String activityId) {
+    extractionFacade.deleteActivityExtraction(activityId);
+    return new Response().buildSuccess().toJson();
   }
 
 }
