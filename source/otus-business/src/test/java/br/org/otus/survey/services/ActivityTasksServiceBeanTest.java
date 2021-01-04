@@ -44,7 +44,6 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
   private static final Long RECRUITMENT_NUMBER = 5112345L;
   private static final String ACTIVITY_ID   = "5c0e5d41e69a69006430cb75";
   private static final String ACTIVITY_ID_2 = "5c0e5d41e69a69006430cb76";
-  private static final String ACTIVITY_ID_3 = "5c0e5d41e69a69006430cb77";
   private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvdHVzQGdtYWlsLmNvbSIsIm1vZGUiOiJ1c2VyIiwianRpIjoiYzc1ODIzNWMtYjQzMy00NDQ2LWFhMDMtYmU0NmI3ODU3NWEyIiwiaWF0IjoxNTg1MTc2NDg5LCJleHAiOjE1ODUxODAwODl9.wlSmhUXYW6Apqg5skGPLDGCyuA0sDYyVtZIBM8RxkLs";
   private static final String TOKEN_BEARER = "Bearer " + TOKEN;
   private static final String PARTICIPANT_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoidXNlciIsImlzcyI6InJvemFsaW5vQGdtYWlsLmNvbSJ9.OStBf7OdE38uTpiQ25XpWxiC3ujsYK6OvZ4rSzQrB-Y";
