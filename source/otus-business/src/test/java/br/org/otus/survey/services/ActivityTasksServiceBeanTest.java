@@ -197,7 +197,7 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     assertEquals(surveyActivityToUpdate, updatedActivity);
     verify(followUpFacade, times(1)).cancelParticipantEventByActivityId(ACTIVITY_ID);
     verify(activitySharingService, times(1)).deleteSharedURL(ACTIVITY_SHARING_ID);
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID);
+    verify(extractionFacade, times(1)).deleteActivityExtraction(ACTIVITY_ID);
   }
 
   @Test
