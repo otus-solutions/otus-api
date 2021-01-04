@@ -162,14 +162,15 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
 
   private void updateStatusHistoryUser(SurveyActivity updatedActivity, User statusHistoryUser){
     List<ActivityStatus> statusHistory = updatedActivity.getStatusHistory();
-    int size = statusHistory.size();
-    for (int i = size - 1; i != 0; i--) {
+    int i = statusHistory.size() - 1;
+    while (i != 0){
       ActivityStatus activityStatus = statusHistory.get(i);
       try {
         activityStatus.getUser();
-        break;
+        i = 0;
       } catch (UserNotFoundException e) {
         activityStatus.setUser(statusHistoryUser);
+        i--;
       }
     }
   }
