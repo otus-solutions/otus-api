@@ -85,11 +85,18 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     }
 
     CompletableFuture.runAsync(() -> {
+      String action = "update";
       try{
-        extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+        if(surveyActivity.isDiscarded()){
+          action = "delete";
+          extractionFacade.deleteActivityExtraction(surveyActivity.getActivityID().toString());
+        }
+        else{
+          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+        }
       }
       catch (Exception e){
-        LOGGER.severe("status: fail, action: update activity extraction for activityId " + surveyActivity.getActivityID().toString());
+        LOGGER.severe("status: fail, action: " + action + " activity extraction for activityId " + surveyActivity.getActivityID().toString());
         new Exception("Error while syncing results", e).printStackTrace();
       }
     });
