@@ -75,7 +75,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
   }
 
   @Override
-  public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) throws ParseException, DataNotFoundException {
+  public SurveyActivity updateActivity(SurveyActivity surveyActivity, String token) throws ParseException, DataNotFoundException, HttpResponseException {
     updateStatusHistoryUser(surveyActivity, generateStatusHistoryUserForUpdate(token));
 
     SurveyActivity updatedActivity = activityService.update(surveyActivity);
@@ -134,7 +134,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     return (activityMode != null && activityMode == ActivityMode.AUTOFILL);
   }
 
-  private User generateStatusHistoryUserForUpdate(String token) throws ParseException, DataNotFoundException {
+  private User generateStatusHistoryUserForUpdate(String token) throws ParseException, DataNotFoundException, HttpResponseException {
     Participant participant = null;
     token = token.substring("Bearer".length()).trim();
     SignedJWT signedJWT = SignedJWT.parse(token);
