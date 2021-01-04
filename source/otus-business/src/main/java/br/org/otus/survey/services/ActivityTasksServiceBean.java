@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 @Stateless
 public class ActivityTasksServiceBean implements ActivityTasksService {
 
-  private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ExtractionFacade");
+  private final static Logger LOGGER = Logger.getLogger("br.org.otus.survey.services.ActivityTasksServiceBean");
 
   @Inject
   private ActivityService activityService;
