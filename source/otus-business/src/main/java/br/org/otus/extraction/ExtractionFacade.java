@@ -80,7 +80,7 @@ public class ExtractionFacade {
     }
   }
 
-  public void createActivityExtraction(String activityId) {
+  public void createActivityExtraction(String activityId) throws HttpResponseException {
     try {
       new ExtractionGatewayService().createActivityExtraction(activityId);
       LOGGER.info("status: success, action: create extraction for activity " + activityId);
