@@ -57,7 +57,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     String activityId = activityService.create(surveyActivity);
     surveyActivity.setActivityID(new ObjectId(activityId));
 
-    if (isSurveyActivityAutofill(surveyActivity.getMode())) {
+    if (surveyActivity.getMode() == ActivityMode.AUTOFILL) {
       followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
     }
 
@@ -80,7 +80,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
 
     SurveyActivity updatedActivity = activityService.update(surveyActivity);
 
-    if (isSurveyActivityAutofill(updatedActivity.getMode())) {
+    if (updatedActivity.getMode() == ActivityMode.AUTOFILL) {
       updateAutofillActivity(updatedActivity);
     }
 
@@ -128,10 +128,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
         new Exception("Error while syncing results", e).printStackTrace();
       }
     });
-  }
-
-  private boolean isSurveyActivityAutofill(ActivityMode activityMode) {
-    return (activityMode != null && activityMode == ActivityMode.AUTOFILL);
   }
 
   private User generateStatusHistoryUserForUpdate(String token) throws ParseException, DataNotFoundException, HttpResponseException {
