@@ -52,6 +52,12 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
   private static final boolean NOTIFY = false;
   private static final String ACTIVITY_SHARING_ID = "5c0e5d41e69a69006430cb74";
   private static final ObjectId ACTIVITY_SHARING_OID = new ObjectId(ACTIVITY_SHARING_ID);
+  private static final String ACTIVITY_STATUS_USER = "{" +
+    "\"name\" : \"Fulano\"," +
+    "\"surname\" : \"De Tal\"," +
+    "\"phone\" : \"5199999999\"," +
+    "\"email\" : \"user@otus.com\"" +
+    "}";
   private static final String SURVEY_ACTIVITY_JSON = "{" +
     "\"objectType\" : \"Activity\"," +
     "\"statusHistory\": [" +
@@ -59,17 +65,18 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
         "\"objectType\" : \"ActivityStatus\"," +
         "\"name\" : \"CREATED\"," +
         "\"date\" : \"2020-12-18T16:55:55.511Z\"," +
-        "\"user\" : {" +
-          "\"name\" : \"Fulano\"," +
-          "\"surname\" : \"De Tal\"," +
-          "\"phone\" : \"5199999999\"," +
-          "\"email\" : \"user@otus.com\"" +
-        "}" +
+        "\"user\" : " + ACTIVITY_STATUS_USER +
       "}," +
       "{" +
         "\"objectType\" : \"ActivityStatus\"," +
         "\"name\" : \"INITIALIZED_ONLINE\"," +
-        "\"date\" : \"2020-12-18T16:55:55.511Z\"" +
+        "\"date\" : \"2020-12-18T16:55:55.511Z\"," +
+        "\"user\" : " + ACTIVITY_STATUS_USER +
+      "}," +
+      "{" +
+        "\"objectType\" : \"ActivityStatus\"," +
+        "\"name\" : \"SAVED\"," +
+        "\"date\" : \"2020-12-18T17:55:55.511Z\"" +
       "}" +
     "]" +
     "}";
