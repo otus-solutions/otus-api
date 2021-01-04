@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
+import br.org.otus.LoggerTestsParent;
 import br.org.otus.api.ExtractionService;
 import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
@@ -39,7 +40,7 @@ import br.org.otus.survey.api.SurveyFacade;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ExtractionFacade.class})
-public class ExtractionFacadeTest {
+public class ExtractionFacadeTest extends LoggerTestsParent {
 
   private static final SurveyTemplate SURVEY_TEMPLATE = new SurveyTemplate();
   private static final String USER_EMAIL = "otus@otus.com";
@@ -87,6 +88,7 @@ public class ExtractionFacadeTest {
 
   @Before
   public void setUp() throws Exception {
+    setUpLogger(ExtractionFacade.class);
     SURVEYS.add(surveyForm);
     SURVEYS.add(surveyForm);
     PowerMockito.when(surveyFacade.get(ACRONYM, VERSION)).thenReturn(SURVEYS.get(0));
@@ -133,12 +135,14 @@ public class ExtractionFacadeTest {
     doNothing().when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
     extractionFacade.createActivityExtraction(ACTIVITY_ID);
     verify(extractionGatewayService, Mockito.times(1)).createActivityExtraction(ACTIVITY_ID);
+    verifyLoggerInfoWasCalled();
   }
 
   @Test(expected = HttpResponseException.class)
   public void createActivityExtraction_method_should_handle_IOException() throws IOException {
     doThrow(new MalformedURLException()).when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
     extractionFacade.createActivityExtraction(ACTIVITY_ID);
+    verifyLoggerSevereWasCalled();
   }
 
 
@@ -147,12 +151,14 @@ public class ExtractionFacadeTest {
     doNothing().when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
     extractionFacade.updateActivityExtraction(ACTIVITY_ID);
     verify(extractionGatewayService, Mockito.times(1)).updateActivityExtraction(ACTIVITY_ID);
+    verifyLoggerInfoWasCalled();
   }
 
   @Test(expected = HttpResponseException.class)
   public void updateActivityExtraction_method_should_handle_IOException() throws IOException {
     doThrow(new MalformedURLException()).when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
     extractionFacade.updateActivityExtraction(ACTIVITY_ID);
+    verifyLoggerSevereWasCalled();
   }
 
 
@@ -161,12 +167,14 @@ public class ExtractionFacadeTest {
     doNothing().when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
     extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
     verify(extractionGatewayService, Mockito.times(1)).deleteActivityExtraction(ACTIVITY_ID);
+    verifyLoggerInfoWasCalled();
   }
 
   @Test(expected = HttpResponseException.class)
   public void deleteActivityExtraction_method_should_handle_IOException() throws IOException {
     doThrow(new MalformedURLException()).when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
     extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
+    verifyLoggerSevereWasCalled();
   }
 
 
