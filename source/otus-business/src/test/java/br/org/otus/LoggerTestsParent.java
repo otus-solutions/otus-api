@@ -29,4 +29,8 @@ public abstract class LoggerTestsParent {
   protected void verifyLoggerSevereWasCalled(){
     verify(LOGGER, times(1)).severe(Mockito.anyString());
   }
+
+  protected void verifyLoggerInfoWasCalled(){
+    verify(LOGGER, times(1)).info(Mockito.anyString());
+  }
 }
