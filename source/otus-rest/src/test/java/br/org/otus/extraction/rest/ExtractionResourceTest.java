@@ -127,8 +127,8 @@ public class ExtractionResourceTest extends AuthenticationResourceTestsParent {
 
   @Test
   public void extractFromPipeline_method_should_call_createExtractionFromPipeline_method() {
-    extractionResource.extractFromPipeline(PIPELINE_NAME);
-    Mockito.verify(extractionFacade).createExtractionFromPipeline(PIPELINE_NAME);
+    extractionResource.extractJsonFromPipeline(PIPELINE_NAME);
+    Mockito.verify(extractionFacade).createJsonExtractionFromPipeline(PIPELINE_NAME);
   }
 
 }

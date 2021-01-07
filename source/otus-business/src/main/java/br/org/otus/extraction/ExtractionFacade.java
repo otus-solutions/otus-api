@@ -69,13 +69,24 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createExtractionFromPipeline(String pipelineName) {
+  public byte[] createJsonExtractionFromPipeline(String pipelineName) {
     try {
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineExtraction(pipelineName);
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName);
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineJsonExtraction(pipelineName);
+      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as json");
       return (byte[]) gatewayResponse.getData();
     } catch (IOException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName);
+      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as json");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public byte[] createCsvExtractionFromPipeline(String pipelineName) {
+    try {
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineCsvJsonExtraction(pipelineName);
+      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as csv");
+      return (byte[]) gatewayResponse.getData();
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }

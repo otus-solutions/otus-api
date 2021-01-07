@@ -9,8 +9,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.extraction.ExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
@@ -133,9 +131,17 @@ public class ExtractionResource {
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/pipeline/{pipeline}")
-  public byte[] extractFromPipeline(@PathParam("pipeline") String pipelineName) {
-    return extractionFacade.createExtractionFromPipeline(pipelineName);
+  @Path("/pipeline/json/{pipeline}")
+  public byte[] extractJsonFromPipeline(@PathParam("pipeline") String pipelineName) {
+    return extractionFacade.createJsonExtractionFromPipeline(pipelineName);
+  }
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/pipeline/csv/{pipeline}")
+  public byte[] extractCsvFromPipeline(@PathParam("pipeline") String pipelineName) {
+    return extractionFacade.createCsvExtractionFromPipeline(pipelineName);
   }
 
   @POST

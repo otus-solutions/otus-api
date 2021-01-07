@@ -7,7 +7,9 @@ import java.net.URL;
 
 public class ExtractionMicroServiceResources extends MicroservicesResources {
 
-  private static final String PIPELINE_EXTRACTION_RESOURCE = "/pipeline/";
+  private static final String PIPELINE_EXTRACTION_SUFFIX = "/pipeline/";
+  private static final String PIPELINE_JSON_EXTRACTION_RESOURCE = PIPELINE_EXTRACTION_SUFFIX + "json/";
+  private static final String PIPELINE_CSV_EXTRACTION_RESOURCE = PIPELINE_EXTRACTION_SUFFIX + "csv/";
 
   private static final String EXTRACTION_SUFFIX = "/extraction/";
   private static final String EXTRACTION_CREATE_RESOURCE = EXTRACTION_SUFFIX + "create/";
@@ -18,8 +20,12 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
     super(MicroservicesEnvironments.EXTRACTION);
   }
 
-  public URL getPipelineExtractionAddress(String pipelineName) throws MalformedURLException {
-    return new URL(getMainAddress() + PIPELINE_EXTRACTION_RESOURCE + pipelineName);
+  public URL getPipelineJsonExtractionAddress(String pipelineName) throws MalformedURLException {
+    return new URL(getMainAddress() + PIPELINE_JSON_EXTRACTION_RESOURCE + pipelineName);
+  }
+
+  public URL getPipelineCsvExtractionAddress(String pipelineName) throws MalformedURLException {
+    return new URL(getMainAddress() + PIPELINE_CSV_EXTRACTION_RESOURCE + pipelineName);
   }
 
   public URL getActivityExtractionCreateAddress(String activityId) throws MalformedURLException {

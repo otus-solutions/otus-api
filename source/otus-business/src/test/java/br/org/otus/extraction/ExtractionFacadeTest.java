@@ -118,15 +118,15 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
 
   @Test
   public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
-    when(extractionGatewayService.getPipelineExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
+    when(extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
     when(gatewayResponse.getData()).thenReturn(BYTES);
-    assertEquals(BYTES, extractionFacade.createExtractionFromPipeline(PIPELINE_NAME));
+    assertEquals(BYTES, extractionFacade.createJsonExtractionFromPipeline(PIPELINE_NAME));
   }
 
   @Test(expected = HttpResponseException.class)
   public void createExtractionFromPipeline_method_should_handle_MalformedURLException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).getPipelineExtraction(PIPELINE_NAME);
-    extractionFacade.createExtractionFromPipeline(PIPELINE_NAME);
+    doThrow(new MalformedURLException()).when(extractionGatewayService).getPipelineJsonExtraction(PIPELINE_NAME);
+    extractionFacade.createJsonExtractionFromPipeline(PIPELINE_NAME);
   }
 
 

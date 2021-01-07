@@ -10,8 +10,17 @@ import java.net.URL;
 
 public class ExtractionGatewayService {
 
-  public GatewayResponse getPipelineExtraction(String pipelineName) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getPipelineExtractionAddress(pipelineName);
+  public GatewayResponse getPipelineJsonExtraction(String pipelineName) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getPipelineJsonExtractionAddress(pipelineName);
+    return getPipelineExtraction(requestURL);
+  }
+
+  public GatewayResponse getPipelineCsvJsonExtraction(String pipelineName) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getPipelineCsvExtractionAddress(pipelineName);
+    return getPipelineExtraction(requestURL);
+  }
+
+  private GatewayResponse getPipelineExtraction(URL requestURL){
     try {
       String response = new JsonGETUtility(requestURL).finish();
       return new GatewayResponse().buildSuccess(response);

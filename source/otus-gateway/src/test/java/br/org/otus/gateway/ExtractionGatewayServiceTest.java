@@ -71,15 +71,15 @@ public class ExtractionGatewayServiceTest {
 
   @Test
   public void getPipelineExtraction_method_should_return_GatewayResponse() throws IOException {
-    when(extractionMicroServiceResources.getPipelineExtractionAddress(PIPELINE_NAME)).thenReturn(requestURL);
-    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getPipelineExtraction(PIPELINE_NAME));
+    when(extractionMicroServiceResources.getPipelineJsonExtractionAddress(PIPELINE_NAME)).thenReturn(requestURL);
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME));
   }
 
   @Test(expected = ReadRequestException.class)
   public void getPipelineExtraction_method_should_throw_ReadRequestException() throws IOException {
-    when(extractionMicroServiceResources.getPipelineExtractionAddress(PIPELINE_NAME)).thenReturn(requestURL);
+    when(extractionMicroServiceResources.getPipelineJsonExtractionAddress(PIPELINE_NAME)).thenReturn(requestURL);
     when(jsonGETUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.getPipelineExtraction(PIPELINE_NAME);
+    extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME);
   }
 
 
