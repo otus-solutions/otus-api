@@ -146,7 +146,7 @@ public class ExtractionResource {
     return extractionFacade.createCsvExtractionFromPipeline(pipelineName);
   }
 
-  @POST
+  @PUT
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/activity/{id}")
