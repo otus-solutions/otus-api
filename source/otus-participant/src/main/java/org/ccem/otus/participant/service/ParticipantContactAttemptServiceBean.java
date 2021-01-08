@@ -2,18 +2,14 @@ package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.Participant;
-import org.ccem.otus.participant.model.ParticipantContactAttempt;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContactPositionOptions;
+import org.ccem.otus.participant.model.participantContactAttempt.MetadataAttemptStatus;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.persistence.MetadataAttemptStatusDao;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
-import org.ccem.otus.participant.persistence.ParticipantContactDao;
-import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.DataFormatException;
 
 @Stateless
@@ -21,6 +17,10 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
 
   @Inject
   private ParticipantContactAttemptDao participantContactAttemptDao;
+
+  @Inject
+  private MetadataAttemptStatusDao metadataAttemptStatusDao;
+
 
   @Override
   public ObjectId create(ParticipantContactAttempt participantContactAttempt) throws DataFormatException {
@@ -35,5 +35,10 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   @Override
   public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber) throws DataNotFoundException {
     return participantContactAttemptDao.findAttempts(recruitmentNumber);
+  }
+
+  @Override
+  public MetadataAttemptStatus findMetadataAttempt(String objectType) throws DataNotFoundException {
+    return metadataAttemptStatusDao.findMetadataAttempt(objectType);
   }
 }

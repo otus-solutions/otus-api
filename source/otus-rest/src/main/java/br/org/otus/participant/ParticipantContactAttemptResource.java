@@ -2,10 +2,11 @@ package br.org.otus.participant;
 
 import br.org.otus.participant.api.ParticipantContactAttemptFacade;
 import br.org.otus.rest.Response;
-import org.ccem.otus.participant.model.ParticipantContactAttempt;
-import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
+import org.ccem.otus.participant.model.participantContactAttempt.MetadataAttemptStatus;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 
 import javax.inject.Inject;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
@@ -38,6 +39,15 @@ public class ParticipantContactAttemptResource {
   public String findAttempts(@PathParam("rn") Long recruitmentNumber) {
     ArrayList<ParticipantContactAttempt> participantContact = participantContactAttemptFacade.findAttempts(recruitmentNumber);
     return (new Response()).buildSuccess(participantContact)
+      .toJson(ParticipantContactAttempt.getGsonBuilder());
+  }
+
+  @GET
+  @Path("/metadata-status/{objectType}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String findMetadataAttempt(@PathParam("objectType") String objectType) {
+    MetadataAttemptStatus metadataAttemptStatus = participantContactAttemptFacade.findMetadataAttempt(objectType);
+    return (new Response()).buildSuccess(metadataAttemptStatus)
       .toJson(ParticipantContactAttempt.getGsonBuilder());
   }
 
