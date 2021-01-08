@@ -17,6 +17,7 @@ import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
+import com.google.gson.internal.LinkedTreeMap;
 
 @Path("data-extraction")
 public class ExtractionResource {
@@ -132,8 +133,9 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/pipeline/json/{pipeline}")
-  public byte[] extractJsonFromPipeline(@PathParam("pipeline") String pipelineName) {
-    return extractionFacade.createJsonExtractionFromPipeline(pipelineName);
+  public String extractJsonFromPipeline(@PathParam("pipeline") String pipelineName) {
+    ArrayList<LinkedTreeMap> json =  extractionFacade.createJsonExtractionFromPipeline(pipelineName);
+    return new Response().buildSuccess(json).toJson();
   }
 
   @GET
