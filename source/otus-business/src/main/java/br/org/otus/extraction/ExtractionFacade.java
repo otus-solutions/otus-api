@@ -6,9 +6,12 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import br.org.otus.api.CsvExtraction;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.response.info.Validation;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.service.DataSourceService;
@@ -69,11 +72,13 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createJsonExtractionFromPipeline(String pipelineName) {
+  public ArrayList<LinkedTreeMap> createJsonExtractionFromPipeline(String pipelineName) {
     try {
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineJsonExtraction(pipelineName);
+      ArrayList<LinkedTreeMap> response = new GsonBuilder().create().fromJson(
+        (String) gatewayResponse.getData(), ArrayList.class);
       LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as json");
-      return (byte[]) gatewayResponse.getData();
+      return response;
     } catch (IOException e) {
       LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
@@ -83,9 +88,10 @@ public class ExtractionFacade {
   public byte[] createCsvExtractionFromPipeline(String pipelineName) {
     try {
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineCsvJsonExtraction(pipelineName);
+      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as csv");
-      return (byte[]) gatewayResponse.getData();
-    } catch (IOException e) {
+      return csv;
+    } catch (IOException | DataNotFoundException e) {
       LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
