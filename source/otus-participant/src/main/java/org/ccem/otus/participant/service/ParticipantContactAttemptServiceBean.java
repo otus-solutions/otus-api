@@ -33,8 +33,8 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber) throws DataNotFoundException {
-    return participantContactAttemptDao.findAttempts(recruitmentNumber);
+  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
+    return participantContactAttemptDao.findAttempts(recruitmentNumber, objectType, position);
   }
 
   @Override

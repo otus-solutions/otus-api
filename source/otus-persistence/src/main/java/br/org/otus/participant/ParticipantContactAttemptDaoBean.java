@@ -1,6 +1,7 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
@@ -19,6 +20,8 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
 
   private static final String COLLECTION_NAME = "participant_contact_attempt";
   private static final String RECRUITMENT_NUMBER_FIELD_NAME = "recruitmentNumber";
+  private static final String OBJECT_TYPE_FIELD_NAME = "objectType";
+  private static final String ADDRESS_FIELD_NAME = "address";
 
   public ParticipantContactAttemptDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -40,15 +43,21 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber) throws DataNotFoundException {
+  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
     try{
       ArrayList<ParticipantContactAttempt> attempts = new ArrayList<>();
-      FindIterable<Document> result = collection.find(eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber));
+      BasicDBObject query = new BasicDBObject();
+      query.put(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber);
+      query.put(OBJECT_TYPE_FIELD_NAME, objectType);
+      FindIterable<Document> result = collection.find(query);
       MongoCursor<Document> iterator = result.iterator();
       while (iterator.hasNext()) {
         Document document = ( Document ) iterator.next();
         ParticipantContactAttempt participantContactAttempt = ParticipantContactAttempt.deserialize(document.toJson());
-        attempts.add(participantContactAttempt);
+        String address = participantContactAttempt.getAddress().toString();
+        if(address.contains(position)) {
+          attempts.add(participantContactAttempt);
+        }
       }
       return attempts;
     }

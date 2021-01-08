@@ -34,10 +34,10 @@ public class ParticipantContactAttemptResource {
   }
 
   @GET
-  @Path("/rn/{rn}")
+  @Path("/{rn}/{contactType}/{position}")
   @Produces(MediaType.APPLICATION_JSON)
-  public String findAttempts(@PathParam("rn") Long recruitmentNumber) {
-    ArrayList<ParticipantContactAttempt> participantContact = participantContactAttemptFacade.findAttempts(recruitmentNumber);
+  public String findAttempts(@PathParam("rn") Long recruitmentNumber, @PathParam("contactType") String objectType, @PathParam("position") String position) {
+    ArrayList<ParticipantContactAttempt> participantContact = participantContactAttemptFacade.findAttempts(recruitmentNumber, objectType, position);
     return (new Response()).buildSuccess(participantContact)
       .toJson(ParticipantContactAttempt.getGsonBuilder());
   }

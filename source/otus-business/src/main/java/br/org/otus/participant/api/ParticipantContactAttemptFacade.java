@@ -35,9 +35,9 @@ public class ParticipantContactAttemptFacade {
     }
   }
 
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber) {
+  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) {
     try{
-      return participantContactAttemptService.findAttempts(recruitmentNumber);
+      return participantContactAttemptService.findAttempts(recruitmentNumber, objectType, position);
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));

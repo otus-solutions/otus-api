@@ -27,6 +27,10 @@ public class ParticipantContactAttempt {
     this.attemptStatus = attemptStatus;
   }
 
+  public Object getAddress() {
+    return address;
+  }
+
   public static String serialize(ParticipantContactAttempt participantContactJson) {
     GsonBuilder builder = ParticipantContactAttempt.getGsonBuilder();
     return builder.create().toJson(participantContactJson);

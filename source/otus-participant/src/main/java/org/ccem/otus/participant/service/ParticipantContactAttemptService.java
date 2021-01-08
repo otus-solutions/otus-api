@@ -15,6 +15,7 @@ public interface ParticipantContactAttemptService {
 
   void delete(ObjectId participantContactAttemptOID) throws DataNotFoundException;
 
-  ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber) throws DataNotFoundException;
+  ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException;
+
   MetadataAttemptStatus findMetadataAttempt(String objectType) throws DataNotFoundException;
 }
