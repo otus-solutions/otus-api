@@ -10,7 +10,7 @@ public class ProjectConfiguration {
   public String objectType;
   private boolean participantRegistration;
   private boolean autoGenerateRecruitmentNumber;
-
+  private boolean addressCensusRequired;
 
   public boolean isAutoGenerateRecruitmentNumber() {
     return autoGenerateRecruitmentNumber;
