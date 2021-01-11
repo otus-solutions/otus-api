@@ -12,6 +12,7 @@ public class Address extends ParticipantContactItemValue {
   private String city;
   private String state;
   private String country;
+  private String census;
 
   public String getPostalCode() {
     return postalCode;
@@ -43,6 +44,10 @@ public class Address extends ParticipantContactItemValue {
     return country;
   }
 
+  public String getCensus() {
+    return census;
+  }
+
   public static String serialize(Address participantContactItemAddress){
     return getGsonBuilder().create().toJson(participantContactItemAddress);
   }
@@ -54,7 +59,7 @@ public class Address extends ParticipantContactItemValue {
   @Override
   public boolean isValid() {
     return (getStreet()!=null && getStreetNumber()!=null &&
-      getNeighbourhood()!=null && getCity()!=null && getState()!=null && getCountry()!=null);
+      getNeighbourhood()!=null && getCity()!=null && getState()!=null && getCountry()!=null && getCensus() != null);
   }
 
   @Override
@@ -67,6 +72,7 @@ public class Address extends ParticipantContactItemValue {
     city = (String)map.get("city");
     state = (String)map.get("state");
     country = (String)map.get("country");
+    census = (String)map.get("census");
   }
 
   @Override
