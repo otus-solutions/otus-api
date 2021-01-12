@@ -42,7 +42,7 @@ public class ParticipantContactAttemptResource {
   }
 
   @GET
-  @Path("/metadata-status/{objectType}")
+  @Path("/attempt-configuration/{objectType}")
   @Produces(MediaType.APPLICATION_JSON)
   public String findMetadataAttempt(@PathParam("objectType") String objectType) {
     ParticipantContactAttemptConfiguration metadataAttemptStatus = participantContactAttemptFacade.findMetadataAttempt(objectType);
