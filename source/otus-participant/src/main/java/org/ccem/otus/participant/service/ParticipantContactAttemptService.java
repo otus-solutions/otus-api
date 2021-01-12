@@ -10,7 +10,7 @@ import java.util.zip.DataFormatException;
 
 public interface ParticipantContactAttemptService {
 
-  ObjectId create(ParticipantContactAttempt participantContact) throws DataFormatException;
+  ObjectId create(ParticipantContactAttempt participantContact, String userEmail) throws DataFormatException, DataNotFoundException;
 
   void delete(ObjectId participantContactAttemptOID) throws DataNotFoundException;
 

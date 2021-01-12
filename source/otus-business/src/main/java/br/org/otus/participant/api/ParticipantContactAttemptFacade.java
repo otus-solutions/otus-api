@@ -1,5 +1,6 @@
 package br.org.otus.participant.api;
 
+import br.org.otus.model.User;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
@@ -18,11 +19,11 @@ public class ParticipantContactAttemptFacade {
   @Inject
   private ParticipantContactAttemptService participantContactAttemptService;
 
-  public String create(String participantContactAttemptJson){
+  public String create(String participantContactAttemptJson, String userEmail){
     try{
-      return participantContactAttemptService.create(ParticipantContactAttempt.deserialize(participantContactAttemptJson)).toString();
+      return participantContactAttemptService.create(ParticipantContactAttempt.deserialize(participantContactAttemptJson), userEmail).toString();
     }
-    catch (DataFormatException e){
+    catch (DataFormatException | DataNotFoundException e){
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }

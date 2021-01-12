@@ -1,5 +1,7 @@
 package org.ccem.otus.participant.service;
 
+import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
@@ -21,9 +23,14 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   @Inject
   private ParticipantContactAttemptConfigurationDao metadataAttemptStatusDao;
 
+  @Inject
+  private UserDao userDao;
+
 
   @Override
-  public ObjectId create(ParticipantContactAttempt participantContactAttempt) throws DataFormatException {
+  public ObjectId create(ParticipantContactAttempt participantContactAttempt, String userEmail) throws DataFormatException, DataNotFoundException {
+    User user = userDao.fetchByEmail(userEmail);
+    participantContactAttempt.setRegisteredBy(user.get_id());
     return participantContactAttemptDao.create(participantContactAttempt);
   }
 
