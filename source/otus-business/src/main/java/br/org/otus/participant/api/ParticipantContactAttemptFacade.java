@@ -5,7 +5,7 @@ import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.participantContactAttempt.MetadataAttemptStatus;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.service.ParticipantContactAttemptService;
 
@@ -44,11 +44,12 @@ public class ParticipantContactAttemptFacade {
     }
   }
 
-  public MetadataAttemptStatus findMetadataAttempt(String objectType) {
+  public ParticipantContactAttemptConfiguration findMetadataAttempt(String objectType) {
     try {
       return participantContactAttemptService.findMetadataAttempt(objectType);
     }catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
+
 }

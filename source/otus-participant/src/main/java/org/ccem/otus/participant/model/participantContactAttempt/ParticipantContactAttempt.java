@@ -17,14 +17,16 @@ public class ParticipantContactAttempt {
   private Long recruitmentNumber;
   private Object address;
   private LocalDateTime attemptDateTime;
-  private String attemptStatus;
+  private Object attemptStatus;
+  private String registeredBy;
 
-  public ParticipantContactAttempt(String objectType, Long recruitmentNumber, Object address, LocalDateTime attemptDateTime, String attemptStatus) {
+  public ParticipantContactAttempt(String objectType, Long recruitmentNumber, Object address, LocalDateTime attemptDateTime, Object attemptStatus, String registeredBy) {
     this.objectType = objectType;
     this.recruitmentNumber = recruitmentNumber;
     this.address = address;
     this.attemptDateTime = attemptDateTime;
     this.attemptStatus = attemptStatus;
+    this.registeredBy = registeredBy;
   }
 
   public Object getAddress() {

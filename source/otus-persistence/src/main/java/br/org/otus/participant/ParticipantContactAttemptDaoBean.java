@@ -8,7 +8,6 @@ import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.participantContactAttempt.MetadataAttemptStatus;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 import java.util.ArrayList;

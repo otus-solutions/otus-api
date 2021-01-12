@@ -8,30 +8,31 @@ import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 import org.ccem.otus.survey.template.utils.date.ImmutableDate;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class MetadataAttemptStatus {
+public class ParticipantContactAttemptConfiguration {
 
   private ObjectId _id;
   private String objectType;
-  private ArrayList metadataOptions;
+  private Integer numberOfAttempts;
+  private ArrayList<Object> statusMetadata;
 
-  public MetadataAttemptStatus(String objectType, ArrayList metadataOptions) {
+  public ParticipantContactAttemptConfiguration(String objectType, Integer numberOfAttempts, ArrayList<Object> statusMetadata) {
     this.objectType = objectType;
-    this.metadataOptions = metadataOptions;
+    this.numberOfAttempts = numberOfAttempts;
+    this.statusMetadata = statusMetadata;
   }
 
-  public static String serialize(MetadataAttemptStatus participantContactJson) {
-    GsonBuilder builder = MetadataAttemptStatus.getGsonBuilder();
+  public static String serialize(ParticipantContactAttemptConfiguration participantContactJson) {
+    GsonBuilder builder = ParticipantContactAttemptConfiguration.getGsonBuilder();
     return builder.create().toJson(participantContactJson);
   }
 
-  public static MetadataAttemptStatus deserialize(String participantJson) {
-    GsonBuilder builder = MetadataAttemptStatus.getGsonBuilder();
+  public static ParticipantContactAttemptConfiguration deserialize(String participantJson) {
+    GsonBuilder builder = ParticipantContactAttemptConfiguration.getGsonBuilder();
     builder.registerTypeAdapter(Long.class, new LongAdapter());
-    return builder.create().fromJson(participantJson, MetadataAttemptStatus.class);
+    return builder.create().fromJson(participantJson, ParticipantContactAttemptConfiguration.class);
   }
 
   public static GsonBuilder getGsonBuilder() {

@@ -2,9 +2,9 @@ package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.participantContactAttempt.MetadataAttemptStatus;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
-import org.ccem.otus.participant.persistence.MetadataAttemptStatusDao;
+import org.ccem.otus.participant.persistence.ParticipantContactAttemptConfigurationDao;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 
 import javax.ejb.Stateless;
@@ -19,7 +19,7 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   private ParticipantContactAttemptDao participantContactAttemptDao;
 
   @Inject
-  private MetadataAttemptStatusDao metadataAttemptStatusDao;
+  private ParticipantContactAttemptConfigurationDao metadataAttemptStatusDao;
 
 
   @Override
@@ -38,7 +38,8 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   }
 
   @Override
-  public MetadataAttemptStatus findMetadataAttempt(String objectType) throws DataNotFoundException {
+  public ParticipantContactAttemptConfiguration findMetadataAttempt(String objectType) throws DataNotFoundException {
     return metadataAttemptStatusDao.findMetadataAttempt(objectType);
   }
+
 }
