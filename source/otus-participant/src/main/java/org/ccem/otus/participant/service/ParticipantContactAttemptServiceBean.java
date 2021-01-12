@@ -1,10 +1,12 @@
 package org.ccem.otus.participant.service;
 
+import br.org.otus.model.User;
+import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.participant.model.participantContactAttempt.MetadataAttemptStatus;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
-import org.ccem.otus.participant.persistence.MetadataAttemptStatusDao;
+import org.ccem.otus.participant.persistence.ParticipantContactAttemptConfigurationDao;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 
 import javax.ejb.Stateless;
@@ -19,11 +21,16 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   private ParticipantContactAttemptDao participantContactAttemptDao;
 
   @Inject
-  private MetadataAttemptStatusDao metadataAttemptStatusDao;
+  private ParticipantContactAttemptConfigurationDao metadataAttemptStatusDao;
+
+  @Inject
+  private UserDao userDao;
 
 
   @Override
-  public ObjectId create(ParticipantContactAttempt participantContactAttempt) throws DataFormatException {
+  public ObjectId create(ParticipantContactAttempt participantContactAttempt, String userEmail) throws DataFormatException, DataNotFoundException {
+    User user = userDao.fetchByEmail(userEmail);
+    participantContactAttempt.setRegisteredBy(user.get_id());
     return participantContactAttemptDao.create(participantContactAttempt);
   }
 
@@ -38,7 +45,8 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   }
 
   @Override
-  public MetadataAttemptStatus findMetadataAttempt(String objectType) throws DataNotFoundException {
+  public ParticipantContactAttemptConfiguration findMetadataAttempt(String objectType) throws DataNotFoundException {
     return metadataAttemptStatusDao.findMetadataAttempt(objectType);
   }
+
 }
