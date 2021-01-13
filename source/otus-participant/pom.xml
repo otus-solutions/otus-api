@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.ccem.otus</groupId>
     <artifactId>otus-root</artifactId>
-    <version>1.46.0</version>
+    <version>1.47.0</version>
     <relativePath>../otus-root/pom.xml</relativePath>
   </parent>
 
@@ -61,6 +61,13 @@
       <artifactId>equalizer</artifactId>
       <version>${equalize.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccem.otus</groupId>
+      <artifactId>otus-user</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+      <type>ejb</type>
     </dependency>
   </dependencies>
 </project>

@@ -18,6 +18,7 @@ public class AddressTest {
   private static final String CITY = "Rainbow City";
   private static final String STATE = "RS";
   private static final String COUNTRY = "Brazil";
+  private static final String CENSUS = "census";
 
   private Address address = new Address();
 
@@ -31,6 +32,7 @@ public class AddressTest {
     Whitebox.setInternalState(address, "city", CITY);
     Whitebox.setInternalState(address, "state", STATE);
     Whitebox.setInternalState(address, "country", COUNTRY);
+    Whitebox.setInternalState(address, "census", CENSUS);
   }
 
   @Test
@@ -43,6 +45,7 @@ public class AddressTest {
     assertEquals(CITY, address.getCity());
     assertEquals(STATE, address.getState());
     assertEquals(COUNTRY, address.getCountry());
+    assertEquals(CENSUS, address.getCensus());
   }
 
   @Test
@@ -97,6 +100,12 @@ public class AddressTest {
   }
 
   @Test
+  public void isValid_method_should_return_FALSE_in_case_null_census(){
+    Whitebox.setInternalState(address, "census", (String)null);
+    assertFalse(address.isValid());
+  }
+
+  @Test
   public void setFromLinkedTreeMap_method_should_set_all_attributes_from_LinkedTreeMap(){
 
     final String POSTAL_CODE_2 = POSTAL_CODE+"2";
@@ -107,6 +116,7 @@ public class AddressTest {
     final String CITY_2 = CITY+"2";
     final String STATE_2 = STATE+"2";
     final String COUNTRY_2 = COUNTRY+"2";
+    final String CENSUS_2 = CENSUS+"2";
 
     LinkedTreeMap map = new LinkedTreeMap();
     map.put("postalCode", POSTAL_CODE_2);
@@ -117,6 +127,7 @@ public class AddressTest {
     map.put("city", CITY_2);
     map.put("state", STATE_2);
     map.put("country", COUNTRY_2);
+    map.put("census", CENSUS_2);
 
     address.setFromLinkedTreeMap(map);
 
@@ -128,6 +139,7 @@ public class AddressTest {
     assertEquals(CITY_2, address.getCity());
     assertEquals(STATE_2, address.getState());
     assertEquals(COUNTRY_2, address.getCountry());
+    assertEquals(CENSUS_2, address.getCensus());
   }
 
 }

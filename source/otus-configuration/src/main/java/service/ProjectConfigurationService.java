@@ -12,5 +12,7 @@ public interface ProjectConfigurationService {
 
   void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException;
 
+  void addressCensusRequired(boolean permission) throws DataNotFoundException;
+
   boolean isRnProvided() throws DataNotFoundException;
 }
