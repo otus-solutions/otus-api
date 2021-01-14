@@ -4,6 +4,7 @@ import br.org.otus.model.User;
 import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptConfigurationDao;
@@ -40,8 +41,8 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
-    return participantContactAttemptDao.findAttempts(recruitmentNumber, objectType, position);
+  public ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
+    return participantContactAttemptDao.findAddressAttempts(recruitmentNumber, objectType, position);
   }
 
   @Override

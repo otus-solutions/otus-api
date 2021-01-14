@@ -5,6 +5,7 @@ import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.security.user.Secured;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 
@@ -50,7 +51,7 @@ public class ParticipantContactAttemptResource {
   @Path("/{rn}/{contactType}/{position}")
   @Produces(MediaType.APPLICATION_JSON)
   public String findAttempts(@PathParam("rn") Long recruitmentNumber, @PathParam("contactType") String objectType, @PathParam("position") String position) {
-    ArrayList<ParticipantContactAttempt> participantContact = participantContactAttemptFacade.findAttempts(recruitmentNumber, objectType, position);
+    ArrayList<ParticipantContactAddressAttempt> participantContact = participantContactAttemptFacade.findAddressAttempts(recruitmentNumber, objectType, position);
     return (new Response()).buildSuccess(participantContact)
       .toJson(ParticipantContactAttempt.getGsonBuilder());
   }
