@@ -75,16 +75,24 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
       pipeline.add(new Document("$addFields",
         new Document("userEmail", new Document("$arrayElemAt", Arrays.asList("$user.email", 0)))));
 
-      pipeline.add(new Document("$sort",
-        new Document(ADDRESS_FIELD_NAME.concat(".").concat(position).concat(".").concat("value").concat("street"), new Integer(-1))));
-
       pipeline.add(new Document("$group",
-        new Document("_id", "$address.main.value.street")
+        new Document("_id", "$address.main.value")
           .append("attemptList", new Document("$push", "$$ROOT"))
       ));
 
+      pipeline.add(new Document("$project",
+        new Document("_id", 0)
+          .append("address", "$_id")
+          .append("attemptList", 1)
+      ));
+
       pipeline.add(new Document("$addFields",
-        new Document("fullAddress", new Document("$arrayElemAt", Arrays.asList("$attemptList.address.main.value", 0)))));
+        new Document("fullAddress", new Document("$concat",
+          Arrays.asList(new Document("$toString", "$address.census")," - ",
+            "$address.street",", ", new Document("$toString","$address.streetNumber"),"/", "$address.complements", " - ",
+            "$address.neighbourhood", " - ",new Document("$toString","$address.postalCode"), " - ", "$address.city", ", ", "$address.state", "(","$address.country", ")")
+      ))));
+
 
       AggregateIterable<Document> result = collection.aggregate(pipeline);
       ArrayList<ParticipantContactAddressAttempt> attempts = new ArrayList<>();
