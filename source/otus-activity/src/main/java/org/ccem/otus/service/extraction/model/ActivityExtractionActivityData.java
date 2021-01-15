@@ -53,7 +53,7 @@ public class ActivityExtractionActivityData {
     this.mode = surveyActivity.getMode().toString();
     this.type = "";
     this.category = surveyActivity.getCategory().getName();
-    this.activityFieldCenter = surveyActivity.getParticipantData().getRecruitmentNumber().toString();
+    this.activityFieldCenter = surveyActivity.getParticipantData().getFieldCenter().toString();
 
     surveyActivity.getLastInterview().ifPresent(interview -> {
       this.interviewer = interview.getInterviewer().getEmail();
