@@ -13,7 +13,6 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
 
   private static final String EXTRACTION_SUFFIX = "/extraction/";
   private static final String EXTRACTION_CREATE_RESOURCE = EXTRACTION_SUFFIX + "create/";
-  private static final String EXTRACTION_UPDATE_RESOURCE = EXTRACTION_SUFFIX + "update/";
   private static final String EXTRACTION_DELETE_RESOURCE = EXTRACTION_SUFFIX + "delete/";
 
   public ExtractionMicroServiceResources() {
@@ -28,15 +27,11 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
     return new URL(getMainAddress() + PIPELINE_CSV_EXTRACTION_RESOURCE + pipelineName);
   }
 
-  public URL getActivityExtractionCreateAddress(String activityId) throws MalformedURLException {
-    return new URL(getMainAddress() + EXTRACTION_CREATE_RESOURCE + activityId);
+  public URL getActivityExtractionCreateAddress() throws MalformedURLException {
+    return new URL(getMainAddress() + EXTRACTION_CREATE_RESOURCE);
   }
 
-  public URL getActivityExtractionUpdateAddress(String activityId) throws MalformedURLException {
-    return new URL(getMainAddress() + EXTRACTION_UPDATE_RESOURCE + activityId);
-  }
-
-  public URL getActivityExtractionDeleteAddress(String activityId) throws MalformedURLException {
-    return new URL(getMainAddress() + EXTRACTION_DELETE_RESOURCE + activityId);
+  public URL getActivityExtractionDeleteAddress(String surveyId, String activityId) throws MalformedURLException {
+    return new URL(getMainAddress() + EXTRACTION_DELETE_RESOURCE + "/" + surveyId + "/" + activityId);
   }
 }
