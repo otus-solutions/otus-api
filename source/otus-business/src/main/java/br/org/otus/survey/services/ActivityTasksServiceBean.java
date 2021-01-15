@@ -63,7 +63,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
 
     CompletableFuture.runAsync(() -> {
       try{
-        extractionFacade.createActivityExtraction(surveyActivity.getActivityID().toString());
+        extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
       }
       catch (Exception e){
         LOGGER.severe("status: fail, action: create activity extraction for activityId " + surveyActivity.getActivityID().toString());
@@ -92,7 +92,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
           extractionFacade.deleteActivityExtraction(surveyActivity.getActivityID().toString());
         }
         else{
-          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+          extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
         }
       }
       catch (Exception e){
@@ -111,7 +111,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     CompletableFuture.runAsync(() -> {
       offlineActivityCollection.getActivities().forEach(surveyActivity -> {
         try{
-          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+          extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
         }
         catch (Exception e){
           LOGGER.severe("status: fail, action: save activity extraction for activityId " + surveyActivity.getActivityID().toString() +

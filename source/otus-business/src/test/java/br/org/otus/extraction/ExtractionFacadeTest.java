@@ -132,50 +132,34 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
 
   @Test
   public void createActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
-    extractionFacade.createActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createActivityExtraction(ACTIVITY_ID);
+    doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
+    extractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
     verifyLoggerInfoWasCalled();
   }
 
   @Test(expected = HttpResponseException.class)
   public void createActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
-    extractionFacade.createActivityExtraction(ACTIVITY_ID);
+    doThrow(new MalformedURLException()).when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
+    extractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
     verifyLoggerSevereWasCalled();
   }
 
 
-  @Test
-  public void updateActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
-    extractionFacade.updateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).updateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerInfoWasCalled();
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void updateActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
-    extractionFacade.updateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
-
-  @Test
-  public void deleteActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
-    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).deleteActivityExtraction(ACTIVITY_ID);
-    verifyLoggerInfoWasCalled();
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void deleteActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
-    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
+//  @Test
+//  public void deleteActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+//    doNothing().when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
+//    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
+//    verify(extractionGatewayService, Mockito.times(1)).deleteActivityExtraction(ACTIVITY_ID);
+//    verifyLoggerInfoWasCalled();
+//  }
+//
+//  @Test(expected = HttpResponseException.class)
+//  public void deleteActivityExtraction_method_should_handle_IOException() throws IOException {
+//    doThrow(new MalformedURLException()).when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
+//    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
+//    verifyLoggerSevereWasCalled();
+//  }
 
 
   @Test

@@ -83,48 +83,33 @@ public class ExtractionGatewayServiceTest {
   }
 
 
-  @Test
-  public void createActivityExtraction_method_should_send_POST_request() throws IOException {
-    when(extractionMicroServiceResources.getActivityExtractionCreateAddress(ACTIVITY_ID)).thenReturn(requestURL);
-    extractionGatewayService.createActivityExtraction(ACTIVITY_ID);
-    verify(jsonPOSTUtility, Mockito.times(1)).finish();
-  }
-
-  @Test(expected = ReadRequestException.class)
-  public void createActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
-    when(extractionMicroServiceResources.getActivityExtractionCreateAddress(ACTIVITY_ID)).thenReturn(requestURL);
-    when(jsonPOSTUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.createActivityExtraction(ACTIVITY_ID);
-  }
-
-
-  @Test
-  public void updateActivityExtraction_method_should_send_POST_request() throws IOException {
-    when(extractionMicroServiceResources.getActivityExtractionUpdateAddress(ACTIVITY_ID)).thenReturn(requestURL);
-    extractionGatewayService.updateActivityExtraction(ACTIVITY_ID);
-    verify(jsonPUTUtility, Mockito.times(1)).finish();
-  }
-
-  @Test(expected = ReadRequestException.class)
-  public void updateActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
-    when(extractionMicroServiceResources.getActivityExtractionUpdateAddress(ACTIVITY_ID)).thenReturn(requestURL);
-    when(jsonPUTUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.updateActivityExtraction(ACTIVITY_ID);
-  }
-
-
-  @Test
-  public void deleteActivityExtraction_method_should_send_POST_request() throws IOException {
-    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(ACTIVITY_ID)).thenReturn(requestURL);
-    extractionGatewayService.deleteActivityExtraction(ACTIVITY_ID);
-    verify(jsonDELETEUtility, Mockito.times(1)).finish();
-  }
-
-  @Test(expected = ReadRequestException.class)
-  public void deleteActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
-    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(ACTIVITY_ID)).thenReturn(requestURL);
-    when(jsonDELETEUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.deleteActivityExtraction(ACTIVITY_ID);
-  }
+//  @Test
+//  public void createActivityExtraction_method_should_send_POST_request() throws IOException {
+//    when(extractionMicroServiceResources.getActivityExtractionCreateAddress(ACTIVITY_ID)).thenReturn(requestURL);
+//    extractionGatewayService.createActivityExtraction(ACTIVITY_ID);
+//    verify(jsonPOSTUtility, Mockito.times(1)).finish();
+//  }
+//
+//  @Test(expected = ReadRequestException.class)
+//  public void createActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
+//    when(extractionMicroServiceResources.getActivityExtractionCreateAddress(ACTIVITY_ID)).thenReturn(requestURL);
+//    when(jsonPOSTUtility.finish()).thenThrow(new IOException());
+//    extractionGatewayService.createActivityExtraction(ACTIVITY_ID);
+//  }
+//
+//
+//  @Test
+//  public void deleteActivityExtraction_method_should_send_POST_request() throws IOException {
+//    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(ACTIVITY_ID)).thenReturn(requestURL);
+//    extractionGatewayService.deleteActivityExtraction(ACTIVITY_ID);
+//    verify(jsonDELETEUtility, Mockito.times(1)).finish();
+//  }
+//
+//  @Test(expected = ReadRequestException.class)
+//  public void deleteActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
+//    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(ACTIVITY_ID)).thenReturn(requestURL);
+//    when(jsonDELETEUtility.finish()).thenThrow(new IOException());
+//    extractionGatewayService.deleteActivityExtraction(ACTIVITY_ID);
+//  }
 
 }

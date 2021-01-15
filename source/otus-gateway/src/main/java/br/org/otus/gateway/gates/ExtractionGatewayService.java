@@ -29,12 +29,7 @@ public class ExtractionGatewayService {
     }
   }
 
-  public void createActivityExtraction(String activityExtractionJson) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
-    sendActivityExtractionRequest(new JsonPOSTUtility(requestURL, activityExtractionJson));
-  }
-
-  public void updateActivityExtraction(String activityExtractionJson) throws IOException {
+  public void createOrUpdateActivityExtraction(String activityExtractionJson) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
     sendActivityExtractionRequest(new JsonPUTRequestUtility(requestURL, activityExtractionJson));
   }

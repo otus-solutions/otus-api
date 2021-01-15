@@ -103,22 +103,12 @@ public class ExtractionFacade {
     }
   }
 
-  public void createActivityExtraction(String activityId) throws HttpResponseException {
+  public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
-      new ExtractionGatewayService().createActivityExtraction(getActivityExtraction(activityId).toJson());
-      LOGGER.info("status: success, action: create extraction for activity " + activityId);
+      new ExtractionGatewayService().createOrUpdateActivityExtraction(getActivityExtraction(activityId).toJson());
+      LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
     } catch (IOException e) {
-      LOGGER.severe("status: fail, action: create extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void updateActivityExtraction(String activityId) {
-    try {
-      new ExtractionGatewayService().updateActivityExtraction(getActivityExtraction(activityId).toJson());
-      LOGGER.info("status: success, action: update extraction for activity " + activityId);
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: update extraction for activity " + activityId);
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId);
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }

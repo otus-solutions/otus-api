@@ -150,17 +150,8 @@ public class ExtractionResource {
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/activity/{id}")
-  public String createActivityExtraction(@PathParam("id") String activityId) {
-    extractionFacade.createActivityExtraction(activityId);
-    return new Response().buildSuccess().toJson();
-  }
-
-  @PUT
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/activity/{id}")
-  public String updateActivityExtraction(@PathParam("id") String activityId) {
-    extractionFacade.updateActivityExtraction(activityId);
+  public String createOrUpdateActivityExtraction(@PathParam("id") String activityId) {
+    extractionFacade.createOrUpdateActivityExtraction(activityId);
     return new Response().buildSuccess().toJson();
   }
 
