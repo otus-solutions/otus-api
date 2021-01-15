@@ -80,6 +80,9 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
           .append("attemptList", new Document("$push", "$$ROOT"))
       ));
 
+      pipeline.add(new Document("$sort",
+        new Document("attemptList._id", new Integer(-1))));
+
       pipeline.add(new Document("$project",
         new Document("_id", 0)
           .append("address", "$_id")
