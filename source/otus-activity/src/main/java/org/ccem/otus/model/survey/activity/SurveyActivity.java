@@ -181,4 +181,8 @@ public class SurveyActivity {
   public void setCategory(ActivityCategory category) {
     this.category = category;
   }
+
+  public ActivityStatus getCreationStatus(){
+    return this.getStatusHistory().get(0);
+  }
 }
