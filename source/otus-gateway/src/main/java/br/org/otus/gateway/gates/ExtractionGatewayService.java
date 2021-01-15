@@ -29,18 +29,18 @@ public class ExtractionGatewayService {
     }
   }
 
-  public void createActivityExtraction(String activityId) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress(activityId);
-    sendActivityExtractionRequest(new JsonPOSTUtility(requestURL, ""));
+  public void createActivityExtraction(String activityExtractionJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
+    sendActivityExtractionRequest(new JsonPOSTUtility(requestURL, activityExtractionJson));
   }
 
-  public void updateActivityExtraction(String activityId) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionUpdateAddress(activityId);
-    sendActivityExtractionRequest(new JsonPUTRequestUtility(requestURL));
+  public void updateActivityExtraction(String activityExtractionJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
+    sendActivityExtractionRequest(new JsonPUTRequestUtility(requestURL, activityExtractionJson));
   }
 
-  public void deleteActivityExtraction(String activityId) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionDeleteAddress(activityId);
+  public void deleteActivityExtraction(String surveyId, String activityId) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionDeleteAddress(surveyId, activityId);
     sendActivityExtractionRequest(new JsonDELETEUtility(requestURL));
   }
 

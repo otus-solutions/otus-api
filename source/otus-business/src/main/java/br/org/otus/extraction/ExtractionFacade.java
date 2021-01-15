@@ -9,15 +9,18 @@ import javax.inject.Inject;
 import br.org.otus.api.CsvExtraction;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
+import org.ccem.otus.service.extraction.model.ActivityExtraction;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
@@ -55,6 +58,9 @@ public class ExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private DataSourceService dataSourceService;
+  @Inject
+  private ParticipantFacade participantFacade;
+
 
   public byte[] createActivityExtraction(String acronym, Integer version) {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
@@ -99,7 +105,7 @@ public class ExtractionFacade {
 
   public void createActivityExtraction(String activityId) throws HttpResponseException {
     try {
-      new ExtractionGatewayService().createActivityExtraction(activityId);
+      new ExtractionGatewayService().createActivityExtraction(getActivityExtraction(activityId).toJson());
       LOGGER.info("status: success, action: create extraction for activity " + activityId);
     } catch (IOException e) {
       LOGGER.severe("status: fail, action: create extraction for activity " + activityId);
@@ -109,7 +115,7 @@ public class ExtractionFacade {
 
   public void updateActivityExtraction(String activityId) {
     try {
-      new ExtractionGatewayService().updateActivityExtraction(activityId);
+      new ExtractionGatewayService().updateActivityExtraction(getActivityExtraction(activityId).toJson());
       LOGGER.info("status: success, action: update extraction for activity " + activityId);
     } catch (IOException e) {
       LOGGER.severe("status: fail, action: update extraction for activity " + activityId);
@@ -119,12 +125,23 @@ public class ExtractionFacade {
 
   public void deleteActivityExtraction(String activityId) {
     try {
-      new ExtractionGatewayService().deleteActivityExtraction(activityId);
+      ActivityExtraction activityExtraction = getActivityExtraction(activityId);
+      new ExtractionGatewayService().deleteActivityExtraction(
+        activityExtraction.getSurveyData().getId(),
+        activityExtraction.getActivityData().getId()
+      );
       LOGGER.info("status: success, action: delete extraction for activity " + activityId);
     } catch (IOException e) {
       LOGGER.severe("status: fail, action: delete extraction for activity " + activityId);
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
+  }
+
+  private ActivityExtraction getActivityExtraction(String activityId){
+    SurveyActivity surveyActivity = activityFacade.getByID(activityId);
+    SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
+    Participant participant = participantFacade.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
+    return new ActivityExtraction(surveyForm, surveyActivity, participant);
   }
 
   public List<Integer> listSurveyVersions(String acronym) {
