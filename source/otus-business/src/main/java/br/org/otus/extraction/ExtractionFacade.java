@@ -14,7 +14,9 @@ import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
@@ -107,7 +109,8 @@ public class ExtractionFacade {
     try {
       new ExtractionGatewayService().createOrUpdateActivityExtraction(getActivityExtraction(activityId).toJson());
       LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
-    } catch (IOException e) {
+    }
+    catch (ValidationException | IOException e) {
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId);
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -121,14 +124,21 @@ public class ExtractionFacade {
         activityExtraction.getActivityData().getId()
       );
       LOGGER.info("status: success, action: delete extraction for activity " + activityId);
-    } catch (IOException e) {
+    }
+    catch (ValidationException | IOException e) {
       LOGGER.severe("status: fail, action: delete extraction for activity " + activityId);
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
-  private ActivityExtraction getActivityExtraction(String activityId){
+  private ActivityExtraction getActivityExtraction(String activityId) throws ValidationException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
+    if(surveyActivity.isDiscarded()){
+      throw new ValidationException("Activity " + activityId + " is discarded");
+    }
+    if(!surveyActivity.couldBeExtracted()){
+      throw new ValidationException("Activity " + activityId + " could not be extracted");
+    }
     SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
     Participant participant = participantFacade.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
     return new ActivityExtraction(surveyForm, surveyActivity, participant);
