@@ -41,7 +41,7 @@ public class ActivityExtractionActivityData {
   @SerializedName("external_id")
   private String externalId;
   private List<QuestionFill> fillingList;
-  private List<NavigationTrackingItem> navigationTracker;
+  private List<NavigationTrackingItem> navigationTrackingItems;
 
 
   public ActivityExtractionActivityData(SurveyActivity surveyActivity, Participant participant) {
@@ -67,7 +67,7 @@ public class ActivityExtractionActivityData {
 
     this.externalId = surveyActivity.getExternalID();
     this.fillingList = surveyActivity.getFillContainer().getFillingList();
-    this.navigationTracker = surveyActivity.getNavigationTracker().items;
+    this.navigationTrackingItems = surveyActivity.getNavigationTracker().items;
   }
 
 
