@@ -27,7 +27,7 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
 
   @Test
   public void getCreateOutcomeAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://" + HOST + ":" + PORT + "/pipeline/" + PIPELINE_NAME);
+    url = new URL("http://" + HOST + ":" + PORT + "/pipeline/json/" + PIPELINE_NAME);
     Assert.assertEquals(url, resources.getPipelineJsonExtractionAddress(PIPELINE_NAME));
   }
 

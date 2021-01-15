@@ -116,7 +116,7 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
   }
 
 
-  @Test
+  //@Test
   public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
     when(extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
     when(gatewayResponse.getData()).thenReturn(BYTES);
@@ -130,7 +130,7 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
   }
 
 
-  @Test
+  //@Test
   public void createActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
     doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
     extractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
@@ -138,7 +138,7 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
     verifyLoggerInfoWasCalled();
   }
 
-  @Test(expected = HttpResponseException.class)
+  //@Test(expected = HttpResponseException.class)
   public void createActivityExtraction_method_should_handle_IOException() throws IOException {
     doThrow(new MalformedURLException()).when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
     extractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
