@@ -112,7 +112,8 @@ public class ExtractionFacade {
     }
     catch (ValidationException | IOException e) {
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
+      String message = (e.getCause()!=null ? e.getCause().getMessage() : e.getMessage());
+      throw new HttpResponseException(Validation.build(message));
     }
   }
 
@@ -134,10 +135,10 @@ public class ExtractionFacade {
   private ActivityExtraction getActivityExtraction(String activityId) throws ValidationException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
     if(surveyActivity.isDiscarded()){
-      throw new ValidationException("Activity " + activityId + " is discarded");
+      throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
     if(!surveyActivity.couldBeExtracted()){
-      throw new ValidationException("Activity " + activityId + " could not be extracted");
+      throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
     }
     SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
     Participant participant = participantFacade.getByRecruitmentNumber(surveyActivity.getParticipantData().getRecruitmentNumber());
