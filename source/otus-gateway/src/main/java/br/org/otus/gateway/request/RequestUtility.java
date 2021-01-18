@@ -46,7 +46,12 @@ public class RequestUtility {
     in.close();
 
     String responseString = response.toString();
-    return new GsonBuilder().create().fromJson(responseString, Document.class).get("data");
+    try{
+      return new GsonBuilder().create().fromJson(responseString, Document.class).get("data");
+    }
+    catch(Exception e){
+      return responseString;
+    }
   }
 
 }
