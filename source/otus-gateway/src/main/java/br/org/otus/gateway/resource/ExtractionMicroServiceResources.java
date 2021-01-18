@@ -11,9 +11,10 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
   private static final String PIPELINE_JSON_EXTRACTION_RESOURCE = PIPELINE_EXTRACTION_SUFFIX + "json/";
   private static final String PIPELINE_CSV_EXTRACTION_RESOURCE = PIPELINE_EXTRACTION_SUFFIX + "csv/";
 
-  private static final String EXTRACTION_SUFFIX = "/extraction/";
-  private static final String EXTRACTION_CREATE_RESOURCE = EXTRACTION_SUFFIX + "create/";
-  private static final String EXTRACTION_DELETE_RESOURCE = EXTRACTION_SUFFIX + "delete/";
+  private static final String EXTRACTION_SUFFIX = "/extractions";
+  private static final String ACTIVITY_EXTRACTION_SUFFIX = EXTRACTION_SUFFIX + "/activity";
+  private static final String EXTRACTION_CREATE_RESOURCE = ACTIVITY_EXTRACTION_SUFFIX + "/create/";
+  private static final String EXTRACTION_DELETE_RESOURCE = ACTIVITY_EXTRACTION_SUFFIX + "/delete/";
 
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
