@@ -11,6 +11,10 @@ public class NavigationTrackingItem {
   public List<String> inputs;
   public List<String> outputs;
 
+  public String getState() {
+    return state;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
