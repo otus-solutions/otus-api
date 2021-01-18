@@ -5,10 +5,12 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
+import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ActivityExtractionActivityData {
 
@@ -59,7 +61,12 @@ public class ActivityExtractionActivityData {
       this.interviewer = interview.getInterviewer().getEmail();
     });
 
-    setStatusInfo(surveyActivity);
+    surveyActivity.getCurrentStatus().ifPresent(status -> {
+      this.currentStatus = status.getName();
+      this.currentStatusDate = status.getDate().toString();
+    });
+
+    this.creationDate = surveyActivity.getCreationStatus().getDate().toString();
 
     if(surveyActivity.getMode() == ActivityMode.PAPER){
       setPaperInfo(surveyActivity);
@@ -67,21 +74,15 @@ public class ActivityExtractionActivityData {
 
     this.externalId = surveyActivity.getExternalID();
     this.fillingList = surveyActivity.getFillContainer().getFillingList();
-    this.navigationTrackingItems = surveyActivity.getNavigationTracker().items;
+
+    this.navigationTrackingItems = surveyActivity.getNavigationTracker().items
+      .stream().filter(item -> item.getState().equals(String.valueOf(NavigationTrackingItemStatuses.SKIPPED)))
+      .collect(Collectors.toList());
   }
 
 
   public String getId() {
     return activityId;
-  }
-
-  private void setStatusInfo(SurveyActivity surveyActivity){
-    surveyActivity.getCurrentStatus().ifPresent(status -> {
-      this.currentStatus = status.getName();
-      this.currentStatusDate = status.getDate().toString();
-    });
-
-    this.creationDate = surveyActivity.getCreationStatus().getDate().toString();
   }
 
   private void setPaperInfo(SurveyActivity surveyActivity){
