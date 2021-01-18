@@ -14,7 +14,7 @@ public class ActivityExtractionSurveyData {
 
   public ActivityExtractionSurveyData(SurveyForm surveyForm) {
     this.surveyId = surveyForm.getSurveyID().toHexString();
-//    this.itemContainer = surveyForm.getSurveyTemplate()
+    this.itemContainer = surveyForm.getSurveyTemplate().getItemContainer();
   }
 
   public String getId() {
