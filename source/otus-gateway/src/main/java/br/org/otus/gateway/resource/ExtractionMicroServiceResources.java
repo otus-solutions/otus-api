@@ -13,8 +13,8 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
 
   private static final String EXTRACTION_SUFFIX = "/extractions";
   private static final String ACTIVITY_EXTRACTION_SUFFIX = EXTRACTION_SUFFIX + "/activity";
-  private static final String EXTRACTION_CREATE_RESOURCE = ACTIVITY_EXTRACTION_SUFFIX + "/create/";
-  private static final String EXTRACTION_DELETE_RESOURCE = ACTIVITY_EXTRACTION_SUFFIX + "/delete/";
+  private static final String EXTRACTION_CREATE_RESOURCE = ACTIVITY_EXTRACTION_SUFFIX + "/create";
+  private static final String EXTRACTION_DELETE_RESOURCE = ACTIVITY_EXTRACTION_SUFFIX + "/delete";
 
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
