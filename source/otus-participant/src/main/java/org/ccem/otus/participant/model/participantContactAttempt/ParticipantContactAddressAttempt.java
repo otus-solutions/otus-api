@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class ParticipantContactAddressAttempt {
 
   private String _id;
+  private Object address;
+  private String fullAddress;
   private ArrayList<ParticipantContactAttempt> attemptList;
 
   public ParticipantContactAddressAttempt(String _id, ArrayList<ParticipantContactAttempt> attemptList) {
