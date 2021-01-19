@@ -1,7 +1,9 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
@@ -11,9 +13,13 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.model.Participant;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +56,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
+  public ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
     try{
       ArrayList<Bson> pipeline = new ArrayList<>();
 
@@ -66,17 +72,23 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
       ));
       pipeline.add(new Document("$addFields",
         new Document("userEmail", new Document("$arrayElemAt", Arrays.asList("$user.email", 0)))));
+      pipeline.add(new Document("$sort",
+        new Document(ADDRESS_FIELD_NAME.concat(".").concat(position).concat(".").concat("value").concat("street"), new Integer(-1))));
+      pipeline.add(new Document("$group",
+        new Document("_id", "$address.main.value.street")
+          .append("attemptList", new Document("$push", "$$ROOT"))
+      ));
 
       AggregateIterable<Document> result = collection.aggregate(pipeline);
-      ArrayList<ParticipantContactAttempt> attempts = new ArrayList<>();
-
+      ArrayList<ParticipantContactAddressAttempt> attempts = new ArrayList<>();
 
       MongoCursor<Document> iterator = result.iterator();
 
       while (iterator.hasNext()) {
         Document document = iterator.next();
-        ParticipantContactAttempt participantContactAttempt = ParticipantContactAttempt.deserialize(document.toJson());
-        attempts.add(participantContactAttempt);
+
+        ParticipantContactAddressAttempt participantContactAddressAttempt = ParticipantContactAddressAttempt.deserialize(document.toJson());
+        attempts.add(participantContactAddressAttempt);
       }
       return attempts;
     }

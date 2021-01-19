@@ -6,6 +6,7 @@ import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.service.ParticipantContactAttemptService;
@@ -36,9 +37,9 @@ public class ParticipantContactAttemptFacade {
     }
   }
 
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) {
+  public ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) {
     try{
-      return participantContactAttemptService.findAttempts(recruitmentNumber, objectType, position);
+      return participantContactAttemptService.findAddressAttempts(recruitmentNumber, objectType, position);
     }
     catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
