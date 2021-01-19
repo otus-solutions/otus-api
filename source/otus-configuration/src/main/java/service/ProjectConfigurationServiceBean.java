@@ -30,6 +30,11 @@ public class ProjectConfigurationServiceBean implements ProjectConfigurationServ
   }
 
   @Override
+  public void addressCensusRequired(boolean permission) throws DataNotFoundException {
+    projectConfigurationDao.addressCensusRequired(permission);
+  }
+
+  @Override
   public boolean isRnProvided() throws DataNotFoundException {
     return getProjectConfiguration().isAutoGenerateRecruitmentNumber();
   }

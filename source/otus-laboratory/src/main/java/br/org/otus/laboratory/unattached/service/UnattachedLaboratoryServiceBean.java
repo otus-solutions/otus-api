@@ -71,7 +71,7 @@ public class UnattachedLaboratoryServiceBean implements UnattachedLaboratoryServ
 
       Participant participant = participantDao.findByRecruitmentNumber(recruitmentNumber);
       FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
-      ParticipantLaboratory participantLaboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, participantCollectGroupName, unattachedLaboratory.getTubes());
+      ParticipantLaboratory participantLaboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, participantCollectGroupName, unattachedLaboratory.getTubes(), new Integer(laboratoryIdentification));
       participantLaboratoryDao.persist(participantLaboratory);
       unattachedLaboratory.disable();
       unattachedLaboratory.addUserHistory(userEmail, UnattachedLaboratoryActions.ATTACHED);

@@ -44,4 +44,13 @@ public class ProjectConfigurationResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @PUT
+  @Secured
+  @Path("/participant/addressCensusRequired/{permission}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String addressCensusRequired(@PathParam("permission") boolean permission) {
+    projectConfigurationFacade.addressCensusRequired(permission);
+    return new Response().buildSuccess().toJson();
+  }
+
 }

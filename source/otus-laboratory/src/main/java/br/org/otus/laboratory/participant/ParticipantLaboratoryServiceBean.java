@@ -88,7 +88,7 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
     CollectGroupDescriptor collectGroup = groupRaffle.perform(participant);
     List<Tube> tubes = tubeService.generateTubes(TubeSeed.generate(participant.getFieldCenter(), collectGroup));
     FieldCenter fieldCenter = fieldCenterDao.fetchByAcronym(participant.getFieldCenter().getAcronym());
-    ParticipantLaboratory laboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, collectGroup.getName(), tubes);
+    ParticipantLaboratory laboratory = new ParticipantLaboratory(fieldCenter.getLocationPoint(), recruitmentNumber, collectGroup.getName(), tubes, null);
     participantLaboratoryDao.persist(laboratory);
     return laboratory;
   }

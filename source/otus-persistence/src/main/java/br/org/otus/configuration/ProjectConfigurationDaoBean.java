@@ -56,4 +56,16 @@ public class ProjectConfigurationDaoBean extends MongoGenericDao<Document> imple
       throw new DataNotFoundException(PROJECT_CONFIGURATION_NOT_FOUND);
     }
   }
+
+  @Override
+  public void addressCensusRequired(boolean permission) throws DataNotFoundException {
+    Document query = new Document(OBJECT_TYPE, ProjectConfiguration.DEFAULT_OBJECT_TYPE);
+    Document update = new Document("$set", new Document("addressCensusRequired", permission));
+
+    UpdateResult updateResult = collection.updateOne(query, update);
+
+    if (updateResult.getMatchedCount() == 0) {
+      throw new DataNotFoundException(PROJECT_CONFIGURATION_NOT_FOUND);
+    }
+  }
 }
