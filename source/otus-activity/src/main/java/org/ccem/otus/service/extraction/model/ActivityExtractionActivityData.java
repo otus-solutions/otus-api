@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class ActivityExtractionActivityData {
 
-  @SerializedName("id")
   private String activityId;
   private String acronym;
   private Integer version;
