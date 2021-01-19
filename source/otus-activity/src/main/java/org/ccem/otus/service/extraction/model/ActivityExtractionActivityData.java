@@ -17,8 +17,9 @@ public class ActivityExtractionActivityData {
   private String activityId;
   private String acronym;
   private Integer version;
+  private Long recruitmentNumber;
   @SerializedName("recruitment_number")
-  private String recruitmentNumber;
+  private String recruitmentNumberStr;
   @SerializedName("participant_field_center")
   private String participantFieldCenter;
   private String mode;
@@ -44,13 +45,10 @@ public class ActivityExtractionActivityData {
   private List<QuestionFill> fillingList;
   private List<NavigationTrackingItem> navigationTrackingItems;
 
-
-  public ActivityExtractionActivityData(SurveyActivity surveyActivity, Participant participant) {
+  public ActivityExtractionActivityData(SurveyActivity surveyActivity) {
     this.activityId = surveyActivity.getActivityID().toHexString();
     this.acronym = surveyActivity.getSurveyForm().getAcronym();
     this.version = surveyActivity.getSurveyForm().getVersion();
-    this.recruitmentNumber = participant.getRecruitmentNumber().toString();
-    this.participantFieldCenter = participant.getFieldCenter().getAcronym();
     this.mode = surveyActivity.getMode().toString();
     this.type = "";
     this.category = surveyActivity.getCategory().getName();
@@ -68,7 +66,10 @@ public class ActivityExtractionActivityData {
     this.creationDate = surveyActivity.getCreationStatus().getDate().toString();
 
     if(surveyActivity.getMode() == ActivityMode.PAPER){
-      setPaperInfo(surveyActivity);
+      surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).ifPresent(status -> {
+        this.paperInterviewer = status.getUser().getEmail();
+        this.paperRealizationDate = status.getDate().toString();
+      });
     }
 
     this.externalId = surveyActivity.getExternalID();
@@ -77,6 +78,9 @@ public class ActivityExtractionActivityData {
     this.navigationTrackingItems = surveyActivity.getNavigationTracker().items
       .stream().filter(item -> item.getState().equals(String.valueOf(NavigationTrackingItemStatuses.SKIPPED)))
       .collect(Collectors.toList());
+
+    this.recruitmentNumber = surveyActivity.getParticipantData().getRecruitmentNumber();
+    this.recruitmentNumberStr = this.recruitmentNumber.toString();
   }
 
 
@@ -84,10 +88,11 @@ public class ActivityExtractionActivityData {
     return activityId;
   }
 
-  private void setPaperInfo(SurveyActivity surveyActivity){
-    surveyActivity.getLastStatusByName(ActivityStatusOptions.INITIALIZED_OFFLINE.getName()).ifPresent(status -> {
-      this.paperInterviewer = status.getUser().getEmail();
-      this.paperRealizationDate = status.getDate().toString();
-    });
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
+  }
+
+  public void setParticipantData(Participant participant){
+    this.participantFieldCenter = participant.getFieldCenter().getAcronym();
   }
 }

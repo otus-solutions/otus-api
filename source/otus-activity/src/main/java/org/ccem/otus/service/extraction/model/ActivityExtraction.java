@@ -13,10 +13,9 @@ public class ActivityExtraction extends SerializableModel {
   @SerializedName("activity")
   private ActivityExtractionActivityData activityData;
 
-
-  public ActivityExtraction(SurveyForm surveyForm, SurveyActivity surveyActivity, Participant participant) {
+  public ActivityExtraction(SurveyForm surveyForm, SurveyActivity surveyActivity) {
     this.surveyData = new ActivityExtractionSurveyData(surveyForm);
-    this.activityData = new ActivityExtractionActivityData(surveyActivity, participant);
+    this.activityData = new ActivityExtractionActivityData(surveyActivity);
   }
 
   public ActivityExtractionSurveyData getSurveyData() {
@@ -25,6 +24,10 @@ public class ActivityExtraction extends SerializableModel {
 
   public ActivityExtractionActivityData getActivityData() {
     return activityData;
+  }
+
+  public void setParticipantData(Participant participant){
+    this.activityData.setParticipantData(participant);
   }
 
   public String toJson(){
