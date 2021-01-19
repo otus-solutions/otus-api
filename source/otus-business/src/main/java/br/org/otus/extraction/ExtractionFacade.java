@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import br.org.otus.api.CsvExtraction;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
-import br.org.otus.model.Pipeline;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.info.Validation;
 import com.google.gson.GsonBuilder;
@@ -24,6 +23,8 @@ import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
 import org.ccem.otus.service.extraction.model.ActivityExtraction;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
+import org.ccem.otus.service.extraction.model.Pipeline;
+import org.ccem.otus.service.extraction.model.PipelineDto;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -93,16 +94,23 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createCsvExtractionFromPipeline(String pipelineName) {
+  public byte[] createCsvExtractionFromPipeline(String pipelineDtoJson) {
     try {
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineCsvJsonExtraction(pipelineName);
+      String pipelineJson = buildPipeline(pipelineDtoJson);
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineCsvJsonExtraction(pipelineJson);
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as csv");
+      LOGGER.info("status: success, action: extraction for pipeline " + pipelineDtoJson + " as csv");
       return csv;
     } catch (IOException | DataNotFoundException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as csv");
+      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineDtoJson + " as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
+  }
+
+  private String buildPipeline(String pipelineDtoJson){
+    PipelineDto pipelineDto = PipelineDto.fromJson(pipelineDtoJson);
+    SurveyForm surveyForm = surveyFacade.get(pipelineDto.getSurveyForm().getAcronym(), pipelineDto.getSurveyForm().getVersion());
+    return new Pipeline(surveyForm.getSurveyID().toHexString(), pipelineDto.getRscript()).toJson();
   }
 
   public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
