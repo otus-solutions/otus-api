@@ -16,21 +16,13 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ReportMicroServiceResources.class})
-public class ReportMicroServiceResourcesTest {
+public class ReportMicroServiceResourcesTest extends MicroServiceResourcesTestParent {
 
-  private static final String HOST = "localhost";
-  private static final String PORT = "8081";
   private ReportMicroServiceResources resources;
-  private MicroservicesEnvironments microservicesEnvironments;
-  private URL url;
 
   @Before
   public void setUp() throws Exception {
-    microservicesEnvironments = MicroservicesEnvironments.REPORT;
-    mockStatic(System.class);
-    when(System.getenv(microservicesEnvironments.getHost())).thenReturn(HOST);
-    when(System.getenv(microservicesEnvironments.getPort())).thenReturn(PORT);
-
+    parentSetUp(MicroservicesEnvironments.REPORT);
     resources = new ReportMicroServiceResources();
   }
 

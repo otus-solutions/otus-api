@@ -27,9 +27,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({MultipartPOSTUtility.class, URL.class, RequestUtility.class})
 public class MultipartPOSTUtilityTest {
-  private static String FIELD_NAME = "Text";
-  private static String NAME = "Peso";
-  private static String VALUE = "60Kg";
+
+  private static final String FIELD_NAME = "Text";
+  private static final String NAME = "Peso";
+  private static final String VALUE = "60Kg";
   private static final String RESPONSE_RESULT = "success: connection finalized ";
   private static byte[] bytes;
 
@@ -58,6 +59,9 @@ public class MultipartPOSTUtilityTest {
 
     file = File.createTempFile("tmp", null);
     bytes = Files.readAllBytes(file.toPath());
+
+    mockStatic(RequestUtility.class);
+    when(RequestUtility.getString(httpConn)).thenReturn(RESPONSE_RESULT);
   }
 
   @Test
@@ -86,15 +90,13 @@ public class MultipartPOSTUtilityTest {
 
   @Test
   public void finishMethod_should_return_variable_type_correlation() throws Exception {
-    when(httpConn.getResponseCode()).thenReturn(200);
-    mockStatic(RequestUtility.class);
-    when(RequestUtility.getString(httpConn)).thenReturn(RESPONSE_RESULT);
+    when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
     assertEquals(RESPONSE_RESULT, multipartPOSTUtility.finish());
   }
 
   @Test(expected = IOException.class)
   public void finishMethod_should_throw_exception_for_IOException() throws Exception {
-    when(httpConn.getResponseCode()).thenReturn(400);
+    when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_BAD_REQUEST);
     multipartPOSTUtility.finish();
   }
 }

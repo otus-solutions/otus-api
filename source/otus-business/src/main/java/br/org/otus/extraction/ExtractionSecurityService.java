@@ -14,11 +14,7 @@ public class ExtractionSecurityService {
 
   public Boolean validateSecurityCredentials(String token, String ip) throws DataNotFoundException {
     User user = ExtractionSecurityDaoBean.validateSecurityCredentials(token);
-    if (!user.getExtractionIps().isEmpty() && !user.getExtractionIps().contains(ip)) {
-      return false;
-    } else {
-      return true;
-    }
+    return ( user.getExtractionIps().isEmpty() || user.getExtractionIps().contains(ip) );
   }
 
   public String getExtractionToken(String email) throws DataNotFoundException {
