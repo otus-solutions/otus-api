@@ -140,10 +140,11 @@ public class ExtractionResource {
 
   @GET
   @SecuredExtraction
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/pipeline/csv/{pipeline}")
-  public byte[] extractCsvFromPipeline(@PathParam("pipeline") String pipelineName) {
-    return extractionFacade.createCsvExtractionFromPipeline(pipelineName);
+  @Path("/pipeline/csv")
+  public byte[] extractCsvFromPipeline(String pipelineDtoJson) {
+    return extractionFacade.createCsvExtractionFromPipeline(pipelineDtoJson);
   }
 
   @PUT
