@@ -19,6 +19,7 @@ public abstract class JsonRequestUtility {
 
   public JsonRequestUtility(RequestTypeOptions requestTypeOption, URL requestURL, String body) throws IOException {
     setHttpConn(requestTypeOption, requestURL);
+    httpConn.setDoOutput(true);
     this.request = new DataOutputStream(httpConn.getOutputStream());
     writeBody(body);
   }
