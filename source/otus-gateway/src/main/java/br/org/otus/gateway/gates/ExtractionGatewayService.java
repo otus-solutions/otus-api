@@ -10,19 +10,19 @@ import java.net.URL;
 
 public class ExtractionGatewayService {
 
-  public GatewayResponse getPipelineJsonExtraction(String pipelineName) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getPipelineJsonExtractionAddress(pipelineName);
-    return getPipelineExtraction(requestURL);
+  public GatewayResponse getPipelineJsonExtraction(String pipelineJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getPipelineJsonExtractionAddress();
+    return getPipelineExtraction(requestURL, pipelineJson);
   }
 
-  public GatewayResponse getPipelineCsvJsonExtraction(String pipelineName) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getPipelineCsvExtractionAddress(pipelineName);
-    return getPipelineExtraction(requestURL);
+  public GatewayResponse getPipelineCsvJsonExtraction(String pipelineJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getPipelineCsvExtractionAddress();
+    return getPipelineExtraction(requestURL, pipelineJson);
   }
 
-  private GatewayResponse getPipelineExtraction(URL requestURL){
+  private GatewayResponse getPipelineExtraction(URL requestURL, String body){
     try {
-      String response = new JsonGETUtility(requestURL).finish();
+      String response = new JsonGETUtility(requestURL, body).finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException e) {
       throw new ReadRequestException();
