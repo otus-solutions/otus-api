@@ -5,14 +5,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
@@ -20,14 +23,13 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({JsonPOSTUtility.class, URL.class, DataOutputStream.class, RequestUtility.class})
-public class JsonPOSTUtilityTest {
+@PrepareForTest({JsonPUTRequestUtility.class, URL.class, DataOutputStream.class, RequestUtility.class})
+public class JsonPUTUtilityTest {
 
-  private static String BODY = "{\"recruitmentNumber\": \"4107\",\"variables\":[{\"name\": \"tst1\",\"value\": \"Text\",\"sending\": \"1\"},{\"name\": \"tst1\",\"value\": \"Text\",\"sending\": \"2\"}]}";
   private static String CONNECTION_CLOSED = "closed";
   private static final String RESPONSE_RESULT = "success";
 
-  private JsonPOSTUtility jsonPOSTUtility;
+  private JsonPUTRequestUtility jsonPUTRequestUtility;
   private URL requestURL;
   @Mock
   private HttpURLConnection httpConn;
@@ -43,7 +45,7 @@ public class JsonPOSTUtilityTest {
     when((HttpURLConnection) requestURL.openConnection()).thenReturn(httpConn);
     when(httpConn.getOutputStream()).thenReturn(outputStream);
     whenNew(DataOutputStream.class).withArguments(outputStream).thenReturn(request);
-    jsonPOSTUtility = new JsonPOSTUtility(requestURL, BODY);
+    jsonPUTRequestUtility = new JsonPUTRequestUtility(requestURL);
   }
 
   @Test
@@ -51,26 +53,25 @@ public class JsonPOSTUtilityTest {
     verify(httpConn, times(1)).setUseCaches(false);
     verify(httpConn, times(1)).setDoOutput(true);
     verify(httpConn, times(1)).setDoInput(true);
-    verify(httpConn, times(1)).setRequestMethod("POST");
+    verify(httpConn, times(1)).setRequestMethod(RequestTypeOptions.PUT.getName());
     verify(httpConn, times(1)).setRequestProperty("Connection", "Keep-Alive");
     verify(httpConn, times(1)).setRequestProperty("Cache-Control", "no-cache");
     verify(httpConn, times(1)).setRequestProperty("Content-Type", "application/json");
-    verify(request, times(1)).write(BODY.getBytes("UTF-8"));
   }
 
   @Test
-  public void finishMethod_should_returns_information_about_properly_closed_connection() throws IOException {
+  public void finish_method_should_returns_information_about_properly_closed_connection() throws IOException {
     when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
     mockStatic(RequestUtility.class);
     when(RequestUtility.getString(httpConn)).thenReturn(RESPONSE_RESULT);
-    assertEquals(jsonPOSTUtility.finish(), RESPONSE_RESULT);
+    assertEquals(jsonPUTRequestUtility.finish(), RESPONSE_RESULT);
   }
 
   @Test
   public void finish_method_should_catch_IOException() throws IOException {
     when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
     try {
-      jsonPOSTUtility.finish();
+      jsonPUTRequestUtility.finish();
     } catch (IOException e) {
       assertEquals(e.getMessage(), CONNECTION_CLOSED);
     }
@@ -79,6 +80,15 @@ public class JsonPOSTUtilityTest {
   @Test(expected = RequestException.class)
   public void finish_method_should_throw_RequestException() throws IOException {
     when(httpConn.getResponseCode()).thenReturn(HttpURLConnection.HTTP_BAD_REQUEST);
-    jsonPOSTUtility.finish();
+    jsonPUTRequestUtility.finish();
   }
+
+  @Test
+  public void writeBody_method_should_call_request_write_method() throws IOException {
+    String body = mock(String.class);
+    Whitebox.setInternalState(jsonPUTRequestUtility, "request", request);
+    jsonPUTRequestUtility.writeBody(body);
+    verify(request, Mockito.times(1)).write(body.getBytes(StandardCharsets.UTF_8));
+  }
+
 }

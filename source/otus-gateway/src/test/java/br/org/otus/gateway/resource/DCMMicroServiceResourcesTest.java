@@ -1,8 +1,6 @@
 package br.org.otus.gateway.resource;
 
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,33 +15,25 @@ import br.org.otus.gateway.MicroservicesEnvironments;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({DCMMicroServiceResources.class})
-public class DCMMicroServiceResourcesTest {
+public class DCMMicroServiceResourcesTest extends MicroServiceResourcesTestParent {
 
-  private static final String HOST = "localhost";
-  private static final String PORT = "8081";
   private DCMMicroServiceResources resources;
-  private MicroservicesEnvironments microservicesEnvironments;
-  private URL url;
 
   @Before
   public void setUp() throws Exception {
-    microservicesEnvironments = MicroservicesEnvironments.DCM;
-    mockStatic(System.class);
-    when(System.getenv(microservicesEnvironments.getHost())).thenReturn(HOST);
-    when(System.getenv(microservicesEnvironments.getPort())).thenReturn(PORT);
-
+    parentSetUp(MicroservicesEnvironments.DCM);
     resources = new DCMMicroServiceResources();
   }
 
   @Test
   public void getRetinographyImageAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:8081/api/retinography");
+    url = new URL("http://"+HOST+":"+PORT+"/api/retinography");
     assertEquals(resources.getRetinographyImageAddress(), url);
   }
 
   @Test
   public void getUltrasoundImageAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://localhost:8081/api/ultrasound");
+    url = new URL("http://"+HOST+":"+PORT+"/api/ultrasound");
     assertEquals(resources.getUltrasoundImageAddress(), url);
   }
 

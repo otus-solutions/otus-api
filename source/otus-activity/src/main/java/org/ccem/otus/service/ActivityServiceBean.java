@@ -1,7 +1,6 @@
 package org.ccem.otus.service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
