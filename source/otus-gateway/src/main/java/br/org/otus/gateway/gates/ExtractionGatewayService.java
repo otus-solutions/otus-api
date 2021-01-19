@@ -22,7 +22,7 @@ public class ExtractionGatewayService {
 
   private GatewayResponse getPipelineExtraction(URL requestURL, String body){
     try {
-      String response = new JsonGETUtility(requestURL, body).finish();
+      String response = new JsonPOSTUtility(requestURL, body).finish();
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException e) {
       throw new ReadRequestException();

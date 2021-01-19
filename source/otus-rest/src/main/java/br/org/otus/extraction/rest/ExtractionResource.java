@@ -129,16 +129,17 @@ public class ExtractionResource {
     return new Response().buildSuccess(extractionToken).toJson();
   }
 
-  @GET
+  @POST
   @SecuredExtraction
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/pipeline/json/{pipeline}")
-  public String extractJsonFromPipeline(@PathParam("pipeline") String pipelineName) {
-    ArrayList<LinkedTreeMap> json =  extractionFacade.createJsonExtractionFromPipeline(pipelineName);
+  public String extractJsonFromPipeline(String pipelineDtoJson) {
+    ArrayList<LinkedTreeMap> json =  extractionFacade.createJsonExtractionFromPipeline(pipelineDtoJson);
     return new Response().buildSuccess(json).toJson();
   }
 
-  @GET
+  @POST
   @SecuredExtraction
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
