@@ -10,4 +10,6 @@ public interface ProjectConfigurationDao {
   ProjectConfiguration getProjectConfiguration() throws DataNotFoundException;
 
   void autoGenerateRecruitmentNumber(boolean permission) throws DataNotFoundException;
+
+  void addressCensusRequired(boolean permission) throws DataNotFoundException;
 }
