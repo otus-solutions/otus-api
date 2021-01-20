@@ -1,30 +1,23 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.model.Participant;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> implements ParticipantContactAttemptDao {
@@ -35,6 +28,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
   private static final String OBJECT_TYPE_FIELD_NAME = "objectType";
   private static final String ADDRESS_FIELD_NAME = "address";
   private static final String REGISTEREDBY_FIELD_NAME = "registeredBy";
+  private static final String CONCAT_ADDRESS = "concatAddress";
 
   public ParticipantContactAttemptDaoBean(){
     super(COLLECTION_NAME, Document.class);
@@ -53,6 +47,51 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
     if(deleteResult.getDeletedCount() == 0){
       throw new DataNotFoundException("Participant contact with id { " + participantContactOID.toString() + " } was not found");
     }
+  }
+
+  @Override
+  public void updateAttemptAddress(Long recruitmentNumber, String objectType, String position, Address address) throws DataNotFoundException {
+    ArrayList<Bson> pipeline = new ArrayList<>();
+    String addressField = ADDRESS_FIELD_NAME.concat(".").concat(position).concat(".").concat("value").concat(".");
+    pipeline.add(new Document("$match",
+      new Document(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)
+        .append(OBJECT_TYPE_FIELD_NAME, objectType)
+        .append(ADDRESS_FIELD_NAME.concat(".").concat(position), new Document("$exists", true))
+        .append("isValid", true)
+    ));
+    AggregateIterable<Document> result = collection.aggregate(pipeline);
+    MongoCursor<Document> iterator = result.iterator();
+
+    while (iterator.hasNext()) {
+      Document document = iterator.next();
+      ParticipantContactAttempt participantContactAttempt = ParticipantContactAttempt.deserialize(document.toJson());
+      collection.updateOne(new Document("_id", participantContactAttempt.get_id()),
+        new Document("$set",
+          new Document(addressField.concat("postalCode"), address.getPostalCode())
+            .append(addressField.concat("street"), address.getStreet())
+            .append(addressField.concat("streetNumber"), address.getStreetNumber())
+            .append(addressField.concat("complements"), address.getComplements())
+            .append(addressField.concat("neighbourhood"), address.getNeighbourhood())
+            .append(addressField.concat("city"), address.getCity())
+            .append(addressField.concat("country"), address.getCountry())
+            .append(addressField.concat("state"), address.getState())
+            .append(addressField.concat("census"), address.getCensus())
+        )
+      );
+    }
+  }
+
+  @Override
+  public void changeAddress(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
+    collection.updateMany(and(
+        eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber),
+        eq(OBJECT_TYPE_FIELD_NAME, objectType),
+        eq(ADDRESS_FIELD_NAME.concat(".").concat(position), new Document("$exists", true)),
+        eq("isValid", true)
+      ),
+      new Document("$set",
+        new Document("isValid", false)
+        ));
   }
 
   @Override
@@ -76,7 +115,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
         new Document("userEmail", new Document("$arrayElemAt", Arrays.asList("$user.email", 0)))));
 
       pipeline.add(new Document("$group",
-        new Document("_id", "$address.main.value")
+        new Document("_id", "$address."+position+".value")
           .append("attemptList", new Document("$push", "$$ROOT"))
       ));
 

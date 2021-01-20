@@ -37,6 +37,31 @@ public class ParticipantContactAttemptResource {
     return (new Response()).buildSuccess(id).toJson();
   }
 
+  @PUT
+  @Secured
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Path("/update-address/{recruitmentNumber}/{contactType}/{position}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String updateAttemptAddress(@PathParam("recruitmentNumber") Long recruitmentNumber,
+                                     @PathParam("contactType") String objectType,
+                                     @PathParam("position") String position,
+                                     String addressJson) {
+    participantContactAttemptFacade.updateAttemptAddress(recruitmentNumber, objectType, position, addressJson);
+    return (new Response()).buildSuccess().toJson();
+  }
+
+  @PUT
+  @Secured
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Path("/change-address/{recruitmentNumber}/{contactType}/{position}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String changeAddress(@PathParam("recruitmentNumber") Long recruitmentNumber,
+                                     @PathParam("contactType") String objectType,
+                                     @PathParam("position") String position) {
+    participantContactAttemptFacade.changeAddress(recruitmentNumber, objectType, position);
+    return (new Response()).buildSuccess().toJson();
+  }
+
   @DELETE
   @Secured
   @Path("/{id}")

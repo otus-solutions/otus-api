@@ -1,7 +1,10 @@
 package org.ccem.otus.participant.model.participantContactAttempt;
 
 import com.google.gson.GsonBuilder;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.utils.LongAdapter;
 import org.ccem.otus.survey.template.utils.adapters.ImmutableDateAdapter;
 import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
@@ -10,6 +13,7 @@ import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class ParticipantContactAttempt {
 
@@ -21,11 +25,13 @@ public class ParticipantContactAttempt {
   private Object attemptStatus;
   private ObjectId registeredBy;
   private String userEmail;
+  private Boolean isValid;
 
   public ParticipantContactAttempt(String objectType, Long recruitmentNumber, Object address, LocalDateTime attemptDateTime,
                                    Object attemptStatus,
                                    ObjectId registeredBy,
-                                   String userEmail) {
+                                   String userEmail,
+                                   Boolean isValid) {
     this.objectType = objectType;
     this.recruitmentNumber = recruitmentNumber;
     this.address = address;
@@ -33,6 +39,15 @@ public class ParticipantContactAttempt {
     this.attemptStatus = attemptStatus;
     this.registeredBy = registeredBy;
     this.userEmail = userEmail;
+    this.isValid = isValid;
+  }
+
+  public ObjectId get_id() {
+    return _id;
+  }
+
+  public Long getRecruitmentNumber() {
+    return recruitmentNumber;
   }
 
   public Object getAddress() {

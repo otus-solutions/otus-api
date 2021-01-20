@@ -1,6 +1,5 @@
 package br.org.otus.participant.api;
 
-import br.org.otus.model.User;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
@@ -9,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.service.ParticipantContactAttemptService;
 
 import javax.inject.Inject;
@@ -25,6 +25,22 @@ public class ParticipantContactAttemptFacade {
       return participantContactAttemptService.create(ParticipantContactAttempt.deserialize(participantContactAttemptJson), userEmail).toString();
     }
     catch (DataFormatException | DataNotFoundException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+  public void updateAttemptAddress(Long recruitmentNumber, String objectType, String position, String addressJson){
+    try{
+      participantContactAttemptService.updateAttemptAddress(recruitmentNumber, objectType, position, Address.deserialize(addressJson));
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+  public void changeAddress(Long recruitmentNumber, String objectType, String position){
+    try{
+      participantContactAttemptService.changeAddress(recruitmentNumber, objectType, position);
+    }
+    catch (DataNotFoundException e){
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }

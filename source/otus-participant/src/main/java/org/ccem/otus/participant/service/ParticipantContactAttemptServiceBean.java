@@ -7,6 +7,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptConfigurationDao;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 
@@ -38,6 +39,16 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   @Override
   public void delete(ObjectId participantContactOID) throws DataNotFoundException {
     participantContactAttemptDao.delete(participantContactOID);
+  }
+
+  @Override
+  public void updateAttemptAddress(Long recruitmentNumber, String objectType, String position, Address addresses) throws DataNotFoundException {
+    participantContactAttemptDao.updateAttemptAddress(recruitmentNumber, objectType, position, addresses);
+  }
+
+  @Override
+  public   void changeAddress(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException{
+    participantContactAttemptDao.changeAddress(recruitmentNumber, objectType, position);
   }
 
   @Override
