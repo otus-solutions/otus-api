@@ -3,6 +3,7 @@ package org.ccem.otus.participant.service;
 import org.bson.types.ObjectId;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactPositionOptions;
+import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 import org.junit.Test;
@@ -15,8 +16,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.zip.DataFormatException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -32,8 +32,10 @@ public class ParticipantContactServiceBeanTest {
   private ParticipantContactServiceBean participantContactServiceBean;
   @Mock
   private ParticipantContactDao participantContactDao;
+  @Mock
+  private ParticipantContactAttemptDao participantContactAttemptDao;
 
-  private ParticipantContactDto participantContactDto  = PowerMockito.spy(new ParticipantContactDto());
+  private ParticipantContactDto participantContactDto  = PowerMockito.spy(ParticipantContactDto.deserialize("{_id:5c7400d2d767afded0d84dcf}"));
   private ParticipantContact participantContact = PowerMockito.spy(new ParticipantContact());
 
 
@@ -112,8 +114,12 @@ public class ParticipantContactServiceBeanTest {
   @Test
   public void swapMainContact_method_invoke_swapMainContact_from_participantContactDao() throws Exception {
     doReturn(true).when(participantContactDto).isValid();
+    when(participantContactDao.getParticipantContact(PARTICIPANT_CONTACT_OID)).thenReturn(participantContact);
+    when(participantContactDto.getObjectId()).thenReturn(PARTICIPANT_CONTACT_OID);
+    when(participantContact.getRecruitmentNumber()).thenReturn(RN);
     participantContactServiceBean.swapMainContact(participantContactDto);
     verify(participantContactDao, times(1)).swapMainContact(participantContactDto);
+    verify(participantContactAttemptDao, times(1)).swapMainContactAttempts(participantContactDto,RN);
   }
 
   @Test
