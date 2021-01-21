@@ -12,6 +12,7 @@ import org.ccem.otus.participant.model.participantContactAttempt.ParticipantCont
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
+import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -152,5 +153,34 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
     catch (NullPointerException e){
       throw new DataNotFoundException("No participant contact attempts found for recruitmentNumber {" + recruitmentNumber.toString() + "}");
     }
+  }
+
+  @Override
+  public void swapMainContactAttempts(ParticipantContactDto participantContactDto, Long recruitmentNumber) {
+    String contactType = participantContactDto.getType();
+    collection.updateMany(and(
+      eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber),
+      eq(OBJECT_TYPE_FIELD_NAME, contactType),
+      eq(ADDRESS_FIELD_NAME.concat(".").concat("main"), new Document("$exists", true))
+      ),
+      new Document("$rename",
+        new Document(ADDRESS_FIELD_NAME.concat(".").concat("main"), ADDRESS_FIELD_NAME.concat(".").concat("oldMain"))
+      ));
+    collection.updateMany(and(
+      eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber),
+      eq(OBJECT_TYPE_FIELD_NAME, contactType),
+      eq(ADDRESS_FIELD_NAME.concat(".").concat(participantContactDto.getPosition()), new Document("$exists", true))
+      ),
+      new Document("$rename",
+        new Document(ADDRESS_FIELD_NAME.concat(".").concat(participantContactDto.getPosition()), ADDRESS_FIELD_NAME.concat(".").concat("main"))
+      ));
+    collection.updateMany(and(
+      eq(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber),
+      eq(OBJECT_TYPE_FIELD_NAME, contactType),
+      eq(ADDRESS_FIELD_NAME.concat(".").concat("oldMain"), new Document("$exists", true))
+      ),
+      new Document("$rename",
+        new Document(ADDRESS_FIELD_NAME.concat(".").concat("oldMain"), ADDRESS_FIELD_NAME.concat(".").concat(participantContactDto.getPosition()))
+      ));
   }
 }
