@@ -77,4 +77,8 @@ public class ParticipantContactAttempt {
     builder.registerTypeAdapter(Long.class, new LongAdapter());
     return builder;
   }
+
+  public void setValid(Boolean valid) {
+    isValid = valid;
+  }
 }
