@@ -33,6 +33,7 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   public ObjectId create(ParticipantContactAttempt participantContactAttempt, String userEmail) throws DataFormatException, DataNotFoundException {
     User user = userDao.fetchByEmail(userEmail);
     participantContactAttempt.setRegisteredBy(user.get_id());
+    participantContactAttempt.setValid(true);
     return participantContactAttemptDao.create(participantContactAttempt);
   }
 
