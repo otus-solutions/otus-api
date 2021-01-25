@@ -78,7 +78,7 @@ public class ExtractionGatewayServiceTest {
   @Test(expected = ReadRequestException.class)
   public void getPipelineExtraction_method_should_throw_ReadRequestException() throws IOException {
     when(extractionMicroServiceResources.getPipelineJsonExtractionAddress()).thenReturn(requestURL);
-    when(jsonGETUtility.finish()).thenThrow(new IOException());
+    when(jsonPOSTUtility.finish()).thenThrow(new IOException());
     extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME);
   }
 
