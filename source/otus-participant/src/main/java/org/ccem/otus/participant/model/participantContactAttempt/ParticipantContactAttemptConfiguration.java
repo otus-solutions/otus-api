@@ -24,6 +24,10 @@ public class ParticipantContactAttemptConfiguration {
     this.statusMetadata = statusMetadata;
   }
 
+  public Integer getNumberOfAttempts() {
+    return numberOfAttempts;
+  }
+
   public static String serialize(ParticipantContactAttemptConfiguration participantContactJson) {
     GsonBuilder builder = ParticipantContactAttemptConfiguration.getGsonBuilder();
     return builder.create().toJson(participantContactJson);

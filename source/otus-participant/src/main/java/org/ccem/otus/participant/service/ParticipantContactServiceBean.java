@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContact;
 import org.ccem.otus.participant.model.participant_contact.ParticipantContactPositionOptions;
+import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 import org.ccem.otus.participant.persistence.ParticipantContactDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
 
@@ -16,6 +17,8 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
 
   @Inject
   private ParticipantContactDao participantContactDao;
+  @Inject
+  private ParticipantContactAttemptDao participantContactAttemptDao;
 
   @Override
   public ObjectId create(ParticipantContact participantContact) throws DataFormatException {
@@ -64,7 +67,9 @@ public class ParticipantContactServiceBean implements ParticipantContactService 
   @Override
   public void swapMainContact(ParticipantContactDto participantContactDto) throws DataNotFoundException, DataFormatException {
     validateDto(participantContactDto);
+    ParticipantContact mainParticipantContact = participantContactDao.getParticipantContact(participantContactDto.getObjectId());
     participantContactDao.swapMainContact(participantContactDto);
+    participantContactAttemptDao.swapMainContactAttempts(participantContactDto,mainParticipantContact.getRecruitmentNumber());
   }
 
   @Override

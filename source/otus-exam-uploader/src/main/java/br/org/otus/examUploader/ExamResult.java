@@ -23,6 +23,7 @@ public class ExamResult {
   private String value;
   private Boolean isValid;
   private String releaseDate;
+  private String cutOffValue;
   private List<Observation> observations;
 
   private FieldCenter fieldCenter;
@@ -36,6 +37,14 @@ public class ExamResult {
 
   public void setExamSendingLotId(ObjectId examId) {
     this.examSendingLotId = examId;
+  }
+
+  public void setCutOffValue(String cutOffValue) {
+    this.cutOffValue = cutOffValue;
+  }
+
+  public String getCutOffValue() {
+    return this.cutOffValue;
   }
 
   public void setFieldCenter(FieldCenter fieldCenter) {

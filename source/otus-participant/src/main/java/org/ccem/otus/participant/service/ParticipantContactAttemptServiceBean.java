@@ -4,8 +4,10 @@ import br.org.otus.model.User;
 import br.org.otus.persistence.UserDao;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptConfigurationDao;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 
@@ -31,6 +33,7 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   public ObjectId create(ParticipantContactAttempt participantContactAttempt, String userEmail) throws DataFormatException, DataNotFoundException {
     User user = userDao.fetchByEmail(userEmail);
     participantContactAttempt.setRegisteredBy(user.get_id());
+    participantContactAttempt.setValid(true);
     return participantContactAttemptDao.create(participantContactAttempt);
   }
 
@@ -40,8 +43,18 @@ public class ParticipantContactAttemptServiceBean implements ParticipantContactA
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> findAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
-    return participantContactAttemptDao.findAttempts(recruitmentNumber, objectType, position);
+  public void updateAttemptAddress(Long recruitmentNumber, String objectType, String position, Address addresses) throws DataNotFoundException {
+    participantContactAttemptDao.updateAttemptAddress(recruitmentNumber, objectType, position, addresses);
+  }
+
+  @Override
+  public   void changeAddress(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException{
+    participantContactAttemptDao.changeAddress(recruitmentNumber, objectType, position);
+  }
+
+  @Override
+  public ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException {
+    return participantContactAttemptDao.findAddressAttempts(recruitmentNumber, objectType, position);
   }
 
   @Override
