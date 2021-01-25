@@ -48,6 +48,11 @@ public class Address extends ParticipantContactItemValue {
     return census;
   }
 
+  public String concatAddress() {
+    String fullAddress = postalCode + street + streetNumber + complements + neighbourhood + city + state + country + census;
+    return fullAddress;
+  }
+
   public static String serialize(Address participantContactItemAddress){
     return getGsonBuilder().create().toJson(participantContactItemAddress);
   }
