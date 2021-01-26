@@ -1,14 +1,18 @@
 package org.ccem.otus.service.extraction.model;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
 import org.ccem.otus.model.survey.activity.navigation.enums.NavigationTrackingItemStatuses;
 import org.ccem.otus.model.survey.activity.status.ActivityStatusOptions;
 import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.survey.template.utils.adapters.LocalDateTimeAdapter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +46,7 @@ public class ActivityExtractionActivityData {
   private String lastFinalizationDate;
   @SerializedName("external_id")
   private String externalId;
-  private List<QuestionFill> fillingList;
+  private String fillingList;
   private List<NavigationTrackingItem> navigationTrackingItems;
 
   public ActivityExtractionActivityData(SurveyActivity surveyActivity) {
@@ -73,7 +77,7 @@ public class ActivityExtractionActivityData {
     }
 
     this.externalId = surveyActivity.getExternalID();
-    this.fillingList = surveyActivity.getFillContainer().getFillingList();
+    this.fillingList = serialize(surveyActivity.getFillContainer().getFillingList());
 
     this.navigationTrackingItems = surveyActivity.getNavigationTracker().items
       .stream().filter(item -> item.getState().equals(String.valueOf(NavigationTrackingItemStatuses.SKIPPED)))
@@ -82,7 +86,6 @@ public class ActivityExtractionActivityData {
     this.recruitmentNumber = surveyActivity.getParticipantData().getRecruitmentNumber();
     this.recruitmentNumberStr = this.recruitmentNumber.toString();
   }
-
 
   public String getId() {
     return activityId;
@@ -94,5 +97,11 @@ public class ActivityExtractionActivityData {
 
   public void setParticipantData(Participant participant){
     this.participantFieldCenter = participant.getFieldCenter().getAcronym();
+  }
+
+  public String serialize(List<QuestionFill> fillingList) {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+    return builder.create().toJson(fillingList);
   }
 }
