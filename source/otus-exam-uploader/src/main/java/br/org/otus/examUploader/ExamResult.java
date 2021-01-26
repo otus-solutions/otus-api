@@ -26,10 +26,20 @@ public class ExamResult {
   private String cutOffValue;
   private List<Observation> observations;
 
+  private List<ExtraVariable> extraVariables;
+
   private FieldCenter fieldCenter;
   private Long recruitmentNumber;
   private Sex sex;
   private ImmutableDate birthdate;
+
+  public List<ExtraVariable> getExtraVariables() {
+    return this.extraVariables;
+  }
+
+  public void setExtraVariables(List<ExtraVariable> extraVariables) {
+    this.extraVariables = extraVariables;
+  }
 
   public void setExamId(ObjectId examId) {
     this.examId = examId;
