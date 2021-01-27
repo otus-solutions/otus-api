@@ -10,7 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
-@Path("activity-extraction")
+@Path("data-extraction/activity")
 public class ActivityExtractionResource {
 
   @Inject

@@ -28,13 +28,6 @@ public class ExtractionResource {
   @Inject
   private SecurityContext securityContext;
 
-  @GET
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/activity/{acronym}/{version}")
-  public byte[] extractActivities(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
-    return extractionFacade.createActivityExtraction(acronym.toUpperCase(), version);
-  }
 
   @GET
   @SecuredExtraction
@@ -42,22 +35,6 @@ public class ExtractionResource {
   @Path("/activity/{acronym}/versions")
   public String listSurveyVersions(@PathParam("acronym") String acronym) {
     return new Response().buildSuccess(extractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
-  }
-
-  @GET
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/laboratory/exams-values")
-  public byte[] extractExamsValues() {
-    return extractionFacade.createLaboratoryExamsValuesExtraction();
-  }
-
-  @GET
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/laboratory")
-  public byte[] extractLaboratory() {
-    return extractionFacade.createLaboratoryExtraction();
   }
 
   @GET
@@ -75,6 +52,35 @@ public class ExtractionResource {
   public byte[] extractActivitiesProgress(@PathParam("center") String center) {
     return extractionFacade.createActivityProgressExtraction(center);
   }
+
+  @POST
+  @SecuredExtraction
+  @Path("/activity/attachments")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
+    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
+    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
+    return builder.build();
+  }
+
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/laboratory/exams-values")
+  public byte[] extractExamsValues() {
+    return extractionFacade.createLaboratoryExamsValuesExtraction();
+  }
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/laboratory")
+  public byte[] extractLaboratory() {
+    return extractionFacade.createLaboratoryExtraction();
+  }
+
 
   @POST
   @Secured
@@ -104,17 +110,6 @@ public class ExtractionResource {
   public String enableIps(ManagementUserDto managementUserDto) {
     userFacade.updateExtractionIps(managementUserDto);
     return new Response().buildSuccess().toJson();
-  }
-
-  @POST
-  @SecuredExtraction
-  @Path("/activity/attachments")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
-    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
-    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
-    return builder.build();
   }
 
   @GET
