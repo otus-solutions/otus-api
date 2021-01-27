@@ -36,7 +36,6 @@ public class ActivityExtractionResource {
 
   @GET
   @SecuredExtraction
-  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/{acronym}/{version}")
   public byte[] getSurveyActivitiesExtractionAsCsv(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
@@ -45,7 +44,6 @@ public class ActivityExtractionResource {
 
   @GET
   @SecuredExtraction
-  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/json/{acronym}/{version}")
   public String getSurveyActivitiesExtractionAsJson(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
