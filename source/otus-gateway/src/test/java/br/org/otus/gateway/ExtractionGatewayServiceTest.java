@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -31,8 +32,10 @@ public class ExtractionGatewayServiceTest {
 
   private static final String HOST = "http://localhost:";
   private static final String PORT = "53004";
-  private static final String PIPELINE_NAME = "pipelineName";
-  private static final String ACTIVITY_ID = "5e0658135b4ff40f8916d2b5";
+  private static final String SURVEY_ID = "5e0658135b4ff40f8916d2b5";
+  private static final String ACTIVITY_ID = "5e0658135b4ff40f8916d2b6";
+  private static final String ACTIVITY_EXTRACTION_JSON = "{}";
+  private static final String SURVEY_EXTRACTION_JSON = "{}";
   private static final GatewayResponse EXPECTED_GATEWAY_RESPONSE = null;
 
   @InjectMocks
@@ -68,47 +71,76 @@ public class ExtractionGatewayServiceTest {
     PowerMockito.whenNew(GatewayResponse.class).withNoArguments().thenReturn(gatewayResponse);
   }
 
+
   @Test
-  public void getPipelineExtraction_method_should_return_GatewayResponse() throws IOException {
-    when(extractionMicroServiceResources.getJsonSurveyExtractionAddress()).thenReturn(requestURL);
-    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getJsonSurveyExtraction(PIPELINE_NAME));
+  public void createActivityExtraction_method_should_send_POST_request() throws IOException {
+    when(extractionMicroServiceResources.getActivityExtractionCreateAddress()).thenReturn(requestURL);
+    extractionGatewayService.createOrUpdateActivityExtraction(ACTIVITY_EXTRACTION_JSON);
+    verify(jsonPUTUtility, Mockito.times(1)).finish();
   }
 
   @Test(expected = ReadRequestException.class)
-  public void getPipelineExtraction_method_should_throw_ReadRequestException() throws IOException {
-    when(extractionMicroServiceResources.getJsonSurveyExtractionAddress()).thenReturn(requestURL);
-    when(jsonPOSTUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.getJsonSurveyExtraction(PIPELINE_NAME);
+  public void createActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getActivityExtractionCreateAddress()).thenReturn(requestURL);
+    when(jsonPUTUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.createOrUpdateActivityExtraction(ACTIVITY_EXTRACTION_JSON);
   }
 
 
-//  @Test
-//  public void createActivityExtraction_method_should_send_POST_request() throws IOException {
-//    when(extractionMicroServiceResources.getActivityExtractionCreateAddress(ACTIVITY_ID)).thenReturn(requestURL);
-//    extractionGatewayService.createActivityExtraction(ACTIVITY_ID);
-//    verify(jsonPOSTUtility, Mockito.times(1)).finish();
-//  }
-//
-//  @Test(expected = ReadRequestException.class)
-//  public void createActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
-//    when(extractionMicroServiceResources.getActivityExtractionCreateAddress(ACTIVITY_ID)).thenReturn(requestURL);
-//    when(jsonPOSTUtility.finish()).thenThrow(new IOException());
-//    extractionGatewayService.createActivityExtraction(ACTIVITY_ID);
-//  }
-//
-//
-//  @Test
-//  public void deleteActivityExtraction_method_should_send_POST_request() throws IOException {
-//    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(ACTIVITY_ID)).thenReturn(requestURL);
-//    extractionGatewayService.deleteActivityExtraction(ACTIVITY_ID);
-//    verify(jsonDELETEUtility, Mockito.times(1)).finish();
-//  }
-//
-//  @Test(expected = ReadRequestException.class)
-//  public void deleteActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
-//    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(ACTIVITY_ID)).thenReturn(requestURL);
-//    when(jsonDELETEUtility.finish()).thenThrow(new IOException());
-//    extractionGatewayService.deleteActivityExtraction(ACTIVITY_ID);
-//  }
+  @Test
+  public void deleteActivityExtraction_method_should_send_POST_request() throws IOException {
+    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(SURVEY_ID, ACTIVITY_ID)).thenReturn(requestURL);
+    extractionGatewayService.deleteActivityExtraction(SURVEY_ID, ACTIVITY_ID);
+    verify(jsonDELETEUtility, Mockito.times(1)).finish();
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void deleteActivityExtraction_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getActivityExtractionDeleteAddress(SURVEY_ID, ACTIVITY_ID)).thenReturn(requestURL);
+    when(jsonDELETEUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.deleteActivityExtraction(SURVEY_ID, ACTIVITY_ID);
+  }
+
+
+  @Test
+  public void getCsvSurveyExtraction_method_should_return_GatewayResponse() throws IOException {
+    when(extractionMicroServiceResources.getCsvSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID));
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void getCsvSurveyExtraction_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getCsvSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
+    when(jsonGETUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID);
+  }
+
+
+  @Test
+  public void getJsonSurveyExtractionAddress_method_should_return_GatewayResponse() throws IOException {
+    when(extractionMicroServiceResources.getJsonSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID));
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void getJsonSurveyExtractionAddress_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getJsonSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
+    when(jsonGETUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID);
+  }
+
+
+  @Test
+  public void getRscriptSurveyExtraction_method_should_return_GatewayResponse() throws IOException {
+    when(extractionMicroServiceResources.getRScriptJsonSurveyExtractionAddress()).thenReturn(requestURL);
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getRscriptSurveyExtraction(SURVEY_EXTRACTION_JSON));
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void getRscriptSurveyExtraction_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getRScriptJsonSurveyExtractionAddress()).thenReturn(requestURL);
+    when(jsonPOSTUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.getRscriptSurveyExtraction(SURVEY_EXTRACTION_JSON);
+  }
 
 }
