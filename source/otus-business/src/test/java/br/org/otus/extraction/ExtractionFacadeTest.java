@@ -49,8 +49,6 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
   private static final Integer VERSION = 1;
   private static final ArrayList<SurveyForm> SURVEYS = new ArrayList<>();
   private static final byte[] BYTES = new byte[1];
-  private static final String PIPELINE_NAME = "pipeline";
-  private static final String ACTIVITY_ID = "12345";
 
   @InjectMocks
   private ExtractionFacade extractionFacade;
@@ -81,8 +79,6 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
   private ActivityProgressExtraction activityProgressExtraction;
   @Mock
   private ExtractionGatewayService extractionGatewayService;
-  @Mock
-  private GatewayResponse gatewayResponse;
 
   private SurveyForm surveyForm = new SurveyForm(SURVEY_TEMPLATE, USER_EMAIL);
 
@@ -114,53 +110,6 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
     doThrow(new DataNotFoundException()).when(extractionService).createExtraction(surveyActivityExtraction);
     extractionFacade.createActivityExtraction(ACRONYM, VERSION);
   }
-
-
-  //@Test
-  public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
-    when(extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
-    when(gatewayResponse.getData()).thenReturn(BYTES);
-    assertEquals(BYTES, extractionFacade.createJsonExtractionFromPipeline(PIPELINE_NAME));
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void createExtractionFromPipeline_method_should_handle_MalformedURLException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).getPipelineJsonExtraction(PIPELINE_NAME);
-    extractionFacade.createJsonExtractionFromPipeline(PIPELINE_NAME);
-  }
-
-
-  //@Test
-  public void createActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
-    extractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerInfoWasCalled();
-  }
-
-  //@Test(expected = HttpResponseException.class)
-  public void createActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
-    extractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
-
-//  @Test
-//  public void deleteActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-//    doNothing().when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
-//    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
-//    verify(extractionGatewayService, Mockito.times(1)).deleteActivityExtraction(ACTIVITY_ID);
-//    verifyLoggerInfoWasCalled();
-//  }
-//
-//  @Test(expected = HttpResponseException.class)
-//  public void deleteActivityExtraction_method_should_handle_IOException() throws IOException {
-//    doThrow(new MalformedURLException()).when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
-//    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
-//    verifyLoggerSevereWasCalled();
-//  }
-
 
   @Test
   public void listSurveyVersions_method_should_call_listVersions_from_surveyFacade() {

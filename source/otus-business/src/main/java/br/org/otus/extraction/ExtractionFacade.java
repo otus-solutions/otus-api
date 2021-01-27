@@ -1,30 +1,17 @@
 package br.org.otus.extraction;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import br.org.otus.api.CsvExtraction;
-import br.org.otus.gateway.gates.ExtractionGatewayService;
-import br.org.otus.gateway.response.GatewayResponse;
-import br.org.otus.participant.api.ParticipantFacade;
-import br.org.otus.response.info.Validation;
-import com.google.gson.GsonBuilder;
-import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
-import org.ccem.otus.service.extraction.model.ActivityExtraction;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
-import org.ccem.otus.service.extraction.model.Pipeline;
-import org.ccem.otus.service.extraction.model.PipelineDto;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -61,8 +48,6 @@ public class ExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private DataSourceService dataSourceService;
-  @Inject
-  private ParticipantFacade participantFacade;
 
 
   public byte[] createActivityExtraction(String acronym, Integer version) {
@@ -79,84 +64,6 @@ public class ExtractionFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build("Results to extraction {" + acronym + "} not found."));
     }
-  }
-
-  public ArrayList<LinkedTreeMap> createJsonExtractionFromPipeline(String pipelineName) {
-    try {
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineJsonExtraction(pipelineName);
-      ArrayList<LinkedTreeMap> response = new GsonBuilder().create().fromJson(
-        (String) gatewayResponse.getData(), ArrayList.class);
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as json");
-      return response;
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as json");
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public byte[] createCsvExtractionFromPipeline(String pipelineDtoJson) {
-    try {
-      String pipelineJson = buildPipeline(pipelineDtoJson);
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineCsvJsonExtraction(pipelineJson);
-      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineDtoJson + " as csv");
-      return csv;
-    } catch (IOException | DataNotFoundException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineDtoJson + " as csv");
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  private String buildPipeline(String pipelineDtoJson){
-    PipelineDto pipelineDto = PipelineDto.fromJson(pipelineDtoJson);
-    SurveyForm surveyForm = surveyFacade.get(pipelineDto.getSurveyForm().getAcronym(), pipelineDto.getSurveyForm().getVersion());
-    return new Pipeline(surveyForm.getSurveyID().toHexString(), pipelineDto.getRscript()).toJson();
-  }
-
-  public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
-    try {
-      new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).toJson());
-      LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
-    }
-    catch (ValidationException | IOException e) {
-      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId);
-      String message = (e.getCause()!=null ? e.getCause().getMessage() : e.getMessage());
-      throw new HttpResponseException(Validation.build(message));
-    }
-  }
-
-  public void deleteActivityExtraction(String activityId) {
-    try {
-      ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
-      new ExtractionGatewayService().deleteActivityExtraction(
-        activityExtraction.getSurveyData().getId(),
-        activityExtraction.getActivityData().getId()
-      );
-      LOGGER.info("status: success, action: DELETE extraction for activity " + activityId);
-    }
-    catch (ValidationException | IOException e) {
-      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException {
-    SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded()){
-      throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
-    }
-    if(!surveyActivity.couldBeExtracted()){
-      throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
-    }
-    SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
-    return new ActivityExtraction(surveyForm, surveyActivity);
-  }
-
-  private ActivityExtraction buildActivityExtractionModelForCreateOrUpdate(String activityId) throws ValidationException {
-    ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
-    Participant participant = participantFacade.getByRecruitmentNumber(activityExtraction.getActivityData().getRecruitmentNumber());
-    activityExtraction.setParticipantData(participant);
-    return activityExtraction;
   }
 
   public List<Integer> listSurveyVersions(String acronym) {

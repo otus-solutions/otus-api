@@ -1,6 +1,6 @@
 package br.org.otus.survey.services;
 
-import br.org.otus.extraction.ExtractionFacade;
+import br.org.otus.extraction.ActivityExtractionFacade;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
@@ -49,7 +49,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
   private ActivitySharingService activitySharingService;
 
   @Inject
-  private ExtractionFacade extractionFacade;
+  private ActivityExtractionFacade extractionFacade;
 
 
   @Override

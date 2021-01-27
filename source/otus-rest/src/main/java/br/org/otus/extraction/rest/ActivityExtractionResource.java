@@ -1,6 +1,6 @@
 package br.org.otus.extraction.rest;
 
-import br.org.otus.extraction.ExtractionFacade;
+import br.org.otus.extraction.ActivityExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
 import com.google.gson.internal.LinkedTreeMap;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ActivityExtractionResource {
 
   @Inject
-  private ExtractionFacade extractionFacade;
+  private ActivityExtractionFacade activityExtractionFacade;
 
   @POST
   @SecuredExtraction
@@ -22,7 +22,7 @@ public class ActivityExtractionResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/pipeline/json/{pipeline}")
   public String extractJsonFromPipeline(String pipelineDtoJson) {
-    ArrayList<LinkedTreeMap> json =  extractionFacade.createJsonExtractionFromPipeline(pipelineDtoJson);
+    ArrayList<LinkedTreeMap> json =  activityExtractionFacade.createJsonExtractionFromPipeline(pipelineDtoJson);
     return new Response().buildSuccess(json).toJson();
   }
 
@@ -32,7 +32,7 @@ public class ActivityExtractionResource {
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/pipeline/csv")
   public byte[] extractCsvFromPipeline(String pipelineDtoJson) {
-    return extractionFacade.createCsvExtractionFromPipeline(pipelineDtoJson);
+    return activityExtractionFacade.createCsvExtractionFromPipeline(pipelineDtoJson);
   }
 
   @PUT
@@ -40,7 +40,7 @@ public class ActivityExtractionResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/activity/{id}")
   public String createOrUpdateActivityExtraction(@PathParam("id") String activityId) {
-    extractionFacade.createOrUpdateActivityExtraction(activityId);
+    activityExtractionFacade.createOrUpdateActivityExtraction(activityId);
     return new Response().buildSuccess().toJson();
   }
 
@@ -49,7 +49,7 @@ public class ActivityExtractionResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/activity/{id}")
   public String deleteActivityExtraction(@PathParam("id") String activityId) {
-    extractionFacade.deleteActivityExtraction(activityId);
+    activityExtractionFacade.deleteActivityExtraction(activityId);
     return new Response().buildSuccess().toJson();
   }
 }
