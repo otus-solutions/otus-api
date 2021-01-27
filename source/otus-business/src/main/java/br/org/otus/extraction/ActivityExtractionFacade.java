@@ -6,7 +6,6 @@ import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
-import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
