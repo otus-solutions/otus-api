@@ -15,7 +15,8 @@ import java.net.URL;
 @PrepareForTest({ExtractionMicroServiceResources.class})
 public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTestParent {
 
-  private static final String PIPELINE_NAME = "pipelineName";
+  private static final String SURVEY_ID = "123";
+  private static final String ACTIVITY_ID = "4567";
 
   private ExtractionMicroServiceResources resources;
 
@@ -26,9 +27,43 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
   }
 
   @Test
-  public void getCreateOutcomeAddress_method_should_return_expected_url() throws MalformedURLException {
-    url = new URL("http://" + HOST + ":" + PORT + "/pipeline/json");
-    Assert.assertEquals(url, resources.getJsonSurveyExtractionAddress());
+  public void getActivityExtractionCreateAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/extractions/activity"),
+      resources.getActivityExtractionCreateAddress()
+    );
+  }
+
+  @Test
+  public void getActivityExtractionDeleteAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/extractions/activity/" + SURVEY_ID + "/" + ACTIVITY_ID),
+      resources.getActivityExtractionDeleteAddress(SURVEY_ID, ACTIVITY_ID)
+    );
+  }
+
+  @Test
+  public void getCsvSurveyExtractionAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/survey/csv/" + SURVEY_ID),
+      resources.getCsvSurveyExtractionAddress(SURVEY_ID)
+    );
+  }
+
+  @Test
+  public void getJsonSurveyExtractionAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/survey/json/" + SURVEY_ID),
+      resources.getJsonSurveyExtractionAddress(SURVEY_ID)
+    );
+  }
+
+  @Test
+  public void getRScriptJsonSurveyExtractionAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/survey/rscript"),
+      resources.getRScriptJsonSurveyExtractionAddress()
+    );
   }
 
 }
