@@ -11,6 +11,10 @@ public abstract class SerializableModelWithID {
     return getGsonBuilder().create().toJson(object);
   }
 
+  public String toJson(){
+    return serialize(this);
+  }
+
   protected static Object deserialize(String json, Class clazz){
     return getGsonBuilder().create().fromJson(json, clazz);
   }
