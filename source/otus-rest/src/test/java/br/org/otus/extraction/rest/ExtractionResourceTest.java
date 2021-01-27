@@ -30,7 +30,7 @@ public class ExtractionResourceTest extends AuthenticationResourceTestsParent {
   private static final Integer VERSION = 1;
   private static final String CENTER = "RS";
   private static final String EXTRACTION_TOKEN = "123";
-  private static final String PIPELINE_NAME = "pipeline";
+
   private static final byte[] BYTES = new byte[1];
 
   @InjectMocks
@@ -123,12 +123,6 @@ public class ExtractionResourceTest extends AuthenticationResourceTestsParent {
     String response = extractionResource.getToken(request);
     Mockito.verify(userFacade).getExtractionToken(USER_EMAIL);
     assertEquals(encapsulateExpectedStringResponse(EXTRACTION_TOKEN), response);
-  }
-
-  @Test
-  public void extractFromPipeline_method_should_call_createExtractionFromPipeline_method() {
-    extractionResource.extractJsonFromPipeline(PIPELINE_NAME);
-    Mockito.verify(extractionFacade).createJsonExtractionFromPipeline(PIPELINE_NAME);
   }
 
 }

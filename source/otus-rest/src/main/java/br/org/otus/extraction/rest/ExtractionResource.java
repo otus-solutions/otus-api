@@ -17,7 +17,6 @@ import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import br.org.otus.user.api.UserFacade;
 import br.org.otus.user.dto.ManagementUserDto;
-import com.google.gson.internal.LinkedTreeMap;
 
 @Path("data-extraction")
 public class ExtractionResource {
@@ -129,41 +128,5 @@ public class ExtractionResource {
     return new Response().buildSuccess(extractionToken).toJson();
   }
 
-  @POST
-  @SecuredExtraction
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/pipeline/json/{pipeline}")
-  public String extractJsonFromPipeline(String pipelineDtoJson) {
-    ArrayList<LinkedTreeMap> json =  extractionFacade.createJsonExtractionFromPipeline(pipelineDtoJson);
-    return new Response().buildSuccess(json).toJson();
-  }
-
-  @POST
-  @SecuredExtraction
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/pipeline/csv")
-  public byte[] extractCsvFromPipeline(String pipelineDtoJson) {
-    return extractionFacade.createCsvExtractionFromPipeline(pipelineDtoJson);
-  }
-
-  @PUT
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/activity/{id}")
-  public String createOrUpdateActivityExtraction(@PathParam("id") String activityId) {
-    extractionFacade.createOrUpdateActivityExtraction(activityId);
-    return new Response().buildSuccess().toJson();
-  }
-
-  @DELETE
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/activity/{id}")
-  public String deleteActivityExtraction(@PathParam("id") String activityId) {
-    extractionFacade.deleteActivityExtraction(activityId);
-    return new Response().buildSuccess().toJson();
-  }
 
 }
