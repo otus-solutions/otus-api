@@ -16,6 +16,24 @@ public class ActivityExtractionResource {
   @Inject
   private ActivityExtractionFacade activityExtractionFacade;
 
+  @PUT
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/{id}")
+  public String createOrUpdateActivityExtraction(@PathParam("id") String activityId) {
+    activityExtractionFacade.createOrUpdateActivityExtraction(activityId);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @DELETE
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/{id}")
+  public String deleteActivityExtraction(@PathParam("id") String activityId) {
+    activityExtractionFacade.deleteActivityExtraction(activityId);
+    return new Response().buildSuccess().toJson();
+  }
+
   @GET
   @SecuredExtraction
   @Consumes(MediaType.APPLICATION_JSON)
@@ -35,21 +53,12 @@ public class ActivityExtractionResource {
     return new Response().buildSuccess(json).toJson();
   }
 
-  @PUT
+  @POST
   @SecuredExtraction
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/activity/{id}")
-  public String createOrUpdateActivityExtraction(@PathParam("id") String activityId) {
-    activityExtractionFacade.createOrUpdateActivityExtraction(activityId);
-    return new Response().buildSuccess().toJson();
-  }
-
-  @DELETE
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/activity/{id}")
-  public String deleteActivityExtraction(@PathParam("id") String activityId) {
-    activityExtractionFacade.deleteActivityExtraction(activityId);
-    return new Response().buildSuccess().toJson();
+  @Path("/rscript")
+  public byte[] getRscriptSurveyExtraction(String rscriptSurveyExtractionJson) {
+    return activityExtractionFacade.getRscriptSurveyExtraction(rscriptSurveyExtractionJson);
   }
 }
