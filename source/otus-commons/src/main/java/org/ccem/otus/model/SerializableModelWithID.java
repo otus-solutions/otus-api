@@ -12,7 +12,7 @@ public abstract class SerializableModelWithID {
   }
 
   public String toJson(){
-    return serialize(this);
+    return getGsonBuilder().create().toJson(this);
   }
 
   protected static Object deserialize(String json, Class clazz){
