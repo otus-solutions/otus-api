@@ -29,8 +29,5 @@ public class ActivityExtraction extends SerializableModel {
   public void setParticipantData(Participant participant){
     this.activityData.setParticipantData(participant);
   }
-
-  public String toJson(){
-    return SerializableModel.serialize(this);
-  }
+  
 }
