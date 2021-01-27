@@ -10,6 +10,25 @@ import java.net.URL;
 
 public class ExtractionGatewayService {
 
+  public void createOrUpdateActivityExtraction(String activityExtractionJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
+    sendActivityExtractionRequest(new JsonPUTRequestUtility(requestURL, activityExtractionJson));
+  }
+
+  public void deleteActivityExtraction(String surveyId, String activityId) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionDeleteAddress(surveyId, activityId);
+    sendActivityExtractionRequest(new JsonDELETEUtility(requestURL));
+  }
+
+  private void sendActivityExtractionRequest(JsonRequestUtility jsonRequestUtility){
+    try {
+      jsonRequestUtility.finish();
+    } catch (IOException e) {
+      throw new ReadRequestException();
+    }
+  }
+
+
   public GatewayResponse getCsvSurveyExtraction(String surveyId) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getCsvSurveyExtractionAddress(surveyId);
     return getSurveyExtraction(requestURL);
@@ -29,22 +48,14 @@ public class ExtractionGatewayService {
     }
   }
 
-  public void createOrUpdateActivityExtraction(String activityExtractionJson) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
-    sendActivityExtractionRequest(new JsonPUTRequestUtility(requestURL, activityExtractionJson));
-  }
 
-  public void deleteActivityExtraction(String surveyId, String activityId) throws IOException {
-    URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionDeleteAddress(surveyId, activityId);
-    sendActivityExtractionRequest(new JsonDELETEUtility(requestURL));
-  }
-
-  private void sendActivityExtractionRequest(JsonRequestUtility jsonRequestUtility){
+  public GatewayResponse getRscriptSurveyExtraction(String rscriptSurveyExtractionJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getRScriptJsonSurveyExtractionAddress();
     try {
-      jsonRequestUtility.finish();
+      String response = new JsonPOSTUtility(requestURL, rscriptSurveyExtractionJson).finish();
+      return new GatewayResponse().buildSuccess(response);
     } catch (IOException e) {
       throw new ReadRequestException();
     }
   }
-
 }
