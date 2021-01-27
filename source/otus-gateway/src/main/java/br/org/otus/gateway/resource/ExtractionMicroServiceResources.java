@@ -11,8 +11,9 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
   private static final String ACTIVITY_EXTRACTION_RESOURCE = EXTRACTION_SUFFIX + "/activity";
 
   private static final String SURVEY_EXTRACTION_SUFFIX = "/survey";
-  private static final String SURVEY_CSV_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/csv";
-  private static final String SURVEY_JSON_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/json";
+  private static final String CSV_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/csv";
+  private static final String JSON_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/json";
+  private static final String RSCRIPT_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/rscript";
 
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
@@ -27,10 +28,14 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
   }
 
   public URL getCsvSurveyExtractionAddress(String surveyId) throws MalformedURLException {
-    return new URL(getMainAddress() + SURVEY_CSV_EXTRACTION_RESOURCE + "/" + surveyId);
+    return new URL(getMainAddress() + CSV_SURVEY_EXTRACTION_RESOURCE + "/" + surveyId);
   }
 
   public URL getJsonSurveyExtractionAddress(String surveyId) throws MalformedURLException {
-    return new URL(getMainAddress() + SURVEY_JSON_EXTRACTION_RESOURCE + "/" + surveyId);
+    return new URL(getMainAddress() + JSON_SURVEY_EXTRACTION_RESOURCE + "/" + surveyId);
+  }
+
+  public URL getRScriptJsonSurveyExtractionAddress() throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_SURVEY_EXTRACTION_RESOURCE);
   }
 }
