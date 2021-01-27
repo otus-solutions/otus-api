@@ -16,8 +16,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.service.extraction.model.ActivityExtraction;
-import org.ccem.otus.service.extraction.model.Pipeline;
-import org.ccem.otus.service.extraction.model.PipelineDto;
+import org.ccem.otus.service.extraction.model.SurveyExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.inject.Inject;
@@ -38,39 +37,6 @@ public class ActivityExtractionFacade {
   @Inject
   private ParticipantFacade participantFacade;
 
-
-  public byte[] getSurveyActivitiesExtractionAsCsv(String acronym, Integer version) {
-    try {
-      String surveyId = surveyFacade.get(acronym, version).getSurveyID().toHexString();
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getCsvSurveyExtraction(surveyId);
-      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
-      LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
-      return csv;
-    } catch (IOException | DataNotFoundException e) {
-      LOGGER.severe("status: fail, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public ArrayList<LinkedTreeMap> getSurveyActivitiesExtractionAsJson(String acronym, Integer version) {
-    try {
-      String surveyId = surveyFacade.get(acronym, version).getSurveyID().toHexString();
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getJsonSurveyExtraction(surveyId);
-      ArrayList<LinkedTreeMap> response = new GsonBuilder().create().fromJson(
-        (String) gatewayResponse.getData(), ArrayList.class);
-      LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as json");
-      return response;
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: extraction for for survey {" + acronym + ", version " + version + "} as json");
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  private String buildPipeline(String pipelineDtoJson){
-    PipelineDto pipelineDto = PipelineDto.fromJson(pipelineDtoJson);
-    SurveyForm surveyForm = surveyFacade.get(pipelineDto.getSurveyForm().getAcronym(), pipelineDto.getSurveyForm().getVersion());
-    return new Pipeline(surveyForm.getSurveyID().toHexString(), pipelineDto.getRscript()).toJson();
-  }
 
   public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
@@ -118,4 +84,49 @@ public class ActivityExtractionFacade {
     return activityExtraction;
   }
 
+
+  public byte[] getSurveyActivitiesExtractionAsCsv(String acronym, Integer version) {
+    try {
+      String surveyId = findSurveyId(acronym, version);
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getCsvSurveyExtraction(surveyId);
+      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
+      LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
+      return csv;
+    } catch (IOException | DataNotFoundException e) {
+      LOGGER.severe("status: fail, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public ArrayList<LinkedTreeMap> getSurveyActivitiesExtractionAsJson(String acronym, Integer version) {
+    try {
+      String surveyId = findSurveyId(acronym, version);
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getJsonSurveyExtraction(surveyId);
+      ArrayList<LinkedTreeMap> response = new GsonBuilder().create().fromJson(
+        (String) gatewayResponse.getData(), ArrayList.class);
+      LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as json");
+      return response;
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: extraction for for survey {" + acronym + ", version " + version + "} as json");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public byte[] getRscriptSurveyExtraction(String surveyExtractionJson){
+    try {
+      SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
+      surveyExtraction.setSurveyId(findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion()));
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
+      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
+      LOGGER.info("status: success, action: extraction for survey {" + surveyExtractionJson + "}");
+      return csv;
+    } catch (IOException | DataNotFoundException e) {
+      LOGGER.severe("status: fail, action: extraction for survey {" + surveyExtractionJson + "}");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  private String findSurveyId(String acronym, Integer version){
+    return surveyFacade.get(acronym, version).getSurveyID().toHexString();
+  }
 }
