@@ -7,6 +7,7 @@ import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
 import br.org.otus.examUploader.ExamUploadResource;
+import br.org.otus.extraction.rest.ActivityExtractionResource;
 import br.org.otus.extraction.rest.ExtractionResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
@@ -170,6 +171,9 @@ public class EndPointsLoader extends Application {
   @Inject
   private StageResource stageResource;
 
+  @Inject
+  private ActivityExtractionResource activityExtractionResource;
+
   @Override
   public Set<Class<?>> getClasses() {
     Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -212,6 +216,7 @@ public class EndPointsLoader extends Application {
     resources.add(MessageCommunicationResource.class);
     resources.add(ActivitySharingResource.class);
     resources.add(StageResource.class);
+    resources.add(ActivityExtractionResource.class);
 
     return resources;
   }
@@ -259,6 +264,7 @@ public class EndPointsLoader extends Application {
     resources.add(messageCommunicationResource);
     resources.add(activitySharingResource);
     resources.add(stageResource);
+    resources.add(activityExtractionResource);
 
     return resources;
   }

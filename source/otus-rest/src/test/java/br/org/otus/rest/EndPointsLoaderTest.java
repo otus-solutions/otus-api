@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import br.org.otus.extraction.rest.ActivityExtractionResource;
 import br.org.otus.importation.ActivityImportationResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -91,6 +92,8 @@ public class EndPointsLoaderTest {
   private ActivityPermissionResource activityAccessPermissionResource;
   @Mock
   private UserPermissionResource userPermissionResource;
+  @Mock
+  private ActivityExtractionResource activityExtractionResource;
 
   @Test
   public void getClassesMetods_should_check_the_presence_of_classes_within_the_list() {
@@ -121,6 +124,7 @@ public class EndPointsLoaderTest {
     assertTrue(resourcesClasses.contains(ProjectConfigurationResource.class));
     assertTrue(resourcesClasses.contains(ActivityPermissionResource.class));
     assertTrue(resourcesClasses.contains(UserPermissionResource.class));
+    assertTrue(resourcesClasses.contains(ActivityExtractionResource.class));
   }
 
   @Test
@@ -151,5 +155,6 @@ public class EndPointsLoaderTest {
     assertTrue(resourcesSingletons.contains(projectConfigurationResource));
     assertTrue(resourcesSingletons.contains(activityAccessPermissionResource));
     assertTrue(resourcesSingletons.contains(userPermissionResource));
+    assertTrue(resourcesSingletons.contains(activityExtractionResource));
   }
 }
