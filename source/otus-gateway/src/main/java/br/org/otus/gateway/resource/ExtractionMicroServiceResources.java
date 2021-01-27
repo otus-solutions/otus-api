@@ -7,23 +7,15 @@ import java.net.URL;
 
 public class ExtractionMicroServiceResources extends MicroservicesResources {
 
-  private static final String PIPELINE_EXTRACTION_SUFFIX = "/pipeline";
-  private static final String PIPELINE_JSON_EXTRACTION_RESOURCE = PIPELINE_EXTRACTION_SUFFIX + "/json";
-  private static final String PIPELINE_CSV_EXTRACTION_RESOURCE = PIPELINE_EXTRACTION_SUFFIX + "/csv";
-
   private static final String EXTRACTION_SUFFIX = "/extractions";
   private static final String ACTIVITY_EXTRACTION_RESOURCE = EXTRACTION_SUFFIX + "/activity";
 
+  private static final String SURVEY_EXTRACTION_SUFFIX = "/survey";
+  private static final String SURVEY_CSV_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/csv";
+  private static final String SURVEY_JSON_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/json";
+
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
-  }
-
-  public URL getPipelineJsonExtractionAddress() throws MalformedURLException {
-    return new URL(getMainAddress() + PIPELINE_JSON_EXTRACTION_RESOURCE);
-  }
-
-  public URL getPipelineCsvExtractionAddress() throws MalformedURLException {
-    return new URL(getMainAddress() + PIPELINE_CSV_EXTRACTION_RESOURCE);
   }
 
   public URL getActivityExtractionCreateAddress() throws MalformedURLException {
@@ -32,5 +24,13 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
 
   public URL getActivityExtractionDeleteAddress(String surveyId, String activityId) throws MalformedURLException {
     return new URL(getMainAddress() + ACTIVITY_EXTRACTION_RESOURCE + "/" + surveyId + "/" + activityId);
+  }
+
+  public URL getCsvSurveyExtractionAddress(String surveyId) throws MalformedURLException {
+    return new URL(getMainAddress() + SURVEY_CSV_EXTRACTION_RESOURCE + "/" + surveyId);
+  }
+
+  public URL getJsonSurveyExtractionAddress(String surveyId) throws MalformedURLException {
+    return new URL(getMainAddress() + SURVEY_JSON_EXTRACTION_RESOURCE + "/" + surveyId);
   }
 }

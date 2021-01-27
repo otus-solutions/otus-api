@@ -1,22 +1,15 @@
 package br.org.otus.extraction;
 
 import br.org.otus.LoggerTestsParent;
-import br.org.otus.api.ExtractionService;
-import br.org.otus.examUploader.api.ExamUploadFacade;
 import br.org.otus.examUploader.business.extraction.ExamUploadExtration;
-import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.laboratory.extraction.LaboratoryExtraction;
-import br.org.otus.laboratory.participant.api.ParticipantLaboratoryFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
-import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.survey.template.SurveyTemplate;
 import org.junit.Before;
@@ -89,15 +82,15 @@ public class ActivityExtractionFacadeTest extends LoggerTestsParent {
 
   //@Test
   public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
-    when(extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
+    when(extractionGatewayService.getJsonSurveyExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
     when(gatewayResponse.getData()).thenReturn(BYTES);
-    assertEquals(BYTES, extractionFacade.createJsonExtractionFromPipeline(PIPELINE_NAME));
+    assertEquals(BYTES, extractionFacade.getSurveyActivitiesExtractionAsJson(PIPELINE_NAME));
   }
 
   @Test(expected = HttpResponseException.class)
   public void createExtractionFromPipeline_method_should_handle_MalformedURLException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).getPipelineJsonExtraction(PIPELINE_NAME);
-    extractionFacade.createJsonExtractionFromPipeline(PIPELINE_NAME);
+    doThrow(new MalformedURLException()).when(extractionGatewayService).getJsonSurveyExtraction(PIPELINE_NAME);
+    extractionFacade.getSurveyActivitiesExtractionAsJson(PIPELINE_NAME);
   }
 
 

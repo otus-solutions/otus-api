@@ -1,7 +1,6 @@
 package br.org.otus.extraction.rest;
 
 import br.org.otus.extraction.ActivityExtractionFacade;
-import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -18,7 +17,7 @@ public class ActivityExtractionResourceTest {
 
   //@Test
   public void extractFromPipeline_method_should_call_createExtractionFromPipeline_method() {
-    activityExtractionResource.extractJsonFromPipeline(PIPELINE_NAME);
-    Mockito.verify(extractionFacade).createJsonExtractionFromPipeline(PIPELINE_NAME);
+    activityExtractionResource.getSurveyActivitiesExtractionAsJson(PIPELINE_NAME);
+    Mockito.verify(extractionFacade).getSurveyActivitiesExtractionAsJson(PIPELINE_NAME);
   }
 }

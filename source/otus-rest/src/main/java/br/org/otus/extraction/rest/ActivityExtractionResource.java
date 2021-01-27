@@ -16,23 +16,23 @@ public class ActivityExtractionResource {
   @Inject
   private ActivityExtractionFacade activityExtractionFacade;
 
-  @POST
-  @SecuredExtraction
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("/pipeline/json/{pipeline}")
-  public String extractJsonFromPipeline(String pipelineDtoJson) {
-    ArrayList<LinkedTreeMap> json =  activityExtractionFacade.createJsonExtractionFromPipeline(pipelineDtoJson);
-    return new Response().buildSuccess(json).toJson();
-  }
-
-  @POST
+  @GET
   @SecuredExtraction
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/pipeline/csv")
-  public byte[] extractCsvFromPipeline(String pipelineDtoJson) {
-    return activityExtractionFacade.createCsvExtractionFromPipeline(pipelineDtoJson);
+  @Path("/{acronym}/{version}")
+  public byte[] getSurveyActivitiesExtractionAsCsv(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
+    return activityExtractionFacade.getSurveyActivitiesExtractionAsCsv(acronym, version);
+  }
+
+  @GET
+  @SecuredExtraction
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/json/{acronym}/{version}")
+  public String getSurveyActivitiesExtractionAsJson(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
+    ArrayList<LinkedTreeMap> json =  activityExtractionFacade.getSurveyActivitiesExtractionAsJson(acronym, version);
+    return new Response().buildSuccess(json).toJson();
   }
 
   @PUT

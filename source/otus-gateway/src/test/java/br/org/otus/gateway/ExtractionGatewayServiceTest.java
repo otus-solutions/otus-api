@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -71,15 +70,15 @@ public class ExtractionGatewayServiceTest {
 
   @Test
   public void getPipelineExtraction_method_should_return_GatewayResponse() throws IOException {
-    when(extractionMicroServiceResources.getPipelineJsonExtractionAddress()).thenReturn(requestURL);
-    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME));
+    when(extractionMicroServiceResources.getJsonSurveyExtractionAddress()).thenReturn(requestURL);
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getJsonSurveyExtraction(PIPELINE_NAME));
   }
 
   @Test(expected = ReadRequestException.class)
   public void getPipelineExtraction_method_should_throw_ReadRequestException() throws IOException {
-    when(extractionMicroServiceResources.getPipelineJsonExtractionAddress()).thenReturn(requestURL);
+    when(extractionMicroServiceResources.getJsonSurveyExtractionAddress()).thenReturn(requestURL);
     when(jsonPOSTUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.getPipelineJsonExtraction(PIPELINE_NAME);
+    extractionGatewayService.getJsonSurveyExtraction(PIPELINE_NAME);
   }
 
 

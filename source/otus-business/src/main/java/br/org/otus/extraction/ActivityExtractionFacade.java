@@ -39,28 +39,29 @@ public class ActivityExtractionFacade {
   private ParticipantFacade participantFacade;
 
 
-  public ArrayList<LinkedTreeMap> createJsonExtractionFromPipeline(String pipelineName) {
+  public byte[] getSurveyActivitiesExtractionAsCsv(String acronym, Integer version) {
     try {
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineJsonExtraction(pipelineName);
-      ArrayList<LinkedTreeMap> response = new GsonBuilder().create().fromJson(
-        (String) gatewayResponse.getData(), ArrayList.class);
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName + " as json");
-      return response;
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName + " as json");
+      String surveyId = surveyFacade.get(acronym, version).getSurveyID().toHexString();
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getCsvSurveyExtraction(surveyId);
+      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
+      LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
+      return csv;
+    } catch (IOException | DataNotFoundException e) {
+      LOGGER.severe("status: fail, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
-  public byte[] createCsvExtractionFromPipeline(String pipelineDtoJson) {
+  public ArrayList<LinkedTreeMap> getSurveyActivitiesExtractionAsJson(String acronym, Integer version) {
     try {
-      String pipelineJson = buildPipeline(pipelineDtoJson);
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineCsvJsonExtraction(pipelineJson);
-      byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineDtoJson + " as csv");
-      return csv;
-    } catch (IOException | DataNotFoundException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineDtoJson + " as csv");
+      String surveyId = surveyFacade.get(acronym, version).getSurveyID().toHexString();
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getJsonSurveyExtraction(surveyId);
+      ArrayList<LinkedTreeMap> response = new GsonBuilder().create().fromJson(
+        (String) gatewayResponse.getData(), ArrayList.class);
+      LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as json");
+      return response;
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: extraction for for survey {" + acronym + ", version " + version + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
