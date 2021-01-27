@@ -32,14 +32,6 @@ public class ExtractionResource {
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/activity/{acronym}/versions")
-  public String listSurveyVersions(@PathParam("acronym") String acronym) {
-    return new Response().buildSuccess(extractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
-  }
-
-  @GET
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/{acronym}/{version}/attachments")
   public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
     return extractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);

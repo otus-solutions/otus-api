@@ -16,6 +16,15 @@ public class ActivityExtractionResource {
   @Inject
   private ActivityExtractionFacade activityExtractionFacade;
 
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/{acronym}/versions")
+  public String listSurveyVersions(@PathParam("acronym") String acronym) {
+    return new Response().buildSuccess(activityExtractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
+  }
+
   @PUT
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)

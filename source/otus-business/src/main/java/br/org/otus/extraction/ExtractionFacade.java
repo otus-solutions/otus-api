@@ -66,9 +66,7 @@ public class ExtractionFacade {
     }
   }
 
-  public List<Integer> listSurveyVersions(String acronym) {
-    return surveyFacade.listVersions(acronym);
-  }
+
 
   public byte[] createLaboratoryExamsValuesExtraction() {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();

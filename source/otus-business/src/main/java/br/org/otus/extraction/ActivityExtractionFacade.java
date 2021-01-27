@@ -22,6 +22,7 @@ import org.ccem.otus.survey.form.SurveyForm;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ActivityExtractionFacade {
@@ -36,6 +37,11 @@ public class ActivityExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private ParticipantFacade participantFacade;
+
+
+  public List<Integer> listSurveyVersions(String acronym) {
+    return surveyFacade.listVersions(acronym);
+  }
 
 
   public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
