@@ -6,6 +6,7 @@ import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
+import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
@@ -41,6 +42,14 @@ public class ActivityExtractionFacade {
 
   public List<Integer> listSurveyVersions(String acronym) {
     return surveyFacade.listVersions(acronym);
+  }
+
+  public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
+    try {
+      return extractionService.getAttachmentsReport(acronym, version);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
   }
 
 

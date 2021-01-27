@@ -88,13 +88,7 @@ public class ExtractionFacade {
     }
   }
 
-  public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
-    try {
-      return extractionService.getAttachmentsReport(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
+
 
   public byte[] createActivityProgressExtraction(String center) {
     LinkedList<ActivityProgressResultExtraction> progress = activityFacade.getActivityProgressExtraction(center);

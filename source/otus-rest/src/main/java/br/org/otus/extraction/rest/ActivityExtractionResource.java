@@ -25,6 +25,14 @@ public class ActivityExtractionResource {
     return new Response().buildSuccess(activityExtractionFacade.listSurveyVersions(acronym.toUpperCase())).toJson();
   }
 
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/{acronym}/{version}/attachments")
+  public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
+    return activityExtractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);
+  }
+
   @PUT
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)

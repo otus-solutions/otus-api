@@ -32,14 +32,6 @@ public class ExtractionResource {
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/activity/{acronym}/{version}/attachments")
-  public byte[] extractAnnexesReport(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
-    return extractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);
-  }
-
-  @GET
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/activity/progress/{center}")
   public byte[] extractActivitiesProgress(@PathParam("center") String center) {
     return extractionFacade.createActivityProgressExtraction(center);
