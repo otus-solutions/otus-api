@@ -8,6 +8,10 @@ public abstract class SerializableModel {
     return getGsonBuilder().create().toJson(object);
   }
 
+  public String toJson(){
+    return getGsonBuilder().create().toJson(this);
+  }
+
   protected static Object deserialize(String json, Class clazz){
     return getGsonBuilder().create().fromJson(json, clazz);
   }
