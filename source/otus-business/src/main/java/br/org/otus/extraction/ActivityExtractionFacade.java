@@ -74,7 +74,6 @@ public class ActivityExtractionFacade {
     return fileUploaderFacade.downloadFiles(oids);
   }
 
-
   public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
       new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).toJson());
@@ -102,25 +101,26 @@ public class ActivityExtractionFacade {
     }
   }
 
-  private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException {
-    SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded()){
-      throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
-    }
-    if(!surveyActivity.couldBeExtracted()){
-      throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
-    }
-    SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
-    return new ActivityExtraction(surveyForm, surveyActivity);
+  public void synchronizeAllActivityExtractions(){
+    surveyFacade.listAllUndiscarded().stream().forEach(surveyForm -> {
+
+    });
   }
 
-  private ActivityExtraction buildActivityExtractionModelForCreateOrUpdate(String activityId) throws ValidationException {
-    ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
-    Participant participant = participantFacade.getByRecruitmentNumber(activityExtraction.getActivityData().getRecruitmentNumber());
-    activityExtraction.setParticipantData(participant);
-    return activityExtraction;
+  public void synchronizeSurveyActivityExtractions(String acronym, Integer version){
+    try {
+      String surveyId = findSurveyId(acronym, version);
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getSurveyActivityIdsWithExtraction(surveyId);
+      ArrayList<String> activitiesIdsWithExtraction = new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
+      activityFacade.getActivityIds(acronym, version, activitiesIdsWithExtraction).stream().forEach(activityOid -> {
+        createOrUpdateActivityExtraction(activityOid.toHexString());
+      });
+      LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
   }
-
 
   public byte[] getSurveyActivitiesExtractionAsCsv(String acronym, Integer version) {
     try {
@@ -161,6 +161,26 @@ public class ActivityExtractionFacade {
       LOGGER.severe("status: fail, action: extraction for survey {" + surveyExtractionJson + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
+  }
+
+
+  private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException {
+    SurveyActivity surveyActivity = activityFacade.getByID(activityId);
+    if(surveyActivity.isDiscarded()){
+      throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
+    }
+    if(!surveyActivity.couldBeExtracted()){
+      throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
+    }
+    SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
+    return new ActivityExtraction(surveyForm, surveyActivity);
+  }
+
+  private ActivityExtraction buildActivityExtractionModelForCreateOrUpdate(String activityId) throws ValidationException {
+    ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
+    Participant participant = participantFacade.getByRecruitmentNumber(activityExtraction.getActivityData().getRecruitmentNumber());
+    activityExtraction.setParticipantData(participant);
+    return activityExtraction;
   }
 
   private String findSurveyId(String acronym, Integer version){
