@@ -14,6 +14,7 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
   private static final String CSV_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/csv";
   private static final String JSON_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/json";
   private static final String RSCRIPT_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/rscript";
+  private static final String SURVEY_ACTIVITIES_IDS_WITH_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/get-survey-activities-ids";
 
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
@@ -25,6 +26,10 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
 
   public URL getActivityExtractionDeleteAddress(String surveyId, String activityId) throws MalformedURLException {
     return new URL(getMainAddress() + ACTIVITY_EXTRACTION_RESOURCE + "/" + surveyId + "/" + activityId);
+  }
+
+  public URL getSurveyActivityIdsWithExtractionAddress(String surveyId) throws MalformedURLException {
+    return new URL(getMainAddress() + SURVEY_ACTIVITIES_IDS_WITH_EXTRACTION_RESOURCE + "/" + surveyId);
   }
 
   public URL getCsvSurveyExtractionAddress(String surveyId) throws MalformedURLException {
