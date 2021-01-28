@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
+import com.google.gson.JsonSyntaxException;
 import org.bson.Document;
 
 import com.google.gson.GsonBuilder;
@@ -15,6 +17,8 @@ import com.google.gson.GsonBuilder;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RequestUtility {
+
+  private static final String EXPECTED_BEGIN_ARRAY_PREFIX_MESSAGE = "Expected BEGIN_ARRAY";
 
   public static String getString(HttpURLConnection httpConn) throws IOException {
     String response;
@@ -32,7 +36,19 @@ public class RequestUtility {
 
     response = stringBuilder.toString();
     httpConn.disconnect();
-    return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, Document.class).get("data"));
+
+    try{
+      return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, Document.class).get("data"));
+    }
+    catch (JsonSyntaxException e){
+      if(!e.getMessage().contains(EXPECTED_BEGIN_ARRAY_PREFIX_MESSAGE)){
+        throw e;
+      }
+      return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, ArrayList.class));
+    }
+    catch(Exception e){
+      throw e;
+    }
   }
 
   public static Object getErrorContent(HttpURLConnection httpConn) throws IOException {
