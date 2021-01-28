@@ -1,7 +1,5 @@
 package br.org.otus.extraction.rest;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
