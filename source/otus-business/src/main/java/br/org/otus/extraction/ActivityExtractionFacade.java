@@ -16,13 +16,17 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.service.extraction.ActivityProgressExtraction;
+import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
 import org.ccem.otus.service.extraction.model.ActivityExtraction;
+import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.extraction.model.SurveyExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -47,6 +51,17 @@ public class ActivityExtractionFacade {
   public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
     try {
       return extractionService.getAttachmentsReport(acronym, version);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public byte[] createActivityProgressExtraction(String center) {
+    LinkedList<ActivityProgressResultExtraction> progress = activityFacade.getActivityProgressExtraction(center);
+    ActivityProgressRecordsFactory extraction = new ActivityProgressRecordsFactory(progress);
+    ActivityProgressExtraction extractor = new ActivityProgressExtraction(extraction);
+    try {
+      return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }

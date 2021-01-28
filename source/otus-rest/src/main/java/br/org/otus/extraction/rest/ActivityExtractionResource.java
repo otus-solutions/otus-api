@@ -33,6 +33,15 @@ public class ActivityExtractionResource {
     return activityExtractionFacade.createAttachmentsReportExtraction(acronym.toUpperCase(), version);
   }
 
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/progress/{center}")
+  public byte[] extractActivitiesProgress(@PathParam("center") String center) {
+    return activityExtractionFacade.createActivityProgressExtraction(center);
+  }
+
+
   @PUT
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)

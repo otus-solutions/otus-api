@@ -29,14 +29,6 @@ public class ExtractionResource {
   private SecurityContext securityContext;
 
 
-  @GET
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/activity/progress/{center}")
-  public byte[] extractActivitiesProgress(@PathParam("center") String center) {
-    return extractionFacade.createActivityProgressExtraction(center);
-  }
-
   @POST
   @SecuredExtraction
   @Path("/activity/attachments")

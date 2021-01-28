@@ -90,16 +90,7 @@ public class ExtractionFacade {
 
 
 
-  public byte[] createActivityProgressExtraction(String center) {
-    LinkedList<ActivityProgressResultExtraction> progress = activityFacade.getActivityProgressExtraction(center);
-    ActivityProgressRecordsFactory extraction = new ActivityProgressRecordsFactory(progress);
-    ActivityProgressExtraction extractor = new ActivityProgressExtraction(extraction);
-    try {
-      return extractionService.createExtraction(extractor);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
+
 
   public byte[] downloadFiles(ArrayList<String> oids) {
     return fileUploaderFacade.downloadFiles(oids);
