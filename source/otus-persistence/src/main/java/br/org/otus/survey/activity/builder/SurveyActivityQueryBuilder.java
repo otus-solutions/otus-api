@@ -8,6 +8,21 @@ import java.util.List;
 
 public class SurveyActivityQueryBuilder {
 
+  public static final String ACRONYM_PATH = "surveyForm.acronym";
+  public static final String VERSION_PATH = "surveyForm.version";
+  public static final String DISCARDED_PATH = "isDiscarded";
+  public static final String TEMPLATE_PATH = "surveyForm.surveyTemplate";
+  public static final String RECRUITMENT_NUMBER_PATH = "participantData.recruitmentNumber";
+  public static final String CATEGORY_NAME_PATH = "category.name";
+  public static final String CATEGORY_LABEL_PATH = "category.label";
+  public static final String IS_DISCARDED = "isDiscarded";
+  public static final String ID_PATH = "_id";
+  public static final String STATUS_HISTORY_NAME = "statusHistory.name";
+  public static final String FINALIZED = "FINALIZED";
+  private static final String SET = "$set";
+  private static final String PARTICIPANT_DATA_EMAIL = "participantData.email";
+  private static final String STAGE_PATH = "stageId";
+
   public ArrayList<Bson> getSurveyActivityListByStageAndAcronymQuery(long rn, List<String> permittedSurveys){
 
     ArrayList<Bson> pipeline = new ArrayList<>();
@@ -104,6 +119,32 @@ public class SurveyActivityQueryBuilder {
       "            $group:{\n" +
       "                _id: \"$_id.stageId\",\n" +
       "                acronyms: { $push: \"$$ROOT\" }\n" +
+      "            }\n" +
+      "        }"));
+
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "            $sort: { _id: 1 }\n" +
+      "        }"));
+
+    return pipeline;
+  }
+
+  public static ArrayList<Bson> getActivityIdsQuery(String acronym, Integer version, Boolean isDiscardedValue,
+                                             List<String> activityIdsToExcludeOfQuery){
+
+    String isDiscardedExpression = "";
+    if(isDiscardedValue != null){
+      isDiscardedExpression = "\"isDiscarded\": " + isDiscardedValue.toString() +",\n";
+    }
+
+    ArrayList<Bson> pipeline = new ArrayList<>();
+
+    pipeline.add(ParseQuery.toDocument("{\n" +
+      "            $match: {\n" +
+      "                " + isDiscardedExpression +
+      "                \""+ACRONYM_PATH+"\": "+acronym+",\n" +
+      "                \""+VERSION_PATH+"\": "+version+",\n" +
+      "                \""+ID_PATH+"\": { $not: { $in: " + activityIdsToExcludeOfQuery.toString() + "} }" +
       "            }\n" +
       "        }"));
 
