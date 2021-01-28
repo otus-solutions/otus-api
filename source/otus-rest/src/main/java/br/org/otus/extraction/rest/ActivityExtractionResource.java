@@ -41,6 +41,17 @@ public class ActivityExtractionResource {
     return activityExtractionFacade.createActivityProgressExtraction(center);
   }
 
+  @POST
+  @SecuredExtraction
+  @Path("/attachments")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
+    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(activityExtractionFacade.downloadFiles(oids));
+    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
+    return builder.build();
+  }
+
 
   @PUT
   @SecuredExtraction

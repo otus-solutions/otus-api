@@ -2,6 +2,7 @@ package br.org.otus.extraction;
 
 import br.org.otus.api.CsvExtraction;
 import br.org.otus.api.ExtractionService;
+import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.participant.api.ParticipantFacade;
@@ -39,6 +40,8 @@ public class ActivityExtractionFacade {
   @Inject
   private SurveyFacade surveyFacade;
   @Inject
+  private FileUploaderFacade fileUploaderFacade;
+  @Inject
   private ExtractionService extractionService;
   @Inject
   private ParticipantFacade participantFacade;
@@ -65,6 +68,10 @@ public class ActivityExtractionFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
+  }
+
+  public byte[] downloadFiles(ArrayList<String> oids) {
+    return fileUploaderFacade.downloadFiles(oids);
   }
 
 

@@ -29,18 +29,6 @@ public class ExtractionResource {
   private SecurityContext securityContext;
 
 
-  @POST
-  @SecuredExtraction
-  @Path("/activity/attachments")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public javax.ws.rs.core.Response fetch(ArrayList<String> oids) {
-    javax.ws.rs.core.Response.ResponseBuilder builder = javax.ws.rs.core.Response.ok(extractionFacade.downloadFiles(oids));
-    builder.header("Content-Disposition", "attachment; filename=" + "file-extraction.zip");
-    return builder.build();
-  }
-
-
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -98,6 +86,5 @@ public class ExtractionResource {
     String extractionToken = userFacade.getExtractionToken(userEmail);
     return new Response().buildSuccess(extractionToken).toJson();
   }
-
 
 }

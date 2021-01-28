@@ -43,8 +43,6 @@ public class ExtractionFacade {
   @Inject
   private ParticipantLaboratoryFacade participantLaboratoryFacade;
   @Inject
-  private FileUploaderFacade fileUploaderFacade;
-  @Inject
   private ExtractionService extractionService;
   @Inject
   private DataSourceService dataSourceService;
@@ -66,8 +64,6 @@ public class ExtractionFacade {
     }
   }
 
-
-
   public byte[] createLaboratoryExamsValuesExtraction() {
     LinkedList<ParticipantExamUploadResultExtraction> records = examUploadFacade.getExamResultsExtractionValues();
     ExamUploadExtration extractor = new ExamUploadExtration(records);
@@ -86,14 +82,6 @@ public class ExtractionFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build("Results to extraction not found."));
     }
-  }
-
-
-
-
-
-  public byte[] downloadFiles(ArrayList<String> oids) {
-    return fileUploaderFacade.downloadFiles(oids);
   }
 
 }
