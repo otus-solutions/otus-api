@@ -12,22 +12,23 @@ public class ExtractionGatewayService {
 
   public void createOrUpdateActivityExtraction(String activityExtractionJson) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionCreateAddress();
-    sendActivityExtractionRequest(new JsonPUTRequestUtility(requestURL, activityExtractionJson));
+    sendRequest(new JsonPUTRequestUtility(requestURL, activityExtractionJson));
   }
 
   public void deleteActivityExtraction(String surveyId, String activityId) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getActivityExtractionDeleteAddress(surveyId, activityId);
-    sendActivityExtractionRequest(new JsonDELETEUtility(requestURL));
+    sendRequest(new JsonDELETEUtility(requestURL));
   }
 
-  private void sendActivityExtractionRequest(JsonRequestUtility jsonRequestUtility){
+  public GatewayResponse getSurveyActivityIdsWithExtraction(String surveyId) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getSurveyActivityIdsWithExtractionAddress(surveyId);
     try {
-      jsonRequestUtility.finish();
+      String response = new JsonGETUtility(requestURL).finish();
+      return new GatewayResponse().buildSuccess(response);
     } catch (IOException e) {
       throw new ReadRequestException();
     }
   }
-
 
   public GatewayResponse getCsvSurveyExtraction(String surveyId) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getCsvSurveyExtractionAddress(surveyId);
@@ -39,16 +40,6 @@ public class ExtractionGatewayService {
     return getSurveyExtraction(requestURL);
   }
 
-  private GatewayResponse getSurveyExtraction(URL requestURL){
-    try {
-      String response = new JsonGETUtility(requestURL).finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException e) {
-      throw new ReadRequestException();
-    }
-  }
-
-
   public GatewayResponse getRscriptSurveyExtraction(String rscriptSurveyExtractionJson) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getRScriptJsonSurveyExtractionAddress();
     try {
@@ -56,6 +47,24 @@ public class ExtractionGatewayService {
       return new GatewayResponse().buildSuccess(response);
     } catch (IOException e) {
       throw new ReadRequestException();
+    }
+  }
+
+
+  private void sendRequest(JsonRequestUtility jsonRequestUtility){
+    try {
+      jsonRequestUtility.finish();
+    } catch (IOException e) {
+      throw new ReadRequestException();
+    }
+  }
+
+  private GatewayResponse getSurveyExtraction(URL requestURL){
+    try {
+      String response = new JsonGETUtility(requestURL).finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (Exception e) {
+      throw new ReadRequestException(e.getMessage(), e.getCause());
     }
   }
 }
