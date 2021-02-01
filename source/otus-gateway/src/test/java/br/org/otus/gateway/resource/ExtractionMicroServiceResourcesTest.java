@@ -43,6 +43,14 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
   }
 
   @Test
+  public void getSurveyActivityIdsWithExtractionAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/survey/get-survey-activities-ids/" + SURVEY_ID),
+      resources.getSurveyActivityIdsWithExtractionAddress(SURVEY_ID)
+    );
+  }
+
+  @Test
   public void getCsvSurveyExtractionAddress_method_should_return_expected_url() throws MalformedURLException {
     Assert.assertEquals(
       new URL("http://" + HOST + ":" + PORT + "/survey/csv/" + SURVEY_ID),
