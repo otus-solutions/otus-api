@@ -71,7 +71,6 @@ public class ExtractionGatewayServiceTest {
     PowerMockito.whenNew(GatewayResponse.class).withNoArguments().thenReturn(gatewayResponse);
   }
 
-
   @Test
   public void createActivityExtraction_method_should_send_POST_request() throws IOException {
     when(extractionMicroServiceResources.getActivityExtractionCreateAddress()).thenReturn(requestURL);
@@ -85,7 +84,6 @@ public class ExtractionGatewayServiceTest {
     when(jsonPUTUtility.finish()).thenThrow(new IOException());
     extractionGatewayService.createOrUpdateActivityExtraction(ACTIVITY_EXTRACTION_JSON);
   }
-
 
   @Test
   public void deleteActivityExtraction_method_should_send_POST_request() throws IOException {
@@ -101,6 +99,19 @@ public class ExtractionGatewayServiceTest {
     extractionGatewayService.deleteActivityExtraction(SURVEY_ID, ACTIVITY_ID);
   }
 
+  @Test
+  public void getSurveyActivityIdsWithExtraction_method_should_send_POST_request() throws IOException {
+    when(extractionMicroServiceResources.getSurveyActivityIdsWithExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
+    extractionGatewayService.getSurveyActivityIdsWithExtraction(SURVEY_ID);
+    verify(jsonGETUtility, Mockito.times(1)).finish();
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void getSurveyActivityIdsWithExtraction_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getSurveyActivityIdsWithExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
+    when(jsonGETUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.getSurveyActivityIdsWithExtraction(SURVEY_ID);
+  }
 
   @Test
   public void getCsvSurveyExtraction_method_should_return_GatewayResponse() throws IOException {
@@ -115,7 +126,6 @@ public class ExtractionGatewayServiceTest {
     extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID);
   }
 
-
   @Test
   public void getJsonSurveyExtractionAddress_method_should_return_GatewayResponse() throws IOException {
     when(extractionMicroServiceResources.getJsonSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
@@ -128,7 +138,6 @@ public class ExtractionGatewayServiceTest {
     when(jsonGETUtility.finish()).thenThrow(new IOException());
     extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID);
   }
-
 
   @Test
   public void getRscriptSurveyExtraction_method_should_return_GatewayResponse() throws IOException {
