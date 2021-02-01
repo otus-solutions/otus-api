@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.LocalDateTime;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityExtractionActivityDataTest {
@@ -64,36 +64,36 @@ public class ActivityExtractionActivityDataTest {
 
   @Before
   public void setUp(){
-    PowerMockito.doReturn(new ObjectId(ACTIVITY_ID)).when(surveyActivity).getActivityID();
+    doReturn(new ObjectId(ACTIVITY_ID)).when(surveyActivity).getActivityID();
 
-    PowerMockito.doReturn(ACRONYM).when(surveyForm).getAcronym();
-    PowerMockito.doReturn(VERSION).when(surveyForm).getVersion();
-    PowerMockito.doReturn(surveyForm).when(surveyActivity).getSurveyForm();
+    doReturn(ACRONYM).when(surveyForm).getAcronym();
+    doReturn(VERSION).when(surveyForm).getVersion();
+    doReturn(surveyForm).when(surveyActivity).getSurveyForm();
 
-    PowerMockito.doReturn(MODE).when(surveyActivity).getMode();
-    PowerMockito.doReturn(CATEGORY).when(surveyActivity).getCategory();
+    doReturn(MODE).when(surveyActivity).getMode();
+    doReturn(CATEGORY).when(surveyActivity).getCategory();
 
-    PowerMockito.doReturn(Optional.empty()).when(surveyActivity).getLastInterview();
+    doReturn(Optional.empty()).when(surveyActivity).getLastInterview();
 
-    PowerMockito.doReturn(ActivityStatusOptions.CREATED.getName()).when(activityStatus).getName();
-    PowerMockito.doReturn(CURR_STATUS_DATE).when(activityStatus).getDate();
-    PowerMockito.doReturn(CURR_STATUS_DATE).when(creationActivityStatus).getDate();
+    doReturn(ActivityStatusOptions.CREATED.getName()).when(activityStatus).getName();
+    doReturn(CURR_STATUS_DATE).when(activityStatus).getDate();
+    doReturn(CURR_STATUS_DATE).when(creationActivityStatus).getDate();
 
-    PowerMockito.doReturn(Optional.of(activityStatus)).when(surveyActivity).getCurrentStatus();
-    PowerMockito.doReturn(creationActivityStatus).when(surveyActivity).getCreationStatus();
+    doReturn(Optional.of(activityStatus)).when(surveyActivity).getCurrentStatus();
+    doReturn(creationActivityStatus).when(surveyActivity).getCreationStatus();
 
-    PowerMockito.doReturn(EXTERNAL_ID).when(surveyActivity).getExternalID();
+    doReturn(EXTERNAL_ID).when(surveyActivity).getExternalID();
 
-    PowerMockito.doReturn(fillContainer).when(surveyActivity).getFillContainer();
-    PowerMockito.doReturn(FILLING_LIST).when(fillContainer).getFillingList();
+    doReturn(fillContainer).when(surveyActivity).getFillContainer();
+    doReturn(FILLING_LIST).when(fillContainer).getFillingList();
 
-    PowerMockito.doReturn(participant).when(surveyActivity).getParticipantData();
-    PowerMockito.doReturn(RECRUITMENT_NUMBER).when(participant).getRecruitmentNumber();
-    PowerMockito.doReturn(fieldCenter).when(participant).getFieldCenter();
-    PowerMockito.doReturn(ACTIVITY_CENTER_ACRONYM).when(fieldCenter).getAcronym();
+    doReturn(participant).when(surveyActivity).getParticipantData();
+    doReturn(RECRUITMENT_NUMBER).when(participant).getRecruitmentNumber();
+    doReturn(fieldCenter).when(participant).getFieldCenter();
+    doReturn(ACTIVITY_CENTER_ACRONYM).when(fieldCenter).getAcronym();
 
     navigationTracker.items = new ArrayList<>();
-    PowerMockito.doReturn(navigationTracker).when(surveyActivity).getNavigationTracker();
+    doReturn(navigationTracker).when(surveyActivity).getNavigationTracker();
 
     activityExtractionActivityData = new ActivityExtractionActivityData(surveyActivity);
   }
