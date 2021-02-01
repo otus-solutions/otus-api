@@ -74,15 +74,6 @@ public class ActivityExtractionResource {
   @PUT
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/sync")
-  public String syncAllExtractions() {
-    activityExtractionFacade.synchronizeAllActivityExtractions();
-    return new Response().buildSuccess().toJson();
-  }
-
-  @PUT
-  @SecuredExtraction
-  @Produces(MediaType.APPLICATION_JSON)
   @Path("/sync/{acronym}/{version}")
   public String syncSurveyExtractions(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
     activityExtractionFacade.synchronizeSurveyActivityExtractions(acronym, version);

@@ -103,12 +103,6 @@ public class ActivityExtractionFacade {
     }
   }
 
-  public void synchronizeAllActivityExtractions(){
-    surveyFacade.listAllUndiscarded().stream().forEach(surveyForm -> {
-
-    });
-  }
-
   public void synchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
       allowCreateExtractionForAnyActivity = true;
