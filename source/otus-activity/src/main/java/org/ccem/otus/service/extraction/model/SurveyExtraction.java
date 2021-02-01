@@ -15,6 +15,10 @@ public class SurveyExtraction extends SerializableModelWithID {
     RscriptName = rscriptName;
   }
 
+  public String getSurveyId() {
+    return surveyId;
+  }
+
   public String getSurveyAcronym() {
     return surveyAcronym;
   }
