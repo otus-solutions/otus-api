@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -55,13 +54,11 @@ public class ActivityExtractionFacadeTest {
   private static final String ACTIVITY_ID_WITHOUT_EXTRACTION = "5e0658135b4ff40f8916d2b7";
   private static final Long RECRUITMENT_NUMBER = 1234567L;
   private static final ArrayList<SurveyForm> SURVEYS = new ArrayList<>();
-  private static final String CSV_CONTENT = "{}";
   private static final byte[] CSV_BYTES = null;
   private static final String EXTRACTIONS_JSON = "[{}]";
   private static final int EXTRACTIONS_JSON_SIZE = 1;
   private static final byte[] BYTES = new byte[1];
   private static final String SURVEY_EXTRACTION_JSON = "{}";
-  private static final String R_SCRIPT_NAME = "rscript";
 
   @InjectMocks
   private ActivityExtractionFacade activityExtractionFacade;
@@ -179,7 +176,6 @@ public class ActivityExtractionFacadeTest {
     verify(fileUploaderFacade, Mockito.times(1)).downloadFiles(oids);
     assertEquals(BYTES, result);
   }
-
 
   @Test
   public void createOrUpdateActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
