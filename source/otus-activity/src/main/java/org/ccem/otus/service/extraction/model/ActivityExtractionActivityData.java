@@ -3,7 +3,6 @@ package org.ccem.otus.service.extraction.model;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
-import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
 import org.ccem.otus.model.survey.activity.mode.ActivityMode;
 import org.ccem.otus.model.survey.activity.navigation.NavigationTrackingItem;
@@ -77,7 +76,7 @@ public class ActivityExtractionActivityData {
     }
 
     this.externalId = surveyActivity.getExternalID();
-    this.fillingList = serialize(surveyActivity.getFillContainer().getFillingList());
+    this.fillingList = serializeAnswers(surveyActivity.getFillContainer().getFillingList());
 
     this.navigationTrackingItems = surveyActivity.getNavigationTracker().items
       .stream().filter(item -> item.state.equals(String.valueOf(NavigationTrackingItemStatuses.SKIPPED)))
@@ -99,7 +98,7 @@ public class ActivityExtractionActivityData {
     this.participantFieldCenter = participant.getFieldCenter().getAcronym();
   }
 
-  public String serialize(List<QuestionFill> fillingList) {
+  private String serializeAnswers(List<QuestionFill> fillingList) {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     return builder.create().toJson(fillingList);
