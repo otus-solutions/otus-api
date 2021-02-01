@@ -35,7 +35,7 @@ public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
 
-  private static boolean allowCreateExtractionForAnyActivity = false;
+  private boolean allowCreateExtractionForAnyActivity = false;
 
   @Inject
   private ActivityFacade activityFacade;
