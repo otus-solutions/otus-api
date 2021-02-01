@@ -80,7 +80,7 @@ public class ActivityExtractionActivityData {
     this.fillingList = serialize(surveyActivity.getFillContainer().getFillingList());
 
     this.navigationTrackingItems = surveyActivity.getNavigationTracker().items
-      .stream().filter(item -> item.getState().equals(String.valueOf(NavigationTrackingItemStatuses.SKIPPED)))
+      .stream().filter(item -> item.state.equals(String.valueOf(NavigationTrackingItemStatuses.SKIPPED)))
       .collect(Collectors.toList());
 
     this.recruitmentNumber = surveyActivity.getParticipantData().getRecruitmentNumber();
