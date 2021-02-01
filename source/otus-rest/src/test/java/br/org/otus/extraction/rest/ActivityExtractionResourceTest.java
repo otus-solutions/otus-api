@@ -72,6 +72,12 @@ public class ActivityExtractionResourceTest extends ResourceTestsParent {
   }
 
   @Test
+  public void syncSurveyExtractions_method_should_call_facade_deleteActivityExtraction_method() {
+    activityExtractionResource.syncSurveyExtractions(ACRONYM, VERSION);
+    Mockito.verify(activityExtractionFacade, Mockito.times(1)).synchronizeSurveyActivityExtractions(ACRONYM, VERSION);
+  }
+
+  @Test
   public void getSurveyActivitiesExtractionAsCsv_method_should_call_facade_getSurveyActivitiesExtractionAsCsv_method() {
     activityExtractionResource.getSurveyActivitiesExtractionAsCsv(ACRONYM, VERSION);
     Mockito.verify(activityExtractionFacade, Mockito.times(1)).getSurveyActivitiesExtractionAsCsv(ACRONYM, VERSION);
