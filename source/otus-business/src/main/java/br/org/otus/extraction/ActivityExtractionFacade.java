@@ -35,6 +35,8 @@ public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
 
+  private static boolean allowCreateExtractionForAnyActivity = false;
+
   @Inject
   private ActivityFacade activityFacade;
   @Inject
@@ -109,16 +111,20 @@ public class ActivityExtractionFacade {
 
   public void synchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
+      allowCreateExtractionForAnyActivity = true;
       String surveyId = findSurveyId(acronym, version);
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getSurveyActivityIdsWithExtraction(surveyId);
       ArrayList<String> activitiesIdsWithExtraction = new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
-      activityFacade.getActivityIds(acronym, version, activitiesIdsWithExtraction).stream().forEach(activityOid -> {
-        createOrUpdateActivityExtraction(activityOid.toHexString());
-      });
+      activityFacade.getActivityIds(acronym, version, activitiesIdsWithExtraction).stream()
+        .filter(activityOid -> !activitiesIdsWithExtraction.contains(activityOid.toHexString()))
+        .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
     } catch (IOException e) {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+    finally {
+      allowCreateExtractionForAnyActivity = false;
     }
   }
 
@@ -166,10 +172,10 @@ public class ActivityExtractionFacade {
 
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded()){
+    if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
-    if(!surveyActivity.couldBeExtracted()){
+    if(!surveyActivity.couldBeExtracted() && !allowCreateExtractionForAnyActivity){
       throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
     }
     SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
