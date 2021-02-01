@@ -46,9 +46,6 @@ public class RequestUtility {
       }
       return new GsonBuilder().create().toJson(new GsonBuilder().create().fromJson(response, ArrayList.class));
     }
-    catch(Exception e){
-      throw e;
-    }
   }
 
   public static Object getErrorContent(HttpURLConnection httpConn) throws IOException {
