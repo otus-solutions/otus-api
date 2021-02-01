@@ -116,14 +116,14 @@ public class ExtractionGatewayServiceTest {
   @Test
   public void getCsvSurveyExtraction_method_should_return_GatewayResponse() throws IOException {
     when(extractionMicroServiceResources.getCsvSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
-    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID));
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getCsvSurveyExtraction(SURVEY_ID));
   }
 
   @Test(expected = ReadRequestException.class)
   public void getCsvSurveyExtraction_method_should_throw_ReadRequestException() throws IOException {
     when(extractionMicroServiceResources.getCsvSurveyExtractionAddress(SURVEY_ID)).thenReturn(requestURL);
     when(jsonGETUtility.finish()).thenThrow(new IOException());
-    extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID);
+    extractionGatewayService.getCsvSurveyExtraction(SURVEY_ID);
   }
 
   @Test
