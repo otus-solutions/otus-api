@@ -130,21 +130,26 @@ public class SurveyActivityQueryBuilder {
   }
 
   public static ArrayList<Bson> getActivityIdsQuery(String acronym, Integer version, Boolean isDiscardedValue,
-                                             List<String> activityIdsToExcludeOfQuery){
+                                                    List<String> activityIdsToExcludeOfQuery){
+
+    String idsToExcludeExpression = "";
+    if(activityIdsToExcludeOfQuery != null && !activityIdsToExcludeOfQuery.isEmpty()){
+      idsToExcludeExpression = "\""+ID_PATH+"\": { $not: { $in: " + activityIdsToExcludeOfQuery.toString() + "} },\n";
+    }
 
     String isDiscardedExpression = "";
     if(isDiscardedValue != null){
-      isDiscardedExpression = "\"isDiscarded\": " + isDiscardedValue.toString() +",\n";
+      isDiscardedExpression = "\""+DISCARDED_PATH+"\": " + isDiscardedValue.toString() +",\n";
     }
 
     ArrayList<Bson> pipeline = new ArrayList<>();
 
     pipeline.add(ParseQuery.toDocument("{\n" +
       "            $match: {\n" +
+      "                " + idsToExcludeExpression +
       "                " + isDiscardedExpression +
-      "                \""+ACRONYM_PATH+"\": "+acronym+",\n" +
-      "                \""+VERSION_PATH+"\": "+version+",\n" +
-      "                \""+ID_PATH+"\": { $not: { $in: " + activityIdsToExcludeOfQuery.toString() + "} }" +
+      "                \""+ACRONYM_PATH+"\": "+ acronym + ",\n" +
+      "                \""+VERSION_PATH+"\": "+ version +
       "            }\n" +
       "        }"));
 
