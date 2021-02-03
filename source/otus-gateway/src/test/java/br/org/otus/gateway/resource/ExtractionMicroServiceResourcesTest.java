@@ -17,6 +17,7 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
 
   private static final String SURVEY_ID = "123";
   private static final String ACTIVITY_ID = "4567";
+  private static final String R_SCRIPT_NAME = "script";
 
   private ExtractionMicroServiceResources resources;
 
@@ -65,6 +66,32 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
       resources.getJsonSurveyExtractionAddress(SURVEY_ID)
     );
   }
+
+
+  @Test
+  public void getRScriptCreationAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/rscript/create"),
+      resources.getRScriptCreationAddress()
+    );
+  }
+
+  @Test
+  public void getRScriptGetterAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/rscript/" + R_SCRIPT_NAME),
+      resources.getRScriptGetterAddress(R_SCRIPT_NAME)
+    );
+  }
+
+  @Test
+  public void getRScriptDeleteAddress_method_should_return_expected_url() throws MalformedURLException {
+    Assert.assertEquals(
+      new URL("http://" + HOST + ":" + PORT + "/rscript/" + R_SCRIPT_NAME),
+      resources.getRScriptDeleteAddress(R_SCRIPT_NAME)
+    );
+  }
+
 
   @Test
   public void getRScriptJsonSurveyExtractionAddress_method_should_return_expected_url() throws MalformedURLException {
