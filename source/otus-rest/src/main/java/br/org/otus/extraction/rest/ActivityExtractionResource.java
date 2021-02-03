@@ -80,6 +80,24 @@ public class ActivityExtractionResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @PUT
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/sync-force/{acronym}/{version}")
+  public String forceSyncSurveyExtractions(@PathParam("acronym") String acronym, @PathParam("version") Integer version) {
+    activityExtractionFacade.forceSynchronizeSurveyActivityExtractions(acronym, version);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @PUT
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/force/{id}")
+  public String forceCreateOrUpdateActivityExtraction(@PathParam("id") String activityId) {
+    activityExtractionFacade.forceCreateOrUpdateActivityExtraction(activityId);
+    return new Response().buildSuccess().toJson();
+  }
+
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)

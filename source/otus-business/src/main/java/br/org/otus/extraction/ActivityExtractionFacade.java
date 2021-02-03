@@ -88,6 +88,19 @@ public class ActivityExtractionFacade {
     }
   }
 
+  public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
+    try {
+      allowCreateExtractionForAnyActivity = true;
+      createOrUpdateActivityExtraction(activityId);
+    }
+    catch (Exception e) {
+      throw e;
+    }
+    finally{
+      allowCreateExtractionForAnyActivity = false;
+    }
+  }
+
   public void deleteActivityExtraction(String activityId) {
     try {
       ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
@@ -114,6 +127,21 @@ public class ActivityExtractionFacade {
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
     } catch (IOException e) {
+      LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+    finally {
+      allowCreateExtractionForAnyActivity = false;
+    }
+  }
+
+  public void forceSynchronizeSurveyActivityExtractions(String acronym, Integer version){
+    try {
+      allowCreateExtractionForAnyActivity = true;
+      activityFacade.getActivityIds(acronym, version, null).stream()
+        .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
+      LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
+    } catch (Exception e) {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
