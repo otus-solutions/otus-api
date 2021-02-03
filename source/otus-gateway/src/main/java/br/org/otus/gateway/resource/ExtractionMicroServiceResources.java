@@ -16,6 +16,9 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
   private static final String RSCRIPT_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/rscript";
   private static final String SURVEY_ACTIVITIES_IDS_WITH_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/get-survey-activities-ids";
 
+  private static final String RSCRIPT_SUFFIX = "/rscript";
+  private static final String RSCRIPT_CREATE_RESOURCE = RSCRIPT_SUFFIX + "/create";
+
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
   }
@@ -38,6 +41,18 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
 
   public URL getJsonSurveyExtractionAddress(String surveyId) throws MalformedURLException {
     return new URL(getMainAddress() + JSON_SURVEY_EXTRACTION_RESOURCE + "/" + surveyId);
+  }
+
+  public URL getRScriptCreationAddress() throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_CREATE_RESOURCE);
+  }
+
+  public URL getRScriptGetterAddress(String rscriptName) throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName);
+  }
+
+  public URL getRScriptDeleteAddress(String rscriptName) throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName);
   }
 
   public URL getRScriptJsonSurveyExtractionAddress() throws MalformedURLException {
