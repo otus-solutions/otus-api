@@ -118,9 +118,18 @@ public class ActivityExtractionResource {
   @POST
   @SecuredExtraction
   @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/rscript")
-  public byte[] getRscriptSurveyExtraction(String rscriptSurveyExtractionJson) {
-    return activityExtractionFacade.getRscriptSurveyExtraction(rscriptSurveyExtractionJson);
+  public byte[] getRscriptSurveyExtractionAsCsv(String rscriptSurveyExtractionJson) {
+    return activityExtractionFacade.getRscriptSurveyExtractionAsCsv(rscriptSurveyExtractionJson);
+  }
+
+  @POST
+  @SecuredExtraction
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/rscript/json")
+  public String getRscriptSurveyExtractionAsJson(String rscriptSurveyExtractionJson) {
+    return activityExtractionFacade.getRscriptSurveyExtractionAsJson(rscriptSurveyExtractionJson);
   }
 }

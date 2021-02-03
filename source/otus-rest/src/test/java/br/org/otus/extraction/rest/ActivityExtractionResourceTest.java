@@ -78,6 +78,18 @@ public class ActivityExtractionResourceTest extends ResourceTestsParent {
   }
 
   @Test
+  public void forceSyncSurveyExtractions_method_should_call_facade_deleteActivityExtraction_method() {
+    activityExtractionResource.forceSyncSurveyExtractions(ACRONYM, VERSION);
+    Mockito.verify(activityExtractionFacade, Mockito.times(1)).forceSynchronizeSurveyActivityExtractions(ACRONYM, VERSION);
+  }
+
+  @Test
+  public void forceCreateOrUpdateActivityExtraction_method_should_call_facade_forceCreateOrUpdateActivityExtraction_method() {
+    activityExtractionResource.forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
+    Mockito.verify(activityExtractionFacade, Mockito.times(1)).forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
+  }
+
+  @Test
   public void getSurveyActivitiesExtractionAsCsv_method_should_call_facade_getSurveyActivitiesExtractionAsCsv_method() {
     activityExtractionResource.getSurveyActivitiesExtractionAsCsv(ACRONYM, VERSION);
     Mockito.verify(activityExtractionFacade, Mockito.times(1)).getSurveyActivitiesExtractionAsCsv(ACRONYM, VERSION);
@@ -90,9 +102,15 @@ public class ActivityExtractionResourceTest extends ResourceTestsParent {
   }
 
   @Test
-  public void getRscriptSurveyExtraction_method_should_call_facade_getRscriptSurveyExtraction_method() {
-    activityExtractionResource.getRscriptSurveyExtraction(SURVEY_EXTRACTION_JSON);
-    Mockito.verify(activityExtractionFacade, Mockito.times(1)).getRscriptSurveyExtraction(SURVEY_EXTRACTION_JSON);
+  public void getRscriptSurveyExtractionAsCsv_method_should_call_facade_getRscriptSurveyExtractionAsCsv_method() {
+    activityExtractionResource.getRscriptSurveyExtractionAsCsv(SURVEY_EXTRACTION_JSON);
+    Mockito.verify(activityExtractionFacade, Mockito.times(1)).getRscriptSurveyExtractionAsCsv(SURVEY_EXTRACTION_JSON);
+  }
+
+  @Test
+  public void getRscriptSurveyExtractionAsJson_method_should_call_facade_getRscriptSurveyExtractionAsJson_method() {
+    activityExtractionResource.getRscriptSurveyExtractionAsJson(SURVEY_EXTRACTION_JSON);
+    Mockito.verify(activityExtractionFacade, Mockito.times(1)).getRscriptSurveyExtractionAsJson(SURVEY_EXTRACTION_JSON);
   }
 
 }

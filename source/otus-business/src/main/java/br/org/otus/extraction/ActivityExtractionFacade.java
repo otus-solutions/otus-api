@@ -88,19 +88,6 @@ public class ActivityExtractionFacade {
     }
   }
 
-  public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
-    try {
-      allowCreateExtractionForAnyActivity = true;
-      createOrUpdateActivityExtraction(activityId);
-    }
-    catch (Exception e) {
-      throw e;
-    }
-    finally{
-      allowCreateExtractionForAnyActivity = false;
-    }
-  }
-
   public void deleteActivityExtraction(String activityId) {
     try {
       ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
@@ -150,6 +137,19 @@ public class ActivityExtractionFacade {
     }
   }
 
+  public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
+    try {
+      allowCreateExtractionForAnyActivity = true;
+      createOrUpdateActivityExtraction(activityId);
+    }
+    catch (Exception e) {
+      throw e;
+    }
+    finally{
+      allowCreateExtractionForAnyActivity = false;
+    }
+  }
+
   public byte[] getSurveyActivitiesExtractionAsCsv(String acronym, Integer version) {
     try {
       String surveyId = findSurveyId(acronym, version);
@@ -177,16 +177,30 @@ public class ActivityExtractionFacade {
     }
   }
 
-  public byte[] getRscriptSurveyExtraction(String surveyExtractionJson){
+  public byte[] getRscriptSurveyExtractionAsCsv(String surveyExtractionJson){
     try {
       SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
       surveyExtraction.setSurveyId(findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion()));
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
-      LOGGER.info("status: success, action: extraction for survey {" + surveyExtractionJson + "}");
+      LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       return csv;
     } catch (IOException | DataNotFoundException e) {
-      LOGGER.severe("status: fail, action: extraction for survey {" + surveyExtractionJson + "}");
+      LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public String getRscriptSurveyExtractionAsJson(String surveyExtractionJson){
+    try {
+      SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
+      surveyExtraction.setSurveyId(findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion()));
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
+      String result = (String) gatewayResponse.getData();
+      LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
+      return result;
+    } catch (IOException e) {
+      LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
