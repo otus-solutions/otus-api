@@ -37,6 +37,8 @@ public class ExtractionGatewayServiceTest {
   private static final String ACTIVITY_EXTRACTION_JSON = "{}";
   private static final String SURVEY_EXTRACTION_JSON = "{}";
   private static final GatewayResponse EXPECTED_GATEWAY_RESPONSE = null;
+  private static final String R_SCRIPT_JSON = "{}";
+  private static final String R_SCRIPT_NAME = "script";
 
   @InjectMocks
   private ExtractionGatewayService extractionGatewayService;
@@ -138,6 +140,48 @@ public class ExtractionGatewayServiceTest {
     when(jsonGETUtility.finish()).thenThrow(new IOException());
     extractionGatewayService.getJsonSurveyExtraction(SURVEY_ID);
   }
+
+  @Test
+  public void createOrUpdateRscript_method_should_send_PUT_request() throws IOException {
+    when(extractionMicroServiceResources.getRScriptCreationAddress()).thenReturn(requestURL);
+    extractionGatewayService.createOrUpdateRscript(R_SCRIPT_JSON);
+    verify(jsonPUTUtility, Mockito.times(1)).finish();
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void createOrUpdateRscript_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getRScriptCreationAddress()).thenReturn(requestURL);
+    when(jsonPUTUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.createOrUpdateRscript(R_SCRIPT_JSON);
+  }
+
+  @Test
+  public void getRscript_method_should_return_GatewayResponse() throws IOException {
+    when(extractionMicroServiceResources.getRScriptGetterAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
+    assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getRscript(R_SCRIPT_NAME));
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void getRscript_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getRScriptGetterAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
+    when(jsonGETUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.getRscript(R_SCRIPT_NAME);
+  }
+
+  @Test
+  public void deleteRscript_method_should_send_DELETE_request() throws IOException {
+    when(extractionMicroServiceResources.getRScriptDeleteAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
+    extractionGatewayService.deleteRscript(R_SCRIPT_NAME);
+    verify(jsonDELETEUtility, Mockito.times(1)).finish();
+  }
+
+  @Test(expected = ReadRequestException.class)
+  public void deleteRscript_method_should_throw_ReadRequestException() throws IOException {
+    when(extractionMicroServiceResources.getRScriptDeleteAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
+    when(jsonDELETEUtility.finish()).thenThrow(new IOException());
+    extractionGatewayService.deleteRscript(R_SCRIPT_NAME);
+  }
+
 
   @Test
   public void getRscriptSurveyExtraction_method_should_return_GatewayResponse() throws IOException {
