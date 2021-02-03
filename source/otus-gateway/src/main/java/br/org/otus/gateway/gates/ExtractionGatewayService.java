@@ -40,6 +40,26 @@ public class ExtractionGatewayService {
     return getSurveyExtraction(requestURL);
   }
 
+  public void createOrUpdateRscript(String rscriptJson) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getRScriptCreationAddress();
+    sendRequest(new JsonPUTRequestUtility(requestURL, rscriptJson));
+  }
+
+  public GatewayResponse getRscript(String rscriptName) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getRScriptGetterAddress(rscriptName);
+    try {
+      String response = new JsonGETUtility(requestURL).finish();
+      return new GatewayResponse().buildSuccess(response);
+    } catch (IOException e) {
+      throw new ReadRequestException();
+    }
+  }
+
+  public void deleteRscript(String rscriptName) throws IOException {
+    URL requestURL = new ExtractionMicroServiceResources().getRScriptDeleteAddress(rscriptName);
+    sendRequest(new JsonDELETEUtility(requestURL));
+  }
+
   public GatewayResponse getRscriptSurveyExtraction(String rscriptSurveyExtractionJson) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getRScriptJsonSurveyExtractionAddress();
     try {
