@@ -12,30 +12,39 @@ import br.org.otus.response.info.Validation;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.DataSource;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.filling.QuestionFill;
+import org.ccem.otus.model.survey.activity.filling.answer.TextAnswer;
 import org.ccem.otus.participant.model.Participant;
+import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
 import org.ccem.otus.service.extraction.model.ActivityExtraction;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.extraction.model.SurveyExtraction;
 import org.ccem.otus.survey.form.SurveyForm;
+import org.ccem.otus.utils.AnswerMapping;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
 
   private boolean allowCreateExtractionForAnyActivity = false;
+  private String runtimeExceptionMessage = null;
 
   @Inject
   private ActivityFacade activityFacade;
@@ -47,6 +56,8 @@ public class ActivityExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private ParticipantFacade participantFacade;
+  @Inject
+  private DataSourceService dataSourceService;
 
 
   public List<Integer> listSurveyVersions(String acronym) {
@@ -86,6 +97,12 @@ public class ActivityExtractionFacade {
       String message = (e.getCause()!=null ? e.getCause().getMessage() : e.getMessage());
       throw new HttpResponseException(Validation.build(message));
     }
+    catch (RuntimeException e) {
+      String message = runtimeExceptionMessage;
+      runtimeExceptionMessage = null;
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
+      throw new HttpResponseException(Validation.build(message));
+    }
   }
 
   public void deleteActivityExtraction(String activityId) {
@@ -100,6 +117,12 @@ public class ActivityExtractionFacade {
     catch (ValidationException | IOException e) {
       LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId);
       throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+    catch (RuntimeException e) {
+      String message = runtimeExceptionMessage;
+      runtimeExceptionMessage = null;
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
+      throw new HttpResponseException(Validation.build(message));
     }
   }
 
@@ -206,7 +229,11 @@ public class ActivityExtractionFacade {
   }
 
 
-  private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException {
+  private String findSurveyId(String acronym, Integer version){
+    return surveyFacade.get(acronym, version).getSurveyID().toHexString();
+  }
+
+  private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
     if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
@@ -215,17 +242,63 @@ public class ActivityExtractionFacade {
       throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
     }
     SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
+
+    if(surveyForm.getSurveyTemplate().dataSources != null && !surveyForm.getSurveyTemplate().dataSources.isEmpty()){
+      setExtractionValueInAutoCompleteQuestions(surveyActivity, surveyForm);
+    }
+
     return new ActivityExtraction(surveyForm, surveyActivity);
   }
 
-  private ActivityExtraction buildActivityExtractionModelForCreateOrUpdate(String activityId) throws ValidationException {
+  private ActivityExtraction buildActivityExtractionModelForCreateOrUpdate(String activityId) throws ValidationException, RuntimeException {
     ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
     Participant participant = participantFacade.getByRecruitmentNumber(activityExtraction.getActivityData().getRecruitmentNumber());
     activityExtraction.setParticipantData(participant);
     return activityExtraction;
   }
 
-  private String findSurveyId(String acronym, Integer version){
-    return surveyFacade.get(acronym, version).getSurveyID().toHexString();
+  private void setExtractionValueInAutoCompleteQuestions(SurveyActivity surveyActivity, SurveyForm surveyForm) throws RuntimeException {
+    List<String> dataSourceIds =  surveyForm.getSurveyTemplate().dataSources.stream()
+      .map(dataSourceDefinition -> dataSourceDefinition.id)
+      .collect(Collectors.toList());
+    List<DataSource> dataSources = dataSourceService.list(dataSourceIds);
+
+    surveyActivity.getFillContainer().getFillingList().stream()
+      .filter(questionFill -> questionFill.getAnswer().getType().equals(AnswerMapping.AUTOCOMPLETE_QUESTION.getQuestionType()))
+      .forEach(questionFill -> {
+        try {
+          setExtractionValueInAutoCompleteQuestion(questionFill, dataSources, surveyForm);
+        } catch (ValidationException e) {
+          throw new RuntimeException(e);
+        }
+      });
+  }
+
+  private void setExtractionValueInAutoCompleteQuestion(QuestionFill questionFill, List<DataSource> dataSources, SurveyForm surveyForm) throws ValidationException {
+    String dataSourceId = surveyForm.getSurveyTemplate().dataSources.stream()
+      .filter(dataSourceDefinition -> dataSourceDefinition.bindTo.contains(questionFill.getQuestionID()))
+      .findFirst()
+      .get().id;
+
+    String value = ((TextAnswer) questionFill.getAnswer()).getValue() + "blabla";
+
+    Iterator<JsonElement> iterator =  dataSources.stream()
+      .filter(dataSource -> dataSource.getId().equals(dataSourceId))
+      .findFirst().get().getData()
+      .iterator();
+
+    boolean found = false;
+    while(iterator.hasNext() && !found){
+      String dataValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
+      found = dataValue.equals(value);
+    }
+
+    if(!found){
+      runtimeExceptionMessage = "Datasource " + dataSourceId + " does not have value " + value + " of question " + questionFill.getQuestionID();
+      throw new ValidationException();
+    }
+
+    String extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
+    ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
   }
 }
