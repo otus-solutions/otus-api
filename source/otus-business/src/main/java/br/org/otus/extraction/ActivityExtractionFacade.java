@@ -280,7 +280,7 @@ public class ActivityExtractionFacade {
       .findFirst()
       .get().id;
 
-    String value = ((TextAnswer) questionFill.getAnswer()).getValue() + "blabla";
+    String value = ((TextAnswer) questionFill.getAnswer()).getValue();
 
     Iterator<JsonElement> iterator =  dataSources.stream()
       .filter(dataSource -> dataSource.getId().equals(dataSourceId))
