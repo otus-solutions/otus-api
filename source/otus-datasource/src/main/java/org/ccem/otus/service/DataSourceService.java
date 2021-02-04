@@ -21,4 +21,6 @@ public interface DataSourceService {
   String getElementExtractionValue(List<String> dataSources, String value);
 
   void populateDataSourceMapping();
+
+  List<DataSource> list(List<String> dataSourceNames);
 }
