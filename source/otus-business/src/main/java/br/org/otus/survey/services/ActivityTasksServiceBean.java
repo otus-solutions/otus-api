@@ -1,6 +1,6 @@
 package br.org.otus.survey.services;
 
-import br.org.otus.extraction.ExtractionFacade;
+import br.org.otus.extraction.ActivityExtractionFacade;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
@@ -49,7 +49,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
   private ActivitySharingService activitySharingService;
 
   @Inject
-  private ExtractionFacade extractionFacade;
+  private ActivityExtractionFacade extractionFacade;
 
 
   @Override
@@ -63,7 +63,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
 
     CompletableFuture.runAsync(() -> {
       try{
-        extractionFacade.createActivityExtraction(surveyActivity.getActivityID().toString());
+        extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
       }
       catch (Exception e){
         LOGGER.severe("status: fail, action: create activity extraction for activityId " + surveyActivity.getActivityID().toString());
@@ -92,7 +92,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
           extractionFacade.deleteActivityExtraction(surveyActivity.getActivityID().toString());
         }
         else{
-          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+          extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
         }
       }
       catch (Exception e){
@@ -111,7 +111,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     CompletableFuture.runAsync(() -> {
       offlineActivityCollection.getActivities().forEach(surveyActivity -> {
         try{
-          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+          extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
         }
         catch (Exception e){
           LOGGER.severe("status: fail, action: save activity extraction for activityId " + surveyActivity.getActivityID().toString() +

@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless
 public class DataSourceServiceBean implements DataSourceService {
@@ -74,6 +75,11 @@ public class DataSourceServiceBean implements DataSourceService {
   @Override
   public void populateDataSourceMapping() {
     this.dataSourceValuesMapping = dataSourceDao.getDataSourceMapping();
+  }
+
+  @Override
+  public List<DataSource> list(List<String> dataSourceIds) {
+    return dataSourceDao.find(dataSourceIds);
   }
 
 }

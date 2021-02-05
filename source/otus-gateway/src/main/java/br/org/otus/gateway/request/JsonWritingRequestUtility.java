@@ -8,6 +8,8 @@ import java.net.URL;
 
 public abstract class JsonWritingRequestUtility extends JsonRequestUtility {
 
+  protected static final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
+
   protected DataOutputStream request;
 
   public JsonWritingRequestUtility(RequestTypeOptions requestTypeOption, URL requestURL, String contentType) throws IOException {

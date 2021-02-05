@@ -249,4 +249,12 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
     }
   }
+
+  public List<ObjectId> getActivityIds(String acronym, Integer version, List<String> activityIdsToExcludeOfQuery) {
+    try {
+      return activityService.getActivityIds(acronym, version, activityIdsToExcludeOfQuery);
+    } catch (MemoryExcededException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
 }

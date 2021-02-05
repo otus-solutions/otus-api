@@ -45,4 +45,6 @@ public interface ActivityDao {
   void removeStageFromActivities(ObjectId stageOID);
 
   void discardByID(ObjectId activityOID) throws DataNotFoundException;
+
+  List<ObjectId> getActivityIds(String acronym, Integer version, Boolean isDiscardedValue, List<String> activityIdsToExcludeOfQuery) throws MemoryExcededException;
 }
