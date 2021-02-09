@@ -35,6 +35,7 @@ public class LaboratoryExtractionHeadersFactory {
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue());
+    this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue());
   }
 
 }
