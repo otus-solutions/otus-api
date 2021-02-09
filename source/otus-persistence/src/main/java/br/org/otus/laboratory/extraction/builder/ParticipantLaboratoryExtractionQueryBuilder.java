@@ -92,7 +92,8 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotContainer",null)
       .append("aliquotProcessingDate",null)
       .append("aliquotRegisterDate",null)
-      .append("aliquotResponsible",null);
+      .append("aliquotResponsible",null)
+      .append("aliquotRole",null);
 
     this.pipeline.add(new Document("$project",projectInitialFields));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
@@ -129,7 +130,8 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotContainer","$container")
       .append("aliquotProcessingDate","$aliquotCollectionData.processing")
       .append("aliquotRegisterDate","$aliquotCollectionData.operator")
-      .append("aliquotResponsible","$aliquotCollectionData.time");
+      .append("aliquotResponsible","$aliquotCollectionData.time")
+      .append("aliquotRole","$role");
 
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
