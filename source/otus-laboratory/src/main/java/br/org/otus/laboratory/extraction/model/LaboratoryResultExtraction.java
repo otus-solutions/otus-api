@@ -18,6 +18,7 @@ public class LaboratoryResultExtraction {
   private String aliquotProcessingDate;
   private String aliquotRegisterDate;
   private String aliquotResponsible;
+  private String aliquotRole;
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
@@ -74,4 +75,6 @@ public class LaboratoryResultExtraction {
   public Integer getUnattachedLaboratoryId() {
     return unattachedLaboratoryId;
   }
+
+  public String getAliquotRole() { return aliquotRole; }
 }
