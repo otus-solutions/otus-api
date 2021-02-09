@@ -92,15 +92,15 @@ public class ActivityExtractionFacade {
       new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).toJson());
       LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
     }
-    catch (ValidationException | IOException e) {
-      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId);
-      String message = (e.getCause()!=null ? e.getCause().getMessage() : e.getMessage());
-      throw new HttpResponseException(Validation.build(message));
-    }
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
+      throw new HttpResponseException(Validation.build(message));
+    }
+    catch (Exception e) {
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId);
+      String message = (e.getCause()!=null ? e.getCause().getMessage() : e.getMessage());
       throw new HttpResponseException(Validation.build(message));
     }
   }
@@ -114,15 +114,15 @@ public class ActivityExtractionFacade {
       );
       LOGGER.info("status: success, action: DELETE extraction for activity " + activityId);
     }
-    catch (ValidationException | IOException e) {
-      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
       throw new HttpResponseException(Validation.build(message));
+    }
+    catch (Exception e) {
+      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId);
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -136,7 +136,7 @@ public class ActivityExtractionFacade {
         .filter(activityOid -> !activitiesIdsWithExtraction.contains(activityOid.toHexString()))
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
-    } catch (IOException e) {
+    } catch (Exception e) {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -180,7 +180,7 @@ public class ActivityExtractionFacade {
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
       return csv;
-    } catch (IOException | DataNotFoundException e) {
+    } catch (Exception e) {
       LOGGER.severe("status: fail, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -194,7 +194,7 @@ public class ActivityExtractionFacade {
         (String) gatewayResponse.getData(), ArrayList.class);
       LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as json");
       return response;
-    } catch (IOException e) {
+    } catch (Exception e) {
       LOGGER.severe("status: fail, action: extraction for for survey {" + acronym + ", version " + version + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -208,7 +208,7 @@ public class ActivityExtractionFacade {
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       return csv;
-    } catch (IOException | DataNotFoundException e) {
+    } catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -222,7 +222,7 @@ public class ActivityExtractionFacade {
       String result = (String) gatewayResponse.getData();
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       return result;
-    } catch (IOException e) {
+    } catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }

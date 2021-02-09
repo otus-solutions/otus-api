@@ -61,16 +61,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
     }
 
-    CompletableFuture.runAsync(() -> {
-      try{
-        extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
-      }
-      catch (Exception e){
-        LOGGER.severe("status: fail, action: create activity extraction for activityId " + surveyActivity.getActivityID().toString());
-        new Exception("Error while syncing results", e).printStackTrace();
-      }
-    });
-
     return activityId;
   }
 

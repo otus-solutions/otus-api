@@ -4,6 +4,7 @@ import br.org.otus.gateway.request.*;
 import br.org.otus.gateway.resource.ExtractionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.gateway.response.exception.ReadRequestException;
+import br.org.otus.gateway.response.exception.RequestException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,22 +23,17 @@ public class ExtractionGatewayService {
 
   public GatewayResponse getSurveyActivityIdsWithExtraction(String surveyId) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getSurveyActivityIdsWithExtractionAddress(surveyId);
-    try {
-      String response = new JsonGETUtility(requestURL).finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException e) {
-      throw new ReadRequestException();
-    }
+    return sendRequestAndGetResponse(new JsonGETUtility(requestURL));
   }
 
   public GatewayResponse getCsvSurveyExtraction(String surveyId) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getCsvSurveyExtractionAddress(surveyId);
-    return getSurveyExtraction(requestURL);
+    return sendRequestAndGetResponse(new JsonGETUtility(requestURL));
   }
 
   public GatewayResponse getJsonSurveyExtraction(String surveyId) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getJsonSurveyExtractionAddress(surveyId);
-    return getSurveyExtraction(requestURL);
+    return sendRequestAndGetResponse(new JsonGETUtility(requestURL));
   }
 
   public void createOrUpdateRscript(String rscriptJson) throws IOException {
@@ -47,12 +43,7 @@ public class ExtractionGatewayService {
 
   public GatewayResponse getRscript(String rscriptName) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getRScriptGetterAddress(rscriptName);
-    try {
-      String response = new JsonGETUtility(requestURL).finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException e) {
-      throw new ReadRequestException();
-    }
+    return sendRequestAndGetResponse(new JsonGETUtility(requestURL));
   }
 
   public void deleteRscript(String rscriptName) throws IOException {
@@ -62,28 +53,31 @@ public class ExtractionGatewayService {
 
   public GatewayResponse getRscriptSurveyExtraction(String rscriptSurveyExtractionJson) throws IOException {
     URL requestURL = new ExtractionMicroServiceResources().getRScriptJsonSurveyExtractionAddress();
-    try {
-      String response = new JsonPOSTUtility(requestURL, rscriptSurveyExtractionJson).finish();
-      return new GatewayResponse().buildSuccess(response);
-    } catch (IOException e) {
-      throw new ReadRequestException();
-    }
+    return sendRequestAndGetResponse(new JsonPOSTUtility(requestURL, rscriptSurveyExtractionJson));
   }
 
 
   private void sendRequest(JsonRequestUtility jsonRequestUtility){
     try {
       jsonRequestUtility.finish();
-    } catch (IOException e) {
-      throw new ReadRequestException();
+    }
+    catch (RequestException e){
+      throw new ReadRequestException(e.getErrorMessage(), e.getCause());
+    }
+    catch (Exception e) {
+      throw new ReadRequestException(e.getMessage(), e.getCause());
     }
   }
 
-  private GatewayResponse getSurveyExtraction(URL requestURL){
+  private GatewayResponse sendRequestAndGetResponse(JsonRequestUtility jsonRequestUtility){
     try {
-      String response = new JsonGETUtility(requestURL).finish();
+      String response = jsonRequestUtility.finish();
       return new GatewayResponse().buildSuccess(response);
-    } catch (Exception e) {
+    }
+    catch (RequestException e){
+      throw new ReadRequestException(e.getErrorMessage(), e.getCause());
+    }
+    catch (Exception e) {
       throw new ReadRequestException(e.getMessage(), e.getCause());
     }
   }
