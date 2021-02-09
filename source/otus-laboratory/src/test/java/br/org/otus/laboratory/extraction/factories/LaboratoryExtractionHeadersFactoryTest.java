@@ -47,6 +47,7 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue()));
   }
 
   @Test
@@ -68,6 +69,7 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue(), headers.get(11));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue(), headers.get(12));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue(), headers.get(13));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue(), headers.get(14));
   }
 
 }
