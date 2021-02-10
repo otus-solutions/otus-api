@@ -220,6 +220,9 @@ public class ActivityExtractionFacade {
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       return csv;
     }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("There is no activity extractions for desired survey"));
+    }
     catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
@@ -234,7 +237,11 @@ public class ActivityExtractionFacade {
       String result = (String) gatewayResponse.getData();
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       return result;
-    } catch (Exception e) {
+    }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("There is no activity extractions for desired survey"));
+    }
+    catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
