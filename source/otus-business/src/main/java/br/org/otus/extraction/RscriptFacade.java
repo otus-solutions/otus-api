@@ -7,7 +7,6 @@ import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.service.extraction.model.Rscript;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class RscriptFacade {

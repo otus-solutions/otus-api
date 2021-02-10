@@ -32,7 +32,6 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerMapping;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
