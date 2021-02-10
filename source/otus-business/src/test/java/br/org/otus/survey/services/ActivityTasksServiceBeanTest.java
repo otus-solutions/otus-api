@@ -121,7 +121,6 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
 
     assertNotNull(surveyActivity.getActivityID());
     assertEquals(ACTIVITY_ID, surveyActivity.getActivityID().toString());
-    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
     assertEquals(ACTIVITY_ID, result);
   }
 
@@ -136,24 +135,7 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     assertNotNull(surveyActivity.getActivityID());
     assertEquals(ACTIVITY_ID, surveyActivity.getActivityID().toString());
     verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity, NOTIFY);
-    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
   }
-
-  @Test
-  public void create_method_should_log_extraction_creation_exception() throws InterruptedException {
-    doThrow(new HttpResponseException(null)).when(extractionFacade).createOrUpdateActivityExtraction(ACTIVITY_ID);
-    when(surveyActivity.getMode()).thenReturn(ActivityMode.ONLINE);
-
-    String result = service.create(surveyActivity, NOTIFY);
-    Thread.sleep(100);
-
-    assertEquals(ACTIVITY_ID, result);
-    assertNotNull(surveyActivity.getActivityID());
-    assertEquals(ACTIVITY_ID, surveyActivity.getActivityID().toString());
-    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
 
   @Test
   public void updateActivity_method_should_update_surveyActivity_and_extraction() throws Exception {
@@ -163,7 +145,6 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     SurveyActivity updatedActivity = service.updateActivity(surveyActivityToUpdate, TOKEN_BEARER);
     Thread.sleep(100);
 
-    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
     assertEquals(surveyActivityToUpdate, updatedActivity);
   }
 
