@@ -16,7 +16,9 @@ public enum LaboratoryExtractionHeaders {
   ALIQUOT_PROCESSING_DATE("aliquot_processing_date"),
   ALIQUOT_REGISTER_DATE("aliquot_register_date"),
   ALIQUOT_RESPONSIBLE("aliquot_responsible"),
-  ALIQUOT_ROLE("aliquot_role");
+  ALIQUOT_ROLE("aliquot_role"),
+  ALIQUOT_HAS_TRANSPORTATION_LOT_ID("has_transportation_lot_id"),
+  ALIQUOT_HAS_EXAM_LOT_ID("has_exam_lot_id");
 
   private final String value;
 
