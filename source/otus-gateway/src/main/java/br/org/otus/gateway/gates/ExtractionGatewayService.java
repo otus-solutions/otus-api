@@ -3,6 +3,7 @@ package br.org.otus.gateway.gates;
 import br.org.otus.gateway.request.*;
 import br.org.otus.gateway.resource.ExtractionMicroServiceResources;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.gateway.response.exception.NotFoundRequestException;
 import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 
@@ -61,6 +62,9 @@ public class ExtractionGatewayService {
     try {
       jsonRequestUtility.finish();
     }
+    catch(NotFoundRequestException e){
+      throw e;
+    }
     catch (RequestException e){
       throw new ReadRequestException(e.getErrorMessage(), e.getCause());
     }
@@ -74,6 +78,9 @@ public class ExtractionGatewayService {
       String response = jsonRequestUtility.finish();
       return new GatewayResponse().buildSuccess(response);
     }
+    catch(NotFoundRequestException e){
+      throw e;
+    }
     catch (RequestException e){
       throw new ReadRequestException(e.getErrorMessage(), e.getCause());
     }
@@ -81,4 +88,5 @@ public class ExtractionGatewayService {
       throw new ReadRequestException(e.getMessage(), e.getCause());
     }
   }
+
 }

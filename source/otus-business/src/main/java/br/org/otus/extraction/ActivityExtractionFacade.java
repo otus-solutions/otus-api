@@ -5,6 +5,7 @@ import br.org.otus.api.ExtractionService;
 import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.gateway.response.exception.NotFoundRequestException;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
@@ -31,7 +32,6 @@ import org.ccem.otus.survey.form.SurveyForm;
 import org.ccem.otus.utils.AnswerMapping;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -114,6 +114,9 @@ public class ActivityExtractionFacade {
       );
       LOGGER.info("status: success, action: DELETE extraction for activity " + activityId);
     }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("Activity's extraction doesn't exists"));
+    }
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
@@ -180,7 +183,11 @@ public class ActivityExtractionFacade {
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
       return csv;
-    } catch (Exception e) {
+    }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("There is no activity extractions for survey {" + acronym + ", version " + version + "}"));
+    }
+    catch (Exception e) {
       LOGGER.severe("status: fail, action: extraction for survey {" + acronym + ", version " + version + "} as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -194,7 +201,11 @@ public class ActivityExtractionFacade {
         (String) gatewayResponse.getData(), ArrayList.class);
       LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as json");
       return response;
-    } catch (Exception e) {
+    }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("There is no activity extractions for survey {" + acronym + ", version " + version + "}"));
+    }
+    catch (Exception e) {
       LOGGER.severe("status: fail, action: extraction for for survey {" + acronym + ", version " + version + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -208,7 +219,11 @@ public class ActivityExtractionFacade {
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       return csv;
-    } catch (Exception e) {
+    }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("There is no activity extractions for desired survey"));
+    }
+    catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
@@ -222,7 +237,11 @@ public class ActivityExtractionFacade {
       String result = (String) gatewayResponse.getData();
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       return result;
-    } catch (Exception e) {
+    }
+    catch(NotFoundRequestException e){
+      throw new HttpResponseException(NotFound.build("There is no activity extractions for desired survey"));
+    }
+    catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
