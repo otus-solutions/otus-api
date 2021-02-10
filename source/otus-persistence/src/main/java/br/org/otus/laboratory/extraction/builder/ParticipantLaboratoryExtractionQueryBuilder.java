@@ -93,7 +93,9 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotProcessingDate",null)
       .append("aliquotRegisterDate",null)
       .append("aliquotResponsible",null)
-      .append("aliquotRole",null);
+      .append("aliquotRole",null)
+      .append("hasTransportationLotId",null)
+    ;
 
     this.pipeline.add(new Document("$project",projectInitialFields));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
@@ -131,7 +133,9 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotProcessingDate","$aliquotCollectionData.processing")
       .append("aliquotRegisterDate","$aliquotCollectionData.operator")
       .append("aliquotResponsible","$aliquotCollectionData.time")
-      .append("aliquotRole","$role");
+      .append("aliquotRole","$role")
+      .append("hasTransportationLotId", getToBool("$transportationLotId"))
+    ;
 
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
@@ -216,5 +220,10 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
   private Document parseQuery(String query) {
     GsonBuilder gsonBuilder = new GsonBuilder();
     return gsonBuilder.create().fromJson(query, Document.class);
+  }
+
+  private String getToBool(String fieldName){
+    Document toBool = new Document("$toBool", fieldName);
+    return String.format("{ \"$ifNull\": [ %s, false ] }", toBool.toJson());
   }
 }
