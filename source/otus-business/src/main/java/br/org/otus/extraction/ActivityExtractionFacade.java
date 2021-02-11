@@ -202,6 +202,9 @@ public class ActivityExtractionFacade {
       LOGGER.info("status: success, action: extraction for survey {" + acronym + ", version " + version + "} as json");
       return response;
     }
+    catch(DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
     catch(NotFoundRequestException e){
       throw new HttpResponseException(NotFound.build("There is no activity extractions for survey {" + acronym + ", version " + version + "}"));
     }
@@ -214,14 +217,18 @@ public class ActivityExtractionFacade {
   public byte[] getRscriptSurveyExtractionAsCsv(String surveyExtractionJson){
     try {
       SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
-      surveyExtraction.setSurveyId(findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion()));
+      String surveyId = findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion());
+      surveyExtraction.setSurveyId(surveyId);
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       return csv;
     }
+    catch(DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
     catch(NotFoundRequestException e){
-      throw new HttpResponseException(NotFound.build("There is no activity extractions for desired survey"));
+      throw new HttpResponseException(NotFound.build(e.getErrorContent().toString()));
     }
     catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
@@ -232,14 +239,18 @@ public class ActivityExtractionFacade {
   public String getRscriptSurveyExtractionAsJson(String surveyExtractionJson){
     try {
       SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
-      surveyExtraction.setSurveyId(findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion()));
+      String surveyId = findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion());
+      surveyExtraction.setSurveyId(surveyId);
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
       String result = (String) gatewayResponse.getData();
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       return result;
     }
+    catch(DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
     catch(NotFoundRequestException e){
-      throw new HttpResponseException(NotFound.build("There is no activity extractions for desired survey"));
+      throw new HttpResponseException(NotFound.build(e.getErrorContent().toString()));
     }
     catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
@@ -248,8 +259,13 @@ public class ActivityExtractionFacade {
   }
 
 
-  private String findSurveyId(String acronym, Integer version){
-    return surveyFacade.get(acronym, version).getSurveyID().toHexString();
+  private String findSurveyId(String acronym, Integer version) throws DataNotFoundException {
+    try{
+      return surveyFacade.get(acronym, version).getSurveyID().toHexString();
+    }
+    catch (HttpResponseException e){
+      throw new DataNotFoundException("Survey {" + acronym + ", version " + version + "} does not exists");
+    }
   }
 
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
