@@ -31,8 +31,8 @@ public class NoteAboutParticipantFacade {
 
   public void update(User user, String noteAboutParticipantJson){
     try{
-      NoteAboutParticipant noteAboutParticipant = (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson);
-      checkIfUserIsTheNoteCreator(user.get_id(), noteAboutParticipant);
+//      NoteAboutParticipant noteAboutParticipant = (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson);
+//      checkIfUserIsTheNoteCreator(user.get_id(), noteAboutParticipant);
 
 //      return noteAboutParticipantService.create(noteAboutParticipant);
 
