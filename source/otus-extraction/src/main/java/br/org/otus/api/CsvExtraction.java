@@ -5,6 +5,7 @@ import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class CsvExtraction implements Extractable {
 
@@ -14,10 +15,15 @@ public class CsvExtraction implements Extractable {
   private List<String> header;
   private List<List<Object>> values;
 
-  public CsvExtraction(String content) {
-    Document doc = new GsonBuilder().create().fromJson(content, Document.class);
-    this.header = (List<String>) doc.get(HEADER_KEY_NAME);
-    this.values = (List<List<Object>>)doc.get(VALUES_KEY_NAME);
+  public CsvExtraction(String content) throws DataFormatException {
+    try{
+      Document doc = new GsonBuilder().create().fromJson(content, Document.class);
+      this.header = (List<String>) doc.get(HEADER_KEY_NAME);
+      this.values = (List<List<Object>>)doc.get(VALUES_KEY_NAME);
+    }
+    catch(Exception e){
+      throw new DataFormatException("Invalid csv content: " + e.getMessage());
+    }
   }
 
   @Override

@@ -1,11 +1,14 @@
 package br.org.otus.gateway.response.exception;
 
-import java.net.HttpURLConnection;
-
 public class NotFoundRequestException extends RequestException {
 
+  private static final int STATUS = java.net.HttpURLConnection.HTTP_NOT_FOUND;
+
   public NotFoundRequestException() {
-    super(HttpURLConnection.HTTP_NOT_FOUND, "Not Found", null);
+    super(STATUS, "Not Found", null);
   }
 
+  public NotFoundRequestException(String errorMessage, Object errorContent) {
+    super(STATUS, errorMessage, errorContent);
+  }
 }
