@@ -19,12 +19,12 @@ public abstract class JsonRequestUtility {
 
   public String finish() throws IOException, RequestException {
     int status = httpConn.getResponseCode();
-    if(status == HttpURLConnection.HTTP_NOT_FOUND){
-      throw new NotFoundRequestException();
-    }
     if (status != HttpURLConnection.HTTP_OK) {
       String errorMessage = httpConn.getResponseMessage();
       Object errorContent = RequestUtility.getErrorContent(httpConn);
+      if(status == HttpURLConnection.HTTP_NOT_FOUND){
+        throw new NotFoundRequestException(errorMessage, errorContent);
+      }
       throw new RequestException(status, errorMessage, errorContent);
     }
 
