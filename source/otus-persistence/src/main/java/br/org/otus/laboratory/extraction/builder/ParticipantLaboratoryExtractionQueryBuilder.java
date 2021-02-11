@@ -3,7 +3,6 @@ package br.org.otus.laboratory.extraction.builder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -95,6 +94,7 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotResponsible",null)
       .append("aliquotRole",null)
       .append("hasTransportationLotId",null)
+      .append("hasExamLotId",null)
     ;
 
     this.pipeline.add(new Document("$project",projectInitialFields));
@@ -134,7 +134,8 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotRegisterDate","$aliquotCollectionData.operator")
       .append("aliquotResponsible","$aliquotCollectionData.time")
       .append("aliquotRole","$role")
-      .append("hasTransportationLotId", getToBool("$transportationLotId"))
+      .append("hasTransportationLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$transportationLotId\"},false]}"))
+      .append("hasExamLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$examLotId\"},false]}"))
     ;
 
     this.pipeline.add(parseQuery("{\n" +
@@ -222,8 +223,4 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     return gsonBuilder.create().fromJson(query, Document.class);
   }
 
-  private String getToBool(String fieldName){
-    Document toBool = new Document("$toBool", fieldName);
-    return String.format("{ \"$ifNull\": [ %s, false ] }", toBool.toJson());
-  }
 }
