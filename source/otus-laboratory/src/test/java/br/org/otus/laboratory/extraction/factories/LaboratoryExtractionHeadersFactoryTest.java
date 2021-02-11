@@ -1,13 +1,11 @@
 package br.org.otus.laboratory.extraction.factories;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -19,13 +17,10 @@ public class LaboratoryExtractionHeadersFactoryTest {
 
   @InjectMocks
   private LaboratoryExtractionHeadersFactory laboratoryExtractionHeadersFactory;
-  @Mock
-  private LinkedHashSet<String> headers;
 
   @Test
   public void construction_method_should_call_buildHeader_method() throws Exception {
     LaboratoryExtractionHeadersFactory spy = PowerMockito.spy(new LaboratoryExtractionHeadersFactory());
-
     PowerMockito.verifyPrivate(spy, Mockito.times(1)).invoke("buildHeader");
   }
 
@@ -48,6 +43,8 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_HAS_TRANSPORTATION_LOT_ID.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_HAS_EXAM_LOT_ID.getValue()));
   }
 
   @Test
@@ -70,6 +67,8 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue(), headers.get(12));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue(), headers.get(13));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue(), headers.get(14));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_HAS_TRANSPORTATION_LOT_ID.getValue(), headers.get(15));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_HAS_EXAM_LOT_ID.getValue(), headers.get(16));
   }
 
 }
