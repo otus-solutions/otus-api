@@ -60,6 +60,7 @@ public class ActivityExtractionFacadeTest {
   private static final byte[] BYTES = new byte[1];
   private static final String SURVEY_EXTRACTION_JSON = "{}";
   private static final String R_SCRIPT_JSON_RESULT = "{}";
+  private static final String CSV_JSON = "{header: [\"x\"], values: [1]}";
 
   @InjectMocks
   private ActivityExtractionFacade activityExtractionFacade;
@@ -328,7 +329,8 @@ public class ActivityExtractionFacadeTest {
   @Test(expected = HttpResponseException.class)
   public void getRscriptSurveyExtractionAsCsv_method_should_handle_DataNotFoundException() throws IOException, DataNotFoundException {
     when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.toJson())).thenReturn(gatewayResponse);
-    when(extractionService.createExtraction(csvExtraction)).thenThrow(new DataNotFoundException());
+    doReturn(CSV_JSON).when(gatewayResponse).getData();
+    doThrow(new DataNotFoundException("")).when(extractionService).createExtraction(csvExtraction);
     activityExtractionFacade.getRscriptSurveyExtractionAsCsv(SURVEY_EXTRACTION_JSON);
   }
 
