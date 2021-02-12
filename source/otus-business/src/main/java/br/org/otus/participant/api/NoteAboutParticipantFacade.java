@@ -18,11 +18,7 @@ public class NoteAboutParticipantFacade {
   public String create(User user, String noteAboutParticipantJson){
     try{
       NoteAboutParticipant noteAboutParticipant = (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson);
-      noteAboutParticipant.setUserId(user.get_id());
-
-//      return noteAboutParticipantService.create(noteAboutParticipant);
-
-      return null;
+      return noteAboutParticipantService.create(user.get_id(), noteAboutParticipant).toHexString();
     }
     catch (Exception e){
       throw new HttpResponseException(Validation.build(e.getMessage()));
