@@ -3,6 +3,7 @@ package br.org.otus.participant;
 import br.org.otus.UserAuthenticationResource;
 import br.org.otus.participant.api.NoteAboutParticipantFacade;
 import br.org.otus.rest.Response;
+import br.org.otus.security.user.Secured;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
   private NoteAboutParticipantFacade noteAboutParticipantFacade;
 
   @POST
+  @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String create(@Context HttpServletRequest request, String noteAboutParticipantJson){
@@ -25,15 +27,17 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
   }
 
   @PUT
+  @Secured
   @Consumes(MediaType.APPLICATION_JSON)
   public String update(@Context HttpServletRequest request, String noteAboutParticipantJson){
     noteAboutParticipantFacade.update(getUser(request), noteAboutParticipantJson);
     return new Response().buildSuccess().toJson();
   }
 
-  @PUT
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String delete(@Context HttpServletRequest request, String noteAboutParticipantId){
+  @DELETE
+  @Secured
+  @Path("/{id}")
+  public String delete(@Context HttpServletRequest request, @PathParam("id") String noteAboutParticipantId){
     noteAboutParticipantFacade.delete(getUser(request), noteAboutParticipantId);
     return new Response().buildSuccess().toJson();
   }
