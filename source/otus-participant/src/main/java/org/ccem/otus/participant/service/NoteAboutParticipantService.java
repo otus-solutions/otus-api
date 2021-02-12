@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface NoteAboutParticipantService {
 
-  ObjectId create(Long recruitmentNumber, String comment);
+  ObjectId create(ObjectId userOid, NoteAboutParticipant noteAboutParticipant);
 
   ObjectId update(String userId, NoteAboutParticipant commentAboutParticipant);
 
