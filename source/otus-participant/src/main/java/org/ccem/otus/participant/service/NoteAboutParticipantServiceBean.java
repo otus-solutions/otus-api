@@ -2,6 +2,7 @@ package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
 import org.ccem.otus.participant.persistence.NoteAboutParticipantDao;
@@ -25,14 +26,14 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   }
 
   @Override
-  public ObjectId update(String userId, NoteAboutParticipant commentAboutParticipant) {
+  public ObjectId update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) {
     //check if creator is the user
-    return noteAboutParticipantDao.update(commentAboutParticipant);
+    return noteAboutParticipantDao.update(noteAboutParticipant);
   }
 
   @Override
-  public void delete(String userId, ObjectId commentAboutParticipantId) throws DataNotFoundException {
-    noteAboutParticipantDao.delete(commentAboutParticipantId);
+  public void delete(ObjectId userOid, ObjectId noteAboutParticipantOid) throws DataNotFoundException, ValidationException {
+    noteAboutParticipantDao.delete(userOid, noteAboutParticipantOid);
   }
 
   @Override
