@@ -9,11 +9,13 @@ public class NoteAboutParticipant extends SerializableModelWithID {
   private Long recruitmentNumber;
   private String date;
   private Boolean edited;
+  private Boolean starred;
   private String comment;
   private ObjectId userId;
 
   public NoteAboutParticipant() {
     edited = false;
+    starred = false;
   }
 
   public ObjectId getId() {
