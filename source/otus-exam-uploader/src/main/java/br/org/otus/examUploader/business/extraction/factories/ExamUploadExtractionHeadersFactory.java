@@ -26,6 +26,8 @@ public class ExamUploadExtractionHeadersFactory {
     this.headers.add(ExamUploadExtractionHeaders.RESULT.getValue());
     this.headers.add(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
     this.headers.add(ExamUploadExtractionHeaders.OBSERVATIONS.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.CUTOFFVALUE.getValue());
+    this.headers.add(ExamUploadExtractionHeaders.EXTRAVARIABLES.getValue());
   }
 
 }
