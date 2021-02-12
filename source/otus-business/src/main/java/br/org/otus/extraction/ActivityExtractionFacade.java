@@ -38,6 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 
 public class ActivityExtractionFacade {
 
@@ -229,6 +230,11 @@ public class ActivityExtractionFacade {
     }
     catch(NotFoundRequestException e){
       throw new HttpResponseException(NotFound.build(e.getErrorContent().toString()));
+    }
+    catch(DataFormatException e){
+      throw new HttpResponseException(NotFound.build("Check your R script: it should return a csv string or a csv string array, " +
+        "both with delimiter \";\" and end of line \"\\n\"" +
+        e.getCause().getMessage()));
     }
     catch (Exception e) {
       LOGGER.severe("status: fail, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
