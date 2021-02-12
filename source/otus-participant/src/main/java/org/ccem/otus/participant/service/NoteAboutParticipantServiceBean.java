@@ -21,14 +21,26 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   @Override
   public ObjectId create(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) {
     noteAboutParticipant.setUserId(userOid);
-    noteAboutParticipant.setDate(DateUtil.nowToISODate());
+    noteAboutParticipant.setCreationDate(DateUtil.nowToISODate());
     return noteAboutParticipantDao.create(noteAboutParticipant);
   }
 
   @Override
-  public ObjectId update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) {
-    //check if creator is the user
-    return noteAboutParticipantDao.update(noteAboutParticipant);
+  public void update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) throws ValidationException, DataNotFoundException {
+    if(noteAboutParticipant.getId() == null){
+      throw new DataNotFoundException("Field id is missing");
+    }
+
+    if(noteAboutParticipant.getUserId() == null){
+      noteAboutParticipant.setUserId(userOid);
+    }
+    else if(!noteAboutParticipant.getUserId().equals(userOid)){
+      throw new ValidationException();
+    }
+
+    noteAboutParticipant.setLastUpdate(DateUtil.nowToISODate());
+    noteAboutParticipant.setEdited(true);
+    noteAboutParticipantDao.update(noteAboutParticipant);
   }
 
   @Override

@@ -2,6 +2,7 @@ package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -17,7 +18,6 @@ import static com.mongodb.client.model.Filters.eq;
 public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> implements NoteAboutParticipantDao {
 
   private static final String COLLECTION_NAME = "participant_note_about";
-
   private static final String USER_ID_PATH = "userId";
 
   public NoteAboutParticipantDaoBean() {
@@ -32,8 +32,15 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ObjectId update(NoteAboutParticipant commentAboutParticipant) {
-    return null;
+  public ObjectId update(NoteAboutParticipant noteAboutParticipant) throws DataNotFoundException {
+    UpdateResult updateResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, noteAboutParticipant.getId()),
+      new Document(SET_OPERATOR, Document.parse(noteAboutParticipant.serialize()))
+    );
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipant.getId().toHexString() + "}");
+    }
+    return noteAboutParticipant.getId();
   }
 
   @Override
@@ -54,4 +61,5 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   public List<NoteAboutParticipantDto> get(Long recruitmentNumber, int skip, int limit) {
     return null;
   }
+
 }

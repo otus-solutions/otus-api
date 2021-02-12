@@ -12,7 +12,7 @@ public interface NoteAboutParticipantService {
 
   ObjectId create(ObjectId userOid, NoteAboutParticipant noteAboutParticipant);
 
-  ObjectId update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant);
+  void update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) throws ValidationException, DataNotFoundException;
 
   void delete(ObjectId userOid, ObjectId noteAboutParticipantOid) throws DataNotFoundException, ValidationException;
 

@@ -33,16 +33,19 @@ public class NoteAboutParticipantFacade {
 
   public void update(User user, String noteAboutParticipantJson){
     try{
-//      NoteAboutParticipant noteAboutParticipant = (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson);
-//      checkIfUserIsTheNoteCreator(user.get_id(), noteAboutParticipant);
-
-//      return noteAboutParticipantService.create(noteAboutParticipant);
-
+      noteAboutParticipantService.update(
+        user.get_id(),
+        (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson));
     }
-    catch(SecurityException e){
-      throw new HttpResponseException(Authorization.build(e.getMessage()));
+    catch(DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+    catch(ValidationException e){
+      LOGGER.severe("User {" + user.get_id() + "} tried delete note about participant not created by him");
+      throw new HttpResponseException(Authorization.build("You can't delete the note because you doesn't create it"));
     }
     catch (Exception e){
+      LOGGER.severe(e.getMessage());
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
@@ -64,10 +67,4 @@ public class NoteAboutParticipantFacade {
     }
   }
 
-
-  private void checkIfUserIsTheNoteCreator(ObjectId userId, NoteAboutParticipant noteAboutParticipant){
-    if(!noteAboutParticipant.getUserId().equals(userId)){
-      throw new SecurityException("User is not the creator of note about participant");
-    }
-  }
 }
