@@ -119,7 +119,7 @@ public class ActivityExtractionResource {
   @SecuredExtraction
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/rscript")
+  @Path("/rscript/csv")
   public byte[] getRscriptSurveyExtractionAsCsv(String rscriptSurveyExtractionJson) {
     return activityExtractionFacade.getRscriptSurveyExtractionAsCsv(rscriptSurveyExtractionJson);
   }
