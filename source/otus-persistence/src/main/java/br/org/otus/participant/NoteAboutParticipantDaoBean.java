@@ -12,15 +12,17 @@ import java.util.List;
 
 public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> implements NoteAboutParticipantDao {
 
-  private static final String COLLECTION_NAME = "comment_participant";
+  private static final String COLLECTION_NAME = "participant_note_about";
 
   public NoteAboutParticipantDaoBean() {
     super(COLLECTION_NAME, Document.class);
   }
 
   @Override
-  public ObjectId create(NoteAboutParticipant commentAboutParticipant) {
-    return null;
+  public ObjectId create(NoteAboutParticipant noteAboutParticipant) {
+    Document parsed = Document.parse(noteAboutParticipant.serializeNonStatic());
+    collection.insertOne(parsed);
+    return parsed.getObjectId(ID_FIELD_NAME);
   }
 
   @Override
