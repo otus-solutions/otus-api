@@ -20,7 +20,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
 
   @Override
   public ObjectId create(NoteAboutParticipant noteAboutParticipant) {
-    Document parsed = Document.parse(noteAboutParticipant.serializeNonStatic());
+    Document parsed = Document.parse(noteAboutParticipant.serialize());
     collection.insertOne(parsed);
     return parsed.getObjectId(ID_FIELD_NAME);
   }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public abstract class SerializableModelWithID {
 
-  public String toJson(){
+  public String serialize(){
     return getGsonBuilder().create().toJson(this);
   }
 

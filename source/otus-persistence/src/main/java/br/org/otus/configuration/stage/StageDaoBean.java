@@ -35,7 +35,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   public ObjectId create(Stage stage) throws AlreadyExistException {
     checkExistence(stage);
 
-    Document parsed = Document.parse(stage.toJson());
+    Document parsed = Document.parse(stage.serialize());
     collection.insertOne(parsed);
     return parsed.getObjectId(ID_FIELD_NAME);
   }
