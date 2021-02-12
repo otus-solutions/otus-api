@@ -7,7 +7,8 @@ public class NoteAboutParticipant extends SerializableModelWithID {
 
   private ObjectId _id;
   private Long recruitmentNumber;
-  private String date;
+  private String creationDate;
+  private String lastUpdate;
   private Boolean edited;
   private Boolean starred;
   private String comment;
@@ -26,8 +27,8 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     return recruitmentNumber;
   }
 
-  public String getDate() {
-    return date;
+  public String getCreationDate() {
+    return creationDate;
   }
 
   public Boolean getEdited() {
@@ -50,12 +51,24 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     this.recruitmentNumber = recruitmentNumber;
   }
 
-  public void setDate(String date) {
-    this.date = date;
+  public void setCreationDate(String creationDate) {
+    this.creationDate = creationDate;
+  }
+
+  public String getLastUpdate() {
+    return lastUpdate;
+  }
+
+  public void setLastUpdate(String lastUpdate) {
+    this.lastUpdate = lastUpdate;
   }
 
   public void setEdited(Boolean edited) {
     this.edited = edited;
+  }
+
+  public void setStarred(Boolean starred) {
+    this.starred = starred;
   }
 
   public void setComment(String comment) {
