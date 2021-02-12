@@ -38,7 +38,7 @@ public class NoteAboutParticipantFacade {
         (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson));
     }
     catch(DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
     catch(ValidationException e){
       LOGGER.severe("User {" + user.get_id() + "} tried delete note about participant not created by him");
@@ -55,7 +55,7 @@ public class NoteAboutParticipantFacade {
       noteAboutParticipantService.delete(user.get_id(), new ObjectId(noteAboutParticipantId));
     }
     catch(DataNotFoundException e){
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
     catch(ValidationException e){
       LOGGER.severe("User {" + user.get_id() + "} tried delete note about participant not created by him");
