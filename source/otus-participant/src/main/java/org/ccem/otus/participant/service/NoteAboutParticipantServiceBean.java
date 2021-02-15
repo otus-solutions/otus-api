@@ -2,6 +2,7 @@ package org.ccem.otus.participant.service;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
@@ -49,8 +50,8 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   }
 
   @Override
-  public List<NoteAboutParticipantDto> get(Long recruitmentNumber, int skip, int limit) {
-    return noteAboutParticipantDao.get(recruitmentNumber, skip, limit);
+  public List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
+    return noteAboutParticipantDao.getAll(userOid, recruitmentNumber, skip, limit);
   }
 
 }

@@ -7,11 +7,14 @@ import br.org.otus.response.info.NotFound;
 import br.org.otus.response.info.Validation;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
+import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
 import org.ccem.otus.participant.service.NoteAboutParticipantService;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class NoteAboutParticipantFacade {
@@ -64,6 +67,16 @@ public class NoteAboutParticipantFacade {
     catch (Exception e){
       LOGGER.severe(e.getMessage());
       throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
+  public List<NoteAboutParticipantDto> getAll(User user, Long recruitmentNumber, int skip, int limit){
+    try{
+      return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, skip, limit);
+    }
+    catch(MemoryExcededException e){
+      LOGGER.severe(e.getMessage());
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
 

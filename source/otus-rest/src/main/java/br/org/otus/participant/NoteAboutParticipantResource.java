@@ -4,6 +4,7 @@ import br.org.otus.UserAuthenticationResource;
 import br.org.otus.participant.api.NoteAboutParticipantFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,15 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
   public String delete(@Context HttpServletRequest request, @PathParam("id") String noteAboutParticipantId){
     noteAboutParticipantFacade.delete(getUser(request), noteAboutParticipantId);
     return new Response().buildSuccess().toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/{rn}/{skip}/{limit}")
+  public String getAll(@Context HttpServletRequest request, @PathParam("rn") Long recruitmentNumber, @PathParam("skip") int skip, @PathParam("limit") int limit){
+    return new Response().buildSuccess(
+      noteAboutParticipantFacade.getAll(getUser(request), recruitmentNumber, skip, limit)
+    ).toJson(NoteAboutParticipantDto.getFrontGsonBuilder());
   }
 
 }
