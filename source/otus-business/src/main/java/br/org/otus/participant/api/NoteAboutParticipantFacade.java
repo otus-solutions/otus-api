@@ -44,8 +44,8 @@ public class NoteAboutParticipantFacade {
       throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }
     catch(ValidationException e){
-      LOGGER.severe("User {" + user.get_id() + "} tried delete note about participant not created by him");
-      throw new HttpResponseException(Authorization.build("You can't delete the note because you doesn't create it"));
+      LOGGER.severe("User {" + user.get_id() + "} tried update note about participant not created by him");
+      throw new HttpResponseException(Authorization.build("You can't update the note because you doesn't create it"));
     }
     catch (Exception e){
       LOGGER.severe(e.getMessage());
