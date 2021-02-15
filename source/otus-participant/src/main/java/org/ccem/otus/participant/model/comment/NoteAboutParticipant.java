@@ -35,6 +35,8 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     return edited;
   }
 
+  public Boolean getStarred() { return starred; }
+
   public String getComment() {
     return comment;
   }
@@ -79,7 +81,8 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     this.userId = userId;
   }
 
-  public boolean isCreator(ObjectId userId){
-    return this.userId.equals(userId);
+  public static NoteAboutParticipant deserialize(String json){
+    return (NoteAboutParticipant)deserialize(json, NoteAboutParticipant.class);
   }
+
 }
