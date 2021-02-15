@@ -15,7 +15,9 @@ public interface NoteAboutParticipantDao {
 
   NoteAboutParticipant get(ObjectId noteAboutParticipantId);
 
-  void update(NoteAboutParticipant commentAboutParticipant) throws DataNotFoundException;
+  void update(ObjectId userOid, NoteAboutParticipant commentAboutParticipant) throws DataNotFoundException;
+
+  void updateStarred(ObjectId userId, ObjectId noteAboutParticipantId, boolean starred) throws DataNotFoundException, ValidationException;
 
   void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException;
 

@@ -28,19 +28,29 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
 
   @Override
   public void update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) throws ValidationException, DataNotFoundException {
-    if(noteAboutParticipant.getId() == null){
-      throw new ValidationException("Field id is missing");
-    }
-
-    if(noteAboutParticipant.getUserId() == null){
-      noteAboutParticipant.setUserId(userOid);
-    }
-    else if(!noteAboutParticipant.getUserId().equals(userOid)){
-      throw new ValidationException();
-    }
     noteAboutParticipant.setLastUpdate(DateUtil.nowToISODate());
     noteAboutParticipant.setEdited(true);
-    noteAboutParticipantDao.update(noteAboutParticipant);
+    try{
+      noteAboutParticipantDao.update(userOid, noteAboutParticipant);
+    }
+    catch (DataNotFoundException e){
+      checkInvalidAccessAttempt(userOid, noteAboutParticipant.getId());
+      throw e;
+    }
+  }
+
+  @Override
+  public void updateStarred(ObjectId userOid, ObjectId noteAboutParticipantOid, Boolean starred) throws ValidationException, DataNotFoundException {
+    if(starred == null){
+      throw new ValidationException("Missing starred field");
+    }
+    try{
+      noteAboutParticipantDao.updateStarred(userOid, noteAboutParticipantOid, starred);
+    }
+    catch (DataNotFoundException e){
+      checkInvalidAccessAttempt(userOid, noteAboutParticipantOid);
+      throw e;
+    }
   }
 
   @Override

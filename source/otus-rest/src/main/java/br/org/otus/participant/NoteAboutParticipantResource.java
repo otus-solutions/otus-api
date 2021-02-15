@@ -35,6 +35,15 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
     return new Response().buildSuccess().toJson();
   }
 
+  @PUT
+  @Secured
+  @Path("/update-starred/{id}/{starred}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String updateStarred(@Context HttpServletRequest request, @PathParam("id") String noteAboutParticipantId, @PathParam("starred") Boolean starred){
+    noteAboutParticipantFacade.updateStarred(getUser(request), noteAboutParticipantId, starred);
+    return new Response().buildSuccess().toJson();
+  }
+
   @DELETE
   @Secured
   @Path("/{id}")

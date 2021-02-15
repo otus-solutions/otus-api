@@ -53,6 +53,23 @@ public class NoteAboutParticipantFacade {
     }
   }
 
+  public void updateStarred(User user, String noteAboutParticipantId, Boolean starred){
+    try{
+      noteAboutParticipantService.updateStarred(user.get_id(), new ObjectId(noteAboutParticipantId), starred);
+    }
+    catch(DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
+    catch(ValidationException e){
+      LOGGER.severe("User {" + user.get_id() + "} tried update starred of note about participant not created by him");
+      throw new HttpResponseException(Authorization.build("You can't update starred of note because you doesn't create it"));
+    }
+    catch (Exception e){
+      LOGGER.severe(e.getMessage());
+      throw new HttpResponseException(Validation.build(e.getMessage()));
+    }
+  }
+
   public void delete(User user, String noteAboutParticipantId){
     try{
       noteAboutParticipantService.delete(user.get_id(), new ObjectId(noteAboutParticipantId));

@@ -38,9 +38,18 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public void update(NoteAboutParticipant noteAboutParticipant) throws DataNotFoundException {
+  public NoteAboutParticipant get(ObjectId noteAboutParticipantId){
+    Document result = collection.find(eq(ID_FIELD_NAME, noteAboutParticipantId)).first();
+    if(result == null){
+      return null;
+    }
+    return NoteAboutParticipant.deserialize(result.toJson());
+  }
+
+  @Override
+  public void update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) throws DataNotFoundException {
     UpdateResult updateResult = collection.updateOne(
-      new Document(ID_FIELD_NAME, noteAboutParticipant.getId()),
+      new Document(ID_FIELD_NAME, noteAboutParticipant.getId()).append(USER_ID_PATH, userOid),
       new Document(SET_OPERATOR, Document.parse(noteAboutParticipant.serialize()))
     );
     if(updateResult.getMatchedCount() == 0){
@@ -49,12 +58,14 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public NoteAboutParticipant get(ObjectId noteAboutParticipantId){
-    Document result = collection.find(eq(ID_FIELD_NAME, noteAboutParticipantId)).first();
-    if(result == null){
-      return null;
+  public void updateStarred(ObjectId userOid, ObjectId noteAboutParticipantId, boolean starred) throws DataNotFoundException {
+    UpdateResult updateResult = collection.updateOne(
+      new Document(ID_FIELD_NAME, noteAboutParticipantId).append(USER_ID_PATH, userOid),
+      new Document(SET_OPERATOR, new Document(STARRED_PATH, starred))
+    );
+    if(updateResult.getMatchedCount() == 0){
+      throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipantId.toHexString() + "}");
     }
-    return NoteAboutParticipant.deserialize(result.toJson());
   }
 
   @Override

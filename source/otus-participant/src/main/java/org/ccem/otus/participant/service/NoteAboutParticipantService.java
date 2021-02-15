@@ -15,6 +15,8 @@ public interface NoteAboutParticipantService {
 
   void update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) throws ValidationException, DataNotFoundException;
 
+  void updateStarred(ObjectId userOid, ObjectId noteAboutParticipantOid, Boolean starred) throws ValidationException, DataNotFoundException;
+
   void delete(ObjectId userOid, ObjectId noteAboutParticipantOid) throws ValidationException, DataNotFoundException;
 
   List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException;
