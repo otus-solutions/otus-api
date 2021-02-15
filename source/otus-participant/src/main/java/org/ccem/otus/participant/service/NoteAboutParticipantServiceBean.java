@@ -29,7 +29,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   @Override
   public void update(ObjectId userOid, NoteAboutParticipant noteAboutParticipant) throws ValidationException, DataNotFoundException {
     if(noteAboutParticipant.getId() == null){
-      throw new DataNotFoundException("Field id is missing");
+      throw new ValidationException("Field id is missing");
     }
 
     if(noteAboutParticipant.getUserId() == null){
@@ -38,20 +38,32 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
     else if(!noteAboutParticipant.getUserId().equals(userOid)){
       throw new ValidationException();
     }
-
     noteAboutParticipant.setLastUpdate(DateUtil.nowToISODate());
     noteAboutParticipant.setEdited(true);
     noteAboutParticipantDao.update(noteAboutParticipant);
   }
 
   @Override
-  public void delete(ObjectId userOid, ObjectId noteAboutParticipantOid) throws DataNotFoundException, ValidationException {
-    noteAboutParticipantDao.delete(userOid, noteAboutParticipantOid);
+  public void delete(ObjectId userOid, ObjectId noteAboutParticipantOid) throws ValidationException, DataNotFoundException {
+    try{
+      noteAboutParticipantDao.delete(userOid, noteAboutParticipantOid);
+    }
+    catch (DataNotFoundException e){
+      checkInvalidAccessAttempt(userOid, noteAboutParticipantOid);
+      throw e;
+    }
   }
 
   @Override
   public List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
     return noteAboutParticipantDao.getAll(userOid, recruitmentNumber, skip, limit);
+  }
+
+  private void checkInvalidAccessAttempt(ObjectId userOid, ObjectId noteAboutParticipantOid) throws ValidationException {
+    NoteAboutParticipant noteAboutParticipantFounded =  noteAboutParticipantDao.get(noteAboutParticipantOid);
+    if(noteAboutParticipantFounded != null && !noteAboutParticipantFounded.getUserId().equals(userOid)){
+      throw new ValidationException();
+    }
   }
 
 }

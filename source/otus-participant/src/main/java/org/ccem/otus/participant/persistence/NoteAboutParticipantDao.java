@@ -13,9 +13,11 @@ public interface NoteAboutParticipantDao {
 
   ObjectId create(NoteAboutParticipant commentAboutParticipant);
 
+  NoteAboutParticipant get(ObjectId noteAboutParticipantId);
+
   void update(NoteAboutParticipant commentAboutParticipant) throws DataNotFoundException;
 
-  void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException, ValidationException;
+  void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException;
 
   List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException;
 }

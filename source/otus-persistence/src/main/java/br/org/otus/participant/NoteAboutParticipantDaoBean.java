@@ -24,7 +24,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
 
   private static final String COLLECTION_NAME = "participant_note_about";
   private static final String USER_ID_PATH = "userId";
-  private static final String RECRUITMENT_NUMBER_PATH = "recruitmentNumber";
+  private static final String STARRED_PATH = "starred";
 
   public NoteAboutParticipantDaoBean() {
     super(COLLECTION_NAME, Document.class);
@@ -49,15 +49,20 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException, ValidationException {
+  public NoteAboutParticipant get(ObjectId noteAboutParticipantId){
+    Document result = collection.find(eq(ID_FIELD_NAME, noteAboutParticipantId)).first();
+    if(result == null){
+      return null;
+    }
+    return NoteAboutParticipant.deserialize(result.toJson());
+  }
+
+  @Override
+  public void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException {
     Document query = new Document(ID_FIELD_NAME, noteAboutParticipantId);
     query.put(USER_ID_PATH, userId);
     DeleteResult deleteResult = collection.deleteOne(query);
     if(deleteResult.getDeletedCount() == 0){
-      Document result = collection.find(eq(ID_FIELD_NAME, noteAboutParticipantId)).first();
-      if(result != null){
-        throw new ValidationException();
-      }
       throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipantId.toHexString() + "}");
     }
   }
