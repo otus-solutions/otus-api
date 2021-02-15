@@ -38,7 +38,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public ObjectId update(NoteAboutParticipant noteAboutParticipant) throws DataNotFoundException {
+  public void update(NoteAboutParticipant noteAboutParticipant) throws DataNotFoundException {
     UpdateResult updateResult = collection.updateOne(
       new Document(ID_FIELD_NAME, noteAboutParticipant.getId()),
       new Document(SET_OPERATOR, Document.parse(noteAboutParticipant.serialize()))
@@ -46,7 +46,6 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
     if(updateResult.getMatchedCount() == 0){
       throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipant.getId().toHexString() + "}");
     }
-    return noteAboutParticipant.getId();
   }
 
   @Override

@@ -13,7 +13,7 @@ public interface NoteAboutParticipantDao {
 
   ObjectId create(NoteAboutParticipant commentAboutParticipant);
 
-  ObjectId update(NoteAboutParticipant commentAboutParticipant) throws DataNotFoundException;
+  void update(NoteAboutParticipant commentAboutParticipant) throws DataNotFoundException;
 
   void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException, ValidationException;
 
