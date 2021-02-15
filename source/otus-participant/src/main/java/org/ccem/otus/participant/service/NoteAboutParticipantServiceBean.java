@@ -5,7 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
 import org.ccem.otus.participant.persistence.NoteAboutParticipantDao;
 import org.ccem.otus.utils.DateUtil;
 
@@ -65,7 +65,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   }
 
   @Override
-  public List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
     return noteAboutParticipantDao.getAll(userOid, recruitmentNumber, skip, limit);
   }
 

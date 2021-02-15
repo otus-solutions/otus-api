@@ -10,9 +10,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
 import org.ccem.otus.participant.persistence.NoteAboutParticipantDao;
 
 import java.util.ArrayList;
@@ -79,15 +78,15 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
     AggregateIterable<Document> results = collection.aggregate((new NoteAboutParticipantQueryBuilder().getByRnQuery(userOid, recruitmentNumber, skip, limit)));
     MongoCursor<Document> iterator = results.iterator();
 
-    List<NoteAboutParticipantDto> notes = new ArrayList<>();
+    List<NoteAboutParticipantResponse> notes = new ArrayList<>();
 
     while(iterator.hasNext()){
       try{
-        notes.add(NoteAboutParticipantDto.deserialize(iterator.next().toJson()));
+        notes.add(NoteAboutParticipantResponse.deserialize(iterator.next().toJson()));
       }
       catch(OutOfMemoryError e){
         notes.clear();

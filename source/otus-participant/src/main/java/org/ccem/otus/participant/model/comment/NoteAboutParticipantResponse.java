@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.SerializableModelWithID;
 
-public class NoteAboutParticipantDto extends SerializableModelWithID {
+public class NoteAboutParticipantResponse extends SerializableModelWithID {
 
   private ObjectId _id;
   private Long recruitmentNumber;
@@ -22,7 +22,7 @@ public class NoteAboutParticipantDto extends SerializableModelWithID {
     registerGsonBuilderLocalDateTimeAdapter(builder);
   }
 
-  public static NoteAboutParticipantDto deserialize(String json){
-    return (NoteAboutParticipantDto)deserialize(json, NoteAboutParticipantDto.class);
+  public static NoteAboutParticipantResponse deserialize(String json){
+    return (NoteAboutParticipantResponse)deserialize(json, NoteAboutParticipantResponse.class);
   }
 }

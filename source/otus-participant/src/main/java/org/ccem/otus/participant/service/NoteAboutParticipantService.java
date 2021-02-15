@@ -5,7 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
 
 import java.util.List;
 
@@ -19,5 +19,5 @@ public interface NoteAboutParticipantService {
 
   void delete(ObjectId userOid, ObjectId noteAboutParticipantOid) throws ValidationException, DataNotFoundException;
 
-  List<NoteAboutParticipantDto> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException;
+  List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException;
 }

@@ -10,7 +10,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantDto;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
 import org.ccem.otus.participant.service.NoteAboutParticipantService;
 
 import javax.inject.Inject;
@@ -87,7 +87,7 @@ public class NoteAboutParticipantFacade {
     }
   }
 
-  public List<NoteAboutParticipantDto> getAll(User user, Long recruitmentNumber, int skip, int limit){
+  public List<NoteAboutParticipantResponse> getAll(User user, Long recruitmentNumber, int skip, int limit){
     try{
       return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, skip, limit);
     }
