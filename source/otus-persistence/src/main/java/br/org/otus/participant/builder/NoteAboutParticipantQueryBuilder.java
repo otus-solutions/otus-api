@@ -2,6 +2,7 @@ package br.org.otus.participant.builder;
 
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
@@ -10,7 +11,10 @@ public class NoteAboutParticipantQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
-  public ArrayList<Bson> getByRnQuery(ObjectId userOid, Long recruitmentNumber, int skip, int limit) {
+  public ArrayList<Bson> getByRnQuery(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) {
+    int skip = searchSettingsDto.getCurrentQuantity();
+    int limit = searchSettingsDto.getQuantityToGet();
+
     pipeline = new ArrayList<>();
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $match: {\n" +

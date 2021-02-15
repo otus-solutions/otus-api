@@ -54,11 +54,11 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
 
   @GET
   @Secured
-  @Path("/{rn}/{skip}/{limit}")
+  @Path("/{rn}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String getAll(@Context HttpServletRequest request, @PathParam("rn") Long recruitmentNumber, @PathParam("skip") int skip, @PathParam("limit") int limit){
+  public String getAll(@Context HttpServletRequest request, @PathParam("rn") Long recruitmentNumber, String searchSettingsDtoJson){
     return new Response().buildSuccess(
-      noteAboutParticipantFacade.getAll(getUser(request), recruitmentNumber, skip, limit)
+      noteAboutParticipantFacade.getAll(getUser(request), recruitmentNumber, searchSettingsDtoJson)
     ).toJson(NoteAboutParticipantResponse.getFrontGsonBuilder());
   }
 

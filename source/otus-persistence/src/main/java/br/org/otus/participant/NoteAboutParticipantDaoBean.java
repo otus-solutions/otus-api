@@ -12,6 +12,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.participant.persistence.NoteAboutParticipantDao;
 
 import java.util.ArrayList;
@@ -78,8 +79,8 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, int skip, int limit) throws MemoryExcededException {
-    AggregateIterable<Document> results = collection.aggregate((new NoteAboutParticipantQueryBuilder().getByRnQuery(userOid, recruitmentNumber, skip, limit)));
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException {
+    AggregateIterable<Document> results = collection.aggregate((new NoteAboutParticipantQueryBuilder().getByRnQuery(userOid, recruitmentNumber, searchSettingsDto)));
     MongoCursor<Document> iterator = results.iterator();
 
     List<NoteAboutParticipantResponse> notes = new ArrayList<>();

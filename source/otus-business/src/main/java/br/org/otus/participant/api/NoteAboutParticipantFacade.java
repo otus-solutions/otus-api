@@ -11,6 +11,7 @@ import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
 import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
+import org.ccem.otus.participant.model.comment.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.participant.service.NoteAboutParticipantService;
 
 import javax.inject.Inject;
@@ -87,9 +88,9 @@ public class NoteAboutParticipantFacade {
     }
   }
 
-  public List<NoteAboutParticipantResponse> getAll(User user, Long recruitmentNumber, int skip, int limit){
+  public List<NoteAboutParticipantResponse> getAll(User user, Long recruitmentNumber, String searchSettingsDtoJson){
     try{
-      return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, skip, limit);
+      return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, NoteAboutParticipantSearchSettingsDto.deserialize(searchSettingsDtoJson));
     }
     catch(MemoryExcededException e){
       LOGGER.severe(e.getMessage());
