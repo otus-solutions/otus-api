@@ -166,9 +166,9 @@ public class ExtractionResource {
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Path("/participant/{rn}/participant-contact-attempts")
-  public byte[] extractParticipantContactAttempts(@PathParam("rn") Long recruitmentNumber) {
-    return extractionFacade.createParticipantContactAttemptsExtraction(recruitmentNumber);
+  @Path("/participant/participant-contact-attempts")
+  public byte[] extractParticipantContactAttempts() {
+    return extractionFacade.createParticipantContactAttemptsExtraction();
   }
 
 }

@@ -121,7 +121,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
       ));
 
       pipeline.add(new Document("$sort",
-        new Document("attemptList._id", new Integer(-1))));
+        new Document("attemptList._id", -1)));
 
       pipeline.add(new Document("$project",
         new Document("_id", 0)
@@ -156,13 +156,9 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> findParticipantAttempts(Long recruitmentNumber) throws DataNotFoundException {
+  public ArrayList<ParticipantContactAttempt> finParticipantContactAttempts() throws DataNotFoundException {
     try{
       ArrayList<Bson> pipeline = new ArrayList<>();
-
-      pipeline.add(new Document("$match",
-        new Document(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)
-      ));
 
       pipeline.add(new Document("$lookup", new Document("from", USER_COLLECTION_NAME)
         .append("localField", REGISTEREDBY_FIELD_NAME)
@@ -175,7 +171,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
       ));
 
       pipeline.add(new Document("$sort",
-        new Document("address", new Integer(-1))
+        new Document("address", -1)
       ));
 
       pipeline.add(new Document("$project",
@@ -219,7 +215,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
       return attempts;
     }
     catch (NullPointerException e){
-      throw new DataNotFoundException("No participant contact attempts found for recruitmentNumber {" + recruitmentNumber.toString() + "}");
+      throw new DataNotFoundException("No participant contact attempts found");
     }
   }
 

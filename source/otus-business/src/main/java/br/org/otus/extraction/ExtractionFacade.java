@@ -162,8 +162,8 @@ public class ExtractionFacade {
     return fileUploaderFacade.downloadFiles(oids);
   }
 
-  public byte[] createParticipantContactAttemptsExtraction(Long recruitmentNumber) {
-    ArrayList<ParticipantContactAttempt> participantContactAttempts = participantContactAttemptFacade.findParticipantAttempts(recruitmentNumber);
+  public byte[] createParticipantContactAttemptsExtraction() {
+    ArrayList<ParticipantContactAttempt> participantContactAttempts = participantContactAttemptFacade.finParticipantContactAttempts();
     ParticipantContactAttemptsExtraction extractor = new ParticipantContactAttemptsExtraction(participantContactAttempts);
     try {
       return extractionService.createExtraction(extractor);
