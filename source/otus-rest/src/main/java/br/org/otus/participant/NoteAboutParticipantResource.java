@@ -52,10 +52,11 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
     return new Response().buildSuccess().toJson();
   }
 
-  @GET
+  @POST
   @Secured
   @Path("/{rn}")
   @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
   public String getAll(@Context HttpServletRequest request, @PathParam("rn") Long recruitmentNumber, String searchSettingsDtoJson){
     return new Response().buildSuccess(
       noteAboutParticipantFacade.getAll(getUser(request), recruitmentNumber, searchSettingsDtoJson)

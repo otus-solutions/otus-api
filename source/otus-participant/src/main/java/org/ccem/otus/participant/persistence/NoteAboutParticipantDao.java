@@ -22,5 +22,5 @@ public interface NoteAboutParticipantDao {
 
   void delete(ObjectId userId, ObjectId noteAboutParticipantId) throws DataNotFoundException;
 
-  List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException;
+  List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException;
 }

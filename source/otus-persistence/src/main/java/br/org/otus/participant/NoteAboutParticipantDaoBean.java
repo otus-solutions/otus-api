@@ -38,9 +38,9 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public NoteAboutParticipant get(ObjectId noteAboutParticipantId){
+  public NoteAboutParticipant get(ObjectId noteAboutParticipantId) {
     Document result = collection.find(eq(ID_FIELD_NAME, noteAboutParticipantId)).first();
-    if(result == null){
+    if (result == null) {
       return null;
     }
     return NoteAboutParticipant.deserialize(result.toJson());
@@ -52,7 +52,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
       new Document(ID_FIELD_NAME, noteAboutParticipant.getId()).append(USER_ID_PATH, userOid),
       new Document(SET_OPERATOR, Document.parse(noteAboutParticipant.serialize()))
     );
-    if(updateResult.getMatchedCount() == 0){
+    if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipant.getId().toHexString() + "}");
     }
   }
@@ -63,7 +63,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
       new Document(ID_FIELD_NAME, noteAboutParticipantId).append(USER_ID_PATH, userOid),
       new Document(SET_OPERATOR, new Document(STARRED_PATH, starred))
     );
-    if(updateResult.getMatchedCount() == 0){
+    if (updateResult.getMatchedCount() == 0) {
       throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipantId.toHexString() + "}");
     }
   }
@@ -73,23 +73,26 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
     Document query = new Document(ID_FIELD_NAME, noteAboutParticipantId);
     query.put(USER_ID_PATH, userId);
     DeleteResult deleteResult = collection.deleteOne(query);
-    if(deleteResult.getDeletedCount() == 0){
+    if (deleteResult.getDeletedCount() == 0) {
       throw new DataNotFoundException("There is no note about participant with id {" + noteAboutParticipantId.toHexString() + "}");
     }
   }
 
   @Override
-  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException {
-    AggregateIterable<Document> results = collection.aggregate((new NoteAboutParticipantQueryBuilder().getByRnQuery(userOid, recruitmentNumber, searchSettingsDto)));
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException {
+    AggregateIterable<Document> results = collection.aggregate((new NoteAboutParticipantQueryBuilder().getByRnQuery(userOid, recruitmentNumber, searchSettingsDto))).allowDiskUse(true);
+    if (results == null) {
+      throw new DataNotFoundException("No results for user note about participant.");
+    }
+
     MongoCursor<Document> iterator = results.iterator();
 
     List<NoteAboutParticipantResponse> notes = new ArrayList<>();
 
-    while(iterator.hasNext()){
-      try{
+    while (iterator.hasNext()) {
+      try {
         notes.add(NoteAboutParticipantResponse.deserialize(iterator.next().toJson()));
-      }
-      catch(OutOfMemoryError e){
+      } catch (OutOfMemoryError e) {
         notes.clear();
         throw new MemoryExcededException("Notes about participant {" + recruitmentNumber + "} exceeded memory used");
       }

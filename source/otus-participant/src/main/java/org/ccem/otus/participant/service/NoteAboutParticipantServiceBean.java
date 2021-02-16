@@ -66,7 +66,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   }
 
   @Override
-  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException {
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException {
     return noteAboutParticipantDao.getAll(userOid, recruitmentNumber, searchSettingsDto);
   }
 

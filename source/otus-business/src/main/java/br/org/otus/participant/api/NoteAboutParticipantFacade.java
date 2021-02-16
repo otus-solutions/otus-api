@@ -92,7 +92,7 @@ public class NoteAboutParticipantFacade {
     try{
       return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, NoteAboutParticipantSearchSettingsDto.deserialize(searchSettingsDtoJson));
     }
-    catch(MemoryExcededException e){
+    catch(MemoryExcededException | DataNotFoundException e){
       LOGGER.severe(e.getMessage());
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
