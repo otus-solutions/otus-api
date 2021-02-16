@@ -8,9 +8,12 @@ import javax.inject.Inject;
 
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.participant.business.ParticipantExtraction;
+import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
@@ -42,6 +45,8 @@ public class ExtractionFacade {
   private SurveyFacade surveyFacade;
   @Inject
   private ExamUploadFacade examUploadFacade;
+  @Inject
+  private ParticipantFacade participantFacade;
   @Inject
   private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
   @Inject
@@ -127,6 +132,16 @@ public class ExtractionFacade {
   public byte[] createLaboratoryExtraction() {
     LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
     LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
+    try {
+      return extractionService.createExtraction(extractor);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
+    }
+  }
+
+  public byte[] createParticipantExtraction() {
+    LinkedList<ParticipantResultExtraction> extraction = participantFacade.getParticipantExtraction();
+    ParticipantExtraction extractor = new ParticipantExtraction(extraction);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

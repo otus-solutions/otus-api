@@ -5,6 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import service.ProjectConfigurationService;
@@ -12,6 +13,7 @@ import service.ProjectConfigurationService;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -133,4 +135,11 @@ public class ParticipantServiceBean implements ParticipantService {
   public Boolean deleteEmail(ObjectId participantId) throws DataNotFoundException {
     return participantDao.deleteEmail(participantId);
   }
+
+  @Override
+  public LinkedList<ParticipantResultExtraction> getParticipantExtraction() throws DataNotFoundException {
+    return participantDao.getParticipantExtraction();
+  }
+
+
 }

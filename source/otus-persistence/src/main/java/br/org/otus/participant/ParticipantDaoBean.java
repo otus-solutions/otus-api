@@ -1,6 +1,10 @@
 package br.org.otus.participant;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadRecordExtraction;
+import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
+import br.org.otus.laboratory.project.builder.ExamResultQueryBuilder;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
@@ -10,6 +14,9 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.builder.ParticipantQueryBuilder;
+import org.ccem.otus.participant.business.extraction.model.ParticipantRecordExtraction;
+import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.persistence.ParticipantDao;
 import org.ccem.otus.persistence.FieldCenterDao;
@@ -268,4 +275,25 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
     return updateResult.getModifiedCount() != 0;
   }
 
+  @Override
+  public LinkedList<ParticipantResultExtraction> getParticipantExtraction() throws DataNotFoundException {
+    LinkedList<ParticipantResultExtraction> values = new LinkedList<>();
+    List<Bson> query = new ParticipantQueryBuilder()
+      .lookupParticipantContact()
+      .projectionStructureParticipantContact()
+      .groupParticipantContactInLines()
+      .getProjectionOfParticipantToExtraction()
+      .build();
+
+    try {
+      AggregateIterable<Document> output = collection.aggregate(query).allowDiskUse(true);
+      for (Object anOutput : output) {
+        Document result = (Document) anOutput;
+        values.addAll(ParticipantRecordExtraction.deserialize(result.toJson()).getResults());
+      }
+    } catch (Exception e) {
+      throw new DataNotFoundException(new Throwable("There are no exams to extraction."));
+    }
+    return values;
+  }
 }
