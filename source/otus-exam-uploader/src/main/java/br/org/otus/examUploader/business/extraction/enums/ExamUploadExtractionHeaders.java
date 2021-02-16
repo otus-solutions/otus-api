@@ -8,7 +8,9 @@ public enum ExamUploadExtractionHeaders {
   RESULT_NAME("result_name"),
   RESULT("result"),
   RELEASE_DATE("release_date"),
-  OBSERVATIONS("observations");
+  OBSERVATIONS("observations"),
+  CUTOFFVALUE("cutoff_value"),
+  EXTRAVARIABLES("extra_variables");
 
   private final String value;
 
