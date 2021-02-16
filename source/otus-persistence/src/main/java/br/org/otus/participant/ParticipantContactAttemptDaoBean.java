@@ -156,6 +156,74 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
   }
 
   @Override
+  public ArrayList<ParticipantContactAttempt> findParticipantAttempts(Long recruitmentNumber) throws DataNotFoundException {
+    try{
+      ArrayList<Bson> pipeline = new ArrayList<>();
+
+      pipeline.add(new Document("$match",
+        new Document(RECRUITMENT_NUMBER_FIELD_NAME, recruitmentNumber)
+      ));
+
+      pipeline.add(new Document("$lookup", new Document("from", USER_COLLECTION_NAME)
+        .append("localField", REGISTEREDBY_FIELD_NAME)
+        .append("foreignField", "_id")
+        .append("as", "user")
+      ));
+
+      pipeline.add(new Document("$addFields",
+        new Document("userEmail", new Document("$arrayElemAt", Arrays.asList("$user.email", 0)))
+      ));
+
+      pipeline.add(new Document("$sort",
+        new Document("address", new Integer(-1))
+      ));
+
+      pipeline.add(new Document("$project",
+        new Document("_id", 1)
+          .append("objectType", 1)
+          .append("recruitmentNumber", 1)
+          .append(
+            "address",
+            new Document(
+              "$let",
+              new Document(
+                "vars",
+                new Document(
+                  "addressPosition",
+                  new Document(
+                    "$arrayElemAt",
+                    Arrays.asList(new Document("$objectToArray", "$address"), 0)
+                  )
+                )
+              ).append("in", "$$addressPosition.v.value")
+            )
+          )
+          .append("attemptDateTime", 1)
+          .append("attemptStatus", 1)
+          .append("registeredBy", 1)
+          .append("userEmail", 1)
+          .append("isValid", 1)
+      ));
+
+      AggregateIterable<Document> result = collection.aggregate(pipeline);
+      ArrayList<ParticipantContactAttempt> attempts = new ArrayList<>();
+
+      MongoCursor<Document> iterator = result.iterator();
+
+      while (iterator.hasNext()) {
+        Document document = iterator.next();
+        ParticipantContactAttempt participantContactAttempt = ParticipantContactAttempt.deserialize(document.toJson());
+        attempts.add(participantContactAttempt);
+      }
+
+      return attempts;
+    }
+    catch (NullPointerException e){
+      throw new DataNotFoundException("No participant contact attempts found for recruitmentNumber {" + recruitmentNumber.toString() + "}");
+    }
+  }
+
+  @Override
   public void swapMainContactAttempts(ParticipantContactDto participantContactDto, Long recruitmentNumber) {
     String contactType = participantContactDto.getType();
     collection.updateMany(and(

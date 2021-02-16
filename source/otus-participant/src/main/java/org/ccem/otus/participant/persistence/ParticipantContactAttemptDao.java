@@ -22,5 +22,7 @@ public interface ParticipantContactAttemptDao {
 
   ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException;
 
+  ArrayList<ParticipantContactAttempt> findParticipantAttempts(Long recruitmentNumber) throws DataNotFoundException;
+
   void swapMainContactAttempts(ParticipantContactDto participantContactDto, Long recruitmentNumber);
 }
