@@ -34,13 +34,14 @@ public abstract class SearchSettingsDto extends SerializableModel {
   }
 
   public Boolean isValid() {
+    boolean isValid = (currentQuantity >= 0 && quantityToGet > 0);
     if(fieldsToOrder == null){
-      return (mode == null);
+      return isValid && (mode == null);
     }
     if(mode == null || (mode != 1 && mode != -1)){
       return false;
     }
-    boolean fieldsAreValid = (fieldsToOrder.length > 0);
+    boolean fieldsAreValid = (isValid && (fieldsToOrder.length > 0));
     for(String field : fieldsToOrder){
       fieldsAreValid &= isValidField(field);
     }
