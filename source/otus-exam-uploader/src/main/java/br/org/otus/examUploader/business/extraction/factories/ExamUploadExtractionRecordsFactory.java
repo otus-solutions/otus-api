@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.org.otus.examUploader.ExtraVariable;
 import br.org.otus.examUploader.Observation;
 import br.org.otus.examUploader.business.extraction.model.ParticipantExamUploadResultExtraction;
 
@@ -35,6 +36,7 @@ public class ExamUploadExtractionRecordsFactory {
     answers.add(record.getResultName());
     answers.add(record.getValue());
     answers.add(record.getReleaseDate());
+
     String observations = "";
     for (Observation observation : record.getObservations()) {
       if (observations.isEmpty()) {
@@ -44,6 +46,19 @@ public class ExamUploadExtractionRecordsFactory {
       }
     }
     answers.add(observations);
+
+    answers.add(record.getCutOffValue());
+
+    String extraVariables = "";
+
+    for (ExtraVariable extraVariable : record.getExtraVariables()) {
+      if (extraVariables.isEmpty()) {
+        extraVariables += extraVariable.getName() + ": '" + extraVariable.getValue() + "'";
+      } else {
+        extraVariables += "; " + extraVariable.getName() + ": '" + extraVariable.getValue() + "'";
+      }
+    }
+    answers.add(extraVariables);
 
     return answers;
   }

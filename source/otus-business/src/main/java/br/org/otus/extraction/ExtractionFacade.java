@@ -14,9 +14,11 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.business.ParticipantExtraction;
 import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
+import org.ccem.otus.participant.service.extraction.ParticipantContactAttemptsExtraction;
 import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
@@ -34,6 +36,7 @@ import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
+import br.org.otus.participant.api.ParticipantContactAttemptFacade;
 
 public class ExtractionFacade {
 
@@ -47,6 +50,8 @@ public class ExtractionFacade {
   private ExamUploadFacade examUploadFacade;
   @Inject
   private ParticipantFacade participantFacade;
+  @Inject
+  private ParticipantContactAttemptFacade participantContactAttemptFacade;
   @Inject
   private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
   @Inject
@@ -170,6 +175,16 @@ public class ExtractionFacade {
 
   public byte[] downloadFiles(ArrayList<String> oids) {
     return fileUploaderFacade.downloadFiles(oids);
+  }
+
+  public byte[] createParticipantContactAttemptsExtraction() {
+    ArrayList<ParticipantContactAttempt> participantContactAttempts = participantContactAttemptFacade.finParticipantContactAttempts();
+    ParticipantContactAttemptsExtraction extractor = new ParticipantContactAttemptsExtraction(participantContactAttempts);
+    try {
+      return extractionService.createExtraction(extractor);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
+    }
   }
 
 }
