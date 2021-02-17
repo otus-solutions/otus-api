@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.org.otus.examUploader.ExtraVariable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
   private static final String VALUE_1 = "10";
   private static final String VALUE_2 = "20";
   private static final String RELEASE_DATE = "1000330";
+  private static final String CUT_OFF_VALUE = "1000330";
 
   private List<String> headers;
   private LinkedList<ParticipantExamUploadResultExtraction> records;
@@ -41,8 +43,16 @@ public class ExamUploadExtractionRecordsFactoryTest {
   @Test
   public void buildResultInformation_method_should_call_createRecordsAnswers_method() throws Exception {
     List<Observation> observations = new ArrayList<>();
+    List<ExtraVariable> extraVariables = new ArrayList<ExtraVariable>();
+    extraVariables.add(new ExtraVariable("any", "any"));
     this.examUploadExtractionRecordsFactory = PowerMockito.spy(new ExamUploadExtractionRecordsFactory(this.records));
-    this.record = this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, CODE, EXAM_NAME, RESULT_NAME, VALUE_1, RELEASE_DATE, observations);
+    this.record = this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER,
+            CODE, EXAM_NAME, RESULT_NAME,
+            VALUE_1,
+            RELEASE_DATE,
+            observations,
+            CUT_OFF_VALUE,
+            extraVariables);
     this.examUploadExtractionRecordsFactory.buildResultInformation();
 
     PowerMockito.verifyPrivate(this.examUploadExtractionRecordsFactory).invoke("createRecordsAnswers", this.record);
@@ -51,7 +61,10 @@ public class ExamUploadExtractionRecordsFactoryTest {
   @Test
   public void getRecords_method_should_only_return_one_line() {
     List<Observation> observations = new ArrayList<>();
-    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, CODE, EXAM_NAME, RESULT_NAME, VALUE_1, RELEASE_DATE, observations));
+    List<ExtraVariable> extraVariables = new ArrayList<ExtraVariable>();
+    extraVariables.add(new ExtraVariable("any", "any"));
+    this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, CODE, EXAM_NAME, RESULT_NAME, VALUE_1,
+            RELEASE_DATE, observations,  CUT_OFF_VALUE, extraVariables));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
     List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
 
@@ -61,8 +74,10 @@ public class ExamUploadExtractionRecordsFactoryTest {
   @Test
   public void getRecords_method_should_return_list_with_expected_values() {
     List<Observation> observations = new ArrayList<>();
+    List<ExtraVariable> extraVariables = new ArrayList<ExtraVariable>();
+    extraVariables.add(new ExtraVariable("any", "any"));
     this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, CODE, EXAM_NAME, RESULT_NAME, VALUE_1,
-      RELEASE_DATE, observations));
+            RELEASE_DATE, observations, CUT_OFF_VALUE, extraVariables));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
     List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
 
@@ -76,7 +91,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Assert.assertEquals("", results.get(6));
   }
 
-  private ParticipantExamUploadResultExtraction createFakeParticipantExamUploadRecord(Long rn, String code, String examName, String resultName, String value, String releaseDate, List<Observation> observations) {
+  private ParticipantExamUploadResultExtraction createFakeParticipantExamUploadRecord(Long rn, String code, String examName, String resultName, String value, String releaseDate, List<Observation> observations, String cutOffValue, List<ExtraVariable> extraVariables) {
     ParticipantExamUploadResultExtraction participantExamUploadRecordExtraction = new ParticipantExamUploadResultExtraction();
 
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "recruitmentNumber", rn);
@@ -86,6 +101,8 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "value", value);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "releaseDate", releaseDate);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "observations", observations);
+    Whitebox.setInternalState(participantExamUploadRecordExtraction, "cutOffValue", cutOffValue);
+    Whitebox.setInternalState(participantExamUploadRecordExtraction, "extraVariables", extraVariables);
 
     return participantExamUploadRecordExtraction;
   }

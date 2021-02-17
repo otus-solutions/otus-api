@@ -12,9 +12,12 @@ import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+<<<<<<< HEAD
 import org.ccem.otus.participant.business.ParticipantExtraction;
 import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
+=======
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+>>>>>>> 818f8d941e2706fed929cc743cc0a09bef3c51e2
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
@@ -49,9 +52,11 @@ public class ExtractionFacade {
   @Inject
   private ExamUploadFacade examUploadFacade;
   @Inject
+<<<<<<< HEAD
   private ParticipantFacade participantFacade;
-  @Inject
+=======
   private ParticipantContactAttemptFacade participantContactAttemptFacade;
+>>>>>>> 818f8d941e2706fed929cc743cc0a09bef3c51e2
   @Inject
   private AutocompleteQuestionPreProcessor autocompleteQuestionPreProcessor;
   @Inject
