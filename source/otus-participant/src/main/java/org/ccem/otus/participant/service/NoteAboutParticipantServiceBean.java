@@ -66,7 +66,10 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   }
 
   @Override
-  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException {
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException, ValidationException {
+    if(!searchSettingsDto.isValid()){
+      throw new ValidationException("Search settings dto is not valid");
+    }
     return noteAboutParticipantDao.getAll(userOid, recruitmentNumber, searchSettingsDto);
   }
 
