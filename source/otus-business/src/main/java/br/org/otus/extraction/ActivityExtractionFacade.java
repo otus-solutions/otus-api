@@ -89,7 +89,7 @@ public class ActivityExtractionFacade {
 
   public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
-      new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).toJson());
+      new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).serialize());
       LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
     }
     catch (RuntimeException e) {

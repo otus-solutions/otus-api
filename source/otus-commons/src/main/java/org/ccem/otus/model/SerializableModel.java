@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 
 public abstract class SerializableModel {
 
-  public String toJson(){
+  public String serialize(){
     return getGsonBuilderNonStatic().create().toJson(this);
   }
 

@@ -185,7 +185,7 @@ public class ActivityExtractionFacadeTest {
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
     doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
     activityExtractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.toJson());
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
   }
 
   @Test(expected = HttpResponseException.class)
@@ -250,7 +250,7 @@ public class ActivityExtractionFacadeTest {
     when(surveyActivity.isDiscarded()).thenReturn(false);
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
     activityExtractionFacade.forceSynchronizeSurveyActivityExtractions(ACRONYM, VERSION);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.toJson());
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
   }
 
   @Test(expected = HttpResponseException.class)
@@ -270,7 +270,7 @@ public class ActivityExtractionFacadeTest {
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
     doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
     activityExtractionFacade.forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.toJson());
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
   }
 
   @Test(expected = HttpResponseException.class)
