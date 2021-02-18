@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
@@ -18,6 +17,8 @@ public class SearchSettingsDtoTest {
   private static final int INVALID_CURRENT_QUANTITY = -1;
   private static final int QUANTITY_TO_GET = 5;
   private static final int INVALID_QUANTITY_TO_GET = 0;
+  private static final Enum ORDER_FIELDS_OPTIONS = null;
+  private static final String JSON = "{}";
 
   private SearchSettingsDto searchSettingsDto;
   @Mock
@@ -25,9 +26,15 @@ public class SearchSettingsDtoTest {
 
   @Before
   public void setUp(){
-    searchSettingsDto = Mockito.mock(SearchSettingsDto.class, Mockito.CALLS_REAL_METHODS);
+    searchSettingsDto = new SearchSettingsDto();
     Whitebox.setInternalState(searchSettingsDto, "currentQuantity", CURRENT_QUANTITY);
     Whitebox.setInternalState(searchSettingsDto, "quantityToGet", QUANTITY_TO_GET);
+  }
+
+  @Test
+  public void constructor_with_args_should_set_oderSettingDto(){
+    searchSettingsDto = new SearchSettingsDto(ORDER_FIELDS_OPTIONS);
+    assertNotNull(searchSettingsDto.getOrder());
   }
 
   @Test
@@ -66,6 +73,11 @@ public class SearchSettingsDtoTest {
     Whitebox.setInternalState(searchSettingsDto, "order", orderSettingsDto);
     doReturn(false).when(orderSettingsDto).isValid();
     assertFalse(searchSettingsDto.isValid());
+  }
+
+  @Test
+  public void deserialize_static_method_should_convert_JsonString_to_objectModel(){
+    assertTrue(SearchSettingsDto.deserialize(JSON) instanceof SearchSettingsDto);
   }
 
 }
