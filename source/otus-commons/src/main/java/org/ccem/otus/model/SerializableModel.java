@@ -9,11 +9,7 @@ public abstract class SerializableModel {
   }
 
   protected static Object deserialize(String json, Class clazz){
-    return getGsonBuilder().create().fromJson(json, clazz);
-  }
-
-  protected static GsonBuilder getGsonBuilder() {
-    return new GsonBuilder();
+    return new GsonBuilder().create().fromJson(json, clazz);
   }
 
   /* Non static methods */

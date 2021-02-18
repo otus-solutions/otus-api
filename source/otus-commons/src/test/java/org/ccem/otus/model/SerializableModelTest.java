@@ -16,8 +16,4 @@ public class SerializableModelTest {
     assertTrue(SerializableModel.deserialize("{}", Object.class) instanceof Object);
   }
 
-  @Test
-  public void getGsonBuilder_return_GsonBuilder_instance(){
-    assertTrue(SerializableModel.getGsonBuilder() instanceof GsonBuilder);
-  }
 }
