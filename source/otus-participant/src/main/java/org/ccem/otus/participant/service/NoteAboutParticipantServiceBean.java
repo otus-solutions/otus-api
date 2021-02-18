@@ -74,8 +74,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
   }
 
   private void checkNoteExistenceOnlyById(ObjectId noteAboutParticipantOid) throws ValidationException {
-    NoteAboutParticipant noteAboutParticipantFound = noteAboutParticipantDao.get(noteAboutParticipantOid);
-    if(noteAboutParticipantFound != null){
+    if(noteAboutParticipantDao.exists(noteAboutParticipantOid)){
       throw new ValidationException();
     }
   }

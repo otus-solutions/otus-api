@@ -14,7 +14,7 @@ public interface NoteAboutParticipantDao {
 
   ObjectId create(NoteAboutParticipant commentAboutParticipant);
 
-  NoteAboutParticipant get(ObjectId noteAboutParticipantId);
+  boolean exists(ObjectId noteAboutParticipantId);
 
   void update(ObjectId userOid, NoteAboutParticipant commentAboutParticipant) throws DataNotFoundException;
 

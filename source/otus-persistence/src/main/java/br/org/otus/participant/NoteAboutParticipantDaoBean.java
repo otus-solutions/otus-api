@@ -38,12 +38,9 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public NoteAboutParticipant get(ObjectId noteAboutParticipantId) {
+  public boolean exists(ObjectId noteAboutParticipantId) {
     Document result = collection.find(eq(ID_FIELD_NAME, noteAboutParticipantId)).first();
-    if (result == null) {
-      return null;
-    }
-    return NoteAboutParticipant.deserialize(result.toJson());
+    return (result != null);
   }
 
   @Override

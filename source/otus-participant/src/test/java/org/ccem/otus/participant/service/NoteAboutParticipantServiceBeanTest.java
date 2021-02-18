@@ -35,7 +35,6 @@ public class NoteAboutParticipantServiceBeanTest {
   private static final Boolean STARRED = true;
   private static final Long RECRUITMENT_NUMBER = 1234567L;
   private static final ObjectId USER_OID = new ObjectId("5a33cb4a28f10d1043710f00");
-  private static final ObjectId USER_OID_2 = new ObjectId("5a33cb4a28f10d1043710f01");
   private static final String NOW_DATE_ISO = "2021-02-15T20:01:50.680Z";
 
   @InjectMocks
@@ -155,12 +154,11 @@ public class NoteAboutParticipantServiceBeanTest {
   }
 
 
-
   private void checkNoteExistenceOnlyByIdOk(){
-    doReturn(null).when(dao).get(NOTE_ABOUT_PARTICIPANT_OID);
+    doReturn(false).when(dao).exists(NOTE_ABOUT_PARTICIPANT_OID);
   }
 
   private void checkNoteExistenceOnlyByIdFindSomeNote(){
-    doReturn(noteAboutParticipantFound).when(dao).get(NOTE_ABOUT_PARTICIPANT_OID);
+    doReturn(true).when(dao).exists(NOTE_ABOUT_PARTICIPANT_OID);
   }
 }
