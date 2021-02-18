@@ -26,13 +26,8 @@ public class NoteAboutParticipantFacade {
   private NoteAboutParticipantService noteAboutParticipantService;
 
   public String create(User user, String noteAboutParticipantJson){
-    try{
-      NoteAboutParticipant noteAboutParticipant = (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson);
-      return noteAboutParticipantService.create(user.get_id(), noteAboutParticipant).toHexString();
-    }
-    catch (Exception e){
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
+    NoteAboutParticipant noteAboutParticipant = (new NoteAboutParticipant()).deserializeNonStatic(noteAboutParticipantJson);
+    return noteAboutParticipantService.create(user.get_id(), noteAboutParticipant).toHexString();
   }
 
   public void update(User user, String noteAboutParticipantJson){
@@ -48,10 +43,6 @@ public class NoteAboutParticipantFacade {
       LOGGER.severe("User {" + user.get_id() + "} tried update note about participant not created by him");
       throw new HttpResponseException(Authorization.build("You can't update the note because you doesn't create it"));
     }
-    catch (Exception e){
-      LOGGER.severe(e.getMessage());
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
   }
 
   public void updateStarred(User user, String noteAboutParticipantId, Boolean starred){
@@ -65,10 +56,6 @@ public class NoteAboutParticipantFacade {
       LOGGER.severe("User {" + user.get_id() + "} tried update starred of note about participant not created by him");
       throw new HttpResponseException(Authorization.build("You can't update starred of note because you doesn't create it"));
     }
-    catch (Exception e){
-      LOGGER.severe(e.getMessage());
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
   }
 
   public void delete(User user, String noteAboutParticipantId){
@@ -81,10 +68,6 @@ public class NoteAboutParticipantFacade {
     catch(ValidationException e){
       LOGGER.severe("User {" + user.get_id() + "} tried delete note about participant not created by him");
       throw new HttpResponseException(Authorization.build("You can't delete the note because you doesn't create it"));
-    }
-    catch (Exception e){
-      LOGGER.severe(e.getMessage());
-      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
