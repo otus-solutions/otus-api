@@ -31,6 +31,10 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     return creationDate;
   }
 
+  public String getLastUpdate() {
+    return lastUpdate;
+  }
+
   public Boolean getEdited() {
     return edited;
   }
@@ -49,16 +53,8 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     this._id = _id;
   }
 
-  public void setRecruitmentNumber(Long recruitmentNumber) {
-    this.recruitmentNumber = recruitmentNumber;
-  }
-
   public void setCreationDate(String creationDate) {
     this.creationDate = creationDate;
-  }
-
-  public String getLastUpdate() {
-    return lastUpdate;
   }
 
   public void setLastUpdate(String lastUpdate) {
@@ -71,10 +67,6 @@ public class NoteAboutParticipant extends SerializableModelWithID {
 
   public void setStarred(Boolean starred) {
     this.starred = starred;
-  }
-
-  public void setComment(String comment) {
-    this.comment = comment;
   }
 
   public void setUserId(ObjectId userId) {
