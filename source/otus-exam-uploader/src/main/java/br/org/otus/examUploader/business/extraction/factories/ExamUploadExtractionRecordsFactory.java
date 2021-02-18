@@ -49,16 +49,18 @@ public class ExamUploadExtractionRecordsFactory {
 
     answers.add(record.getCutOffValue());
 
-    String extraVariables = "";
-
-    for (ExtraVariable extraVariable : record.getExtraVariables()) {
-      if (extraVariables.isEmpty()) {
-        extraVariables += extraVariable.getName() + ": '" + extraVariable.getValue() + "'";
-      } else {
-        extraVariables += "; " + extraVariable.getName() + ": '" + extraVariable.getValue() + "'";
+    StringBuilder extraVariables = new StringBuilder();
+    List<ExtraVariable> recordExtraVariables = record.getExtraVariables();
+    if (recordExtraVariables != null){
+      for (ExtraVariable extraVariable : recordExtraVariables) {
+        if (extraVariables.length() == 0) {
+          extraVariables.append(extraVariable.getName()).append(": '").append(extraVariable.getValue()).append("'");
+        } else {
+          extraVariables.append("; ").append(extraVariable.getName()).append(": '").append(extraVariable.getValue()).append("'");
+        }
       }
     }
-    answers.add(extraVariables);
+    answers.add(extraVariables.toString());
 
     return answers;
   }
