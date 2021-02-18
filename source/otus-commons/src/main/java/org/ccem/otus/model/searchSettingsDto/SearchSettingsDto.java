@@ -2,7 +2,7 @@ package org.ccem.otus.model.searchSettingsDto;
 
 import org.ccem.otus.model.SerializableModel;
 
-public abstract class SearchSettingsDto extends SerializableModel {
+public class SearchSettingsDto extends SerializableModel {
 
   protected int currentQuantity;
   protected int quantityToGet;
@@ -28,6 +28,10 @@ public abstract class SearchSettingsDto extends SerializableModel {
 
   public Boolean isValid() {
     return (currentQuantity >= 0 && quantityToGet > 0 && (order == null || order.isValid()));
+  }
+
+  public static SearchSettingsDto deserialize(String json){
+    return (SearchSettingsDto)deserialize(json, SearchSettingsDto.class);
   }
 
 }
