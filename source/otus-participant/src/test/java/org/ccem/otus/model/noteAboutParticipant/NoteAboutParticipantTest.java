@@ -90,9 +90,4 @@ public class NoteAboutParticipantTest {
     assertEquals(USER_OID_2, noteAboutParticipant.getUserId());
   }
 
-  @Test
-  public void deserialize_method_should_return_NoteAboutParticipant_instance(){
-    assertTrue(NoteAboutParticipant.deserialize(NOTE_ABOUT_PARTICIPANT_JSON) instanceof NoteAboutParticipant);
-  }
-
 }

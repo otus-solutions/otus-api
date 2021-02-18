@@ -73,8 +73,4 @@ public class NoteAboutParticipant extends SerializableModelWithID {
     this.userId = userId;
   }
 
-  public static NoteAboutParticipant deserialize(String json){
-    return (NoteAboutParticipant)deserialize(json, NoteAboutParticipant.class);
-  }
-
 }
