@@ -11,10 +11,6 @@ import java.time.LocalDateTime;
 
 public abstract class SerializableModelWithID {
 
-  public String serialize(){
-    return getGsonBuilder().create().toJson(this);
-  }
-
   protected static Object deserialize(String json, Class clazz){
     return getGsonBuilder().create().fromJson(json, clazz);
   }
@@ -30,20 +26,24 @@ public abstract class SerializableModelWithID {
     return builder;
   }
 
-  // Non static
+  /* Non static methods */
 
-  public <T> T deserializeNonStatic(String json){
-    return (T)gsonBuilder().create().fromJson(json, this.getClass());
+  public String serialize(){
+    return getGsonBuilderNonStatic().create().toJson(this);
   }
 
-  protected GsonBuilder gsonBuilder() {
+  public <T> T deserializeNonStatic(String json){
+    return (T) getGsonBuilderNonStatic().create().fromJson(json, this.getClass());
+  }
+
+  protected GsonBuilder getGsonBuilderNonStatic() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
     registerSpecificTypeAdapter(builder);
     return builder;
   }
 
-  public GsonBuilder frontGsonBuilder() {
+  public GsonBuilder getFrontGsonBuilderNonStatic() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
     registerSpecificTypeAdapter(builder);
