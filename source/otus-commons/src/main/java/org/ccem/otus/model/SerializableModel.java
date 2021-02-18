@@ -4,10 +4,6 @@ import com.google.gson.GsonBuilder;
 
 public abstract class SerializableModel {
 
-  protected static String serialize(Object object) {
-    return getGsonBuilder().create().toJson(object);
-  }
-
   public String toJson(){
     return getGsonBuilder().create().toJson(this);
   }

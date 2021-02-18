@@ -12,11 +12,6 @@ import static org.junit.Assert.assertTrue;
 public class SerializableModelTest {
 
   @Test
-  public void serializeStaticMethod_should_convert_objectModel_to_JsonString() {
-    assertTrue(SerializableModel.serialize(Mockito.anyObject()) instanceof String);
-  }
-
-  @Test
   public void deserializeStaticMethod_should_convert_JsonString_to_objectModel() {
     assertTrue(SerializableModel.deserialize("{}", Object.class) instanceof Object);
   }
