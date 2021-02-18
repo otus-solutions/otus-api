@@ -7,8 +7,8 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.searchSettingsDto.SearchSettingsDto;
 import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipant;
-import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.participant.service.NoteAboutParticipantService;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({NoteAboutParticipantFacade.class, NoteAboutParticipantSearchSettingsDto.class})
+@PrepareForTest({NoteAboutParticipantFacade.class, SearchSettingsDto.class})
 public class NoteAboutParticipantFacadeTest extends LoggerTestsParent {
 
   private static final String NOTE_ABOUT_PARTICIPANT_ID = "5a33cb4a28f10d1043710f7d";
@@ -47,7 +47,7 @@ public class NoteAboutParticipantFacadeTest extends LoggerTestsParent {
   @Mock
   private User user;
   @Mock
-  private NoteAboutParticipantSearchSettingsDto searchSettingsDto;
+  private SearchSettingsDto searchSettingsDto;
 
   private DataNotFoundException dataNotFoundException = new DataNotFoundException(new Throwable("error"));
   private ValidationException validationException = new ValidationException(new Throwable("error"));
@@ -60,9 +60,8 @@ public class NoteAboutParticipantFacadeTest extends LoggerTestsParent {
     doReturn(noteAboutParticipant).when(noteAboutParticipant).deserializeNonStatic(NOTE_ABOUT_PARTICIPANT_JSON);
     doReturn(USER_OID).when(user).get_id();
 
-    PowerMockito.mockStatic(NoteAboutParticipantSearchSettingsDto.class);
-    when(NoteAboutParticipantSearchSettingsDto.class, "deserialize", SEARCH_SETTINGS_JSON)
-      .thenReturn(searchSettingsDto);
+    PowerMockito.mockStatic(SearchSettingsDto.class);
+    when(SearchSettingsDto.class, "deserialize", SEARCH_SETTINGS_JSON).thenReturn(searchSettingsDto);
   }
 
   @Test

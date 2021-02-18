@@ -2,7 +2,7 @@ package br.org.otus.participant.builder;
 
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantSearchSettingsDto;
+import org.ccem.otus.model.searchSettingsDto.SearchSettingsDto;
 import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class NoteAboutParticipantQueryBuilder {
 
   private ArrayList<Bson> pipeline;
 
-  public ArrayList<Bson> getByRnQuery(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) {
+  public ArrayList<Bson> getByRnQuery(ObjectId userOid, Long recruitmentNumber, SearchSettingsDto searchSettingsDto) {
     int skip = searchSettingsDto.getCurrentQuantity();
     int limit = searchSettingsDto.getQuantityToGet();
 

@@ -10,9 +10,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
+import org.ccem.otus.model.searchSettingsDto.SearchSettingsDto;
 import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipant;
 import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantResponse;
-import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.participant.persistence.NoteAboutParticipantDao;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
   }
 
   @Override
-  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, NoteAboutParticipantSearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException {
+  public List<NoteAboutParticipantResponse> getAll(ObjectId userOid, Long recruitmentNumber, SearchSettingsDto searchSettingsDto) throws MemoryExcededException, DataNotFoundException {
     AggregateIterable<Document> results = collection.aggregate((new NoteAboutParticipantQueryBuilder().getByRnQuery(userOid, recruitmentNumber, searchSettingsDto))).allowDiskUse(true);
     if (results == null) {
       throw new DataNotFoundException("No results for user note about participant.");

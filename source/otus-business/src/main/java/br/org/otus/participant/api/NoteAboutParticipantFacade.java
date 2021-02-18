@@ -9,9 +9,9 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
+import org.ccem.otus.model.searchSettingsDto.SearchSettingsDto;
 import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipant;
 import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantResponse;
-import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.participant.service.NoteAboutParticipantService;
 
 import javax.inject.Inject;
@@ -73,7 +73,7 @@ public class NoteAboutParticipantFacade {
 
   public List<NoteAboutParticipantResponse> getAll(User user, Long recruitmentNumber, String searchSettingsDtoJson){
     try{
-      return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, NoteAboutParticipantSearchSettingsDto.deserialize(searchSettingsDtoJson));
+      return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, SearchSettingsDto.deserialize(searchSettingsDtoJson));
     }
     catch(ValidationException | MemoryExcededException e){
       LOGGER.severe(e.getMessage());
