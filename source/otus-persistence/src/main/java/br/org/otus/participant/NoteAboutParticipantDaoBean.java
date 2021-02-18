@@ -91,7 +91,7 @@ public class NoteAboutParticipantDaoBean extends MongoGenericDao<Document> imple
 
     while (iterator.hasNext()) {
       try {
-        notes.add(NoteAboutParticipantResponse.deserialize(iterator.next().toJson()));
+        notes.add(new NoteAboutParticipantResponse().deserializeNonStatic(iterator.next().toJson()));
       } catch (OutOfMemoryError e) {
         notes.clear();
         throw new MemoryExcededException("Notes about participant {" + recruitmentNumber + "} exceeded memory used");

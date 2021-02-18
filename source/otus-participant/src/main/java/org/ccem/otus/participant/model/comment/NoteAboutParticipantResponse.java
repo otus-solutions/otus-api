@@ -22,7 +22,4 @@ public class NoteAboutParticipantResponse extends SerializableModelWithID {
     registerGsonBuilderLocalDateTimeAdapter(builder);
   }
 
-  public static NoteAboutParticipantResponse deserialize(String json){
-    return (NoteAboutParticipantResponse)deserialize(json, NoteAboutParticipantResponse.class);
-  }
 }
