@@ -31,7 +31,7 @@ public class ParticipantResultExtraction {
     String fifthEmailObservation;
     String mainAddressCep;
     String mainAddressStreet;
-    Double mainAddressNumber;
+    Long mainAddressNumber;
     String mainAddressComplements;
     String mainAddressNeighbourhood;
     String mainAddressCity;
@@ -40,7 +40,7 @@ public class ParticipantResultExtraction {
     String mainAddressObservation;
     String secondAddressCep;
     String secondAddressStreet;
-    Double secondAddressNumber;
+    Long secondAddressNumber;
     String secondAddressComplements;
     String secondAddressNeighbourhood;
     String secondAddressCity;
@@ -49,7 +49,7 @@ public class ParticipantResultExtraction {
     String secondAddressObservation;
     String thirdAddressCep;
     String thirdAddressStreet;
-    Double thirdAddressNumber;
+    Long thirdAddressNumber;
     String thirdAddressComplements;
     String thirdAddressNeighbourhood;
     String thirdAddressCity;
@@ -58,7 +58,7 @@ public class ParticipantResultExtraction {
     String thirdAddressObservation;
     String fourthAddressCep;
     String fourthAddressStreet;
-    Double fourthAddressNumber;
+    Long fourthAddressNumber;
     String fourthAddressComplements;
     String fourthAddressNeighbourhood;
     String fourthAddressCity;
@@ -67,7 +67,7 @@ public class ParticipantResultExtraction {
     String fourthAddressObservation;
     String fifthAddressCep;
     String fifthAddressStreet;
-    Double fifthAddressNumber;
+    Long fifthAddressNumber;
     String fifthAddressComplements;
     String fifthAddressNeighbourhood;
     String fifthAddressCity;
@@ -191,7 +191,7 @@ public class ParticipantResultExtraction {
         return mainAddressStreet;
     }
 
-    public Double getMainAddressNumber() {
+    public Long getMainAddressNumber() {
         return mainAddressNumber;
     }
 
@@ -227,7 +227,7 @@ public class ParticipantResultExtraction {
         return secondAddressStreet;
     }
 
-    public Double getSecondAddressNumber() {
+    public Long getSecondAddressNumber() {
         return secondAddressNumber;
     }
 
@@ -263,7 +263,7 @@ public class ParticipantResultExtraction {
         return thirdAddressStreet;
     }
 
-    public Double getThirdAddressNumber() {
+    public Long getThirdAddressNumber() {
         return thirdAddressNumber;
     }
 
@@ -299,7 +299,7 @@ public class ParticipantResultExtraction {
         return fourthAddressStreet;
     }
 
-    public Double getFourthAddressNumber() {
+    public Long getFourthAddressNumber() {
         return fourthAddressNumber;
     }
 
@@ -335,7 +335,7 @@ public class ParticipantResultExtraction {
         return fifthAddressStreet;
     }
 
-    public Double getFifthAddressNumber() {
+    public Long getFifthAddressNumber() {
         return fifthAddressNumber;
     }
 

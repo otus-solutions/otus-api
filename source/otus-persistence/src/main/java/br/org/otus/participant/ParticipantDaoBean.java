@@ -292,7 +292,7 @@ public class ParticipantDaoBean extends MongoGenericDao<Document> implements Par
         values.addAll(ParticipantRecordExtraction.deserialize(result.toJson()).getResults());
       }
     } catch (Exception e) {
-      throw new DataNotFoundException(new Throwable("There are no exams to extraction."));
+      throw new DataNotFoundException(new Throwable("There are no participant data to extraction."));
     }
     return values;
   }

@@ -37,7 +37,7 @@ public enum ParticipantExtractionHeaders {
   MAIN_ADDRESS_CITY("endereco_principal_cidade"),
   MAIN_ADDRESS_UF("endereco_principal_uf"),
   MAIN_ADDRESS_COUNTRY("endereco_principal_pais"),
-  MAIN_ADDRESS_OBSERVATION("endereço_principal_observacao"),
+  MAIN_ADDRESS_OBSERVATION("endereco_principal_observacao"),
   SECOND_ADDRESS_CEP("segundo_endereco_cep"),
   SECOND_ADDRESS_STREET("segundo_endereco_rua"),
   SECOND_ADDRESS_NUMBER("segundo_endereco_numero"),

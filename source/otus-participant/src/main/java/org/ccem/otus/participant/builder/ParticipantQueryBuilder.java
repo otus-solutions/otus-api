@@ -69,7 +69,7 @@ public class ParticipantQueryBuilder {
       "            endereco_principal_cidade:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.city\",0]}, \"\" ] }," +
       "            endereco_principal_uf:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.state\",0]}, \"\" ] }," +
       "            endereco_principal_pais:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.country\",0]}, \"\" ] }," +
-      "            endereço_principal_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.observation\",0]}, \"\" ] }," +
+      "            endereco_principal_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.observation\",0]}, \"\" ] }," +
       "            segundo_endereco_cep:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.postalCode\",0]}, \"\" ] }," +
       "            segundo_endereco_rua:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.street\",0]}, \"\" ] }," +
       "            segundo_endereco_numero:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.streetNumber\",0]}, 0 ] }," +
@@ -153,7 +153,7 @@ public class ParticipantQueryBuilder {
             "        \"mainAddressCity\": \"$endereco_principal_cidade\",\n" +
             "        \"mainAddressUf\": \"$endereco_principal_uf\",\n" +
             "        \"mainAddressCountry\": \"$endereco_principal_pais\",\n" +
-            "        \"mainAddressObservation\": \"$endereço_principal_observacao\",\n" +
+            "        \"mainAddressObservation\": \"$endereco_principal_observacao\",\n" +
             "        \"secondAddressCep\": \"$segundo_endereco_cep\",\n" +
             "        \"secondAddressStreet\": \"$segundo_endereco_rua\",\n" +
             "        \"secondAddressNumber\": \"$segundo_endereco_numero\",\n" +
