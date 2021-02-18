@@ -35,7 +35,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
       noteAboutParticipantDao.update(userOid, noteAboutParticipant);
     }
     catch (DataNotFoundException e){
-      checkInvalidAccessAttempt(userOid, noteAboutParticipant.getId());
+      checkNoteExistenceOnlyById(noteAboutParticipant.getId());
       throw e;
     }
   }
@@ -49,7 +49,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
       noteAboutParticipantDao.updateStarred(userOid, noteAboutParticipantOid, starred);
     }
     catch (DataNotFoundException e){
-      checkInvalidAccessAttempt(userOid, noteAboutParticipantOid);
+      checkNoteExistenceOnlyById(noteAboutParticipantOid);
       throw e;
     }
   }
@@ -60,7 +60,7 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
       noteAboutParticipantDao.delete(userOid, noteAboutParticipantOid);
     }
     catch (DataNotFoundException e){
-      checkInvalidAccessAttempt(userOid, noteAboutParticipantOid);
+      checkNoteExistenceOnlyById(noteAboutParticipantOid);
       throw e;
     }
   }
@@ -73,9 +73,9 @@ public class NoteAboutParticipantServiceBean implements NoteAboutParticipantServ
     return noteAboutParticipantDao.getAll(userOid, recruitmentNumber, searchSettingsDto);
   }
 
-  private void checkInvalidAccessAttempt(ObjectId userOid, ObjectId noteAboutParticipantOid) throws ValidationException {
-    NoteAboutParticipant noteAboutParticipantFounded =  noteAboutParticipantDao.get(noteAboutParticipantOid);
-    if(noteAboutParticipantFounded != null && !noteAboutParticipantFounded.getUserId().equals(userOid)){
+  private void checkNoteExistenceOnlyById(ObjectId noteAboutParticipantOid) throws ValidationException {
+    NoteAboutParticipant noteAboutParticipantFound = noteAboutParticipantDao.get(noteAboutParticipantOid);
+    if(noteAboutParticipantFound != null){
       throw new ValidationException();
     }
   }
