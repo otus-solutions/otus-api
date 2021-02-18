@@ -1,4 +1,4 @@
-package org.ccem.otus.participant.model.comment;
+package org.ccem.otus.participant.model.noteAboutParticipant;
 
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.SerializableModelWithID;

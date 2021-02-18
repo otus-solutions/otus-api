@@ -4,7 +4,7 @@ import br.org.otus.UserAuthenticationResource;
 import br.org.otus.participant.api.NoteAboutParticipantFacade;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantResponse;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;

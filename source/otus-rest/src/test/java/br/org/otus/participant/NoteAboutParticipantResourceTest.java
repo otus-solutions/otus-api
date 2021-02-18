@@ -3,7 +3,7 @@ package br.org.otus.participant;
 import br.org.otus.participant.api.NoteAboutParticipantFacade;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.user.UserAuthenticationResourceTestsParent;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

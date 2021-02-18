@@ -10,9 +10,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantSearchSettingsDto;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipant;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantResponse;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.participant.persistence.NoteAboutParticipantDao;
 
 import java.util.ArrayList;

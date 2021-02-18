@@ -1,4 +1,4 @@
-package org.ccem.otus.participant.model.comment;
+package org.ccem.otus.participant.model.noteAboutParticipant;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;

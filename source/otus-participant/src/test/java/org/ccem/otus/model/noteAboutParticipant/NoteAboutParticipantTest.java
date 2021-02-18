@@ -1,7 +1,7 @@
 package org.ccem.otus.model.noteAboutParticipant;
 
 import org.bson.types.ObjectId;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipant;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

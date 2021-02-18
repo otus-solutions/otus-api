@@ -2,7 +2,7 @@ package br.org.otus.participant.builder;
 
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantSearchSettingsDto;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantSearchSettingsDto;
 import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;

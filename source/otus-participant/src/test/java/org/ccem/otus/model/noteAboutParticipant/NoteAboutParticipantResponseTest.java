@@ -1,6 +1,6 @@
 package org.ccem.otus.model.noteAboutParticipant;
 
-import org.ccem.otus.participant.model.comment.NoteAboutParticipantResponse;
+import org.ccem.otus.participant.model.noteAboutParticipant.NoteAboutParticipantResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
