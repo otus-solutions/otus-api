@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 public abstract class SerializableModel {
 
   public String toJson(){
-    return getGsonBuilder().create().toJson(this);
+    return getGsonBuilderNonStatic().create().toJson(this);
   }
 
   protected static Object deserialize(String json, Class clazz){
@@ -15,5 +15,16 @@ public abstract class SerializableModel {
   protected static GsonBuilder getGsonBuilder() {
     return new GsonBuilder();
   }
+
+  /* Non static methods */
+
+  protected GsonBuilder getGsonBuilderNonStatic() {
+    GsonBuilder builder = new GsonBuilder();
+    registerSpecificTypeAdapter(builder);
+    return builder;
+  }
+
+  /* Override or not by child class */
+  protected void registerSpecificTypeAdapter(GsonBuilder builder){ }
 
 }
