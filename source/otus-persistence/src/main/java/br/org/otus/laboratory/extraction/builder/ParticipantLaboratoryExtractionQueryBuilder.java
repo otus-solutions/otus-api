@@ -78,21 +78,21 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       fieldsToPush.append("unattachedLaboratoryId",new Document("$arrayElemAt",Arrays.asList("$unattachedLaboratory.unattachedLaboratoryIdentification",0)));
     } else {
       this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$nin", attachedLaboratories.get("recruitmentNumbers")))));
-      fieldsToPush.append("unattachedLaboratoryId",null);
+      fieldsToPush.append("unattachedLaboratoryId", new Integer(0));
     }
 
-    fieldsToPush.append("tubeCode","$tubes.code")
+    fieldsToPush.append("tubeCode", new Document("$ifNull", Arrays.asList("$tubes.code", "")))
       .append("tubeQualityControl",new Document("$cond",Arrays.asList(new Document("$eq",Arrays.asList("$tubes.groupName","DEFAULT")),0,1)))
-      .append("tubeType","$tubes.type")
-      .append("tubeMoment","$tubes.moment")
-      .append("tubeCollectionDate","$tubes.tubeCollectionData.time")
-      .append("tubeResponsible","$tubes.tubeCollectionData.operator")
-      .append("aliquotCode",null)
-      .append("aliquotName",null)
-      .append("aliquotContainer",null)
-      .append("aliquotProcessingDate",null)
-      .append("aliquotRegisterDate",null)
-      .append("aliquotResponsible",null);
+      .append("tubeType", new Document("$ifNull", Arrays.asList("$tubes.type", "")))
+      .append("tubeMoment", new Document("$ifNull", Arrays.asList("$tubes.moment", "")))
+      .append("tubeCollectionDate",new Document("$ifNull", Arrays.asList("$tubes.tubeCollectionData.time", "")))
+      .append("tubeResponsible", new Document("$ifNull", Arrays.asList("$tubes.tubeCollectionData.operator", "")))
+      .append("aliquotCode","")
+      .append("aliquotName","")
+      .append("aliquotContainer","")
+      .append("aliquotProcessingDate","")
+      .append("aliquotRegisterDate","")
+      .append("aliquotResponsible","");
 
     this.pipeline.add(new Document("$project",projectInitialFields));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
@@ -115,21 +115,21 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       fieldsToPush.append("unattachedLaboratoryId",new Document("$arrayElemAt",Arrays.asList("$unattachedLaboratory.unattachedLaboratoryIdentification",0)));
     } else {
       this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$nin", attachedLaboratories.get("recruitmentNumbers")))));
-      fieldsToPush.append("unattachedLaboratoryId",null);
+      fieldsToPush.append("unattachedLaboratoryId",new Integer(0));
     }
 
-    fieldsToPush.append("tubeCode","$tubeData.tubeCode")
-      .append("tubeQualityControl","$tubeData.qualityControl")
-      .append("tubeType","$tubeData.type")
-      .append("tubeMoment","$tubeData.moment")
-      .append("tubeCollectionDate","$tubeData.collectionDate")
-      .append("tubeResponsible","$tubeData.tubeResponsible")
-      .append("aliquotCode","$code")
-      .append("aliquotName","$name")
-      .append("aliquotContainer","$container")
-      .append("aliquotProcessingDate","$aliquotCollectionData.processing")
-      .append("aliquotRegisterDate","$aliquotCollectionData.operator")
-      .append("aliquotResponsible","$aliquotCollectionData.time");
+    fieldsToPush.append("tubeCode", new Document("$ifNull", Arrays.asList("$tubeData.tubeCode", "")))
+      .append("tubeQualityControl", new Document("$ifNull", Arrays.asList("$tubeData.qualityControl", new Integer(0))))
+      .append("tubeType", new Document("$ifNull", Arrays.asList("$tubeData.type" , "")))
+      .append("tubeMoment", new Document("$ifNull", Arrays.asList("$tubeData.moment", "")))
+      .append("tubeCollectionDate", new Document("$ifNull", Arrays.asList("$tubeData.collectionDate", "")))
+      .append("tubeResponsible", new Document("$ifNull", Arrays.asList("$tubeData.tubeResponsible", "")))
+      .append("aliquotCode", new Document("$ifNull", Arrays.asList("$code", "")))
+      .append("aliquotName", new Document("$ifNull", Arrays.asList("$name", "")))
+      .append("aliquotContainer", new Document("$ifNull", Arrays.asList("$container", "")))
+      .append("aliquotProcessingDate", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.processing", "")))
+      .append("aliquotRegisterDate", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.operator", "")))
+      .append("aliquotResponsible", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.time" , "")));
 
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
