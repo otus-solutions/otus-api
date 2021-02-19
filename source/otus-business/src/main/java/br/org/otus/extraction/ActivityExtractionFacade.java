@@ -90,7 +90,7 @@ public class ActivityExtractionFacade {
 
   public void createOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
-      new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).toJson());
+      new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).serialize());
       LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
     }
     catch (RuntimeException e) {
@@ -220,7 +220,7 @@ public class ActivityExtractionFacade {
       SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
       String surveyId = findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion());
       surveyExtraction.setSurveyId(surveyId);
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.serialize());
       byte[] csv = extractionService.createExtraction(new CsvExtraction((String) gatewayResponse.getData()));
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as csv");
       return csv;
@@ -247,7 +247,7 @@ public class ActivityExtractionFacade {
       SurveyExtraction surveyExtraction = SurveyExtraction.fromJson(surveyExtractionJson);
       String surveyId = findSurveyId(surveyExtraction.getSurveyAcronym(), surveyExtraction.getSurveyVersion());
       surveyExtraction.setSurveyId(surveyId);
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.toJson());
+      GatewayResponse gatewayResponse = new ExtractionGatewayService().getRscriptSurveyExtraction(surveyExtraction.serialize());
       String result = (String) gatewayResponse.getData();
       LOGGER.info("status: success, action: R script extraction for survey {" + surveyExtractionJson + "} as json");
       return result;

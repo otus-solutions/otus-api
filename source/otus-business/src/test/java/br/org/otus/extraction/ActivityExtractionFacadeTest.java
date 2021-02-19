@@ -185,7 +185,7 @@ public class ActivityExtractionFacadeTest {
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
     doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
     activityExtractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.toJson());
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
   }
 
   @Test(expected = HttpResponseException.class)
@@ -250,7 +250,7 @@ public class ActivityExtractionFacadeTest {
     when(surveyActivity.isDiscarded()).thenReturn(false);
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
     activityExtractionFacade.forceSynchronizeSurveyActivityExtractions(ACRONYM, VERSION);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.toJson());
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
   }
 
   @Test(expected = HttpResponseException.class)
@@ -270,7 +270,7 @@ public class ActivityExtractionFacadeTest {
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
     doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
     activityExtractionFacade.forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.toJson());
+    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
   }
 
   @Test(expected = HttpResponseException.class)
@@ -316,19 +316,19 @@ public class ActivityExtractionFacadeTest {
 
   @Test
   public void getRscriptSurveyExtractionAsCsv_method_should_return_bytes_array() throws IOException {
-    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.toJson())).thenReturn(gatewayResponse);
+    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.serialize())).thenReturn(gatewayResponse);
     assertEquals(BYTES, activityExtractionFacade.getRscriptSurveyExtractionAsCsv(SURVEY_EXTRACTION_JSON));
   }
 
   @Test(expected = HttpResponseException.class)
   public void getRscriptSurveyExtractionAsCsv_method_should_handle_IOException() throws IOException {
-    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.toJson())).thenThrow(new IOException());
+    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.serialize())).thenThrow(new IOException());
     activityExtractionFacade.getRscriptSurveyExtractionAsCsv(SURVEY_EXTRACTION_JSON);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getRscriptSurveyExtractionAsCsv_method_should_handle_DataNotFoundException() throws IOException, DataNotFoundException {
-    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.toJson())).thenReturn(gatewayResponse);
+    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.serialize())).thenReturn(gatewayResponse);
     doReturn(CSV_JSON).when(gatewayResponse).getData();
     doThrow(new DataNotFoundException("")).when(extractionService).createExtraction(csvExtraction);
     activityExtractionFacade.getRscriptSurveyExtractionAsCsv(SURVEY_EXTRACTION_JSON);
@@ -336,14 +336,14 @@ public class ActivityExtractionFacadeTest {
 
   @Test
   public void getRscriptSurveyExtractionAsJson_method_should_return_bytes_array() throws IOException {
-    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.toJson())).thenReturn(gatewayResponse);
+    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.serialize())).thenReturn(gatewayResponse);
     when(gatewayResponse.getData()).thenReturn(R_SCRIPT_JSON_RESULT);
     assertEquals(R_SCRIPT_JSON_RESULT, activityExtractionFacade.getRscriptSurveyExtractionAsJson(SURVEY_EXTRACTION_JSON));
   }
 
   @Test(expected = HttpResponseException.class)
   public void getRscriptSurveyExtractionAsJson_method_should_handle_IOException() throws IOException {
-    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.toJson())).thenThrow(new IOException());
+    when(extractionGatewayService.getRscriptSurveyExtraction(surveyExtraction.serialize())).thenThrow(new IOException());
     activityExtractionFacade.getRscriptSurveyExtractionAsJson(SURVEY_EXTRACTION_JSON);
   }
 

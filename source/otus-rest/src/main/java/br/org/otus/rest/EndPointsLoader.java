@@ -23,6 +23,7 @@ import br.org.otus.laboratory.project.TransportLocationPointResource;
 import br.org.otus.monitoring.MonitoringResource;
 import br.org.otus.outcomes.configuration.FollowUpConfiguration;
 import br.org.otus.outcomes.configuration.FollowUpEventConfiguration;
+import br.org.otus.participant.NoteAboutParticipantResource;
 import br.org.otus.participant.ParticipantContactAttemptResource;
 import br.org.otus.participant.ParticipantContactResource;
 import br.org.otus.participant.ParticipantResource;
@@ -182,6 +183,9 @@ public class EndPointsLoader extends Application {
   @Inject
   private RscriptResource rscriptResource;
 
+  @Inject
+  private NoteAboutParticipantResource noteAboutParticipantResource;
+
   @Override
   public Set<Class<?>> getClasses() {
     Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -227,6 +231,7 @@ public class EndPointsLoader extends Application {
     resources.add(StageResource.class);
     resources.add(ActivityExtractionResource.class);
     resources.add(RscriptResource.class);
+    resources.add(NoteAboutParticipantResource.class);
 
     return resources;
   }
@@ -277,6 +282,7 @@ public class EndPointsLoader extends Application {
     resources.add(stageResource);
     resources.add(activityExtractionResource);
     resources.add(rscriptResource);
+    resources.add(noteAboutParticipantResource);
 
     return resources;
   }
