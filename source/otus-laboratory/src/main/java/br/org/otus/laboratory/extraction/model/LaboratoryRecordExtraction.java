@@ -3,6 +3,7 @@ package br.org.otus.laboratory.extraction.model;
 import java.util.List;
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.participant.utils.LongAdapter;
 
 public class LaboratoryRecordExtraction implements Comparable<LaboratoryRecordExtraction> {
 
@@ -20,6 +21,7 @@ public class LaboratoryRecordExtraction implements Comparable<LaboratoryRecordEx
 
   public static GsonBuilder getGsonBuilder() {
     GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(Long.class, new LongAdapter());
     builder.serializeNulls();
 
     return builder;
