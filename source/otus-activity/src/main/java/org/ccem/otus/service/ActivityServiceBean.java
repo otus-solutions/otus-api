@@ -190,4 +190,9 @@ public class ActivityServiceBean implements ActivityService {
     activityDao.discardByID(activityID);
   }
 
+  @Override
+  public List<ObjectId> getActivityIds(String acronym, Integer version, List<String> activityIdsToExcludeOfQuery) throws MemoryExcededException {
+    return activityDao.getActivityIds(acronym, version, null, activityIdsToExcludeOfQuery);
+  }
+
 }

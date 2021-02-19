@@ -1,19 +1,16 @@
 package br.org.otus.configuration.stage;
 
 import br.org.mongodb.MongoGenericDao;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import model.Stage;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.common.MemoryExcededException;
-import org.ccem.otus.service.ParseQuery;
 import persistence.StageDao;
 
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ public class StageDaoBean extends MongoGenericDao<Document> implements StageDao 
   public ObjectId create(Stage stage) throws AlreadyExistException {
     checkExistence(stage);
 
-    Document parsed = Document.parse(Stage.serialize(stage));
+    Document parsed = Document.parse(stage.serialize());
     collection.insertOne(parsed);
     return parsed.getObjectId(ID_FIELD_NAME);
   }

@@ -52,4 +52,6 @@ public interface ActivityService {
 
   void discardByID(ObjectId activityOID) throws DataNotFoundException;
 
+  List<ObjectId> getActivityIds(String acronym, Integer version, List<String> activityIdsToExcludeOfQuery) throws MemoryExcededException;
+
 }

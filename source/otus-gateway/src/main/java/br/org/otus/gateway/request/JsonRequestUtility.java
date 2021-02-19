@@ -1,5 +1,6 @@
 package br.org.otus.gateway.request;
 
+import br.org.otus.gateway.response.exception.NotFoundRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ public abstract class JsonRequestUtility {
     if (status != HttpURLConnection.HTTP_OK) {
       String errorMessage = httpConn.getResponseMessage();
       Object errorContent = RequestUtility.getErrorContent(httpConn);
+      if(status == HttpURLConnection.HTTP_NOT_FOUND){
+        throw new NotFoundRequestException(errorMessage, errorContent);
+      }
       throw new RequestException(status, errorMessage, errorContent);
     }
 
