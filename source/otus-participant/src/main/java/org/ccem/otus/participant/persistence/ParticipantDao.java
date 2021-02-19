@@ -1,6 +1,7 @@
 package org.ccem.otus.participant.persistence;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bson.Document;
@@ -9,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.participant.model.Participant;
 
 import com.mongodb.client.AggregateIterable;
@@ -56,5 +58,7 @@ public interface ParticipantDao {
   String getEmail(ObjectId id) throws DataNotFoundException;
 
   Boolean deleteEmail(ObjectId id) throws DataNotFoundException;
+
+  LinkedList<ParticipantResultExtraction> getParticipantExtraction() throws DataNotFoundException;
 }
 

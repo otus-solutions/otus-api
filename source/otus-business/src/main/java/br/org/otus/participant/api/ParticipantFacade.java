@@ -17,6 +17,7 @@ import org.ccem.otus.exceptions.webservice.http.EmailNotificationException;
 import org.ccem.otus.exceptions.webservice.security.EncryptedException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.participant.model.Participant;
 import org.ccem.otus.participant.service.ParticipantService;
 import org.ccem.otus.service.ActivityService;
@@ -24,6 +25,7 @@ import org.ccem.otus.service.ActivityService;
 import javax.inject.Inject;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ParticipantFacade {
@@ -205,5 +207,13 @@ public class ParticipantFacade {
   public boolean isValid(String email) {
     String regex = "^[\\w-_+]+(\\.[\\w-_]+)*\\@\\w+([[.-]?\\w])*(\\.[A-Za-z]{2,3})+$";
     return email.matches(regex);
+  }
+
+  public LinkedList<ParticipantResultExtraction> getParticipantExtraction() {
+    try {
+      return participantService.getParticipantExtraction();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
+    }
   }
 }

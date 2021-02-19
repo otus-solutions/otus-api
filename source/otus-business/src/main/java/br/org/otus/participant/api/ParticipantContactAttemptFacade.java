@@ -70,4 +70,13 @@ public class ParticipantContactAttemptFacade {
     }
   }
 
+  public ArrayList<ParticipantContactAttempt> finParticipantContactAttempts() {
+    try{
+      return participantContactAttemptService.finParticipantContactAttempts();
+    }
+    catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
 }

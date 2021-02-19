@@ -50,7 +50,9 @@ public class ExamResultQueryBuilder {
       "          \"resultName\":\"$resultName\",\n" +
       "          \"value\":\"$value\",\n" +
       "          \"releaseDate\":\"$releaseDate\",\n" +
-      "          \"observations\":\"$observations\"\n" +
+      "          \"observations\":\"$observations\",\n" +
+      "          \"cutOffValue\":\"$cutOffValue\",\n" +
+      "          \"extraVariables\":\"$extraVariables\"\n" +
       "        }\n" +
       "      }\n" +
       "    }\n" +

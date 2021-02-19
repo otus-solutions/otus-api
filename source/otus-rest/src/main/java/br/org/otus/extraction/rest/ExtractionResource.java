@@ -9,8 +9,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-
 import br.org.otus.extraction.ExtractionFacade;
 import br.org.otus.extraction.SecuredExtraction;
 import br.org.otus.rest.Response;
@@ -60,6 +58,14 @@ public class ExtractionResource {
   @Path("/laboratory")
   public byte[] extractLaboratory() {
     return extractionFacade.createLaboratoryExtraction();
+  }
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/participant")
+  public byte[] extractParticipant() {
+    return extractionFacade.createParticipantExtraction();
   }
 
   @GET
@@ -163,6 +169,14 @@ public class ExtractionResource {
   public String deleteActivityExtraction(@PathParam("id") String activityId) {
     extractionFacade.deleteActivityExtraction(activityId);
     return new Response().buildSuccess().toJson();
+  }
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/participant/participant-contact-attempts")
+  public byte[] extractParticipantContactAttempts() {
+    return extractionFacade.createParticipantContactAttemptsExtraction();
   }
 
 }
