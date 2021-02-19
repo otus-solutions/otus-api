@@ -53,7 +53,7 @@ public class ExtractionResource {
   }
 
   @GET
-  @SecuredExtraction
+//  @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/laboratory")
   public byte[] extractLaboratory() {
