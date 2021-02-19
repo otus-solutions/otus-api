@@ -89,7 +89,7 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       projectInitialFields.append("unattachedLaboratory",1);
       fieldsToPush.append("unattachedLaboratoryId",new Document("$arrayElemAt",Arrays.asList("$unattachedLaboratory.unattachedLaboratoryIdentification",0)));
     } else {
-      this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$nin", attachedLaboratories.get("recruitmentNumbers")))));
+      this.pipeline.add(new Document("$match", new Document("recruitmentNumber", new Document("$nin", recruitmentNumbers))));
       fieldsToPush.append("unattachedLaboratoryId", new Integer(0));
     }
 
