@@ -37,6 +37,7 @@ public enum ParticipantExtractionHeaders {
   MAIN_ADDRESS_CITY("endereco_principal_cidade"),
   MAIN_ADDRESS_UF("endereco_principal_uf"),
   MAIN_ADDRESS_COUNTRY("endereco_principal_pais"),
+  MAIN_ADDRESS_CENSUS("endereco_principal_setor_censitario"),
   MAIN_ADDRESS_OBSERVATION("endereco_principal_observacao"),
   SECOND_ADDRESS_CEP("segundo_endereco_cep"),
   SECOND_ADDRESS_STREET("segundo_endereco_rua"),
@@ -46,6 +47,7 @@ public enum ParticipantExtractionHeaders {
   SECOND_ADDRESS_CITY("segundo_endereco_cidade"),
   SECOND_ADDRESS_UF("segundo_endereco_uf"),
   SECOND_ADDRESS_COUNTRY("segundo_endereco_pais"),
+  SECOND_ADDRESS_CENSUS("segundo_endereco_setor_censitario"),
   SECOND_ADDRESS_OBSERVATION("segundo_endereco_observacao"),
   THIRD_ADDRESS_CEP("terceiro_endereco_cep"),
   THIRD_ADDRESS_STREET("terceiro_endereco_rua"),
@@ -55,6 +57,7 @@ public enum ParticipantExtractionHeaders {
   THIRD_ADDRESS_CITY("terceiro_endereco_cidade"),
   THIRD_ADDRESS_UF("terceiro_endereco_uf"),
   THIRD_ADDRESS_COUNTRY("terceiro_endereco_pais"),
+  THIRD_ADDRESS_CENSUS("terceiro_endereco_setor_censitario"),
   THIRD_ADDRESS_OBSERVATION("terceiro_endereco_observacao"),
   FOURTH_ADDRESS_CEP("quarto_endereco_cep"),
   FOURTH_ADDRESS_STREET("quarto_endereco_rua"),
@@ -64,6 +67,7 @@ public enum ParticipantExtractionHeaders {
   FOURTH_ADDRESS_CITY("quarto_endereco_cidade"),
   FOURTH_ADDRESS_UF("quarto_endereco_uf"),
   FOURTH_ADDRESS_COUNTRY("quarto_endereco_pais"),
+  FOURTH_ADDRESS_CENSUS("quarto_endereco_setor_censitario"),
   FOURTH_ADDRESS_OBSERVATION("quarto_endereco_observacao"),
   FIFTH_ADDRESS_CEP("quinto_endereco_cep"),
   FIFTH_ADDRESS_STREET("quinto_endereco_rua"),
@@ -73,6 +77,7 @@ public enum ParticipantExtractionHeaders {
   FIFTH_ADDRESS_CITY("quinto_endereco_cidade"),
   FIFTH_ADDRESS_UF("quinto_endereco_uf"),
   FIFTH_ADDRESS_COUNTRY("quinto_endereco_pais"),
+  FIFTH_ADDRESS_CENSUS("quinto_endereco_setor_censitario"),
   FIFTH_ADDRESS_OBSERVATION("quinto_endereco_observacao");
 
   private final String value;
