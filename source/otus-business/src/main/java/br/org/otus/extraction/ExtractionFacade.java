@@ -15,6 +15,7 @@ import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.business.ParticipantExtraction;
 import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptExtractionDTO;
 import org.ccem.otus.service.DataSourceService;
 import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
@@ -178,7 +179,7 @@ public class ExtractionFacade {
   }
 
   public byte[] createParticipantContactAttemptsExtraction() {
-    ArrayList<ParticipantContactAttempt> participantContactAttempts = participantContactAttemptFacade.finParticipantContactAttempts();
+    ArrayList<ParticipantContactAttemptExtractionDTO> participantContactAttempts = participantContactAttemptFacade.finParticipantContactAttempts();
     ParticipantContactAttemptsExtraction extractor = new ParticipantContactAttemptsExtraction(participantContactAttempts);
     try {
       return extractionService.createExtraction(extractor);
