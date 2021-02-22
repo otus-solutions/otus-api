@@ -5,13 +5,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptExtractionDTO;
 
 public class ParticipantContactAttemptsRecordsFactory {
 
-  private ArrayList<ParticipantContactAttempt>  inputRecords;
+  private ArrayList<ParticipantContactAttemptExtractionDTO>  inputRecords;
   private List<List<Object>> outputRecords;
 
-  public ParticipantContactAttemptsRecordsFactory(ArrayList<ParticipantContactAttempt> records) {
+  public ParticipantContactAttemptsRecordsFactory(ArrayList<ParticipantContactAttemptExtractionDTO> records) {
     this.inputRecords = records;
     this.outputRecords = new ArrayList<>();
     this.buildResultInformation();
@@ -27,7 +28,7 @@ public class ParticipantContactAttemptsRecordsFactory {
     });
   }
 
-  private List<String> createRecordsAnswers(ParticipantContactAttempt record) {
+  private List<String> createRecordsAnswers(ParticipantContactAttemptExtractionDTO record) {
     List<String> answers = new LinkedList<String>();
 
     answers.add(record.getRecruitmentNumber().toString());
