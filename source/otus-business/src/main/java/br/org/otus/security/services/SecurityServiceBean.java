@@ -90,11 +90,8 @@ public class SecurityServiceBean implements SecurityService {
       ParticipantTempTokenRequestDto dto = ParticipantTempTokenRequestDto.deserialize(payload);
 
       ActivitySharing activitySharing = activitySharingDao.getSharedURL(new ObjectId(dto.getActivityId()));
-      if(activitySharing == null){
+      if(activitySharing == null || !activityId.equals(activitySharing.getActivityId().toHexString())){
         throw new TokenException();
-      }
-      if(!activityId.equals(activitySharing.getActivityId().toHexString())){
-         throw new TokenException();
       }
       if(DateUtil.before(activitySharing.getExpirationDate(), DateUtil.nowToISODate())){
         throw new ExpiredDataException("Expired token");
