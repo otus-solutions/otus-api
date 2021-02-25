@@ -83,7 +83,7 @@ public class SecurityServiceBean implements SecurityService {
   }
 
   @Override
-  public void validateActivitySharingToken(String token) throws TokenException, ExpiredDataException {
+  public void validateActivitySharingToken(String token, String activityId) throws TokenException, ExpiredDataException {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);
       String payload = signedJWT.getPayload().toString();
@@ -92,6 +92,9 @@ public class SecurityServiceBean implements SecurityService {
       ActivitySharing activitySharing = activitySharingDao.getSharedURL(new ObjectId(dto.getActivityId()));
       if(activitySharing == null){
         throw new TokenException();
+      }
+      if(!activityId.equals(activitySharing.getActivityId().toHexString())){
+         throw new TokenException();
       }
       if(DateUtil.before(activitySharing.getExpirationDate(), DateUtil.nowToISODate())){
         throw new ExpiredDataException("Expired token");
