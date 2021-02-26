@@ -23,6 +23,7 @@ public class ExamResult {
   private String value;
   private Boolean isValid;
   private String releaseDate;
+  private String realizationDate;
   private String cutOffValue;
   private List<Observation> observations;
 
@@ -32,6 +33,9 @@ public class ExamResult {
   private Long recruitmentNumber;
   private Sex sex;
   private ImmutableDate birthdate;
+
+  public String getRealizationDate() { return this.realizationDate; }
+  public void setRealizationDate(String realizationDate) { this.realizationDate = realizationDate;
 
   public List<ExtraVariable> getExtraVariables() {
     return this.extraVariables;
