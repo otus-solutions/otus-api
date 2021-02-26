@@ -35,7 +35,7 @@ public class ExamResult {
   private ImmutableDate birthdate;
 
   public String getRealizationDate() { return this.realizationDate; }
-  public void setRealizationDate(String realizationDate) { this.realizationDate = realizationDate;
+  public void setRealizationDate(String realizationDate) { this.realizationDate = realizationDate; }
 
   public List<ExtraVariable> getExtraVariables() {
     return this.extraVariables;
