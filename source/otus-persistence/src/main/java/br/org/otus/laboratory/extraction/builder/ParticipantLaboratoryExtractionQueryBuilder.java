@@ -3,7 +3,6 @@ package br.org.otus.laboratory.extraction.builder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -92,7 +91,11 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotContainer",null)
       .append("aliquotProcessingDate",null)
       .append("aliquotRegisterDate",null)
-      .append("aliquotResponsible",null);
+      .append("aliquotResponsible",null)
+      .append("aliquotRole",null)
+      .append("hasTransportationLotId",null)
+      .append("hasExamLotId",null)
+    ;
 
     this.pipeline.add(new Document("$project",projectInitialFields));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
@@ -129,7 +132,11 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotContainer","$container")
       .append("aliquotProcessingDate","$aliquotCollectionData.processing")
       .append("aliquotRegisterDate","$aliquotCollectionData.operator")
-      .append("aliquotResponsible","$aliquotCollectionData.time");
+      .append("aliquotResponsible","$aliquotCollectionData.time")
+      .append("aliquotRole","$role")
+      .append("hasTransportationLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$transportationLotId\"},false]}"))
+      .append("hasExamLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$examLotId\"},false]}"))
+    ;
 
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
@@ -215,4 +222,5 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     GsonBuilder gsonBuilder = new GsonBuilder();
     return gsonBuilder.create().fromJson(query, Document.class);
   }
+
 }
