@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptExtractionDTO;
 import org.ccem.otus.participant.service.extraction.factories.ParticipantContactAttemptsHeadersFactory;
 import org.ccem.otus.participant.service.extraction.factories.ParticipantContactAttemptsRecordsFactory;
 
@@ -15,7 +16,7 @@ public class ParticipantContactAttemptsExtraction implements Extractable {
   private ParticipantContactAttemptsHeadersFactory headersFactory;
   private ParticipantContactAttemptsRecordsFactory recordsFactory;
 
-  public ParticipantContactAttemptsExtraction(ArrayList<ParticipantContactAttempt> records) {
+  public ParticipantContactAttemptsExtraction(ArrayList<ParticipantContactAttemptExtractionDTO> records) {
     this.headersFactory = new ParticipantContactAttemptsHeadersFactory();
     this.recordsFactory = new ParticipantContactAttemptsRecordsFactory(records);
   }
