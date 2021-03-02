@@ -5,9 +5,11 @@ import org.ccem.otus.exceptions.webservice.common.AlreadyExistException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import org.ccem.otus.model.FieldCenter;
+import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
 import org.ccem.otus.participant.model.Participant;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -42,4 +44,7 @@ public interface ParticipantService {
   String getEmail(String participantId) throws ValidationException, DataNotFoundException;
 
   Boolean deleteEmail(ObjectId participantId) throws DataNotFoundException;
+
+  LinkedList<ParticipantResultExtraction> getParticipantExtraction() throws DataNotFoundException;
+
 }

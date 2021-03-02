@@ -22,6 +22,8 @@ public interface ParticipantContactAttemptService {
 
   ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException;
 
+  ArrayList<ParticipantContactAttempt> finParticipantContactAttempts() throws DataNotFoundException;
+
   ParticipantContactAttemptConfiguration findMetadataAttempt(String objectType) throws DataNotFoundException;
 
 }

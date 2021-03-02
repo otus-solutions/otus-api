@@ -2,6 +2,7 @@ package br.org.otus.examUploader.business.extraction.model;
 
 import java.util.List;
 
+import br.org.otus.examUploader.ExtraVariable;
 import br.org.otus.examUploader.Observation;
 
 public class ParticipantExamUploadResultExtraction {
@@ -13,6 +14,8 @@ public class ParticipantExamUploadResultExtraction {
   private String value;
   private String releaseDate;
   private List<Observation> observations;
+  private String cutOffValue;
+  private List<ExtraVariable> extraVariables;
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
@@ -41,4 +44,10 @@ public class ParticipantExamUploadResultExtraction {
   public String getExamName() {
     return examName;
   }
+
+  public String getCutOffValue() {
+    return cutOffValue;
+  }
+
+  public List<ExtraVariable> getExtraVariables() { return extraVariables; }
 }
