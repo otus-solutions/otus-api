@@ -14,6 +14,10 @@ public class TextAnswer extends AnswerFill {
     return value;
   }
 
+  public void setValue(String value) {
+    this.value = value;
+  }
+
   @Override
   public Map<String, Object> getAnswerExtract(String questionID) {
     Map<String, Object> extraction = new LinkedHashMap<>();

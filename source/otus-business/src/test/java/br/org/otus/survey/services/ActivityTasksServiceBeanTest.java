@@ -1,7 +1,7 @@
 package br.org.otus.survey.services;
 
 import br.org.otus.LoggerTestsParent;
-import br.org.otus.extraction.ExtractionFacade;
+import br.org.otus.extraction.ActivityExtractionFacade;
 import br.org.otus.model.User;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
@@ -95,7 +95,7 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
   @Mock
   private ActivitySharingService activitySharingService;
   @Mock
-  private ExtractionFacade extractionFacade;
+  private ActivityExtractionFacade extractionFacade;
 
   private SurveyActivity surveyActivity;
   private SurveyActivity surveyActivityToUpdate;
@@ -121,7 +121,6 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
 
     assertNotNull(surveyActivity.getActivityID());
     assertEquals(ACTIVITY_ID, surveyActivity.getActivityID().toString());
-    verify(extractionFacade, times(1)).createActivityExtraction(ACTIVITY_ID);
     assertEquals(ACTIVITY_ID, result);
   }
 
@@ -136,24 +135,7 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     assertNotNull(surveyActivity.getActivityID());
     assertEquals(ACTIVITY_ID, surveyActivity.getActivityID().toString());
     verify(followUpFacade, times(1)).createParticipantActivityAutoFillEvent(surveyActivity, NOTIFY);
-    verify(extractionFacade, times(1)).createActivityExtraction(ACTIVITY_ID);
   }
-
-  @Test
-  public void create_method_should_log_extraction_creation_exception() throws InterruptedException {
-    doThrow(new HttpResponseException(null)).when(extractionFacade).createActivityExtraction(ACTIVITY_ID);
-    when(surveyActivity.getMode()).thenReturn(ActivityMode.ONLINE);
-
-    String result = service.create(surveyActivity, NOTIFY);
-    Thread.sleep(100);
-
-    assertEquals(ACTIVITY_ID, result);
-    assertNotNull(surveyActivity.getActivityID());
-    assertEquals(ACTIVITY_ID, surveyActivity.getActivityID().toString());
-    verify(extractionFacade, times(1)).createActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
 
   @Test
   public void updateActivity_method_should_update_surveyActivity_and_extraction() throws Exception {
@@ -163,7 +145,6 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     SurveyActivity updatedActivity = service.updateActivity(surveyActivityToUpdate, TOKEN_BEARER);
     Thread.sleep(100);
 
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID);
     assertEquals(surveyActivityToUpdate, updatedActivity);
   }
 
@@ -180,7 +161,7 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     String lastStatusHistoryName = surveyActivityToUpdate.getLastStatus().get().getName();
     verify(followUpFacade, times(1)).statusUpdateEvent(lastStatusHistoryName, ACTIVITY_ID);
 
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID);
+    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
   }
 
   @Test
@@ -204,13 +185,13 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
   public void updateActivity_method_should_log_extraction_update_exception() throws Exception {
     mockUserForUpdate();
     setUpdatedActivity(ActivityMode.AUTOFILL);
-    doThrow(new HttpResponseException(null)).when(extractionFacade).updateActivityExtraction(ACTIVITY_ID);
+    doThrow(new HttpResponseException(null)).when(extractionFacade).createOrUpdateActivityExtraction(ACTIVITY_ID);
 
     SurveyActivity updatedActivity = service.updateActivity(surveyActivityToUpdate, TOKEN_BEARER);
     Thread.sleep(100);
 
     assertEquals(surveyActivityToUpdate, updatedActivity);
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID);
+    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
     verifyLoggerSevereWasCalled();
   }
 
@@ -228,20 +209,20 @@ public class ActivityTasksServiceBeanTest extends LoggerTestsParent {
     service.save(USER_EMAIL, offlineActivityCollection);
     Thread.sleep(100);
 
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID);
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID_2);
+    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
+    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID_2);
   }
 
   @Test
   public void save_method_should_log_extraction_update_exception() throws InterruptedException, DataNotFoundException {
     setOfflineActivityCollection();
-    doThrow(new HttpResponseException(null)).when(extractionFacade).updateActivityExtraction(ACTIVITY_ID);
+    doThrow(new HttpResponseException(null)).when(extractionFacade).createOrUpdateActivityExtraction(ACTIVITY_ID);
 
     service.save(USER_EMAIL, offlineActivityCollection);
     Thread.sleep(100);
 
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID);
-    verify(extractionFacade, times(1)).updateActivityExtraction(ACTIVITY_ID_2);
+    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID);
+    verify(extractionFacade, times(1)).createOrUpdateActivityExtraction(ACTIVITY_ID_2);
     verifyLoggerSevereWasCalled();
   }
 
