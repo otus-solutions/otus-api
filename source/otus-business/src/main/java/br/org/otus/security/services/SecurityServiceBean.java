@@ -94,7 +94,7 @@ public class SecurityServiceBean implements SecurityService {
         throw new TokenException();
       }
 
-      if(activityId != null) {
+      if(ObjectId.isValid(activityId)) {
         if(!activityId.equals(activitySharing.getActivityId().toHexString())){
           throw new TokenException();
         }
