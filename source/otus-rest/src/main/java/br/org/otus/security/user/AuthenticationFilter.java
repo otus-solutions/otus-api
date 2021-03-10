@@ -31,6 +31,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
   @Override
   public void filter(ContainerRequestContext containerRequestContext) {
+    final String ACTIVITIES = "activities";
+    final String ID  = "id";
     String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
     try {
       String token = AuthorizationHeaderReader.readToken(authorizationHeader);
@@ -48,7 +50,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
           break;
 
         case ACTIVITY_SHARING:
-          String activityId = containerRequestContext.getUriInfo().getPathParameters().getFirst("id");
+          String activityId = "";
+          if(containerRequestContext.getUriInfo().getPathSegments().get(0).getPath().equals(ACTIVITIES)){
+            activityId = containerRequestContext.getUriInfo().getPathParameters().getFirst(ID);
+          }
           securityFacade.validateActivitySharingToken(AuthorizationHeaderReader.readToken(authorizationHeader), activityId);
           break;
 
