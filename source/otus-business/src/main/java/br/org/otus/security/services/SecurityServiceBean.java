@@ -94,10 +94,12 @@ public class SecurityServiceBean implements SecurityService {
         throw new TokenException();
       }
 
-      if(ObjectId.isValid(activityId)) {
-        if(!activityId.equals(activitySharing.getActivityId().toHexString())){
-          throw new TokenException();
-        }
+      if (activityId != null) {
+          if (ObjectId.isValid(activityId)) {
+              if (!activityId.equals(activitySharing.getActivityId().toHexString())) {
+                    throw new TokenException();
+              }
+          }
       }
 
       if(DateUtil.before(activitySharing.getExpirationDate(), DateUtil.nowToISODate())){
