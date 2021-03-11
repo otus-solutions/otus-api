@@ -90,7 +90,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Assert.assertEquals(RESULT_NAME, results.get(3));
     Assert.assertEquals(VALUE_1, results.get(4));
     Assert.assertEquals(RELEASE_DATE, results.get(5));
-    Assert.assertEquals(REALIZATION_DATE, results.get(5));
+    Assert.assertEquals(REALIZATION_DATE, results.get(6));
     Assert.assertEquals("", results.get(7));
   }
 
