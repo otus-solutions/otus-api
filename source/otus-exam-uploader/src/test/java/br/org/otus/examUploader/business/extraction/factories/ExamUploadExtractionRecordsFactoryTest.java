@@ -94,7 +94,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Assert.assertEquals("", results.get(7));
   }
 
-  private ParticipantExamUploadResultExtraction createFakeParticipantExamUploadRecord(Long rn, String code, String examName, String resultName, String value, String releaseDate, List<Observation> observations, String cutOffValue, List<ExtraVariable> extraVariables) {
+  private ParticipantExamUploadResultExtraction createFakeParticipantExamUploadRecord(Long rn, String code, String examName, String resultName, String value, String releaseDate, String realizationDate, List<Observation> observations, String cutOffValue, List<ExtraVariable> extraVariables) {
     ParticipantExamUploadResultExtraction participantExamUploadRecordExtraction = new ParticipantExamUploadResultExtraction();
 
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "recruitmentNumber", rn);
