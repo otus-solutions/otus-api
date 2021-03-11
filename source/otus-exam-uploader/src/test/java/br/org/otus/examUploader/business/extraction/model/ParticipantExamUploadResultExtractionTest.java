@@ -15,6 +15,7 @@ public class ParticipantExamUploadResultExtractionTest {
   private static final String RESULT_NAME = "1000330";
   private static final String VALUE = "1000330";
   private static final String RELEASE_DATE = "1000330";
+  private static final String REALIZATION_DATE = "1000330";
   private List<Observation> observations;
 
   private ParticipantExamUploadResultExtraction participantExamUploadResultExtraction;
@@ -27,6 +28,7 @@ public class ParticipantExamUploadResultExtractionTest {
     Whitebox.setInternalState(participantExamUploadResultExtraction, "resultName", RESULT_NAME);
     Whitebox.setInternalState(participantExamUploadResultExtraction, "value", VALUE);
     Whitebox.setInternalState(participantExamUploadResultExtraction, "releaseDate", RELEASE_DATE);
+    Whitebox.setInternalState(participantExamUploadResultExtraction, "realizationDate", REALIZATION_DATE);
     Whitebox.setInternalState(participantExamUploadResultExtraction, "observations", observations);
   }
 
@@ -36,6 +38,7 @@ public class ParticipantExamUploadResultExtractionTest {
     Assert.assertEquals(RESULT_NAME, participantExamUploadResultExtraction.getResultName());
     Assert.assertEquals(VALUE, participantExamUploadResultExtraction.getValue());
     Assert.assertEquals(RELEASE_DATE, participantExamUploadResultExtraction.getReleaseDate());
+    Assert.assertEquals(REALIZATION_DATE, participantExamUploadResultExtraction.getRealizationDate());
     Assert.assertEquals(observations, participantExamUploadResultExtraction.getObservations());
   }
 

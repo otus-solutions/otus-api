@@ -23,6 +23,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
   private static final String VALUE_1 = "10";
   private static final String VALUE_2 = "20";
   private static final String RELEASE_DATE = "1000330";
+  private static final String REALIZATION_DATE = "1000330";
   private static final String CUT_OFF_VALUE = "1000330";
 
   private List<String> headers;
@@ -50,6 +51,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
             CODE, EXAM_NAME, RESULT_NAME,
             VALUE_1,
             RELEASE_DATE,
+            REALIZATION_DATE,
             observations,
             CUT_OFF_VALUE,
             extraVariables);
@@ -64,7 +66,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
     List<ExtraVariable> extraVariables = new ArrayList<ExtraVariable>();
     extraVariables.add(new ExtraVariable("any", "any"));
     this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, CODE, EXAM_NAME, RESULT_NAME, VALUE_1,
-            RELEASE_DATE, observations,  CUT_OFF_VALUE, extraVariables));
+            RELEASE_DATE, REALIZATION_DATE, observations,  CUT_OFF_VALUE, extraVariables));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
     List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
 
@@ -77,7 +79,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
     List<ExtraVariable> extraVariables = new ArrayList<ExtraVariable>();
     extraVariables.add(new ExtraVariable("any", "any"));
     this.records.add(this.createFakeParticipantExamUploadRecord(RECRUITMENT_NUMBER, CODE, EXAM_NAME, RESULT_NAME, VALUE_1,
-            RELEASE_DATE, observations, CUT_OFF_VALUE, extraVariables));
+            RELEASE_DATE, REALIZATION_DATE, observations, CUT_OFF_VALUE, extraVariables));
     this.examUploadExtractionRecordsFactory.buildResultInformation();
     List<List<Object>> records = this.examUploadExtractionRecordsFactory.getRecords();
 
@@ -88,7 +90,8 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Assert.assertEquals(RESULT_NAME, results.get(3));
     Assert.assertEquals(VALUE_1, results.get(4));
     Assert.assertEquals(RELEASE_DATE, results.get(5));
-    Assert.assertEquals("", results.get(6));
+    Assert.assertEquals(REALIZATION_DATE, results.get(5));
+    Assert.assertEquals("", results.get(7));
   }
 
   private ParticipantExamUploadResultExtraction createFakeParticipantExamUploadRecord(Long rn, String code, String examName, String resultName, String value, String releaseDate, List<Observation> observations, String cutOffValue, List<ExtraVariable> extraVariables) {
@@ -100,6 +103,7 @@ public class ExamUploadExtractionRecordsFactoryTest {
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "resultName", resultName);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "value", value);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "releaseDate", releaseDate);
+    Whitebox.setInternalState(participantExamUploadRecordExtraction, "realizationDate", realizationDate);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "observations", observations);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "cutOffValue", cutOffValue);
     Whitebox.setInternalState(participantExamUploadRecordExtraction, "extraVariables", extraVariables);

@@ -13,6 +13,7 @@ public class ParticipantExamUploadResultExtraction {
   private String resultName;
   private String value;
   private String releaseDate;
+  private String realizationDate;
   private List<Observation> observations;
   private String cutOffValue;
   private List<ExtraVariable> extraVariables;
@@ -31,6 +32,10 @@ public class ParticipantExamUploadResultExtraction {
 
   public String getReleaseDate() {
     return releaseDate;
+  }
+
+  public String getRealizationDate() {
+    return realizationDate;
   }
 
   public String getCode() {

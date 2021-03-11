@@ -36,6 +36,7 @@ public class ExamUploadExtractionRecordsFactory {
     answers.add(record.getResultName());
     answers.add(record.getValue());
     answers.add(record.getReleaseDate());
+    answers.add(record.getRealizationDate());
 
     String observations = "";
     for (Observation observation : record.getObservations()) {

@@ -48,6 +48,9 @@ public class ExamUploadExtractionHeadersFactoryTest {
     contains = headers.contains(ExamUploadExtractionHeaders.RELEASE_DATE.getValue());
     Assert.assertTrue(contains);
 
+    contains = headers.contains(ExamUploadExtractionHeaders.REALIZATION_DATE.getValue());
+    Assert.assertTrue(contains);
+
     contains = headers.contains(ExamUploadExtractionHeaders.OBSERVATIONS.getValue());
     Assert.assertTrue(contains);
   }
@@ -77,6 +80,9 @@ public class ExamUploadExtractionHeadersFactoryTest {
     Assert.assertEquals(ExamUploadExtractionHeaders.RELEASE_DATE.getValue(), header);
 
     header = headers.get(6);
+    Assert.assertEquals(ExamUploadExtractionHeaders.REALIZATION_DATE.getValue(), header);
+
+    header = headers.get(7);
     Assert.assertEquals(ExamUploadExtractionHeaders.OBSERVATIONS.getValue(), header);
   }
 
