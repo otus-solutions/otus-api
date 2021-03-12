@@ -97,7 +97,6 @@ public class ActivityExtractionFacade {
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + e.getMessage());
       throw e;
     }
-
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
@@ -122,6 +121,10 @@ public class ActivityExtractionFacade {
     }
     catch(NotFoundRequestException e){
       throw new HttpResponseException(NotFound.build("Activity's extraction doesn't exists"));
+    }
+    catch(HttpResponseException e){
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + e.getMessage());
+      throw e;
     }
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
