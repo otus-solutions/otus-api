@@ -194,12 +194,6 @@ public class ActivityExtractionFacadeTest {
     activityExtractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
   }
 
-  @Test(expected = HttpResponseException.class)
-  public void createOrUpdateActivityExtraction_method_should_handle_ValidationException_in_case_activity_unextractable() {
-    when(surveyActivity.isDiscarded()).thenReturn(false);
-    when(surveyActivity.couldBeExtracted()).thenReturn(false);
-    activityExtractionFacade.createOrUpdateActivityExtraction(ACTIVITY_ID);
-  }
 
   @Test
   public void deleteActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {

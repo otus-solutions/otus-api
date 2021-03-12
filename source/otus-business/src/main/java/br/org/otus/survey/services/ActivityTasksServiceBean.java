@@ -57,6 +57,8 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     String activityId = activityService.create(surveyActivity);
     surveyActivity.setActivityID(new ObjectId(activityId));
 
+    extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
+
     if (surveyActivity.getMode() == ActivityMode.AUTOFILL) {
       followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
     }

@@ -284,9 +284,7 @@ public class ActivityExtractionFacade {
     if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
-    if(!surveyActivity.couldBeExtracted() && !allowCreateExtractionForAnyActivity){
-      throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
-    }
+
     SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
 
     if(surveyForm.getSurveyTemplate().dataSources != null && !surveyForm.getSurveyTemplate().dataSources.isEmpty()){
