@@ -104,7 +104,10 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotContainer","")
       .append("aliquotProcessingDate","")
       .append("aliquotRegisterDate","")
-      .append("aliquotResponsible","");
+      .append("aliquotResponsible","")
+      .append("aliquotRole","")
+      .append("hasTransportationLotId","")
+      .append("hasExamLotId","");
 
     this.pipeline.add(new Document("$project",projectInitialFields));
     this.pipeline.add(parseQuery("{ $unwind: \"$tubes\" }"));
@@ -151,7 +154,10 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotContainer", new Document("$ifNull", Arrays.asList("$container", "")))
       .append("aliquotProcessingDate", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.processing", "")))
       .append("aliquotRegisterDate", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.operator", "")))
-      .append("aliquotResponsible", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.time" , "")));
+      .append("aliquotResponsible", new Document("$ifNull", Arrays.asList("$aliquotCollectionData.time" , "")))
+      .append("aliquotRole",new Document("$ifNull", Arrays.asList("$role", "")))
+      .append("hasTransportationLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$transportationLotId\"},false]}"))
+      .append("hasExamLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$examLotId\"},false]}"));
 
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
