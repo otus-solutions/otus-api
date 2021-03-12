@@ -54,7 +54,9 @@ public class ActivityExtractionActivityData {
     this.version = surveyActivity.getSurveyForm().getVersion();
     this.mode = surveyActivity.getMode().toString();
     this.type = "";
-    this.category = surveyActivity.getCategory().getName();
+    if (surveyActivity.getCategory() != null) {
+      this.category = surveyActivity.getCategory().getName();
+    }
     this.activityFieldCenter = surveyActivity.getParticipantData().getFieldCenter().getAcronym();
 
     surveyActivity.getLastInterview().ifPresent(interview -> {
