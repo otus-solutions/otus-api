@@ -98,8 +98,13 @@ public class ActivityExtractionFacade {
       throw e;
     }
     catch (RuntimeException e) {
-      String message = runtimeExceptionMessage;
-      runtimeExceptionMessage = null;
+      String message;
+      if(runtimeExceptionMessage != null) {
+        message = runtimeExceptionMessage;
+        runtimeExceptionMessage = null;
+      } else {
+        message = e.toString();
+      }
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
       throw new HttpResponseException(Validation.build(message));
     }
@@ -123,13 +128,13 @@ public class ActivityExtractionFacade {
       throw new HttpResponseException(NotFound.build("Activity's extraction doesn't exists"));
     }
     catch(HttpResponseException e){
-      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + e.getMessage());
+      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId + ": " + e.getMessage());
       throw e;
     }
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
-      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
+      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId + ": " + message);
       throw new HttpResponseException(Validation.build(message));
     }
     catch (Exception e) {
@@ -345,7 +350,14 @@ public class ActivityExtractionFacade {
       throw new ValidationException();
     }
 
-    String extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
+    String extractionValue;
+    //some datasources doesn't have extractionvalue.
+    if(iterator.next().getAsJsonObject().get("extractionValue") != null) {
+      extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
+    } else {
+      extractionValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
+    }
+
     ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
   }
 }
