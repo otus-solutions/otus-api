@@ -6,7 +6,7 @@
     <parent>
         <artifactId>otus-root</artifactId>
         <groupId>org.ccem.otus</groupId>
-        <version>1.52.0-SNAPSHOT</version>
+        <version>1.52.0</version>
         <relativePath>../otus-root/pom.xml</relativePath>
     </parent>
     <dependencies>
@@ -26,6 +26,12 @@
             <groupId>org.mongodb</groupId>
             <artifactId>bson</artifactId>
             <version>${mongodb.bson.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ccem.otus</groupId>
+            <artifactId>survey-model</artifactId>
+            <version>1.12.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

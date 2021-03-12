@@ -55,6 +55,9 @@ public class LaboratoryExtractionRecordsFactory {
         answers.add(result.getAliquotProcessingDate());
         answers.add(result.getAliquotRegisterDate());
         answers.add(result.getAliquotResponsible());
+        answers.add(result.getAliquotRole());
+        answers.add(result.getHasTransportationLotId().toString());
+        answers.add(result.getHasExamLotId().toString());
 
         this.outputRecords.add(new ArrayList<>(answers));
       });

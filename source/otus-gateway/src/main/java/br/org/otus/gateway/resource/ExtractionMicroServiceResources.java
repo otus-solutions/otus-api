@@ -7,30 +7,55 @@ import java.net.URL;
 
 public class ExtractionMicroServiceResources extends MicroservicesResources {
 
-  private static final String PIPELINE_EXTRACTION_RESOURCE = "/pipeline/";
+  private static final String EXTRACTION_SUFFIX = "/extractions";
+  private static final String ACTIVITY_EXTRACTION_RESOURCE = EXTRACTION_SUFFIX + "/activity";
 
-  private static final String EXTRACTION_SUFFIX = "/extraction/";
-  private static final String EXTRACTION_CREATE_RESOURCE = EXTRACTION_SUFFIX + "create/";
-  private static final String EXTRACTION_UPDATE_RESOURCE = EXTRACTION_SUFFIX + "update/";
-  private static final String EXTRACTION_DELETE_RESOURCE = EXTRACTION_SUFFIX + "delete/";
+  private static final String SURVEY_EXTRACTION_SUFFIX = "/survey";
+  private static final String CSV_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/csv";
+  private static final String JSON_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/json";
+  private static final String RSCRIPT_SURVEY_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/rscript";
+  private static final String SURVEY_ACTIVITIES_IDS_WITH_EXTRACTION_RESOURCE = SURVEY_EXTRACTION_SUFFIX + "/get-survey-activities-ids";
+
+  private static final String RSCRIPT_SUFFIX = "/rscript";
+  private static final String RSCRIPT_CREATE_RESOURCE = RSCRIPT_SUFFIX + "/create";
 
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
   }
 
-  public URL getPipelineExtractionAddress(String pipelineName) throws MalformedURLException {
-    return new URL(getMainAddress() + PIPELINE_EXTRACTION_RESOURCE + pipelineName);
+  public URL getActivityExtractionCreateAddress() throws MalformedURLException {
+    return new URL(getMainAddress() + ACTIVITY_EXTRACTION_RESOURCE);
   }
 
-  public URL getActivityExtractionCreateAddress(String activityId) throws MalformedURLException {
-    return new URL(getMainAddress() + EXTRACTION_CREATE_RESOURCE + activityId);
+  public URL getActivityExtractionDeleteAddress(String surveyId, String activityId) throws MalformedURLException {
+    return new URL(getMainAddress() + ACTIVITY_EXTRACTION_RESOURCE + "/" + surveyId + "/" + activityId);
   }
 
-  public URL getActivityExtractionUpdateAddress(String activityId) throws MalformedURLException {
-    return new URL(getMainAddress() + EXTRACTION_UPDATE_RESOURCE + activityId);
+  public URL getSurveyActivityIdsWithExtractionAddress(String surveyId) throws MalformedURLException {
+    return new URL(getMainAddress() + SURVEY_ACTIVITIES_IDS_WITH_EXTRACTION_RESOURCE + "/" + surveyId);
   }
 
-  public URL getActivityExtractionDeleteAddress(String activityId) throws MalformedURLException {
-    return new URL(getMainAddress() + EXTRACTION_DELETE_RESOURCE + activityId);
+  public URL getCsvSurveyExtractionAddress(String surveyId) throws MalformedURLException {
+    return new URL(getMainAddress() + CSV_SURVEY_EXTRACTION_RESOURCE + "/" + surveyId);
+  }
+
+  public URL getJsonSurveyExtractionAddress(String surveyId) throws MalformedURLException {
+    return new URL(getMainAddress() + JSON_SURVEY_EXTRACTION_RESOURCE + "/" + surveyId);
+  }
+
+  public URL getRScriptCreationAddress() throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_CREATE_RESOURCE);
+  }
+
+  public URL getRScriptGetterAddress(String rscriptName) throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName);
+  }
+
+  public URL getRScriptDeleteAddress(String rscriptName) throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName);
+  }
+
+  public URL getRScriptJsonSurveyExtractionAddress() throws MalformedURLException {
+    return new URL(getMainAddress() + RSCRIPT_SURVEY_EXTRACTION_RESOURCE);
   }
 }

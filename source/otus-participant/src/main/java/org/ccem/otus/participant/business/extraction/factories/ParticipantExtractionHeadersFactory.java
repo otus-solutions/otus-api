@@ -54,6 +54,7 @@ public class ParticipantExtractionHeadersFactory {
     this.headers.add(ParticipantExtractionHeaders.MAIN_ADDRESS_CITY.getValue());
     this.headers.add(ParticipantExtractionHeaders.MAIN_ADDRESS_UF.getValue());
     this.headers.add(ParticipantExtractionHeaders.MAIN_ADDRESS_COUNTRY.getValue());
+    this.headers.add(ParticipantExtractionHeaders.MAIN_ADDRESS_CENSUS.getValue());
     this.headers.add(ParticipantExtractionHeaders.MAIN_ADDRESS_OBSERVATION.getValue());
     this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_CEP.getValue());
     this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_STREET.getValue());
@@ -63,6 +64,7 @@ public class ParticipantExtractionHeadersFactory {
     this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_CITY.getValue());
     this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_UF.getValue());
     this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_COUNTRY.getValue());
+    this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_CENSUS.getValue());
     this.headers.add(ParticipantExtractionHeaders.SECOND_ADDRESS_OBSERVATION.getValue());
     this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_CEP.getValue());
     this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_STREET.getValue());
@@ -72,6 +74,7 @@ public class ParticipantExtractionHeadersFactory {
     this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_CITY.getValue());
     this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_UF.getValue());
     this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_COUNTRY.getValue());
+    this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_CENSUS.getValue());
     this.headers.add(ParticipantExtractionHeaders.THIRD_ADDRESS_OBSERVATION.getValue());
     this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_CEP.getValue());
     this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_STREET.getValue());
@@ -81,6 +84,7 @@ public class ParticipantExtractionHeadersFactory {
     this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_CITY.getValue());
     this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_UF.getValue());
     this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_COUNTRY.getValue());
+    this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_CENSUS.getValue());
     this.headers.add(ParticipantExtractionHeaders.FOURTH_ADDRESS_OBSERVATION.getValue());
     this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_CEP.getValue());
     this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_STREET.getValue());
@@ -90,6 +94,7 @@ public class ParticipantExtractionHeadersFactory {
     this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_CITY.getValue());
     this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_UF.getValue());
     this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_COUNTRY.getValue());
+    this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_CENSUS.getValue());
     this.headers.add(ParticipantExtractionHeaders.FIFTH_ADDRESS_OBSERVATION.getValue());
   }
 

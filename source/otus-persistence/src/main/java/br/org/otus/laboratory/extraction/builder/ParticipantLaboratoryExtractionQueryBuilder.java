@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -243,4 +242,5 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     GsonBuilder gsonBuilder = new GsonBuilder();
     return gsonBuilder.create().fromJson(query, Document.class);
   }
+
 }

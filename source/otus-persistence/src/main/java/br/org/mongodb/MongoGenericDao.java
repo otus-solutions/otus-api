@@ -16,6 +16,7 @@ public abstract class MongoGenericDao<T> {
 
   protected static final String ID_FIELD_NAME = "_id";
   protected static final String OBJECT_TYPE_PATH = "objectType";
+  protected static final String SET_OPERATOR = "$set";
 
   @Inject
   protected MongoDatabase db;

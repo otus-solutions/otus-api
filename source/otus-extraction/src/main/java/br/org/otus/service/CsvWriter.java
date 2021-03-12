@@ -2,6 +2,7 @@ package br.org.otus.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CsvWriter {
     try {
       out = new ByteArrayOutputStream();
       csvFileFormat = CSVFormat.newFormat(DELIMITER).withRecordSeparator(RECORD_SEPARATOR).withQuote('\"').withQuoteMode(QuoteMode.MINIMAL);
-      csvFilePrinter = new CSVPrinter(new PrintWriter(out), csvFileFormat);
+      csvFilePrinter = new CSVPrinter(new PrintWriter(new OutputStreamWriter(out, "UTF-8")), csvFileFormat);
     } catch (IOException e) {
       e.printStackTrace();
     }

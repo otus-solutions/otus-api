@@ -233,9 +233,15 @@ public class ActivityServiceBeanTest {
   }
 
   @Test
-  public void discardByID_method_should_invoke_ActivityDao_discardByID() throws DataNotFoundException {
+  public void discardByID_method_should_call_activityDao_discardByID_method() throws DataNotFoundException {
     service.discardByID(ACTIVITY_OID);
     verify(activityDao, times(1)).discardByID(ACTIVITY_OID);
   }
 
+  @Test
+  public void getActivityIds_method_should_call_activityDao_getActivityIds_method() throws MemoryExcededException {
+    final List<String> activityIdsToExcludeOfQuery = new ArrayList<>();
+    service.getActivityIds(ACRONYM, VERSION, activityIdsToExcludeOfQuery);
+    verify(activityDao, times(1)).getActivityIds(ACRONYM, VERSION, null, activityIdsToExcludeOfQuery);
+  }
 }
