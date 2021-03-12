@@ -7,7 +7,9 @@ import br.org.otus.configuration.publish.TemplateResource;
 import br.org.otus.configuration.survey.SurveyResource;
 import br.org.otus.configuration.visual.VisualIdentityResource;
 import br.org.otus.examUploader.ExamUploadResource;
+import br.org.otus.extraction.rest.ActivityExtractionResource;
 import br.org.otus.extraction.rest.ExtractionResource;
+import br.org.otus.extraction.rest.RscriptResource;
 import br.org.otus.fieldCenter.FieldCenterResource;
 import br.org.otus.fileuploader.FileUploaderResource;
 import br.org.otus.importation.ActivityImportationResource;
@@ -21,6 +23,7 @@ import br.org.otus.laboratory.project.TransportLocationPointResource;
 import br.org.otus.monitoring.MonitoringResource;
 import br.org.otus.outcomes.configuration.FollowUpConfiguration;
 import br.org.otus.outcomes.configuration.FollowUpEventConfiguration;
+import br.org.otus.participant.NoteAboutParticipantResource;
 import br.org.otus.participant.ParticipantContactAttemptResource;
 import br.org.otus.participant.ParticipantContactResource;
 import br.org.otus.participant.ParticipantResource;
@@ -174,6 +177,15 @@ public class EndPointsLoader extends Application {
   @Inject
   private StageResource stageResource;
 
+  @Inject
+  private ActivityExtractionResource activityExtractionResource;
+
+  @Inject
+  private RscriptResource rscriptResource;
+
+  @Inject
+  private NoteAboutParticipantResource noteAboutParticipantResource;
+
   @Override
   public Set<Class<?>> getClasses() {
     Set<Class<?>> resources = new HashSet<Class<?>>();
@@ -217,6 +229,9 @@ public class EndPointsLoader extends Application {
     resources.add(MessageCommunicationResource.class);
     resources.add(ActivitySharingResource.class);
     resources.add(StageResource.class);
+    resources.add(ActivityExtractionResource.class);
+    resources.add(RscriptResource.class);
+    resources.add(NoteAboutParticipantResource.class);
 
     return resources;
   }
@@ -265,6 +280,9 @@ public class EndPointsLoader extends Application {
     resources.add(messageCommunicationResource);
     resources.add(activitySharingResource);
     resources.add(stageResource);
+    resources.add(activityExtractionResource);
+    resources.add(rscriptResource);
+    resources.add(noteAboutParticipantResource);
 
     return resources;
   }

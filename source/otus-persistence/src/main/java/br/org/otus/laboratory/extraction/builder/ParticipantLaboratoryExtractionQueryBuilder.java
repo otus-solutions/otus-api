@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -158,7 +157,7 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("aliquotRole",new Document("$ifNull", Arrays.asList("$role", "")))
       .append("hasTransportationLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$transportationLotId\"},false]}"))
       .append("hasExamLotId", parseQuery("{\"$ifNull\":[{\"$toBool\":\"$examLotId\"},false]}"));
-
+    
     this.pipeline.add(parseQuery("{\n" +
       "    $lookup: {\n" +
       "      from: \"participant_laboratory\",\n" +
@@ -243,4 +242,5 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     GsonBuilder gsonBuilder = new GsonBuilder();
     return gsonBuilder.create().fromJson(query, Document.class);
   }
+
 }

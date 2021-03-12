@@ -40,55 +40,41 @@ public class ParticipantLaboratoryExtractionDaoBean implements ParticipantLabora
     LinkedList<LaboratoryRecordExtraction> laboratoryExtraction = laboratoryExtraction(attachedLaboratories, false);
     participantLaboratoryRecordExtractions.addAll(laboratoryExtraction);
 
-
     return participantLaboratoryRecordExtractions;
   }
 
   private LinkedList<LaboratoryRecordExtraction> laboratoryExtraction(Document attachedLaboratories, boolean extractionFromUnattached) {
     LinkedList<LaboratoryRecordExtraction> participantLaboratoryRecordExtractions = new LinkedList<LaboratoryRecordExtraction>();
-    CompletableFuture<AggregateIterable<Document>> future1 = CompletableFuture.supplyAsync(() -> {
-      AggregateIterable<Document> notAliquotedTubesDocument = null;
+
+    CompletableFuture<AggregateIterable<Document>> notAliquotedTubesFuture = CompletableFuture.supplyAsync(() -> {
       Document tubeCodeDocument = aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getTubeCodesInAliquotQuery()).first();
-
-      ArrayList<String> tubeCodes = null;
-      if (tubeCodeDocument != null) {
-        tubeCodes = (ArrayList<String>) tubeCodeDocument.get("tubeCodes");
-      } else {
-        tubeCodes = new ArrayList<>();
-      }
-
-      notAliquotedTubesDocument = participantLaboratoryDao
-        .aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery(tubeCodes, attachedLaboratories, extractionFromUnattached));
-
-      return notAliquotedTubesDocument;
+      ArrayList<String> tubeCodes = (tubeCodeDocument == null ? new ArrayList<>() : (ArrayList<String>) tubeCodeDocument.get("tubeCodes"));
+      return participantLaboratoryDao.aggregate(
+          new ParticipantLaboratoryExtractionQueryBuilder().getNotAliquotedTubesQuery(tubeCodes, attachedLaboratories, extractionFromUnattached));
     });
 
-    CompletableFuture<AggregateIterable<Document>> future2 = CompletableFuture.supplyAsync(() ->
+    CompletableFuture<AggregateIterable<Document>> aliquotedTubesFuture = CompletableFuture.supplyAsync(() ->
       aliquotDao.aggregate(new ParticipantLaboratoryExtractionQueryBuilder().getAliquotedTubesQuery(attachedLaboratories, extractionFromUnattached))
     );
 
-    try {
-      AggregateIterable<Document> future1Result = future1.get();
-      if (future1Result != null) {
-        for (Document notAliquotedTube : future1Result) {
-          participantLaboratoryRecordExtractions.add(LaboratoryRecordExtraction.deserialize(notAliquotedTube.toJson()));
-        }
-      }
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
-    }
-
-    try {
-      AggregateIterable<Document> future2Result = future2.get();
-      if (future2Result != null) {
-        for (Document aliquotedTubes : future2Result) {
-          participantLaboratoryRecordExtractions.add(LaboratoryRecordExtraction.deserialize(aliquotedTubes.toJson()));
-        }
-      }
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
-    }
+    addFoundTubes(participantLaboratoryRecordExtractions, notAliquotedTubesFuture);
+    addFoundTubes(participantLaboratoryRecordExtractions, aliquotedTubesFuture);
 
     return participantLaboratoryRecordExtractions;
   }
+
+  private void addFoundTubes(LinkedList<LaboratoryRecordExtraction> participantLaboratoryRecordExtractions, CompletableFuture<AggregateIterable<Document>> tubesFuture){
+    try {
+      AggregateIterable<Document> tubesFutureResult = tubesFuture.get();
+      if (tubesFutureResult == null) {
+        return;
+      }
+      for (Document tubes : tubesFutureResult) {
+        participantLaboratoryRecordExtractions.add(LaboratoryRecordExtraction.deserialize(tubes.toJson()));
+      }
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+    }
+  }
+
 }

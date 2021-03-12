@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptExtractionDTO;
 import org.ccem.otus.participant.model.participant_contact.Address;
 import org.ccem.otus.participant.persistence.ParticipantContactAttemptDao;
 import org.ccem.otus.participant.persistence.dto.ParticipantContactDto;
@@ -156,7 +157,7 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
   }
 
   @Override
-  public ArrayList<ParticipantContactAttempt> finParticipantContactAttempts() throws DataNotFoundException {
+  public ArrayList<ParticipantContactAttemptExtractionDTO> finParticipantContactAttempts() throws DataNotFoundException {
     try{
       ArrayList<Bson> pipeline = new ArrayList<>();
 
@@ -202,13 +203,13 @@ public class ParticipantContactAttemptDaoBean extends MongoGenericDao<Document> 
       ));
 
       AggregateIterable<Document> result = collection.aggregate(pipeline);
-      ArrayList<ParticipantContactAttempt> attempts = new ArrayList<>();
+      ArrayList<ParticipantContactAttemptExtractionDTO> attempts = new ArrayList<>();
 
       MongoCursor<Document> iterator = result.iterator();
 
       while (iterator.hasNext()) {
         Document document = iterator.next();
-        ParticipantContactAttempt participantContactAttempt = ParticipantContactAttempt.deserialize(document.toJson());
+        ParticipantContactAttemptExtractionDTO participantContactAttempt = ParticipantContactAttemptExtractionDTO.deserialize(document.toJson());
         attempts.add(participantContactAttempt);
       }
 

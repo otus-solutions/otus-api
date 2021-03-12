@@ -37,6 +37,7 @@ public class ParticipantResultExtraction {
     String mainAddressCity;
     String mainAddressUf;
     String mainAddressCountry;
+    String mainAddressCensus;
     String mainAddressObservation;
     String secondAddressCep;
     String secondAddressStreet;
@@ -46,6 +47,7 @@ public class ParticipantResultExtraction {
     String secondAddressCity;
     String secondAddressUf;
     String secondAddressCountry;
+    String secondAddressCensus;
     String secondAddressObservation;
     String thirdAddressCep;
     String thirdAddressStreet;
@@ -55,6 +57,7 @@ public class ParticipantResultExtraction {
     String thirdAddressCity;
     String thirdAddressUf;
     String thirdAddressCountry;
+    String thirdAddressCensus;
     String thirdAddressObservation;
     String fourthAddressCep;
     String fourthAddressStreet;
@@ -64,6 +67,7 @@ public class ParticipantResultExtraction {
     String fourthAddressCity;
     String fourthAddressUf;
     String fourthAddressCountry;
+    String fourthAddressCensus;
     String fourthAddressObservation;
     String fifthAddressCep;
     String fifthAddressStreet;
@@ -73,6 +77,7 @@ public class ParticipantResultExtraction {
     String fifthAddressCity;
     String fifthAddressUf;
     String fifthAddressCountry;
+    String fifthAddressCensus;
     String fifthAddressObservation;
 
     public Long getRecruitmentNumber() {
@@ -215,6 +220,10 @@ public class ParticipantResultExtraction {
         return mainAddressCountry;
     }
 
+    public String getMainAddressCensus() {
+        return mainAddressCensus;
+    }
+
     public String getMainAddressObservation() {
         return mainAddressObservation;
     }
@@ -249,6 +258,10 @@ public class ParticipantResultExtraction {
 
     public String getSecondAddressCountry() {
         return secondAddressCountry;
+    }
+
+    public String getSecondAddressCensus() {
+        return secondAddressCensus;
     }
 
     public String getSecondAddressObservation() {
@@ -287,6 +300,10 @@ public class ParticipantResultExtraction {
         return thirdAddressCountry;
     }
 
+    public String getThirdAddressCensus() {
+        return thirdAddressCensus;
+    }
+
     public String getThirdAddressObservation() {
         return thirdAddressObservation;
     }
@@ -323,6 +340,10 @@ public class ParticipantResultExtraction {
         return fourthAddressCountry;
     }
 
+    public String getFourthAddressCensus() {
+        return fourthAddressCensus;
+    }
+
     public String getFourthAddressObservation() {
         return fourthAddressObservation;
     }
@@ -357,6 +378,10 @@ public class ParticipantResultExtraction {
 
     public String getFifthAddressCountry() {
         return fifthAddressCountry;
+    }
+
+    public String getFifthAddressCensus() {
+        return fifthAddressCensus;
     }
 
     public String getFifthAddressObservation() {

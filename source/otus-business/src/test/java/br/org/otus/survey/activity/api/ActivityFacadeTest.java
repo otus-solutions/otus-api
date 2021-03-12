@@ -282,4 +282,18 @@ public class ActivityFacadeTest {
     PowerMockito.doThrow(new DataNotFoundException("")).when(activityTasksService, "discardById", ACTIVITY_ID);
     activityFacade.discardByID(ACTIVITY_ID);
   }
+
+  @Test
+  public void getActivityIds_method_should_invoke_ActivityService_getActivityIds() throws MemoryExcededException {
+    List<String> activityIdsToExcludeOfQuery = new ArrayList<>();
+    activityFacade.getActivityIds(ACRONYM, VERSION, activityIdsToExcludeOfQuery);
+    verify(activityService, Mockito.times(1)).getActivityIds(ACRONYM, VERSION, activityIdsToExcludeOfQuery);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getActivityIds_method_should_handle_MemoryExceededException() throws Exception {
+    List<String> activityIdsToExcludeOfQuery = new ArrayList<>();
+    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "getActivityIds", ACRONYM, VERSION, activityIdsToExcludeOfQuery);
+    activityFacade.getActivityIds(ACRONYM, VERSION, activityIdsToExcludeOfQuery);
+  }
 }

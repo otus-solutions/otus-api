@@ -64,6 +64,7 @@ public class ParticipantExtractionRecordsFactory {
     answers.add(record.getMainAddressCity());
     answers.add(record.getMainAddressUf());
     answers.add(record.getMainAddressCountry());
+    answers.add(record.getMainAddressCensus());
     answers.add(record.getMainAddressObservation());
     answers.add(record.getSecondAddressCep());
     answers.add(record.getSecondAddressStreet());
@@ -73,6 +74,7 @@ public class ParticipantExtractionRecordsFactory {
     answers.add(record.getSecondAddressCity());
     answers.add(record.getSecondAddressUf());
     answers.add(record.getSecondAddressCountry());
+    answers.add(record.getSecondAddressCensus());
     answers.add(record.getSecondAddressObservation());
     answers.add(record.getThirdAddressCep());
     answers.add(record.getThirdAddressStreet());
@@ -82,6 +84,7 @@ public class ParticipantExtractionRecordsFactory {
     answers.add(record.getThirdAddressCity());
     answers.add(record.getThirdAddressUf());
     answers.add(record.getThirdAddressCountry());
+    answers.add(record.getThirdAddressCensus());
     answers.add(record.getThirdAddressObservation());
     answers.add(record.getFourthAddressCep());
     answers.add(record.getFourthAddressStreet());
@@ -91,6 +94,7 @@ public class ParticipantExtractionRecordsFactory {
     answers.add(record.getFourthAddressCity());
     answers.add(record.getFourthAddressUf());
     answers.add(record.getFourthAddressCountry());
+    answers.add(record.getFourthAddressCensus());
     answers.add(record.getFourthAddressObservation());
     answers.add(record.getFifthAddressCep());
     answers.add(record.getFifthAddressStreet());
@@ -100,6 +104,7 @@ public class ParticipantExtractionRecordsFactory {
     answers.add(record.getFifthAddressCity());
     answers.add(record.getFifthAddressUf());
     answers.add(record.getFifthAddressCountry());
+    answers.add(record.getFifthAddressCensus());
     answers.add(record.getFifthAddressObservation());
     return answers;
   }
