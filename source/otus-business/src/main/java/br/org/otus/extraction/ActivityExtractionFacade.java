@@ -93,6 +93,11 @@ public class ActivityExtractionFacade {
       new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).serialize());
       LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
     }
+    catch(HttpResponseException e){
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + e.getMessage());
+      throw e;
+    }
+
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
