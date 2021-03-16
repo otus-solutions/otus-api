@@ -250,9 +250,9 @@ public class ActivityFacade {
     }
   }
 
-  public List<ObjectId> getActivityIds(String acronym, Integer version, List<String> activityIdsToExcludeOfQuery) {
+  public List<ObjectId> getActivityIds(String acronym, Integer version, Boolean isDiscardedValue, List<String> activityIdsToExcludeOfQuery) {
     try {
-      return activityService.getActivityIds(acronym, version, activityIdsToExcludeOfQuery);
+      return activityService.getActivityIds(acronym, version, isDiscardedValue, activityIdsToExcludeOfQuery);
     } catch (MemoryExcededException e) {
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }

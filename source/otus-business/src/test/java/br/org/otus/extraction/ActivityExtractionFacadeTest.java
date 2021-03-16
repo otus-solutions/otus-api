@@ -61,6 +61,7 @@ public class ActivityExtractionFacadeTest {
   private static final String SURVEY_EXTRACTION_JSON = "{}";
   private static final String R_SCRIPT_JSON_RESULT = "{}";
   private static final String CSV_JSON = "{header: [\"x\"], values: [1]}";
+  private static final Boolean IS_DISCARDED_VALUE = false;
 
   @InjectMocks
   private ActivityExtractionFacade activityExtractionFacade;
@@ -219,7 +220,7 @@ public class ActivityExtractionFacadeTest {
     activitiesIdsWithExtraction.add(ACTIVITY_ID);
     List<ObjectId> activityOidsWithoutExtraction = new ArrayList<>();
     activityOidsWithoutExtraction.add(new ObjectId(ACTIVITY_ID_WITHOUT_EXTRACTION));
-    when(activityFacade.getActivityIds(ACRONYM, VERSION, activitiesIdsWithExtraction)).thenReturn(activityOidsWithoutExtraction);
+    when(activityFacade.getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, activitiesIdsWithExtraction)).thenReturn(activityOidsWithoutExtraction);
     when(activityFacade.getByID(ACTIVITY_ID_WITHOUT_EXTRACTION)).thenReturn(surveyActivity);
     when(surveyActivity.isDiscarded()).thenReturn(false);
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
@@ -239,7 +240,7 @@ public class ActivityExtractionFacadeTest {
     when(gatewayResponse.getData()).thenReturn("[" + ACTIVITY_ID + "]");
     List<ObjectId> activityOidsWithoutExtraction = new ArrayList<>();
     activityOidsWithoutExtraction.add(new ObjectId(ACTIVITY_ID_WITHOUT_EXTRACTION));
-    when(activityFacade.getActivityIds(ACRONYM, VERSION, null)).thenReturn(activityOidsWithoutExtraction);
+    when(activityFacade.getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, null)).thenReturn(activityOidsWithoutExtraction);
     when(activityFacade.getByID(ACTIVITY_ID_WITHOUT_EXTRACTION)).thenReturn(surveyActivity);
     when(surveyActivity.isDiscarded()).thenReturn(false);
     when(surveyActivity.couldBeExtracted()).thenReturn(true);
@@ -251,27 +252,10 @@ public class ActivityExtractionFacadeTest {
   public void forceSynchronizeSurveyActivityExtractions_method_should_handle_IOException() throws IOException {
     List<ObjectId> activityOidsWithoutExtraction = new ArrayList<>();
     activityOidsWithoutExtraction.add(new ObjectId(ACTIVITY_ID_WITHOUT_EXTRACTION));
-    when(activityFacade.getActivityIds(ACRONYM, VERSION, null)).thenReturn(activityOidsWithoutExtraction);
+    when(activityFacade.getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, null)).thenReturn(activityOidsWithoutExtraction);
     when(activityFacade.getByID(ACTIVITY_ID_WITHOUT_EXTRACTION)).thenReturn(surveyActivity);
     doThrow(new IOException()).when(extractionGatewayService).createOrUpdateActivityExtraction(Mockito.anyString());
     activityExtractionFacade.forceSynchronizeSurveyActivityExtractions(ACRONYM, VERSION);
-  }
-
-
-  @Test
-  public void forceCreateOrUpdateActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doReturn(true).when(surveyActivity).isFinalized();
-    when(surveyActivity.couldBeExtracted()).thenReturn(true);
-    doNothing().when(extractionGatewayService).createOrUpdateActivityExtraction(ACTIVITY_ID);
-    activityExtractionFacade.forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createOrUpdateActivityExtraction(activityExtraction.serialize());
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void forceCreateOrUpdateActivityExtraction_method_should_handle_ValidationException_in_case_discarded_activity() throws IOException {
-    when(surveyActivity.isDiscarded()).thenReturn(true);
-    doThrow(new IOException()).when(extractionGatewayService).createOrUpdateActivityExtraction(Mockito.anyString());
-    activityExtractionFacade.forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
   }
 
   @Test

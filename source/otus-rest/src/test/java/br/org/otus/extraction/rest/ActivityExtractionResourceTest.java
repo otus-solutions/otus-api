@@ -84,12 +84,6 @@ public class ActivityExtractionResourceTest extends ResourceTestsParent {
   }
 
   @Test
-  public void forceCreateOrUpdateActivityExtraction_method_should_call_facade_forceCreateOrUpdateActivityExtraction_method() {
-    activityExtractionResource.forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
-    Mockito.verify(activityExtractionFacade, Mockito.times(1)).forceCreateOrUpdateActivityExtraction(ACTIVITY_ID);
-  }
-
-  @Test
   public void getSurveyActivitiesExtractionAsCsv_method_should_call_facade_getSurveyActivitiesExtractionAsCsv_method() {
     activityExtractionResource.getSurveyActivitiesExtractionAsCsv(ACRONYM, VERSION);
     Mockito.verify(activityExtractionFacade, Mockito.times(1)).getSurveyActivitiesExtractionAsCsv(ACRONYM, VERSION);
