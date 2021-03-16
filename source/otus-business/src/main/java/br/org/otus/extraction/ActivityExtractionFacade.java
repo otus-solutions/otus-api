@@ -43,8 +43,7 @@ import java.util.zip.DataFormatException;
 public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
-
-  private boolean allowCreateExtractionForDiscardedActivities = false;
+  
   private String runtimeExceptionMessage = null;
 
   @Inject
@@ -160,7 +159,6 @@ public class ActivityExtractionFacade {
 
   public void forceSynchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
-      allowCreateExtractionForDiscardedActivities = true;
       activityFacade.getActivityIds(acronym, version, false, null).stream()
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
@@ -168,21 +166,14 @@ public class ActivityExtractionFacade {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
-    finally {
-      allowCreateExtractionForDiscardedActivities = false;
-    }
   }
 
   public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
-      allowCreateExtractionForDiscardedActivities = true;
       createOrUpdateActivityExtraction(activityId);
     }
     catch (Exception e) {
       throw e;
-    }
-    finally{
-      allowCreateExtractionForDiscardedActivities = false;
     }
   }
 
@@ -285,7 +276,7 @@ public class ActivityExtractionFacade {
 
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded() && !allowCreateExtractionForDiscardedActivities){
+    if(surveyActivity.isDiscarded()){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
 
