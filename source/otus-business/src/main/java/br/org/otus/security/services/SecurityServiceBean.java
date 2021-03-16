@@ -90,8 +90,14 @@ public class SecurityServiceBean implements SecurityService {
       ParticipantTempTokenRequestDto dto = ParticipantTempTokenRequestDto.deserialize(payload);
 
       ActivitySharing activitySharing = activitySharingDao.getSharedURL(new ObjectId(dto.getActivityId()));
-      if(activitySharing == null || activitySharingIdDoesNotMatchWithActivityId(activitySharing, activityId)){
+      if(activitySharing == null){
         throw new TokenException();
+      }
+
+      if(ObjectId.isValid(activityId)) {
+        if(!activityId.equals(activitySharing.getActivityId().toHexString())){
+          throw new TokenException();
+        }
       }
 
       if(DateUtil.before(activitySharing.getExpirationDate(), DateUtil.nowToISODate())){
@@ -104,10 +110,6 @@ public class SecurityServiceBean implements SecurityService {
     catch (ParseException | DataNotFoundException e) {
       throw new TokenException(e);
     }
-  }
-
-  private boolean activitySharingIdDoesNotMatchWithActivityId(ActivitySharing activitySharing, String activityId){
-    return ObjectId.isValid(activityId) && !activityId.equals(activitySharing.getActivityId().toHexString());
   }
 
   @Override
