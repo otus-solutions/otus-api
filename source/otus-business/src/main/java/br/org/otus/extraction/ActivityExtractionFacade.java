@@ -148,7 +148,7 @@ public class ActivityExtractionFacade {
       String surveyId = findSurveyId(acronym, version);
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getSurveyActivityIdsWithExtraction(surveyId);
       ArrayList<String> activitiesIdsWithExtraction = new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
-      activityFacade.getActivityIds(acronym, version, false, activitiesIdsWithExtraction).stream()
+      activityFacade.getActivityIds(acronym, version, activitiesIdsWithExtraction).stream()
         .filter(activityOid -> !activitiesIdsWithExtraction.contains(activityOid.toHexString()))
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
@@ -161,7 +161,7 @@ public class ActivityExtractionFacade {
   public void forceSynchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
       allowCreateExtractionForDiscardedActivities = true;
-      activityFacade.getActivityIds(acronym, version, false, null).stream()
+      activityFacade.getActivityIds(acronym, version, null).stream()
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
     } catch (Exception e) {
