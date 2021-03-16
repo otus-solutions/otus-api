@@ -43,8 +43,7 @@ import java.util.zip.DataFormatException;
 public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
-
-  private boolean allowCreateExtractionForAnyActivity = false;
+  
   private String runtimeExceptionMessage = null;
 
   @Inject
@@ -145,7 +144,6 @@ public class ActivityExtractionFacade {
 
   public void synchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
-      allowCreateExtractionForAnyActivity = true;
       String surveyId = findSurveyId(acronym, version);
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getSurveyActivityIdsWithExtraction(surveyId);
       ArrayList<String> activitiesIdsWithExtraction = new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
@@ -157,14 +155,10 @@ public class ActivityExtractionFacade {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
-    finally {
-      allowCreateExtractionForAnyActivity = false;
-    }
   }
 
   public void forceSynchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
-      allowCreateExtractionForAnyActivity = true;
       activityFacade.getActivityIds(acronym, version, false, null).stream()
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
@@ -172,21 +166,14 @@ public class ActivityExtractionFacade {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
-    finally {
-      allowCreateExtractionForAnyActivity = false;
-    }
   }
 
   public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
     try {
-      allowCreateExtractionForAnyActivity = true;
       createOrUpdateActivityExtraction(activityId);
     }
     catch (Exception e) {
       throw e;
-    }
-    finally{
-      allowCreateExtractionForAnyActivity = false;
     }
   }
 
@@ -289,7 +276,7 @@ public class ActivityExtractionFacade {
 
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
+    if(surveyActivity.isDiscarded()){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
 
