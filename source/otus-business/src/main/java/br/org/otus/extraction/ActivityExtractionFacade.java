@@ -43,7 +43,7 @@ import java.util.zip.DataFormatException;
 public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
-  
+
   private String runtimeExceptionMessage = null;
 
   @Inject
@@ -165,15 +165,6 @@ public class ActivityExtractionFacade {
     } catch (Exception e) {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
-    try {
-      createOrUpdateActivityExtraction(activityId);
-    }
-    catch (Exception e) {
-      throw e;
     }
   }
 
