@@ -2,8 +2,8 @@ package br.org.otus.gateway.resource;
 
 import br.org.otus.gateway.MicroservicesEnvironments;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 
 public class ExtractionMicroServiceResources extends MicroservicesResources {
 
@@ -18,6 +18,8 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
 
   private static final String RSCRIPT_SUFFIX = "/rscript";
   private static final String RSCRIPT_CREATE_RESOURCE = RSCRIPT_SUFFIX + "/create";
+  private static final String SPACE_0020 = "%20";
+  private static final String REPLACE_SPACE = " ";
 
   public ExtractionMicroServiceResources() {
     super(MicroservicesEnvironments.EXTRACTION);
@@ -47,12 +49,12 @@ public class ExtractionMicroServiceResources extends MicroservicesResources {
     return new URL(getMainAddress() + RSCRIPT_CREATE_RESOURCE);
   }
 
-  public URL getRScriptGetterAddress(String rscriptName) throws MalformedURLException {
-    return new URL(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName);
+  public URL getRScriptGetterAddress(String rscriptName) throws MalformedURLException, URISyntaxException {
+    return new URI(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName.replace(REPLACE_SPACE, SPACE_0020)).toURL();
   }
 
-  public URL getRScriptDeleteAddress(String rscriptName) throws MalformedURLException {
-    return new URL(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName);
+  public URL getRScriptDeleteAddress(String rscriptName) throws MalformedURLException, URISyntaxException {
+    return new URI(getMainAddress() + RSCRIPT_SUFFIX + "/" + rscriptName.replace(REPLACE_SPACE, SPACE_0020)).toURL();
   }
 
   public URL getRScriptJsonSurveyExtractionAddress() throws MalformedURLException {

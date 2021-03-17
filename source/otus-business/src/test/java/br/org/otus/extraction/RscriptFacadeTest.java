@@ -14,6 +14,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -22,7 +23,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({RscriptFacade.class})
 public class RscriptFacadeTest {
 
-  private static final String R_SCRIPT_JSON = "{}";
+  private static final String R_SCRIPT_JSON = "{\n \"name\":\"script\",\n \"script\":\"function(x) {return(x)}\"}";
   private static final String R_SCRIPT_NAME = "script";
 
   @InjectMocks
@@ -39,7 +40,7 @@ public class RscriptFacadeTest {
   }
 
   @Test
-  public void createOrUpdateRscript_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+  public void createOrUpdateRscript_method_should_call_same_method_from_ExtractionGatewayService() throws Exception {
     doNothing().when(extractionGatewayService).createOrUpdateRscript(R_SCRIPT_JSON);
     rscriptFacade.createOrUpdate(R_SCRIPT_JSON);
     verify(extractionGatewayService, Mockito.times(1)).createOrUpdateRscript(R_SCRIPT_JSON);
@@ -52,7 +53,7 @@ public class RscriptFacadeTest {
   }
 
   @Test
-  public void get_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+  public void get_method_should_call_same_method_from_ExtractionGatewayService() throws IOException, URISyntaxException {
     doReturn(gatewayResponse).when(extractionGatewayService).getRscript(R_SCRIPT_NAME);
     when(gatewayResponse.getData()).thenReturn(R_SCRIPT_JSON);
     rscriptFacade.get(R_SCRIPT_NAME);
@@ -60,20 +61,20 @@ public class RscriptFacadeTest {
   }
 
   @Test(expected = HttpResponseException.class)
-  public void get_method_should_handle_IOException() throws IOException {
+  public void get_method_should_handle_IOException() throws IOException, URISyntaxException {
     doThrow(new IOException()).when(extractionGatewayService).getRscript(R_SCRIPT_NAME);
     rscriptFacade.get(R_SCRIPT_NAME);
   }
 
   @Test
-  public void delete_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
+  public void delete_method_should_call_same_method_from_ExtractionGatewayService() throws IOException, URISyntaxException {
     doNothing().when(extractionGatewayService).deleteRscript(R_SCRIPT_NAME);
     rscriptFacade.delete(R_SCRIPT_NAME);
     verify(extractionGatewayService, Mockito.times(1)).deleteRscript(R_SCRIPT_NAME);
   }
 
   @Test(expected = HttpResponseException.class)
-  public void delete_method_should_handle_IOException() throws IOException {
+  public void delete_method_should_handle_IOException() throws IOException, URISyntaxException {
     doThrow(new IOException()).when(extractionGatewayService).deleteRscript(R_SCRIPT_NAME);
     rscriptFacade.delete(R_SCRIPT_NAME);
   }

@@ -8,6 +8,7 @@ import br.org.otus.gateway.response.exception.ReadRequestException;
 import br.org.otus.gateway.response.exception.RequestException;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ExtractionGatewayService {
@@ -42,12 +43,12 @@ public class ExtractionGatewayService {
     sendRequest(new JsonPUTRequestUtility(requestURL, rscriptJson));
   }
 
-  public GatewayResponse getRscript(String rscriptName) throws IOException {
+  public GatewayResponse getRscript(String rscriptName) throws IOException, URISyntaxException {
     URL requestURL = new ExtractionMicroServiceResources().getRScriptGetterAddress(rscriptName);
     return sendRequestAndGetResponse(new JsonGETUtility(requestURL));
   }
 
-  public void deleteRscript(String rscriptName) throws IOException {
+  public void deleteRscript(String rscriptName) throws IOException, URISyntaxException {
     URL requestURL = new ExtractionMicroServiceResources().getRScriptDeleteAddress(rscriptName);
     sendRequest(new JsonDELETEUtility(requestURL));
   }
