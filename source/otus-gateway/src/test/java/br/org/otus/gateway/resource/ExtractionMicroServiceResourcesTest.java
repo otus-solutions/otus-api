@@ -8,7 +8,9 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 @RunWith(PowerMockRunner.class)
@@ -77,7 +79,7 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
   }
 
   @Test
-  public void getRScriptGetterAddress_method_should_return_expected_url() throws MalformedURLException {
+  public void getRScriptGetterAddress_method_should_return_expected_url() throws MalformedURLException, URISyntaxException {
     Assert.assertEquals(
       new URL("http://" + HOST + ":" + PORT + "/rscript/" + R_SCRIPT_NAME),
       resources.getRScriptGetterAddress(R_SCRIPT_NAME)
@@ -85,7 +87,7 @@ public class ExtractionMicroServiceResourcesTest extends MicroServiceResourcesTe
   }
 
   @Test
-  public void getRScriptDeleteAddress_method_should_return_expected_url() throws MalformedURLException {
+  public void getRScriptDeleteAddress_method_should_return_expected_url() throws MalformedURLException, URISyntaxException {
     Assert.assertEquals(
       new URL("http://" + HOST + ":" + PORT + "/rscript/" + R_SCRIPT_NAME),
       resources.getRScriptDeleteAddress(R_SCRIPT_NAME)
