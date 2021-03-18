@@ -2,20 +2,15 @@ package br.org.otus.extraction;
 
 
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.model.SerializableModel;
 
 
-public class RscriptExtractionData {
+public class RscriptExtractionData extends SerializableModel {
     private String name;
     private String script;
 
     public static RscriptExtractionData deserialize(String json) {
-        RscriptExtractionData rscriptJson = RscriptExtractionData.getGsonBuilder().create().fromJson(json, RscriptExtractionData.class);
-        return rscriptJson;
-    }
-
-    public static GsonBuilder getGsonBuilder() {
-        GsonBuilder builder = new GsonBuilder();
-        return builder;
+        return (RscriptExtractionData) deserialize(json, RscriptExtractionData.class);
     }
 
     public String getName(){
