@@ -45,6 +45,7 @@ public class ActivityExtractionFacade {
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
 
   private String runtimeExceptionMessage = null;
+  private boolean allowCreateExtractionForAnyActivity = false;
 
   @Inject
   private ActivityFacade activityFacade;
@@ -267,7 +268,9 @@ public class ActivityExtractionFacade {
 
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded()){
+
+    if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
+      allowCreateExtractionForAnyActivity = false;
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
 
@@ -337,5 +340,9 @@ public class ActivityExtractionFacade {
     }
 
     ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
+  }
+
+  public void discardAllowCreateExtractionForAnyActivity() {
+    allowCreateExtractionForAnyActivity = true;
   }
 }
