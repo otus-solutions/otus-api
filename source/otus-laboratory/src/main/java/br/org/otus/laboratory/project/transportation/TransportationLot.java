@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.transportation;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -30,10 +31,15 @@ public class TransportationLot {
   private ObjectId originLocationPoint;
   private ObjectId destinationLocationPoint;
   private FieldCenter fieldCenter;
+  private TransportationReceipt transportationReceipt;
+  private boolean isReceived;
 
   public TransportationLot() {
     objectType = "TransportationLot";
+    isReceived = false;
   }
+
+  public void setIsReceived(boolean value) { this.isReceived = value; }
 
   public String getObjectType() {
     return objectType;
@@ -61,6 +67,18 @@ public class TransportationLot {
 
   public String getOperator() {
     return operator;
+  }
+
+  public TransportationReceipt getTransportationReceipt() {
+    return transportationReceipt;
+  }
+
+  public void setTransportationReceipt(TransportationReceipt transportationReceipt) {
+    this.transportationReceipt = transportationReceipt;
+  }
+
+  public void setTransportationMetadata(List<ObjectId> transportationMetadata) {
+    this.transportationReceipt.setTransportationMetadata(transportationMetadata);
   }
 
   public ArrayList<String> getAliquotCodeList() {
