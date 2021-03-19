@@ -77,10 +77,6 @@ public class TransportationLot {
     this.transportationReceipt = transportationReceipt;
   }
 
-  public void setTransportationMetadata(List<ObjectId> transportationMetadata) {
-    this.transportationReceipt.setTransportationMetadata(transportationMetadata);
-  }
-
   public ArrayList<String> getAliquotCodeList() {
     ArrayList<String> codeList = new ArrayList<>();
     if (aliquotList != null) {

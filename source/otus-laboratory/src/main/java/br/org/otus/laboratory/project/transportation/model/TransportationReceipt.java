@@ -28,9 +28,6 @@ public class TransportationReceipt {
     public List<ObjectId> getTransportationMetadata() {
         return transportationMetadata;
     }
-    public void setTransportationMetadata(List<ObjectId> transportationMetadata) {
-        this.transportationMetadata = transportationMetadata;
-    }
 
     public static String serialize(TransportationReceipt transportationReceipt) {
         Gson builder = getGsonBuilder().create();
