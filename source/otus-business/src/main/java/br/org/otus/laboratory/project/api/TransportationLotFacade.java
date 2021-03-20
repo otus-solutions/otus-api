@@ -45,8 +45,8 @@ public class TransportationLotFacade {
     }
   }
 
-  public List<TransportationLot> getLots(String locationPointId) {
-    return transportationLotService.list(locationPointId);
+  public List<TransportationLot> getLots(String originLocationPointId, String destinationLocationPointId) {
+    return transportationLotService.list(originLocationPointId, destinationLocationPointId);
   }
 
   public TransportationLot update(TransportationLot transportationLot, String userEmail) {
