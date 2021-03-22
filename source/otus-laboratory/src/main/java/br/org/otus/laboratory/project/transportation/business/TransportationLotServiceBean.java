@@ -116,6 +116,10 @@ public class TransportationLotServiceBean implements TransportationLotService {
     }
   }
 
+  public TransportationLot getByCode(String code) throws DataNotFoundException {
+    return transportationLotDao.findByCode(code);
+  }
+
   @Override
   public List<TransportationLot> list(String originLocationPointId, String destinationLocationPointId) {
     List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoints(originLocationPointId, destinationLocationPointId);

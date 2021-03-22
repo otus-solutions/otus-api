@@ -4,12 +4,14 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import br.org.otus.rest.Response;
 import br.org.otus.security.AuthorizationHeaderReader;
 import br.org.otus.security.user.Secured;
 import br.org.otus.security.context.SecurityContext;
 import com.google.gson.GsonBuilder;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.json.JSONException;
 
 import javax.inject.Inject;
@@ -76,6 +78,22 @@ public class TransportationResource {
 
     TransportationLot transportationLot = TransportationLot.deserialize(transportationLotJson);
     TransportationLot updatedLot = transportationLotFacade.update(transportationLot,userEmail);
+    return new Response().buildSuccess(TransportationLot.serialize(updatedLot)).toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/lot/receipt/{code}")
+  public String updateLotReceipt(@Context HttpServletRequest request, @PathParam("code") String code, String transportationReceiptJson) throws DataNotFoundException {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    TransportationLot transportationLot = transportationLotFacade.getLotByCode(code);
+
+    transportationLot.setTransportationReceipt(TransportationReceipt.deserialize(transportationReceiptJson));
+    transportationLot.setIsReceived(true);
+    TransportationLot updatedLot = transportationLotFacade.update(transportationLot, userEmail);
+
     return new Response().buildSuccess(TransportationLot.serialize(updatedLot)).toJson();
   }
 

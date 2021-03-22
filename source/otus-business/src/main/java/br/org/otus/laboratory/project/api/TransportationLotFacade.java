@@ -49,6 +49,10 @@ public class TransportationLotFacade {
     return transportationLotService.list(originLocationPointId, destinationLocationPointId);
   }
 
+  public TransportationLot getLotByCode(String code) throws DataNotFoundException {
+    return transportationLotService.getByCode(code);
+  }
+
   public TransportationLot update(TransportationLot transportationLot, String userEmail) {
     try {
       User user = userDao.fetchByEmail(userEmail);
