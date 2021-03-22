@@ -15,5 +15,7 @@ public interface TransportationLotService {
 
   List<TransportationLot> list(String locationPointId);
 
+  TransportationLot getByCode(String code) throws DataNotFoundException;
+
   void delete(String id) throws DataNotFoundException;
 }
