@@ -32,9 +32,27 @@ public class TransportationResource {
 
   @GET
   @Secured
-  @Path("/lots/{locationPointId}")
-  public String getLots(@PathParam("locationPointId") String locationPointId) {
-    List<TransportationLot> lots = transportationLotFacade.getLots(locationPointId);
+  @Path("/lots/from/{originLocationPointId}")
+  public String getLotsByOrigin(@PathParam("originLocationPointId") String originLocationPointId) {
+    List<TransportationLot> lots = transportationLotFacade.getLots(originLocationPointId, null);
+    GsonBuilder builder = TransportationLot.getGsonBuilder();
+    return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/lots/to/{destinationLocationPointId}")
+  public String getLotsByDestination(@PathParam("destinationLocationPointId") String destinationLocationPointId) {
+    List<TransportationLot> lots = transportationLotFacade.getLots(null, destinationLocationPointId);
+    GsonBuilder builder = TransportationLot.getGsonBuilder();
+    return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/lots/{originLocationPointId}/{destinationLocationPointId}")
+  public String getLots(@PathParam("originLocationPointId") String originLocationPointId, @PathParam("destinationLocationPointId") String destinationLocationPointId) {
+    List<TransportationLot> lots = transportationLotFacade.getLots(originLocationPointId, destinationLocationPointId);
     GsonBuilder builder = TransportationLot.getGsonBuilder();
     return new Response().buildSuccess(builder.create().toJson(lots)).toJson();
   }

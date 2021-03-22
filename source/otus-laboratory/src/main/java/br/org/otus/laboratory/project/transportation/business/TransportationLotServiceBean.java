@@ -121,8 +121,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
   }
 
   @Override
-  public List<TransportationLot> list(String locationPointId) {
-    List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoint(locationPointId);
+  public List<TransportationLot> list(String originLocationPointId, String destinationLocationPointId) {
+    List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoints(originLocationPointId, destinationLocationPointId);
     transportationLots.forEach(lot -> {
       TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(lot.getLotId());
       ArrayList<Aliquot> aliquots = aliquotDao.getAliquots(transportMaterialCorrelation.getAliquotCodeList());

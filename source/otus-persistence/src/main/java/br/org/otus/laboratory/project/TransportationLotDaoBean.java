@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.mongodb.client.model.Variable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -33,15 +34,23 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   }
 
   @Override
-  public List<TransportationLot> findByLocationPoint(String locationPointId) {
+  public List<TransportationLot> findByLocationPoints(String originLocationPointId, String destinationLocationPointId) {
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
+    ArrayList<Bson> pipelineAggregates = new ArrayList<>();
+    Document matchStage = new Document();
 
-    AggregateIterable output = collection
-      .aggregate(
-        Arrays.asList(
-          Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId)))
-        )
-      );
+    if(originLocationPointId != null) {
+      matchStage.append("originLocationPoint", new ObjectId(originLocationPointId));
+    }
+
+    if(destinationLocationPointId != null) {
+      matchStage.append("destinationLocationPoint", new ObjectId(destinationLocationPointId));
+
+    }
+    pipelineAggregates.add(Aggregates.match(matchStage));
+
+    AggregateIterable output = collection.aggregate(pipelineAggregates);
+
     for (Object result : output) {
       Document document = (Document) result;
       transportationLots.add(TransportationLot.deserialize(document.toJson()));
