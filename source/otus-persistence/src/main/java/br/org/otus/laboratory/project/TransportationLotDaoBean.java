@@ -37,14 +37,17 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   public List<TransportationLot> findByLocationPoints(String originLocationPointId, String destinationLocationPointId) {
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
     ArrayList<Bson> pipelineAggregates = new ArrayList<>();
+    Document matchStage = new Document();
 
     if(originLocationPointId != null) {
-      pipelineAggregates.add(Aggregates.match(new Document("originLocationPoint", new ObjectId(originLocationPointId))));
+      matchStage.append("originLocationPoint", new ObjectId(originLocationPointId));
     }
 
     if(destinationLocationPointId != null) {
-      pipelineAggregates.add(Aggregates.match(new Document("destinationLocationPoint", new ObjectId(destinationLocationPointId))));
+      matchStage.append("destinationLocationPoint", new ObjectId(destinationLocationPointId));
+
     }
+    pipelineAggregates.add(Aggregates.match(matchStage));
 
     AggregateIterable output = collection.aggregate(pipelineAggregates);
 
