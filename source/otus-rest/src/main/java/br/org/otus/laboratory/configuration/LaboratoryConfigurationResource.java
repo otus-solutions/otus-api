@@ -7,6 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
 
@@ -55,5 +56,15 @@ public class LaboratoryConfigurationResource {
   public String getTubeMedataData(@PathParam("type") String tubeType) {
     List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationFacade.getTubeMedataData(tubeType);
     return new Response().buildSuccess(tubeCustomMetadata).toJson(TubeCustomMetadata.getGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/lot-receipt-custom-metadata")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String getLotReceiptCustomMetadata() {
+    List<LotReceiptCustomMetadata> receiptCustomMetadata = laboratoryConfigurationFacade.getLotReceiptCustomMetadata();
+    return new Response().buildSuccess(receiptCustomMetadata).toJson(LotReceiptCustomMetadata.getGsonBuilder());
   }
 }

@@ -16,6 +16,8 @@ public class TransportationReceipt {
     private String objectType;
     private double temperature;
     private List<ObjectId> transportationMetadata;
+    private LocalDateTime receiptDate;
+    private LocalDateTime lastUpdateDate;
 
     public TransportationReceipt() {
         objectType = "TransportationReceipt";
@@ -28,6 +30,8 @@ public class TransportationReceipt {
     public List<ObjectId> getTransportationMetadata() {
         return transportationMetadata;
     }
+    public LocalDateTime getReceiptDate() { return receiptDate; }
+    public LocalDateTime getLastUpdateDate(){ return lastUpdateDate; }
 
     public static String serialize(TransportationReceipt transportationReceipt) {
         Gson builder = getGsonBuilder().create();
@@ -41,6 +45,7 @@ public class TransportationReceipt {
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
+        builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         builder.registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
             @Override
             public ObjectId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
