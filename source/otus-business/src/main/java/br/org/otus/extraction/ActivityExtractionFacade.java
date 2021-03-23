@@ -45,7 +45,6 @@ public class ActivityExtractionFacade {
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
 
   private String runtimeExceptionMessage = null;
-  private boolean allowCreateExtractionForAnyActivity = false;
 
   @Inject
   private ActivityFacade activityFacade;
@@ -117,10 +116,13 @@ public class ActivityExtractionFacade {
 
   public void deleteActivityExtraction(String activityId) {
     try {
-      ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
+      SurveyActivity surveyActivity = activityFacade.getByID(activityId);
+
+      SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
+
       new ExtractionGatewayService().deleteActivityExtraction(
-        activityExtraction.getSurveyData().getId(),
-        activityExtraction.getActivityData().getId()
+        surveyActivity.getActivityID().toHexString(),
+        surveyForm.getSurveyID().toHexString()
       );
       LOGGER.info("status: success, action: DELETE extraction for activity " + activityId);
     }
@@ -269,8 +271,7 @@ public class ActivityExtractionFacade {
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
 
-    if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
-      allowCreateExtractionForAnyActivity = false;
+    if(surveyActivity.isDiscarded()){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
 
@@ -340,9 +341,5 @@ public class ActivityExtractionFacade {
     }
 
     ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
-  }
-
-  public void discardAllowCreateExtractionForAnyActivity() {
-    allowCreateExtractionForAnyActivity = true;
   }
 }
