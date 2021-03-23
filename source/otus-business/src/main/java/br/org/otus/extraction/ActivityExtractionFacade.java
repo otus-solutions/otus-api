@@ -121,8 +121,8 @@ public class ActivityExtractionFacade {
       SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
 
       new ExtractionGatewayService().deleteActivityExtraction(
-        surveyActivity.getActivityID().toHexString(),
-        surveyForm.getSurveyID().toHexString()
+          surveyForm.getSurveyID().toHexString(),
+          activityId
       );
       LOGGER.info("status: success, action: DELETE extraction for activity " + activityId);
     }
