@@ -1,15 +1,21 @@
 package br.org.otus.laboratory.extraction.factories;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.laboratory.extraction.enums.LaboratoryExtractionHeaders;
+import org.ccem.otus.service.extraction.enums.SurveyActivityExtractionHeaders;
+import org.ccem.otus.survey.template.item.questions.Question;
 
 public class LaboratoryExtractionHeadersFactory {
 
-  private List<String> headers;
+  private final List<String> headers;
+  private final List<TubeCustomMetadata> customMetadata;
 
-  public LaboratoryExtractionHeadersFactory() {
+  public LaboratoryExtractionHeadersFactory(List<TubeCustomMetadata> customMetadata) {
+    this.customMetadata = customMetadata;
     this.headers = new LinkedList<String>();
     this.buildHeader();
   }
@@ -35,6 +41,11 @@ public class LaboratoryExtractionHeadersFactory {
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue());
     this.headers.add(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue());
+
+    this.customMetadata.forEach(customMetadata -> {
+      this.headers.add(customMetadata.getExtractionValue());
+    });
+
   }
 
 }

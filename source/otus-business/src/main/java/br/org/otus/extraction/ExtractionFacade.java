@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -62,6 +64,8 @@ public class ExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private DataSourceService dataSourceService;
+  @Inject
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
   public byte[] createActivityExtraction(String acronym, Integer version) {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
@@ -135,8 +139,9 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExtraction() {
+    List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationService.getTubeCustomMedataData();
     LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
-    LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
+    LaboratoryExtraction extractor = new LaboratoryExtraction(extraction, tubeCustomMetadata);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {

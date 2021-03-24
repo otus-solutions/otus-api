@@ -107,6 +107,11 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
+  public List<TubeCustomMetadata> getTubeCustomMedataData() {
+    return laboratoryConfigurationDao.getTubeCustomMedataData();
+  }
+
+  @Override
   public Integer updateUnattachedLaboratoryLastInsertion() {
     return laboratoryConfigurationDao.updateUnattachedLaboratoryLastInsertion();
   }

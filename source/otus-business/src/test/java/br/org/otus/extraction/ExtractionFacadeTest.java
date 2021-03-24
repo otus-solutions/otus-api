@@ -13,6 +13,7 @@ import br.org.otus.api.ExtractionService;
 import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.DataSourceService;
@@ -70,6 +71,8 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
   private ExtractionService extractionService;
   @Mock
   private DataSourceService dataSourceService;
+  @Mock
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
   @Mock
   private LaboratoryExtraction laboratoryExtraction;

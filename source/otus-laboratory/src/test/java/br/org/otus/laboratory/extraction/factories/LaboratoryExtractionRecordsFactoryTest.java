@@ -1,8 +1,10 @@
 package br.org.otus.laboratory.extraction.factories;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +35,9 @@ public class LaboratoryExtractionRecordsFactoryTest {
 
   @Before
   public void setup() {
+    List<TubeCustomMetadata> customMetadata = new ArrayList<>();
     this.records = new LinkedList<>();
-    this.laboratoryExtractionRecordsFactory = new LaboratoryExtractionRecordsFactory(this.records);
+    this.laboratoryExtractionRecordsFactory = new LaboratoryExtractionRecordsFactory(this.records, customMetadata);
   }
 
   @Test

@@ -42,5 +42,7 @@ public interface LaboratoryConfigurationService {
 
   List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException;
 
+  List<TubeCustomMetadata> getTubeCustomMedataData();
+
   Integer updateUnattachedLaboratoryLastInsertion();
 }

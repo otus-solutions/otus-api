@@ -43,4 +43,6 @@ public interface LaboratoryConfigurationDao {
   AggregateIterable<Document> aggregate(List<Bson> query);
 
   List<TubeCustomMetadata> getTubeCustomMedataData(String type) throws DataNotFoundException;
+
+  List<TubeCustomMetadata> getTubeCustomMedataData() ;
 }
