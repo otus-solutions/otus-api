@@ -81,7 +81,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       try{
         if(surveyActivity.isDiscarded()){
           action = "delete";
-          extractionFacade.discardAllowCreateExtractionForAnyActivity();
           extractionFacade.deleteActivityExtraction(surveyActivity.getActivityID().toString());
         }
         else{
@@ -119,7 +118,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
 
     CompletableFuture.runAsync(() -> {
       try{
-        extractionFacade.discardAllowCreateExtractionForAnyActivity();
         extractionFacade.deleteActivityExtraction(activityId);
       }
       catch (Exception e){
