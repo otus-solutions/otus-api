@@ -228,6 +228,23 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
   }
 
   @Override
+  public List<TubeCustomMetadata> getTubeCustomMedataData() {
+
+    Document query = new Document(OBJECT_TYPE_PATH, TubeCustomMetadata.OBJECT_TYPE);
+
+    FindIterable<Document> results = collection.find(query);
+
+    List<TubeCustomMetadata> tubeCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      tubeCustomMetadata.add(TubeCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return tubeCustomMetadata;
+  }
+
+  @Override
   public List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException {
 
     Document query = new Document(OBJECT_TYPE_PATH, LotReceiptCustomMetadata.OBJECT_TYPE);

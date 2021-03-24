@@ -98,6 +98,7 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("tubeType", new Document("$ifNull", Arrays.asList("$tubes.type", "")))
       .append("tubeMoment", new Document("$ifNull", Arrays.asList("$tubes.moment", "")))
       .append("tubeCollectionDate",new Document("$ifNull", Arrays.asList("$tubes.tubeCollectionData.time", "")))
+      .append("tubeCustomMetadata", new Document("$ifNull", Arrays.asList("$tubes.tubeCollectionData.customMetadata", new ArrayList<>(0))))
       .append("tubeResponsible", new Document("$ifNull", Arrays.asList("$tubes.tubeCollectionData.operator", "")))
       .append("aliquotCode","")
       .append("aliquotName","")
@@ -148,6 +149,7 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       .append("tubeType", new Document("$ifNull", Arrays.asList("$tubeData.type" , "")))
       .append("tubeMoment", new Document("$ifNull", Arrays.asList("$tubeData.moment", "")))
       .append("tubeCollectionDate", new Document("$ifNull", Arrays.asList("$tubeData.collectionDate", "")))
+      .append("tubeCustomMetadata", new Document("$ifNull", Arrays.asList("$tubeData.customMetadata", new ArrayList<>(0))))
       .append("tubeResponsible", new Document("$ifNull", Arrays.asList("$tubeData.tubeResponsible", "")))
       .append("aliquotCode", new Document("$ifNull", Arrays.asList("$code", "")))
       .append("aliquotName", new Document("$ifNull", Arrays.asList("$name", "")))
@@ -208,6 +210,7 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
       "            type: '$tubes.type',\n" +
       "            moment: '$tubes.moment',\n" +
       "            collectionDate: \"$tubes.tubeCollectionData.time\",\n" +
+      "            customMetadata: \"$tubes.tubeCollectionData.customMetadata\",\n" +
       "            tubeResponsible: \"$tubes.tubeCollectionData.operator\"\n" +
       "          }\n" +
       "        }\n" +

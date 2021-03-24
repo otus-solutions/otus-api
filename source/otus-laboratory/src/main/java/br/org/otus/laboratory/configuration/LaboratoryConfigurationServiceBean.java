@@ -108,6 +108,11 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   }
 
   @Override
+  public List<TubeCustomMetadata> getTubeCustomMedataData() {
+    return laboratoryConfigurationDao.getTubeCustomMedataData();
+  }
+
+  @Override
   public List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException {
     return laboratoryConfigurationDao.getLotReceiptCustomMetadata();
   }

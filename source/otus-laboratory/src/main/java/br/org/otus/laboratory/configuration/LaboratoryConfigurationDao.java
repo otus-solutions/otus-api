@@ -45,5 +45,7 @@ public interface LaboratoryConfigurationDao {
 
   List<TubeCustomMetadata> getTubeCustomMedataData(String type) throws DataNotFoundException;
 
+  List<TubeCustomMetadata> getTubeCustomMedataData() ;
+	
   List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException;
 }

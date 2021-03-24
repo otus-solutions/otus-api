@@ -1,8 +1,11 @@
 package br.org.otus.laboratory.extraction.factories;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.participant.tube.Tube;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +17,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.laboratory.extraction.enums.LaboratoryExtractionHeaders;
 
-@RunWith(PowerMockRunner.class)
 public class LaboratoryExtractionHeadersFactoryTest {
 
   @InjectMocks
@@ -24,14 +26,19 @@ public class LaboratoryExtractionHeadersFactoryTest {
 
   @Test
   public void construction_method_should_call_buildHeader_method() throws Exception {
-    LaboratoryExtractionHeadersFactory spy = PowerMockito.spy(new LaboratoryExtractionHeadersFactory());
+    List<TubeCustomMetadata> customMetadata = new ArrayList<TubeCustomMetadata>();
+    customMetadata.add(new TubeCustomMetadata());
+    LaboratoryExtractionHeadersFactory spy = PowerMockito.spy(new LaboratoryExtractionHeadersFactory(customMetadata));
 
     PowerMockito.verifyPrivate(spy, Mockito.times(1)).invoke("buildHeader");
   }
 
   @Test
   public void getHeaders_method_should_return_list_with_information_headers() {
-    List<String> headers = laboratoryExtractionHeadersFactory.getHeaders();
+    List<TubeCustomMetadata> customMetadata = new ArrayList<TubeCustomMetadata>();
+    customMetadata.add(new TubeCustomMetadata());
+    LaboratoryExtractionHeadersFactory factory = new LaboratoryExtractionHeadersFactory(customMetadata);
+    List<String> headers = factory.getHeaders();
 
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.UNATTACHED_IDENTIFICATION.getValue()));
@@ -51,7 +58,9 @@ public class LaboratoryExtractionHeadersFactoryTest {
 
   @Test
   public void getHeaders_method_should_return_list_with_expected_order() {
-    LaboratoryExtractionHeadersFactory factory = new LaboratoryExtractionHeadersFactory();
+    List<TubeCustomMetadata> customMetadata = new ArrayList<TubeCustomMetadata>();
+    customMetadata.add(new TubeCustomMetadata());
+    LaboratoryExtractionHeadersFactory factory = new LaboratoryExtractionHeadersFactory(customMetadata);
     List<String> headers = factory.getHeaders();
 
     Assert.assertEquals(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue(), headers.get(0));
