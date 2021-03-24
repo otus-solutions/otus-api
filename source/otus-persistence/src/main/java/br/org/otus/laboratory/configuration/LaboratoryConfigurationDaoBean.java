@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
@@ -241,5 +242,25 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     }
 
     return tubeCustomMetadata;
+  }
+
+  @Override
+  public List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException {
+
+    Document query = new Document(OBJECT_TYPE_PATH, LotReceiptCustomMetadata.OBJECT_TYPE);
+
+    FindIterable<Document> results = collection.find(query);
+    if(results == null){
+      throw new DataNotFoundException("No lot receipt custom metadata was found.");
+    }
+
+    List<LotReceiptCustomMetadata> lotReceiptCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      lotReceiptCustomMetadata.add(LotReceiptCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return lotReceiptCustomMetadata;
   }
 }

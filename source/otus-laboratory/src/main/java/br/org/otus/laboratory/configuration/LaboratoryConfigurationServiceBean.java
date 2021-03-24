@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
@@ -109,6 +110,11 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   @Override
   public List<TubeCustomMetadata> getTubeCustomMedataData() {
     return laboratoryConfigurationDao.getTubeCustomMedataData();
+  }
+
+  @Override
+  public List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException {
+    return laboratoryConfigurationDao.getLotReceiptCustomMetadata();
   }
 
   @Override

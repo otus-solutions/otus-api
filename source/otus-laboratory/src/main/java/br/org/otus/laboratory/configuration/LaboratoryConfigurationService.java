@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
@@ -43,6 +44,8 @@ public interface LaboratoryConfigurationService {
   List<TubeCustomMetadata> getTubeCustomMedataData(String tubeType) throws DataNotFoundException;
 
   List<TubeCustomMetadata> getTubeCustomMedataData();
+
+  List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException;
 
   Integer updateUnattachedLaboratoryLastInsertion();
 }

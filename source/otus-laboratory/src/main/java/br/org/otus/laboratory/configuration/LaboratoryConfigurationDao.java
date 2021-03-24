@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -45,4 +46,6 @@ public interface LaboratoryConfigurationDao {
   List<TubeCustomMetadata> getTubeCustomMedataData(String type) throws DataNotFoundException;
 
   List<TubeCustomMetadata> getTubeCustomMedataData() ;
+	
+  List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException;
 }
