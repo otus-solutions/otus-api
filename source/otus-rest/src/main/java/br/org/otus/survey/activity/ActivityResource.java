@@ -36,4 +36,14 @@ public class ActivityResource {
     SurveyActivity updatedActivity = activityFacade.updateActivity(deserializedSurveyActivity, token);
     return new Response().buildSuccess(updatedActivity).toSurveyJson();
   }
+
+
+  @GET
+  @Path("/teste-async/{method}/{seconds}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String testeAsync(@PathParam("method") String method, @PathParam("seconds") String seconds)
+  {
+    String response = activityFacade.testeAsync(method, seconds);
+    return new Response().buildSuccess(response).toJson();
+  }
 }

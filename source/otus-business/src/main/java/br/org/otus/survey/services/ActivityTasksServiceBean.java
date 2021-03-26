@@ -184,4 +184,47 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     }
   }
 
+
+  @Override
+  public String callSomeAsyncMethod(String method, int seconds){
+    System.out.println("inicio call " + method);
+
+    CompletableFuture.runAsync(() -> {
+      try{
+        if(method.equals("ok")){
+          ok(seconds);
+          LOGGER.info("back from async OK");
+        }
+        else{
+          fail(seconds);
+        }
+      }
+      catch (Exception e){
+        LOGGER.severe(e.getMessage());
+      }
+    });
+
+    System.out.println("fim call " + method);
+    return method.equals("ok") ? "deu certo" : null;
+  }
+
+  private String ok(int seconds) throws InterruptedException {
+    Thread newThread = new Thread(() -> {
+      System.out.println("thread ok");
+    });
+    newThread.sleep(seconds * 1000);
+    newThread.start();
+    return "ok";
+  }
+
+  public String fail(int seconds) throws Exception {
+    Thread newThread = new Thread(() -> {
+      System.out.println("thread fail");
+    });
+    newThread.sleep(seconds * 1000);
+    newThread.start();
+    newThread.join();
+    throw new Exception("fail exception");
+  }
+
 }

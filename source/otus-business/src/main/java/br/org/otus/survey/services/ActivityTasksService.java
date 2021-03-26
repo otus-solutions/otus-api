@@ -16,4 +16,7 @@ public interface ActivityTasksService {
 
   void discardById(String activityId) throws DataNotFoundException;
 
+
+  String callSomeAsyncMethod(String method, int seconds);
+
 }

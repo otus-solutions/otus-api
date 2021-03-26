@@ -257,4 +257,9 @@ public class ActivityFacade {
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
+
+
+  public String testeAsync(String method, String seconds){
+    return activityTasksService.callSomeAsyncMethod(method, Integer.parseInt(seconds));
+  }
 }
