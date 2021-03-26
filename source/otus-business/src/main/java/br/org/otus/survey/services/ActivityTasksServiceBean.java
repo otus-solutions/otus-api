@@ -187,16 +187,22 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
 
   @Override
   public String callSomeAsyncMethod(String method, int seconds){
-    System.out.println("inicio call " + method);
+    System.out.println("begin call " + method);
+
+    System.out.println("processing something ...");
+    try {
+      Thread.sleep(seconds * 1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
     CompletableFuture.runAsync(() -> {
       try{
         if(method.equals("ok")){
-          ok(seconds);
-          LOGGER.info("back from async OK");
+          sendOk(seconds);
         }
         else{
-          fail(seconds);
+          sendFail(seconds);
         }
       }
       catch (Exception e){
@@ -204,27 +210,34 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       }
     });
 
-    System.out.println("fim call " + method);
-    return method.equals("ok") ? "deu certo" : null;
+    System.out.println("end call " + method.toUpperCase());
+    return "1234";
   }
 
-  private String ok(int seconds) throws InterruptedException {
-    Thread newThread = new Thread(() -> {
-      System.out.println("thread ok");
-    });
-    newThread.sleep(seconds * 1000);
-    newThread.start();
-    return "ok";
+  private void sendOk(int seconds) throws InterruptedException {
+    sendFakeRequestAndDontWait("OK", seconds);
   }
 
-  public String fail(int seconds) throws Exception {
+  public void sendFail(int seconds) throws Exception {
+    sendFakeRequestAndDontWait("FAIL", seconds);
+    throw new Exception("FAIL request: algo de errado nao deu certo");
+  }
+
+  private void sendFakeRequestAndDontWait(String requestName, int seconds) throws InterruptedException {
     Thread newThread = new Thread(() -> {
-      System.out.println("thread fail");
+      System.out.println("\"sending\" " + requestName + " request ...");
+      for (int s = 1; s <= seconds; s++) {
+        try {
+          Thread.sleep(1000);
+          System.out.println(s + " sec waiting for " + requestName + " response");
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      System.out.println("finish thread");
     });
-    newThread.sleep(seconds * 1000);
     newThread.start();
     newThread.join();
-    throw new Exception("fail exception");
   }
 
 }
