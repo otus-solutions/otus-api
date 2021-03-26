@@ -55,6 +55,7 @@ public class TransportationLotFacade {
 
   public TransportationLot update(TransportationLot transportationLot, String userEmail) {
     try {
+      transportationLotService.areMaterialsInLotReceived(transportationLot.getCode());
       User user = userDao.fetchByEmail(userEmail);
       return transportationLotService.update(transportationLot,user.get_id());
     } catch (DataNotFoundException e) {
@@ -69,8 +70,12 @@ public class TransportationLotFacade {
 
   public void delete(String id) {
     try {
+      transportationLotService.areMaterialsInLotReceived(id);
       transportationLotService.delete(id);
     } catch (DataNotFoundException e) {
+      e.printStackTrace();
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    } catch (ValidationException e) {
       e.printStackTrace();
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }

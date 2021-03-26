@@ -18,4 +18,6 @@ public interface TransportationLotService {
   TransportationLot getByCode(String code) throws DataNotFoundException;
 
   void delete(String id) throws DataNotFoundException;
+
+  void areMaterialsInLotReceived(String code) throws ValidationException, DataNotFoundException;
 }

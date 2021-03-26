@@ -8,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 public class AliquotDeletionValidator {
@@ -34,6 +35,7 @@ public class AliquotDeletionValidator {
     this.aliquotInTransportation();
     this.aliquotInExamLot();
     this.aliquotInExamResult();
+    this.aliquotInReceivedMaterials();
     if (!this.aliquotDeletionValidatorResponse.isDeletionValidated()) {
       throw new ValidationException(new Throwable("Exclusion of unauthorized aliquot."), this.aliquotDeletionValidatorResponse);
     }
@@ -67,6 +69,15 @@ public class AliquotDeletionValidator {
     Boolean examResult = this.examUploader.checkIfThereInExamResultLot(this.code);
     if (examResult) {
       this.aliquotDeletionValidatorResponse.setExamResult(Boolean.TRUE);
+      this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
+    }
+  }
+
+  private void aliquotInReceivedMaterials() {
+    MaterialTrail materialTrail = materialTrackingDao.getCurrent(this.code);
+
+    if (materialTrail.getReceived()) {
+      this.aliquotDeletionValidatorResponse.setReceivedMaterial(Boolean.TRUE);
       this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
     }
   }

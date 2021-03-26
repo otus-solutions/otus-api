@@ -17,14 +17,16 @@ public class MaterialTrail {
   private ObjectId locationPoint;
   private Boolean isCurrentLocation;
   private ObjectId transportationLotId;
+  private Boolean isReceived;
 
-  public MaterialTrail(ObjectId operator,String materialCode, TransportationLot transportationLot) {
+  public MaterialTrail(ObjectId operator, String materialCode, TransportationLot transportationLot) {
     this.isCurrentLocation = true;
     this.operationDate = transportationLot.getShipmentDate();
     this.operator = operator;
     this.materialCode = materialCode;
     this.locationPoint = transportationLot.getDestinationLocationPoint();
     this.transportationLotId = transportationLot.getLotId();
+    this.isReceived = false;
   }
 
   public ObjectId get_id() {
@@ -75,5 +77,13 @@ public class MaterialTrail {
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     builder.serializeNulls();
     return builder;
+  }
+
+  public Boolean getReceived() {
+    return isReceived;
+  }
+
+  public void setReceived(Boolean received) {
+    isReceived = received;
   }
 }
