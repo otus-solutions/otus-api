@@ -316,30 +316,32 @@ public class ActivityExtractionFacade {
 
     String value = ((TextAnswer) questionFill.getAnswer()).getValue();
 
-    Iterator<JsonElement> iterator =  dataSources.stream()
-      .filter(dataSource -> dataSource.getId().equals(dataSourceId))
-      .findFirst().get().getData()
-      .iterator();
+    if(value != null) {
+      Iterator<JsonElement> iterator =  dataSources.stream()
+          .filter(dataSource -> dataSource.getId().equals(dataSourceId))
+          .findFirst().get().getData()
+          .iterator();
 
-    boolean found = false;
-    while(iterator.hasNext() && !found){
-      String dataValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
-      found = dataValue.equals(value);
+      boolean found = false;
+      while(iterator.hasNext() && !found){
+        String dataValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
+        found = dataValue.equals(value);
+      }
+
+      if(!found){
+        runtimeExceptionMessage = "Datasource " + dataSourceId + " does not have value " + value + " of question " + questionFill.getQuestionID();
+        throw new ValidationException();
+      }
+
+      String extractionValue;
+      //some datasources doesn't have extractionvalue.
+      if(iterator.next().getAsJsonObject().get("extractionValue") != null) {
+        extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
+      } else {
+        extractionValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
+      }
+
+      ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
     }
-
-    if(!found){
-      runtimeExceptionMessage = "Datasource " + dataSourceId + " does not have value " + value + " of question " + questionFill.getQuestionID();
-      throw new ValidationException();
-    }
-
-    String extractionValue;
-    //some datasources doesn't have extractionvalue.
-    if(iterator.next().getAsJsonObject().get("extractionValue") != null) {
-      extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
-    } else {
-      extractionValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
-    }
-
-    ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
   }
 }
