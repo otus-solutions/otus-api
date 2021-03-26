@@ -68,6 +68,7 @@ public class ActivityExtractionActivityData {
       this.currentStatusDate = status.getDate().toString();
     });
 
+
     this.creationDate = surveyActivity.getCreationStatus().getDate().toString();
 
     if(surveyActivity.getMode() == ActivityMode.PAPER){
@@ -76,6 +77,10 @@ public class ActivityExtractionActivityData {
         this.paperRealizationDate = status.getDate().toString();
       });
     }
+
+    surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).ifPresent(status -> {
+        this.lastFinalizationDate =  status.getDate().toString();
+    });
 
     this.externalId = surveyActivity.getExternalID();
     this.fillingList = serializeAnswers(surveyActivity.getFillContainer().getFillingList());
