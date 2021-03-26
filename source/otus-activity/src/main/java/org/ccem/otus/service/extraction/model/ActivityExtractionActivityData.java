@@ -59,15 +59,14 @@ public class ActivityExtractionActivityData {
     }
     this.activityFieldCenter = surveyActivity.getParticipantData().getFieldCenter().getAcronym();
 
-    surveyActivity.getLastInterview().ifPresent(interview -> {
-      this.interviewer = interview.getInterviewer().getEmail();
+    surveyActivity.getLastStatus().ifPresent(status -> {
+      this.interviewer = status.getUser().getEmail();
     });
 
     surveyActivity.getCurrentStatus().ifPresent(status -> {
       this.currentStatus = status.getName();
       this.currentStatusDate = status.getDate().toString();
     });
-
 
     this.creationDate = surveyActivity.getCreationStatus().getDate().toString();
 
