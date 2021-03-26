@@ -59,8 +59,8 @@ public class ActivityExtractionActivityData {
     }
     this.activityFieldCenter = surveyActivity.getParticipantData().getFieldCenter().getAcronym();
 
-    surveyActivity.getLastInterview().ifPresent(interview -> {
-      this.interviewer = interview.getInterviewer().getEmail();
+    surveyActivity.getLastStatus().ifPresent(status -> {
+      this.interviewer = status.getUser().getEmail();
     });
 
     surveyActivity.getCurrentStatus().ifPresent(status -> {
@@ -76,6 +76,10 @@ public class ActivityExtractionActivityData {
         this.paperRealizationDate = status.getDate().toString();
       });
     }
+
+    surveyActivity.getLastStatusByName(ActivityStatusOptions.FINALIZED.getName()).ifPresent(status -> {
+        this.lastFinalizationDate =  status.getDate().toString();
+    });
 
     this.externalId = surveyActivity.getExternalID();
     this.fillingList = serializeAnswers(surveyActivity.getFillContainer().getFillingList());

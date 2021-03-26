@@ -14,6 +14,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -323,22 +324,26 @@ public class ActivityExtractionFacade {
           .iterator();
 
       boolean found = false;
+      JsonObject datasourceItem = null;
+
       while(iterator.hasNext() && !found){
-        String dataValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
+        datasourceItem = iterator.next().getAsJsonObject();
+        String dataValue = datasourceItem.get("value").toString().replace("\"", "");
         found = dataValue.equals(value);
       }
 
-      if(!found){
+      if(!found || datasourceItem == null){
         runtimeExceptionMessage = "Datasource " + dataSourceId + " does not have value " + value + " of question " + questionFill.getQuestionID();
         throw new ValidationException();
       }
 
       String extractionValue;
       //some datasources doesn't have extractionvalue.
+
       if(iterator.next().getAsJsonObject().get("extractionValue") != null) {
-        extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
+        extractionValue = datasourceItem.get("extractionValue").toString().replace("\"", "");
       } else {
-        extractionValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
+        extractionValue = datasourceItem.get("value").toString().replace("\"", "");
       }
 
       ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
