@@ -47,7 +47,7 @@ public class AliquotDeletionValidatorResponse {
     this.receivedMaterial = receivedMaterial;
   }
 
-  public void getReceivedMaterial() {
+  public Boolean getReceivedMaterial() {
     return this.receivedMaterial;
   }
 

@@ -54,7 +54,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
     checkReceivedMaterial();
     if (!aliquotUpdateValidateResponse.isValid()) {
       throw new ValidationException(
-        new Throwable("Lot deletion unauthorized, material(s) have already been received."),
+        new Throwable("Aliquot deletion unauthorized, material has already been received."),
         aliquotUpdateValidateResponse
       );
     }
@@ -105,7 +105,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
     return aliquotDao.exists(aliquotCode);
   }
 
-  private void checkReceivedMaterial() {
+  private List<SimpleAliquot> checkReceivedMaterial() {
     for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
       for (SimpleAliquot aliquot : aliquotDTO.getAliquots()) {
         MaterialTrail materialTrail = materialTrackingDao.getCurrent(aliquot.getCode());

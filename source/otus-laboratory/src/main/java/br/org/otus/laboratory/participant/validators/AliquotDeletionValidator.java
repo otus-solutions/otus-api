@@ -10,6 +10,7 @@ import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 
 public class AliquotDeletionValidator {
 
@@ -20,6 +21,7 @@ public class AliquotDeletionValidator {
   private AliquotDao aliquotDao;
   private ExamUploader examUploader;
   private AliquotDeletionValidatorResponse aliquotDeletionValidatorResponse;
+  private MaterialTrackingDao materialTrackingDao;
 
   public AliquotDeletionValidator(String code, AliquotDao aliquotDao, ExamUploader examUploader, ExamLotDao examLotDao, TransportationLotDao transportationLotDao) {
     this.code = code;
