@@ -6,6 +6,7 @@
 *.jsfdia
 *.metadata
 **/.idea
+**/.vscode
 *.iml
 *.swp
 *.swo
