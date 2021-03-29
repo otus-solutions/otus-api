@@ -36,6 +36,7 @@ public class TransportMaterialCorrelationDaoBean extends MongoGenericDao<Documen
 
   @Override
   public void pushReceived(ReceivedMaterial receivedMaterial, ObjectId transportationLotId) {
-    collection.updateOne(new Document("_id",transportationLotId),new Document("$push", new Document("receivedMaterials", receivedMaterial)));
+    Document parsed = Document.parse(ReceivedMaterial.serialize(receivedMaterial));
+    collection.updateOne(new Document("_id",transportationLotId),new Document("$push", new Document("receivedMaterials", parsed)));
   }
 }
