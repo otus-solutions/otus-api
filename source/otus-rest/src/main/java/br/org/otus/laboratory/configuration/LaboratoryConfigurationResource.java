@@ -3,11 +3,14 @@ package br.org.otus.laboratory.configuration;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
 
@@ -66,5 +69,13 @@ public class LaboratoryConfigurationResource {
   public String getLotReceiptCustomMetadata() {
     List<LotReceiptCustomMetadata> receiptCustomMetadata = laboratoryConfigurationFacade.getLotReceiptCustomMetadata();
     return new Response().buildSuccess(receiptCustomMetadata).toJson(LotReceiptCustomMetadata.getGsonBuilder());
+  }
+
+  @GET
+  @Secured
+  @Path("/lot/receive-material-metadata-options/{{materialType}}")
+  public String getMetadataOptions(@Context HttpServletRequest request, @PathParam("materialType") String materialType) {
+    List<MaterialReceiptCustomMetadata> metadataOptions = laboratoryConfigurationFacade.getMaterialReceiptCustomMetadataOptions(materialType);
+    return new Response().buildSuccess(metadataOptions).toJson();
   }
 }

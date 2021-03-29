@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import br.org.otus.laboratory.configuration.aliquot.AliquotExamCorrelation;
@@ -120,6 +121,11 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
   @Override
   public Integer updateUnattachedLaboratoryLastInsertion() {
     return laboratoryConfigurationDao.updateUnattachedLaboratoryLastInsertion();
+  }
+
+  @Override
+  public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadataOptions(String materialType) throws DataNotFoundException {
+    return laboratoryConfigurationDao.getMaterialReceiptCustomMetadata(materialType);
   }
 
 }

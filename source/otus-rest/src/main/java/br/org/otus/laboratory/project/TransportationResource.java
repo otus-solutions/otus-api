@@ -1,8 +1,10 @@
 package br.org.otus.laboratory.project;
 
+import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
+import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
@@ -135,5 +137,24 @@ public class TransportationResource {
   public String getTube(@PathParam("locationPointId") String locationPointId, @PathParam("tubeCode") String tubeCode) {
     Tube tube = transportationLotFacade.getTube(locationPointId, tubeCode);
     return new Response().buildSuccess(Tube.serializeToJsonTree(tube)).toJson();
+  }
+
+  @POST
+  @Secured
+  @Path("/lot/{id}/receive-material")
+  public String receiveMaterial(@Context HttpServletRequest request, @PathParam("id") String transportationLotId, String receiveMaterialJson) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+
+    ReceivedMaterial receivedMaterial = ReceivedMaterial.deserialize(receiveMaterialJson);
+    transportationLotFacade.receiveMaterial(receivedMaterial, userEmail, transportationLotId);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/material/tracking/{{materialCode}}")
+  public String getMaterialTrackingList(@Context HttpServletRequest request, @PathParam("materialCode") String materialCode) {
+    return new Response().buildSuccess(transportationLotFacade.getMaterialTrackingList(materialCode)).toJson();
   }
 }

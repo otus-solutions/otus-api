@@ -17,6 +17,7 @@ public class MaterialTrail {
   private ObjectId locationPoint;
   private Boolean isCurrentLocation;
   private ObjectId transportationLotId;
+  private Boolean isReceived;
 
   public MaterialTrail(ObjectId operator,String materialCode, TransportationLot transportationLot) {
     this.isCurrentLocation = true;
@@ -25,6 +26,7 @@ public class MaterialTrail {
     this.materialCode = materialCode;
     this.locationPoint = transportationLot.getDestinationLocationPoint();
     this.transportationLotId = transportationLot.getLotId();
+    this.isReceived = false;
   }
 
   public ObjectId get_id() {
@@ -75,5 +77,13 @@ public class MaterialTrail {
     builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     builder.serializeNulls();
     return builder;
+  }
+
+  public Boolean getReceived() {
+    return isReceived;
+  }
+
+  public void setReceived(Boolean received) {
+    isReceived = received;
   }
 }

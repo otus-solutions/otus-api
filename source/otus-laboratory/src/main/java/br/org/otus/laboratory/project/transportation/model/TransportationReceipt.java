@@ -46,12 +46,7 @@ public class TransportationReceipt {
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-        builder.registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-            @Override
-            public ObjectId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new ObjectId(json.getAsString());
-            }
-        });
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
         return builder;
     }
 }
