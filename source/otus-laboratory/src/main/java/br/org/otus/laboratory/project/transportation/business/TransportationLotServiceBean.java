@@ -5,9 +5,7 @@ import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.participant.tube.Tube;
-import br.org.otus.laboratory.project.transportation.MaterialTrail;
-import br.org.otus.laboratory.project.transportation.TransportMaterialCorrelation;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.*;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportMaterialCorrelationDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
@@ -182,5 +180,22 @@ public class TransportationLotServiceBean implements TransportationLotService {
       materialTrackingDao.activateTrails(TrailsToActivate);
     }
     transportationLotDao.delete(code);
+  }
+
+  @Override
+  public void receiveMaterial(ReceivedMaterial receivedMaterial, String transportationLotId) throws ValidationException {
+    MaterialTrail materialTrail = materialTrackingDao.getCurrent(receivedMaterial.getMaterialCode());
+    if (materialTrail.getReceived()){
+      throw new ValidationException(new Throwable("Material already received"));
+    }
+    materialTrackingDao.setReceived(materialTrail);
+
+    transportMaterialCorrelationDao.pushReceived(receivedMaterial, materialTrail.getTransportationLotId());
+  }
+
+  @Override
+  public List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException {
+    List<TrailHistoryRecord> materialTracking = materialTrackingDao.getMaterialTrackingList(materialCode);
+    return materialTracking;
   }
 }

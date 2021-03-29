@@ -4,6 +4,7 @@ import br.org.otus.laboratory.configuration.collect.aliquot.AliquotConfiguration
 import br.org.otus.laboratory.configuration.collect.aliquot.AliquoteDescriptor;
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.NotFound;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -56,6 +57,14 @@ public class LaboratoryConfigurationFacade {
   public List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() {
     try{
       return laboratoryConfigurationService.getLotReceiptCustomMetadata();
+    }catch (DataNotFoundException e){
+      throw new HttpResponseException(NotFound.build(e.getMessage()));
+    }
+  }
+
+  public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadataOptions(String materialType) {
+    try{
+      return laboratoryConfigurationService.getMaterialReceiptCustomMetadataOptions(materialType);
     }catch (DataNotFoundException e){
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
