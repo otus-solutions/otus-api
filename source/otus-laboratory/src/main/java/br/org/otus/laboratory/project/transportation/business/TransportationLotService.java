@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.project.transportation.business;
 
+import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
+import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -18,4 +20,8 @@ public interface TransportationLotService {
   TransportationLot getByCode(String code) throws DataNotFoundException;
 
   void delete(String id) throws DataNotFoundException;
+
+  void receiveMaterial(ReceivedMaterial receivedMaterial, String transportationLotId) throws ValidationException;
+
+  List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException;
 }

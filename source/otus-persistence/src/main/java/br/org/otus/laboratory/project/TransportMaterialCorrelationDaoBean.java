@@ -1,11 +1,11 @@
 package br.org.otus.laboratory.project;
 
 import br.org.mongodb.MongoGenericDao;
+import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
 import br.org.otus.laboratory.project.transportation.TransportMaterialCorrelation;
 import br.org.otus.laboratory.project.transportation.persistence.TransportMaterialCorrelationDao;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 
@@ -32,5 +32,10 @@ public class TransportMaterialCorrelationDaoBean extends MongoGenericDao<Documen
   @Override
   public void update(ObjectId lotId, ArrayList<String> newAliquotCodeList, ArrayList<String> newTubeCodeList) {
    collection.updateOne(new Document("_id",lotId),new Document("$set", new Document("aliquotCodeList", newAliquotCodeList).append("tubeCodeList",newTubeCodeList)));
+  }
+
+  @Override
+  public void pushReceived(ReceivedMaterial receivedMaterial, ObjectId transportationLotId) {
+    collection.updateOne(new Document("_id",transportationLotId),new Document("$push", new Document("receivedMaterials", receivedMaterial)));
   }
 }
