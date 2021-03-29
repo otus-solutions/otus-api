@@ -2,9 +2,6 @@ package br.org.otus.laboratory.project.transportation;
 
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
-import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
-import org.ccem.otus.utils.LongAdapter;
-import org.ccem.otus.utils.ObjectIdAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.util.ArrayList;
@@ -21,11 +18,11 @@ public class TrailHistoryRecord {
     private ObjectId lotId;
 
     public static String serialize(TrailHistoryRecord trailHistoryRecord) {
-        return ActivityProgressResultExtraction.getGsonBuilder().create().toJson(trailHistoryRecord);
+        return TrailHistoryRecord.getGsonBuilder().create().toJson(trailHistoryRecord);
     }
 
     public static TrailHistoryRecord deserialize(String trailHistoryRecordJson) {
-        GsonBuilder builder = ActivityProgressResultExtraction.getGsonBuilder();
+        GsonBuilder builder = TrailHistoryRecord.getGsonBuilder();
         return builder.create().fromJson(trailHistoryRecordJson, TrailHistoryRecord.class);
     }
 
