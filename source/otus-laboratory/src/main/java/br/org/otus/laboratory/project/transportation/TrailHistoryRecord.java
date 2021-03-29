@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.utils.LongAdapter;
 import org.ccem.otus.utils.ObjectIdAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ public class TrailHistoryRecord {
 
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
         builder.serializeNulls();
         return builder;
     }

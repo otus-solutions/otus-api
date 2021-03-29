@@ -5,6 +5,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.api.TransportationLotFacade;
 import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
+import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
 import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
@@ -153,8 +154,8 @@ public class TransportationResource {
 
   @GET
   @Secured
-  @Path("/material/tracking/{{materialCode}}")
+  @Path("/material/tracking/{materialCode}")
   public String getMaterialTrackingList(@Context HttpServletRequest request, @PathParam("materialCode") String materialCode) {
-    return new Response().buildSuccess(transportationLotFacade.getMaterialTrackingList(materialCode)).toJson();
+    return new Response().buildSuccess(TrailHistoryRecord.getGsonBuilder().create().toJsonTree(transportationLotFacade.getMaterialTrackingList(materialCode))).toJson();
   }
 }

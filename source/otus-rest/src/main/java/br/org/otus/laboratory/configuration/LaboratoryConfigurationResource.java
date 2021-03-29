@@ -73,9 +73,9 @@ public class LaboratoryConfigurationResource {
 
   @GET
   @Secured
-  @Path("/lot/receive-material-metadata-options/{{materialType}}")
+  @Path("/lot/receive-material-metadata-options/{materialType}")
   public String getMetadataOptions(@Context HttpServletRequest request, @PathParam("materialType") String materialType) {
     List<MaterialReceiptCustomMetadata> metadataOptions = laboratoryConfigurationFacade.getMaterialReceiptCustomMetadataOptions(materialType);
-    return new Response().buildSuccess(metadataOptions).toJson();
+    return new Response().buildSuccess(MaterialReceiptCustomMetadata.getGsonBuilder().create().toJson(metadataOptions)).toJson();
   }
 }

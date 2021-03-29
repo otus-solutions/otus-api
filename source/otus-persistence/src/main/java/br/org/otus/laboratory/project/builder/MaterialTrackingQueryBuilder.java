@@ -21,7 +21,7 @@ public class MaterialTrackingQueryBuilder {
     public MaterialTrackingQueryBuilder getMaterialTrackingListQuery(String materialCode) {
         pipeline.add(this.parseQuery("{\n" +
                 "      $match:{\n" +
-                "          \"materialCode\": "+ materialCode +
+                "          \"materialCode\": \""+ materialCode + "\""+
                 "      }  \n" +
                 "    }"));
         pipeline.add(this.parseQuery("{\n" +
@@ -35,8 +35,26 @@ public class MaterialTrackingQueryBuilder {
         pipeline.add(this.parseQuery("{\n" +
                 "        $lookup:{\n" +
                 "            from: \"transport_material_correlation\",\n" +
-                "            localField: \"transportationLotId\",\n" +
-                "            foreignField: \"_id\",\n" +
+                "            let: {materialCode:\"111036780\",transportationLotId:\"$transportationLotId\"},\n" +
+                "            pipeline: [\n" +
+                "                {\n" +
+                "                    $match: {\n" +
+                "                        $expr:{\n" +
+                "                            $eq:[\"$_id\",\"$$transportationLotId\"]\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    $unwind:\"$receivedMaterials\"\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    $match: {\n" +
+                "                        $expr:{\n" +
+                "                            $eq:[\"$receivedMaterials.materialCode\",\"$$materialCode\"]\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                }\n" +
+                "                ],\n" +
                 "            as:\"correlation\"\n" +
                 "        }\n" +
                 "    }"));
@@ -49,16 +67,13 @@ public class MaterialTrackingQueryBuilder {
                 "        }\n" +
                 "    }"));
         pipeline.add(this.parseQuery("{\n" +
-                "        $unwind:\"$receiptData.receivedMaterials\"\n" +
-                "    }"));
-        pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
                 "            \"lotId\": \"$_id\",\n" +
                 "            \"_id\":0,\n" +
                 "            \"origin\": 1,\n" +
                 "            \"destination\": 1,\n" +
                 "            \"sendingDate\": 1,\n" +
-                "            \"receipted\": {$cond:[({$ifNull:[\"$receiptData\",false]} == false),false,true]},\n" +
+                "            \"receipted\": {\"$cond\":[{$eq:[{$ifNull:[\"$receiptData\",false]},false]},false,true]},\n" +
                 "            \"receiveResponsible\": \"$receiptData.receivedMaterials.receiveResponsible\",\n" +
                 "            \"receiptMetadata\": \"$receiptData.receivedMaterials.receiptMetadata\",\n" +
                 "            \"otherMetadata\": \"$receiptData.receivedMaterials.otherMetadata\",\n" +
@@ -100,7 +115,7 @@ public class MaterialTrackingQueryBuilder {
                 "            \"destination\": {$arrayElemAt:[\"$destination.name\",0]},\n" +
                 "            \"sendingDate\": 1,\n" +
                 "            \"receiveResponsible\": {$arrayElemAt:[\"$receiveResponsible.email\",0]},\n" +
-                "            \"receiptMetadata\": 1,\n" +
+                "            \"receiptMetadata\": 1\n" +
                 "            \n" +
                 "        }\n" +
                 "    }"));
