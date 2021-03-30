@@ -21,7 +21,7 @@ public interface TransportationLotService {
 
   void delete(String id) throws DataNotFoundException;
 
-  void areMaterialsInLotReceived(String code) throws ValidationException, DataNotFoundException;
+  void doesLotHaveReceivedMaterials(String code) throws ValidationException, DataNotFoundException;
 
   void receiveMaterial(ReceivedMaterial receivedMaterial, String transportationLotId) throws ValidationException;
   

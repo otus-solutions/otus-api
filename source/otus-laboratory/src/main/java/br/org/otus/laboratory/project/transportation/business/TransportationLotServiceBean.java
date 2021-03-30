@@ -80,6 +80,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
     List<String> removedMaterialCodes = transportMaterialCorrelation.getRemovedAliquots(currentAliquotCodeList);
     removedMaterialCodes.addAll(transportMaterialCorrelation.getRemovedTubes(currentTubeCodeList));
 
+    areMaterialsReceived(removedMaterialCodes);
+
     List<String> newMaterialCodes = transportMaterialCorrelation.getNewAliquots(currentAliquotCodeList);
     newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentTubeCodeList));
 
@@ -118,35 +120,32 @@ public class TransportationLotServiceBean implements TransportationLotService {
     return transportationLotDao.findByCode(code);
   }
 
-  public void areMaterialsInLotReceived(String code) throws ValidationException, DataNotFoundException {
+  public void doesLotHaveReceivedMaterials(String code) throws ValidationException, DataNotFoundException {
     TransportationLot transportationLot = getByCode(code);
     TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(transportationLot.getLotId());
-    ArrayList<Aliquot> aliquots = aliquotDao.getAliquots(transportMaterialCorrelation.getAliquotCodeList());
-    ArrayList<Tube> tubes = participantLaboratoryDao.getTubes(transportMaterialCorrelation.getTubeCodeList());
+    List<String> materialCodes = new ArrayList<String>();
+    
+    materialCodes.addAll(transportMaterialCorrelation.getAliquotCodeList());
+    materialCodes.addAll(transportMaterialCorrelation.getTubeCodeList());
 
-    ArrayList<String> receivedMaterials = new ArrayList<String>(0);
+    areMaterialsReceived(materialCodes);
+  }
 
-    aliquots.forEach(aliquot -> {
-      MaterialTrail materialTrail = materialTrackingDao.getCurrent(aliquot.getCode());
-      Boolean isReceived = materialTrail.getReceived();
+  public void areMaterialsReceived(List<String> materialCodes) throws ValidationException, DataNotFoundException {
+    List<String> receivedMaterials = new ArrayList<String>();
 
-      if(isReceived != null && isReceived) {
-        receivedMaterials.add("Lot deletion unauthorized, aliquot " + aliquot.getCode() + " is received.");
-      }
-    });
-
-    tubes.forEach(tube -> {
-      MaterialTrail materialTrail = materialTrackingDao.getCurrent(tube.getCode());
+    materialCodes.forEach(materialCode -> {
+      MaterialTrail materialTrail = materialTrackingDao.getCurrent(materialCode);
       Boolean isReceived = materialTrail.getReceived();
 
       if (isReceived != null && isReceived) {
-        receivedMaterials.add("Lot deletion unauthorized, tube " + tube.getCode() + " is received.");
+        receivedMaterials.add("Lot deletion unauthorized, material " + materialCode + " has been received.");
       }
     });
 
-    if(receivedMaterials.size() > 0) {
+    if (receivedMaterials.size() > 0) {
       throw new ValidationException(
-        new Throwable("Lot deletion unauthorized, material(s) have already been received."),
+        new Throwable("Lot deletion unauthorized, material(s) already received."),
         receivedMaterials
       );
     }
