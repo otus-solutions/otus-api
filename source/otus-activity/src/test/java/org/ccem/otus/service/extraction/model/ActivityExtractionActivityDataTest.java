@@ -3,6 +3,7 @@ package org.ccem.otus.service.extraction.model;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
+import org.ccem.otus.model.survey.activity.User;
 import org.ccem.otus.model.survey.activity.configuration.ActivityCategory;
 import org.ccem.otus.model.survey.activity.filling.FillContainer;
 import org.ccem.otus.model.survey.activity.filling.QuestionFill;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class ActivityExtractionActivityDataTest {
@@ -39,6 +41,7 @@ public class ActivityExtractionActivityDataTest {
   private static final ActivityCategory CATEGORY = new ActivityCategory(CATEGORY_NAME, "", null, null);
   private static final String ACTIVITY_CENTER_ACRONYM = "RS";
   private static final List<QuestionFill> FILLING_LIST = new ArrayList<>();
+  private static final String USER_EMAIL = "fulano@gmail.com";
   private static final String EXTERNAL_ID = "123";
   private static final LocalDateTime CURR_STATUS_DATE = LocalDateTime.now();
 
@@ -57,10 +60,13 @@ public class ActivityExtractionActivityDataTest {
   @Mock
   private ActivityStatus creationActivityStatus;
   @Mock
+  private ActivityStatus finalizeActivityStatus;
+  @Mock
+  private User userEmail;
+  @Mock
   private FillContainer fillContainer;
   @Mock
   private NavigationTracker navigationTracker;
-
 
   @Before
   public void setUp(){
@@ -72,15 +78,20 @@ public class ActivityExtractionActivityDataTest {
 
     doReturn(MODE).when(surveyActivity).getMode();
     doReturn(CATEGORY).when(surveyActivity).getCategory();
-
-    doReturn(Optional.empty()).when(surveyActivity).getLastInterview();
+    doReturn(USER_EMAIL).when(userEmail).getEmail();
 
     doReturn(ActivityStatusOptions.CREATED.getName()).when(activityStatus).getName();
+    doReturn(userEmail).when(activityStatus).getUser();
     doReturn(CURR_STATUS_DATE).when(activityStatus).getDate();
     doReturn(CURR_STATUS_DATE).when(creationActivityStatus).getDate();
 
     doReturn(Optional.of(activityStatus)).when(surveyActivity).getCurrentStatus();
+    doReturn(Optional.of(activityStatus)).when(surveyActivity).getLastStatus();
     doReturn(creationActivityStatus).when(surveyActivity).getCreationStatus();
+
+    doReturn(Optional.of(finalizeActivityStatus)).when(surveyActivity).getLastStatusByName(ActivityStatusOptions.FINALIZED.getName());
+    doReturn(ActivityStatusOptions.FINALIZED.getName()).when(finalizeActivityStatus).getName();
+    doReturn(CURR_STATUS_DATE).when(finalizeActivityStatus).getDate();
 
     doReturn(EXTERNAL_ID).when(surveyActivity).getExternalID();
 
