@@ -77,8 +77,9 @@ public class AliquotDeletionValidator {
 
   private void aliquotInReceivedMaterials() {
     MaterialTrail materialTrail = materialTrackingDao.getCurrent(this.code);
+    Boolean isReceived = materialTrail.getReceived();
 
-    if (materialTrail.getReceived()) {
+    if (isReceived != null && isReceived) {
       this.aliquotDeletionValidatorResponse.setReceivedMaterial(Boolean.TRUE);
       this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
     }
