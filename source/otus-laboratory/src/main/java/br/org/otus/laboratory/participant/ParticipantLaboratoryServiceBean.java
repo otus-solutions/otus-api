@@ -128,7 +128,8 @@ public class ParticipantLaboratoryServiceBean implements ParticipantLaboratorySe
 
   @Override
   public void deleteAliquot(String code) throws ValidationException, DataNotFoundException {
-    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao, this.transportationLotDao);
+    MaterialTrail materialTrail = materialTrackingDao.getCurrent(code);
+    AliquotDeletionValidator validator = new AliquotDeletionValidator(code, this.aliquotDao, this.examUploader, this.examLotDao, this.transportationLotDao, materialTrail);
     validator.validate();
     aliquotDao.delete(code);
   }

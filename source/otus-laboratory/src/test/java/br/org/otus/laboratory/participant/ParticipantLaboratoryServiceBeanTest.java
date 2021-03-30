@@ -52,6 +52,7 @@ import br.org.otus.laboratory.participant.validators.ParticipantLaboratoryValida
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import org.powermock.reflect.Whitebox;
 
 @RunWith(PowerMockRunner.class)
@@ -100,6 +101,8 @@ public class ParticipantLaboratoryServiceBeanTest {
   private AliquotEvent aliquotEvent;
   @Mock
   private FieldCenter fieldCenter;
+  @Mock
+  private MaterialTrail materialTrail;
 
   private static final long RECRUIMENT_NUMBER = 12345;
   private static final String ALIQUOT_CODE = "354005002";
@@ -197,7 +200,7 @@ public class ParticipantLaboratoryServiceBeanTest {
   public void deleteAliquot_should_call_method_validate() throws Exception {
 
     AliquotDeletionValidator aliquotDeletionValidator = Mockito.mock(AliquotDeletionValidator.class);
-    whenNew(AliquotDeletionValidator.class).withArguments(ALIQUOT_CODE, aliquotDao, examUploader, examLotDao, transportationLotDao).thenReturn(aliquotDeletionValidator);
+    whenNew(AliquotDeletionValidator.class).withArguments(ALIQUOT_CODE, aliquotDao, examUploader, examLotDao, transportationLotDao, materialTrail).thenReturn(aliquotDeletionValidator);
 
     aliquotDeletionValidator.validate();
 

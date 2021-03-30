@@ -10,7 +10,6 @@ import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
-import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 
 public class AliquotDeletionValidator {
 
@@ -21,14 +20,22 @@ public class AliquotDeletionValidator {
   private AliquotDao aliquotDao;
   private ExamUploader examUploader;
   private AliquotDeletionValidatorResponse aliquotDeletionValidatorResponse;
-  private MaterialTrackingDao materialTrackingDao;
+  private MaterialTrail materialTrail;
 
-  public AliquotDeletionValidator(String code, AliquotDao aliquotDao, ExamUploader examUploader, ExamLotDao examLotDao, TransportationLotDao transportationLotDao) {
+  public AliquotDeletionValidator(
+    String code,
+    AliquotDao aliquotDao,
+    ExamUploader examUploader,
+    ExamLotDao examLotDao,
+    TransportationLotDao transportationLotDao,
+    MaterialTrail materialTrail
+  ) {
     this.code = code;
     this.aliquotDao = aliquotDao;
     this.examUploader = examUploader;
     this.examLotDao = examLotDao;
     this.transportationLotDao = transportationLotDao;
+    this.materialTrail = materialTrail;
     this.aliquotDeletionValidatorResponse = new AliquotDeletionValidatorResponse();
   }
 
@@ -76,8 +83,7 @@ public class AliquotDeletionValidator {
   }
 
   private void aliquotInReceivedMaterials() {
-    MaterialTrail materialTrail = materialTrackingDao.getCurrent(this.code);
-    Boolean isReceived = materialTrail.getReceived();
+    Boolean isReceived = this.materialTrail.getReceived();
 
     if (isReceived != null && isReceived) {
       this.aliquotDeletionValidatorResponse.setReceivedMaterial(Boolean.TRUE);
