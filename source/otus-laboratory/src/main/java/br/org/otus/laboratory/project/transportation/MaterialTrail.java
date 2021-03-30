@@ -19,7 +19,7 @@ public class MaterialTrail {
   private ObjectId transportationLotId;
   private Boolean isReceived;
 
-  public MaterialTrail(ObjectId operator,String materialCode, TransportationLot transportationLot) {
+  public MaterialTrail(ObjectId operator, String materialCode, TransportationLot transportationLot) {
     this.isCurrentLocation = true;
     this.operationDate = transportationLot.getShipmentDate();
     this.operator = operator;

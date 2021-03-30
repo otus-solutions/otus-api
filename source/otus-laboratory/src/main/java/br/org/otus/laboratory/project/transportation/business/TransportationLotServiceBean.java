@@ -118,6 +118,40 @@ public class TransportationLotServiceBean implements TransportationLotService {
     return transportationLotDao.findByCode(code);
   }
 
+  public void areMaterialsInLotReceived(String code) throws ValidationException, DataNotFoundException {
+    TransportationLot transportationLot = getByCode(code);
+    TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(transportationLot.getLotId());
+    ArrayList<Aliquot> aliquots = aliquotDao.getAliquots(transportMaterialCorrelation.getAliquotCodeList());
+    ArrayList<Tube> tubes = participantLaboratoryDao.getTubes(transportMaterialCorrelation.getTubeCodeList());
+
+    ArrayList<String> receivedMaterials = new ArrayList<String>(0);
+
+    aliquots.forEach(aliquot -> {
+      MaterialTrail materialTrail = materialTrackingDao.getCurrent(aliquot.getCode());
+      Boolean isReceived = materialTrail.getReceived();
+
+      if(isReceived != null && isReceived) {
+        receivedMaterials.add("Lot deletion unauthorized, aliquot " + aliquot.getCode() + " is received.");
+      }
+    });
+
+    tubes.forEach(tube -> {
+      MaterialTrail materialTrail = materialTrackingDao.getCurrent(tube.getCode());
+      Boolean isReceived = materialTrail.getReceived();
+
+      if (isReceived != null && isReceived) {
+        receivedMaterials.add("Lot deletion unauthorized, tube " + tube.getCode() + " is received.");
+      }
+    });
+
+    if(receivedMaterials.size() > 0) {
+      throw new ValidationException(
+        new Throwable("Lot deletion unauthorized, material(s) have already been received."),
+        receivedMaterials
+      );
+    }
+  }
+
   @Override
   public List<TransportationLot> list(String originLocationPointId, String destinationLocationPointId) {
     List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoints(originLocationPointId, destinationLocationPointId);
@@ -154,7 +188,9 @@ public class TransportationLotServiceBean implements TransportationLotService {
   @Override
   public void receiveMaterial(ReceivedMaterial receivedMaterial, String transportationLotId) throws ValidationException {
     MaterialTrail materialTrail = materialTrackingDao.getCurrent(receivedMaterial.getMaterialCode());
-    if (materialTrail.getReceived()){
+    Boolean isReceived = materialTrail.getReceived();
+
+    if (isReceived != null && isReceived){
       throw new ValidationException(new Throwable("Material already received"));
     }
     materialTrackingDao.setReceived(materialTrail);

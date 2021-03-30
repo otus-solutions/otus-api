@@ -1,9 +1,9 @@
 package br.org.otus.laboratory.participant.validators;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
+import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.participant.dto.UpdateAliquotsDTO;
 import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
@@ -20,6 +20,7 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
   private AliquotUpdateValidateResponse aliquotUpdateValidateResponse;
   private AliquotDao aliquotDao;
   private ParticipantLaboratory participantLaboratory;
+  private MaterialTrackingDao materialTrackingDao;
 
   public AliquotUpdateValidator(UpdateAliquotsDTO updateAliquotsDTO, AliquotDao aliquotDao, ParticipantLaboratory participantLaboratory) {
     this.aliquotUpdateValidateResponse = new AliquotUpdateValidateResponse();

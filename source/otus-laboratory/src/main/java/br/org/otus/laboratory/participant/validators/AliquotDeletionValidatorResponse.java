@@ -5,6 +5,7 @@ public class AliquotDeletionValidatorResponse {
   private String transportationLot;
   private Boolean examResult;
   private Boolean deletionValidated;
+  private Boolean receivedMaterial;
 
   public AliquotDeletionValidatorResponse() {
     this.deletionValidated = Boolean.TRUE;
@@ -40,6 +41,14 @@ public class AliquotDeletionValidatorResponse {
 
   public void setDeletionValidated(Boolean deletionValidated) {
     this.deletionValidated = deletionValidated;
+  }
+
+  public void setReceivedMaterial(Boolean receivedMaterial) {
+    this.receivedMaterial = receivedMaterial;
+  }
+
+  public Boolean getReceivedMaterial() {
+    return this.receivedMaterial;
   }
 
 }
