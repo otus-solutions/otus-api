@@ -1,7 +1,6 @@
 package br.org.otus.laboratory.participant.validators;
 
 import br.org.otus.laboratory.participant.ParticipantLaboratory;
-import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.SimpleAliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
@@ -10,7 +9,6 @@ import br.org.otus.laboratory.participant.dto.UpdateTubeAliquotsDTO;
 import br.org.otus.laboratory.participant.tube.Tube;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
-import br.org.otus.laboratory.project.transportation.MaterialTrail;
 
 import java.util.HashSet;
 import java.util.List;
@@ -49,14 +47,6 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
     if (!aliquotUpdateValidateResponse.isValid()) {
       throw new ValidationException(new Throwable("There are repeated aliquots on Database."),
         aliquotUpdateValidateResponse);
-    }
-
-    checkReceivedMaterial();
-    if (!aliquotUpdateValidateResponse.isValid()) {
-      throw new ValidationException(
-        new Throwable("Aliquot deletion unauthorized, material has already been received."),
-        aliquotUpdateValidateResponse
-      );
     }
 
     return aliquotUpdateValidateResponse;
@@ -103,19 +93,6 @@ public class AliquotUpdateValidator implements ParticipantLaboratoryValidator {
 
   private boolean isAliquoted(String aliquotCode) {
     return aliquotDao.exists(aliquotCode);
-  }
-
-  private List<SimpleAliquot> checkReceivedMaterial() {
-    for (UpdateTubeAliquotsDTO aliquotDTO : updateAliquotsDTO.getUpdateTubeAliquots()) {
-      for (SimpleAliquot aliquot : aliquotDTO.getAliquots()) {
-        MaterialTrail materialTrail = materialTrackingDao.getCurrent(aliquot.getCode());
-
-        if (materialTrail.getReceived()) {
-          aliquotUpdateValidateResponse.getConflicts().add(aliquot);
-        }
-      }
-    }
-    return aliquotUpdateValidateResponse.getConflicts();
   }
 
 }

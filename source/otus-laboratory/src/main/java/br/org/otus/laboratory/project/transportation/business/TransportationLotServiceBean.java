@@ -128,8 +128,9 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
     aliquots.forEach(aliquot -> {
       MaterialTrail materialTrail = materialTrackingDao.getCurrent(aliquot.getCode());
+      Boolean isReceived = materialTrail.getReceived();
 
-      if(materialTrail.getReceived()) {
+      if(isReceived != null && isReceived) {
         receivedMaterials.add("Lot deletion unauthorized, aliquot " + aliquot.getCode() + " is received.");
       }
     });
