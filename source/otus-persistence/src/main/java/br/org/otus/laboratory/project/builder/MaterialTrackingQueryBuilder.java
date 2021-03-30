@@ -35,7 +35,7 @@ public class MaterialTrackingQueryBuilder {
         pipeline.add(this.parseQuery("{\n" +
                 "        $lookup:{\n" +
                 "            from: \"transport_material_correlation\",\n" +
-                "            let: {materialCode:\"111036780\",transportationLotId:\"$transportationLotId\"},\n" +
+                "            let: {materialCode:\""+materialCode+"\",transportationLotId:\"$transportationLotId\"},\n" +
                 "            pipeline: [\n" +
                 "                {\n" +
                 "                    $match: {\n" +
@@ -60,6 +60,7 @@ public class MaterialTrackingQueryBuilder {
                 "    }"));
         pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
+                "            \"transportationLotId\": 1,\n" +
                 "            \"origin\": {$arrayElemAt:[\"$lot.originLocationPoint\",0]},\n" +
                 "            \"destination\": {$arrayElemAt:[\"$lot.destinationLocationPoint\",0]},\n" +
                 "            \"sendingDate\": {$arrayElemAt:[\"$lot.shipmentDate\",0]},\n" +
@@ -68,7 +69,7 @@ public class MaterialTrackingQueryBuilder {
                 "    }"));
         pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
-                "            \"lotId\": \"$_id\",\n" +
+                "            \"lotId\": \"$transportationLotId\",\n" +
                 "            \"_id\":0,\n" +
                 "            \"origin\": 1,\n" +
                 "            \"destination\": 1,\n" +

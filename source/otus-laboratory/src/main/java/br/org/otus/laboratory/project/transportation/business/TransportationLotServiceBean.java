@@ -160,6 +160,7 @@ public class TransportationLotServiceBean implements TransportationLotService {
       ArrayList<Tube> tubes = participantLaboratoryDao.getTubes(transportMaterialCorrelation.getTubeCodeList());
       lot.setAliquotList(aliquots);
       lot.setTubeList(tubes);
+      lot.setReceivedMaterials(transportMaterialCorrelation.getReceivedMaterials());
     });
     return transportationLots;
   }

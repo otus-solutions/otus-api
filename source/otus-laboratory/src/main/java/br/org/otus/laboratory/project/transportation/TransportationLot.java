@@ -28,6 +28,7 @@ public class TransportationLot {
   private ArrayList<Tube> tubeList;
   private ArrayList<AliquotInfo> aliquotsInfo;
   private ArrayList<TubeInfo> tubesInfo;
+  private ArrayList<ReceivedMaterial> receivedMaterials;
   private ObjectId originLocationPoint;
   private ObjectId destinationLocationPoint;
   private FieldCenter fieldCenter;
@@ -165,5 +166,9 @@ public class TransportationLot {
 
   public void setTubeList(ArrayList<Tube> tubeList) {
     this.tubeList = tubeList;
+  }
+
+  public void setReceivedMaterials(ArrayList<ReceivedMaterial> receivedMaterials) {
+    this.receivedMaterials = receivedMaterials;
   }
 }
