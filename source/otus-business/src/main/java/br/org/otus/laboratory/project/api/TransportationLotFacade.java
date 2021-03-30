@@ -60,7 +60,6 @@ public class TransportationLotFacade {
 
   public TransportationLot update(TransportationLot transportationLot, String userEmail) {
     try {
-      transportationLotService.areMaterialsInLotReceived(transportationLot.getCode());
       User user = userDao.fetchByEmail(userEmail);
       return transportationLotService.update(transportationLot,user.get_id());
     } catch (DataNotFoundException e) {
