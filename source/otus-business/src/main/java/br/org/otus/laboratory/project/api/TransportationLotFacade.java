@@ -74,7 +74,7 @@ public class TransportationLotFacade {
 
   public void delete(String id) {
     try {
-      transportationLotService.areMaterialsInLotReceived(id);
+      transportationLotService.doesLotHaveReceivedMaterials(id);
       transportationLotService.delete(id);
     } catch (DataNotFoundException e) {
       e.printStackTrace();
