@@ -53,6 +53,7 @@ public class ActivityServiceBeanTest {
   private static final String CENTER = "RS";
   private static final String EMAIL= "email@email.com";
   private static final ObjectId STAGE_OID = new ObjectId("5f77920624439758ce4a43ab");
+  private static final Boolean IS_DISCARDED_VALUE = false;
 
 
   @InjectMocks
@@ -241,7 +242,7 @@ public class ActivityServiceBeanTest {
   @Test
   public void getActivityIds_method_should_call_activityDao_getActivityIds_method() throws MemoryExcededException {
     final List<String> activityIdsToExcludeOfQuery = new ArrayList<>();
-    service.getActivityIds(ACRONYM, VERSION, activityIdsToExcludeOfQuery);
-    verify(activityDao, times(1)).getActivityIds(ACRONYM, VERSION, null, activityIdsToExcludeOfQuery);
+    service.getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, activityIdsToExcludeOfQuery);
+    verify(activityDao, times(1)).getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, activityIdsToExcludeOfQuery);
   }
 }

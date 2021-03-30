@@ -57,6 +57,8 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     String activityId = activityService.create(surveyActivity);
     surveyActivity.setActivityID(new ObjectId(activityId));
 
+    extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
+
     if (surveyActivity.getMode() == ActivityMode.AUTOFILL) {
       followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
     }
@@ -87,7 +89,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       }
       catch (Exception e){
         LOGGER.severe("status: fail, action: " + action + " activity extraction for activityId " + surveyActivity.getActivityID().toString());
-        new Exception("Error while syncing results", e).printStackTrace();
       }
     });
 
@@ -106,7 +107,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
         catch (Exception e){
           LOGGER.severe("status: fail, action: save activity extraction for activityId " + surveyActivity.getActivityID().toString() +
             " from offlineActivityCollection " + offlineActivityCollection.get_id());
-          new Exception("Error while syncing results", e).printStackTrace();
         }
       });
     });
@@ -122,7 +122,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       }
       catch (Exception e){
         LOGGER.severe("status: fail, action: delete activity extraction for activityId " + activityId);
-        new Exception("Error while syncing results", e).printStackTrace();
       }
     });
   }

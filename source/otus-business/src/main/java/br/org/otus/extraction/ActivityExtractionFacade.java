@@ -14,6 +14,7 @@ import br.org.otus.survey.activity.api.ActivityFacade;
 import br.org.otus.survey.api.SurveyFacade;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
@@ -44,7 +45,6 @@ public class ActivityExtractionFacade {
 
   private final static Logger LOGGER = Logger.getLogger("br.org.otus.extraction.ActivityExtractionFacade");
 
-  private boolean allowCreateExtractionForAnyActivity = false;
   private String runtimeExceptionMessage = null;
 
   @Inject
@@ -93,9 +93,18 @@ public class ActivityExtractionFacade {
       new ExtractionGatewayService().createOrUpdateActivityExtraction(buildActivityExtractionModelForCreateOrUpdate(activityId).serialize());
       LOGGER.info("status: success, action: create/update extraction for activity " + activityId);
     }
+    catch(HttpResponseException e){
+      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + e.getMessage());
+      throw e;
+    }
     catch (RuntimeException e) {
-      String message = runtimeExceptionMessage;
-      runtimeExceptionMessage = null;
+      String message;
+      if(runtimeExceptionMessage != null) {
+        message = runtimeExceptionMessage;
+        runtimeExceptionMessage = null;
+      } else {
+        message = e.toString();
+      }
       LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
       throw new HttpResponseException(Validation.build(message));
     }
@@ -108,20 +117,27 @@ public class ActivityExtractionFacade {
 
   public void deleteActivityExtraction(String activityId) {
     try {
-      ActivityExtraction activityExtraction = buildActivityExtractionModel(activityId);
+      SurveyActivity surveyActivity = activityFacade.getByID(activityId);
+
+      SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
+
       new ExtractionGatewayService().deleteActivityExtraction(
-        activityExtraction.getSurveyData().getId(),
-        activityExtraction.getActivityData().getId()
+          surveyForm.getSurveyID().toHexString(),
+          activityId
       );
       LOGGER.info("status: success, action: DELETE extraction for activity " + activityId);
     }
     catch(NotFoundRequestException e){
       throw new HttpResponseException(NotFound.build("Activity's extraction doesn't exists"));
     }
+    catch(HttpResponseException e){
+      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId + ": " + e.getMessage());
+      throw e;
+    }
     catch (RuntimeException e) {
       String message = runtimeExceptionMessage;
       runtimeExceptionMessage = null;
-      LOGGER.severe("status: fail, action: create/update extraction for activity " + activityId + ": " + message);
+      LOGGER.severe("status: fail, action: DELETE extraction for activity " + activityId + ": " + message);
       throw new HttpResponseException(Validation.build(message));
     }
     catch (Exception e) {
@@ -132,11 +148,10 @@ public class ActivityExtractionFacade {
 
   public void synchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
-      allowCreateExtractionForAnyActivity = true;
       String surveyId = findSurveyId(acronym, version);
       GatewayResponse gatewayResponse = new ExtractionGatewayService().getSurveyActivityIdsWithExtraction(surveyId);
       ArrayList<String> activitiesIdsWithExtraction = new GsonBuilder().create().fromJson((String) gatewayResponse.getData(), ArrayList.class);
-      activityFacade.getActivityIds(acronym, version, activitiesIdsWithExtraction).stream()
+      activityFacade.getActivityIds(acronym, version, false, activitiesIdsWithExtraction).stream()
         .filter(activityOid -> !activitiesIdsWithExtraction.contains(activityOid.toHexString()))
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
@@ -144,36 +159,16 @@ public class ActivityExtractionFacade {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
     }
-    finally {
-      allowCreateExtractionForAnyActivity = false;
-    }
   }
 
   public void forceSynchronizeSurveyActivityExtractions(String acronym, Integer version){
     try {
-      allowCreateExtractionForAnyActivity = true;
-      activityFacade.getActivityIds(acronym, version, null).stream()
+      activityFacade.getActivityIds(acronym, version, false, null).stream()
         .forEach(activityOid -> createOrUpdateActivityExtraction(activityOid.toHexString()));
       LOGGER.info("status: success, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
     } catch (Exception e) {
       LOGGER.severe("status: fail, action: synchronize activities extractions of survey {" + acronym + ", version " + version + "}");
       throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-    finally {
-      allowCreateExtractionForAnyActivity = false;
-    }
-  }
-
-  public void forceCreateOrUpdateActivityExtraction(String activityId) throws HttpResponseException {
-    try {
-      allowCreateExtractionForAnyActivity = true;
-      createOrUpdateActivityExtraction(activityId);
-    }
-    catch (Exception e) {
-      throw e;
-    }
-    finally{
-      allowCreateExtractionForAnyActivity = false;
     }
   }
 
@@ -276,12 +271,11 @@ public class ActivityExtractionFacade {
 
   private ActivityExtraction buildActivityExtractionModel(String activityId) throws ValidationException, RuntimeException {
     SurveyActivity surveyActivity = activityFacade.getByID(activityId);
-    if(surveyActivity.isDiscarded() && !allowCreateExtractionForAnyActivity){
+
+    if(surveyActivity.isDiscarded()){
       throw new ValidationException(new Throwable("Activity " + activityId + " is discarded"));
     }
-    if(!surveyActivity.couldBeExtracted() && !allowCreateExtractionForAnyActivity){
-      throw new ValidationException(new Throwable("Activity " + activityId + " could not be extracted"));
-    }
+
     SurveyForm surveyForm = surveyFacade.get(surveyActivity.getSurveyForm().getAcronym(), surveyActivity.getSurveyForm().getVersion());
 
     if(surveyForm.getSurveyTemplate().dataSources != null && !surveyForm.getSurveyTemplate().dataSources.isEmpty()){
@@ -323,23 +317,36 @@ public class ActivityExtractionFacade {
 
     String value = ((TextAnswer) questionFill.getAnswer()).getValue();
 
-    Iterator<JsonElement> iterator =  dataSources.stream()
-      .filter(dataSource -> dataSource.getId().equals(dataSourceId))
-      .findFirst().get().getData()
-      .iterator();
+    if(value != null) {
+      Iterator<JsonElement> iterator =  dataSources.stream()
+          .filter(dataSource -> dataSource.getId().equals(dataSourceId))
+          .findFirst().get().getData()
+          .iterator();
 
-    boolean found = false;
-    while(iterator.hasNext() && !found){
-      String dataValue = iterator.next().getAsJsonObject().get("value").toString().replace("\"", "");
-      found = dataValue.equals(value);
+      boolean found = false;
+      JsonObject datasourceItem = null;
+
+      while(iterator.hasNext() && !found){
+        datasourceItem = iterator.next().getAsJsonObject();
+        String dataValue = datasourceItem.get("value").toString().replace("\"", "");
+        found = dataValue.equals(value);
+      }
+
+      if(!found || datasourceItem == null){
+        runtimeExceptionMessage = "Datasource " + dataSourceId + " does not have value " + value + " of question " + questionFill.getQuestionID();
+        throw new ValidationException();
+      }
+
+      String extractionValue;
+      //some datasources doesn't have extractionvalue.
+
+      if(iterator.next().getAsJsonObject().get("extractionValue") != null) {
+        extractionValue = datasourceItem.get("extractionValue").toString().replace("\"", "");
+      } else {
+        extractionValue = datasourceItem.get("value").toString().replace("\"", "");
+      }
+
+      ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
     }
-
-    if(!found){
-      runtimeExceptionMessage = "Datasource " + dataSourceId + " does not have value " + value + " of question " + questionFill.getQuestionID();
-      throw new ValidationException();
-    }
-
-    String extractionValue = iterator.next().getAsJsonObject().get("extractionValue").toString().replace("\"", "");
-    ((TextAnswer) questionFill.getAnswer()).setValue(extractionValue);
   }
 }

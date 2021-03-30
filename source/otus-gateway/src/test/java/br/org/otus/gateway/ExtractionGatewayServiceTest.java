@@ -20,6 +20,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
@@ -156,27 +157,27 @@ public class ExtractionGatewayServiceTest {
   }
 
   @Test
-  public void getRscript_method_should_return_GatewayResponse() throws IOException {
+  public void getRscript_method_should_return_GatewayResponse() throws IOException, URISyntaxException {
     when(extractionMicroServiceResources.getRScriptGetterAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
     assertEquals(EXPECTED_GATEWAY_RESPONSE, extractionGatewayService.getRscript(R_SCRIPT_NAME));
   }
 
   @Test(expected = ReadRequestException.class)
-  public void getRscript_method_should_throw_ReadRequestException() throws IOException {
+  public void getRscript_method_should_throw_ReadRequestException() throws IOException, URISyntaxException {
     when(extractionMicroServiceResources.getRScriptGetterAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
     when(jsonGETUtility.finish()).thenThrow(new IOException());
     extractionGatewayService.getRscript(R_SCRIPT_NAME);
   }
 
   @Test
-  public void deleteRscript_method_should_send_DELETE_request() throws IOException {
+  public void deleteRscript_method_should_send_DELETE_request() throws IOException, URISyntaxException {
     when(extractionMicroServiceResources.getRScriptDeleteAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
     extractionGatewayService.deleteRscript(R_SCRIPT_NAME);
     verify(jsonDELETEUtility, Mockito.times(1)).finish();
   }
 
   @Test(expected = ReadRequestException.class)
-  public void deleteRscript_method_should_throw_ReadRequestException() throws IOException {
+  public void deleteRscript_method_should_throw_ReadRequestException() throws IOException, URISyntaxException {
     when(extractionMicroServiceResources.getRScriptDeleteAddress(R_SCRIPT_NAME)).thenReturn(requestURL);
     when(jsonDELETEUtility.finish()).thenThrow(new IOException());
     extractionGatewayService.deleteRscript(R_SCRIPT_NAME);
