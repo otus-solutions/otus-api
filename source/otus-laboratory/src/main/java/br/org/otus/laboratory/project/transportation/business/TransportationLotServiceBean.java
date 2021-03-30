@@ -137,8 +137,9 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
     tubes.forEach(tube -> {
       MaterialTrail materialTrail = materialTrackingDao.getCurrent(tube.getCode());
+      Boolean isReceived = materialTrail.getReceived();
 
-      if (materialTrail.getReceived()) {
+      if (isReceived != null && isReceived) {
         receivedMaterials.add("Lot deletion unauthorized, tube " + tube.getCode() + " is received.");
       }
     });
