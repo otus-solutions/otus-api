@@ -187,7 +187,9 @@ public class TransportationLotServiceBean implements TransportationLotService {
   @Override
   public void receiveMaterial(ReceivedMaterial receivedMaterial, String transportationLotId) throws ValidationException {
     MaterialTrail materialTrail = materialTrackingDao.getCurrent(receivedMaterial.getMaterialCode());
-    if (materialTrail.getReceived()){
+    Boolean isReceived = materialTrail.getReceived();
+
+    if (isReceived != null && isReceived){
       throw new ValidationException(new Throwable("Material already received"));
     }
     materialTrackingDao.setReceived(materialTrail);
