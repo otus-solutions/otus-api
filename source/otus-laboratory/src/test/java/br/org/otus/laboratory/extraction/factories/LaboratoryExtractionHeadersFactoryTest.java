@@ -17,28 +17,28 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.laboratory.extraction.enums.LaboratoryExtractionHeaders;
 
+@RunWith(PowerMockRunner.class)
 public class LaboratoryExtractionHeadersFactoryTest {
 
-  @InjectMocks
-  private LaboratoryExtractionHeadersFactory laboratoryExtractionHeadersFactory;
   @Mock
   private LinkedHashSet<String> headers;
+  private LaboratoryExtractionHeadersFactory laboratoryExtractionHeadersFactory;
 
   @Test
   public void construction_method_should_call_buildHeader_method() throws Exception {
     List<TubeCustomMetadata> customMetadata = new ArrayList<TubeCustomMetadata>();
     customMetadata.add(new TubeCustomMetadata());
-    LaboratoryExtractionHeadersFactory spy = PowerMockito.spy(new LaboratoryExtractionHeadersFactory(customMetadata));
+    laboratoryExtractionHeadersFactory = PowerMockito.spy(new LaboratoryExtractionHeadersFactory(customMetadata));
 
-    PowerMockito.verifyPrivate(spy, Mockito.times(1)).invoke("buildHeader");
+    PowerMockito.verifyPrivate(laboratoryExtractionHeadersFactory, Mockito.times(1)).invoke("buildHeader");
   }
 
   @Test
   public void getHeaders_method_should_return_list_with_information_headers() {
     List<TubeCustomMetadata> customMetadata = new ArrayList<TubeCustomMetadata>();
     customMetadata.add(new TubeCustomMetadata());
-    LaboratoryExtractionHeadersFactory factory = new LaboratoryExtractionHeadersFactory(customMetadata);
-    List<String> headers = factory.getHeaders();
+    laboratoryExtractionHeadersFactory = PowerMockito.spy(new LaboratoryExtractionHeadersFactory(customMetadata));
+    List<String> headers = laboratoryExtractionHeadersFactory.getHeaders();
 
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.UNATTACHED_IDENTIFICATION.getValue()));
@@ -54,14 +54,17 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_HAS_TRANSPORTATION_LOT_ID.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_HAS_EXAM_LOT_ID.getValue()));
   }
 
   @Test
   public void getHeaders_method_should_return_list_with_expected_order() {
     List<TubeCustomMetadata> customMetadata = new ArrayList<TubeCustomMetadata>();
     customMetadata.add(new TubeCustomMetadata());
-    LaboratoryExtractionHeadersFactory factory = new LaboratoryExtractionHeadersFactory(customMetadata);
-    List<String> headers = factory.getHeaders();
+    laboratoryExtractionHeadersFactory = PowerMockito.spy(new LaboratoryExtractionHeadersFactory(customMetadata));
+    List<String> headers = laboratoryExtractionHeadersFactory.getHeaders();
 
     Assert.assertEquals(LaboratoryExtractionHeaders.RECRUITMENT_NUMBER.getValue(), headers.get(0));
     Assert.assertEquals(LaboratoryExtractionHeaders.UNATTACHED_IDENTIFICATION.getValue(), headers.get(1));
@@ -77,6 +80,9 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue(), headers.get(11));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue(), headers.get(12));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue(), headers.get(13));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue(), headers.get(14));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_HAS_TRANSPORTATION_LOT_ID.getValue(), headers.get(15));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_HAS_EXAM_LOT_ID.getValue(), headers.get(16));
   }
 
 }

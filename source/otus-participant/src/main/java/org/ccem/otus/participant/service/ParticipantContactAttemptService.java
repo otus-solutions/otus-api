@@ -5,6 +5,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAddressAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptConfiguration;
+import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptExtractionDTO;
 import org.ccem.otus.participant.model.participant_contact.Address;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public interface ParticipantContactAttemptService {
 
   ArrayList<ParticipantContactAddressAttempt> findAddressAttempts(Long recruitmentNumber, String objectType, String position) throws DataNotFoundException;
 
-  ArrayList<ParticipantContactAttempt> finParticipantContactAttempts() throws DataNotFoundException;
+  ArrayList<ParticipantContactAttemptExtractionDTO> finParticipantContactAttempts() throws DataNotFoundException;
 
   ParticipantContactAttemptConfiguration findMetadataAttempt(String objectType) throws DataNotFoundException;
 

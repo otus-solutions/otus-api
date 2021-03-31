@@ -1,6 +1,6 @@
 package br.org.otus.survey.services;
 
-import br.org.otus.extraction.ExtractionFacade;
+import br.org.otus.extraction.ActivityExtractionFacade;
 import br.org.otus.outcomes.FollowUpFacade;
 import br.org.otus.response.exception.HttpResponseException;
 import br.org.otus.response.info.Validation;
@@ -49,7 +49,7 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
   private ActivitySharingService activitySharingService;
 
   @Inject
-  private ExtractionFacade extractionFacade;
+  private ActivityExtractionFacade extractionFacade;
 
 
   @Override
@@ -57,19 +57,11 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     String activityId = activityService.create(surveyActivity);
     surveyActivity.setActivityID(new ObjectId(activityId));
 
+    extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
+
     if (surveyActivity.getMode() == ActivityMode.AUTOFILL) {
       followUpFacade.createParticipantActivityAutoFillEvent(surveyActivity, notify);
     }
-
-    CompletableFuture.runAsync(() -> {
-      try{
-        extractionFacade.createActivityExtraction(surveyActivity.getActivityID().toString());
-      }
-      catch (Exception e){
-        LOGGER.severe("status: fail, action: create activity extraction for activityId " + surveyActivity.getActivityID().toString());
-        new Exception("Error while syncing results", e).printStackTrace();
-      }
-    });
 
     return activityId;
   }
@@ -92,12 +84,11 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
           extractionFacade.deleteActivityExtraction(surveyActivity.getActivityID().toString());
         }
         else{
-          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+          extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
         }
       }
       catch (Exception e){
         LOGGER.severe("status: fail, action: " + action + " activity extraction for activityId " + surveyActivity.getActivityID().toString());
-        new Exception("Error while syncing results", e).printStackTrace();
       }
     });
 
@@ -111,12 +102,11 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
     CompletableFuture.runAsync(() -> {
       offlineActivityCollection.getActivities().forEach(surveyActivity -> {
         try{
-          extractionFacade.updateActivityExtraction(surveyActivity.getActivityID().toString());
+          extractionFacade.createOrUpdateActivityExtraction(surveyActivity.getActivityID().toString());
         }
         catch (Exception e){
           LOGGER.severe("status: fail, action: save activity extraction for activityId " + surveyActivity.getActivityID().toString() +
             " from offlineActivityCollection " + offlineActivityCollection.get_id());
-          new Exception("Error while syncing results", e).printStackTrace();
         }
       });
     });
@@ -132,7 +122,6 @@ public class ActivityTasksServiceBean implements ActivityTasksService {
       }
       catch (Exception e){
         LOGGER.severe("status: fail, action: delete activity extraction for activityId " + activityId);
-        new Exception("Error while syncing results", e).printStackTrace();
       }
     });
   }
