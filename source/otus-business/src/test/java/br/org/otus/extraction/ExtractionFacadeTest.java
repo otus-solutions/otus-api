@@ -118,6 +118,11 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
     extractionFacade.createActivityExtraction(ACRONYM, VERSION);
   }
 
+  @Test
+
+  public void listSurveyVersions_method_should_return_integer_list() {
+    assertEquals(extractionFacade.listSurveyVersions)
+  }
 
   @Test
   public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
