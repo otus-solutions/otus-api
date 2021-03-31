@@ -7,8 +7,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import com.mongodb.client.model.Variable;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
@@ -33,15 +35,23 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
   }
 
   @Override
-  public List<TransportationLot> findByLocationPoint(String locationPointId) {
+  public List<TransportationLot> findByLocationPoints(String originLocationPointId, String destinationLocationPointId) {
     ArrayList<TransportationLot> transportationLots = new ArrayList<>();
+    ArrayList<Bson> pipelineAggregates = new ArrayList<>();
+    Document matchStage = new Document();
 
-    AggregateIterable output = collection
-      .aggregate(
-        Arrays.asList(
-          Aggregates.match(new Document("originLocationPoint",new ObjectId(locationPointId)))
-        )
-      );
+    if(originLocationPointId != null) {
+      matchStage.append("originLocationPoint", new ObjectId(originLocationPointId));
+    }
+
+    if(destinationLocationPointId != null) {
+      matchStage.append("destinationLocationPoint", new ObjectId(destinationLocationPointId));
+
+    }
+    pipelineAggregates.add(Aggregates.match(matchStage));
+
+    AggregateIterable output = collection.aggregate(pipelineAggregates);
+
     for (Object result : output) {
       Document document = (Document) result;
       transportationLots.add(TransportationLot.deserialize(document.toJson()));
@@ -68,6 +78,12 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
       newLotCode = Integer.parseInt(document.get("code").toString());
     }
     return newLotCode;
+  }
+
+  @Override
+  public void receiveLot(String code, TransportationReceipt transportationReceipt) {
+    Document parsed = Document.parse(TransportationReceipt.serialize(transportationReceipt));
+    collection.updateOne(eq("code", code),new Document("$set",new Document("transportationReceipt",parsed).append("isReceived",true)));
   }
 
   @Override

@@ -6,16 +6,10 @@
     <parent>
         <artifactId>otus-root</artifactId>
         <groupId>org.ccem.otus</groupId>
-        <version>1.51.3</version>
+        <version>1.53.0</version>
         <relativePath>../otus-root/pom.xml</relativePath>
     </parent>
     <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${google.gson.version}</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -27,6 +21,12 @@
             <artifactId>bson</artifactId>
             <version>${mongodb.bson.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ccem.otus</groupId>
+            <artifactId>survey-model</artifactId>
+            <version>${survey.model.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

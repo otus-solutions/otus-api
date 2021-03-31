@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.participant.api.ParticipantFacade;
 import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -63,6 +65,8 @@ public class ExtractionFacade {
   private ExtractionService extractionService;
   @Inject
   private DataSourceService dataSourceService;
+  @Inject
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
   public byte[] createActivityExtraction(String acronym, Integer version) {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
@@ -77,47 +81,6 @@ public class ExtractionFacade {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build("Results to extraction {" + acronym + "} not found."));
-    }
-  }
-
-  public byte[] createExtractionFromPipeline(String pipelineName) {
-    try {
-      GatewayResponse gatewayResponse = new ExtractionGatewayService().getPipelineExtraction(pipelineName);
-      LOGGER.info("status: success, action: extraction for pipeline " + pipelineName);
-      return (byte[]) gatewayResponse.getData();
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: extraction for pipeline " + pipelineName);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void createActivityExtraction(String activityId) throws HttpResponseException {
-    try {
-      new ExtractionGatewayService().createActivityExtraction(activityId);
-      LOGGER.info("status: success, action: create extraction for activity " + activityId);
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: create extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void updateActivityExtraction(String activityId) {
-    try {
-      new ExtractionGatewayService().updateActivityExtraction(activityId);
-      LOGGER.info("status: success, action: update extraction for activity " + activityId);
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: update extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
-    }
-  }
-
-  public void deleteActivityExtraction(String activityId) {
-    try {
-      new ExtractionGatewayService().deleteActivityExtraction(activityId);
-      LOGGER.info("status: success, action: delete extraction for activity " + activityId);
-    } catch (IOException e) {
-      LOGGER.severe("status: fail, action: delete extraction for activity " + activityId);
-      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 
@@ -136,8 +99,9 @@ public class ExtractionFacade {
   }
 
   public byte[] createLaboratoryExtraction() {
+    List<TubeCustomMetadata> tubeCustomMetadata = laboratoryConfigurationService.getTubeCustomMedataData();
     LinkedList<LaboratoryRecordExtraction> extraction = participantLaboratoryFacade.getLaboratoryExtraction();
-    LaboratoryExtraction extractor = new LaboratoryExtraction(extraction);
+    LaboratoryExtraction extractor = new LaboratoryExtraction(extraction, tubeCustomMetadata);
     try {
       return extractionService.createExtraction(extractor);
     } catch (DataNotFoundException e) {
@@ -153,29 +117,6 @@ public class ExtractionFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build("Results to extraction not found."));
     }
-  }
-
-  public byte[] createAttachmentsReportExtraction(String acronym, Integer version) {
-    try {
-      return extractionService.getAttachmentsReport(acronym, version);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
-
-  public byte[] createActivityProgressExtraction(String center) {
-    LinkedList<ActivityProgressResultExtraction> progress = activityFacade.getActivityProgressExtraction(center);
-    ActivityProgressRecordsFactory extraction = new ActivityProgressRecordsFactory(progress);
-    ActivityProgressExtraction extractor = new ActivityProgressExtraction(extraction);
-    try {
-      return extractionService.createExtraction(extractor);
-    } catch (DataNotFoundException e) {
-      throw new HttpResponseException(NotFound.build(e.getMessage()));
-    }
-  }
-
-  public byte[] downloadFiles(ArrayList<String> oids) {
-    return fileUploaderFacade.downloadFiles(oids);
   }
 
   public byte[] createParticipantContactAttemptsExtraction() {

@@ -1,7 +1,11 @@
 package br.org.otus.laboratory.extraction;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +30,8 @@ public class LaboratoryExtractionTest {
   private LaboratoryExtractionRecordsFactory recordsFactory;
   @Mock
   private LinkedHashSet<String> headers;
+  @Mock
+  private List<TubeCustomMetadata> customMetadata;
 
   @Before
   public void setup() {

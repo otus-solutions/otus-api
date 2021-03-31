@@ -8,6 +8,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
 
 public class AliquotDeletionValidator {
@@ -19,13 +20,22 @@ public class AliquotDeletionValidator {
   private AliquotDao aliquotDao;
   private ExamUploader examUploader;
   private AliquotDeletionValidatorResponse aliquotDeletionValidatorResponse;
+  private MaterialTrail materialTrail;
 
-  public AliquotDeletionValidator(String code, AliquotDao aliquotDao, ExamUploader examUploader, ExamLotDao examLotDao, TransportationLotDao transportationLotDao) {
+  public AliquotDeletionValidator(
+    String code,
+    AliquotDao aliquotDao,
+    ExamUploader examUploader,
+    ExamLotDao examLotDao,
+    TransportationLotDao transportationLotDao,
+    MaterialTrail materialTrail
+  ) {
     this.code = code;
     this.aliquotDao = aliquotDao;
     this.examUploader = examUploader;
     this.examLotDao = examLotDao;
     this.transportationLotDao = transportationLotDao;
+    this.materialTrail = materialTrail;
     this.aliquotDeletionValidatorResponse = new AliquotDeletionValidatorResponse();
   }
 
@@ -34,6 +44,7 @@ public class AliquotDeletionValidator {
     this.aliquotInTransportation();
     this.aliquotInExamLot();
     this.aliquotInExamResult();
+    this.aliquotInReceivedMaterials();
     if (!this.aliquotDeletionValidatorResponse.isDeletionValidated()) {
       throw new ValidationException(new Throwable("Exclusion of unauthorized aliquot."), this.aliquotDeletionValidatorResponse);
     }
@@ -67,6 +78,15 @@ public class AliquotDeletionValidator {
     Boolean examResult = this.examUploader.checkIfThereInExamResultLot(this.code);
     if (examResult) {
       this.aliquotDeletionValidatorResponse.setExamResult(Boolean.TRUE);
+      this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
+    }
+  }
+
+  private void aliquotInReceivedMaterials() {
+    Boolean isReceived = this.materialTrail.getReceived();
+
+    if (isReceived != null && isReceived) {
+      this.aliquotDeletionValidatorResponse.setReceivedMaterial(Boolean.TRUE);
       this.aliquotDeletionValidatorResponse.setDeletionValidated(Boolean.FALSE);
     }
   }

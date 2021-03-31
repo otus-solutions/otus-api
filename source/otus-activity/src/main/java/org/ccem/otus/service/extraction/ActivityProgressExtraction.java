@@ -27,5 +27,4 @@ public class ActivityProgressExtraction implements Extractable {
   public List<List<Object>> getValues() throws DataNotFoundException {
     return this.recordsFactory.getRecords();
   }
-
 }

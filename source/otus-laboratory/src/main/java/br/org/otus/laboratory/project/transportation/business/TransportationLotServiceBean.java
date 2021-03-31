@@ -5,9 +5,8 @@ import br.org.otus.laboratory.participant.ParticipantLaboratoryDao;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.participant.tube.Tube;
-import br.org.otus.laboratory.project.transportation.MaterialTrail;
-import br.org.otus.laboratory.project.transportation.TransportMaterialCorrelation;
-import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.*;
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportMaterialCorrelationDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
@@ -82,6 +81,8 @@ public class TransportationLotServiceBean implements TransportationLotService {
     List<String> removedMaterialCodes = transportMaterialCorrelation.getRemovedAliquots(currentAliquotCodeList);
     removedMaterialCodes.addAll(transportMaterialCorrelation.getRemovedTubes(currentTubeCodeList));
 
+    areMaterialsReceived(removedMaterialCodes);
+
     List<String> newMaterialCodes = transportMaterialCorrelation.getNewAliquots(currentAliquotCodeList);
     newMaterialCodes.addAll(transportMaterialCorrelation.getNewTubes(currentTubeCodeList));
 
@@ -116,15 +117,51 @@ public class TransportationLotServiceBean implements TransportationLotService {
     }
   }
 
+  public TransportationLot getByCode(String code) throws DataNotFoundException {
+    return transportationLotDao.findByCode(code);
+  }
+
+  public void doesLotHaveReceivedMaterials(String code) throws ValidationException, DataNotFoundException {
+    TransportationLot transportationLot = getByCode(code);
+    TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(transportationLot.getLotId());
+    List<String> materialCodes = new ArrayList<String>();
+    
+    materialCodes.addAll(transportMaterialCorrelation.getAliquotCodeList());
+    materialCodes.addAll(transportMaterialCorrelation.getTubeCodeList());
+
+    areMaterialsReceived(materialCodes);
+  }
+
+  public void areMaterialsReceived(List<String> materialCodes) throws ValidationException, DataNotFoundException {
+    List<String> receivedMaterials = new ArrayList<String>();
+
+    materialCodes.forEach(materialCode -> {
+      MaterialTrail materialTrail = materialTrackingDao.getCurrent(materialCode);
+      Boolean isReceived = materialTrail.getReceived();
+
+      if (isReceived != null && isReceived) {
+        receivedMaterials.add("Lot deletion unauthorized, material " + materialCode + " has been received.");
+      }
+    });
+
+    if (receivedMaterials.size() > 0) {
+      throw new ValidationException(
+        new Throwable("Lot deletion unauthorized, material(s) already received."),
+        receivedMaterials
+      );
+    }
+  }
+
   @Override
-  public List<TransportationLot> list(String locationPointId) {
-    List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoint(locationPointId);
+  public List<TransportationLot> list(String originLocationPointId, String destinationLocationPointId) {
+    List<TransportationLot> transportationLots = transportationLotDao.findByLocationPoints(originLocationPointId, destinationLocationPointId);
     transportationLots.forEach(lot -> {
       TransportMaterialCorrelation transportMaterialCorrelation = transportMaterialCorrelationDao.get(lot.getLotId());
       ArrayList<Aliquot> aliquots = aliquotDao.getAliquots(transportMaterialCorrelation.getAliquotCodeList());
       ArrayList<Tube> tubes = participantLaboratoryDao.getTubes(transportMaterialCorrelation.getTubeCodeList());
       lot.setAliquotList(aliquots);
       lot.setTubeList(tubes);
+      lot.setReceivedMaterials(transportMaterialCorrelation.getReceivedMaterials());
     });
     return transportationLots;
   }
@@ -146,5 +183,26 @@ public class TransportationLotServiceBean implements TransportationLotService {
       materialTrackingDao.activateTrails(TrailsToActivate);
     }
     transportationLotDao.delete(code);
+  }
+
+  @Override
+  public void receiveMaterial(ReceivedMaterial receivedMaterial, String transportationLotId) throws ValidationException {
+    MaterialTrail materialTrail = materialTrackingDao.getTrail(receivedMaterial.getMaterialCode(),new ObjectId(transportationLotId));
+    if (materialTrail.getReceived()){
+      throw new ValidationException(new Throwable("Material already received"));
+    }
+    materialTrackingDao.setReceived(materialTrail);
+    transportMaterialCorrelationDao.pushReceived(receivedMaterial, materialTrail.getTransportationLotId());
+  }
+
+  @Override
+  public List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException {
+    List<TrailHistoryRecord> materialTracking = materialTrackingDao.getMaterialTrackingList(materialCode);
+    return materialTracking;
+  }
+
+  @Override
+  public void receiveLot(String code, TransportationReceipt transportationReceipt) {
+    transportationLotDao.receiveLot(code,transportationReceipt);
   }
 }

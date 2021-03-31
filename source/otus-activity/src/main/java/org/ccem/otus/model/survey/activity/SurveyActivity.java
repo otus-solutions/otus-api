@@ -139,8 +139,7 @@ public class SurveyActivity {
   }
 
   public Boolean isFinalized() {
-    ActivityStatus activityStatus = getCurrentStatus().get();
-    return activityStatus.getName().equals(ActivityStatusOptions.FINALIZED.getName());
+    return currentStatusIs(ActivityStatusOptions.FINALIZED);
   }
 
   public static String serialize(SurveyActivity surveyActivity) {
@@ -180,5 +179,18 @@ public class SurveyActivity {
 
   public void setCategory(ActivityCategory category) {
     this.category = category;
+  }
+
+  public ActivityStatus getCreationStatus(){
+    return this.getStatusHistory().get(0);
+  }
+
+  public boolean couldBeExtracted(){
+    return isFinalized() || currentStatusIs(ActivityStatusOptions.SAVED);
+  }
+
+  private boolean currentStatusIs(ActivityStatusOptions activityStatusOptions){
+    ActivityStatus activityStatus = getCurrentStatus().get();
+    return activityStatus.getName().equals(activityStatusOptions.getName());
   }
 }

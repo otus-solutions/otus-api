@@ -14,11 +14,13 @@ public class TransportMaterialCorrelation {
   private ObjectId _id;
   private ArrayList<String> aliquotCodeList;
   private ArrayList<String> tubeCodeList;
+  private ArrayList<ReceivedMaterial> receivedMaterials;
 
   public TransportMaterialCorrelation(ObjectId transportationLotId, ArrayList<String> aliquotCodeList, ArrayList<String> tubeCodeList) {
     this._id = transportationLotId;
     this.aliquotCodeList = aliquotCodeList;
     this.tubeCodeList = tubeCodeList;
+    this.receivedMaterials = new ArrayList<>();
   }
 
   public ArrayList<String> getAliquotCodeList() {
@@ -88,5 +90,9 @@ public class TransportMaterialCorrelation {
 
   private Boolean isNotContains(List codes,String code){
     return !codes.contains(code);
+  }
+
+  public ArrayList<ReceivedMaterial> getReceivedMaterials() {
+    return receivedMaterials;
   }
 }

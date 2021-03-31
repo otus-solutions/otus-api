@@ -2,6 +2,7 @@ package br.org.otus.laboratory.project.transportation;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.tube.Tube;
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -27,13 +28,19 @@ public class TransportationLot {
   private ArrayList<Tube> tubeList;
   private ArrayList<AliquotInfo> aliquotsInfo;
   private ArrayList<TubeInfo> tubesInfo;
+  private ArrayList<ReceivedMaterial> receivedMaterials;
   private ObjectId originLocationPoint;
   private ObjectId destinationLocationPoint;
   private FieldCenter fieldCenter;
+  private TransportationReceipt transportationReceipt;
+  private boolean isReceived;
 
   public TransportationLot() {
     objectType = "TransportationLot";
+    isReceived = false;
   }
+
+  public void setIsReceived(boolean value) { this.isReceived = value; }
 
   public String getObjectType() {
     return objectType;
@@ -61,6 +68,14 @@ public class TransportationLot {
 
   public String getOperator() {
     return operator;
+  }
+
+  public TransportationReceipt getTransportationReceipt() {
+    return transportationReceipt;
+  }
+
+  public void setTransportationReceipt(TransportationReceipt transportationReceipt) {
+    this.transportationReceipt = transportationReceipt;
   }
 
   public ArrayList<String> getAliquotCodeList() {
@@ -151,5 +166,9 @@ public class TransportationLot {
 
   public void setTubeList(ArrayList<Tube> tubeList) {
     this.tubeList = tubeList;
+  }
+
+  public void setReceivedMaterials(ArrayList<ReceivedMaterial> receivedMaterials) {
+    this.receivedMaterials = receivedMaterials;
   }
 }

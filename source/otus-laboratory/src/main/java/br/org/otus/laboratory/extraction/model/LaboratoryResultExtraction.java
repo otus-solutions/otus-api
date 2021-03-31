@@ -1,5 +1,10 @@
 package br.org.otus.laboratory.extraction.model;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import org.bson.types.ObjectId;
+
+import java.util.List;
+
 public class LaboratoryResultExtraction {
 
   private Long recruitmentNumber;
@@ -11,6 +16,7 @@ public class LaboratoryResultExtraction {
   private String tubeMoment;
   private String tubeCollectionDate;
   private String tubeResponsible;
+  private List<ObjectId> tubeCustomMetadata;
   /* information of aliquot */
   private String aliquotCode;
   private String aliquotName;
@@ -18,6 +24,9 @@ public class LaboratoryResultExtraction {
   private String aliquotProcessingDate;
   private String aliquotRegisterDate;
   private String aliquotResponsible;
+  private String aliquotRole;
+  private Boolean hasTransportationLotId;
+  private Boolean hasExamLotId;
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
@@ -73,5 +82,25 @@ public class LaboratoryResultExtraction {
 
   public Integer getUnattachedLaboratoryId() {
     return unattachedLaboratoryId;
+  }
+
+  public String getAliquotRole() { return aliquotRole; }
+
+  public Boolean getHasTransportationLotId() {
+    if(hasTransportationLotId == null){
+      return false;
+    }
+    return hasTransportationLotId;
+  }
+
+  public Boolean getHasExamLotId() {
+    if(hasExamLotId == null){
+      return false;
+    }
+    return hasExamLotId;
+  }
+
+  public List<ObjectId> getTubeCustomMetadata(){
+    return tubeCustomMetadata;
   }
 }

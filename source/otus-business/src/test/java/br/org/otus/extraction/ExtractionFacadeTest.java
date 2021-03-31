@@ -13,6 +13,7 @@ import br.org.otus.api.ExtractionService;
 import br.org.otus.fileuploader.api.FileUploaderFacade;
 import br.org.otus.gateway.gates.ExtractionGatewayService;
 import br.org.otus.gateway.response.GatewayResponse;
+import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.response.exception.HttpResponseException;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.service.DataSourceService;
@@ -70,6 +71,8 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
   private ExtractionService extractionService;
   @Mock
   private DataSourceService dataSourceService;
+  @Mock
+  private LaboratoryConfigurationService laboratoryConfigurationService;
 
   @Mock
   private LaboratoryExtraction laboratoryExtraction;
@@ -115,69 +118,6 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
     extractionFacade.createActivityExtraction(ACRONYM, VERSION);
   }
 
-
-  @Test
-  public void createExtractionFromPipeline_method_should_return_bytes_array() throws IOException {
-    when(extractionGatewayService.getPipelineExtraction(PIPELINE_NAME)).thenReturn(gatewayResponse);
-    when(gatewayResponse.getData()).thenReturn(BYTES);
-    assertEquals(BYTES, extractionFacade.createExtractionFromPipeline(PIPELINE_NAME));
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void createExtractionFromPipeline_method_should_handle_MalformedURLException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).getPipelineExtraction(PIPELINE_NAME);
-    extractionFacade.createExtractionFromPipeline(PIPELINE_NAME);
-  }
-
-
-  @Test
-  public void createActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
-    extractionFacade.createActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).createActivityExtraction(ACTIVITY_ID);
-    verifyLoggerInfoWasCalled();
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void createActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).createActivityExtraction(ACTIVITY_ID);
-    extractionFacade.createActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
-
-  @Test
-  public void updateActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
-    extractionFacade.updateActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).updateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerInfoWasCalled();
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void updateActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).updateActivityExtraction(ACTIVITY_ID);
-    extractionFacade.updateActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
-
-  @Test
-  public void deleteActivityExtraction_method_should_call_same_method_from_ExtractionGatewayService() throws IOException {
-    doNothing().when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
-    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
-    verify(extractionGatewayService, Mockito.times(1)).deleteActivityExtraction(ACTIVITY_ID);
-    verifyLoggerInfoWasCalled();
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void deleteActivityExtraction_method_should_handle_IOException() throws IOException {
-    doThrow(new MalformedURLException()).when(extractionGatewayService).deleteActivityExtraction(ACTIVITY_ID);
-    extractionFacade.deleteActivityExtraction(ACTIVITY_ID);
-    verifyLoggerSevereWasCalled();
-  }
-
-
   @Test
   public void listSurveyVersions_method_should_call_listVersions_from_surveyFacade() {
     extractionFacade.listSurveyVersions(ACRONYM);
@@ -211,42 +151,4 @@ public class ExtractionFacadeTest extends LoggerTestsParent {
     doThrow(new DataNotFoundException()).when(extractionService).createExtraction(laboratoryExtraction);
     extractionFacade.createLaboratoryExtraction();
   }
-
-
-  @Test
-  public void createAttachmentsReportExtraction_method_should_call_getAttachmentsReport_from_extractionService() throws DataNotFoundException {
-    extractionFacade.createAttachmentsReportExtraction(ACRONYM, VERSION);
-    Mockito.verify(extractionService).getAttachmentsReport(ACRONYM, VERSION);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void createAttachmentsReportExtraction_method_should_handle_DataNotFoundException() throws DataNotFoundException {
-    doThrow(new DataNotFoundException()).when(extractionService).getAttachmentsReport(ACRONYM, VERSION);
-    extractionFacade.createAttachmentsReportExtraction(ACRONYM, VERSION);
-  }
-
-
-  @Test
-  public void createActivityProgressExtraction_method_should_call_methods_expected() throws DataNotFoundException {
-    extractionFacade.createActivityProgressExtraction(CENTER);
-    Mockito.verify(activityFacade, Mockito.times(1)).getActivityProgressExtraction(CENTER);
-    Mockito.verify(extractionService, Mockito.times(1)).createExtraction(activityProgressExtraction);
-  }
-
-  @Test(expected = HttpResponseException.class)
-  public void createActivityProgressExtraction_method_should_handle_DataNotFoundException() throws DataNotFoundException {
-    doThrow(new DataNotFoundException()).when(extractionService).createExtraction(activityProgressExtraction);
-    extractionFacade.createActivityProgressExtraction(CENTER);
-  }
-
-
-  @Test
-  public void downloadFiles_method_should_call_fileUploaderFacade_downloadFiles_method(){
-    ArrayList<String> oids = new ArrayList<>();
-    when(fileUploaderFacade.downloadFiles(oids)).thenReturn(BYTES);
-    byte[] result = extractionFacade.downloadFiles(oids);
-    verify(fileUploaderFacade, Mockito.times(1)).downloadFiles(oids);
-    assertEquals(BYTES, result);
-  }
-
 }

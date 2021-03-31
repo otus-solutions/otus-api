@@ -1,8 +1,10 @@
 package br.org.otus.laboratory.project.transportation.persistence;
 
 import br.org.otus.laboratory.project.transportation.MaterialTrail;
+import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +33,11 @@ public interface MaterialTrackingDao {
 
   void insert(MaterialTrail materialTrail);
 
+  void setReceived(MaterialTrail materialTrail);
+
   List<String> verifyIfAliquotsAreInOrigin(List<String> aliquotsOfLocationPoint, String locationPointId);
+
+  List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException;
+
+  MaterialTrail getTrail(String materialCode, ObjectId transportationLotId);
 }

@@ -26,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import br.org.otus.laboratory.project.exam.examLot.persistence.ExamLotDao;
 import br.org.otus.laboratory.project.exam.examUploader.persistence.ExamUploader;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationLotDao;
+import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import org.powermock.reflect.Whitebox;
 
 
@@ -49,6 +50,8 @@ public class AliquotDeletionValidatorTest {
   private TransportationLot transportationLot;
   @Mock
   private ExamLot examLot;
+  @Mock
+  private MaterialTrail materialTrail;
 
   private static final String ALIQUOT_CODE = "354005002";
   private static final String LOT_CODE = "300000624";
@@ -62,7 +65,7 @@ public class AliquotDeletionValidatorTest {
   public void setup() throws DataNotFoundException {
     aliquot = Aliquot.deserialize("{code:300000624 }");
     when(aliquotDao.find(ALIQUOT_CODE)).thenReturn(aliquot);
-    aliquotDeletionValidator = PowerMockito.spy(new AliquotDeletionValidator(ALIQUOT_CODE, aliquotDao, examUploader, examLotDao, transportationLotDao));
+    aliquotDeletionValidator = PowerMockito.spy(new AliquotDeletionValidator(ALIQUOT_CODE, aliquotDao, examUploader, examLotDao, transportationLotDao, materialTrail));
   }
 
   @Test
@@ -84,6 +87,13 @@ public class AliquotDeletionValidatorTest {
     aliquotDeletionValidator.validate();
 
     PowerMockito.verifyPrivate(aliquotDeletionValidator).invoke("aliquotInExamResult");
+  }
+
+  @Test
+  public void validate_should_call_method_aliquotInReceivedMaterials() throws Exception {
+    aliquotDeletionValidator.validate();
+
+    PowerMockito.verifyPrivate(aliquotDeletionValidator).invoke("aliquotInReceivedMaterials");
   }
 
   @Test
@@ -126,8 +136,21 @@ public class AliquotDeletionValidatorTest {
   }
 
   @Test
-  public void validate_should_return_validationException_when_contains_aliquot_in_exam_result() throws ValidationException, DataNotFoundException {
+  public void validate_should_return_validationException_when_contains_aliquot_in_exam_result()
+      throws ValidationException, DataNotFoundException {
     when(examUploader.checkIfThereInExamResultLot(ALIQUOT_CODE)).thenReturn(Boolean.TRUE);
+
+    try {
+      aliquotDeletionValidator.validate();
+      fail();
+    } catch (ValidationException expected) {
+      assertThat(expected.getMessage(), CoreMatchers.containsString(EXCEPTION_MESSAGE));
+    }
+  }
+
+  @Test
+  public void validate_should_return_validationException_when_contains_materials_already_received() throws ValidationException, DataNotFoundException {
+    when(materialTrail.getReceived()).thenReturn(Boolean.TRUE);
 
     try {
       aliquotDeletionValidator.validate();

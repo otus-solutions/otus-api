@@ -5,16 +5,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
 import br.org.otus.laboratory.extraction.model.LaboratoryRecordExtraction;
 
 public class LaboratoryExtractionRecordsFactory {
 
-  private LinkedList<LaboratoryRecordExtraction> inputRecords;
-  private List<List<Object>> outputRecords;
+  private final LinkedList<LaboratoryRecordExtraction> inputRecords;
+  private final List<List<Object>> outputRecords;
+  private final List<TubeCustomMetadata> customMetadata;
 
-  public LaboratoryExtractionRecordsFactory(LinkedList<LaboratoryRecordExtraction> records) {
+  public LaboratoryExtractionRecordsFactory(LinkedList<LaboratoryRecordExtraction> records, List<TubeCustomMetadata> customMetadata) {
     this.inputRecords = records;
     this.outputRecords = new LinkedList<>();
+    this.customMetadata = customMetadata;
   }
 
   public List<List<Object>> getRecords() {
@@ -55,6 +58,18 @@ public class LaboratoryExtractionRecordsFactory {
         answers.add(result.getAliquotProcessingDate());
         answers.add(result.getAliquotRegisterDate());
         answers.add(result.getAliquotResponsible());
+        answers.add(result.getAliquotRole());
+        answers.add(result.getHasTransportationLotId().toString());
+        answers.add(result.getHasExamLotId().toString());
+
+        customMetadata.forEach(customMetadata -> {
+          boolean contains = result.getTubeCustomMetadata().contains(customMetadata.getId());
+          if (contains) {
+            answers.add("true");
+          } else {
+            answers.add("false");
+          }
+        });
 
         this.outputRecords.add(new ArrayList<>(answers));
       });

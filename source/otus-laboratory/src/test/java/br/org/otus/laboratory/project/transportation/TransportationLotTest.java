@@ -1,6 +1,7 @@
 package br.org.otus.laboratory.project.transportation;
 
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.FieldCenter;
 import org.junit.Assert;
@@ -36,6 +37,7 @@ public class TransportationLotTest {
   @Mock
   private FieldCenter fieldCenter;
   private ArrayList<Aliquot> aliquotList = new ArrayList<>();
+  private TransportationReceipt transportationReceipt = new TransportationReceipt();
   private ObjectId objectId;
 
   @Before
@@ -50,6 +52,7 @@ public class TransportationLotTest {
     transportationLot.setCenter(fieldCenter);
     setInternalState(transportationLot, "shipmentDate", LocalDateTime.parse(DATE));
     setInternalState(transportationLot, "processingDate", LocalDateTime.parse(DATE));
+    setInternalState(transportationLot, "transportationReceipt", transportationReceipt);
   }
 
   @Test
@@ -62,6 +65,7 @@ public class TransportationLotTest {
     assertEquals(USER_MAIL, transportationLot.getOperator());
     assertEquals(LocalDateTime.parse(DATE), transportationLot.getShipmentDate());
     assertEquals(LocalDateTime.parse(DATE), transportationLot.getProcessingDate());
+    assertEquals(transportationReceipt, transportationLot.getTransportationReceipt());
   }
 
   @Test

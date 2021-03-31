@@ -24,6 +24,7 @@ import org.ccem.otus.service.configuration.ActivityCategoryService;
 import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import service.StageService;
 
+import javax.ejb.EJBException;
 import javax.inject.Inject;
 import java.text.ParseException;
 import java.util.*;
@@ -138,6 +139,8 @@ public class ActivityFacade {
       return activityTasksService.updateActivity(surveyActivity, token);
     } catch (DataNotFoundException | ParseException e) {
       throw new HttpResponseException(Validation.build(e.getMessage(), e.getCause()));
+    } catch (EJBException e) {
+      throw new HttpResponseException(Validation.build("Connection error", e.getCause()));
     }
   }
 
@@ -244,6 +247,14 @@ public class ActivityFacade {
       activityTasksService.discardById(activityId);
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(Validation.build(e.getCause().getMessage()));
+    }
+  }
+
+  public List<ObjectId> getActivityIds(String acronym, Integer version, Boolean isDiscardedValue, List<String> activityIdsToExcludeOfQuery) {
+    try {
+      return activityService.getActivityIds(acronym, version, isDiscardedValue, activityIdsToExcludeOfQuery);
+    } catch (MemoryExcededException e) {
+      throw new HttpResponseException(Validation.build(e.getMessage()));
     }
   }
 }

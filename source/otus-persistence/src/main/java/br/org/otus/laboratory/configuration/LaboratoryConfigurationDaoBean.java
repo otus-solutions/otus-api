@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
-import com.mongodb.client.AggregateIterable;
+import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
@@ -224,5 +225,62 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     }
 
     return tubeCustomMetadata;
+  }
+
+  @Override
+  public List<TubeCustomMetadata> getTubeCustomMedataData() {
+
+    Document query = new Document(OBJECT_TYPE_PATH, TubeCustomMetadata.OBJECT_TYPE);
+
+    FindIterable<Document> results = collection.find(query);
+
+    List<TubeCustomMetadata> tubeCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      tubeCustomMetadata.add(TubeCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return tubeCustomMetadata;
+  }
+
+  @Override
+  public List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException {
+
+    Document query = new Document(OBJECT_TYPE_PATH, LotReceiptCustomMetadata.OBJECT_TYPE);
+
+    FindIterable<Document> results = collection.find(query);
+    if(results == null){
+      throw new DataNotFoundException("No lot receipt custom metadata was found.");
+    }
+
+    List<LotReceiptCustomMetadata> lotReceiptCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      lotReceiptCustomMetadata.add(LotReceiptCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return lotReceiptCustomMetadata;
+  }
+
+  @Override
+  public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadata(String materialType) throws DataNotFoundException {
+
+    Document query = new Document(OBJECT_TYPE_PATH, MaterialReceiptCustomMetadata.OBJECT_TYPE).append("type",materialType);
+
+    FindIterable<Document> results = collection.find(query);
+    if(results == null){
+      throw new DataNotFoundException("No lot receipt custom metadata was found.");
+    }
+
+    List<MaterialReceiptCustomMetadata> materialReceiptCustomMetadata = new ArrayList<>();
+
+    MongoCursor<Document> iterator = results.iterator();
+    while(iterator.hasNext()){
+      materialReceiptCustomMetadata.add(MaterialReceiptCustomMetadata.deserialize(iterator.next().toJson()));
+    }
+
+    return materialReceiptCustomMetadata;
   }
 }

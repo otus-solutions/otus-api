@@ -3,6 +3,7 @@ package br.org.otus.laboratory.project.transportation.persistence;
 import java.util.HashSet;
 import java.util.List;
 
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
@@ -15,7 +16,7 @@ public interface TransportationLotDao {
 
   TransportationLot update(TransportationLot transportationLot) throws DataNotFoundException;
 
-  List<TransportationLot> findByLocationPoint(String locationPointId);
+  List<TransportationLot> findByLocationPoints(String originLocationPointId, String destinationLocationPointId);
 
   void delete(String id) throws DataNotFoundException;
 
@@ -28,4 +29,6 @@ public interface TransportationLotDao {
   TransportationLot find(ObjectId transportationLotId) throws DataNotFoundException;
 
   Integer getLastTransportationLotCode();
+
+  void receiveLot(String code, TransportationReceipt transportationReceipt);
 }
