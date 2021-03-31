@@ -16,6 +16,7 @@ public class ParticipantExamUploadRecordExtractionTest {
   private static final String RESULT_NAME = "1000330";
   private static final String VALUE = "1000330";
   private static final String RELEASE_DATE = "1000330";
+  private static final String REALIZATION_DATE = "1000330";
   private List<Observation> observations;
   private static final Long RECRUITMENT_NUMBER = 1000330L;
   private ParticipantExamUploadRecordExtraction participantExamUploadRecordExtraction;
@@ -48,6 +49,7 @@ public class ParticipantExamUploadRecordExtractionTest {
     Whitebox.setInternalState(result, "resultName", RESULT_NAME);
     Whitebox.setInternalState(result, "value", VALUE);
     Whitebox.setInternalState(result, "releaseDate", RELEASE_DATE);
+    Whitebox.setInternalState(result, "realizationDate", REALIZATION_DATE);
     Whitebox.setInternalState(result, "observations", observations);
     results.add(result);
 
