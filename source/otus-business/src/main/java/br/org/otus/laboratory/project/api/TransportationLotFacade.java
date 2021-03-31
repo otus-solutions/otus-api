@@ -13,6 +13,7 @@ import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
 import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import br.org.otus.model.User;
 import br.org.otus.persistence.UserDao;
@@ -139,6 +140,10 @@ public class TransportationLotFacade {
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
     }
+  }
+
+  public void receiveLot(String code, TransportationReceipt transportationReceipt) {
+    transportationLotService.receiveLot(code, transportationReceipt);
   }
 }
 

@@ -88,16 +88,8 @@ public class TransportationResource {
   @Secured
   @Path("/lot/receipt/{code}")
   public String updateLotReceipt(@Context HttpServletRequest request, @PathParam("code") String code, String transportationReceiptJson) throws DataNotFoundException {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-
-    TransportationLot transportationLot = transportationLotFacade.getLotByCode(code);
-
-    transportationLot.setTransportationReceipt(TransportationReceipt.deserialize(transportationReceiptJson));
-    transportationLot.setIsReceived(true);
-    TransportationLot updatedLot = transportationLotFacade.update(transportationLot, userEmail);
-
-    return new Response().buildSuccess(TransportationLot.serialize(updatedLot)).toJson();
+    transportationLotFacade.receiveLot(code, TransportationReceipt.deserialize(transportationReceiptJson));
+    return new Response().buildSuccess().toJson();
   }
 
   @DELETE

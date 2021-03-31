@@ -38,4 +38,6 @@ public interface MaterialTrackingDao {
   List<String> verifyIfAliquotsAreInOrigin(List<String> aliquotsOfLocationPoint, String locationPointId);
 
   List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException;
+
+  MaterialTrail getTrail(String materialCode, ObjectId transportationLotId);
 }

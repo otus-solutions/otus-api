@@ -6,11 +6,9 @@ import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -178,5 +176,17 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
         }
 
         return materialTracking;
+    }
+
+    @Override
+    public MaterialTrail getTrail(String materialCode, ObjectId transportationLotId) {
+        MaterialTrail materialTrail = null;
+        Document currentMaterialLocation = super.collection.find(new Document("materialCode", materialCode).append("transportationLotId", transportationLotId)).first();
+
+        if (currentMaterialLocation != null) {
+            materialTrail = MaterialTrail.deserialize(currentMaterialLocation.toJson());
+        }
+
+        return materialTrail;
     }
 }
