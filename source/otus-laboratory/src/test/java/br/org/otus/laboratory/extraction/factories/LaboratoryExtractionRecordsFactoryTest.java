@@ -29,6 +29,9 @@ public class LaboratoryExtractionRecordsFactoryTest {
   private static final String ALIQUOT_PROCESSING_DATE = "2018-05-22T18:54:09.189Z";
   private static final String ALIQUOT_REGISTER_DATE = "2018-05-22T18:55:06.028Z";
   private static final String ALIQUOT_RESPONSIBLE = "diogo.rosas.ferreira@gmail.com";
+  private static final String ALIQUOT_ROLE = "EXAM";
+  private static final Boolean ALIQUOT_HAS_TRANSPORTATION_LOT_ID = true;
+  private static final Boolean ALIQUOT_HAS_EXAM_LOT_ID = false;
 
   private LinkedList<LaboratoryRecordExtraction> records;
   private LaboratoryExtractionRecordsFactory laboratoryExtractionRecordsFactory;
@@ -70,6 +73,9 @@ public class LaboratoryExtractionRecordsFactoryTest {
     Assert.assertTrue(results.contains(ALIQUOT_PROCESSING_DATE));
     Assert.assertTrue(results.contains(ALIQUOT_REGISTER_DATE));
     Assert.assertTrue(results.contains(ALIQUOT_RESPONSIBLE));
+    Assert.assertTrue(results.contains(ALIQUOT_ROLE));
+    Assert.assertTrue(results.contains(ALIQUOT_HAS_TRANSPORTATION_LOT_ID.toString()));
+    Assert.assertTrue(results.contains(ALIQUOT_HAS_EXAM_LOT_ID.toString()));
   }
 
   @Test
@@ -93,6 +99,9 @@ public class LaboratoryExtractionRecordsFactoryTest {
     Assert.assertEquals(ALIQUOT_PROCESSING_DATE, results.get(11));
     Assert.assertEquals(ALIQUOT_REGISTER_DATE, results.get(12));
     Assert.assertEquals(ALIQUOT_RESPONSIBLE, results.get(13));
+    Assert.assertEquals(ALIQUOT_ROLE, results.get(14));
+    Assert.assertEquals(ALIQUOT_HAS_TRANSPORTATION_LOT_ID.toString(), results.get(15));
+    Assert.assertEquals(ALIQUOT_HAS_EXAM_LOT_ID.toString(), results.get(16));
   }
 
   private LaboratoryRecordExtraction createFakeLaboratoryRecordExtraction() {
@@ -113,6 +122,9 @@ public class LaboratoryExtractionRecordsFactoryTest {
     Whitebox.setInternalState(result, "aliquotProcessingDate", ALIQUOT_PROCESSING_DATE);
     Whitebox.setInternalState(result, "aliquotRegisterDate", ALIQUOT_REGISTER_DATE);
     Whitebox.setInternalState(result, "aliquotResponsible", ALIQUOT_RESPONSIBLE);
+    Whitebox.setInternalState(result, "aliquotRole", ALIQUOT_ROLE);
+    Whitebox.setInternalState(result, "hasTransportationLotId", ALIQUOT_HAS_TRANSPORTATION_LOT_ID);
+    Whitebox.setInternalState(result, "hasExamLotId", ALIQUOT_HAS_EXAM_LOT_ID);
 
     results.add(result);
 

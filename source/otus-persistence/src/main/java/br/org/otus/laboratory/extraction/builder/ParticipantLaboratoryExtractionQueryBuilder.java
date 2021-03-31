@@ -246,4 +246,5 @@ public class ParticipantLaboratoryExtractionQueryBuilder {
     GsonBuilder gsonBuilder = new GsonBuilder();
     return gsonBuilder.create().fromJson(query, Document.class);
   }
+
 }

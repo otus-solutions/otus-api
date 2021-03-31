@@ -54,12 +54,10 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
   @Override
   public List<DataSource> find() {
     ArrayList<DataSource> dataSources = new ArrayList<DataSource>();
-
     FindIterable<Document> result = collection.find();
     result.forEach((Block<Document>) document -> {
       dataSources.add(DataSource.deserialize(document.toJson()));
     });
-
     return dataSources;
   }
 
@@ -95,6 +93,17 @@ public class DataSourceDaoBean extends MongoGenericDao<Document> implements Data
       dataSourceValuesMapping = DataSourceValuesMapping.deserialize(output.toJson());
     }
     return dataSourceValuesMapping;
+  }
+
+  @Override
+  public List<DataSource> find(List<String> datasourceIds) {
+    List<DataSource> dataSources = new ArrayList<>();
+    Document query = new Document("id", new Document("$in", datasourceIds));
+    FindIterable<Document> result = collection.find(query);
+    result.forEach((Block<Document>) document -> {
+      dataSources.add(DataSource.deserialize(document.toJson()));
+    });
+    return dataSources;
   }
 
   private Bson parseQuery(String stage) {

@@ -7,6 +7,10 @@ public class HttpResponseException extends RuntimeException {
     this.responseInfo = responseInfo;
   }
 
+  public String getMessage() {
+    return this.responseInfo.MESSAGE;
+  }
+
   public ResponseInfo getResponseInfo() {
     return responseInfo;
   }

@@ -17,6 +17,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.org.otus.laboratory.extraction.enums.LaboratoryExtractionHeaders;
 
+@RunWith(PowerMockRunner.class)
 public class LaboratoryExtractionHeadersFactoryTest {
 
   @InjectMocks
@@ -54,6 +55,9 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue()));
     Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_HAS_TRANSPORTATION_LOT_ID.getValue()));
+    Assert.assertTrue(headers.contains(LaboratoryExtractionHeaders.ALIQUOT_HAS_EXAM_LOT_ID.getValue()));
   }
 
   @Test
@@ -77,6 +81,9 @@ public class LaboratoryExtractionHeadersFactoryTest {
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_PROCESSING_DATE.getValue(), headers.get(11));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_REGISTER_DATE.getValue(), headers.get(12));
     Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_RESPONSIBLE.getValue(), headers.get(13));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_ROLE.getValue(), headers.get(14));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_HAS_TRANSPORTATION_LOT_ID.getValue(), headers.get(15));
+    Assert.assertEquals(LaboratoryExtractionHeaders.ALIQUOT_HAS_EXAM_LOT_ID.getValue(), headers.get(16));
   }
 
 }

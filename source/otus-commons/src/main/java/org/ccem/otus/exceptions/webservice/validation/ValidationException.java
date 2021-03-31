@@ -5,6 +5,10 @@ public class ValidationException extends Exception {
   private static final long serialVersionUID = 1L;
   private Object data;
 
+  public ValidationException(String message) {
+    super(message);
+  }
+
   public ValidationException(Throwable cause) {
     super(cause);
   }

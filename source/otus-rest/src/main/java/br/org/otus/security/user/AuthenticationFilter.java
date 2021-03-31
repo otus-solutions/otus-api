@@ -48,7 +48,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
           break;
 
         case ACTIVITY_SHARING:
-          securityFacade.validateActivitySharingToken(AuthorizationHeaderReader.readToken(authorizationHeader));
+          String activityId = containerRequestContext.getUriInfo().getPathParameters().getFirst("id");
+          securityFacade.validateActivitySharingToken(AuthorizationHeaderReader.readToken(authorizationHeader), activityId);
           break;
 
         default:
