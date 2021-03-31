@@ -24,6 +24,9 @@ public class LaboratoryResultExtraction {
   private String aliquotProcessingDate;
   private String aliquotRegisterDate;
   private String aliquotResponsible;
+  private String aliquotRole;
+  private Boolean hasTransportationLotId;
+  private Boolean hasExamLotId;
 
   public Long getRecruitmentNumber() {
     return recruitmentNumber;
@@ -79,6 +82,22 @@ public class LaboratoryResultExtraction {
 
   public Integer getUnattachedLaboratoryId() {
     return unattachedLaboratoryId;
+  }
+
+  public String getAliquotRole() { return aliquotRole; }
+
+  public Boolean getHasTransportationLotId() {
+    if(hasTransportationLotId == null){
+      return false;
+    }
+    return hasTransportationLotId;
+  }
+
+  public Boolean getHasExamLotId() {
+    if(hasExamLotId == null){
+      return false;
+    }
+    return hasExamLotId;
   }
 
   public List<ObjectId> getTubeCustomMetadata(){

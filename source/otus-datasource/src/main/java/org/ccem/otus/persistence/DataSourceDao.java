@@ -20,4 +20,6 @@ public interface DataSourceDao {
   DataSource findByID(String id) throws DataNotFoundException;
 
   DataSourceValuesMapping getDataSourceMapping();
+
+  List<DataSource> find(List<String> datasourceNames);
 }

@@ -69,6 +69,7 @@ public class ParticipantQueryBuilder {
       "            endereco_principal_cidade:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.city\",0]}, \"\" ] }," +
       "            endereco_principal_uf:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.state\",0]}, \"\" ] }," +
       "            endereco_principal_pais:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.country\",0]}, \"\" ] }," +
+      "            endereco_principal_setor_censitario:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.value.census\",0]}, \"\" ] }," +
       "            endereco_principal_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.main.observation\",0]}, \"\" ] }," +
       "            segundo_endereco_cep:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.postalCode\",0]}, \"\" ] }," +
       "            segundo_endereco_rua:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.street\",0]}, \"\" ] }," +
@@ -78,6 +79,7 @@ public class ParticipantQueryBuilder {
       "            segundo_endereco_cidade:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.city\",0]}, \"\" ] }," +
       "            segundo_endereco_uf:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.state\",0]}, \"\" ] }," +
       "            segundo_endereco_pais:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.country\",0]}, \"\" ] }," +
+      "            segundo_endereco_setor_censitario:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.value.census\",0]}, \"\" ] }," +
       "            segundo_endereco_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.second.observation\",0]}, \"\" ] }," +
       "            terceiro_endereco_cep:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.value.postalCode\",0]}, \"\" ] }," +
       "            terceiro_endereco_rua:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.value.street\",0]}, \"\" ] }," +
@@ -87,6 +89,7 @@ public class ParticipantQueryBuilder {
       "            terceiro_endereco_cidade:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.value.city\",0]}, \"\" ] }," +
       "            terceiro_endereco_uf:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.value.state\",0]}, \"\" ] }," +
       "            terceiro_endereco_pais:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.value.country\",0]}, \"\" ] }," +
+      "            terceiro_endereco_setor_censitario:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.value.census\",0]}, \"\" ] }," +
       "            terceiro_endereco_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.third.observation\",0]}, \"\" ] }," +
       "            quarto_endereco_cep:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.value.postalCode\",0]}, \"\" ] }," +
       "            quarto_endereco_rua:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.value.street\",0]}, \"\" ] }," +
@@ -96,6 +99,7 @@ public class ParticipantQueryBuilder {
       "            quarto_endereco_cidade:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.value.city\",0]}, \"\" ] }," +
       "            quarto_endereco_uf:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.value.state\",0]}, \"\" ] }," +
       "            quarto_endereco_pais:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.value.country\",0]}, \"\" ] }," +
+      "            quarto_endereco_setor_censitario:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.value.census\",0]}, \"\" ] }," +
       "            quarto_endereco_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fourth.observation\",0]}, \"\" ] }," +
       "            quinto_endereco_cep:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.value.postalCode\",0]}, \"\" ] }," +
       "            quinto_endereco_rua:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.value.street\",0]}, \"\" ] }," +
@@ -105,6 +109,7 @@ public class ParticipantQueryBuilder {
       "            quinto_endereco_cidade:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.value.city\",0]}, \"\" ] }," +
       "            quinto_endereco_uf:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.value.state\",0]}, \"\" ] }," +
       "            quinto_endereco_pais:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.value.country\",0]}, \"\" ] }," +
+      "            quinto_endereco_setor_censitario:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.value.census\",0]}, \"\" ] }," +
       "            quinto_endereco_observacao:{ $ifNull: [ {$arrayElemAt:[\"$CT.address.fifth.observation\",0]}, \"\" ] }" +
       "        }" +
       "    }"));
@@ -153,6 +158,7 @@ public class ParticipantQueryBuilder {
             "        \"mainAddressCity\": \"$endereco_principal_cidade\",\n" +
             "        \"mainAddressUf\": \"$endereco_principal_uf\",\n" +
             "        \"mainAddressCountry\": \"$endereco_principal_pais\",\n" +
+            "        \"mainAddressCensus\": \"$endereco_principal_setor_censitario\",\n" +
             "        \"mainAddressObservation\": \"$endereco_principal_observacao\",\n" +
             "        \"secondAddressCep\": \"$segundo_endereco_cep\",\n" +
             "        \"secondAddressStreet\": \"$segundo_endereco_rua\",\n" +
@@ -162,6 +168,7 @@ public class ParticipantQueryBuilder {
             "        \"secondAddressCity\": \"$segundo_endereco_cidade\",\n" +
             "        \"secondAddressUf\": \"$segundo_endereco_uf\",\n" +
             "        \"secondAddressCountry\": \"$segundo_endereco_pais\",\n" +
+            "        \"secondAddressCensus\": \"$segundo_endereco_setor_censitario\",\n" +
             "        \"secondAddressObservation\": \"$segundo_endereco_observacao\",\n" +
             "        \"thirdAddressCep\": \"$terceiro_endereco_cep\",\n" +
             "        \"thirdAddressStreet\": \"$terceiro_endereco_rua\",\n" +
@@ -171,6 +178,7 @@ public class ParticipantQueryBuilder {
             "        \"thirdAddressCity\": \"$terceiro_endereco_cidade\",\n" +
             "        \"thirdAddressUf\": \"$terceiro_endereco_uf\",\n" +
             "        \"thirdAddressCountry\":\"$terceiro_endereco_pais\",\n" +
+            "        \"thirdAddressCensus\":\"$terceiro_endereco_setor_censitario\",\n" +
             "        \"thirdAddressObservation\":\"$terceiro_endereco_observacao\",\n" +
             "        \"fourthAddressCep\":\"$quarto_endereco_cep\",\n" +
             "        \"fourthAddressStreet\":\"$quarto_endereco_rua\",\n" +
@@ -180,6 +188,7 @@ public class ParticipantQueryBuilder {
             "        \"fourthAddressCity\":\"$quarto_endereco_cidade\",\n" +
             "        \"fourthAddressUf\":\"$quarto_endereco_uf\",\n" +
             "        \"fourthAddressCountry\":\"$quarto_endereco_pais\",\n" +
+            "        \"fourthAddressCensus\":\"$quarto_endereco_setor_censitario\",\n" +
             "        \"fourthAddressObservation\":\"$quarto_endereco_observacao\",\n" +
             "        \"fifthAddressCep\": \"$quinto_endereco_cep\",\n" +
             "        \"fifthAddressStreet\": \"$quinto_endereco_rua\",\n" +
@@ -189,6 +198,7 @@ public class ParticipantQueryBuilder {
             "        \"fifthAddressCity\": \"$quinto_endereco_cidade\",\n" +
             "        \"fifthAddressUf\": \"$quinto_endereco_uf\",\n" +
             "        \"fifthAddressCountry\": \"$quinto_endereco_pais\",\n" +
+            "        \"fifthAddressCensus\": \"$quinto_endereco_setor_censitario\",\n" +
             "        \"fifthAddressObservation\": \"$quinto_endereco_observacao\"\n" +
             "      }\n" +
             "    }\n" +

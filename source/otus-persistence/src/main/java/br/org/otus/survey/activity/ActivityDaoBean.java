@@ -347,6 +347,28 @@ public class ActivityDaoBean extends MongoGenericDao<Document> implements Activi
     }
   }
 
+  @Override
+  public List<ObjectId> getActivityIds(String acronym, Integer version, Boolean isDiscardedValue,
+                                             List<String> activityIdsToExcludeOfQuery) throws MemoryExcededException {
+
+    ArrayList<ObjectId> activities = new ArrayList<>();
+
+    ArrayList<Bson> pipeline = SurveyActivityQueryBuilder.getActivityIdsQuery(acronym, version, isDiscardedValue, activityIdsToExcludeOfQuery);
+    AggregateIterable<Document> results = collection.aggregate(pipeline).allowDiskUse(true);
+    MongoCursor<Document> iterator = results.iterator();
+
+    while (iterator.hasNext()) {
+      try {
+        activities.add(SurveyActivity.deserialize(iterator.next().toJson()).getActivityID());
+      } catch (OutOfMemoryError e) {
+        activities.clear();
+        throw new MemoryExcededException(String.format("Extraction { %s, version %ld } exceeded memory used.", acronym, version));
+      }
+    }
+
+    return activities;
+  }
+
   private void removeOids(Document parsedActivity) {
     parsedActivity.remove("_id");
     ((Document) parsedActivity.get("surveyForm")).remove("_id"); //todo: remove when this id becomes standard

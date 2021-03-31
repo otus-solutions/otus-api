@@ -48,6 +48,7 @@ public class ActivityFacadeTest {
   private static final String CHECKER_UPDATED = "{\"id\":\"5c0e5d41e69a69006430cb75\",\"activityStatus\":{\"objectType\":\"ActivityStatus\",\"name\":\"INITIALIZED_OFFLINE\",\"date\":\"2018-12-10T12:33:29.007Z\",\"user\":{\"name\":\"Otus\",\"surname\":\"Solutions\",\"extraction\":true,\"extractionIps\":[\"999.99.999.99\"],\"phone\":\"21987654321\",\"fieldCenter\":{},\"email\":\"otus@gmail.com\",\"admin\":false,\"enable\":true,\"meta\":{\"revision\":0,\"created\":0,\"version\":0},\"$loki\":2}}}";
   private static final String CENTER = "RS";
   private static final boolean NOTIFY = false;
+  private static final Boolean IS_DISCARDED_VALUE = false;
 
   @InjectMocks
   private ActivityFacade activityFacade;
@@ -281,5 +282,19 @@ public class ActivityFacadeTest {
   public void discardById_method_should_handle_DataNotFoundException() throws Exception {
     PowerMockito.doThrow(new DataNotFoundException("")).when(activityTasksService, "discardById", ACTIVITY_ID);
     activityFacade.discardByID(ACTIVITY_ID);
+  }
+
+  @Test
+  public void getActivityIds_method_should_invoke_ActivityService_getActivityIds() throws MemoryExcededException {
+    List<String> activityIdsToExcludeOfQuery = new ArrayList<>();
+    activityFacade.getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, activityIdsToExcludeOfQuery);
+    verify(activityService, Mockito.times(1)).getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, activityIdsToExcludeOfQuery);
+  }
+
+  @Test(expected = HttpResponseException.class)
+  public void getActivityIds_method_should_handle_MemoryExceededException() throws Exception {
+    List<String> activityIdsToExcludeOfQuery = new ArrayList<>();
+    PowerMockito.doThrow(new MemoryExcededException("")).when(activityService, "getActivityIds", ACRONYM, VERSION, IS_DISCARDED_VALUE, activityIdsToExcludeOfQuery);
+    activityFacade.getActivityIds(ACRONYM, VERSION, IS_DISCARDED_VALUE, activityIdsToExcludeOfQuery);
   }
 }

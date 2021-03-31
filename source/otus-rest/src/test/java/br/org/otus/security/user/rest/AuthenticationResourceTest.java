@@ -51,7 +51,7 @@ public class AuthenticationResourceTest {
   private ProjectAuthenticationDto projectAuthenticationDto;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     mockStatic(EncryptorResources.class);
     authenticationDto = new AuthenticationDto();
     authenticationDto.setEmail(AUTHENTICATION_DTO_EMAIL);
@@ -77,8 +77,7 @@ public class AuthenticationResourceTest {
   }
 
   @Test
-  public void method_projectAuthenticate_should_return_response_JWT()
-    throws TokenException, AuthenticationException, JOSEException {
+  public void method_projectAuthenticate_should_return_response_JWT() {
     String responseJWTExpected = response.buildSuccess(JWT).toJson();
     when(securityFacade.projectAuthentication(projectAuthenticationDto, request.getRemoteAddr().toString()))
       .thenReturn(JWT);
