@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import com.mongodb.client.model.Variable;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -77,6 +78,12 @@ public class TransportationLotDaoBean extends MongoGenericDao<Document> implemen
       newLotCode = Integer.parseInt(document.get("code").toString());
     }
     return newLotCode;
+  }
+
+  @Override
+  public void receiveLot(String code, TransportationReceipt transportationReceipt) {
+    Document parsed = Document.parse(TransportationReceipt.serialize(transportationReceipt));
+    collection.updateOne(eq("code", code),new Document("$set",new Document("transportationReceipt",parsed).append("isReceived",true)));
   }
 
   @Override
