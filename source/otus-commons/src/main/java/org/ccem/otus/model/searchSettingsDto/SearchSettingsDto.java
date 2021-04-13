@@ -2,11 +2,15 @@ package org.ccem.otus.model.searchSettingsDto;
 
 import org.ccem.otus.model.SerializableModel;
 
+import java.util.Map;
+
 public class SearchSettingsDto extends SerializableModel {
 
   protected int currentQuantity;
   protected int quantityToGet;
+  protected Map<String, Object> filters;
   protected OrderSettingsDto order;
+
 
   public SearchSettingsDto(){}
 
@@ -22,6 +26,14 @@ public class SearchSettingsDto extends SerializableModel {
     return quantityToGet;
   }
 
+  public void revalidate() {
+    this.quantityToGet = this.quantityToGet != 0 ? this.quantityToGet : Integer.MAX_VALUE;
+  }
+
+  public Map<String, Object> getFilters() {
+    return filters;
+  }
+
   public OrderSettingsDto getOrder() {
     return order;
   }
@@ -31,7 +43,9 @@ public class SearchSettingsDto extends SerializableModel {
   }
 
   public static SearchSettingsDto deserialize(String json){
-    return (SearchSettingsDto)deserialize(json, SearchSettingsDto.class);
+    SearchSettingsDto object = (SearchSettingsDto) deserialize(json, SearchSettingsDto.class);
+    object.revalidate();
+    return object;
   }
 
 }

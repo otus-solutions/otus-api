@@ -132,20 +132,20 @@ public class NoteAboutParticipantFacadeTest extends LoggerTestsParent {
 
   @Test
   public void getAll_method_should_call_getAll_service_method() throws ValidationException, DataNotFoundException, MemoryExcededException {
-    facade.getAll(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
+    facade.filter(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
     verify(service, Mockito.times(1)).getAll(USER_OID, RECRUITMENT_NUMBER, searchSettingsDto);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getAll_method_should_handle_DataNotFoundException() throws ValidationException, DataNotFoundException, MemoryExcededException {
     doThrow(dataNotFoundException).when(service).getAll(USER_OID, RECRUITMENT_NUMBER, searchSettingsDto);
-    facade.getAll(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
+    facade.filter(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
   }
 
   @Test(expected = HttpResponseException.class)
   public void getAll_method_should_handle_ValidationException() throws ValidationException, DataNotFoundException, MemoryExcededException {
     doThrow(validationException).when(service).getAll(USER_OID, RECRUITMENT_NUMBER, searchSettingsDto);
-    facade.getAll(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
+    facade.filter(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
     verifyLoggerSevereWasCalled();
   }
 

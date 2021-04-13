@@ -1,26 +1,34 @@
 package br.org.otus.participant.builder;
 
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.ccem.otus.model.searchSettingsDto.SearchSettingsDto;
 import org.ccem.otus.service.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class NoteAboutParticipantQueryBuilder {
 
   private ArrayList<Bson> pipeline;
+
+  private Document buildMatchStage(Map searchFiltersDto, Long recruitmentNumber) {
+
+    Document matchStage = searchFiltersDto != null ?  new Document(searchFiltersDto) : new Document();
+    matchStage.append("recruitmentNumber", recruitmentNumber);
+    Document stage = new Document("$match", matchStage);
+
+
+    return stage;
+  }
 
   public ArrayList<Bson> getByRnQuery(ObjectId userOid, Long recruitmentNumber, SearchSettingsDto searchSettingsDto) {
     int skip = searchSettingsDto.getCurrentQuantity();
     int limit = searchSettingsDto.getQuantityToGet();
 
     pipeline = new ArrayList<>();
-    pipeline.add(ParseQuery.toDocument("{\n" +
-      "        $match: {\n" +
-      "            \"recruitmentNumber\": " + recruitmentNumber +
-      "        }\n" +
-      "    }"));
+    pipeline.add(buildMatchStage(searchSettingsDto.getFilters(), recruitmentNumber));
     pipeline.add(ParseQuery.toDocument("{\n" +
       "        $lookup: {\n" +
       "            from: \"user\",\n" +

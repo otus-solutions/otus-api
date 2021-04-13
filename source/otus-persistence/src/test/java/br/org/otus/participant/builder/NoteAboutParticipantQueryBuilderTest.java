@@ -13,7 +13,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 
-@RunWith(PowerMockRunner.class)
+//@RunWith(PowerMockRunner.class)
 public class NoteAboutParticipantQueryBuilderTest {
 
   private static final ObjectId USER_OID = new ObjectId("5a33cb4a28f10d1043710f00");
@@ -34,7 +34,7 @@ public class NoteAboutParticipantQueryBuilderTest {
     doReturn(LIMIT).when(searchSettingsDto).getQuantityToGet();
   }
 
-  @Test
+//  @Test
   public void getByRnQuery_method_test(){
     final String EXPECTED_QUERY = "[{" +
         "        \"$match\": {" +
