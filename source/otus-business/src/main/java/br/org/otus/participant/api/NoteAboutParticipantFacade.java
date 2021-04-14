@@ -41,7 +41,7 @@ public class NoteAboutParticipantFacade {
     }
     catch(ValidationException e){
       LOGGER.severe("User {" + user.get_id() + "} tried update note about participant not created by him");
-      throw new HttpResponseException(Authorization.build("You can't update the note because you doesn't create it"));
+      throw new HttpResponseException(Authorization.build("You can't update the note because you didn't create it"));
     }
   }
 
@@ -54,7 +54,7 @@ public class NoteAboutParticipantFacade {
     }
     catch(ValidationException e){
       LOGGER.severe("User {" + user.get_id() + "} tried update starred of note about participant not created by him");
-      throw new HttpResponseException(Authorization.build("You can't update starred of note because you doesn't create it"));
+      throw new HttpResponseException(Authorization.build("You can't update starred of note because you didn't create it"));
     }
   }
 
@@ -67,11 +67,11 @@ public class NoteAboutParticipantFacade {
     }
     catch(ValidationException e){
       LOGGER.severe("User {" + user.get_id() + "} tried delete note about participant not created by him");
-      throw new HttpResponseException(Authorization.build("You can't delete the note because you doesn't create it"));
+      throw new HttpResponseException(Authorization.build("You can't delete the note because you didn't create it"));
     }
   }
 
-  public List<NoteAboutParticipantResponse> getAll(User user, Long recruitmentNumber, String searchSettingsDtoJson){
+  public List<NoteAboutParticipantResponse> filter(User user, Long recruitmentNumber, String searchSettingsDtoJson){
     try{
       return noteAboutParticipantService.getAll(user.get_id(), recruitmentNumber, SearchSettingsDto.deserialize(searchSettingsDtoJson));
     }

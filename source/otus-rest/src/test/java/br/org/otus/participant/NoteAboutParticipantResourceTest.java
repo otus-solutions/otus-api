@@ -78,11 +78,11 @@ public class NoteAboutParticipantResourceTest extends UserAuthenticationResource
   @Test
   public void getAll_method_should_call_getAll_facade_method(){
     List<NoteAboutParticipantResponse> noteResponses = new ArrayList<>();
-    doReturn(noteResponses).when(facade).getAll(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
+    doReturn(noteResponses).when(facade).filter(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
     assertEquals(
       encapsulateExpectedResponse(noteResponses.toString()),
-      resource.getAll(request, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON));
-    verify(facade, Mockito.times(1)).getAll(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
+      resource.filter(request, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON));
+    verify(facade, Mockito.times(1)).filter(user, RECRUITMENT_NUMBER, SEARCH_SETTINGS_JSON);
   }
 
 }
