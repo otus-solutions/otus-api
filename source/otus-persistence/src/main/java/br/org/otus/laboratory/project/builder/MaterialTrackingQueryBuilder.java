@@ -115,6 +115,7 @@ public class MaterialTrackingQueryBuilder {
         pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
                 "            \"materialCode\": 1,\n" +
+                "            \"lotId\": 1,\n" +
                 "            \"lotCode\": 1,\n" +
                 "            \"receipted\": 1,\n" +
                 "            \"otherMetadata\": 1,\n" +
@@ -131,7 +132,8 @@ public class MaterialTrackingQueryBuilder {
             pipeline.add(this.parseQuery("{\n" +
                     "        \"$group\": {\n" +
                     "             _id: \"$lotId\",\n" +
-                    "            results: {\n" +
+                    "             sendingDate: {$max: \"$sendingDate\"},\n" +
+                    "             results: {\n" +
                     "               $push: {\n" +
                     "                    materialCode: \"$materialCode\",\n" +
                     "                    lotCode: \"$lotCode\",\n" +
@@ -145,6 +147,12 @@ public class MaterialTrackingQueryBuilder {
                     "                    receiptDate: \"$receiptDate\"\n" +
                     "               }\n" +
                     "            }\n" +
+                    "        }\n" +
+                    "  }"));
+
+            pipeline.add(this.parseQuery("{\n" +
+                    "        \"$sort\": {\n" +
+                    "            sendingDate: -1\n" +
                     "        }\n" +
                     "  }"));
         }
