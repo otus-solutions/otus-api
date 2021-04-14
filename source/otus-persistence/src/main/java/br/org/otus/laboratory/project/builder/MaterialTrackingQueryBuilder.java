@@ -18,12 +18,15 @@ public class MaterialTrackingQueryBuilder {
         return this.pipeline;
     }
 
-    public MaterialTrackingQueryBuilder getMaterialTrackingListQuery(String materialCode) {
-        pipeline.add(this.parseQuery("{\n" +
+    public MaterialTrackingQueryBuilder getMaterialTrackingListQuery(String materialCode, boolean isExtraction) {
+        if(!materialCode.isEmpty()) {
+            pipeline.add(this.parseQuery("{\n" +
                 "      $match:{\n" +
                 "          \"materialCode\": \""+ materialCode + "\""+
                 "      }  \n" +
                 "    }"));
+        }
+
         pipeline.add(this.parseQuery("{\n" +
                 "        $lookup:{\n" +
                 "            from: \"transportation_lot\",\n" +
@@ -35,7 +38,7 @@ public class MaterialTrackingQueryBuilder {
         pipeline.add(this.parseQuery("{\n" +
                 "        $lookup:{\n" +
                 "            from: \"transport_material_correlation\",\n" +
-                "            let: {materialCode:\""+materialCode+"\",transportationLotId:\"$transportationLotId\"},\n" +
+                "            let: {materialCode:\"$materialCode\",transportationLotId:\"$transportationLotId\"},\n" +
                 "            pipeline: [\n" +
                 "                {\n" +
                 "                    $match: {\n" +
@@ -61,6 +64,8 @@ public class MaterialTrackingQueryBuilder {
         pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
                 "            \"transportationLotId\": 1,\n" +
+                "            \"materialCode\": 1,\n" +
+                "            \"lotCode\": {$arrayElemAt:[\"$lot.code\",0]},\n" +
                 "            \"origin\": {$arrayElemAt:[\"$lot.originLocationPoint\",0]},\n" +
                 "            \"destination\": {$arrayElemAt:[\"$lot.destinationLocationPoint\",0]},\n" +
                 "            \"sendingDate\": {$arrayElemAt:[\"$lot.shipmentDate\",0]},\n" +
@@ -70,6 +75,8 @@ public class MaterialTrackingQueryBuilder {
         pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
                 "            \"lotId\": \"$transportationLotId\",\n" +
+                "            \"materialCode\": \"$materialCode\",\n" +
+                "            \"lotCode\": \"$lotCode\",\n" +
                 "            \"_id\":0,\n" +
                 "            \"origin\": 1,\n" +
                 "            \"destination\": 1,\n" +
@@ -105,10 +112,10 @@ public class MaterialTrackingQueryBuilder {
                 "            as:\"receiveResponsible\"\n" +
                 "         }\n" +
                 "    }"));
-
         pipeline.add(this.parseQuery("{\n" +
                 "        $project:{\n" +
-                "            \"lotId\": 1,\n" +
+                "            \"materialCode\": 1,\n" +
+                "            \"lotCode\": 1,\n" +
                 "            \"receipted\": 1,\n" +
                 "            \"otherMetadata\": 1,\n" +
                 "            \"receiptDate\": 1,\n" +
@@ -120,8 +127,32 @@ public class MaterialTrackingQueryBuilder {
                 "            \n" +
                 "        }\n" +
                 "    }"));
-
+        if(isExtraction) {
+            pipeline.add(this.parseQuery("{\n" +
+                    "        \"$group\": {\n" +
+                    "             _id: \"$lotId\",\n" +
+                    "            results: {\n" +
+                    "               $push: {\n" +
+                    "                    materialCode: \"$materialCode\",\n" +
+                    "                    lotCode: \"$lotCode\",\n" +
+                    "                    origin: \"$origin\",\n" +
+                    "                    destination: \"$destination\",\n" +
+                    "                    sendingDate: \"$sendingDate\",\n" +
+                    "                    receipted: \"$receipted\",\n" +
+                    "                    receiveResponsible: \"$receiveResponsible\",\n" +
+                    "                    receiptedMetadata: \"$receiptMetadata\",\n" +
+                    "                    otherMetadata: \"$otherMetadata\",\n" +
+                    "                    receiptDate: \"$receiptDate\"\n" +
+                    "               }\n" +
+                    "            }\n" +
+                    "        }\n" +
+                    "  }"));
+        }
         return this;
+    }
+
+    public MaterialTrackingQueryBuilder getMaterialTrackingListQuery(boolean isExtraction) {
+        return this.getMaterialTrackingListQuery("", isExtraction);
     }
 
     private Document parseQuery(String query) {

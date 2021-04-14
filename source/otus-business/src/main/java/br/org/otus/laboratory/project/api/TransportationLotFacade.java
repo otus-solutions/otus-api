@@ -2,17 +2,18 @@ package br.org.otus.laboratory.project.api;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import br.org.otus.laboratory.participant.ParticipantLaboratoryService;
 import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.business.AliquotService;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
 import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingResultExtraction;
 import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.TransportationAliquotFiltersDTO;
 import br.org.otus.model.User;
@@ -144,6 +145,14 @@ public class TransportationLotFacade {
 
   public void receiveLot(String code, TransportationReceipt transportationReceipt) {
     transportationLotService.receiveLot(code, transportationReceipt);
+  }
+
+  public LinkedList<MaterialTrackingResultExtraction> getMaterialTrackingExtraction() {
+    try {
+      return transportationLotService.getMaterialTrackingExtraction();
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(ResponseBuild.Security.Validation.build(e.getCause().getMessage()));
+    }
   }
 }
 

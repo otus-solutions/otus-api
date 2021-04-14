@@ -51,4 +51,6 @@ public interface LaboratoryConfigurationDao {
   List<LotReceiptCustomMetadata> getLotReceiptCustomMetadata() throws DataNotFoundException;
 
   List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadata(String materialType) throws DataNotFoundException;
+
+  List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadata();
 }

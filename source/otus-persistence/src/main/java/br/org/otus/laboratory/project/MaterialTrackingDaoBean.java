@@ -4,6 +4,8 @@ import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.project.builder.MaterialTrackingQueryBuilder;
 import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingRecordExtraction;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingResultExtraction;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
@@ -12,6 +14,7 @@ import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implements MaterialTrackingDao {
@@ -165,7 +168,7 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
     @Override
     public List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException {
         ArrayList<TrailHistoryRecord> materialTracking = new ArrayList<>();
-        AggregateIterable<Document> queryResult = collection.aggregate(new MaterialTrackingQueryBuilder().getMaterialTrackingListQuery(materialCode).build());
+        AggregateIterable<Document> queryResult = collection.aggregate(new MaterialTrackingQueryBuilder().getMaterialTrackingListQuery(materialCode, false).build());
 
         for (Document document : queryResult) {
             materialTracking.add(TrailHistoryRecord.deserialize(document.toJson()));
@@ -188,5 +191,21 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
         }
 
         return materialTrail;
+    }
+
+    @Override
+    public LinkedList<MaterialTrackingResultExtraction> getMaterialTrackingExtraction() throws DataNotFoundException {
+        LinkedList<MaterialTrackingResultExtraction> materialTracking = new LinkedList<>();
+        AggregateIterable<Document> queryResult = collection.aggregate(new MaterialTrackingQueryBuilder().getMaterialTrackingListQuery(true).build());
+
+        for (Document document : queryResult) {
+            materialTracking.addAll(MaterialTrackingRecordExtraction.deserialize(document.toJson()).getResults());
+        }
+
+        if (materialTracking.size() == 0) {
+            throw new DataNotFoundException("Tracking List not found");
+        }
+
+        return materialTracking;
     }
 }

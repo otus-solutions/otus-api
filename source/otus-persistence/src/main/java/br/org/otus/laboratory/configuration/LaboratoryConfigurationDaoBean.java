@@ -264,10 +264,11 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
     return lotReceiptCustomMetadata;
   }
 
+
   @Override
   public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadata(String materialType) throws DataNotFoundException {
 
-    Document query = new Document(OBJECT_TYPE_PATH, MaterialReceiptCustomMetadata.OBJECT_TYPE).append("type",materialType);
+    Document query = new Document(OBJECT_TYPE_PATH, MaterialReceiptCustomMetadata.OBJECT_TYPE).append("type", materialType);
 
     FindIterable<Document> results = collection.find(query);
     if(results == null){
@@ -283,4 +284,20 @@ public class LaboratoryConfigurationDaoBean extends MongoGenericDao<Document> im
 
     return materialReceiptCustomMetadata;
   }
+
+  @Override
+  public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadata() {
+    Document query = new Document(OBJECT_TYPE_PATH, MaterialReceiptCustomMetadata.OBJECT_TYPE);
+    List<MaterialReceiptCustomMetadata> materialReceiptCustomMetadata = new ArrayList<>();
+
+    FindIterable<Document> results = collection.find(query);
+    if(results != null){
+      MongoCursor<Document> iterator = results.iterator();
+      while(iterator.hasNext()){
+        materialReceiptCustomMetadata.add(MaterialReceiptCustomMetadata.deserialize(iterator.next().toJson()));
+      }
+    }
+    return materialReceiptCustomMetadata;
+  }
+
 }
