@@ -6,6 +6,7 @@ import br.org.otus.laboratory.participant.aliquot.Aliquot;
 import br.org.otus.laboratory.participant.aliquot.persistence.AliquotDao;
 import br.org.otus.laboratory.participant.tube.Tube;
 import br.org.otus.laboratory.project.transportation.*;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingResultExtraction;
 import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import br.org.otus.laboratory.project.transportation.persistence.MaterialTrackingDao;
 import br.org.otus.laboratory.project.transportation.persistence.TransportMaterialCorrelationDao;
@@ -18,6 +19,7 @@ import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -197,12 +199,16 @@ public class TransportationLotServiceBean implements TransportationLotService {
 
   @Override
   public List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException {
-    List<TrailHistoryRecord> materialTracking = materialTrackingDao.getMaterialTrackingList(materialCode);
-    return materialTracking;
+    return materialTrackingDao.getMaterialTrackingList(materialCode);
   }
 
   @Override
   public void receiveLot(String code, TransportationReceipt transportationReceipt) {
     transportationLotDao.receiveLot(code,transportationReceipt);
+  }
+
+  @Override
+  public LinkedList<MaterialTrackingResultExtraction> getMaterialTrackingExtraction() throws DataNotFoundException {
+    return materialTrackingDao.getMaterialTrackingExtraction();
   }
 }

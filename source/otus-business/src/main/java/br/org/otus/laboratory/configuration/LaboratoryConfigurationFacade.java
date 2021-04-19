@@ -69,4 +69,8 @@ public class LaboratoryConfigurationFacade {
       throw new HttpResponseException(NotFound.build(e.getMessage()));
     }
   }
+
+  public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadataOptions() {
+    return laboratoryConfigurationService.getMaterialReceiptCustomMetadataOptions();
+  }
 }

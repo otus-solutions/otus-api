@@ -28,6 +28,27 @@ public class ExtractionResource {
   @Inject
   private SecurityContext securityContext;
 
+  @POST
+  @Secured
+  @Path("/enable-ips")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String enableIps(ManagementUserDto managementUserDto) {
+    userFacade.updateExtractionIps(managementUserDto);
+    return new Response().buildSuccess().toJson();
+  }
+
+  @GET
+  @Secured
+  @Path("/extraction-token")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getToken(@Context HttpServletRequest request) {
+    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
+    String extractionToken = userFacade.getExtractionToken(userEmail);
+    return new Response().buildSuccess(extractionToken).toJson();
+  }
+
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -72,33 +93,20 @@ public class ExtractionResource {
     return new Response().buildSuccess().toJson();
   }
 
-  @POST
-  @Secured
-  @Path("/enable-ips")
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  public String enableIps(ManagementUserDto managementUserDto) {
-    userFacade.updateExtractionIps(managementUserDto);
-    return new Response().buildSuccess().toJson();
-  }
-
-  @GET
-  @Secured
-  @Path("/extraction-token")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String getToken(@Context HttpServletRequest request) {
-    String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String userEmail = securityContext.getSession(AuthorizationHeaderReader.readToken(token)).getAuthenticationData().getUserEmail();
-    String extractionToken = userFacade.getExtractionToken(userEmail);
-    return new Response().buildSuccess(extractionToken).toJson();
-  }
-
   @GET
   @SecuredExtraction
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @Path("/participant/participant-contact-attempts")
   public byte[] extractParticipantContactAttempts() {
     return extractionFacade.createParticipantContactAttemptsExtraction();
+  }
+
+  @GET
+  @SecuredExtraction
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Path("/transportation/material-tracking")
+  public byte[] extractMaterialTracking() {
+    return extractionFacade.createMaterialTrackingExtraction();
   }
 
 }

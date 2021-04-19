@@ -128,4 +128,9 @@ public class LaboratoryConfigurationServiceBean implements LaboratoryConfigurati
     return laboratoryConfigurationDao.getMaterialReceiptCustomMetadata(materialType);
   }
 
+  @Override
+  public List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadataOptions() {
+    return laboratoryConfigurationDao.getMaterialReceiptCustomMetadata();
+  }
+
 }

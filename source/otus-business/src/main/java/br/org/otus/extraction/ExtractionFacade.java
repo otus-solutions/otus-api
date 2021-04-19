@@ -1,29 +1,25 @@
 package br.org.otus.extraction;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import br.org.otus.gateway.gates.ExtractionGatewayService;
-import br.org.otus.gateway.response.GatewayResponse;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationService;
 import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
+import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
+import br.org.otus.laboratory.project.api.TransportationLotFacade;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.MaterialTrackingExtraction;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingResultExtraction;
 import br.org.otus.participant.api.ParticipantFacade;
-import br.org.otus.response.info.Validation;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.model.survey.activity.SurveyActivity;
 import org.ccem.otus.participant.business.ParticipantExtraction;
 import org.ccem.otus.participant.business.extraction.model.ParticipantResultExtraction;
-import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttempt;
 import org.ccem.otus.participant.model.participantContactAttempt.ParticipantContactAttemptExtractionDTO;
 import org.ccem.otus.service.DataSourceService;
-import org.ccem.otus.service.extraction.ActivityProgressExtraction;
 import org.ccem.otus.service.extraction.SurveyActivityExtraction;
 import org.ccem.otus.participant.service.extraction.ParticipantContactAttemptsExtraction;
-import org.ccem.otus.service.extraction.factories.ActivityProgressRecordsFactory;
-import org.ccem.otus.service.extraction.model.ActivityProgressResultExtraction;
 import org.ccem.otus.service.extraction.preprocessing.AutocompleteQuestionPreProcessor;
 import org.ccem.otus.survey.form.SurveyForm;
 
@@ -67,6 +63,8 @@ public class ExtractionFacade {
   private DataSourceService dataSourceService;
   @Inject
   private LaboratoryConfigurationService laboratoryConfigurationService;
+  @Inject
+  private TransportationLotFacade transportationLotFacade;
 
   public byte[] createActivityExtraction(String acronym, Integer version) {
     SurveyForm surveyForm = surveyFacade.get(acronym, version);
@@ -129,4 +127,14 @@ public class ExtractionFacade {
     }
   }
 
+  public byte[] createMaterialTrackingExtraction() {
+    List<MaterialReceiptCustomMetadata> customMetadata = laboratoryConfigurationService.getMaterialReceiptCustomMetadataOptions();
+    LinkedList<MaterialTrackingResultExtraction> extraction = transportationLotFacade.getMaterialTrackingExtraction();
+    MaterialTrackingExtraction extractor = new MaterialTrackingExtraction(extraction, customMetadata);
+    try {
+      return extractionService.createExtraction(extractor);
+    } catch (DataNotFoundException e) {
+      throw new HttpResponseException(NotFound.build("Results to extraction not found."));
+    }
+  }
 }

@@ -3,11 +3,13 @@ package br.org.otus.laboratory.project.transportation.business;
 import br.org.otus.laboratory.project.transportation.ReceivedMaterial;
 import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
 import br.org.otus.laboratory.project.transportation.TransportationLot;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingResultExtraction;
 import br.org.otus.laboratory.project.transportation.model.TransportationReceipt;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public interface TransportationLotService {
@@ -29,4 +31,6 @@ public interface TransportationLotService {
   List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException;
 
   void receiveLot(String code, TransportationReceipt transportationReceipt);
+
+  LinkedList<MaterialTrackingResultExtraction> getMaterialTrackingExtraction() throws DataNotFoundException;
 }
