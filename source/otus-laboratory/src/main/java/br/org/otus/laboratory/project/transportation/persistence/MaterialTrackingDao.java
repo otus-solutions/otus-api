@@ -2,16 +2,18 @@ package br.org.otus.laboratory.project.transportation.persistence;
 
 import br.org.otus.laboratory.project.transportation.MaterialTrail;
 import br.org.otus.laboratory.project.transportation.TrailHistoryRecord;
+import br.org.otus.laboratory.project.transportation.business.extraction.materialTracking.model.MaterialTrackingResultExtraction;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public interface MaterialTrackingDao {
 
-  MaterialTrail getCurrent (String materialCode);
+  MaterialTrail getCurrent(String materialCode);
 
   List<String> getAliquotsInLocation(String locationPointId);
 
@@ -40,4 +42,6 @@ public interface MaterialTrackingDao {
   List<TrailHistoryRecord> getMaterialTrackingList(String materialCode) throws DataNotFoundException;
 
   MaterialTrail getTrail(String materialCode, ObjectId transportationLotId);
+
+  LinkedList<MaterialTrackingResultExtraction> getMaterialTrackingExtraction() throws DataNotFoundException;
 }

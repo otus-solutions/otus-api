@@ -51,4 +51,6 @@ public interface LaboratoryConfigurationService {
   Integer updateUnattachedLaboratoryLastInsertion();
 
   List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadataOptions(String materialType) throws DataNotFoundException;
+
+  List<MaterialReceiptCustomMetadata> getMaterialReceiptCustomMetadataOptions();
 }
