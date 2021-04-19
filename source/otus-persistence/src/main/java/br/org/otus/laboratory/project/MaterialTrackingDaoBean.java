@@ -174,11 +174,11 @@ public class MaterialTrackingDaoBean extends MongoGenericDao<Document> implement
             materialTracking.add(TrailHistoryRecord.deserialize(document.toJson()));
         }
 
-        if (materialTracking.size() == 0) {
+        if (!materialTracking.isEmpty()) {
+            return materialTracking;
+        } else {
             throw new DataNotFoundException("Tracking List not found for material code " + materialCode);
         }
-
-        return materialTracking;
     }
 
     @Override

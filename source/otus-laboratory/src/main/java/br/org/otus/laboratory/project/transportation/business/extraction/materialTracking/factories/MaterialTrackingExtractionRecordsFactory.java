@@ -51,7 +51,6 @@ public class MaterialTrackingExtractionRecordsFactory {
       });
     }
 
-
     answers.add(record.getOtherMetadata());
 
     return answers;
