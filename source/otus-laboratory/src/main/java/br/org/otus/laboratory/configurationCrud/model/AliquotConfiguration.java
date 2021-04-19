@@ -1,0 +1,38 @@
+package br.org.otus.laboratory.configurationCrud.model;
+
+import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
+import org.ccem.otus.participant.utils.LongAdapter;
+import org.ccem.otus.utils.ObjectIdToStringAdapter;
+
+import java.time.LocalDateTime;
+
+public class AliquotConfiguration {
+    ObjectId _id;
+    String objectType;
+    String name;
+    String label;
+
+    public AliquotConfiguration(String name, String label) {
+        this.objectType = "aliquotConfiguration";
+        this.name = name;
+        this.label = label;
+    };
+
+    public static String serialize(AliquotConfiguration aliquotConfiguration) {
+        GsonBuilder builder = AliquotConfiguration.getGsonBuilder();
+        return builder.create().toJson(aliquotConfiguration);
+    }
+
+    public static AliquotConfiguration deserialize(String aliquotConfigurationJson) {
+        GsonBuilder builder = AliquotConfiguration.getGsonBuilder();
+        builder.registerTypeAdapter(Long.class, new LongAdapter());
+        return builder.create().fromJson(aliquotConfigurationJson, AliquotConfiguration.class);
+    }
+
+    public static GsonBuilder getGsonBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+        return builder;
+    }
+}

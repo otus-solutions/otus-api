@@ -17,6 +17,7 @@ import br.org.otus.importation.ParticipantImportationResource;
 import br.org.otus.laboratory.ParticipantLaboratoryResource;
 import br.org.otus.laboratory.UnattachedLaboratoryResource;
 import br.org.otus.laboratory.configuration.LaboratoryConfigurationResource;
+import br.org.otus.laboratory.configurationCrud.LaboratoryConfigurationCrudResource;
 import br.org.otus.laboratory.project.ExamResource;
 import br.org.otus.laboratory.project.TransportationResource;
 import br.org.otus.laboratory.project.TransportLocationPointResource;
@@ -136,6 +137,9 @@ public class EndPointsLoader extends Application {
   private LaboratoryConfigurationResource laboratoryConfigurationResource;
 
   @Inject
+  private LaboratoryConfigurationCrudResource laboratoryConfigurationCrudResource;
+
+  @Inject
   private UnattachedLaboratoryResource unattachedLaboratoryResource;
 
   @Inject
@@ -216,6 +220,7 @@ public class EndPointsLoader extends Application {
     resources.add(TransportationResource.class);
     resources.add(TransportLocationPointResource.class);
     resources.add(LaboratoryConfigurationResource.class);
+    resources.add(LaboratoryConfigurationCrudResource.class);
     resources.add(ExtractionResource.class);
     resources.add(ActivityConfigurationResource.class);
     resources.add(ExamResource.class);
@@ -267,6 +272,7 @@ public class EndPointsLoader extends Application {
     resources.add(transportationResource);
     resources.add(transportLocationPointResource);
     resources.add(laboratoryConfigurationResource);
+    resources.add(laboratoryConfigurationCrudResource);
     resources.add(extractionResource);
     resources.add(activityConfigurationResource);
     resources.add(examResource);
