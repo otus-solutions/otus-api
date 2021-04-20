@@ -12,11 +12,13 @@ public class AliquotConfiguration {
     String objectType;
     String name;
     String label;
+    String type;
 
-    public AliquotConfiguration(String name, String label) {
+    public AliquotConfiguration(String name, String label, String type) {
         this.objectType = "aliquotConfiguration";
         this.name = name;
         this.label = label;
+        this.type = type;
     };
 
     public static String serialize(AliquotConfiguration aliquotConfiguration) {
