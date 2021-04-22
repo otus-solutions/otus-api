@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.bson.Document;
 import org.ccem.otus.model.dataSources.ReportDataSource;
+import org.ccem.otus.service.ParseQuery;
 
 public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResult> {
 
@@ -19,6 +20,7 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
   public ArrayList<Document> buildQuery(Long recruitmentNumber) {
     ArrayList<Document> query = new ArrayList<>();
     this.buildMachStage(recruitmentNumber, query);
+    this.appendQuestionsFilter(query);
     this.buildProjectionStage(query);
     this.appendStatusHistoryFilter(query);
 
@@ -46,6 +48,9 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
         projectionFields.append("statusHistoryPosition", new Document("$slice", Arrays.asList("$statusHistory", this.filters.getStatusHistory().getPosition(), 1)));
       }
     }
+    if (this.filters.getQuestion() != null) {
+      projectionFields.append("question", "$fillContainer");
+    }
     projectionFields.append("mode", 1);
     Document projectStage = new Document("$project", projectionFields);
     query.add(projectStage);
@@ -65,5 +70,40 @@ public class ActivityDataSource extends ReportDataSource<ActivityDataSourceResul
 
   private void appendCategoryFilter(Document matchStage, String category) {
     matchStage.append("category.name", category);
+  }
+
+  private void appendQuestionsFilter(ArrayList<Document> query) {
+    if (this.filters.getQuestion() != null) {
+       unwindFillingList(query);
+       matchQuestionID(query);
+       rewindResults(query);
+    }
+  }
+
+  private void unwindFillingList(ArrayList<Document> query) {
+    query.add(ParseQuery.toDocument("{\n" +
+            "    \"$unwind\": {\n" +
+            "        path: \"$fillContainer.fillingList\",\n" +
+            "        preserveNullAndEmptyArrays: true\n" +
+            "    }\n" +
+            "  }"));
+  }
+
+  private void matchQuestionID(ArrayList<Document> query) {
+    query.add(
+      new Document("$match",
+          new Document("fillContainer.fillingList.questionID", this.filters.getQuestion())
+      )
+    );
+  }
+
+  private void rewindResults(ArrayList<Document> query) {
+    query.add(ParseQuery.toDocument("{\n" +
+            "    \"$group\": {\n" +
+            "      \"_id\": \"$_id\",\n" +
+            "      \"statusHistory\": {$first: \"$statusHistory\"},\n" +
+            "      \"fillContainer\": {$first: \"$fillContainer.fillingList\"}\n" +
+            "    }\n" +
+            "  }"));
   }
 }
