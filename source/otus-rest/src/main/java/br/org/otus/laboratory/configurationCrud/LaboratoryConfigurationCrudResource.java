@@ -1,23 +1,14 @@
 package br.org.otus.laboratory.configurationCrud;
 
-import br.org.otus.laboratory.configuration.LaboratoryConfigurationFacade;
-import br.org.otus.laboratory.configuration.collect.tube.TubeCustomMetadata;
-import br.org.otus.laboratory.configuration.lot.receipt.LotReceiptCustomMetadata;
-import br.org.otus.laboratory.configuration.lot.receipt.MaterialReceiptCustomMetadata;
 import br.org.otus.laboratory.configurationCrud.model.*;
-import br.org.otus.laboratory.project.transportation.TransportLocationPoint;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
-import org.ccem.otus.exceptions.webservice.validation.ValidationException;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.List;
 
 @Path("/laboratory-configuration-crud")
 public class LaboratoryConfigurationCrudResource {
@@ -104,22 +95,22 @@ public class LaboratoryConfigurationCrudResource {
 
   @POST
   @Secured
-  @Path("/controll-group")
+  @Path("/control-group")
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createControllGroup(String controllGroupJson) {
-    ControllGroupConfiguration controllGroupConfiguraiton =
-            ControllGroupConfiguration.deserialize(controllGroupJson);
-    laboratoryConfigurationCrudFacade.createControllGroup(controllGroupConfiguraiton);
-    return new Response().buildSuccess(ControllGroupConfiguration.serialize(controllGroupConfiguraiton)).toJson();
+  public String createControlGroup(String controlGroupJson) {
+    ControlGroupConfiguration controlGroupConfiguraiton =
+            ControlGroupConfiguration.deserialize(controlGroupJson);
+    laboratoryConfigurationCrudFacade.createControlGroup(controlGroupConfiguraiton);
+    return new Response().buildSuccess(ControlGroupConfiguration.serialize(controlGroupConfiguraiton)).toJson();
   }
 
   @GET
   @Secured
-  @Path("/controll-group")
+  @Path("/control-group")
   @Produces(MediaType.APPLICATION_JSON)
-  public String indexControllGroup() throws DataNotFoundException {
-    ArrayList<ControllGroupConfiguration> controllGroupConfiguraitons =
-            laboratoryConfigurationCrudFacade.indexControllGroup();
-    return new Response().buildSuccess(controllGroupConfiguraitons).toJson(ControllGroupConfiguration.getGsonBuilder());
+  public String indexControlGroup() throws DataNotFoundException {
+    ArrayList<ControlGroupConfiguration> controlGroupConfiguraitons =
+            laboratoryConfigurationCrudFacade.indexControlGroup();
+    return new Response().buildSuccess(controlGroupConfiguraitons).toJson(ControlGroupConfiguration.getGsonBuilder());
   }
 }

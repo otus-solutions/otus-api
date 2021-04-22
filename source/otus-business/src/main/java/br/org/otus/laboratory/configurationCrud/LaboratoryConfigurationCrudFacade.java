@@ -1,7 +1,7 @@
 package br.org.otus.laboratory.configurationCrud;
 
 import br.org.otus.laboratory.configurationCrud.business.aliquot.AliquotConfigurationService;
-import br.org.otus.laboratory.configurationCrud.business.controllGroup.ControllGroupConfigurationService;
+import br.org.otus.laboratory.configurationCrud.business.controlGroup.ControlGroupConfigurationService;
 import br.org.otus.laboratory.configurationCrud.business.exam.ExamConfigurationService;
 import br.org.otus.laboratory.configurationCrud.business.moment.MomentConfigurationService;
 import br.org.otus.laboratory.configurationCrud.business.tube.TubeConfigurationService;
@@ -24,7 +24,7 @@ public class LaboratoryConfigurationCrudFacade {
   @Inject
   private ExamConfigurationService examConfigurationService;
   @Inject
-  private ControllGroupConfigurationService controllGroupConfigurationService;
+  private ControlGroupConfigurationService controlGroupConfigurationService;
 
   public void createTube(TubeConfiguration tubeConfiguration) {
     tubeConfigurationService.create(tubeConfiguration);
@@ -74,13 +74,13 @@ public class LaboratoryConfigurationCrudFacade {
     }
   }
 
-  public void createControllGroup(ControllGroupConfiguration controllGroupConfiguration) {
-    controllGroupConfigurationService.create(controllGroupConfiguration);
+  public void createControlGroup(ControlGroupConfiguration controlGroupConfiguration) {
+    controlGroupConfigurationService.create(controlGroupConfiguration);
   }
 
-  public ArrayList<ControllGroupConfiguration> indexControllGroup() {
+  public ArrayList<ControlGroupConfiguration> indexControlGroup() {
     try{
-      return controllGroupConfigurationService.index();
+      return controlGroupConfigurationService.index();
     } catch (DataNotFoundException e) {
       throw new HttpResponseException(NotFound.build(e.getCause().getMessage()));
     }

@@ -1,10 +1,7 @@
 package br.org.otus.laboratory.configurationCrud.business.exam;
 
-import br.org.otus.laboratory.configurationCrud.model.AliquotConfiguration;
 import br.org.otus.laboratory.configurationCrud.model.ExamConfiguration;
-import br.org.otus.laboratory.configurationCrud.persistence.AliquotConfigurationDao;
 import br.org.otus.laboratory.configurationCrud.persistence.ExamConfigurationDao;
-import br.org.otus.laboratory.participant.exam.Exam;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.ejb.Stateless;

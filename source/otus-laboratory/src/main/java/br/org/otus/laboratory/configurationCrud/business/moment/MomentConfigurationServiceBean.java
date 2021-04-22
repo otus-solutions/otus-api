@@ -1,9 +1,7 @@
 package br.org.otus.laboratory.configurationCrud.business.moment;
 
 import br.org.otus.laboratory.configurationCrud.model.MomentConfiguration;
-import br.org.otus.laboratory.configurationCrud.model.TubeConfiguration;
 import br.org.otus.laboratory.configurationCrud.persistence.MomentConfigurationDao;
-import br.org.otus.laboratory.configurationCrud.persistence.TubeConfigurationDao;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
 import javax.ejb.Stateless;

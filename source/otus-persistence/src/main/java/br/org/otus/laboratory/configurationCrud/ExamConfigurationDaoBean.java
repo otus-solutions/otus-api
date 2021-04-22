@@ -1,10 +1,7 @@
 package br.org.otus.laboratory.configurationCrud;
 
 import br.org.mongodb.MongoGenericDao;
-import br.org.otus.examUploader.Exam;
-import br.org.otus.laboratory.configurationCrud.model.AliquotConfiguration;
 import br.org.otus.laboratory.configurationCrud.model.ExamConfiguration;
-import br.org.otus.laboratory.configurationCrud.persistence.AliquotConfigurationDao;
 import br.org.otus.laboratory.configurationCrud.persistence.ExamConfigurationDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;

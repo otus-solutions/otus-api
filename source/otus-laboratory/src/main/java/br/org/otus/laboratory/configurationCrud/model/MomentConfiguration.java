@@ -24,13 +24,13 @@ public class MomentConfiguration {
 
     public static MomentConfiguration deserialize(String momentConfigurationJson) {
         GsonBuilder builder = MomentConfiguration.getGsonBuilder();
-        builder.registerTypeAdapter(Long.class, new LongAdapter());
         return builder.create().fromJson(momentConfigurationJson, MomentConfiguration.class);
     }
 
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+        builder.registerTypeAdapter(Long.class, new LongAdapter());
         return builder;
     }
 }

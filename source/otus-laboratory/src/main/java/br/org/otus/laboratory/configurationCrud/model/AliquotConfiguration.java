@@ -5,8 +5,6 @@ import org.bson.types.ObjectId;
 import org.ccem.otus.participant.utils.LongAdapter;
 import org.ccem.otus.utils.ObjectIdToStringAdapter;
 
-import java.time.LocalDateTime;
-
 public class AliquotConfiguration {
     ObjectId _id;
     String objectType;
@@ -28,13 +26,13 @@ public class AliquotConfiguration {
 
     public static AliquotConfiguration deserialize(String aliquotConfigurationJson) {
         GsonBuilder builder = AliquotConfiguration.getGsonBuilder();
-        builder.registerTypeAdapter(Long.class, new LongAdapter());
         return builder.create().fromJson(aliquotConfigurationJson, AliquotConfiguration.class);
     }
 
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+        builder.registerTypeAdapter(Long.class, new LongAdapter());
         return builder;
     }
 }

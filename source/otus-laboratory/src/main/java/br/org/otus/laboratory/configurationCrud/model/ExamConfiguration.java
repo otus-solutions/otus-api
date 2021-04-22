@@ -24,13 +24,13 @@ public class ExamConfiguration {
 
     public static ExamConfiguration deserialize(String examConfigurationJson) {
         GsonBuilder builder = ExamConfiguration.getGsonBuilder();
-        builder.registerTypeAdapter(Long.class, new LongAdapter());
         return builder.create().fromJson(examConfigurationJson, ExamConfiguration.class);
     }
 
     public static GsonBuilder getGsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectId.class, new ObjectIdToStringAdapter());
+        builder.registerTypeAdapter(Long.class, new LongAdapter());
         return builder;
     }
 }

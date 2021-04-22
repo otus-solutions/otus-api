@@ -3,7 +3,6 @@ package br.org.otus.laboratory.configurationCrud;
 import br.org.mongodb.MongoGenericDao;
 import br.org.otus.laboratory.configurationCrud.model.MomentConfiguration;
 import br.org.otus.laboratory.configurationCrud.persistence.MomentConfigurationDao;
-import br.org.otus.laboratory.configurationCrud.persistence.MomentConfigurationDao;
 import org.bson.Document;
 import org.ccem.otus.exceptions.webservice.common.DataNotFoundException;
 
