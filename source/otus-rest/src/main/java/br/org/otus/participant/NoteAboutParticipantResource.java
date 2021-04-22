@@ -57,9 +57,9 @@ public class NoteAboutParticipantResource extends UserAuthenticationResource {
   @Path("/{rn}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String getAll(@Context HttpServletRequest request, @PathParam("rn") Long recruitmentNumber, String searchSettingsDtoJson){
+  public String filter(@Context HttpServletRequest request, @PathParam("rn") Long recruitmentNumber, String searchSettingsDtoJson){
     return new Response().buildSuccess(
-      noteAboutParticipantFacade.getAll(getUser(request), recruitmentNumber, searchSettingsDtoJson)
+        noteAboutParticipantFacade.filter(getUser(request), recruitmentNumber, searchSettingsDtoJson)
     ).toJson(NoteAboutParticipantResponse.getFrontGsonBuilder());
   }
 
