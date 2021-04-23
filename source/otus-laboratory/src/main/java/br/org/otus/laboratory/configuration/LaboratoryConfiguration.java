@@ -30,6 +30,7 @@ public class LaboratoryConfiguration {
   @SerializedName("_id")
   private ObjectId id;
   private Integer version;
+  private String objectType;
 
   private CodeConfiguration codeConfiguration;
   private LotConfiguration lotConfiguration;
@@ -42,6 +43,7 @@ public class LaboratoryConfiguration {
 
   public LaboratoryConfiguration() {
     version = 1;
+    objectType = "LaboratoryConfiguration";
     codeConfiguration = new CodeConfiguration();
     lotConfiguration = new LotConfiguration();
     tubeConfiguration = new TubeConfiguration(new HashSet<>());
@@ -85,6 +87,10 @@ public class LaboratoryConfiguration {
 
   public Integer getVersion() {
     return this.version;
+  }
+
+  public String getObjectType() {
+    return this.objectType;
   }
 
   public void setVersion(Integer version) {

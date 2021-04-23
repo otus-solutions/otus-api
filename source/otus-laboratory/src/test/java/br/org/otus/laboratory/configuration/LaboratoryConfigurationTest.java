@@ -50,6 +50,8 @@ public class LaboratoryConfigurationTest {
     json = new JsonObject();
 
     json.add("version", new JsonPrimitive(1));
+
+    json.add("objectType", new JsonPrimitive("LaboratoryConfiguration"));
     
     JsonObject codeConfiguration = new JsonObject();
     json.add("codeConfiguration", codeConfiguration);

@@ -17,7 +17,8 @@ public class LaboratoryConfigurationCrudDaoBean extends MongoGenericDao<Document
     @Override
     public LaboratoryConfiguration persistConfiguration(LaboratoryConfiguration laboratoryConfiguration) {
         Document currentConfiguration = collection
-                .find(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE)).first();
+                .find(new Document(OBJECT_TYPE_PATH, LABORATORY_CONFIGURATION_OBJECT_TYPE))
+                .first();
 
         if (currentConfiguration == null) {
             super.persist(LaboratoryConfiguration.serialize(laboratoryConfiguration));

@@ -22,8 +22,7 @@ public class LaboratoryConfigurationCrudResource {
   @Path("/")
   public String persistConfiguration(String configurationJson) {
     LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(configurationJson);
-    LaboratoryConfiguration updatedConfiguration = laboratoryConfigurationCrudFacade
-        .persistConfiguration(laboratoryConfiguration);
+    LaboratoryConfiguration updatedConfiguration = laboratoryConfigurationCrudFacade.persistConfiguration(laboratoryConfiguration);
     return new Response().buildSuccess(LaboratoryConfiguration.serialize(updatedConfiguration)).toJson();
   }
 
