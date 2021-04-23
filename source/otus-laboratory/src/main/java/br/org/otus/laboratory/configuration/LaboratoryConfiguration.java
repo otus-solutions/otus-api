@@ -29,6 +29,7 @@ public class LaboratoryConfiguration {
 
   @SerializedName("_id")
   private ObjectId id;
+  private Integer version;
 
   private CodeConfiguration codeConfiguration;
   private LotConfiguration lotConfiguration;
@@ -40,6 +41,7 @@ public class LaboratoryConfiguration {
   private List<MetadataConfiguration> metadataConfiguration;
 
   public LaboratoryConfiguration() {
+    version = 1;
     codeConfiguration = new CodeConfiguration();
     lotConfiguration = new LotConfiguration();
     tubeConfiguration = new TubeConfiguration(new HashSet<>());
@@ -79,6 +81,14 @@ public class LaboratoryConfiguration {
 
   public LabelPrintConfiguration getLabelPrintConfiguration() {
     return this.labelPrintConfiguration;
+  }
+
+  public Integer getVersion() {
+    return this.version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
   }
 
   public List<String> generateNewCodeList(TubeSeed seed, Integer startingPoint) {

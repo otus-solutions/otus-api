@@ -7,6 +7,8 @@ import br.org.otus.laboratory.configuration.collect.tube.generator.TubeSeed;
 import br.org.otus.laboratory.configuration.label.LabelPrintConfiguration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +49,8 @@ public class LaboratoryConfigurationTest {
 
     json = new JsonObject();
 
+    json.add("version", new JsonPrimitive(1));
+    
     JsonObject codeConfiguration = new JsonObject();
     json.add("codeConfiguration", codeConfiguration);
 
@@ -125,8 +129,8 @@ public class LaboratoryConfigurationTest {
 
   @Test
   public void method_should_deserialize_and_serialize_jsonString() {
-    LaboratoryConfiguration labDeserialize = laboratoryConfiguration.deserialize(json.toString());
-    assertEquals(json.toString(), laboratoryConfiguration.serialize(labDeserialize));
+    LaboratoryConfiguration labDeserialize = LaboratoryConfiguration.deserialize(json.toString());
+    assertEquals(json.toString(), LaboratoryConfiguration.serialize(labDeserialize));
   }
 
 }
