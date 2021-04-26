@@ -1,5 +1,7 @@
 package br.org.otus.laboratory.configurationCrud;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
+import br.org.otus.laboratory.configurationCrud.business.LaboratoryConfigurationCrudService;
 import br.org.otus.laboratory.configurationCrud.business.aliquot.AliquotConfigurationService;
 import br.org.otus.laboratory.configurationCrud.business.controlGroup.ControlGroupConfigurationService;
 import br.org.otus.laboratory.configurationCrud.business.exam.ExamConfigurationService;
@@ -25,6 +27,12 @@ public class LaboratoryConfigurationCrudFacade {
   private ExamConfigurationService examConfigurationService;
   @Inject
   private ControlGroupConfigurationService controlGroupConfigurationService;
+  @Inject
+  private LaboratoryConfigurationCrudService laboratoryConfigurationCrudService;
+
+  public LaboratoryConfiguration persistConfiguration(LaboratoryConfiguration laboratoryConfiguration) {
+    return laboratoryConfigurationCrudService.persistConfiguration(laboratoryConfiguration);
+  }
 
   public void createTube(TubeConfiguration tubeConfiguration) {
     tubeConfigurationService.create(tubeConfiguration);

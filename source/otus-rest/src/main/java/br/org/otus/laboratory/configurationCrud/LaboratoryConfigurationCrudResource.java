@@ -1,5 +1,6 @@
 package br.org.otus.laboratory.configurationCrud;
 
+import br.org.otus.laboratory.configuration.LaboratoryConfiguration;
 import br.org.otus.laboratory.configurationCrud.model.*;
 import br.org.otus.rest.Response;
 import br.org.otus.security.user.Secured;
@@ -15,6 +16,15 @@ public class LaboratoryConfigurationCrudResource {
 
   @Inject
   private LaboratoryConfigurationCrudFacade laboratoryConfigurationCrudFacade;
+
+  @POST
+  @Secured
+  @Path("/")
+  public String persistConfiguration(String configurationJson) {
+    LaboratoryConfiguration laboratoryConfiguration = LaboratoryConfiguration.deserialize(configurationJson);
+    LaboratoryConfiguration updatedConfiguration = laboratoryConfigurationCrudFacade.persistConfiguration(laboratoryConfiguration);
+    return new Response().buildSuccess(LaboratoryConfiguration.serialize(updatedConfiguration)).toJson();
+  }
 
   @POST
   @Secured
